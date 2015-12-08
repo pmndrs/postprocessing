@@ -1,16 +1,16 @@
 # Post Processing 
 [![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing) 
 [![GitHub version](https://badge.fury.io/gh/vanruesc%2Fpostprocessing.svg)](http://badge.fury.io/gh/vanruesc%2Fpostprocessing) 
-[![npm version](https://badge.fury.io/js/%40vanruesc%2Fpostprocessing.svg)](http://badge.fury.io/js/%40vanruesc%2Fpostprocessing) 
+[![npm version](https://badge.fury.io/js/postprocessing.svg)](http://badge.fury.io/js/postprocessing) 
 [![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
 
-A post processing library for filter effects and GPGPU algorithms with three.js. 
+A post processing library with filter effects and GPGPU algorithms for three.js. 
 
 
 ## Installation
 
 ```sh
-$ npm install @vanruesc/postprocessing
+$ npm install postprocessing
 ``` 
 
 
@@ -21,7 +21,7 @@ import {
 	EffectComposer,
 	RenderPass,
 	GlitchPass
-} from "@vanruesc/postprocessing";
+} from "postprocessing";
 
 // Three is no ES6 module yet so this won't work.
 // Use the global THREE variable instead!
