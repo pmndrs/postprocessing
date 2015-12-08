@@ -32,7 +32,6 @@ import {
 } from "three";
 
 var composer = new EffectComposer(new WebGLRenderer());
-
 composer.addPass(new RenderPass(new Scene(), new Camera()));
 
 var glitchPass = new GlitchPass();
@@ -55,4 +54,4 @@ Maintain the existing coding style. Add unit tests for any new or changed functi
 The original code was written by [alteredq](http://alteredqualia.com), 
 [miibond](https://github.com/MiiBond) [zz85](https://github.com/zz85) and 
 [felixturner](http://airtight.cc/) 
-and is licensed under the [MIT license](http://vanruesc.github.io/postprocessing/LICENSE).  
+and is licensed under the [MIT license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).  
