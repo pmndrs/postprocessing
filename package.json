@@ -1,0 +1,63 @@
+{
+	"name": "@vanruesc/postprocessing",
+	"version": "0.0.0",
+	"description": "An effect composer for implementing post processing effects in three.js.",
+	"homepage": "https://github.com/vanruesc/postprocessing",
+	"main": "build/postprocessing.js",
+	"jsnext:main": "src/postprocessing.js",
+	"license": "Zlib",
+
+	"keywords": [
+		"3d",
+		"rendering",
+		"animation",
+		"rendertexture",
+		"rendertarget",
+		"three",
+		"three.js"
+	],
+
+	"author": {
+		"name": "Raoul van Rüschen",
+		"email": "vanruesc@fh-brandenburg.de"
+	},
+
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/vanruesc/postprocessing.git"
+	},
+
+	"bugs": {
+		"url": "https://github.com/vanruesc/postprocessing/issues"
+	},
+
+	"scripts": {
+		"test": "node grunt-cli.js"
+	},
+
+	"engines": {
+		"node": ">= 5.1"
+	},
+
+	"dependencies": {
+		"three": "x.x.x"
+	},
+
+	"devDependencies": {
+		"grunt": "0.x.x",
+		"grunt-contrib-jshint": "x.x.x",
+		"grunt-contrib-uglify": "x.x.x",
+		"grunt-contrib-yuidoc": "x.x.x",
+		"grunt-contrib-clean": "x.x.x",
+		"grunt-contrib-watch": "x.x.x",
+		"grunt-contrib-copy": "x.x.x",
+		"grunt-fs-inline": "x.x.x",
+		"grunt-mocha": "x.x.x",
+		"grunt-rollup": "x.x.x",
+		"rollup-plugin-npm": "x.x.x"
+	},
+
+	"peerDependencies": {
+		"grunt": "0.x.x"
+	}
+}
