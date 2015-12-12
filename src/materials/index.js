@@ -1,3 +1,11 @@
+/**
+ * A compilation of the shader materials that are used 
+ * in the post processing passes.
+ *
+ * @module postprocessing
+ * @submodule materials
+ */
+
 export { CopyMaterial } from "./copy";
 export { LuminosityMaterial } from "./luminosity";
 export { AdaptiveLuminosityMaterial } from "./adaptive-luminosity";

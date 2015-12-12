@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\passes\texture.js - postprocessing</title>
+    <title>postprocessing - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -101,74 +101,172 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\passes\texture.js</h1>
+<h1>postprocessing Module</h1>
+<div class="box clearfix meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-import { CopyMaterial } from &quot;../materials&quot;;
-import { Pass } from &quot;./pass&quot;;
-import THREE from &quot;three&quot;;
 
-/**
- * A texture pass.
- *
- * @class TexturePass
- * @constructor
- * @extends Pass
- * @param {Texture} texture - The texture.
- * @param {Number} [opacity] - The opacity to apply to the texture.
- */
+        <div class="foundat">
+            Defined in: <a href="../files/src_effect-composer.js.html#l5"><code>src\effect-composer.js:5</code></a>
+        </div>
 
-export function TexturePass(texture, opacity) {
+</div>
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
 
-	/**
-	 * Copy shader material.
-	 *
-	 * @property material
-	 * @type CopyMaterial
-	 * @private
-	 */
+<div class="box intro">
+    <p>Exposure of the library components.</p>
 
-	this.material = new CopyMaterial();
-	this.material.uniforms.tDiffuse.value = texture;
-	this.material.uniforms.opacity.value = (opacity !== undefined) ? opacity : 1.0;
+</div>
 
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
 
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
+<div class="yui3-g">
+    <div class="yui3-u-1-2">
+            <p>This module provides the following classes:</p>
 
-}
+            <ul class="module-classes">
+                <li class="module-class">
+                    <a href="../classes/AdaptiveLuminosityMaterial.html">
+                        AdaptiveLuminosityMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/AdaptiveToneMappingPass.html">
+                        AdaptiveToneMappingPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/BloomPass.html">
+                        BloomPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/BokehMaterial.html">
+                        BokehMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/BokehPass.html">
+                        BokehPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/ClearMaskPass.html">
+                        ClearMaskPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/ConvolutionMaterial.html">
+                        ConvolutionMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/CopyMaterial.html">
+                        CopyMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/DotScreenMaterial.html">
+                        DotScreenMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/EffectComposer.html">
+                        EffectComposer
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/FilmMaterial.html">
+                        FilmMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/GlitchMaterial.html">
+                        GlitchMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/GlitchPass.html">
+                        GlitchPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/GodRaysMaterial.html">
+                        GodRaysMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/GodRaysPass.html">
+                        GodRaysPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/LuminosityMaterial.html">
+                        LuminosityMaterial
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/MaskPass.html">
+                        MaskPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/Pass.html">
+                        Pass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/RenderPass.html">
+                        RenderPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/SavePass.html">
+                        SavePass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/ShaderPass.html">
+                        ShaderPass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/TexturePass.html">
+                        TexturePass
+                    </a>
+                </li>
+                <li class="module-class">
+                    <a href="../classes/ToneMappingMaterial.html">
+                        ToneMappingMaterial
+                    </a>
+                </li>
+            </ul>
+    </div>
 
-TexturePass.prototype = Object.create(Pass.prototype);
-TexturePass.prototype.constructor = TexturePass;
 
-/**
- * Renders the scene.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
- */
+    <div class="yui3-u-1-2">
+            <p>This module is a rollup of the following modules:</p>
 
-TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+            <ul class="module-submodules">
+                <li class="module-submodule">
+                    <a href="../modules/materials.html">
+                        materials
+                    </a>
 
-	this.quad.material = this.material;
-	renderer.render(this.scene, this.camera, readBuffer);
+                    <div class="module-submodule-description">
+                        A compilation of the shader materials that are used 
+in the post processing passes.
+                    </div>
+                </li>
+                <li class="module-submodule">
+                    <a href="../modules/passes.html">
+                        passes
+                    </a>
 
-};
-
-    </pre>
+                    <div class="module-submodule-description">
+                        A compilation of the post processing passes.
+                    </div>
+                </li>
+            </ul>
+    </div>
 </div>
                     </div>
                 </div>

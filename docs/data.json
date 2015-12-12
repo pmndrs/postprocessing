@@ -96,6 +96,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src\\materials\\index.js": {
+            "name": "src\\materials\\index.js",
+            "modules": {
+                "materials": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src\\passes\\adaptive-tone-mapping.js": {
             "name": "src\\passes\\adaptive-tone-mapping.js",
             "modules": {},
@@ -164,6 +173,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src\\passes\\index.js": {
+            "name": "src\\passes\\index.js",
+            "modules": {
+                "passes": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "src\\passes\\mask.js": {
             "name": "src\\passes\\mask.js",
             "modules": {},
@@ -226,9 +244,86 @@
             },
             "fors": {},
             "namespaces": {}
+        },
+        "src\\index.js": {
+            "name": "src\\index.js",
+            "modules": {
+                "postprocessing": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
         }
     },
-    "modules": {},
+    "modules": {
+        "postprocessing": {
+            "name": "postprocessing",
+            "submodules": {
+                "materials": 1,
+                "passes": 1
+            },
+            "elements": {},
+            "classes": {
+                "AdaptiveLuminosityMaterial": 1,
+                "BokehMaterial": 1,
+                "ConvolutionMaterial": 1,
+                "CopyMaterial": 1,
+                "DotScreenMaterial": 1,
+                "FilmMaterial": 1,
+                "GlitchMaterial": 1,
+                "GodRaysMaterial": 1,
+                "LuminosityMaterial": 1,
+                "ToneMappingMaterial": 1,
+                "AdaptiveToneMappingPass": 1,
+                "BloomPass": 1,
+                "BokehPass": 1,
+                "ClearMaskPass": 1,
+                "RenderPass": 1,
+                "TexturePass": 1,
+                "GlitchPass": 1,
+                "GodRaysPass": 1,
+                "MaskPass": 1,
+                "Pass": 1,
+                "SavePass": 1,
+                "ShaderPass": 1,
+                "EffectComposer": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src\\effect-composer.js",
+            "line": 5,
+            "description": "Exposure of the library components."
+        },
+        "materials": {
+            "name": "materials",
+            "submodules": {},
+            "elements": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "postprocessing",
+            "namespace": "",
+            "file": "src\\materials\\index.js",
+            "line": 1,
+            "description": "A compilation of the shader materials that are used \nin the post processing passes."
+        },
+        "passes": {
+            "name": "passes",
+            "submodules": {},
+            "elements": {},
+            "classes": {},
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "postprocessing",
+            "namespace": "",
+            "file": "src\\passes\\index.js",
+            "line": 1,
+            "description": "A compilation of the post processing passes."
+        }
+    },
     "classes": {
         "AdaptiveLuminosityMaterial": {
             "name": "AdaptiveLuminosityMaterial",
@@ -238,6 +333,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\adaptive-luminosity\\index.js",
             "line": 4,
             "description": "An adaptive luminosity shader material.",
@@ -252,6 +348,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\bokeh\\index.js",
             "line": 4,
             "description": "Depth-of-field shader with bokeh ported from GLSL shader by Martins Upitis.\nhttp://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)",
@@ -266,6 +363,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\convolution\\index.js",
             "line": 18,
             "description": "A convolution shader material.",
@@ -280,6 +378,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\copy\\index.js",
             "line": 4,
             "description": "A simple copy shader material.",
@@ -294,6 +393,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\dot-screen\\index.js",
             "line": 4,
             "description": "A dot screen shader material.",
@@ -308,6 +408,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\film\\index.js",
             "line": 4,
             "description": "Film grain & scanlines shader\n\n- ported from HLSL to WebGL / GLSL\nhttp://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nScreen Space Static Postprocessor\n\nProduces an analogue noise overlay similar to a film grain / TV static\n\nOriginal implementation and noise algorithm\nPat \"Hawthorne\" Shearon\n\nOptimized scanlines + noise version with intensity scaling\nGeorg \"Leviathan\" Steinrohder\n\nThis version is provided under a Creative Commons Attribution 3.0 License\nhttp://creativecommons.org/licenses/by/3.0/",
@@ -322,6 +423,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\glitch\\index.js",
             "line": 4,
             "description": "A glitch shader material.\nBased on https://github.com/staffantan/unityglitch",
@@ -336,6 +438,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\god-rays\\index.js",
             "line": 28,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
@@ -359,6 +462,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\luminosity\\index.js",
             "line": 4,
             "description": "A luminosity shader material.\nhttp://en.wikipedia.org/wiki/Luminosity",
@@ -373,6 +477,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
             "file": "src\\materials\\tone-mapping\\index.js",
             "line": 4,
             "description": "Full-screen tone-mapping shader material.\nhttp://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
@@ -387,6 +492,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\adaptive-tone-mapping.js",
             "line": 11,
             "description": "Generates a texture that represents the luminosity of the current scene, adapted over time\nto simulate the optic nerve responding to the amount of light it is receiving.\nBased on a GDC2007 presentation by Wolfgang Engel titled \"Post-Processing Pipeline\"\n\nFull-screen tone-mapping shader based on http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
@@ -414,6 +521,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\bloom.js",
             "line": 9,
             "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.\n\nSince the effect will be written to the readBuffer \nrender texture, you'll need to use a ShaderPass with \na CopyMaterial to render the texture to screen.",
@@ -458,6 +567,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\bokeh.js",
             "line": 5,
             "description": "Depth-of-field pass using a bokeh shader.",
@@ -522,6 +633,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\clear-mask.js",
             "line": 3,
             "description": "A clear mask pass.",
@@ -536,6 +649,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\render.js",
             "line": 4,
             "description": "A render pass.",
@@ -586,6 +701,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\texture.js",
             "line": 5,
             "description": "A texture pass.",
@@ -638,6 +755,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\glitch.js",
             "line": 5,
             "description": "A glitch pass.",
@@ -660,6 +779,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\god-rays.js",
             "line": 5,
             "description": "A crepuscular rays pass.",
@@ -733,6 +854,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\mask.js",
             "line": 3,
             "description": "A mask pass.",
@@ -759,6 +882,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\pass.js",
             "line": 3,
             "description": "An abstract render pass.",
@@ -786,6 +911,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\save.js",
             "line": 5,
             "description": "A save pass.",
@@ -807,6 +934,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\passes\\shader.js",
             "line": 4,
             "description": "A shader pass.\n\nUsed to render simple shader materials as 2D filters.",
@@ -835,6 +964,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
             "file": "src\\effect-composer.js",
             "line": 5,
             "description": "The effect composer may be used in place of a normal WebGLRenderer.\n\nThe composer will disable the auto clear behaviour of the provided\nrenderer in order to prevent unnecessary clear operations. \nYou might want to use a RenderPass as your first pass to automatically \nclear the screen and render the scene to a texture for further processing.",
@@ -913,7 +1044,8 @@
             "name": "adaptive",
             "type": "Number",
             "default": "256",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -923,7 +1055,8 @@
             "name": "adaptive",
             "type": "Boolean",
             "default": "false",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -933,7 +1066,8 @@
             "name": "needsInit",
             "type": "Boolean",
             "default": "true",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -944,7 +1078,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -955,7 +1090,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -966,7 +1102,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -977,7 +1114,8 @@
             "type": "CopyMaterial",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -988,7 +1126,8 @@
             "type": "LuminosityMaterial",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -999,7 +1138,8 @@
             "type": "AdaptiveLuminosityMaterial",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1010,7 +1150,8 @@
             "type": "ToneMappingMaterial",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1021,7 +1162,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1051,7 +1193,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1068,7 +1211,8 @@
             ],
             "access": "private",
             "tagname": "",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1083,7 +1227,8 @@
                     "type": "Boolean"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1098,7 +1243,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1113,7 +1259,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1128,7 +1275,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1143,7 +1291,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1151,7 +1300,8 @@
             "description": "Deletes all render targets and materials.",
             "itemtype": "method",
             "name": "dispose",
-            "class": "AdaptiveToneMappingPass"
+            "class": "AdaptiveToneMappingPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1162,7 +1312,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1173,7 +1324,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1184,7 +1336,8 @@
             "type": "CopyMaterial",
             "access": "private",
             "tagname": "",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1195,7 +1348,8 @@
             "type": "ConvolutionMaterial",
             "access": "private",
             "tagname": "",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1205,7 +1359,8 @@
             "name": "clear",
             "type": "Boolean",
             "default": "true",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1216,7 +1371,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
@@ -1251,7 +1407,8 @@
                     "type": "Boolean"
                 }
             ],
-            "class": "BloomPass"
+            "class": "BloomPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1262,7 +1419,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1273,7 +1431,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1284,7 +1443,8 @@
             "type": "MeshDepthMaterial",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1295,7 +1455,8 @@
             "type": "BokehMaterial",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1305,7 +1466,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1316,7 +1478,8 @@
             "type": "Scene",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1327,7 +1490,8 @@
             "type": "Camera",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1338,7 +1502,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -1373,7 +1538,8 @@
                     "type": "Boolean"
                 }
             ],
-            "class": "BokehPass"
+            "class": "BokehPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\clear-mask.js",
@@ -1408,7 +1574,8 @@
                     "type": "Boolean"
                 }
             ],
-            "class": "ClearMaskPass"
+            "class": "ClearMaskPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\dot-screen.js",
@@ -1419,7 +1586,8 @@
             "type": "DotScreenMaterial",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\dot-screen.js",
@@ -1429,7 +1597,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\dot-screen.js",
@@ -1440,7 +1609,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\dot-screen.js",
@@ -1470,7 +1640,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\film.js",
@@ -1481,7 +1652,8 @@
             "type": "FilmMaterial",
             "access": "private",
             "tagname": "",
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\film.js",
@@ -1491,7 +1663,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\film.js",
@@ -1502,7 +1675,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\film.js",
@@ -1532,7 +1706,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1543,7 +1718,8 @@
             "type": "GlitchMaterial",
             "access": "private",
             "tagname": "",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1553,7 +1729,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1564,7 +1741,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1573,7 +1751,8 @@
             "itemtype": "property",
             "name": "quad",
             "type": "Mesh",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1584,7 +1763,8 @@
             "type": "Number",
             "access": "private",
             "tagname": "",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1609,7 +1789,8 @@
                     "type": "WebGLRenderTarget"
                 }
             ],
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1617,7 +1798,8 @@
             "description": "Creates a new break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
@@ -1632,7 +1814,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "GlitchPass"
+            "class": "GlitchPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1643,7 +1826,8 @@
             "type": "Object3D",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1654,7 +1838,8 @@
             "type": "Vector3",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1665,7 +1850,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1676,7 +1862,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1687,7 +1874,8 @@
             "type": "GodRaysMaterial",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1698,7 +1886,8 @@
             "type": "Number",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1709,7 +1898,8 @@
             "type": "GodRaysMaterial",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1720,7 +1910,8 @@
             "type": "MeshDepthMaterial",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1731,7 +1922,8 @@
             "type": "Float32Array",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1741,7 +1933,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1752,7 +1945,8 @@
             "type": "Scene",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1763,7 +1957,8 @@
             "type": "Camera",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1774,7 +1969,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1799,7 +1995,8 @@
                     "type": "WebGLRenderTarget"
                 }
             ],
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -1813,7 +2010,8 @@
                 "description": "A scalar in the range 0.0 to 1.0.",
                 "type": "Number"
             },
-            "class": "GodRaysPass"
+            "class": "GodRaysPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\mask.js",
@@ -1823,7 +2021,8 @@
             "name": "inverse",
             "type": "Boolean",
             "default": "false",
-            "class": "MaskPass"
+            "class": "MaskPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\mask.js",
@@ -1833,7 +2032,8 @@
             "name": "clear",
             "type": "Boolean",
             "default": "true",
-            "class": "MaskPass"
+            "class": "MaskPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\mask.js",
@@ -1868,7 +2068,8 @@
                     "type": "Boolean"
                 }
             ],
-            "class": "MaskPass"
+            "class": "MaskPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1880,7 +2081,8 @@
             "access": "private",
             "tagname": "",
             "default": "Scene()",
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1892,7 +2094,8 @@
             "access": "private",
             "tagname": "",
             "default": "OrthographicCamera(-1, 1, 1, -1, 0, 1)",
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1902,7 +2105,8 @@
             "name": "enabled",
             "type": "Boolean",
             "default": "true",
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1912,7 +2116,8 @@
             "name": "needsSwap",
             "type": "Boolean",
             "default": "false",
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1946,7 +2151,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\pass.js",
@@ -1964,7 +2170,8 @@
             "example": [
                 "\n this.myRenderTarget.width = renderer.context.canvas.width / 2;"
             ],
-            "class": "Pass"
+            "class": "Pass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -1973,7 +2180,8 @@
             "itemtype": "property",
             "name": "overrideMaterial",
             "type": "Material",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -1982,7 +2190,8 @@
             "itemtype": "property",
             "name": "clearColor",
             "type": "Color",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -1991,7 +2200,8 @@
             "itemtype": "property",
             "name": "clearAlpha",
             "type": "Number",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -2002,7 +2212,8 @@
             "type": "Color",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -2013,7 +2224,8 @@
             "type": "Number",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -2023,7 +2235,8 @@
             "name": "clear",
             "type": "Boolean",
             "default": "true",
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\render.js",
@@ -2053,7 +2266,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "RenderPass"
+            "class": "RenderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\save.js",
@@ -2064,7 +2278,8 @@
             "type": "CopyMaterial",
             "access": "private",
             "tagname": "",
-            "class": "SavePass"
+            "class": "SavePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\save.js",
@@ -2075,7 +2290,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "SavePass"
+            "class": "SavePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\save.js",
@@ -2086,7 +2302,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "SavePass"
+            "class": "SavePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\save.js",
@@ -2116,7 +2333,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "SavePass"
+            "class": "SavePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\shader.js",
@@ -2126,7 +2344,8 @@
             "name": "textureID",
             "type": "String",
             "default": "tDiffuse",
-            "class": "ShaderPass"
+            "class": "ShaderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\shader.js",
@@ -2135,7 +2354,8 @@
             "itemtype": "property",
             "name": "material",
             "type": "ShaderMaterial",
-            "class": "ShaderPass"
+            "class": "ShaderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\shader.js",
@@ -2145,7 +2365,8 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "ShaderPass"
+            "class": "ShaderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\shader.js",
@@ -2156,7 +2377,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "ShaderPass"
+            "class": "ShaderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\shader.js",
@@ -2186,7 +2408,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "ShaderPass"
+            "class": "ShaderPass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\texture.js",
@@ -2197,7 +2420,8 @@
             "type": "CopyMaterial",
             "access": "private",
             "tagname": "",
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\texture.js",
@@ -2208,7 +2432,8 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\passes\\texture.js",
@@ -2238,7 +2463,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "TexturePass"
+            "class": "TexturePass",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2247,7 +2473,8 @@
             "itemtype": "property",
             "name": "renderer",
             "type": "WebGLRenderer",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2258,7 +2485,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2269,7 +2497,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2280,7 +2509,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2291,7 +2521,8 @@
             "type": "WebGLRenderTarget",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2302,7 +2533,8 @@
             "type": "Array",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2313,7 +2545,8 @@
             "type": "ShaderPass",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2323,7 +2556,8 @@
             "name": "swapBuffers",
             "access": "private",
             "tagname": "",
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2338,7 +2572,8 @@
                     "type": "Pass"
                 }
             ],
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2358,7 +2593,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2373,7 +2609,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2389,7 +2626,8 @@
                     "optional": true
                 }
             ],
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         },
         {
             "file": "src\\effect-composer.js",
@@ -2409,7 +2647,8 @@
                     "type": "Number"
                 }
             ],
-            "class": "EffectComposer"
+            "class": "EffectComposer",
+            "module": "postprocessing"
         }
     ],
     "warnings": [

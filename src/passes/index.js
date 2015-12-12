@@ -1,3 +1,10 @@
+/**
+ * A compilation of the post processing passes.
+ *
+ * @module postprocessing
+ * @submodule passes
+ */
+
 export { Pass } from "./pass";
 export { SavePass } from "./save";
 export { MaskPass } from "./mask";

@@ -1,3 +1,9 @@
+/**
+ * Exposure of the library components.
+ *
+ * @module postprocessing
+ */
+
 export { EffectComposer } from "./effect-composer";
 
 export {
