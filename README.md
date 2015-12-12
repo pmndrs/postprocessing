@@ -42,6 +42,10 @@ composer.addPass(glitchPass);
 [API](http://vanruesc.github.io/postprocessing/docs)
 
 
+## Demo
+See the [Post Processing](http://vanruesc.github.io/postprocessing/public/god-rays.html) in action!
+
+
 ## Contributing
 Maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.
 
