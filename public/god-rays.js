@@ -48,13 +48,13 @@ window.addEventListener("load", function init() {
 	var loader = new THREE.ObjectLoader();
 	var textureLoader = new THREE.TextureLoader();
 
-	loader.load("/models/waggon.json", function(object) {
+	loader.load("models/waggon.json", function(object) {
 
-		textureLoader.load("/textures/wood.jpg", function(colorMap) {
+		textureLoader.load("textures/wood.jpg", function(colorMap) {
 
 			colorMap.wrapS = colorMap.wrapT = THREE.RepeatWrapping;
 
-			textureLoader.load("/textures/woodnormals.jpg", function(normalMap) {
+			textureLoader.load("textures/woodnormals.jpg", function(normalMap) {
 
 				normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
 				normalMap = normalMap;
