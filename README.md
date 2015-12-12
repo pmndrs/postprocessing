@@ -38,12 +38,16 @@ composer.addPass(glitchPass);
 ```
 
 
+## Included Filters
+ - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html) 
+ - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html) 
+ - [Film](http://vanruesc.github.io/postprocessing/public/film.html) 
+ - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html) 
+ - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html) 
+
+
 ## Documentation
 [API](http://vanruesc.github.io/postprocessing/docs)
-
-
-## Demo
-See the [Post Processing](http://vanruesc.github.io/postprocessing/public/god-rays.html) in action!
 
 
 ## Contributing
@@ -51,7 +55,8 @@ Maintain the existing coding style. Add unit tests for any new or changed functi
 
 
 ## License
+This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).  
 The original code was written by [alteredq](http://alteredqualia.com), 
 [miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), 
 [felixturner](http://airtight.cc) and [huwb](http://huwbowles.com) 
-and is licensed under the [MIT license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).  
+and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).  
