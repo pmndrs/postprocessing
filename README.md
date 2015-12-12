@@ -5,7 +5,6 @@
 [![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
 
 A post processing library that provides the means to implement 2D filter effects for three.js. 
-Common implementations such as god rays and bloom are included. 
 
 
 ## Installation
