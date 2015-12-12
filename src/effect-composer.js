@@ -3,42 +3,53 @@ import { ShaderPass, MaskPass, ClearMaskPass } from "./passes";
 import THREE from "three";
 
 /**
- * The effect composer may be used in place of a common 
- * WebGLRenderer inside of the main render loop.
+ * The effect composer may be used in place of a normal WebGLRenderer.
+ *
+ * The composer will disable the auto clear behaviour of the provided
+ * renderer in order to prevent unnecessary clear operations. 
+ * You might want to use a RenderPass as your first pass to automatically 
+ * clear the screen and render the scene to a texture for further processing. 
  *
  * @class EffectComposer
  * @constructor
- * @param {WebGLRenderer} renderer - The renderer that should be used to display the effects.
- * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing.
+ * @param {WebGLRenderer} renderer - The renderer that should be used.
+ * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing. If none is provided,
  */
 
 export function EffectComposer(renderer, renderTarget) {
+
+	var pixelRatio, width, height;
 
 	/**
 	 * The renderer.
 	 *
 	 * @property renderer
-	 * @type {WebGLRenderer}
+	 * @type WebGLRenderer
 	 */
 
 	this.renderer = renderer;
+	this.renderer.autoClear = false;
 
 	/**
 	 * The render target.
 	 *
 	 * @property renderTarget1
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	if(renderTarget === undefined) {
 
-		var pixelRatio = renderer.getPixelRatio();
+		pixelRatio = renderer.getPixelRatio();
+		width = Math.floor(renderer.context.canvas.width / pixelRatio) || 1;
+		height = Math.floor(renderer.context.canvas.height / pixelRatio) || 1;
 
-		var width  = Math.floor(renderer.context.canvas.width  / pixelRatio) || 1;
-		var height = Math.floor(renderer.context.canvas.height / pixelRatio) || 1;
-		var parameters = {minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false};
-
-		renderTarget = new THREE.WebGLRenderTarget(width, height, parameters);
+		renderTarget = new THREE.WebGLRenderTarget(width, height, {
+			minFilter: THREE.LinearFilter,
+			magFilter: THREE.LinearFilter,
+			format: THREE.RGBFormat,
+			stencilBuffer: false
+		});
 
 	}
 
@@ -48,7 +59,8 @@ export function EffectComposer(renderer, renderTarget) {
 	 * A copy of the render target.
 	 *
 	 * @property renderTarget2
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.renderTarget2 = renderTarget.clone();
@@ -57,7 +69,8 @@ export function EffectComposer(renderer, renderTarget) {
 	 * The write buffer. Alias for renderTarget1.
 	 *
 	 * @property writeBuffer
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.writeBuffer = this.renderTarget1;
@@ -66,7 +79,8 @@ export function EffectComposer(renderer, renderTarget) {
 	 * The read buffer. Alias for renderTarget2.
 	 *
 	 * @property readBuffer
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.readBuffer = this.renderTarget2;
@@ -75,7 +89,8 @@ export function EffectComposer(renderer, renderTarget) {
 	 * The render passes.
 	 *
 	 * @property passes
-	 * @type {Array}
+	 * @type Array
+	 * @private
 	 */
 
 	this.passes = [];
@@ -84,7 +99,8 @@ export function EffectComposer(renderer, renderTarget) {
 	 * A copy pass.
 	 *
 	 * @property copyPass
-	 * @type {ShaderPass}
+	 * @type ShaderPass
+	 * @private
 	 */
 
 	this.copyPass = new ShaderPass(new CopyMaterial());
@@ -93,8 +109,11 @@ export function EffectComposer(renderer, renderTarget) {
 
 /**
  * Swaps the render targets on demand.
+ * You can toggle swapping in your pass 
+ * by setting the needsSwap flag.
  *
  * @method swapBuffers
+ * @private
  */
 
 EffectComposer.prototype.swapBuffers = function() {
@@ -106,15 +125,16 @@ EffectComposer.prototype.swapBuffers = function() {
 };
 
 /**
- * Adds another render pass.
+ * Adds another pass.
  *
  * @method addPass
- * @param {Pass} pass - A new render pass.
+ * @param {Pass} pass - A new pass.
  */
 
 EffectComposer.prototype.addPass = function(pass) {
 
 	this.passes.push(pass);
+	pass.update(this.renderer);
 
 };
 
@@ -129,6 +149,7 @@ EffectComposer.prototype.addPass = function(pass) {
 EffectComposer.prototype.insertPass = function(pass, index) {
 
 	this.passes.splice(index, 0, pass);
+	pass.update(this.renderer);
 
 };
 
@@ -136,7 +157,7 @@ EffectComposer.prototype.insertPass = function(pass, index) {
  * Renders all passes in order.
  *
  * @method render
- * @param {Number} delta - The render delta time.
+ * @param {Number} delta - The delta time between the last frame and the current one.
  */
 
 EffectComposer.prototype.render = function(delta) {
@@ -144,11 +165,10 @@ EffectComposer.prototype.render = function(delta) {
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
 
-	var context, pass;
 	var maskActive = false;
-	var i, il;
+	var i, l, pass, context;
 
-	for(i = 0, il = this.passes.length; i < il; ++i) {
+	for(i = 0, l = this.passes.length; i < l; ++i) {
 
 		pass = this.passes[i];
 
@@ -188,10 +208,12 @@ EffectComposer.prototype.render = function(delta) {
 };
 
 /**
- * Resets the composer.
+ * Resets the composer's render textures.
+ * Call this method when the size of the renderer's canvas changed or
+ * if you want to drop the old read/write buffers and create new ones.
  *
  * @method reset
- * @param {WebGLRenderTarget} renderTarget - A new render target to use.
+ * @param {WebGLRenderTarget} [renderTarget] - A new render target to use.
  */
 
 EffectComposer.prototype.reset = function(renderTarget) {
@@ -216,6 +238,15 @@ EffectComposer.prototype.reset = function(renderTarget) {
 
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
+
+	var i, l;
+
+	// Let all passes adjust to the renderer size.
+	for(i = 0, l = this.passes.length; i < l; ++i) {
+
+		this.passes[i].update(this.renderer);
+
+	}
 
 };
 

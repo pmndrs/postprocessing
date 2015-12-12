@@ -10,7 +10,7 @@ import { Pass } from "./pass";
 
 export function ClearMaskPass() {
 
-	Pass.call(this);
+	Pass.call(this, null, null);
 
 }
 

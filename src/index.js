@@ -13,7 +13,8 @@ export {
 	GlitchPass,
 	BloomPass,
 	BokehPass,
-	FilmPass
+	FilmPass,
+	GodRaysPass
 } from "./passes";
 
 export {
@@ -25,5 +26,6 @@ export {
 	GlitchMaterial,
 	ConvolutionMaterial,
 	BokehMaterial,
-	FilmMaterial
+	FilmMaterial,
+	GodRaysMaterial
 } from "./materials";

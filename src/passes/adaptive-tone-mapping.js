@@ -24,13 +24,13 @@ import THREE from "three";
 
 export function AdaptiveToneMappingPass(adaptive, resolution) {
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+	Pass.call(this);
 
 	/**
 	 * Render resolution.
 	 *
 	 * @property adaptive
-	 * @type {Number}
+	 * @type Number
 	 * @default 256
 	 */
 
@@ -40,7 +40,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Adaptivity flag.
 	 *
 	 * @property adaptive
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
@@ -50,7 +50,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Initialisation flag.
 	 *
 	 * @property needsInit
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default true
 	 */
 
@@ -60,7 +60,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Luminance render target.
 	 *
 	 * @property luminanceRT
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
 	 * @private
 	 */
 
@@ -70,7 +70,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Previous luminance render target.
 	 *
 	 * @property previousLuminanceRT
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
 	 * @private
 	 */
 
@@ -80,7 +80,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Current luminance render target.
 	 *
 	 * @property currentLuminanceRT
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
 	 * @private
 	 */
 
@@ -90,7 +90,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Copy shader material.
 	 *
 	 * @property materialCopy
-	 * @type {CopyMaterial}
+	 * @type CopyMaterial
 	 * @private
 	 */
 
@@ -102,7 +102,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Luminance shader material.
 	 *
 	 * @property materialLuminance
-	 * @type {LuminosityMaterial}
+	 * @type LuminosityMaterial
 	 * @private
 	 */
 
@@ -113,7 +113,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Adaptive luminance shader material.
 	 *
 	 * @property materialAdaptiveLuminosity
-	 * @type {AdaptiveLuminosityMaterial}
+	 * @type AdaptiveLuminosityMaterial
 	 * @private
 	 */
 
@@ -125,7 +125,7 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	 * Tone mapping shader material.
 	 *
 	 * @property materialToneMapping
-	 * @type {ToneMappingMaterial}
+	 * @type ToneMappingMaterial
 	 * @private
 	 */
 
@@ -135,14 +135,12 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	// Swap the render targets in this pass.
 	this.needsSwap = true;
 
-	// Don't clear in this pass.
-	this.clear = false;
-
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
@@ -207,6 +205,7 @@ AdaptiveToneMappingPass.prototype.render = function(renderer, writeBuffer, readB
  *
  * @method reset
  * @param {WebGLRender} renderer - The renderer to use.
+ * @private
  */
 
 AdaptiveToneMappingPass.prototype.reset = function(renderer) {

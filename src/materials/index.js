@@ -7,3 +7,4 @@ export { GlitchMaterial } from "./glitch";
 export { ConvolutionMaterial } from "./convolution";
 export { BokehMaterial } from "./bokeh";
 export { FilmMaterial } from "./film";
+export { GodRaysMaterial, Phase } from "./god-rays";

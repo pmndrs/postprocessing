@@ -10,20 +10,20 @@ import THREE from "three";
  * @extends Pass
  * @param {Object} [options] - The options.
  * @param {Boolean} [options.grayscale=true] - Convert to greyscale.
- * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. [0.0, 1.0].
- * @param {Number} [options.scanlinesIntensity=0.05] - The scanline intensity. [0.0, 1.0].
- * @param {Number} [options.scanlinesCount=4096.0] - The number of scanlines. [0, 4096].
+ * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
+ * @param {Number} [options.scanlinesIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
+ * @param {Number} [options.scanlinesCount=4096.0] - The number of scanlines. 0.0 to 4096.0.
  */
 
 export function FilmPass(options) {
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+	Pass.call(this);
 
 	/**
 	 * Film shader material.
 	 *
 	 * @property material
-	 * @type {FilmMaterial}
+	 * @type FilmMaterial
 	 * @private
 	 */
 
@@ -42,7 +42,7 @@ export function FilmPass(options) {
 	 * Render to screen flag.
 	 *
 	 * @property renderToScreen
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
@@ -52,10 +52,11 @@ export function FilmPass(options) {
 	this.needsSwap = true;
 
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);

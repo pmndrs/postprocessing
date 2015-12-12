@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>BokehPass - postprocessing</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
+                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
+                                <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
+                                <li><a href="../classes/BokehPass.html">BokehPass</a></li>
+                                <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
+                                <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
+                                <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
+                                <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
+                                <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
+                                <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
+                                <li><a href="../classes/MaskPass.html">MaskPass</a></li>
+                                <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/RenderPass.html">RenderPass</a></li>
+                                <li><a href="../classes/SavePass.html">SavePass</a></li>
+                                <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
+                                <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>BokehPass Class</h1>
+<div class="box meta">
+
+        <div class="extends">
+            Extends <a href="../classes/Pass.html" class="crosslink">Pass</a>
+        </div>
+
+        <div class="foundat">
+            Defined in: <a href="../files/src_passes_bokeh.js.html#l5"><code>src\passes\bokeh.js:5</code></a>
+        </div>
+
+
+</div>
+
+
+<div class="box intro">
+    <p>Depth-of-field pass using a bokeh shader.</p>
+
+</div>
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_BokehPass" class="method item">
+    <h3 class="name"><code>BokehPass</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>scene</code>
+                </li>
+                <li class="arg">
+                        <code>camera</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[params]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l5"><code>src\passes\bokeh.js:5</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">scene</code>
+                        <span class="type">Scene</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The scene to render.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">camera</code>
+                        <span class="type">Camera</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The camera to use to render the scene.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[params]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Additional parameters.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[focus]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The focus.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[aspect]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The aspect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[aperture]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The aperture.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[maxBlur]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The maximum blur.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[resolution]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The render resolution.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods extends">
+                            <li class="index-item method inherited">
+                                <a href="#method_render">render</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_update">update</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property_bokehMaterial">bokehMaterial</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_camera">camera</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_camera2">camera2</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_depthMaterial">depthMaterial</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_enabled">enabled</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_quad">quad</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetColor">renderTargetColor</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetDepth">renderTargetDepth</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_scene2">scene2</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_render" class="method item">
+    <h3 class="name"><code>render</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>readBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>delta</code>
+                </li>
+                <li class="arg">
+                        <code>maskActive</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_render">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh.js.html#l125"><code>src\passes\bokeh.js:125</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Renders the scene.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The renderer to use.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">readBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">delta</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The render delta time.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">maskActive</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Disable stencil test.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+<div id="method_update" class="method item inherited">
+    <h3 class="name"><code>update</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_update">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Updates this pass's render targets.
+This is an abstract method that can be overriden in case  
+a created render target depends on the renderer's size.
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        - The renderer.
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.myRenderTarget.width = renderer.context.canvas.width / 2;</p>
+
+            </div>
+        </div>
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_bokehMaterial" class="property item private">
+    <h3 class="name"><code>bokehMaterial</code></h3>
+    <span class="type"><a href="../classes/BokehMaterial.html" class="crosslink">BokehMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l62"><code>src\passes\bokeh.js:62</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Bokeh shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_camera" class="property item private inherited">
+    <h3 class="name"><code>camera</code></h3>
+    <span class="type">Camera</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_camera">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The camera to render with.
+    </div>
+
+        <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
+
+
+</div>
+<div id="property_camera2" class="property item private">
+    <h3 class="name"><code>camera2</code></h3>
+    <span class="type">Camera</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l98"><code>src\passes\bokeh.js:98</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A camera to render the depth of field effect with.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_depthMaterial" class="property item private">
+    <h3 class="name"><code>depthMaterial</code></h3>
+    <span class="type">MeshDepthMaterial</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l52"><code>src\passes\bokeh.js:52</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Depth shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_enabled" class="property item inherited">
+    <h3 class="name"><code>enabled</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_enabled">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Enabled flag.
+    </div>
+
+        <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Render target swap flag.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_quad" class="property item private">
+    <h3 class="name"><code>quad</code></h3>
+    <span class="type">Mesh</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l109"><code>src\passes\bokeh.js:109</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The quad mesh to use for rendering the 2D effect.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetColor" class="property item private">
+    <h3 class="name"><code>renderTargetColor</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l28"><code>src\passes\bokeh.js:28</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetDepth" class="property item private">
+    <h3 class="name"><code>renderTargetDepth</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l42"><code>src\passes\bokeh.js:42</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A render target for the depth.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderToScreen" class="property item">
+    <h3 class="name"><code>renderToScreen</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l78"><code>src\passes\bokeh.js:78</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Render to screen flag.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_scene" class="property item private inherited">
+    <h3 class="name"><code>scene</code></h3>
+    <span class="type">Scene</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_scene">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The scene to render.
+    </div>
+
+        <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_scene2" class="property item private">
+    <h3 class="name"><code>scene2</code></h3>
+    <span class="type">Scene</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh.js.html#l88"><code>src\passes\bokeh.js:88</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A scene to render the depth of field with.</p>
+
+    </div>
+
+
+
+</div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

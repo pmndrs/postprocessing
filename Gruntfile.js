@@ -59,6 +59,10 @@ module.exports = function(grunt) {
 			filmShader: {
 				src: "src/materials/film/shader.js",
 				dest: "src/materials/film/inlined/shader.js"
+			},
+			godRaysShader: {
+				src: "src/materials/god-rays/shader.js",
+				dest: "src/materials/god-rays/inlined/shader.js"
 			}
 		},
 

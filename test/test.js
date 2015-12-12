@@ -1,19 +1,13 @@
-describe("Water", function() {
+describe("Post Processing", function() {
 
 	describe("Sanity checks", function() {
 
-		//var water;
-
-		it("is a constructor function", function() {
-
-			//assert(typeof Water === "function");
-
-		});
+		//var ;
 
 		it("is instancable", function() {
 
-			//water = new Water();
-			//assert(typeof water === "object");
+			// = new ();
+			//assert(typeof  === "object");
 
 		});
 

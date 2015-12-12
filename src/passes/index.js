@@ -11,3 +11,4 @@ export { GlitchPass } from "./glitch";
 export { BloomPass } from "./bloom";
 export { BokehPass } from "./bokeh";
 export { FilmPass } from "./film";
+export { GodRaysPass } from "./god-rays";

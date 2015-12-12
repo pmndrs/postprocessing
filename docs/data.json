@@ -1,0 +1,2421 @@
+{
+    "project": {
+        "name": "postprocessing",
+        "description": "A post processing library that provides the means to implement 2D filter effects for three.js. ",
+        "version": "0.0.1",
+        "url": "https://github.com/vanruesc/postprocessing"
+    },
+    "files": {
+        "src\\materials\\adaptive-luminosity\\index.js": {
+            "name": "src\\materials\\adaptive-luminosity\\index.js",
+            "modules": {},
+            "classes": {
+                "AdaptiveLuminosityMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\bokeh\\index.js": {
+            "name": "src\\materials\\bokeh\\index.js",
+            "modules": {},
+            "classes": {
+                "BokehMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\convolution\\index.js": {
+            "name": "src\\materials\\convolution\\index.js",
+            "modules": {},
+            "classes": {
+                "ConvolutionMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\copy\\index.js": {
+            "name": "src\\materials\\copy\\index.js",
+            "modules": {},
+            "classes": {
+                "CopyMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\dot-screen\\index.js": {
+            "name": "src\\materials\\dot-screen\\index.js",
+            "modules": {},
+            "classes": {
+                "DotScreenMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\film\\index.js": {
+            "name": "src\\materials\\film\\index.js",
+            "modules": {},
+            "classes": {
+                "FilmMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\glitch\\index.js": {
+            "name": "src\\materials\\glitch\\index.js",
+            "modules": {},
+            "classes": {
+                "GlitchMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\god-rays\\index.js": {
+            "name": "src\\materials\\god-rays\\index.js",
+            "modules": {},
+            "classes": {
+                "GodRaysMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\luminosity\\index.js": {
+            "name": "src\\materials\\luminosity\\index.js",
+            "modules": {},
+            "classes": {
+                "LuminosityMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\tone-mapping\\index.js": {
+            "name": "src\\materials\\tone-mapping\\index.js",
+            "modules": {},
+            "classes": {
+                "ToneMappingMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\adaptive-tone-mapping.js": {
+            "name": "src\\passes\\adaptive-tone-mapping.js",
+            "modules": {},
+            "classes": {
+                "AdaptiveToneMappingPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\bloom.js": {
+            "name": "src\\passes\\bloom.js",
+            "modules": {},
+            "classes": {
+                "BloomPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\bokeh.js": {
+            "name": "src\\passes\\bokeh.js",
+            "modules": {},
+            "classes": {
+                "BokehPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\clear-mask.js": {
+            "name": "src\\passes\\clear-mask.js",
+            "modules": {},
+            "classes": {
+                "ClearMaskPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\dot-screen.js": {
+            "name": "src\\passes\\dot-screen.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\film.js": {
+            "name": "src\\passes\\film.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\glitch.js": {
+            "name": "src\\passes\\glitch.js",
+            "modules": {},
+            "classes": {
+                "GlitchPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\god-rays.js": {
+            "name": "src\\passes\\god-rays.js",
+            "modules": {},
+            "classes": {
+                "GodRaysPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\mask.js": {
+            "name": "src\\passes\\mask.js",
+            "modules": {},
+            "classes": {
+                "MaskPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\pass.js": {
+            "name": "src\\passes\\pass.js",
+            "modules": {},
+            "classes": {
+                "Pass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\render.js": {
+            "name": "src\\passes\\render.js",
+            "modules": {},
+            "classes": {
+                "RenderPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\save.js": {
+            "name": "src\\passes\\save.js",
+            "modules": {},
+            "classes": {
+                "SavePass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\shader.js": {
+            "name": "src\\passes\\shader.js",
+            "modules": {},
+            "classes": {
+                "ShaderPass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\texture.js": {
+            "name": "src\\passes\\texture.js",
+            "modules": {},
+            "classes": {
+                "TexturePass": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\effect-composer.js": {
+            "name": "src\\effect-composer.js",
+            "modules": {},
+            "classes": {
+                "EffectComposer": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "AdaptiveLuminosityMaterial": {
+            "name": "AdaptiveLuminosityMaterial",
+            "shortname": "AdaptiveLuminosityMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\adaptive-luminosity\\index.js",
+            "line": 4,
+            "description": "An adaptive luminosity shader material.",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "BokehMaterial": {
+            "name": "BokehMaterial",
+            "shortname": "BokehMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\bokeh\\index.js",
+            "line": 4,
+            "description": "Depth-of-field shader with bokeh ported from GLSL shader by Martins Upitis.\nhttp://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "ConvolutionMaterial": {
+            "name": "ConvolutionMaterial",
+            "shortname": "ConvolutionMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 18,
+            "description": "A convolution shader material.",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "CopyMaterial": {
+            "name": "CopyMaterial",
+            "shortname": "CopyMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\copy\\index.js",
+            "line": 4,
+            "description": "A simple copy shader material.",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "DotScreenMaterial": {
+            "name": "DotScreenMaterial",
+            "shortname": "DotScreenMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\dot-screen\\index.js",
+            "line": 4,
+            "description": "A dot screen shader material.",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "FilmMaterial": {
+            "name": "FilmMaterial",
+            "shortname": "FilmMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\film\\index.js",
+            "line": 4,
+            "description": "Film grain & scanlines shader\n\n- ported from HLSL to WebGL / GLSL\nhttp://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nScreen Space Static Postprocessor\n\nProduces an analogue noise overlay similar to a film grain / TV static\n\nOriginal implementation and noise algorithm\nPat \"Hawthorne\" Shearon\n\nOptimized scanlines + noise version with intensity scaling\nGeorg \"Leviathan\" Steinrohder\n\nThis version is provided under a Creative Commons Attribution 3.0 License\nhttp://creativecommons.org/licenses/by/3.0/",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "GlitchMaterial": {
+            "name": "GlitchMaterial",
+            "shortname": "GlitchMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\glitch\\index.js",
+            "line": 4,
+            "description": "A glitch shader material.\nBased on https://github.com/staffantan/unityglitch",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "GodRaysMaterial": {
+            "name": "GodRaysMaterial",
+            "shortname": "GodRaysMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\god-rays\\index.js",
+            "line": 28,
+            "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial",
+            "params": [
+                {
+                    "name": "phase",
+                    "description": "- Determines which shader code to use. See Phase enumeration.",
+                    "type": "Phase",
+                    "optional": true,
+                    "optdefault": "Phase.GENERATE"
+                }
+            ]
+        },
+        "LuminosityMaterial": {
+            "name": "LuminosityMaterial",
+            "shortname": "LuminosityMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\luminosity\\index.js",
+            "line": 4,
+            "description": "A luminosity shader material.\nhttp://en.wikipedia.org/wiki/Luminosity",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "ToneMappingMaterial": {
+            "name": "ToneMappingMaterial",
+            "shortname": "ToneMappingMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\materials\\tone-mapping\\index.js",
+            "line": 4,
+            "description": "Full-screen tone-mapping shader material.\nhttp://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial"
+        },
+        "AdaptiveToneMappingPass": {
+            "name": "AdaptiveToneMappingPass",
+            "shortname": "AdaptiveToneMappingPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 11,
+            "description": "Generates a texture that represents the luminosity of the current scene, adapted over time\nto simulate the optic nerve responding to the amount of light it is receiving.\nBased on a GDC2007 presentation by Wolfgang Engel titled \"Post-Processing Pipeline\"\n\nFull-screen tone-mapping shader based on http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "adaptive",
+                    "description": "- Adaptivity flag.",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "opacity",
+                    "description": "- The resolution.",
+                    "type": "Number",
+                    "optional": true
+                }
+            ]
+        },
+        "BloomPass": {
+            "name": "BloomPass",
+            "shortname": "BloomPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\bloom.js",
+            "line": 9,
+            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.\n\nSince the effect will be written to the readBuffer \nrender texture, you'll need to use a ShaderPass with \na CopyMaterial to render the texture to screen.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "strength",
+                    "description": "- The bloom strength.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "1.0"
+                },
+                {
+                    "name": "kernelSize",
+                    "description": "- The kernel size.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "25"
+                },
+                {
+                    "name": "sigma",
+                    "description": "- The sigma value.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "4.0"
+                },
+                {
+                    "name": "resolution",
+                    "description": "- The render resolution.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "256"
+                }
+            ]
+        },
+        "BokehPass": {
+            "name": "BokehPass",
+            "shortname": "BokehPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\bokeh.js",
+            "line": 5,
+            "description": "Depth-of-field pass using a bokeh shader.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "scene",
+                    "description": "- The scene to render.",
+                    "type": "Scene"
+                },
+                {
+                    "name": "camera",
+                    "description": "- The camera to use to render the scene.",
+                    "type": "Camera"
+                },
+                {
+                    "name": "params",
+                    "description": "- Additional parameters.",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "focus",
+                            "description": "- The focus.",
+                            "type": "Number",
+                            "optional": true
+                        },
+                        {
+                            "name": "aspect",
+                            "description": "- The aspect.",
+                            "type": "Number",
+                            "optional": true
+                        },
+                        {
+                            "name": "aperture",
+                            "description": "- The aperture.",
+                            "type": "Number",
+                            "optional": true
+                        },
+                        {
+                            "name": "maxBlur",
+                            "description": "- The maximum blur.",
+                            "type": "Number",
+                            "optional": true
+                        },
+                        {
+                            "name": "resolution",
+                            "description": "- The render resolution.",
+                            "type": "Number",
+                            "optional": true
+                        }
+                    ]
+                }
+            ]
+        },
+        "ClearMaskPass": {
+            "name": "ClearMaskPass",
+            "shortname": "ClearMaskPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\clear-mask.js",
+            "line": 3,
+            "description": "A clear mask pass.",
+            "is_constructor": 1,
+            "extends": "Pass"
+        },
+        "RenderPass": {
+            "name": "RenderPass",
+            "shortname": "RenderPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\render.js",
+            "line": 4,
+            "description": "A render pass.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "- The options.",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "tSize",
+                    "description": "- The pattern texture size.",
+                    "type": "Vector2",
+                    "optional": true,
+                    "optdefault": "(256.0, 256.0)"
+                },
+                {
+                    "name": "center",
+                    "description": "- The center.",
+                    "type": "Vector2",
+                    "optional": true,
+                    "optdefault": "(0.5, 0.5)"
+                },
+                {
+                    "name": "angle",
+                    "description": "- The angle.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "1.57"
+                },
+                {
+                    "name": "scale",
+                    "description": "- The scale.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "1.0"
+                }
+            ]
+        },
+        "TexturePass": {
+            "name": "TexturePass",
+            "shortname": "TexturePass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\texture.js",
+            "line": 5,
+            "description": "A texture pass.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "options",
+                    "description": "- The options.",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "grayscale",
+                            "description": "- Convert to greyscale.",
+                            "type": "Boolean",
+                            "optional": true,
+                            "optdefault": "true"
+                        },
+                        {
+                            "name": "noiseIntensity",
+                            "description": "- The noise intensity. 0.0 to 1.0.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.5"
+                        },
+                        {
+                            "name": "scanlinesIntensity",
+                            "description": "- The scanline intensity. 0.0 to 1.0.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.05"
+                        },
+                        {
+                            "name": "scanlinesCount",
+                            "description": "- The number of scanlines. 0.0 to 4096.0.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "4096.0"
+                        }
+                    ]
+                }
+            ]
+        },
+        "GlitchPass": {
+            "name": "GlitchPass",
+            "shortname": "GlitchPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\glitch.js",
+            "line": 5,
+            "description": "A glitch pass.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "dtSize",
+                    "description": "- The size of the generated displacement map.",
+                    "type": "Number",
+                    "optional": true,
+                    "optdefault": "64"
+                }
+            ]
+        },
+        "GodRaysPass": {
+            "name": "GodRaysPass",
+            "shortname": "GodRaysPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\god-rays.js",
+            "line": 5,
+            "description": "A crepuscular rays pass.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "scene",
+                    "description": "- The main scene. Used for depth rendering.",
+                    "type": "Scene"
+                },
+                {
+                    "name": "camera",
+                    "description": "- The main camera. Used for depth rendering.",
+                    "type": "Camera"
+                },
+                {
+                    "name": "lightSource",
+                    "description": "- The most important light source.",
+                    "type": "Vector3"
+                },
+                {
+                    "name": "options",
+                    "description": "- The options.",
+                    "type": "Object",
+                    "optional": true,
+                    "props": [
+                        {
+                            "name": "rayLength",
+                            "description": "- The maximum length of god rays. Valid values are 0.0 to 1.0.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1.0"
+                        },
+                        {
+                            "name": "exposure",
+                            "description": "- A constant attenuation coefficient.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.65"
+                        },
+                        {
+                            "name": "intensity",
+                            "description": "- A constant factor for additive blending. The higher, the brighter the result.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.75"
+                        },
+                        {
+                            "name": "resolution",
+                            "description": "- The render texture resolution.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "256"
+                        },
+                        {
+                            "name": "samples",
+                            "description": "- The number of samples per pixel.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "6"
+                        }
+                    ]
+                }
+            ]
+        },
+        "MaskPass": {
+            "name": "MaskPass",
+            "shortname": "MaskPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\mask.js",
+            "line": 3,
+            "description": "A mask pass.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "scene",
+                    "description": "- The scene to render.",
+                    "type": "Scene"
+                },
+                {
+                    "name": "camera",
+                    "description": "- The camera to use to render the scene.",
+                    "type": "Camera"
+                }
+            ]
+        },
+        "Pass": {
+            "name": "Pass",
+            "shortname": "Pass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\pass.js",
+            "line": 3,
+            "description": "An abstract render pass.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "scene",
+                    "description": "- The scene to render.",
+                    "type": "Scene",
+                    "optional": true
+                },
+                {
+                    "name": "camera",
+                    "description": "- The camera will be added to the given scene if it has no parent.",
+                    "type": "Camera",
+                    "optional": true
+                }
+            ]
+        },
+        "SavePass": {
+            "name": "SavePass",
+            "shortname": "SavePass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\save.js",
+            "line": 5,
+            "description": "A save pass.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "renderTarget",
+                    "description": "- The render target.",
+                    "type": "Scene"
+                }
+            ]
+        },
+        "ShaderPass": {
+            "name": "ShaderPass",
+            "shortname": "ShaderPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\passes\\shader.js",
+            "line": 4,
+            "description": "A shader pass.\n\nUsed to render simple shader materials as 2D filters.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "material",
+                    "description": "- The shader material to use.",
+                    "type": "ShaderMaterial"
+                },
+                {
+                    "name": "textureID",
+                    "description": "- The texture uniform identifier.",
+                    "type": "String",
+                    "optional": true,
+                    "optdefault": "tDiffuse"
+                }
+            ]
+        },
+        "EffectComposer": {
+            "name": "EffectComposer",
+            "shortname": "EffectComposer",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src\\effect-composer.js",
+            "line": 5,
+            "description": "The effect composer may be used in place of a normal WebGLRenderer.\n\nThe composer will disable the auto clear behaviour of the provided\nrenderer in order to prevent unnecessary clear operations. \nYou might want to use a RenderPass as your first pass to automatically \nclear the screen and render the scene to a texture for further processing.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer that should be used.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "renderTarget",
+                    "description": "- A render target to use for the post processing. If none is provided,",
+                    "type": "WebGLRenderTarget",
+                    "optional": true
+                }
+            ]
+        }
+    },
+    "elements": {},
+    "classitems": [
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 4,
+            "description": "Gauss kernel.\n\nDropped [ sqrt(2 * pi) * sigma ] term (unnecessary when normalizing).",
+            "itemtype": "method",
+            "name": "gauss",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "- X.",
+                    "type": "Number"
+                },
+                {
+                    "name": "sigma",
+                    "description": "- Sigma.",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "ConvolutionMaterial"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 55,
+            "description": "Creates a new kernel for this material.",
+            "params": [
+                {
+                    "name": "sigma",
+                    "description": "- Sigma value.",
+                    "type": "Number"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "ConvolutionMaterial"
+        },
+        {
+            "file": "src\\materials\\god-rays\\index.js",
+            "line": 4,
+            "description": "Phase enumeration.\n\nGenerate-phase:\n\n The input is the depth map which is blurred along radial lines towards the \"sun\". \n The output is written to a render texture.\n\nCombine-phase:\n\n The results of the previous pass are re-blurred two times with a decreased \n distance between samples.",
+            "itemtype": "property",
+            "name": "Phase",
+            "type": "Object",
+            "static": 1,
+            "final": 1,
+            "class": "GodRaysMaterial"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 29,
+            "description": "Render resolution.",
+            "itemtype": "property",
+            "name": "adaptive",
+            "type": "Number",
+            "default": "256",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 39,
+            "description": "Adaptivity flag.",
+            "itemtype": "property",
+            "name": "adaptive",
+            "type": "Boolean",
+            "default": "false",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 49,
+            "description": "Initialisation flag.",
+            "itemtype": "property",
+            "name": "needsInit",
+            "type": "Boolean",
+            "default": "true",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 59,
+            "description": "Luminance render target.",
+            "itemtype": "property",
+            "name": "luminanceRT",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 69,
+            "description": "Previous luminance render target.",
+            "itemtype": "property",
+            "name": "previousLuminanceRT",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 79,
+            "description": "Current luminance render target.",
+            "itemtype": "property",
+            "name": "currentLuminanceRT",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 89,
+            "description": "Copy shader material.",
+            "itemtype": "property",
+            "name": "materialCopy",
+            "type": "CopyMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 101,
+            "description": "Luminance shader material.",
+            "itemtype": "property",
+            "name": "materialLuminance",
+            "type": "LuminosityMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 112,
+            "description": "Adaptive luminance shader material.",
+            "itemtype": "property",
+            "name": "materialAdaptiveLuminosity",
+            "type": "AdaptiveLuminosityMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 124,
+            "description": "Tone mapping shader material.",
+            "itemtype": "property",
+            "name": "materialToneMapping",
+            "type": "ToneMappingMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 138,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 154,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 203,
+            "description": "Resets this pass.",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRender"
+                }
+            ],
+            "access": "private",
+            "tagname": "",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 247,
+            "description": "Sets whether this pass uses adaptive luminosity.",
+            "itemtype": "method",
+            "name": "setAdaptive",
+            "params": [
+                {
+                    "name": "adaptive",
+                    "description": "- Adaptivity flag.",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 274,
+            "description": "Sets the adaption rate (tau) for the adaptive luminosity.",
+            "itemtype": "method",
+            "name": "setAdaptionRate",
+            "params": [
+                {
+                    "name": "tau",
+                    "description": "- The new rate.",
+                    "type": "Number"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 291,
+            "description": "Sets the maximum luminosity value for the adaptive luminosity.",
+            "itemtype": "method",
+            "name": "setMaxLuminance",
+            "params": [
+                {
+                    "name": "maxLum",
+                    "description": "- The new maximum luminosity.",
+                    "type": "Number"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 308,
+            "description": "Sets the average luminance value for tone-mapping.",
+            "itemtype": "method",
+            "name": "setAverageLuminance",
+            "params": [
+                {
+                    "name": "avgLum",
+                    "description": "- The new average.",
+                    "type": "Number"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 325,
+            "description": "Sets the middle grey value for tone-mapping.",
+            "itemtype": "method",
+            "name": "setMiddleGrey",
+            "params": [
+                {
+                    "name": "middleGrey",
+                    "description": "- The new middle grey value.",
+                    "type": "Number"
+                }
+            ],
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\adaptive-tone-mapping.js",
+            "line": 342,
+            "description": "Deletes all render targets and materials.",
+            "itemtype": "method",
+            "name": "dispose",
+            "class": "AdaptiveToneMappingPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 37,
+            "description": "A render target.",
+            "itemtype": "property",
+            "name": "renderTargetX",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 51,
+            "description": "A second render target.",
+            "itemtype": "property",
+            "name": "renderTargetY",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 61,
+            "description": "Copy shader material.",
+            "itemtype": "property",
+            "name": "copyMaterial",
+            "type": "CopyMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 75,
+            "description": "Convolution shader material.",
+            "itemtype": "property",
+            "name": "convolutionMaterial",
+            "type": "ConvolutionMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 89,
+            "description": "Clear flag. If set to true, the blurring will occur.",
+            "itemtype": "property",
+            "name": "clear",
+            "type": "Boolean",
+            "default": "true",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 99,
+            "description": "The quad mesh to render.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 115,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                },
+                {
+                    "name": "maskActive",
+                    "description": "- Disable stencil test.",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "BloomPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 28,
+            "description": "A render target.",
+            "itemtype": "property",
+            "name": "renderTargetColor",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 42,
+            "description": "A render target for the depth.",
+            "itemtype": "property",
+            "name": "renderTargetDepth",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 52,
+            "description": "Depth shader material.",
+            "itemtype": "property",
+            "name": "depthMaterial",
+            "type": "MeshDepthMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 62,
+            "description": "Bokeh shader material.",
+            "itemtype": "property",
+            "name": "bokehMaterial",
+            "type": "BokehMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 78,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 88,
+            "description": "A scene to render the depth of field with.",
+            "itemtype": "property",
+            "name": "scene2",
+            "type": "Scene",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 98,
+            "description": "A camera to render the depth of field effect with.",
+            "itemtype": "property",
+            "name": "camera2",
+            "type": "Camera",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 109,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\bokeh.js",
+            "line": 125,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                },
+                {
+                    "name": "maskActive",
+                    "description": "- Disable stencil test.",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "BokehPass"
+        },
+        {
+            "file": "src\\passes\\clear-mask.js",
+            "line": 20,
+            "description": "This pass's render method disables the stencil test.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                },
+                {
+                    "name": "maskActive",
+                    "description": "- This flag is supposed to mask this pass, but it isn't used here :/ hm.",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "ClearMaskPass"
+        },
+        {
+            "file": "src\\passes\\dot-screen.js",
+            "line": 22,
+            "description": "Dot screen shader material description.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "DotScreenMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\dot-screen.js",
+            "line": 41,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\dot-screen.js",
+            "line": 54,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\dot-screen.js",
+            "line": 70,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 22,
+            "description": "Film shader material.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "FilmMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 41,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 54,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 70,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 19,
+            "description": "Glitch shader material.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "GlitchMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 30,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 43,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 54,
+            "description": "The quad mesh to render.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 63,
+            "description": "Counter for glitch activation/deactivation.",
+            "itemtype": "property",
+            "name": "curF",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 81,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                }
+            ],
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 140,
+            "description": "Creates a new break point for the glitch effect.",
+            "itemtype": "method",
+            "name": "generateTrigger",
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 152,
+            "description": "Generates a randomised displacementmap for this pass.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "size",
+                    "description": "- The texture size.",
+                    "type": "Number"
+                }
+            ],
+            "class": "GlitchPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 28,
+            "description": "The light source.",
+            "itemtype": "property",
+            "name": "lightSource",
+            "type": "Object3D",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 38,
+            "description": "The light position in screen space.",
+            "itemtype": "property",
+            "name": "screenLightPos",
+            "type": "Vector3",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 48,
+            "description": "A render target.",
+            "itemtype": "property",
+            "name": "renderTarget",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 62,
+            "description": "Another render target for ping-ponging.",
+            "itemtype": "property",
+            "name": "renderTargetY",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 72,
+            "description": "God rays shader material for the generate phase.",
+            "itemtype": "property",
+            "name": "godRaysGenerateMaterial",
+            "type": "GodRaysMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 85,
+            "description": "The exposure coefficient.",
+            "itemtype": "property",
+            "name": "exposure",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 96,
+            "description": "God rays shader material for the final composite phase.",
+            "itemtype": "property",
+            "name": "godRaysCombineMaterial",
+            "type": "GodRaysMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 108,
+            "description": "Depth material.",
+            "itemtype": "property",
+            "name": "depthMaterial",
+            "type": "MeshDepthMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 118,
+            "description": "The maximum length of god-rays (in texture space [0.0, 1.0]).\nTranslates to pre-computed step sizes for the 3 generate passes.",
+            "itemtype": "property",
+            "name": "stepSizes",
+            "type": "Float32Array",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 135,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 145,
+            "description": "A scene to render the god rays with.",
+            "itemtype": "property",
+            "name": "scene2",
+            "type": "Scene",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 155,
+            "description": "A camera to render the god rays with.",
+            "itemtype": "property",
+            "name": "camera2",
+            "type": "Camera",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 166,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 182,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                }
+            ],
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 239,
+            "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
+            "itemtype": "method",
+            "name": "computeAngleScalar",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "A scalar in the range 0.0 to 1.0.",
+                "type": "Number"
+            },
+            "class": "GodRaysPass"
+        },
+        {
+            "file": "src\\passes\\mask.js",
+            "line": 17,
+            "description": "Inverse flag.",
+            "itemtype": "property",
+            "name": "inverse",
+            "type": "Boolean",
+            "default": "false",
+            "class": "MaskPass"
+        },
+        {
+            "file": "src\\passes\\mask.js",
+            "line": 27,
+            "description": "Clear flag.",
+            "itemtype": "property",
+            "name": "clear",
+            "type": "Boolean",
+            "default": "true",
+            "class": "MaskPass"
+        },
+        {
+            "file": "src\\passes\\mask.js",
+            "line": 42,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                },
+                {
+                    "name": "maskActive",
+                    "description": "- This flag is supposed to mask this pass, but it isn't used here :/ hm.",
+                    "type": "Boolean"
+                }
+            ],
+            "class": "MaskPass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 14,
+            "description": "The scene to render.",
+            "itemtype": "property",
+            "name": "scene",
+            "type": "Scene",
+            "access": "private",
+            "tagname": "",
+            "default": "Scene()",
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 25,
+            "description": "The camera to render with.",
+            "itemtype": "property",
+            "name": "camera",
+            "type": "Camera",
+            "access": "private",
+            "tagname": "",
+            "default": "OrthographicCamera(-1, 1, 1, -1, 0, 1)",
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 38,
+            "description": "Enabled flag.",
+            "itemtype": "property",
+            "name": "enabled",
+            "type": "Boolean",
+            "default": "true",
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 48,
+            "description": "Render target swap flag.",
+            "itemtype": "property",
+            "name": "needsSwap",
+            "type": "Boolean",
+            "default": "false",
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 60,
+            "description": "Renders the scene.\nThis is an abstract method that must be overriden.",
+            "itemtype": "method",
+            "name": "render",
+            "throws": {
+                "description": "An error is thrown if the method is not overridden.",
+                "type": "Error"
+            },
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 74,
+            "description": "Updates this pass's render targets.\nThis is an abstract method that can be overriden in case  \na created render target depends on the renderer's size.",
+            "itemtype": "method",
+            "name": "update",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer.",
+                    "type": "WebGLRenderer"
+                }
+            ],
+            "example": [
+                "\n this.myRenderTarget.width = renderer.context.canvas.width / 2;"
+            ],
+            "class": "Pass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 20,
+            "description": "Override material.",
+            "itemtype": "property",
+            "name": "overrideMaterial",
+            "type": "Material",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 29,
+            "description": "Clear color.",
+            "itemtype": "property",
+            "name": "clearColor",
+            "type": "Color",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 38,
+            "description": "Clear alpha.",
+            "itemtype": "property",
+            "name": "clearAlpha",
+            "type": "Number",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 47,
+            "description": "Old clear color.",
+            "itemtype": "property",
+            "name": "oldClearColor",
+            "type": "Color",
+            "access": "private",
+            "tagname": "",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 57,
+            "description": "Old clear alpha.",
+            "itemtype": "property",
+            "name": "oldClearAlpha",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 67,
+            "description": "Clear flag.",
+            "itemtype": "property",
+            "name": "clear",
+            "type": "Boolean",
+            "default": "true",
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 82,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "RenderPass"
+        },
+        {
+            "file": "src\\passes\\save.js",
+            "line": 18,
+            "description": "Copy shader material.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "CopyMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "SavePass"
+        },
+        {
+            "file": "src\\passes\\save.js",
+            "line": 28,
+            "description": "The render target.",
+            "itemtype": "property",
+            "name": "renderTarget",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "SavePass"
+        },
+        {
+            "file": "src\\passes\\save.js",
+            "line": 49,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "SavePass"
+        },
+        {
+            "file": "src\\passes\\save.js",
+            "line": 65,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "SavePass"
+        },
+        {
+            "file": "src\\passes\\shader.js",
+            "line": 20,
+            "description": "The texture id used to set the read buffer render \ntexture in the shader.",
+            "itemtype": "property",
+            "name": "textureID",
+            "type": "String",
+            "default": "tDiffuse",
+            "class": "ShaderPass"
+        },
+        {
+            "file": "src\\passes\\shader.js",
+            "line": 31,
+            "description": "The shader material to use for rendering.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "ShaderMaterial",
+            "class": "ShaderPass"
+        },
+        {
+            "file": "src\\passes\\shader.js",
+            "line": 40,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "ShaderPass"
+        },
+        {
+            "file": "src\\passes\\shader.js",
+            "line": 53,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "ShaderPass"
+        },
+        {
+            "file": "src\\passes\\shader.js",
+            "line": 69,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "ShaderPass"
+        },
+        {
+            "file": "src\\passes\\texture.js",
+            "line": 19,
+            "description": "Copy shader material.",
+            "itemtype": "property",
+            "name": "material",
+            "type": "CopyMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\texture.js",
+            "line": 31,
+            "description": "The quad mesh to use for rendering the 2D effect.",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\passes\\texture.js",
+            "line": 47,
+            "description": "Renders the scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "delta",
+                    "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "TexturePass"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 23,
+            "description": "The renderer.",
+            "itemtype": "property",
+            "name": "renderer",
+            "type": "WebGLRenderer",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 33,
+            "description": "The render target.",
+            "itemtype": "property",
+            "name": "renderTarget1",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 58,
+            "description": "A copy of the render target.",
+            "itemtype": "property",
+            "name": "renderTarget2",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 68,
+            "description": "The write buffer. Alias for renderTarget1.",
+            "itemtype": "property",
+            "name": "writeBuffer",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 78,
+            "description": "The read buffer. Alias for renderTarget2.",
+            "itemtype": "property",
+            "name": "readBuffer",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 88,
+            "description": "The render passes.",
+            "itemtype": "property",
+            "name": "passes",
+            "type": "Array",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 98,
+            "description": "A copy pass.",
+            "itemtype": "property",
+            "name": "copyPass",
+            "type": "ShaderPass",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 110,
+            "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass \nby setting the needsSwap flag.",
+            "itemtype": "method",
+            "name": "swapBuffers",
+            "access": "private",
+            "tagname": "",
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 127,
+            "description": "Adds another pass.",
+            "itemtype": "method",
+            "name": "addPass",
+            "params": [
+                {
+                    "name": "pass",
+                    "description": "- A new pass.",
+                    "type": "Pass"
+                }
+            ],
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 141,
+            "description": "Inserts a new pass at a specific index.",
+            "itemtype": "method",
+            "name": "insertPass",
+            "params": [
+                {
+                    "name": "pass",
+                    "description": "- The pass.",
+                    "type": "Pass"
+                },
+                {
+                    "name": "index",
+                    "description": "- The index.",
+                    "type": "Number"
+                }
+            ],
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 156,
+            "description": "Renders all passes in order.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "delta",
+                    "description": "- The delta time between the last frame and the current one.",
+                    "type": "Number"
+                }
+            ],
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 210,
+            "description": "Resets the composer's render textures.\nCall this method when the size of the renderer's canvas changed or\nif you want to drop the old read/write buffers and create new ones.",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "renderTarget",
+                    "description": "- A new render target to use.",
+                    "type": "WebGLRenderTarget",
+                    "optional": true
+                }
+            ],
+            "class": "EffectComposer"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 253,
+            "description": "Sets the render size.",
+            "itemtype": "method",
+            "name": "setSize",
+            "params": [
+                {
+                    "name": "width",
+                    "description": "- The width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "height",
+                    "description": "- The height.",
+                    "type": "Number"
+                }
+            ],
+            "class": "EffectComposer"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nCreates a new kernel for this material.",
+            "line": " src\\materials\\convolution\\index.js:55"
+        }
+    ]
+}

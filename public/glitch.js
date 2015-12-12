@@ -4,7 +4,7 @@ window.addEventListener("load", function init() {
 
 	// Renderer and Scene.
 
-	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: false});
+	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2(0x000000, 0.001);
 	renderer.setClearColor(0x000000);
@@ -47,7 +47,7 @@ window.addEventListener("load", function init() {
 	var geometry = new THREE.SphereBufferGeometry(1, 4, 4);
 	var material = new THREE.MeshPhongMaterial({color: 0xffffff, shading: THREE.FlatShading});
 
-	for ( i = 0; i < 100; ++i) {
+	for(i = 0; i < 100; ++i) {
 
 		material = new THREE.MeshPhongMaterial({color: 0xffffff * Math.random(), shading: THREE.FlatShading});
 
@@ -83,6 +83,7 @@ window.addEventListener("load", function init() {
 		renderer.setSize(width, height);
 		camera.aspect = width / height;
 		camera.updateProjectionMatrix();
+		composer.reset();
 
 	});
 

@@ -20,7 +20,7 @@ export function TexturePass(texture, opacity) {
 	 * Copy shader material.
 	 *
 	 * @property material
-	 * @type {CopyMaterial}
+	 * @type CopyMaterial
 	 * @private
 	 */
 
@@ -29,10 +29,11 @@ export function TexturePass(texture, opacity) {
 	this.material.uniforms.opacity.value = (opacity !== undefined) ? opacity : 1.0;
 
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);

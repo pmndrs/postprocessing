@@ -6,8 +6,11 @@ import THREE from "three";
  *
  * Dropped [ sqrt(2 * pi) * sigma ] term (unnecessary when normalizing).
  *
+ * @method gauss
  * @param {Number} x - X.
  * @param {Number} sigma - Sigma.
+ * @private
+ * @static
  */
 
 function gauss(x, sigma) { return Math.exp(-(x * x) / (2.0 * sigma * sigma)); }
@@ -53,6 +56,7 @@ ConvolutionMaterial.prototype.constructor = ConvolutionMaterial;
  * Creates a new kernel for this material.
  *
  * @param {Number} sigma - Sigma value.
+ * @private
  */
 
 ConvolutionMaterial.prototype.buildKernel = function(sigma) {

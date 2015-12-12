@@ -17,13 +17,13 @@ import THREE from "three";
 
 export function DotScreenPass(options) {
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+	Pass.call(this);
 
 	/**
 	 * Dot screen shader material description.
 	 *
 	 * @property material
-	 * @type {DotScreenMaterial}
+	 * @type DotScreenMaterial
 	 * @private
 	 */
 
@@ -42,7 +42,7 @@ export function DotScreenPass(options) {
 	 * Render to screen flag.
 	 *
 	 * @property renderToScreen
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
@@ -52,10 +52,11 @@ export function DotScreenPass(options) {
 	this.needsSwap = true;
 
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);

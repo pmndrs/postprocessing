@@ -21,7 +21,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * Override material.
 	 *
 	 * @property overrideMaterial
-	 * @type {Material}
+	 * @type Material
 	 */
 
 	this.overrideMaterial = overrideMaterial;
@@ -30,7 +30,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * Clear color.
 	 *
 	 * @property clearColor
-	 * @type {Color}
+	 * @type Color
 	 */
 
 	this.clearColor = clearColor;
@@ -39,7 +39,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * Clear alpha.
 	 *
 	 * @property clearAlpha
-	 * @type {Number}
+	 * @type Number
 	 */
 
 	this.clearAlpha = (clearAlpha !== undefined) ? clearAlpha : 1;
@@ -48,7 +48,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * Old clear color.
 	 *
 	 * @property oldClearColor
-	 * @type {Color}
+	 * @type Color
 	 * @private
 	 */
 
@@ -58,11 +58,21 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * Old clear alpha.
 	 *
 	 * @property oldClearAlpha
-	 * @type {Number}
+	 * @type Number
 	 * @private
 	 */
 
 	this.oldClearAlpha = 1.0;
+
+	/**
+	 * Clear flag.
+	 *
+	 * @property clear
+	 * @type Boolean
+	 * @default true
+	 */
+
+	this.clear = true;
 
 }
 

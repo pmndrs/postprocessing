@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src\effect-composer.js - postprocessing</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
+                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
+                                <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
+                                <li><a href="../classes/BokehPass.html">BokehPass</a></li>
+                                <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
+                                <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
+                                <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
+                                <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
+                                <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
+                                <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
+                                <li><a href="../classes/MaskPass.html">MaskPass</a></li>
+                                <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/RenderPass.html">RenderPass</a></li>
+                                <li><a href="../classes/SavePass.html">SavePass</a></li>
+                                <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
+                                <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1 class="file-heading">File: src\effect-composer.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+import { CopyMaterial } from &quot;./materials&quot;;
+import { ShaderPass, MaskPass, ClearMaskPass } from &quot;./passes&quot;;
+import THREE from &quot;three&quot;;
+
+/**
+ * The effect composer may be used in place of a normal WebGLRenderer.
+ *
+ * The composer will disable the auto clear behaviour of the provided
+ * renderer in order to prevent unnecessary clear operations. 
+ * You might want to use a RenderPass as your first pass to automatically 
+ * clear the screen and render the scene to a texture for further processing. 
+ *
+ * @class EffectComposer
+ * @constructor
+ * @param {WebGLRenderer} renderer - The renderer that should be used.
+ * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing. If none is provided,
+ */
+
+export function EffectComposer(renderer, renderTarget) {
+
+	var pixelRatio, width, height;
+
+	/**
+	 * The renderer.
+	 *
+	 * @property renderer
+	 * @type WebGLRenderer
+	 */
+
+	this.renderer = renderer;
+	this.renderer.autoClear = false;
+
+	/**
+	 * The render target.
+	 *
+	 * @property renderTarget1
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	if(renderTarget === undefined) {
+
+		pixelRatio = renderer.getPixelRatio();
+		width = Math.floor(renderer.context.canvas.width / pixelRatio) || 1;
+		height = Math.floor(renderer.context.canvas.height / pixelRatio) || 1;
+
+		renderTarget = new THREE.WebGLRenderTarget(width, height, {
+			minFilter: THREE.LinearFilter,
+			magFilter: THREE.LinearFilter,
+			format: THREE.RGBFormat,
+			stencilBuffer: false
+		});
+
+	}
+
+	this.renderTarget1 = renderTarget;
+
+	/**
+	 * A copy of the render target.
+	 *
+	 * @property renderTarget2
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.renderTarget2 = renderTarget.clone();
+
+	/**
+	 * The write buffer. Alias for renderTarget1.
+	 *
+	 * @property writeBuffer
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.writeBuffer = this.renderTarget1;
+
+	/**
+	 * The read buffer. Alias for renderTarget2.
+	 *
+	 * @property readBuffer
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.readBuffer = this.renderTarget2;
+
+	/**
+	 * The render passes.
+	 *
+	 * @property passes
+	 * @type Array
+	 * @private
+	 */
+
+	this.passes = [];
+
+	/**
+	 * A copy pass.
+	 *
+	 * @property copyPass
+	 * @type ShaderPass
+	 * @private
+	 */
+
+	this.copyPass = new ShaderPass(new CopyMaterial());
+
+}
+
+/**
+ * Swaps the render targets on demand.
+ * You can toggle swapping in your pass 
+ * by setting the needsSwap flag.
+ *
+ * @method swapBuffers
+ * @private
+ */
+
+EffectComposer.prototype.swapBuffers = function() {
+
+	var tmp = this.readBuffer;
+	this.readBuffer = this.writeBuffer;
+	this.writeBuffer = tmp;
+
+};
+
+/**
+ * Adds another pass.
+ *
+ * @method addPass
+ * @param {Pass} pass - A new pass.
+ */
+
+EffectComposer.prototype.addPass = function(pass) {
+
+	this.passes.push(pass);
+	pass.update(this.renderer);
+
+};
+
+/**
+ * Inserts a new pass at a specific index.
+ *
+ * @method insertPass
+ * @param {Pass} pass - The pass.
+ * @param {Number} index - The index.
+ */
+
+EffectComposer.prototype.insertPass = function(pass, index) {
+
+	this.passes.splice(index, 0, pass);
+	pass.update(this.renderer);
+
+};
+
+/**
+ * Renders all passes in order.
+ *
+ * @method render
+ * @param {Number} delta - The delta time between the last frame and the current one.
+ */
+
+EffectComposer.prototype.render = function(delta) {
+
+	this.writeBuffer = this.renderTarget1;
+	this.readBuffer = this.renderTarget2;
+
+	var maskActive = false;
+	var i, l, pass, context;
+
+	for(i = 0, l = this.passes.length; i &lt; l; ++i) {
+
+		pass = this.passes[i];
+
+		if(pass.enabled) {
+
+			pass.render(this.renderer, this.writeBuffer, this.readBuffer, delta, maskActive);
+
+			if(pass.needsSwap) {
+
+				if(maskActive) {
+
+					context = this.renderer.context;
+					context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
+					this.copyPass.render(this.renderer, this.writeBuffer, this.readBuffer, delta);
+					context.stencilFunc(context.EQUAL, 1, 0xffffffff);
+
+				}
+
+				this.swapBuffers();
+
+			}
+
+			if(pass instanceof MaskPass) {
+
+				maskActive = true;
+
+			} else if(pass instanceof ClearMaskPass) {
+
+				maskActive = false;
+
+			}
+
+		}
+
+	}
+
+};
+
+/**
+ * Resets the composer&#x27;s render textures.
+ * Call this method when the size of the renderer&#x27;s canvas changed or
+ * if you want to drop the old read/write buffers and create new ones.
+ *
+ * @method reset
+ * @param {WebGLRenderTarget} [renderTarget] - A new render target to use.
+ */
+
+EffectComposer.prototype.reset = function(renderTarget) {
+
+	var pixelRatio;
+
+	if(renderTarget === undefined) {
+
+		renderTarget = this.renderTarget1.clone();
+
+		pixelRatio = this.renderer.getPixelRatio();
+
+		renderTarget.width = Math.floor(this.renderer.context.canvas.width / pixelRatio);
+		renderTarget.height = Math.floor(this.renderer.context.canvas.height / pixelRatio);
+
+	}
+
+	this.renderTarget1.dispose();
+	this.renderTarget1 = renderTarget;
+	this.renderTarget2.dispose();
+	this.renderTarget2 = renderTarget.clone();
+
+	this.writeBuffer = this.renderTarget1;
+	this.readBuffer = this.renderTarget2;
+
+	var i, l;
+
+	// Let all passes adjust to the renderer size.
+	for(i = 0, l = this.passes.length; i &lt; l; ++i) {
+
+		this.passes[i].update(this.renderer);
+
+	}
+
+};
+
+/**
+ * Sets the render size.
+ *
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} height - The height.
+ */
+
+EffectComposer.prototype.setSize = function(width, height) {
+
+	this.renderTarget1.setSize(width, height);
+	this.renderTarget2.setSize(width, height);
+
+};
+
+    </pre>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

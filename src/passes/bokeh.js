@@ -22,18 +22,15 @@ export function BokehPass(scene, camera, params) {
 
 	Pass.call(this, scene, camera);
 
-	// Defaults.
-	var focus = (params.focus !== undefined) ? params.focus : 1.0;
-	var aspect = (params.aspect !== undefined) ? params.aspect : camera.aspect;
-	var aperture = (params.aperture !== undefined) ? params.aperture : 0.025;
-	var maxBlur = (params.maxBlur !== undefined) ? params.maxBlur : 1.0;
+	if(params === undefined) { params = {}; }
 	var resolution = (params.resolution !== undefined) ? resolution : 256;
 
 	/**
 	 * A render target.
 	 *
 	 * @property renderTargetColor
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.renderTargetColor = new THREE.WebGLRenderTarget(resolution, resolution, {
@@ -46,7 +43,8 @@ export function BokehPass(scene, camera, params) {
 	 * A render target for the depth.
 	 *
 	 * @property renderTargetDepth
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.renderTargetDepth = this.renderTargetColor.clone();
@@ -55,7 +53,7 @@ export function BokehPass(scene, camera, params) {
 	 * Depth shader material.
 	 *
 	 * @property depthMaterial
-	 * @type {MeshDepthMaterial}
+	 * @type MeshDepthMaterial
 	 * @private
 	 */
 
@@ -65,57 +63,59 @@ export function BokehPass(scene, camera, params) {
 	 * Bokeh shader material.
 	 *
 	 * @property bokehMaterial
-	 * @type {BokehMaterial}
+	 * @type BokehMaterial
 	 * @private
 	 */
 
 	this.bokehMaterial = new BokehMaterial();
 	this.bokehMaterial.uniforms.tDepth.value = this.renderTargetDepth;
-	this.bokehMaterial.uniforms.focus.value = focus;
-	this.bokehMaterial.uniforms.aspect.value = aspect;
-	this.bokehMaterial.uniforms.aperture.value = aperture;
-	this.bokehMaterial.uniforms.maxBlur.value = maxBlur;
+
+	if(params.focus !== undefined) { this.bokehMaterial.uniforms.focus.value = params.focus; }
+	if(params.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = params.aspect; }
+	if(params.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = params.aperture; }
+	if(params.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = params.maxBlur; }
 
 	/**
 	 * Render to screen flag.
 	 *
 	 * @property renderToScreen
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
 	this.renderToScreen = false;
 
-	// Don't clear in this pass.
-	this.clear = false;
-
 	/**
-	 * A scene to render the second quad with.
+	 * A scene to render the depth of field with.
 	 *
 	 * @property scene2
-	 * @type {Scene}
+	 * @type Scene
+	 * @private
 	 */
 
 	this.scene2  = new THREE.Scene();
 
 	/**
-	 * A camera to render the second quad with.
+	 * A camera to render the depth of field effect with.
 	 *
 	 * @property camera2
-	 * @type {Camera}
+	 * @type Camera
+	 * @private
 	 */
 
-	this.camera2 = new THREE.OrthographicCamera( - 1, 1, 1, - 1, 0, 1 );
+	this.camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+	this.scene2.add(this.camera2);
 
 	/**
-	 * Another quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
-	 * @property quad2
-	 * @type {Mesh}
+	 * @property quad
+	 * @type Mesh
+	 * @private
 	 */
 
-	this.quad2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene2.add(this.quad2);
+	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+	this.scene2.add(this.quad);
 
 }
 
@@ -135,14 +135,13 @@ BokehPass.prototype.constructor = BokehPass;
 
 BokehPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 
-	this.quad2.material = this.bokehMaterial;
-
 	// Render depth into texture.
 	this.scene.overrideMaterial = this.depthMaterial;
-
 	renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
+	this.scene.overrideMaterial = null;
 
 	// Render bokeh composite.
+	this.quad.material = this.bokehMaterial;
 	this.bokehMaterial.uniforms.tColor.value = readBuffer;
 
 	if(this.renderToScreen) {
@@ -154,7 +153,5 @@ BokehPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 		renderer.render(this.scene2, this.camera2, writeBuffer, this.clear);
 
 	}
-
-	this.scene.overrideMaterial = null;
 
 };

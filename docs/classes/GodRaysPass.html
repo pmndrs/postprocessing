@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GodRaysPass - postprocessing</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="icon" href="../assets/favicon.ico">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+                <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.0.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+                    <h2 class="off-left">APIs</h2>
+                    <div id="api-tabview" class="tabview">
+                        <ul class="tabs">
+                            <li><a href="#api-classes">Classes</a></li>
+                            <li><a href="#api-modules">Modules</a></li>
+                        </ul>
+                
+                        <div id="api-tabview-filter">
+                            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+                        </div>
+                
+                        <div id="api-tabview-panel">
+                            <ul id="api-classes" class="apis classes">
+                                <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
+                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
+                                <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
+                                <li><a href="../classes/BokehPass.html">BokehPass</a></li>
+                                <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
+                                <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
+                                <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
+                                <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
+                                <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
+                                <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
+                                <li><a href="../classes/MaskPass.html">MaskPass</a></li>
+                                <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/RenderPass.html">RenderPass</a></li>
+                                <li><a href="../classes/SavePass.html">SavePass</a></li>
+                                <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
+                                <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                            </ul>
+                
+                
+                            <ul id="api-modules" class="apis modules">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+                    Show:
+                    <label for="api-show-inherited">
+                        <input type="checkbox" id="api-show-inherited" checked>
+                        Inherited
+                    </label>
+            
+                    <label for="api-show-protected">
+                        <input type="checkbox" id="api-show-protected">
+                        Protected
+                    </label>
+            
+                    <label for="api-show-private">
+                        <input type="checkbox" id="api-show-private">
+                        Private
+                    </label>
+                    <label for="api-show-deprecated">
+                        <input type="checkbox" id="api-show-deprecated">
+                        Deprecated
+                    </label>
+            
+                </div>
+            
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+<h1>GodRaysPass Class</h1>
+<div class="box meta">
+
+
+        <div class="foundat">
+            Defined in: <a href="../files/src_passes_god-rays.js.html#l5"><code>src\passes\god-rays.js:5</code></a>
+        </div>
+
+
+</div>
+
+
+<div class="box intro">
+    <p>A crepuscular rays pass.</p>
+
+</div>
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_GodRaysPass" class="method item">
+    <h3 class="name"><code>GodRaysPass</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>scene</code>
+                </li>
+                <li class="arg">
+                        <code>camera</code>
+                </li>
+                <li class="arg">
+                        <code>lightSource</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l5"><code>src\passes\god-rays.js:5</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">scene</code>
+                        <span class="type">Scene</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The main scene. Used for depth rendering.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">camera</code>
+                        <span class="type">Camera</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The main camera. Used for depth rendering.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">lightSource</code>
+                        <span class="type">Vector3</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The most important light source.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The options.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[rayLength=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The maximum length of god rays. Valid values are 0.0 to 1.0.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[exposure=0.65]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A constant attenuation coefficient.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[intensity=0.75]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A constant factor for additive blending. The higher, the brighter the result.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[resolution=256]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The render texture resolution.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[samples=6]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The number of samples per pixel.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                            <li class="index-item method private">
+                                <a href="#method_computeAngleScalar">computeAngleScalar</a>
+
+                            </li>
+                            <li class="index-item method">
+                                <a href="#method_render">render</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                            <li class="index-item property private">
+                                <a href="#property_camera2">camera2</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_depthMaterial">depthMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_exposure">exposure</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_godRaysCombineMaterial">godRaysCombineMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_godRaysGenerateMaterial">godRaysGenerateMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_lightSource">lightSource</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_quad">quad</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTarget">renderTarget</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetY">renderTargetY</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_scene2">scene2</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_screenLightPos">screenLightPos</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_stepSizes">stepSizes</a>
+
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_computeAngleScalar" class="method item private">
+    <h3 class="name"><code>computeAngleScalar</code></h3>
+
+        <span class="paren">()</span>
+
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l239"><code>src\passes\god-rays.js:239</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Computes the angle between the camera look direction and the light
+direction in order to create a scalar for the god rays exposure.</p>
+
+    </div>
+
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Number</span>:
+                    <p>A scalar in the range 0.0 to 1.0.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_render" class="method item">
+    <h3 class="name"><code>render</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>readBuffer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l182"><code>src\passes\god-rays.js:182</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Renders the scene.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The renderer to use.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">readBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+            </div>
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_camera2" class="property item private">
+    <h3 class="name"><code>camera2</code></h3>
+    <span class="type">Camera</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l155"><code>src\passes\god-rays.js:155</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A camera to render the god rays with.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_depthMaterial" class="property item private">
+    <h3 class="name"><code>depthMaterial</code></h3>
+    <span class="type">MeshDepthMaterial</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l108"><code>src\passes\god-rays.js:108</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Depth material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_exposure" class="property item private">
+    <h3 class="name"><code>exposure</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l85"><code>src\passes\god-rays.js:85</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The exposure coefficient.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_godRaysCombineMaterial" class="property item private">
+    <h3 class="name"><code>godRaysCombineMaterial</code></h3>
+    <span class="type"><a href="../classes/GodRaysMaterial.html" class="crosslink">GodRaysMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l96"><code>src\passes\god-rays.js:96</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>God rays shader material for the final composite phase.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_godRaysGenerateMaterial" class="property item private">
+    <h3 class="name"><code>godRaysGenerateMaterial</code></h3>
+    <span class="type"><a href="../classes/GodRaysMaterial.html" class="crosslink">GodRaysMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l72"><code>src\passes\god-rays.js:72</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>God rays shader material for the generate phase.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_lightSource" class="property item private">
+    <h3 class="name"><code>lightSource</code></h3>
+    <span class="type">Object3D</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l28"><code>src\passes\god-rays.js:28</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The light source.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_quad" class="property item private">
+    <h3 class="name"><code>quad</code></h3>
+    <span class="type">Mesh</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l166"><code>src\passes\god-rays.js:166</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The quad mesh to use for rendering the 2D effect.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTarget" class="property item private">
+    <h3 class="name"><code>renderTarget</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l48"><code>src\passes\god-rays.js:48</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetY" class="property item private">
+    <h3 class="name"><code>renderTargetY</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l62"><code>src\passes\god-rays.js:62</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Another render target for ping-ponging.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderToScreen" class="property item">
+    <h3 class="name"><code>renderToScreen</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l135"><code>src\passes\god-rays.js:135</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Render to screen flag.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_scene2" class="property item private">
+    <h3 class="name"><code>scene2</code></h3>
+    <span class="type">Scene</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l145"><code>src\passes\god-rays.js:145</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A scene to render the god rays with.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_screenLightPos" class="property item private">
+    <h3 class="name"><code>screenLightPos</code></h3>
+    <span class="type">Vector3</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l38"><code>src\passes\god-rays.js:38</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The light position in screen space.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_stepSizes" class="property item private">
+    <h3 class="name"><code>stepSizes</code></h3>
+    <span class="type">Float32Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l118"><code>src\passes\god-rays.js:118</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The maximum length of god-rays (in texture space [0.0, 1.0]).
+Translates to pre-computed step sizes for the 3 generate passes.</p>
+
+    </div>
+
+
+
+</div>
+            </div>
+
+
+    </div>
+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

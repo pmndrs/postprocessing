@@ -18,11 +18,21 @@ export function MaskPass(scene, camera) {
 	 * Inverse flag.
 	 *
 	 * @property inverse
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
 	this.inverse = false;
+
+	/**
+	 * Clear flag.
+	 *
+	 * @property clear
+	 * @type Boolean
+	 * @default true
+	 */
+
+	this.clear = true;
 
 }
 

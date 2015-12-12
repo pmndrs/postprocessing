@@ -4,7 +4,8 @@
 [![npm version](https://badge.fury.io/js/postprocessing.svg)](http://badge.fury.io/js/postprocessing) 
 [![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
 
-A post processing library with filter effects and GPGPU algorithms for three.js. 
+A post processing library that provides the means to implement 2D filter effects for three.js. 
+Common implementations such as god rays and bloom are included. 
 
 
 ## Installation
@@ -17,19 +18,9 @@ $ npm install postprocessing
 ## Usage
 
 ```javascript
-import {
-	EffectComposer,
-	RenderPass,
-	GlitchPass
-} from "postprocessing";
-
-// Three is no ES6 module yet so this won't work.
-// Use the global THREE variable instead!
-import {
-	WebGLRenderer,
-	Scene,
-	Camera
-} from "three";
+// Attention: Three is not yet an ES6 module!
+import { WebGLRenderer, Scene, Camera } from "three";
+import { EffectComposer, RenderPass, GlitchPass } from "postprocessing";
 
 var composer = new EffectComposer(new WebGLRenderer());
 composer.addPass(new RenderPass(new Scene(), new Camera()));
@@ -38,7 +29,12 @@ var glitchPass = new GlitchPass();
 glitchPass.renderToScreen = true;
 composer.addPass(glitchPass);
 
-composer.render();
+(function render(now) {
+
+	composer.render();
+	requestAnimationFrame(render);
+
+}());
 ```
 
 
@@ -52,6 +48,6 @@ Maintain the existing coding style. Add unit tests for any new or changed functi
 
 ## License
 The original code was written by [alteredq](http://alteredqualia.com), 
-[miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85) and 
-[felixturner](http://airtight.cc/) 
+[miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), 
+[felixturner](http://airtight.cc) and [huwb](http://huwbowles.com) 
 and is licensed under the [MIT license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).  

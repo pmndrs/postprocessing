@@ -13,13 +13,13 @@ import THREE from "three";
 
 export function SavePass(renderTarget) {
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+	Pass.call(this);
 
 	/**
 	 * Copy shader material.
 	 *
 	 * @property material
-	 * @type {CopyMaterial}
+	 * @type CopyMaterial
 	 * @private
 	 */
 
@@ -29,7 +29,8 @@ export function SavePass(renderTarget) {
 	 * The render target.
 	 *
 	 * @property renderTarget
-	 * @type {WebGLRenderTarget}
+	 * @type WebGLRenderTarget
+	 * @private
 	 */
 
 	this.renderTarget = renderTarget;
@@ -45,14 +46,12 @@ export function SavePass(renderTarget) {
 
 	}
 
-	// Don't clear in this pass.
-	this.clear = false;
-
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);

@@ -12,7 +12,7 @@ import THREE from "three";
 
 export function GlitchPass(dtSize) {
 
-	Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+	Pass.call(this);
 
 	if(dtSize === undefined) { dtSize = 64; }
 
@@ -20,18 +20,18 @@ export function GlitchPass(dtSize) {
 	 * Glitch shader material.
 	 *
 	 * @property material
-	 * @type {GlitchMaterial}
+	 * @type GlitchMaterial
 	 * @private
 	 */
 
 	this.material = new GlitchMaterial();
-	this.material.uniforms.tDisp.value = this.generateHeightmap(dtSize);
+	this.generateHeightmap(dtSize);
 
 	/**
 	 * Render to screen flag.
 	 *
 	 * @property renderToScreen
-	 * @type {Boolean}
+	 * @type Boolean
 	 * @default false
 	 */
 
@@ -41,10 +41,11 @@ export function GlitchPass(dtSize) {
 	this.needsSwap = true;
 
 	/**
-	 * The quad mesh to render.
+	 * The quad mesh to use for rendering the 2D effect.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
+	 * @private
 	 */
 
 	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
@@ -54,7 +55,7 @@ export function GlitchPass(dtSize) {
 	 * The quad mesh to render.
 	 *
 	 * @property quad
-	 * @type {Mesh}
+	 * @type Mesh
 	 */
 
 	this.goWild = false;
@@ -63,7 +64,7 @@ export function GlitchPass(dtSize) {
 	 * Counter for glitch activation/deactivation.
 	 *
 	 * @property curF
-	 * @type {Number}
+	 * @type Number
 	 * @private
 	 */
 
@@ -149,11 +150,10 @@ GlitchPass.prototype.generateTrigger = function() {
 };
 
 /**
- * Generates a randomised heightmap for displacement.
+ * Generates a randomised displacementmap for this pass.
  *
  * @method render
  * @param {Number} size - The texture size.
- * @return {Texture} The texture.
  */
 
 GlitchPass.prototype.generateHeightmap = function(size) {
@@ -174,6 +174,6 @@ GlitchPass.prototype.generateHeightmap = function(size) {
 	t = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 	t.needsUpdate = true;
 
-	return t;
+	this.material.uniforms.tDisp.value = t;
 
 };
