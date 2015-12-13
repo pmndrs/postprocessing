@@ -147,7 +147,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-mocha");
 
 	grunt.registerTask("default", ["build", "uglify", "mocha"]);
-	grunt.registerTask("build", ["jshint", "fsinline", "rollup", "copy", "clean"]);
+	grunt.registerTask("build", ["clean", "jshint", "fsinline", "rollup", "copy"]);
 	grunt.registerTask("test", ["jshint", "mocha"]);
 
 };
