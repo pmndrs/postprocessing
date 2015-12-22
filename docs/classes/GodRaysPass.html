@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: 0.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -233,7 +233,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[exposure=0.65]</code>
+                                    <code class="param-name optional">[decay=0.93]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -246,7 +246,33 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[intensity=0.75]</code>
+                                    <code class="param-name optional">[weight=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A constant attenuation coefficient.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[exposure=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A constant attenuation coefficient.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[intensity=0.69]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -259,13 +285,13 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[resolution=256]</code>
+                                    <code class="param-name optional">[resolutionScale=0.25]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The render texture resolution.</li>
+<li>The god rays render texture resolution scale relative to the on-screen render size.</li>
 </ul>
 
                                 </div>
@@ -318,6 +344,10 @@
                                 <a href="#method_render">render</a>
 
                             </li>
+                            <li class="index-item method">
+                                <a href="#method_updateRenderSize">updateRenderSize</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -327,10 +357,6 @@
                     <ul class="index-list properties">
                             <li class="index-item property private">
                                 <a href="#property_camera2">camera2</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_depthMaterial">depthMaterial</a>
 
                             </li>
                             <li class="index-item property private">
@@ -350,6 +376,10 @@
 
                             </li>
                             <li class="index-item property private">
+                                <a href="#property_maskMaterial">maskMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
                                 <a href="#property_quad">quad</a>
 
                             </li>
@@ -363,6 +393,10 @@
                             </li>
                             <li class="index-item property">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property private">
@@ -405,7 +439,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l239"><code>src\passes\god-rays.js:239</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l257"><code>src\passes\god-rays.js:257</code></a>
         </p>
 
 
@@ -458,7 +492,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l182"><code>src\passes\god-rays.js:182</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l195"><code>src\passes\god-rays.js:195</code></a>
         </p>
 
 
@@ -519,6 +553,78 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
+<div id="method_updateRenderSize" class="method item">
+    <h3 class="name"><code>updateRenderSize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>w</code>
+                </li>
+                <li class="arg">
+                        <code>h</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l293"><code>src\passes\god-rays.js:293</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Updates this pass with the new main render size.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">w</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The on-screen render width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">h</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The on-screen render height.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
@@ -536,7 +642,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l155"><code>src\passes\god-rays.js:155</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l168"><code>src\passes\god-rays.js:168</code></a>
         </p>
 
 
@@ -544,32 +650,6 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     <div class="description">
         <p>A camera to render the god rays with.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_depthMaterial" class="property item private">
-    <h3 class="name"><code>depthMaterial</code></h3>
-    <span class="type">MeshDepthMaterial</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l108"><code>src\passes\god-rays.js:108</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Depth material.</p>
 
     </div>
 
@@ -588,7 +668,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l85"><code>src\passes\god-rays.js:85</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l98"><code>src\passes\god-rays.js:98</code></a>
         </p>
 
 
@@ -614,7 +694,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l96"><code>src\passes\god-rays.js:96</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l109"><code>src\passes\god-rays.js:109</code></a>
         </p>
 
 
@@ -640,7 +720,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l72"><code>src\passes\god-rays.js:72</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l83"><code>src\passes\god-rays.js:83</code></a>
         </p>
 
 
@@ -666,7 +746,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l28"><code>src\passes\god-rays.js:28</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l39"><code>src\passes\god-rays.js:39</code></a>
         </p>
 
 
@@ -674,6 +754,32 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     <div class="description">
         <p>The light source.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_maskMaterial" class="property item private">
+    <h3 class="name"><code>maskMaterial</code></h3>
+    <span class="type">MeshBasicMaterial</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l121"><code>src\passes\god-rays.js:121</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A material used for masking the scene objects.</p>
 
     </div>
 
@@ -692,7 +798,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l166"><code>src\passes\god-rays.js:166</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l179"><code>src\passes\god-rays.js:179</code></a>
         </p>
 
 
@@ -718,7 +824,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l48"><code>src\passes\god-rays.js:48</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l59"><code>src\passes\god-rays.js:59</code></a>
         </p>
 
 
@@ -744,7 +850,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l62"><code>src\passes\god-rays.js:62</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l73"><code>src\passes\god-rays.js:73</code></a>
         </p>
 
 
@@ -769,7 +875,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l135"><code>src\passes\god-rays.js:135</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l148"><code>src\passes\god-rays.js:148</code></a>
         </p>
 
 
@@ -781,6 +887,32 @@ direction in order to create a scalar for the god rays exposure.</p>
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolutionScale" class="property item private">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l29"><code>src\passes\god-rays.js:29</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+
+    </div>
+
 
 
 </div>
@@ -796,7 +928,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l145"><code>src\passes\god-rays.js:145</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l158"><code>src\passes\god-rays.js:158</code></a>
         </p>
 
 
@@ -822,7 +954,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l38"><code>src\passes\god-rays.js:38</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l49"><code>src\passes\god-rays.js:49</code></a>
         </p>
 
 
@@ -848,7 +980,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l118"><code>src\passes\god-rays.js:118</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l131"><code>src\passes\god-rays.js:131</code></a>
         </p>
 
 

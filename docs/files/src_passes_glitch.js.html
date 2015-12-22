@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: 0.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -155,7 +155,7 @@ export function GlitchPass(dtSize) {
 	 * @private
 	 */
 
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
 	this.scene.add(this.quad);
 
 	/**
@@ -230,8 +230,6 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	++this.curF;
 
-	this.quad.material = this.material;
-
 	if(this.renderToScreen) {
 
 		renderer.render(this.scene, this.camera);
@@ -259,7 +257,7 @@ GlitchPass.prototype.generateTrigger = function() {
 /**
  * Generates a randomised displacementmap for this pass.
  *
- * @method render
+ * @method generateHeightmap
  * @param {Number} size - The texture size.
  */
 

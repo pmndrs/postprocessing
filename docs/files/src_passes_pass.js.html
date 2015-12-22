@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: 0.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -176,20 +176,25 @@ export function Pass(scene, camera) {
  * @param {Number} delta - The render delta time.
  */
 
-Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) { throw new Error(&quot;Render method not implemented!&quot;); };
+Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+
+	throw new Error(&quot;Render method not implemented!&quot;);
+
+};
 
 /**
- * Updates this pass&#x27;s render targets.
- * This is an abstract method that can be overriden in case  
- * a created render target depends on the renderer&#x27;s size.
+ * Updates this pass with the new main render size.
+ * This is an abstract method that may be overriden in case  
+ * you want to react to render size changes.
  *
- * @method update
- * @param {WebGLRenderer} renderer - The renderer.
+ * @method updateRenderSize
+ * @param {Number} w - The on-screen render width.
+ * @param {Number} h - The on-screen render height.
  * @example
- *  this.myRenderTarget.width = renderer.context.canvas.width / 2;
+ *  this.myRenderTarget.width = w / 2;
  */
 
-Pass.prototype.update = function(renderer) {};
+Pass.prototype.updateRenderSize = function(w, h) {};
 
     </pre>
 </div>

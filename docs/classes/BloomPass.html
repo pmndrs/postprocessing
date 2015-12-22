@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: 0.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -109,7 +109,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_bloom.js.html#l9"><code>src\passes\bloom.js:9</code></a>
+            Defined in: <a href="../files/src_passes_bloom.js.html#l8"><code>src\passes\bloom.js:8</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -135,16 +135,7 @@ a CopyMaterial to render the texture to screen.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code class="optional">[strength=1.0]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[kernelSize=25]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[sigma=4.0]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[resolution=256]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -159,7 +150,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l9"><code>src\passes\bloom.js:9</code></a>
+        <a href="../files/src_passes_bloom.js.html#l8"><code>src\passes\bloom.js:8</code></a>
         </p>
 
 
@@ -175,60 +166,72 @@ a CopyMaterial to render the texture to screen.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[strength=1.0]</code>
-                        <span class="type">Number</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
+<li>The options.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[strength=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
 <li>The bloom strength.</li>
 </ul>
 
-                    </div>
+                                </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[kernelSize=25]</code>
-                        <span class="type">Number</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[kernelSize=25]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
+                                <div class="param-description">
+                                    <ul>
 <li>The kernel size.</li>
 </ul>
 
-                    </div>
+                                </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[sigma=4.0]</code>
-                        <span class="type">Number</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[sigma=4.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
+                                <div class="param-description">
+                                    <ul>
 <li>The sigma value.</li>
 </ul>
 
-                    </div>
+                                </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[resolution=256]</code>
-                        <span class="type">Number</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[resolutionScale=0.25]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
-<li>The render resolution.</li>
+                                <div class="param-description">
+                                    <ul>
+<li>The render resolution scale, relative to the on-screen render size.</li>
 </ul>
 
-                    </div>
+                                </div>
 
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -259,7 +262,7 @@ a CopyMaterial to render the texture to screen.</p>
 
                             </li>
                             <li class="index-item method inherited">
-                                <a href="#method_update">update</a>
+                                <a href="#method_updateRenderSize">updateRenderSize</a>
 
                             </li>
                     </ul>
@@ -269,6 +272,14 @@ a CopyMaterial to render the texture to screen.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property_blurX">blurX</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_blurY">blurY</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
@@ -303,6 +314,10 @@ a CopyMaterial to render the texture to screen.</p>
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_renderTargetY">renderTargetY</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -354,7 +369,7 @@ a CopyMaterial to render the texture to screen.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l115"><code>src\passes\bloom.js:115</code></a>
+        <a href="../files/src_passes_bloom.js.html#l144"><code>src\passes\bloom.js:144</code></a>
         </p>
 
 
@@ -441,13 +456,16 @@ a CopyMaterial to render the texture to screen.</p>
 
 
 </div>
-<div id="method_update" class="method item inherited">
-    <h3 class="name"><code>update</code></h3>
+<div id="method_updateRenderSize" class="method item">
+    <h3 class="name"><code>updateRenderSize</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>renderer</code>
+                        <code>w</code>
+                </li>
+                <li class="arg">
+                        <code>h</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -460,9 +478,12 @@ a CopyMaterial to render the texture to screen.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_update">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_updateRenderSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bloom.js.html#l180"><code>src\passes\bloom.js:180</code></a>
         </p>
 
 
@@ -470,9 +491,8 @@ a CopyMaterial to render the texture to screen.</p>
     </div>
 
     <div class="description">
-        Updates this pass's render targets.
-This is an abstract method that can be overriden in case  
-a created render target depends on the renderer's size.
+        <p>Updates this pass with the main render size.</p>
+
     </div>
 
         <div class="params">
@@ -480,12 +500,28 @@ a created render target depends on the renderer's size.
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">renderer</code>
-                        <span class="type">WebGLRenderer</span>
+                        <code class="param-name">w</code>
+                        <span class="type">Number</span>
 
 
                     <div class="param-description">
-                        - The renderer.
+                        <ul>
+<li>The on-screen render width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">h</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The on-screen render height.</li>
+</ul>
+
                     </div>
 
                 </li>
@@ -494,20 +530,64 @@ a created render target depends on the renderer's size.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = renderer.context.canvas.width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_blurX" class="property item private">
+    <h3 class="name"><code>blurX</code></h3>
+    <span class="type">Vector2</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l46"><code>src\passes\bloom.js:46</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The horizontal blur factor.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_blurY" class="property item private">
+    <h3 class="name"><code>blurY</code></h3>
+    <span class="type">Vector2</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l56"><code>src\passes\bloom.js:56</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The vertical blur factor.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -545,7 +625,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l89"><code>src\passes\bloom.js:89</code></a>
+        <a href="../files/src_passes_bloom.js.html#l118"><code>src\passes\bloom.js:118</code></a>
         </p>
 
 
@@ -572,7 +652,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l75"><code>src\passes\bloom.js:75</code></a>
+        <a href="../files/src_passes_bloom.js.html#l104"><code>src\passes\bloom.js:104</code></a>
         </p>
 
 
@@ -598,7 +678,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l61"><code>src\passes\bloom.js:61</code></a>
+        <a href="../files/src_passes_bloom.js.html#l90"><code>src\passes\bloom.js:90</code></a>
         </p>
 
 
@@ -674,7 +754,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l99"><code>src\passes\bloom.js:99</code></a>
+        <a href="../files/src_passes_bloom.js.html#l128"><code>src\passes\bloom.js:128</code></a>
         </p>
 
 
@@ -700,7 +780,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l37"><code>src\passes\bloom.js:37</code></a>
+        <a href="../files/src_passes_bloom.js.html#l66"><code>src\passes\bloom.js:66</code></a>
         </p>
 
 
@@ -726,7 +806,7 @@ a created render target depends on the renderer's size.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l51"><code>src\passes\bloom.js:51</code></a>
+        <a href="../files/src_passes_bloom.js.html#l80"><code>src\passes\bloom.js:80</code></a>
         </p>
 
 
@@ -734,6 +814,32 @@ a created render target depends on the renderer's size.
 
     <div class="description">
         <p>A second render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_resolutionScale" class="property item private">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l36"><code>src\passes\bloom.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
 
     </div>
 

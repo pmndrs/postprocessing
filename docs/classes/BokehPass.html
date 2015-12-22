@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: 0.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -302,7 +302,7 @@
 
                             </li>
                             <li class="index-item method inherited">
-                                <a href="#method_update">update</a>
+                                <a href="#method_updateRenderSize">updateRenderSize</a>
 
                             </li>
                     </ul>
@@ -492,13 +492,16 @@
 
 
 </div>
-<div id="method_update" class="method item inherited">
-    <h3 class="name"><code>update</code></h3>
+<div id="method_updateRenderSize" class="method item inherited">
+    <h3 class="name"><code>updateRenderSize</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>renderer</code>
+                        <code>w</code>
+                </li>
+                <li class="arg">
+                        <code>h</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -512,8 +515,8 @@
 
     <div class="meta">
                 <p>Inherited from
-                <a href="../classes/Pass.html#method_update">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
+                <a href="../classes/Pass.html#method_updateRenderSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
         </p>
 
 
@@ -521,9 +524,9 @@
     </div>
 
     <div class="description">
-        Updates this pass's render targets.
-This is an abstract method that can be overriden in case  
-a created render target depends on the renderer's size.
+        Updates this pass with the new main render size.
+This is an abstract method that may be overriden in case  
+you want to react to render size changes.
     </div>
 
         <div class="params">
@@ -531,12 +534,28 @@ a created render target depends on the renderer's size.
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">renderer</code>
-                        <span class="type">WebGLRenderer</span>
+                        <code class="param-name">w</code>
+                        <span class="type">Number</span>
 
 
                     <div class="param-description">
-                        - The renderer.
+                        <ul>
+<li>The on-screen render width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">h</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The on-screen render height.</li>
+</ul>
+
                     </div>
 
                 </li>
@@ -549,7 +568,7 @@ a created render target depends on the renderer's size.
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.myRenderTarget.width = renderer.context.canvas.width / 2;</p>
+                <p>this.myRenderTarget.width = w / 2;</p>
 
             </div>
         </div>

@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js. ",
-        "version": "0.0.1",
+        "version": "0.0.3",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -524,38 +524,46 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\bloom.js",
-            "line": 9,
+            "line": 8,
             "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.\n\nSince the effect will be written to the readBuffer \nrender texture, you'll need to use a ShaderPass with \na CopyMaterial to render the texture to screen.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
                 {
-                    "name": "strength",
-                    "description": "- The bloom strength.",
-                    "type": "Number",
+                    "name": "options",
+                    "description": "- The options.",
+                    "type": "Object",
                     "optional": true,
-                    "optdefault": "1.0"
-                },
-                {
-                    "name": "kernelSize",
-                    "description": "- The kernel size.",
-                    "type": "Number",
-                    "optional": true,
-                    "optdefault": "25"
-                },
-                {
-                    "name": "sigma",
-                    "description": "- The sigma value.",
-                    "type": "Number",
-                    "optional": true,
-                    "optdefault": "4.0"
-                },
-                {
-                    "name": "resolution",
-                    "description": "- The render resolution.",
-                    "type": "Number",
-                    "optional": true,
-                    "optdefault": "256"
+                    "props": [
+                        {
+                            "name": "strength",
+                            "description": "- The bloom strength.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1.0"
+                        },
+                        {
+                            "name": "kernelSize",
+                            "description": "- The kernel size.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "25"
+                        },
+                        {
+                            "name": "sigma",
+                            "description": "- The sigma value.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "4.0"
+                        },
+                        {
+                            "name": "resolutionScale",
+                            "description": "- The render resolution scale, relative to the on-screen render size.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.25"
+                        }
+                    ]
                 }
             ]
         },
@@ -815,25 +823,39 @@
                             "optdefault": "1.0"
                         },
                         {
+                            "name": "decay",
+                            "description": "- A constant attenuation coefficient.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.93"
+                        },
+                        {
+                            "name": "weight",
+                            "description": "- A constant attenuation coefficient.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1.0"
+                        },
+                        {
                             "name": "exposure",
                             "description": "- A constant attenuation coefficient.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "0.65"
+                            "optdefault": "1.0"
                         },
                         {
                             "name": "intensity",
                             "description": "- A constant factor for additive blending. The higher, the brighter the result.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "0.75"
+                            "optdefault": "0.69"
                         },
                         {
-                            "name": "resolution",
-                            "description": "- The render texture resolution.",
+                            "name": "resolutionScale",
+                            "description": "- The god rays render texture resolution scale relative to the on-screen render size.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "256"
+                            "optdefault": "0.25"
                         },
                         {
                             "name": "samples",
@@ -978,7 +1000,7 @@
                 },
                 {
                     "name": "renderTarget",
-                    "description": "- A render target to use for the post processing. If none is provided,",
+                    "description": "- A render target to use for the post processing. If none is provided, a new one will be created.",
                     "type": "WebGLRenderTarget",
                     "optional": true
                 }
@@ -1305,7 +1327,43 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 37,
+            "line": 36,
+            "description": "The resolution scale.",
+            "itemtype": "property",
+            "name": "resolutionScale",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 46,
+            "description": "The horizontal blur factor.",
+            "itemtype": "property",
+            "name": "blurX",
+            "type": "Vector2",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 56,
+            "description": "The vertical blur factor.",
+            "itemtype": "property",
+            "name": "blurY",
+            "type": "Vector2",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 66,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1317,7 +1375,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 51,
+            "line": 80,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1329,7 +1387,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 61,
+            "line": 90,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1341,7 +1399,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 75,
+            "line": 104,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1353,7 +1411,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 89,
+            "line": 118,
             "description": "Clear flag. If set to true, the blurring will occur.",
             "itemtype": "property",
             "name": "clear",
@@ -1364,7 +1422,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 99,
+            "line": 128,
             "description": "The quad mesh to render.",
             "itemtype": "property",
             "name": "quad",
@@ -1376,7 +1434,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 115,
+            "line": 144,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1405,6 +1463,27 @@
                     "name": "maskActive",
                     "description": "- Disable stencil test.",
                     "type": "Boolean"
+                }
+            ],
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 180,
+            "description": "Updates this pass with the main render size.",
+            "itemtype": "method",
+            "name": "updateRenderSize",
+            "params": [
+                {
+                    "name": "w",
+                    "description": "- The on-screen render width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "h",
+                    "description": "- The on-screen render height.",
+                    "type": "Number"
                 }
             ],
             "class": "BloomPass",
@@ -1794,7 +1873,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 140,
+            "line": 138,
             "description": "Creates a new break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -1803,10 +1882,10 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 152,
+            "line": 150,
             "description": "Generates a randomised displacementmap for this pass.",
             "itemtype": "method",
-            "name": "render",
+            "name": "generateHeightmap",
             "params": [
                 {
                     "name": "size",
@@ -1819,7 +1898,19 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 28,
+            "line": 29,
+            "description": "The resolution scale.",
+            "itemtype": "property",
+            "name": "resolutionScale",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 39,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -1831,7 +1922,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 38,
+            "line": 49,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenLightPos",
@@ -1843,7 +1934,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 48,
+            "line": 59,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTarget",
@@ -1855,7 +1946,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 62,
+            "line": 73,
             "description": "Another render target for ping-ponging.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1867,7 +1958,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 72,
+            "line": 83,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
             "name": "godRaysGenerateMaterial",
@@ -1879,7 +1970,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 85,
+            "line": 98,
             "description": "The exposure coefficient.",
             "itemtype": "property",
             "name": "exposure",
@@ -1891,7 +1982,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 96,
+            "line": 109,
             "description": "God rays shader material for the final composite phase.",
             "itemtype": "property",
             "name": "godRaysCombineMaterial",
@@ -1903,11 +1994,11 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 108,
-            "description": "Depth material.",
+            "line": 121,
+            "description": "A material used for masking the scene objects.",
             "itemtype": "property",
-            "name": "depthMaterial",
-            "type": "MeshDepthMaterial",
+            "name": "maskMaterial",
+            "type": "MeshBasicMaterial",
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
@@ -1915,7 +2006,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 118,
+            "line": 131,
             "description": "The maximum length of god-rays (in texture space [0.0, 1.0]).\nTranslates to pre-computed step sizes for the 3 generate passes.",
             "itemtype": "property",
             "name": "stepSizes",
@@ -1927,7 +2018,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 135,
+            "line": 148,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -1938,7 +2029,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 145,
+            "line": 158,
             "description": "A scene to render the god rays with.",
             "itemtype": "property",
             "name": "scene2",
@@ -1950,7 +2041,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 155,
+            "line": 168,
             "description": "A camera to render the god rays with.",
             "itemtype": "property",
             "name": "camera2",
@@ -1962,7 +2053,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 166,
+            "line": 179,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -1974,7 +2065,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 182,
+            "line": 195,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2000,7 +2091,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 239,
+            "line": 257,
             "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
             "itemtype": "method",
             "name": "computeAngleScalar",
@@ -2010,6 +2101,27 @@
                 "description": "A scalar in the range 0.0 to 1.0.",
                 "type": "Number"
             },
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 293,
+            "description": "Updates this pass with the new main render size.",
+            "itemtype": "method",
+            "name": "updateRenderSize",
+            "params": [
+                {
+                    "name": "w",
+                    "description": "- The on-screen render width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "h",
+                    "description": "- The on-screen render height.",
+                    "type": "Number"
+                }
+            ],
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
@@ -2156,19 +2268,24 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 74,
-            "description": "Updates this pass's render targets.\nThis is an abstract method that can be overriden in case  \na created render target depends on the renderer's size.",
+            "line": 78,
+            "description": "Updates this pass with the new main render size.\nThis is an abstract method that may be overriden in case  \nyou want to react to render size changes.",
             "itemtype": "method",
-            "name": "update",
+            "name": "updateRenderSize",
             "params": [
                 {
-                    "name": "renderer",
-                    "description": "- The renderer.",
-                    "type": "WebGLRenderer"
+                    "name": "w",
+                    "description": "- The on-screen render width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "h",
+                    "description": "- The on-screen render height.",
+                    "type": "Number"
                 }
             ],
             "example": [
-                "\n this.myRenderTarget.width = renderer.context.canvas.width / 2;"
+                "\n this.myRenderTarget.width = w / 2;"
             ],
             "class": "Pass",
             "module": "postprocessing"
@@ -2631,7 +2748,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 253,
+            "line": 256,
             "description": "Sets the render size.",
             "itemtype": "method",
             "name": "setSize",
