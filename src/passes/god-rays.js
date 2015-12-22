@@ -7,16 +7,16 @@ import THREE from "three";
  *
  * @class GodRaysPass
  * @constructor
- * @param {Scene} scene - The main scene. Used for depth rendering.
- * @param {Camera} camera - The main camera. Used for depth rendering.
+ * @param {Scene} scene - The main scene.
+ * @param {Camera} camera - The main camera.
  * @param {Vector3} lightSource - The most important light source.
  * @param {Object} [options] - The options.
- * @param {Number} [options.rayLength=1.0] - The maximum length of god rays. Valid values are 0.0 to 1.0.
+ * @param {Number} [options.rayLength=1.0] - The length of god rays.
  * @param {Number} [options.decay=0.93] - A constant attenuation coefficient.
  * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
- * @param {Number} [options.intensity=0.69] - A constant factor for additive blending. The higher, the brighter the result.
- * @param {Number} [options.resolutionScale=0.25] - The god rays render texture resolution scale relative to the on-screen render size.
+ * @param {Number} [options.intensity=0.69] - A constant factor for additive blending.
+ * @param {Number} [options.resolutionScale=0.25] - The god rays render texture resolution scale, relative to the on-screen render size.
  * @param {Number} [options.samples=6] - The number of samples per pixel.
  */
 
@@ -291,16 +291,16 @@ GodRaysPass.prototype.computeAngleScalar = function() {
 };
 
 /**
- * Updates this pass with the new main render size.
+ * Updates this pass with the main render target's size.
  *
- * @method updateRenderSize
- * @param {Number} w - The on-screen render width.
- * @param {Number} h - The on-screen render height.
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} height - The height.
  */
 
-GodRaysPass.prototype.updateRenderSize = function(w, h) {
+GodRaysPass.prototype.setSize = function(width, height) {
 
-	this.renderTargetX.setSize(Math.floor(w * this.resolutionScale), Math.floor(h * this.resolutionScale));
+	this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
 
 	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
 	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }

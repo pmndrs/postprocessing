@@ -109,8 +109,7 @@ export function EffectComposer(renderer, renderTarget) {
 
 /**
  * Swaps the render targets on demand.
- * You can toggle swapping in your pass 
- * by setting the needsSwap flag.
+ * You can toggle swapping in your pass by setting the needsSwap flag.
  *
  * @method swapBuffers
  * @private
@@ -133,8 +132,8 @@ EffectComposer.prototype.swapBuffers = function() {
 
 EffectComposer.prototype.addPass = function(pass) {
 
+	pass.setSize(this.renderTarget1.width, this.renderTarget1.height);
 	this.passes.push(pass);
-	pass.updateRenderSize(this.renderTarget1.width, this.renderTarget1.height);
 
 };
 
@@ -148,8 +147,8 @@ EffectComposer.prototype.addPass = function(pass) {
 
 EffectComposer.prototype.insertPass = function(pass, index) {
 
+	pass.setSize(this.renderTarget1.width, this.renderTarget1.height);
 	this.passes.splice(index, 0, pass);
-	pass.updateRenderSize(this.renderTarget1.width, this.renderTarget1.height);
 
 };
 
@@ -218,23 +217,22 @@ EffectComposer.prototype.render = function(delta) {
 
 EffectComposer.prototype.reset = function(renderTarget) {
 
-	var pixelRatio, w, h;
-
-	var i, l;
+	var pixelRatio, width, height;
 
 	if(renderTarget === undefined) {
 
 		renderTarget = this.renderTarget1.clone();
 
 		pixelRatio = this.renderer.getPixelRatio();
+		width = Math.floor(this.renderer.context.canvas.width / pixelRatio);
+		height = Math.floor(this.renderer.context.canvas.height / pixelRatio);
 
-		renderTarget.width = Math.floor(this.renderer.context.canvas.width / pixelRatio);
-		renderTarget.height = Math.floor(this.renderer.context.canvas.height / pixelRatio);
+	} else {
+
+		width = renderTarget.width;
+		height = renderTarget.height;
 
 	}
-
-	w = renderTarget.width;
-	h = renderTarget.height;
 
 	this.renderTarget1.dispose();
 	this.renderTarget1 = renderTarget;
@@ -244,12 +242,7 @@ EffectComposer.prototype.reset = function(renderTarget) {
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
 
-	// Let all passes adjust to the render size.
-	for(i = 0, l = this.passes.length; i < l; ++i) {
-
-		this.passes[i].updateRenderSize(w, h);
-
-	}
+	this.setSize(width, height);
 
 };
 
@@ -263,7 +256,16 @@ EffectComposer.prototype.reset = function(renderTarget) {
 
 EffectComposer.prototype.setSize = function(width, height) {
 
+	var i, l;
+
 	this.renderTarget1.setSize(width, height);
 	this.renderTarget2.setSize(width, height);
+
+	// Let all passes adjust to the new size.
+	for(i = 0, l = this.passes.length; i < l; ++i) {
+
+		this.passes[i].setSize(width, height);
+
+	}
 
 };

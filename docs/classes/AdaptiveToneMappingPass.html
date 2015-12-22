@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.3</em>
+            <em>API Docs for: 0.0.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -250,7 +250,7 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
                             </li>
                             <li class="index-item method inherited">
-                                <a href="#method_updateRenderSize">updateRenderSize</a>
+                                <a href="#method_setSize">setSize</a>
 
                             </li>
                     </ul>
@@ -804,16 +804,16 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
 
 </div>
-<div id="method_updateRenderSize" class="method item inherited">
-    <h3 class="name"><code>updateRenderSize</code></h3>
+<div id="method_setSize" class="method item inherited">
+    <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>w</code>
+                        <code>width</code>
                 </li>
                 <li class="arg">
-                        <code>h</code>
+                        <code>height</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -827,8 +827,8 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
     <div class="meta">
                 <p>Inherited from
-                <a href="../classes/Pass.html#method_updateRenderSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
+                <a href="../classes/Pass.html#method_setSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
         </p>
 
 
@@ -836,9 +836,13 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
     </div>
 
     <div class="description">
-        Updates this pass with the new main render size.
-This is an abstract method that may be overriden in case  
-you want to react to render size changes.
+        Updates this pass with the main render target's size.
+
+This is an abstract method that may be overriden in case 
+you want to be informed about the main render size.
+
+The effect composer calls this method when the pass is added 
+and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -846,22 +850,22 @@ you want to react to render size changes.
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">w</code>
+                        <code class="param-name">width</code>
                         <span class="type">Number</span>
 
 
                     <div class="param-description">
-                        - The on-screen render width.
+                        - The width.
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">h</code>
+                        <code class="param-name">height</code>
                         <span class="type">Number</span>
 
 
                     <div class="param-description">
-                        - The on-screen render height.
+                        - The height.
                     </div>
 
                 </li>
@@ -874,7 +878,7 @@ you want to react to render size changes.
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.myRenderTarget.width = w / 2;</p>
+                <p>this.myRenderTarget.width = width / 2;</p>
 
             </div>
         </div>

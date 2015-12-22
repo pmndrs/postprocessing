@@ -178,16 +178,16 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 };
 
 /**
- * Updates this pass with the main render size.
+ * Updates this pass with the main render target's size.
  *
- * @method updateRenderSize
- * @param {Number} w - The on-screen render width.
- * @param {Number} h - The on-screen render height.
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} height - The height.
  */
 
-BloomPass.prototype.updateRenderSize = function(w, h) {
+BloomPass.prototype.setSize = function(width, height) {
 
-	this.renderTargetX.setSize(Math.floor(w * this.resolutionScale), Math.floor(h * this.resolutionScale));
+	this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
 
 	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
 	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
@@ -195,6 +195,6 @@ BloomPass.prototype.updateRenderSize = function(w, h) {
 	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 	// Scale the factor with the render target ratio.
-	this.blurY.set(0.0, (w / h) * BLUR);
+	this.blurY.set(0.0, (width / height) * BLUR);
 
 };

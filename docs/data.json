@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js. ",
-        "version": "0.0.3",
+        "version": "0.0.4",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -796,12 +796,12 @@
             "params": [
                 {
                     "name": "scene",
-                    "description": "- The main scene. Used for depth rendering.",
+                    "description": "- The main scene.",
                     "type": "Scene"
                 },
                 {
                     "name": "camera",
-                    "description": "- The main camera. Used for depth rendering.",
+                    "description": "- The main camera.",
                     "type": "Camera"
                 },
                 {
@@ -817,7 +817,7 @@
                     "props": [
                         {
                             "name": "rayLength",
-                            "description": "- The maximum length of god rays. Valid values are 0.0 to 1.0.",
+                            "description": "- The length of god rays.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1.0"
@@ -845,14 +845,14 @@
                         },
                         {
                             "name": "intensity",
-                            "description": "- A constant factor for additive blending. The higher, the brighter the result.",
+                            "description": "- A constant factor for additive blending.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "0.69"
                         },
                         {
                             "name": "resolutionScale",
-                            "description": "- The god rays render texture resolution scale relative to the on-screen render size.",
+                            "description": "- The god rays render texture resolution scale, relative to the on-screen render size.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "0.25"
@@ -1471,18 +1471,18 @@
         {
             "file": "src\\passes\\bloom.js",
             "line": 180,
-            "description": "Updates this pass with the main render size.",
+            "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
-            "name": "updateRenderSize",
+            "name": "setSize",
             "params": [
                 {
-                    "name": "w",
-                    "description": "- The on-screen render width.",
+                    "name": "width",
+                    "description": "- The width.",
                     "type": "Number"
                 },
                 {
-                    "name": "h",
-                    "description": "- The on-screen render height.",
+                    "name": "height",
+                    "description": "- The height.",
                     "type": "Number"
                 }
             ],
@@ -2107,18 +2107,18 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 293,
-            "description": "Updates this pass with the new main render size.",
+            "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
-            "name": "updateRenderSize",
+            "name": "setSize",
             "params": [
                 {
-                    "name": "w",
-                    "description": "- The on-screen render width.",
+                    "name": "width",
+                    "description": "- The width.",
                     "type": "Number"
                 },
                 {
-                    "name": "h",
-                    "description": "- The on-screen render height.",
+                    "name": "height",
+                    "description": "- The height.",
                     "type": "Number"
                 }
             ],
@@ -2234,7 +2234,7 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 60,
-            "description": "Renders the scene.\nThis is an abstract method that must be overriden.",
+            "description": "Renders the scene.\n\nThis is an abstract method that must be overriden.",
             "itemtype": "method",
             "name": "render",
             "throws": {
@@ -2268,24 +2268,24 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 78,
-            "description": "Updates this pass with the new main render size.\nThis is an abstract method that may be overriden in case  \nyou want to react to render size changes.",
+            "line": 79,
+            "description": "Updates this pass with the main render target's size.\n\nThis is an abstract method that may be overriden in case \nyou want to be informed about the main render size.\n\nThe effect composer calls this method when the pass is added \nand when the effect composer is reset.",
             "itemtype": "method",
-            "name": "updateRenderSize",
+            "name": "setSize",
             "params": [
                 {
-                    "name": "w",
-                    "description": "- The on-screen render width.",
+                    "name": "width",
+                    "description": "- The width.",
                     "type": "Number"
                 },
                 {
-                    "name": "h",
-                    "description": "- The on-screen render height.",
+                    "name": "height",
+                    "description": "- The height.",
                     "type": "Number"
                 }
             ],
             "example": [
-                "\n this.myRenderTarget.width = w / 2;"
+                "\n this.myRenderTarget.width = width / 2;"
             ],
             "class": "Pass",
             "module": "postprocessing"
@@ -2668,7 +2668,7 @@
         {
             "file": "src\\effect-composer.js",
             "line": 110,
-            "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass \nby setting the needsSwap flag.",
+            "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass by setting the needsSwap flag.",
             "itemtype": "method",
             "name": "swapBuffers",
             "access": "private",
@@ -2678,7 +2678,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 127,
+            "line": 126,
             "description": "Adds another pass.",
             "itemtype": "method",
             "name": "addPass",
@@ -2694,7 +2694,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 141,
+            "line": 140,
             "description": "Inserts a new pass at a specific index.",
             "itemtype": "method",
             "name": "insertPass",
@@ -2715,7 +2715,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 156,
+            "line": 155,
             "description": "Renders all passes in order.",
             "itemtype": "method",
             "name": "render",
@@ -2731,7 +2731,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 210,
+            "line": 209,
             "description": "Resets the composer's render textures.\nCall this method when the size of the renderer's canvas changed or\nif you want to drop the old read/write buffers and create new ones.",
             "itemtype": "method",
             "name": "reset",
@@ -2748,7 +2748,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 256,
+            "line": 249,
             "description": "Sets the render size.",
             "itemtype": "method",
             "name": "setSize",

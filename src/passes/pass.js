@@ -59,6 +59,7 @@ export function Pass(scene, camera) {
 
 /**
  * Renders the scene.
+ *
  * This is an abstract method that must be overriden.
  *
  * @method render
@@ -76,15 +77,19 @@ Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 };
 
 /**
- * Updates this pass with the new main render size.
- * This is an abstract method that may be overriden in case  
- * you want to react to render size changes.
+ * Updates this pass with the main render target's size.
  *
- * @method updateRenderSize
- * @param {Number} w - The on-screen render width.
- * @param {Number} h - The on-screen render height.
+ * This is an abstract method that may be overriden in case 
+ * you want to be informed about the main render size.
+ *
+ * The effect composer calls this method when the pass is added 
+ * and when the effect composer is reset.
+ *
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} height - The height.
  * @example
- *  this.myRenderTarget.width = w / 2;
+ *  this.myRenderTarget.width = width / 2;
  */
 
-Pass.prototype.updateRenderSize = function(w, h) {};
+Pass.prototype.setSize = function(width, height) {};

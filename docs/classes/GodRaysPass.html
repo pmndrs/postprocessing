@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.3</em>
+            <em>API Docs for: 0.0.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -173,7 +173,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The main scene. Used for depth rendering.</li>
+<li>The main scene.</li>
 </ul>
 
                     </div>
@@ -186,7 +186,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The main camera. Used for depth rendering.</li>
+<li>The main camera.</li>
 </ul>
 
                     </div>
@@ -226,7 +226,7 @@
 
                                 <div class="param-description">
                                     <ul>
-<li>The maximum length of god rays. Valid values are 0.0 to 1.0.</li>
+<li>The length of god rays.</li>
 </ul>
 
                                 </div>
@@ -278,7 +278,7 @@
 
                                 <div class="param-description">
                                     <ul>
-<li>A constant factor for additive blending. The higher, the brighter the result.</li>
+<li>A constant factor for additive blending.</li>
 </ul>
 
                                 </div>
@@ -291,7 +291,7 @@
 
                                 <div class="param-description">
                                     <ul>
-<li>The god rays render texture resolution scale relative to the on-screen render size.</li>
+<li>The god rays render texture resolution scale, relative to the on-screen render size.</li>
 </ul>
 
                                 </div>
@@ -345,7 +345,7 @@
 
                             </li>
                             <li class="index-item method">
-                                <a href="#method_updateRenderSize">updateRenderSize</a>
+                                <a href="#method_setSize">setSize</a>
 
                             </li>
                     </ul>
@@ -553,16 +553,16 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
-<div id="method_updateRenderSize" class="method item">
-    <h3 class="name"><code>updateRenderSize</code></h3>
+<div id="method_setSize" class="method item">
+    <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>w</code>
+                        <code>width</code>
                 </li>
                 <li class="arg">
-                        <code>h</code>
+                        <code>height</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -585,7 +585,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     </div>
 
     <div class="description">
-        <p>Updates this pass with the new main render size.</p>
+        <p>Updates this pass with the main render target's size.</p>
 
     </div>
 
@@ -594,26 +594,26 @@ direction in order to create a scalar for the god rays exposure.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">w</code>
+                        <code class="param-name">width</code>
                         <span class="type">Number</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The on-screen render width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">h</code>
+                        <code class="param-name">height</code>
                         <span class="type">Number</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The on-screen render height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
