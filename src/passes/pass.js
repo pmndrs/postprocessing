@@ -69,17 +69,22 @@ export function Pass(scene, camera) {
  * @param {Number} delta - The render delta time.
  */
 
-Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) { throw new Error("Render method not implemented!"); };
+Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+
+	throw new Error("Render method not implemented!");
+
+};
 
 /**
- * Updates this pass's render targets.
- * This is an abstract method that can be overriden in case  
- * a created render target depends on the renderer's size.
+ * Updates this pass with the new main render size.
+ * This is an abstract method that may be overriden in case  
+ * you want to react to render size changes.
  *
- * @method update
- * @param {WebGLRenderer} renderer - The renderer.
+ * @method updateRenderSize
+ * @param {Number} w - The on-screen render width.
+ * @param {Number} h - The on-screen render height.
  * @example
- *  this.myRenderTarget.width = renderer.context.canvas.width / 2;
+ *  this.myRenderTarget.width = w / 2;
  */
 
-Pass.prototype.update = function(renderer) {};
+Pass.prototype.updateRenderSize = function(w, h) {};

@@ -24,45 +24,9 @@ module.exports = function(grunt) {
 			options: {
 				append: "export default shader;"
 			},
-			copyShader: {
-				src: "src/materials/copy/shader.js",
-				dest: "src/materials/copy/inlined/shader.js"
-			},
-			luminosityShader: {
-				src: "src/materials/luminosity/shader.js",
-				dest: "src/materials/luminosity/inlined/shader.js"
-			},
-			adaptiveLuminosityShader: {
-				src: "src/materials/adaptive-luminosity/shader.js",
-				dest: "src/materials/adaptive-luminosity/inlined/shader.js"
-			},
-			dotScreenShader: {
-				src: "src/materials/dot-screen/shader.js",
-				dest: "src/materials/dot-screen/inlined/shader.js"
-			},
-			toneMappingShader: {
-				src: "src/materials/tone-mapping/shader.js",
-				dest: "src/materials/tone-mapping/inlined/shader.js"
-			},
-			glitchShader: {
-				src: "src/materials/glitch/shader.js",
-				dest: "src/materials/glitch/inlined/shader.js"
-			},
-			convolutionShader: {
-				src: "src/materials/convolution/shader.js",
-				dest: "src/materials/convolution/inlined/shader.js"
-			},
-			bokehShader: {
-				src: "src/materials/bokeh/shader.js",
-				dest: "src/materials/bokeh/inlined/shader.js"
-			},
-			filmShader: {
-				src: "src/materials/film/shader.js",
-				dest: "src/materials/film/inlined/shader.js"
-			},
-			godRaysShader: {
-				src: "src/materials/god-rays/shader.js",
-				dest: "src/materials/god-rays/inlined/shader.js"
+			shaders: {
+				src: "src/materials/*/shader.js",
+				dest: "./inlined"
 			}
 		},
 
@@ -146,8 +110,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-rollup");
 	grunt.loadNpmTasks("grunt-mocha");
 
-	grunt.registerTask("default", ["build", "uglify", "mocha"]);
-	grunt.registerTask("build", ["clean", "jshint", "fsinline", "rollup", "copy"]);
+	grunt.registerTask("default", ["clean", "jshint", "build", "uglify", "mocha"]);
+	grunt.registerTask("build", ["fsinline", "rollup", "copy", "clean"]);
 	grunt.registerTask("test", ["jshint", "mocha"]);
 
 };

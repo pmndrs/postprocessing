@@ -2,9 +2,8 @@ import { CopyMaterial, ConvolutionMaterial } from "../materials";
 import { Pass } from "./pass";
 import THREE from "three";
 
-// Blur constants.
-var BLUR_X = new THREE.Vector2(0.001953125, 0.0);
-var BLUR_Y = new THREE.Vector2(0.0, 0.001953125);
+// A constant blur spread factor.
+var BLUR = 0.001953125;
 
 /**
  * A bloom pass.
@@ -19,20 +18,50 @@ var BLUR_Y = new THREE.Vector2(0.0, 0.001953125);
  * @class BloomPass
  * @constructor
  * @extends Pass
- * @param {Number} [strength=1.0] - The bloom strength.
- * @param {Number} [kernelSize=25] - The kernel size.
- * @param {Number} [sigma=4.0] - The sigma value.
- * @param {Number} [resolution=256] - The render resolution.
+ * @param {Object} [options] - The options.
+ * @param {Number} [options.strength=1.0] - The bloom strength.
+ * @param {Number} [options.kernelSize=25] - The kernel size.
+ * @param {Number} [options.sigma=4.0] - The sigma value.
+ * @param {Number} [options.resolutionScale=0.25] - The render resolution scale, relative to the on-screen render size.
  */
 
-export function BloomPass(strength, kernelSize, sigma, resolution) {
+export function BloomPass(options) {
 
 	Pass.call(this);
 
-	// Defaults.
-	kernelSize = (kernelSize !== undefined) ? kernelSize : 25;
-	sigma = (sigma !== undefined) ? sigma : 4.0;
-	resolution = (resolution !== undefined) ? resolution : 256;
+	if(options === undefined) { options = {}; }
+
+	var kernelSize = (options.kernelSize !== undefined) ? options.kernelSize : 25;
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @property resolutionScale
+	 * @type Number
+	 * @private
+	 */
+
+	this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+
+	/**
+	 * The horizontal blur factor.
+	 *
+	 * @property blurX
+	 * @type Vector2
+	 * @private
+	 */
+
+	this.blurX = new THREE.Vector2(BLUR, 0.0);
+
+	/**
+	 * The vertical blur factor.
+	 *
+	 * @property blurY
+	 * @type Vector2
+	 * @private
+	 */
+
+	this.blurY = new THREE.Vector2();
 
 	/**
 	 * A render target.
@@ -42,7 +71,7 @@ export function BloomPass(strength, kernelSize, sigma, resolution) {
 	 * @private
 	 */
 
-	this.renderTargetX = new THREE.WebGLRenderTarget(resolution, resolution, {
+	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
 		format: THREE.RGBFormat
@@ -70,7 +99,7 @@ export function BloomPass(strength, kernelSize, sigma, resolution) {
 	this.copyMaterial.blending = THREE.AdditiveBlending;
 	this.copyMaterial.transparent = true;
 
-	if(strength !== undefined) { this.copyMaterial.uniforms.opacity.value = strength; }
+	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
 	/**
 	 * Convolution shader material.
@@ -81,8 +110,8 @@ export function BloomPass(strength, kernelSize, sigma, resolution) {
 	 */
 
 	this.convolutionMaterial = new ConvolutionMaterial();
-	this.convolutionMaterial.uniforms.uImageIncrement.value = BLUR_X;
-	this.convolutionMaterial.buildKernel(sigma);
+
+	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
 	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
 	this.convolutionMaterial.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
 
@@ -130,22 +159,42 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 	// Render quad with blurred scene into texture (convolution pass 1).
 	this.quad.material = this.convolutionMaterial;
 	this.convolutionMaterial.uniforms.tDiffuse.value = readBuffer;
-	this.convolutionMaterial.uniforms.uImageIncrement.value = BLUR_X;
-
+	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurX);
 	renderer.render(this.scene, this.camera, this.renderTargetX, true);
 
 	// Render quad with blurred scene into texture (convolution pass 2).
 	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	this.convolutionMaterial.uniforms.uImageIncrement.value = BLUR_Y;
-
+	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurY);
 	renderer.render(this.scene, this.camera, this.renderTargetY, true);
 
-	// Render original scene with superimposed blur (-> into readBuffer).
+	// Render original scene with superimposed blur (-> onto readBuffer).
 	this.quad.material = this.copyMaterial;
 	this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
 	if(maskActive) { renderer.context.enable(renderer.context.STENCIL_TEST); }
 
 	renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+};
+
+/**
+ * Updates this pass with the main render size.
+ *
+ * @method updateRenderSize
+ * @param {Number} w - The on-screen render width.
+ * @param {Number} h - The on-screen render height.
+ */
+
+BloomPass.prototype.updateRenderSize = function(w, h) {
+
+	this.renderTargetX.setSize(Math.floor(w * this.resolutionScale), Math.floor(h * this.resolutionScale));
+
+	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
+	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
+
+	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
+
+	// Scale the factor with the render target ratio.
+	this.blurY.set(0.0, (w / h) * BLUR);
 
 };

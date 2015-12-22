@@ -6,8 +6,8 @@ window.addEventListener("load", function init() {
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x222211, 0.00025);
-	renderer.setClearColor(0x222211);
+	scene.fog = new THREE.FogExp2(0x000000, 0.00025);
+	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
@@ -15,9 +15,9 @@ window.addEventListener("load", function init() {
 
 	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, 0, 0);
+	controls.target.set(0, 50, 0);
 	controls.damping = 0.2;
-	camera.position.set(750, -300, 750);
+	camera.position.set(-400, -50, -400);
 	camera.lookAt(controls.target);
 
 	// FPS.
@@ -33,7 +33,7 @@ window.addEventListener("load", function init() {
 	var hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x000000, 1);
 	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
 
-	directionalLight.position.set(0, 500, -1000);
+	directionalLight.position.set(38000, 5000, 50000);
 	directionalLight.target.position.copy(scene.position);
 
 	scene.add(directionalLight);
@@ -42,6 +42,38 @@ window.addEventListener("load", function init() {
 	// Helpers.
 
 	//scene.add(new THREE.DirectionalLightHelper(directionalLight, 1.0));
+
+	// Sky.
+
+	var path = "textures/skies/sunset/";
+	var format = ".png";
+	var urls = [
+		path + "px" + format, path + "nx" + format,
+		path + "py" + format, path + "ny" + format,
+		path + "pz" + format, path + "nz" + format
+	];
+
+	var cubeTextureLoader = new THREE.CubeTextureLoader();
+	cubeTextureLoader.load(urls, function(textureCube) {
+
+		var shader = THREE.ShaderLib.cube;
+		shader.uniforms.tCube.value = textureCube;
+
+		var skyBoxMaterial = new THREE.ShaderMaterial( {
+			fragmentShader: shader.fragmentShader,
+			vertexShader: shader.vertexShader,
+			uniforms: shader.uniforms,
+			depthWrite: false,
+			side: THREE.BackSide,
+			fog: false
+		});
+
+		var skyMesh = new THREE.Mesh(new THREE.BoxGeometry(10000, 10000, 10000), skyBoxMaterial);
+
+		// Move the sky with the camera.
+		camera.add(skyMesh);
+
+	});
 
 	// Load a model.
 
@@ -67,7 +99,8 @@ window.addEventListener("load", function init() {
 				});
 
 				object.scale.multiplyScalar(100.0);
-				object.rotation.y = Math.PI * 0.5;
+				object.rotation.y = Math.PI * 0.75;
+				object.rotation.x = Math.PI * 0.25;
 				object.traverse(function(child) { child.material = material; })
 				scene.add(object);
 
@@ -100,11 +133,11 @@ window.addEventListener("load", function init() {
 
 	//scene.add(object);
 
-	material = new THREE.MeshPhongMaterial({color: 0x666666, shading: THREE.FlatShading});
+	/*material = new THREE.MeshPhongMaterial({color: 0x666666, shading: THREE.FlatShading});
 	var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(20000, 20000), material);
 	plane.position.y = -500;
 	plane.rotation.x = -Math.PI * 0.5;
-	scene.add(plane);
+	scene.add(plane);*/
 
 	// Post-Processing.
 
@@ -113,8 +146,10 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 256,
-		intensity: 0.33,
+		resolution: 0.25,
+		intensity: 0.69,
+		decay: 0.96,
+		weight: 0.89,
 		exposure: 1.0,
 		samples: 6
 	});

@@ -12,9 +12,11 @@ import THREE from "three";
  * @param {Vector3} lightSource - The most important light source.
  * @param {Object} [options] - The options.
  * @param {Number} [options.rayLength=1.0] - The maximum length of god rays. Valid values are 0.0 to 1.0.
- * @param {Number} [options.exposure=0.65] - A constant attenuation coefficient.
- * @param {Number} [options.intensity=0.75] - A constant factor for additive blending. The higher, the brighter the result.
- * @param {Number} [options.resolution=256] - The render texture resolution.
+ * @param {Number} [options.decay=0.93] - A constant attenuation coefficient.
+ * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
+ * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
+ * @param {Number} [options.intensity=0.69] - A constant factor for additive blending. The higher, the brighter the result.
+ * @param {Number} [options.resolutionScale=0.25] - The god rays render texture resolution scale relative to the on-screen render size.
  * @param {Number} [options.samples=6] - The number of samples per pixel.
  */
 
@@ -23,7 +25,16 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	Pass.call(this, scene, camera);
 
 	if(options === undefined) { options = {}; }
-	if(options.resolution === undefined) { options.resolution = 256; }
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @property resolutionScale
+	 * @type Number
+	 * @private
+	 */
+
+	this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
 
 	/**
 	 * The light source.
@@ -53,7 +64,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @private
 	 */
 
-	this.renderTargetX = new THREE.WebGLRenderTarget(options.resolution, options.resolution, {
+	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
 		format: THREE.RGBFormat
@@ -81,6 +92,8 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.godRaysGenerateMaterial.uniforms.lightPosition.value = this.screenLightPos;
 
 	if(options.samples !== undefined) { this.godRaysGenerateMaterial.defines.NUM_SAMPLES = options.samples; }
+	if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
+	if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
 	/**
 	 * The exposure coefficient.
@@ -106,14 +119,14 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
 
 	/**
-	 * Depth material.
+	 * A material used for masking the scene objects.
 	 *
-	 * @property depthMaterial
-	 * @type MeshDepthMaterial
+	 * @property maskMaterial
+	 * @type MeshBasicMaterial
 	 * @private
 	 */
 
-	this.depthMaterial = new THREE.MeshDepthMaterial();
+	this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
 
 	/**
 	 * The maximum length of god-rays (in texture space [0.0, 1.0]).
@@ -124,7 +137,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @private
 	 */
 
-	var rayLength = (options.rayLength !== undefined) ? options.rayLength : 1.0;
+	var rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
 	var NUM_SAMPLES = this.godRaysGenerateMaterial.defines.NUM_SAMPLES;
 
 	this.stepSizes = new Float32Array(3);
@@ -190,33 +203,38 @@ GodRaysPass.prototype.constructor = GodRaysPass;
 
 GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
+	var clearColor;
+
 	// Compute the screen light position and translate the coordinates to [-1, 1].
 	this.screenLightPos.copy(this.lightSource.position).project(this.camera);
-	this.screenLightPos.x = (this.screenLightPos.x + 1.0) * 0.5;
-	this.screenLightPos.y = (this.screenLightPos.y + 1.0) * 0.5;
+	this.screenLightPos.x = THREE.Math.clamp((this.screenLightPos.x + 1.0) * 0.5, 0.0, 1.0);
+	this.screenLightPos.y = THREE.Math.clamp((this.screenLightPos.y + 1.0) * 0.55, 0.0, 1.0);
 
 	// Don't show the rays from weird angles.
 	this.godRaysGenerateMaterial.uniforms.exposure.value = this.computeAngleScalar() * this.exposure;
 
-	// Render scene depth into texture.
-	this.scene.overrideMaterial = this.depthMaterial;
+	// Render masked scene into texture.
+	this.scene.overrideMaterial = this.maskMaterial;
+	clearColor = renderer.getClearColor().getHex();
+	renderer.setClearColor(0xffffff);
 	renderer.render(this.scene, this.camera, this.renderTargetX, true);
+	renderer.setClearColor(clearColor);
 	this.scene.overrideMaterial = null;
 
 	// God rays - Pass 1.
 	this.quad.material = this.godRaysGenerateMaterial;
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[0];
-	this.godRaysGenerateMaterial.uniforms.frameSampler.value = this.renderTargetX;
+	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene2, this.camera2, this.renderTargetY);
 
 	// God rays - Pass 2.
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[1];
-	this.godRaysGenerateMaterial.uniforms.frameSampler.value = this.renderTargetY;
+	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 	renderer.render(this.scene2, this.camera2, this.renderTargetX);
 
 	// God rays - Pass 3.
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[2];
-	this.godRaysGenerateMaterial.uniforms.frameSampler.value = this.renderTargetX;
+	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene2, this.camera2, this.renderTargetY);
 
 	// Final pass - Composite god-rays onto colors.
@@ -269,5 +287,24 @@ GodRaysPass.prototype.computeAngleScalar = function() {
 	// Compute the angle between the directions.
 	// Don't allow acute angles and make a scalar out of it.
 	return THREE.Math.clamp(cameraDirection.angleTo(lightDirection) - HALF_PI, 0.0, 1.0);
+
+};
+
+/**
+ * Updates this pass with the new main render size.
+ *
+ * @method updateRenderSize
+ * @param {Number} w - The on-screen render width.
+ * @param {Number} h - The on-screen render height.
+ */
+
+GodRaysPass.prototype.updateRenderSize = function(w, h) {
+
+	this.renderTargetX.setSize(Math.floor(w * this.resolutionScale), Math.floor(h * this.resolutionScale));
+
+	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
+	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
+
+	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 };

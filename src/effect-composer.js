@@ -13,7 +13,7 @@ import THREE from "three";
  * @class EffectComposer
  * @constructor
  * @param {WebGLRenderer} renderer - The renderer that should be used.
- * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing. If none is provided,
+ * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing. If none is provided, a new one will be created.
  */
 
 export function EffectComposer(renderer, renderTarget) {
@@ -134,7 +134,7 @@ EffectComposer.prototype.swapBuffers = function() {
 EffectComposer.prototype.addPass = function(pass) {
 
 	this.passes.push(pass);
-	pass.update(this.renderer);
+	pass.updateRenderSize(this.renderTarget1.width, this.renderTarget1.height);
 
 };
 
@@ -149,7 +149,7 @@ EffectComposer.prototype.addPass = function(pass) {
 EffectComposer.prototype.insertPass = function(pass, index) {
 
 	this.passes.splice(index, 0, pass);
-	pass.update(this.renderer);
+	pass.updateRenderSize(this.renderTarget1.width, this.renderTarget1.height);
 
 };
 
@@ -218,7 +218,9 @@ EffectComposer.prototype.render = function(delta) {
 
 EffectComposer.prototype.reset = function(renderTarget) {
 
-	var pixelRatio;
+	var pixelRatio, w, h;
+
+	var i, l;
 
 	if(renderTarget === undefined) {
 
@@ -231,6 +233,9 @@ EffectComposer.prototype.reset = function(renderTarget) {
 
 	}
 
+	w = renderTarget.width;
+	h = renderTarget.height;
+
 	this.renderTarget1.dispose();
 	this.renderTarget1 = renderTarget;
 	this.renderTarget2.dispose();
@@ -239,12 +244,10 @@ EffectComposer.prototype.reset = function(renderTarget) {
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
 
-	var i, l;
-
-	// Let all passes adjust to the renderer size.
+	// Let all passes adjust to the render size.
 	for(i = 0, l = this.passes.length; i < l; ++i) {
 
-		this.passes[i].update(this.renderer);
+		this.passes[i].updateRenderSize(w, h);
 
 	}
 

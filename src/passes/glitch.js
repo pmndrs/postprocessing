@@ -48,7 +48,7 @@ export function GlitchPass(dtSize) {
 	 * @private
 	 */
 
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
 	this.scene.add(this.quad);
 
 	/**
@@ -123,8 +123,6 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	++this.curF;
 
-	this.quad.material = this.material;
-
 	if(this.renderToScreen) {
 
 		renderer.render(this.scene, this.camera);
@@ -152,7 +150,7 @@ GlitchPass.prototype.generateTrigger = function() {
 /**
  * Generates a randomised displacementmap for this pass.
  *
- * @method render
+ * @method generateHeightmap
  * @param {Number} size - The texture size.
  */
 

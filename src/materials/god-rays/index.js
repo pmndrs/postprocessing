@@ -58,19 +58,21 @@ export function GodRaysMaterial(phase) {
 
 			tDiffuse: {type: "t", value: null},
 			tGodRays: {type: "t", value: null},
-			intensity: {type: "f", value: 0.75},
+			intensity: {type: "f", value: 0.69},
 
 		} : {
 
-			frameSampler: {type: "t", value: null},
+			tDiffuse: {type: "t", value: null},
 			stepSize: {type: "f", value: 1.0},
-			exposure: {type: "f", value: 0.65},
+			decay: {type: "f", value: 0.93},
+			weight: {type: "f", value: 1.0},
+			exposure: {type: "f", value: 1.0},
 			lightPosition: {type: "v3", value: null}
 
 		},
 
 		fragmentShader: (phase === Phase.COMBINE) ? shader.fragment.combine : shader.fragment.generate,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 
