@@ -10,7 +10,6 @@ varying vec2 vUv;
 void main() {
 
 	vec2 texCoord = vUv;
-	float numSamples = float(NUM_SAMPLES);
 
 	// Calculate vector from pixel to light source in screen space.
 	vec2 deltaTexCoord = texCoord - lightPosition.st;
@@ -32,7 +31,7 @@ void main() {
 	vec4 color = vec4(0.0);
 
 	// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light source.
-	for(int i = 0; i < NUM_SAMPLES; ++i) {
+	for(int i = 0; i < NUM_SAMPLES_INT; ++i) {
 
 		// Don't do more than necessary.
 		if(i <= iterations && texCoord.y < 1.0) {
@@ -54,6 +53,6 @@ void main() {
 	}
 
 	// Output final color with a further scale control factor.
-	gl_FragColor = (color / numSamples) * exposure;
+	gl_FragColor = (color / NUM_SAMPLES_FLOAT) * exposure;
 
 }

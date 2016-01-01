@@ -91,7 +91,13 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.godRaysGenerateMaterial = new GodRaysMaterial(Phase.GENERATE);
 	this.godRaysGenerateMaterial.uniforms.lightPosition.value = this.screenLightPos;
 
-	if(options.samples !== undefined) { this.godRaysGenerateMaterial.defines.NUM_SAMPLES = options.samples; }
+	if(options.samples !== undefined) {
+
+		this.godRaysGenerateMaterial.defines.NUM_SAMPLES_FLOAT = options.samples.toFixed(1);
+		this.godRaysGenerateMaterial.defines.NUM_SAMPLES_INT = options.samples.toFixed(0);
+
+	}
+
 	if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
 	if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
@@ -138,7 +144,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	var rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
-	var NUM_SAMPLES = this.godRaysGenerateMaterial.defines.NUM_SAMPLES;
+	var NUM_SAMPLES = Number.parseInt(this.godRaysGenerateMaterial.defines.NUM_SAMPLES_INT);
 
 	this.stepSizes = new Float32Array(3);
 	this.stepSizes[0] = rayLength * Math.pow(NUM_SAMPLES, -1.0);
@@ -207,8 +213,8 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	// Compute the screen light position and translate the coordinates to [-1, 1].
 	this.screenLightPos.copy(this.lightSource.position).project(this.camera);
-	this.screenLightPos.x = THREE.Math.clamp((this.screenLightPos.x + 1.0) * 0.5, 0.0, 1.0);
-	this.screenLightPos.y = THREE.Math.clamp((this.screenLightPos.y + 1.0) * 0.55, 0.0, 1.0);
+	this.screenLightPos.x = THREE.Math.clamp((this.screenLightPos.x + 1.0) * 0.5, -1.0, 1.0);
+	this.screenLightPos.y = THREE.Math.clamp((this.screenLightPos.y + 1.0) * 0.5, -1.0, 1.0);
 
 	// Don't show the rays from weird angles.
 	this.godRaysGenerateMaterial.uniforms.exposure.value = this.computeAngleScalar() * this.exposure;
@@ -271,6 +277,7 @@ var lightDirection = new THREE.Vector3();
 
 GodRaysPass.prototype.computeAngleScalar = function() {
 
+	//this.camera.getWorldDirection(cameraDirection);
 	// Save camera space point. Using lightDirection as a clipboard.
 	lightDirection.copy(localPoint);
 	// Camera space to world space.
@@ -304,6 +311,13 @@ GodRaysPass.prototype.setSize = function(width, height) {
 
 	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
 	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
+
+	if(!THREE.Math.isPowerOfTwo(this.renderTargetX.width) || !THREE.Math.isPowerOfTwo(this.renderTargetX.height)) {
+
+		this.renderTargetX.texture.generateMipmaps = false;
+		this.renderTargetY.texture.generateMipmaps = false;
+
+	}
 
 	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 

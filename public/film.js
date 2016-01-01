@@ -69,9 +69,11 @@ window.addEventListener("load", function init() {
 
 	var pass = new POSTPROCESSING.FilmPass({
 		grayscale: false,
+		noiseIntensity: 0.5,
 		scanlinesIntensity: 0.5,
 		scanlinesCount: 1024.0
 	});
+
 	pass.renderToScreen = true;
 	composer.addPass(pass);
 

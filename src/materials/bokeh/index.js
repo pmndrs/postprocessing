@@ -16,8 +16,8 @@ export function BokehMaterial() {
 
 		defines: {
 
-			RINGS: 3,
-			SAMPLES: 4
+			RINGS: "3",
+			SAMPLES: "4"
 
 		},
 

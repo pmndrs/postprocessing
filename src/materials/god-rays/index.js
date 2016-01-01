@@ -5,14 +5,11 @@ import THREE from "three";
  * Phase enumeration.
  *
  * Generate-phase:
- *
- *  The input is the depth map which is blurred along radial lines towards the "sun". 
- *  The output is written to a render texture.
+ *  In the first pass, the masked scene is blurred along radial lines towards the light source.
+ *  The result of the previous pass is re-blurred twice with a decreased distance between the samples.
  *
  * Combine-phase:
- *
- *  The results of the previous pass are re-blurred two times with a decreased 
- *  distance between samples.
+ *  The result is added to the normal scene.
  *
  * @property Phase
  * @type Object
@@ -50,7 +47,8 @@ export function GodRaysMaterial(phase) {
 
 		defines: {
 
-			NUM_SAMPLES: 6
+			NUM_SAMPLES_FLOAT: "6.0",
+			NUM_SAMPLES_INT: "6"
 
 		},
 

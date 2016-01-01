@@ -70,7 +70,7 @@ window.addEventListener("load", function init() {
 	composer.addPass(new POSTPROCESSING.BloomPass({
 		strength: 1.0,
 		kernelSize: 25,
-		sigma: 5,
+		sigma: 4,
 		resolutionScale: 0.25
 	}));
 

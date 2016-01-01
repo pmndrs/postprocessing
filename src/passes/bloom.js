@@ -61,7 +61,7 @@ export function BloomPass(options) {
 	 * @private
 	 */
 
-	this.blurY = new THREE.Vector2();
+	this.blurY = new THREE.Vector2(0.0, BLUR);
 
 	/**
 	 * A render target.
@@ -187,14 +187,23 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 
 BloomPass.prototype.setSize = function(width, height) {
 
+	// Scale the factor with the render target ratio.
+	this.blurY.set(0.0, (width / height) * BLUR);
+
+	//width = height = 512;
+
 	this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
 
 	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
 	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
 
-	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
+	if(!THREE.Math.isPowerOfTwo(this.renderTargetX.width) || !THREE.Math.isPowerOfTwo(this.renderTargetX.height)) {
 
-	// Scale the factor with the render target ratio.
-	this.blurY.set(0.0, (width / height) * BLUR);
+		this.renderTargetX.texture.generateMipmaps = false;
+		this.renderTargetY.texture.generateMipmaps = false;
+
+	}
+
+	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 };
