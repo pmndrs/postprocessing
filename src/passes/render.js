@@ -6,6 +6,7 @@ import THREE from "three";
  *
  * @class RenderPass
  * @constructor
+ * @extends Pass
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  * @param {Material} overrideMaterial - An override material for the scene.

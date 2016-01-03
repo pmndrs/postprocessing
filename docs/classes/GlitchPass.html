@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
@@ -104,6 +105,9 @@
 <h1>GlitchPass Class</h1>
 <div class="box meta">
 
+        <div class="extends">
+            Extends <a href="../classes/Pass.html" class="crosslink">Pass</a>
+        </div>
 
         <div class="foundat">
             Defined in: <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
@@ -194,7 +198,7 @@
                 <div class="index-section methods">
                     <h3>Methods</h3>
 
-                    <ul class="index-list methods">
+                    <ul class="index-list methods extends">
                             <li class="index-item method">
                                 <a href="#method_generateHeightmap">generateHeightmap</a>
 
@@ -203,8 +207,12 @@
                                 <a href="#method_generateTrigger">generateTrigger</a>
 
                             </li>
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_setSize">setSize</a>
 
                             </li>
                     </ul>
@@ -213,13 +221,25 @@
                 <div class="index-section properties">
                     <h3>Properties</h3>
 
-                    <ul class="index-list properties">
+                    <ul class="index-list properties extends">
+                            <li class="index-item property private inherited">
+                                <a href="#property_camera">camera</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_curF">curF</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_enabled">enabled</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_material">material</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
                             <li class="index-item property private">
@@ -232,6 +252,10 @@
                             </li>
                             <li class="index-item property">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_scene">scene</a>
 
                             </li>
                     </ul>
@@ -264,7 +288,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l150"><code>src\passes\glitch.js:150</code></a>
+        <a href="../files/src_passes_glitch.js.html#l151"><code>src\passes\glitch.js:151</code></a>
         </p>
 
 
@@ -314,7 +338,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l138"><code>src\passes\glitch.js:138</code></a>
+        <a href="../files/src_passes_glitch.js.html#l139"><code>src\passes\glitch.js:139</code></a>
         </p>
 
 
@@ -355,9 +379,12 @@
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_glitch.js.html#l81"><code>src\passes\glitch.js:81</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_render">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_glitch.js.html#l82"><code>src\passes\glitch.js:82</code></a>
         </p>
 
 
@@ -418,11 +445,122 @@
 
 
 </div>
+<div id="method_setSize" class="method item inherited">
+    <h3 class="name"><code>setSize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>width</code>
+                </li>
+                <li class="arg">
+                        <code>height</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_setSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Updates this pass with the main render target's size.
+
+This is an abstract method that may be overriden in case 
+you want to be informed about the main render size.
+
+The effect composer calls this method when the pass is added 
+and when the effect composer is reset.
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">width</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">height</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The height.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.myRenderTarget.width = width / 2;</p>
+
+            </div>
+        </div>
+</div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_camera" class="property item private inherited">
+    <h3 class="name"><code>camera</code></h3>
+    <span class="type">Camera</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_camera">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The camera to render with.
+    </div>
+
+        <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
+
+
+</div>
 <div id="property_curF" class="property item private">
     <h3 class="name"><code>curF</code></h3>
     <span class="type">Number</span>
@@ -435,7 +573,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l63"><code>src\passes\glitch.js:63</code></a>
+        <a href="../files/src_passes_glitch.js.html#l64"><code>src\passes\glitch.js:64</code></a>
         </p>
 
 
@@ -446,6 +584,31 @@
 
     </div>
 
+
+
+</div>
+<div id="property_enabled" class="property item inherited">
+    <h3 class="name"><code>enabled</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_enabled">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Enabled flag.
+    </div>
+
+        <p><strong>Default:</strong> true</p>
 
 
 </div>
@@ -461,7 +624,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l19"><code>src\passes\glitch.js:19</code></a>
+        <a href="../files/src_passes_glitch.js.html#l20"><code>src\passes\glitch.js:20</code></a>
         </p>
 
 
@@ -472,6 +635,31 @@
 
     </div>
 
+
+
+</div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Render target swap flag.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -487,7 +675,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l43"><code>src\passes\glitch.js:43</code></a>
+        <a href="../files/src_passes_glitch.js.html#l44"><code>src\passes\glitch.js:44</code></a>
         </p>
 
 
@@ -512,7 +700,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l54"><code>src\passes\glitch.js:54</code></a>
+        <a href="../files/src_passes_glitch.js.html#l55"><code>src\passes\glitch.js:55</code></a>
         </p>
 
 
@@ -537,7 +725,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l30"><code>src\passes\glitch.js:30</code></a>
+        <a href="../files/src_passes_glitch.js.html#l31"><code>src\passes\glitch.js:31</code></a>
         </p>
 
 
@@ -549,6 +737,32 @@
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_scene" class="property item private inherited">
+    <h3 class="name"><code>scene</code></h3>
+    <span class="type">Scene</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_scene">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The scene to render.
+    </div>
+
+        <p><strong>Default:</strong> Scene()</p>
 
 
 </div>

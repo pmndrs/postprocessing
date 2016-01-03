@@ -7,6 +7,7 @@ import THREE from "three";
  *
  * @class GodRaysPass
  * @constructor
+ * @extends Pass
  * @param {Scene} scene - The main scene.
  * @param {Camera} camera - The main camera.
  * @param {Vector3} lightSource - The most important light source.

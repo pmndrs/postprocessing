@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
@@ -104,6 +105,9 @@
 <h1>GodRaysPass Class</h1>
 <div class="box meta">
 
+        <div class="extends">
+            Extends <a href="../classes/Pass.html" class="crosslink">Pass</a>
+        </div>
 
         <div class="foundat">
             Defined in: <a href="../files/src_passes_god-rays.js.html#l5"><code>src\passes\god-rays.js:5</code></a>
@@ -335,16 +339,16 @@
                 <div class="index-section methods">
                     <h3>Methods</h3>
 
-                    <ul class="index-list methods">
+                    <ul class="index-list methods extends">
                             <li class="index-item method private">
                                 <a href="#method_computeAngleScalar">computeAngleScalar</a>
 
                             </li>
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_setSize">setSize</a>
 
                             </li>
@@ -354,9 +358,17 @@
                 <div class="index-section properties">
                     <h3>Properties</h3>
 
-                    <ul class="index-list properties">
+                    <ul class="index-list properties extends">
+                            <li class="index-item property private inherited">
+                                <a href="#property_camera">camera</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_camera2">camera2</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_enabled">enabled</a>
 
                             </li>
                             <li class="index-item property private">
@@ -379,6 +391,10 @@
                                 <a href="#property_maskMaterial">maskMaterial</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_quad">quad</a>
 
@@ -397,6 +413,10 @@
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_resolutionScale">resolutionScale</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_scene">scene</a>
 
                             </li>
                             <li class="index-item property private">
@@ -439,7 +459,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l257"><code>src\passes\god-rays.js:257</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l264"><code>src\passes\god-rays.js:264</code></a>
         </p>
 
 
@@ -490,9 +510,12 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l195"><code>src\passes\god-rays.js:195</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_render">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_god-rays.js.html#l202"><code>src\passes\god-rays.js:202</code></a>
         </p>
 
 
@@ -575,9 +598,12 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l293"><code>src\passes\god-rays.js:293</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_god-rays.js.html#l301"><code>src\passes\god-rays.js:301</code></a>
         </p>
 
 
@@ -630,6 +656,32 @@ direction in order to create a scalar for the god rays exposure.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_camera" class="property item private inherited">
+    <h3 class="name"><code>camera</code></h3>
+    <span class="type">Camera</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_camera">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The camera to render with.
+    </div>
+
+        <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
+
+
+</div>
 <div id="property_camera2" class="property item private">
     <h3 class="name"><code>camera2</code></h3>
     <span class="type">Camera</span>
@@ -642,7 +694,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l168"><code>src\passes\god-rays.js:168</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l175"><code>src\passes\god-rays.js:175</code></a>
         </p>
 
 
@@ -653,6 +705,31 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_enabled" class="property item inherited">
+    <h3 class="name"><code>enabled</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_enabled">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Enabled flag.
+    </div>
+
+        <p><strong>Default:</strong> true</p>
 
 
 </div>
@@ -668,7 +745,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l98"><code>src\passes\god-rays.js:98</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l105"><code>src\passes\god-rays.js:105</code></a>
         </p>
 
 
@@ -694,7 +771,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l109"><code>src\passes\god-rays.js:109</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l116"><code>src\passes\god-rays.js:116</code></a>
         </p>
 
 
@@ -720,7 +797,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l83"><code>src\passes\god-rays.js:83</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l84"><code>src\passes\god-rays.js:84</code></a>
         </p>
 
 
@@ -746,7 +823,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l39"><code>src\passes\god-rays.js:39</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l40"><code>src\passes\god-rays.js:40</code></a>
         </p>
 
 
@@ -772,7 +849,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l121"><code>src\passes\god-rays.js:121</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l128"><code>src\passes\god-rays.js:128</code></a>
         </p>
 
 
@@ -783,6 +860,31 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Render target swap flag.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -798,7 +900,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l179"><code>src\passes\god-rays.js:179</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l186"><code>src\passes\god-rays.js:186</code></a>
         </p>
 
 
@@ -824,7 +926,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l59"><code>src\passes\god-rays.js:59</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l60"><code>src\passes\god-rays.js:60</code></a>
         </p>
 
 
@@ -850,7 +952,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l73"><code>src\passes\god-rays.js:73</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l74"><code>src\passes\god-rays.js:74</code></a>
         </p>
 
 
@@ -875,7 +977,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l148"><code>src\passes\god-rays.js:148</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l155"><code>src\passes\god-rays.js:155</code></a>
         </p>
 
 
@@ -902,7 +1004,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l29"><code>src\passes\god-rays.js:29</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l30"><code>src\passes\god-rays.js:30</code></a>
         </p>
 
 
@@ -913,6 +1015,32 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_scene" class="property item private inherited">
+    <h3 class="name"><code>scene</code></h3>
+    <span class="type">Scene</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_scene">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The scene to render.
+    </div>
+
+        <p><strong>Default:</strong> Scene()</p>
 
 
 </div>
@@ -928,7 +1056,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l158"><code>src\passes\god-rays.js:158</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l165"><code>src\passes\god-rays.js:165</code></a>
         </p>
 
 
@@ -954,7 +1082,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l49"><code>src\passes\god-rays.js:49</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l50"><code>src\passes\god-rays.js:50</code></a>
         </p>
 
 
@@ -980,7 +1108,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l131"><code>src\passes\god-rays.js:131</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l138"><code>src\passes\god-rays.js:138</code></a>
         </p>
 
 

@@ -144,7 +144,9 @@
         "src\\passes\\dot-screen.js": {
             "name": "src\\passes\\dot-screen.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "DotScreenPass": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -278,12 +280,13 @@
                 "BloomPass": 1,
                 "BokehPass": 1,
                 "ClearMaskPass": 1,
-                "RenderPass": 1,
+                "DotScreenPass": 1,
                 "TexturePass": 1,
                 "GlitchPass": 1,
                 "GodRaysPass": 1,
                 "MaskPass": 1,
                 "Pass": 1,
+                "RenderPass": 1,
                 "SavePass": 1,
                 "ShaderPass": 1,
                 "EffectComposer": 1
@@ -440,7 +443,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\god-rays\\index.js",
-            "line": 28,
+            "line": 25,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -649,9 +652,9 @@
             "is_constructor": 1,
             "extends": "Pass"
         },
-        "RenderPass": {
-            "name": "RenderPass",
-            "shortname": "RenderPass",
+        "DotScreenPass": {
+            "name": "DotScreenPass",
+            "shortname": "DotScreenPass",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -659,8 +662,8 @@
             "extension_for": [],
             "module": "postprocessing",
             "namespace": "",
-            "file": "src\\passes\\render.js",
-            "line": 4,
+            "file": "src\\passes\\dot-screen.js",
+            "line": 5,
             "description": "A render pass.",
             "is_constructor": 1,
             "extends": "Pass",
@@ -769,6 +772,7 @@
             "line": 5,
             "description": "A glitch pass.",
             "is_constructor": 1,
+            "extends": "Pass",
             "params": [
                 {
                     "name": "dtSize",
@@ -793,6 +797,7 @@
             "line": 5,
             "description": "A crepuscular rays pass.",
             "is_constructor": 1,
+            "extends": "Pass",
             "params": [
                 {
                     "name": "scene",
@@ -925,6 +930,49 @@
                 }
             ]
         },
+        "RenderPass": {
+            "name": "RenderPass",
+            "shortname": "RenderPass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
+            "file": "src\\passes\\render.js",
+            "line": 4,
+            "description": "A render pass.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "scene",
+                    "description": "- The scene to render.",
+                    "type": "Scene"
+                },
+                {
+                    "name": "camera",
+                    "description": "- The camera to use to render the scene.",
+                    "type": "Camera"
+                },
+                {
+                    "name": "overrideMaterial",
+                    "description": "- An override material for the scene.",
+                    "type": "Material"
+                },
+                {
+                    "name": "clearColor",
+                    "description": "- A clear color.",
+                    "type": "Color"
+                },
+                {
+                    "name": "clearAlpha",
+                    "description": "- A clear alpha value.",
+                    "type": "Number"
+                }
+            ]
+        },
         "SavePass": {
             "name": "SavePass",
             "shortname": "SavePass",
@@ -1050,7 +1098,7 @@
         {
             "file": "src\\materials\\god-rays\\index.js",
             "line": 4,
-            "description": "Phase enumeration.\n\nGenerate-phase:\n\n The input is the depth map which is blurred along radial lines towards the \"sun\". \n The output is written to a render texture.\n\nCombine-phase:\n\n The results of the previous pass are re-blurred two times with a decreased \n distance between samples.",
+            "description": "Phase enumeration.\n\nGenerate-phase:\n In the first pass, the masked scene is blurred along radial lines towards the light source.\n The result of the previous pass is re-blurred twice with a decreased distance between the samples.\n\nCombine-phase:\n The result is added to the normal scene.",
             "itemtype": "property",
             "name": "Phase",
             "type": "Object",
@@ -1665,7 +1713,7 @@
             "type": "DotScreenMaterial",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass",
+            "class": "DotScreenPass",
             "module": "postprocessing"
         },
         {
@@ -1676,7 +1724,7 @@
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
-            "class": "RenderPass",
+            "class": "DotScreenPass",
             "module": "postprocessing"
         },
         {
@@ -1688,7 +1736,7 @@
             "type": "Mesh",
             "access": "private",
             "tagname": "",
-            "class": "RenderPass",
+            "class": "DotScreenPass",
             "module": "postprocessing"
         },
         {
@@ -1719,7 +1767,7 @@
                     "type": "Number"
                 }
             ],
-            "class": "RenderPass",
+            "class": "DotScreenPass",
             "module": "postprocessing"
         },
         {
@@ -1790,7 +1838,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 19,
+            "line": 20,
             "description": "Glitch shader material.",
             "itemtype": "property",
             "name": "material",
@@ -1802,7 +1850,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 30,
+            "line": 31,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -1813,7 +1861,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 43,
+            "line": 44,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -1825,7 +1873,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 54,
+            "line": 55,
             "description": "The quad mesh to render.",
             "itemtype": "property",
             "name": "quad",
@@ -1835,7 +1883,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 63,
+            "line": 64,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "curF",
@@ -1847,7 +1895,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 81,
+            "line": 82,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1873,7 +1921,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 138,
+            "line": 139,
             "description": "Creates a new break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -1882,7 +1930,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 150,
+            "line": 151,
             "description": "Generates a randomised displacementmap for this pass.",
             "itemtype": "method",
             "name": "generateHeightmap",
@@ -1898,7 +1946,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 29,
+            "line": 30,
             "description": "The resolution scale.",
             "itemtype": "property",
             "name": "resolutionScale",
@@ -1910,7 +1958,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 39,
+            "line": 40,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -1922,7 +1970,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 49,
+            "line": 50,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenLightPos",
@@ -1934,7 +1982,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 59,
+            "line": 60,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTarget",
@@ -1946,7 +1994,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 73,
+            "line": 74,
             "description": "Another render target for ping-ponging.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1958,7 +2006,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 83,
+            "line": 84,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
             "name": "godRaysGenerateMaterial",
@@ -1970,7 +2018,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 98,
+            "line": 105,
             "description": "The exposure coefficient.",
             "itemtype": "property",
             "name": "exposure",
@@ -1982,7 +2030,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 109,
+            "line": 116,
             "description": "God rays shader material for the final composite phase.",
             "itemtype": "property",
             "name": "godRaysCombineMaterial",
@@ -1994,7 +2042,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 121,
+            "line": 128,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2006,7 +2054,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 131,
+            "line": 138,
             "description": "The maximum length of god-rays (in texture space [0.0, 1.0]).\nTranslates to pre-computed step sizes for the 3 generate passes.",
             "itemtype": "property",
             "name": "stepSizes",
@@ -2018,7 +2066,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 148,
+            "line": 155,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -2029,7 +2077,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 158,
+            "line": 165,
             "description": "A scene to render the god rays with.",
             "itemtype": "property",
             "name": "scene2",
@@ -2041,7 +2089,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 168,
+            "line": 175,
             "description": "A camera to render the god rays with.",
             "itemtype": "property",
             "name": "camera2",
@@ -2053,7 +2101,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 179,
+            "line": 186,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -2065,7 +2113,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 195,
+            "line": 202,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2091,7 +2139,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 257,
+            "line": 264,
             "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
             "itemtype": "method",
             "name": "computeAngleScalar",
@@ -2106,7 +2154,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 293,
+            "line": 301,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2292,7 +2340,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 20,
+            "line": 21,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
@@ -2302,7 +2350,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 29,
+            "line": 30,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
@@ -2312,7 +2360,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 38,
+            "line": 39,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
@@ -2322,7 +2370,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 47,
+            "line": 48,
             "description": "Old clear color.",
             "itemtype": "property",
             "name": "oldClearColor",
@@ -2334,7 +2382,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 57,
+            "line": 58,
             "description": "Old clear alpha.",
             "itemtype": "property",
             "name": "oldClearAlpha",
@@ -2346,7 +2394,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 67,
+            "line": 68,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
@@ -2357,7 +2405,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 82,
+            "line": 83,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",

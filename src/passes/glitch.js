@@ -7,6 +7,7 @@ import THREE from "three";
  *
  * @class GlitchPass
  * @constructor
+ * @extends Pass
  * @param {Number} [dtSize=64] - The size of the generated displacement map.
  */
 

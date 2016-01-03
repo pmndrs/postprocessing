@@ -5,7 +5,7 @@ import THREE from "three";
 /**
  * A render pass.
  *
- * @class RenderPass
+ * @class DotScreenPass
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.

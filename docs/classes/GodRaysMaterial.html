@@ -47,6 +47,7 @@
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
+                                <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
@@ -109,7 +110,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_materials_god-rays_index.js.html#l28"><code>src\materials\god-rays\index.js:28</code></a>
+            Defined in: <a href="../files/src_materials_god-rays_index.js.html#l25"><code>src\materials\god-rays\index.js:25</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -152,7 +153,7 @@ Crysis Next Gen Effects
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_god-rays_index.js.html#l28"><code>src\materials\god-rays\index.js:28</code></a>
+        <a href="../files/src_materials_god-rays_index.js.html#l25"><code>src\materials\god-rays\index.js:25</code></a>
         </p>
 
 
@@ -241,12 +242,11 @@ Crysis Next Gen Effects
 
     <div class="description">
         <p>Phase enumeration.</p>
-<p>Generate-phase:</p>
-<p>The input is the depth map which is blurred along radial lines towards the &quot;sun&quot;.
-The output is written to a render texture.</p>
-<p>Combine-phase:</p>
-<p>The results of the previous pass are re-blurred two times with a decreased
-distance between samples.</p>
+<p>Generate-phase:
+In the first pass, the masked scene is blurred along radial lines towards the light source.
+The result of the previous pass is re-blurred twice with a decreased distance between the samples.</p>
+<p>Combine-phase:
+The result is added to the normal scene.</p>
 
     </div>
 

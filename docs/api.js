@@ -10,6 +10,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "ConvolutionMaterial",
         "CopyMaterial",
         "DotScreenMaterial",
+        "DotScreenPass",
         "EffectComposer",
         "FilmMaterial",
         "GlitchMaterial",
