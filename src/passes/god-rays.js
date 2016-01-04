@@ -267,7 +267,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
  *
  * @method computeAngleScalar
  * @private
- * @return {Number} A scalar in the range 0.0 to 1.0.
+ * @return {Number} A scalar in the range 0.0 to 1.0 for a linear transition.
  */
 
 // Computation helpers.
@@ -279,6 +279,7 @@ var lightDirection = new THREE.Vector3();
 GodRaysPass.prototype.computeAngleScalar = function() {
 
 	//this.camera.getWorldDirection(cameraDirection);
+
 	// Save camera space point. Using lightDirection as a clipboard.
 	lightDirection.copy(localPoint);
 	// Camera space to world space.

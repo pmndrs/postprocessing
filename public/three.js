@@ -25804,7 +25804,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			var object = renderItem.object;
 			var geometry = renderItem.geometry;
-			var material = overrideMaterial === undefined ? renderItem.material : overrideMaterial;
+			var material = (object.ignoreOverrideMaterial || overrideMaterial === undefined) ? renderItem.material : overrideMaterial;
 			var group = renderItem.group;
 
 			object.modelViewMatrix.multiplyMatrices( camera.matrixWorldInverse, object.matrixWorld );

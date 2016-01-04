@@ -13,11 +13,11 @@ window.addEventListener("load", function init() {
 
 	// Camera.
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 10000);
+	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 50, 0);
 	controls.damping = 0.2;
-	camera.position.set(-400, -50, -400);
+	camera.position.set(-550, -175, -400);
 	camera.lookAt(controls.target);
 
 	// FPS.
@@ -68,7 +68,8 @@ window.addEventListener("load", function init() {
 			fog: false
 		});
 
-		var skyMesh = new THREE.Mesh(new THREE.BoxGeometry(10000, 10000, 10000), skyBoxMaterial);
+		var skyMesh = new THREE.Mesh(new THREE.BoxGeometry(2000, 2000, 2000), skyBoxMaterial);
+		skyMesh.ignoreOverrideMaterial = true; // Hack.
 
 		// Move the sky with the camera.
 		camera.add(skyMesh);
@@ -76,6 +77,8 @@ window.addEventListener("load", function init() {
 	});
 
 	// Load a model.
+
+	var object;
 
 	var loader = new THREE.ObjectLoader();
 	var textureLoader = new THREE.TextureLoader();
@@ -98,6 +101,7 @@ window.addEventListener("load", function init() {
 					fog: true
 				});
 
+				//object = o;
 				object.scale.multiplyScalar(100.0);
 				object.rotation.y = Math.PI * 0.75;
 				object.rotation.x = Math.PI * 0.25;
@@ -112,7 +116,7 @@ window.addEventListener("load", function init() {
 
 	// Random objects.
 
-	var object = new THREE.Object3D();
+	object = new THREE.Object3D();
 
 	var i, mesh;
 	var geometry = new THREE.SphereBufferGeometry(1, 4, 4);
@@ -146,10 +150,10 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 0.25,
-		intensity: 0.69,
+		resolution: 0.5,
+		intensity: 1.0,
 		decay: 0.96,
-		weight: 0.89,
+		weight: 0.99,
 		exposure: 1.0,
 		samples: 6
 	});
