@@ -41,53 +41,15 @@ canvas:active {
  cursor: grabbing;
 }
 
-#options {
- background-color: rgba(0, 0, 0, 0.8);
- border: 3px solid rgba(0, 0, 0, 0.9);
- color: rgb(255, 255, 0);
- font-family: Helvetica, Arial, sans-serif;
- font-size: 9px;
- font-weight: bold;
- line-height: 15px;
- margin: 0;
- padding: 0;
- width: 74px;
- height: 42px;
+p {
+ background-color: rgba(0, 0, 0, 0.3);
+ color: white;
+ font-family: Helvetica, sans-serif;
  position: fixed;
- right: 5px;
- top: 58px;
-}
-
-#options:hover {
- width: auto;
- height: auto;
-}
-
-#options:hover ul {
- visibility: visible;
-}
-
-#options:hover div {
- display: none;
-}
-
-#options div {
- border: 1px dotted rgba(255, 255, 0, 0.5);
- text-align: center;
- margin: 5px 10px;
- height: 15px;
-}
-
-#options ul {
- margin: 10px;
- padding: 0;
- visibility: hidden;
-}
-
-li {
- font-size: 11px;
- list-style: square inside;
- padding: 4px 16px;
+ right: 100px;
+ top: 10px;
+ margin: 0;
+ padding: 6px;
 }
 
 #stats {

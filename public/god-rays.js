@@ -13,7 +13,7 @@ window.addEventListener("load", function init() {
 
 	// Camera.
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100000);
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 50, 0);
 	controls.damping = 0.2;
@@ -30,7 +30,7 @@ window.addEventListener("load", function init() {
 
 	// Lights.
 
-	var hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x000000, 1);
+	var hemisphereLight = new THREE.HemisphereLight(0xffffee, 0x080820, 1);
 	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
 
 	directionalLight.position.set(38000, 5000, 50000);
@@ -53,6 +53,8 @@ window.addEventListener("load", function init() {
 		path + "pz" + format, path + "nz" + format
 	];
 
+	var sky;
+
 	var cubeTextureLoader = new THREE.CubeTextureLoader();
 	cubeTextureLoader.load(urls, function(textureCube) {
 
@@ -68,11 +70,11 @@ window.addEventListener("load", function init() {
 			fog: false
 		});
 
-		var skyMesh = new THREE.Mesh(new THREE.BoxGeometry(2000, 2000, 2000), skyBoxMaterial);
-		skyMesh.ignoreOverrideMaterial = true; // Hack.
+		sky = new THREE.Mesh(new THREE.BoxGeometry(100000, 100000, 100000), skyBoxMaterial);
+		sky.ignoreOverrideMaterial = true; // Hack.
 
 		// Move the sky with the camera.
-		camera.add(skyMesh);
+		camera.add(sky);
 
 	});
 
@@ -114,35 +116,6 @@ window.addEventListener("load", function init() {
 
 	});
 
-	// Random objects.
-
-	object = new THREE.Object3D();
-
-	var i, mesh;
-	var geometry = new THREE.SphereBufferGeometry(1, 4, 4);
-	var material = null;
-
-	for(i = 0; i < 100; ++i) {
-
-		material = new THREE.MeshPhongMaterial({color: 0xffffff * Math.random(), shading: THREE.FlatShading});
-
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-		mesh.position.multiplyScalar(Math.random() * 400);
-		mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-		mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 50;
-		object.add(mesh);
-
-	}
-
-	//scene.add(object);
-
-	/*material = new THREE.MeshPhongMaterial({color: 0x666666, shading: THREE.FlatShading});
-	var plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(20000, 20000), material);
-	plane.position.y = -500;
-	plane.rotation.x = -Math.PI * 0.5;
-	scene.add(plane);*/
-
 	// Post-Processing.
 
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
@@ -150,16 +123,53 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 0.5,
+		resolution: 0.2,
+		rayLength: 1.0,
 		intensity: 1.0,
-		decay: 0.96,
-		weight: 0.99,
+		decay: 1.0,
+		weight: 1.0,
 		exposure: 1.0,
 		samples: 6
 	});
 
 	pass.renderToScreen = true;
 	composer.addPass(pass);
+
+	/**
+	 * Effect toggle for closer light source.
+	 */
+
+	var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
+	sun.ignoreOverrideMaterial = true; // Hack.
+	sun.position.set(1440, 400, 2000);
+
+	document.addEventListener("keyup", function(event) {
+
+		var key = event.keyCode || event.which;
+
+		if(key === 32) {
+
+			if(sky.ignoreOverrideMaterial) {
+
+				pass.godRaysGenerateMaterial.uniforms.weight.value = 0.58767;
+				pass.exposure = 3.0;
+				pass.lightSource = sun;
+				sky.ignoreOverrideMaterial = false;
+				scene.add(sun);
+
+			} else {
+
+				pass.godRaysGenerateMaterial.uniforms.weight.value = 1.0;
+				pass.exposure = 1.0;
+				pass.lightSource = directionalLight;
+				sky.ignoreOverrideMaterial = true;
+				scene.remove(sun);
+
+			}
+
+		}
+
+	});
 
 	/**
 	 * Handles resizing.
@@ -187,14 +197,7 @@ window.addEventListener("load", function init() {
 
 		stats.begin();
 
-		object.rotation.x += 0.005;
-		object.rotation.y += 0.01;
-
 		composer.render();
-
-		// Prevent overflow.
-		if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-		if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
 		stats.end();
 

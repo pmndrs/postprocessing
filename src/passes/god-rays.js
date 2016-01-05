@@ -12,12 +12,12 @@ import THREE from "three";
  * @param {Camera} camera - The main camera.
  * @param {Vector3} lightSource - The most important light source.
  * @param {Object} [options] - The options.
- * @param {Number} [options.rayLength=1.0] - The length of god rays.
- * @param {Number} [options.decay=0.93] - A constant attenuation coefficient.
+ * @param {Number} [options.rayLength=1.0] - The maximum length of god rays.
+ * @param {Number} [options.decay=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
- * @param {Number} [options.intensity=0.69] - A constant factor for additive blending.
- * @param {Number} [options.resolutionScale=0.25] - The god rays render texture resolution scale, relative to the on-screen render size.
+ * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
+ * @param {Number} [options.resolutionScale=0.2] - The god rays render texture resolution scale, relative to the on-screen render size.
  * @param {Number} [options.samples=6] - The number of samples per pixel.
  */
 
@@ -35,7 +35,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @private
 	 */
 
-	this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+	this.resolutionScale = (options.resolution === undefined) ? 0.2 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
 
 	/**
 	 * The light source.
@@ -223,7 +223,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	// Render masked scene into texture.
 	this.scene.overrideMaterial = this.maskMaterial;
 	clearColor = renderer.getClearColor().getHex();
-	renderer.setClearColor(0xffffff);
+	renderer.setClearColor(0x000000);
 	renderer.render(this.scene, this.camera, this.renderTargetX, true);
 	renderer.setClearColor(clearColor);
 	this.scene.overrideMaterial = null;
