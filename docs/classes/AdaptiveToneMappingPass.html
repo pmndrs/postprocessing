@@ -218,7 +218,7 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_dispose">dispose</a>
 
                             </li>
@@ -297,6 +297,10 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
                                 <a href="#property_materialLuminance">materialLuminance</a>
 
                             </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_materials">materials</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_materialToneMapping">materialToneMapping</a>
 
@@ -318,7 +322,15 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
                             </li>
                             <li class="index-item property private inherited">
+                                <a href="#property_renderTargets">renderTargets</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_textures">textures</a>
 
                             </li>
                     </ul>
@@ -343,8 +355,11 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
 
     <div class="meta">
-                <p>
-                Defined in
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_dispose">
+                Pass
+            </a>
+            but overwritten in
         <a href="../files/src_passes_adaptive-tone-mapping.js.html#l342"><code>src\passes\adaptive-tone-mapping.js:342</code></a>
         </p>
 
@@ -829,7 +844,7 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
+        <a href="../files/src_passes_pass.js.html#l118"><code>src\passes\pass.js:118</code></a>
         </p>
 
 
@@ -953,7 +968,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
         </p>
 
 
@@ -1004,7 +1019,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
         </p>
 
 
@@ -1122,6 +1137,32 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_materials" class="property item private inherited">
+    <h3 class="name"><code>materials</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_materials">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The materials created by this pass.
+Used to keep track of materials to delete on demand.
+    </div>
+
+
+
+</div>
 <div id="property_materialToneMapping" class="property item private">
     <h3 class="name"><code>materialToneMapping</code></h3>
     <span class="type"><a href="../classes/ToneMappingMaterial.html" class="crosslink">ToneMappingMaterial</a></span>
@@ -1185,7 +1226,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
         </p>
 
 
@@ -1193,6 +1234,12 @@ and when the effect composer is reset.
 
     <div class="description">
         Render target swap flag.
+
+When set to true, the read and write buffers will be swapped 
+after this pass is done with rendering so that any following  
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively 
+renders into the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -1251,6 +1298,32 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_renderTargets" class="property item private inherited">
+    <h3 class="name"><code>renderTargets</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The render targets created by this pass.
+Used to keep track of render targets to delete on demand.
+    </div>
+
+
+
+</div>
 <div id="property_scene" class="property item private inherited">
     <h3 class="name"><code>scene</code></h3>
     <span class="type">Scene</span>
@@ -1263,7 +1336,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -1274,6 +1347,32 @@ and when the effect composer is reset.
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_textures" class="property item private inherited">
+    <h3 class="name"><code>textures</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_textures">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The textures created by this pass.
+Used to keep track of textures to delete on demand.
+    </div>
+
 
 
 </div>

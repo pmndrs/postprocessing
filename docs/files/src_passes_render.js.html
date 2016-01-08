@@ -151,7 +151,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * @type Number
 	 */
 
-	this.clearAlpha = (clearAlpha !== undefined) ? clearAlpha : 1;
+	this.clearAlpha = (clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(clearAlpha, 0.0, 1.0);
 
 	/**
 	 * Old clear color.

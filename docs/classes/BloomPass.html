@@ -259,6 +259,10 @@ a CopyMaterial to render the texture to screen.</p>
 
                     <ul class="index-list methods extends">
                             <li class="index-item method inherited">
+                                <a href="#method_dispose">dispose</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -301,12 +305,20 @@ a CopyMaterial to render the texture to screen.</p>
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_materials">materials</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_quad">quad</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_renderTargets">renderTargets</a>
 
                             </li>
                             <li class="index-item property private">
@@ -325,6 +337,10 @@ a CopyMaterial to render the texture to screen.</p>
                                 <a href="#property_scene">scene</a>
 
                             </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_textures">textures</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -334,6 +350,39 @@ a CopyMaterial to render the texture to screen.</p>
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_dispose" class="method item inherited">
+    <h3 class="name"><code>dispose</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_dispose">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l136"><code>src\passes\pass.js:136</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Destroys all render targets, materials and textures created by this pass.
+
+The pass will be inoperative after this method has finished.
+Use it to free memory when you are certain that you don't need this pass anymore.
+    </div>
+
+
+
+
+</div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
 
@@ -370,7 +419,7 @@ a CopyMaterial to render the texture to screen.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l144"><code>src\passes\bloom.js:144</code></a>
+        <a href="../files/src_passes_bloom.js.html#l157"><code>src\passes\bloom.js:157</code></a>
         </p>
 
 
@@ -484,7 +533,7 @@ a CopyMaterial to render the texture to screen.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l180"><code>src\passes\bloom.js:180</code></a>
+        <a href="../files/src_passes_bloom.js.html#l193"><code>src\passes\bloom.js:193</code></a>
         </p>
 
 
@@ -549,7 +598,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l46"><code>src\passes\bloom.js:46</code></a>
+        <a href="../files/src_passes_bloom.js.html#l77"><code>src\passes\bloom.js:77</code></a>
         </p>
 
 
@@ -575,7 +624,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l56"><code>src\passes\bloom.js:56</code></a>
+        <a href="../files/src_passes_bloom.js.html#l87"><code>src\passes\bloom.js:87</code></a>
         </p>
 
 
@@ -601,7 +650,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
         </p>
 
 
@@ -626,14 +675,16 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l118"><code>src\passes\bloom.js:118</code></a>
+        <a href="../files/src_passes_bloom.js.html#l128"><code>src\passes\bloom.js:128</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Clear flag. If set to true, the blurring will occur.</p>
+        <p>Clear flag.</p>
+<p>This pass draws the blurred scene over the normal one.
+Set to true to see the fully blurred scene.</p>
 
     </div>
 
@@ -653,7 +704,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l104"><code>src\passes\bloom.js:104</code></a>
+        <a href="../files/src_passes_bloom.js.html#l113"><code>src\passes\bloom.js:113</code></a>
         </p>
 
 
@@ -679,7 +730,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l90"><code>src\passes\bloom.js:90</code></a>
+        <a href="../files/src_passes_bloom.js.html#l97"><code>src\passes\bloom.js:97</code></a>
         </p>
 
 
@@ -704,7 +755,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
         </p>
 
 
@@ -715,6 +766,32 @@ a CopyMaterial to render the texture to screen.</p>
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_materials" class="property item private inherited">
+    <h3 class="name"><code>materials</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_materials">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The materials created by this pass.
+Used to keep track of materials to delete on demand.
+    </div>
+
 
 
 </div>
@@ -729,7 +806,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
         </p>
 
 
@@ -737,6 +814,12 @@ a CopyMaterial to render the texture to screen.</p>
 
     <div class="description">
         Render target swap flag.
+
+When set to true, the read and write buffers will be swapped 
+after this pass is done with rendering so that any following  
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively 
+renders into the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -755,7 +838,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l128"><code>src\passes\bloom.js:128</code></a>
+        <a href="../files/src_passes_bloom.js.html#l141"><code>src\passes\bloom.js:141</code></a>
         </p>
 
 
@@ -764,6 +847,32 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="description">
         <p>The quad mesh to render.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_renderTargets" class="property item private inherited">
+    <h3 class="name"><code>renderTargets</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The render targets created by this pass.
+Used to keep track of render targets to delete on demand.
     </div>
 
 
@@ -781,7 +890,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l66"><code>src\passes\bloom.js:66</code></a>
+        <a href="../files/src_passes_bloom.js.html#l36"><code>src\passes\bloom.js:36</code></a>
         </p>
 
 
@@ -807,14 +916,14 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l80"><code>src\passes\bloom.js:80</code></a>
+        <a href="../files/src_passes_bloom.js.html#l52"><code>src\passes\bloom.js:52</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A second render target.</p>
+        <p>Another render target.</p>
 
     </div>
 
@@ -833,7 +942,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l36"><code>src\passes\bloom.js:36</code></a>
+        <a href="../files/src_passes_bloom.js.html#l67"><code>src\passes\bloom.js:67</code></a>
         </p>
 
 
@@ -859,7 +968,7 @@ a CopyMaterial to render the texture to screen.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -870,6 +979,32 @@ a CopyMaterial to render the texture to screen.</p>
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_textures" class="property item private inherited">
+    <h3 class="name"><code>textures</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_textures">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The textures created by this pass.
+Used to keep track of textures to delete on demand.
+    </div>
+
 
 
 </div>

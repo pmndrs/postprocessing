@@ -269,3 +269,22 @@ EffectComposer.prototype.setSize = function(width, height) {
 	}
 
 };
+
+/**
+ * Destroys all passes.
+ *
+ * This method deallocates any render targets, data textures 
+ * and materials created by the passes.
+ *
+ * @method dispose
+ */
+
+EffectComposer.prototype.dispose = function(width, height) {
+
+	while(this.passes.length > 0) {
+
+		this.passes.pop().dispose();
+
+	}
+
+};

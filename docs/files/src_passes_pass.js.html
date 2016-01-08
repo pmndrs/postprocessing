@@ -120,6 +120,39 @@ import THREE from &quot;three&quot;;
 export function Pass(scene, camera) {
 
 	/**
+	 * The render targets created by this pass.
+	 * Used to keep track of render targets to delete on demand.
+	 *
+	 * @property renderTargets
+	 * @type Array
+	 * @private
+	 */
+
+	this.renderTargets = [];
+
+	/**
+	 * The materials created by this pass.
+	 * Used to keep track of materials to delete on demand.
+	 *
+	 * @property materials
+	 * @type Array
+	 * @private
+	 */
+
+	this.materials = [];
+
+	/**
+	 * The textures created by this pass.
+	 * Used to keep track of textures to delete on demand.
+	 *
+	 * @property textures
+	 * @type Array
+	 * @private
+	 */
+
+	this.textures = [];
+
+	/**
 	 * The scene to render.
 	 *
 	 * @property scene
@@ -155,6 +188,12 @@ export function Pass(scene, camera) {
 
 	/**
 	 * Render target swap flag.
+	 *
+	 * When set to true, the read and write buffers will be swapped 
+	 * after this pass is done with rendering so that any following  
+	 * pass can find the rendered result in the read buffer.
+	 * Swapping is not necessary if, for example, a pass additively 
+	 * renders into the read buffer.
 	 *
 	 * @property needsSwap
 	 * @type Boolean
@@ -201,6 +240,37 @@ Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
  */
 
 Pass.prototype.setSize = function(width, height) {};
+
+/**
+ * Destroys all render targets, materials and textures created by this pass.
+ *
+ * The pass will be inoperative after this method has finished.
+ * Use it to free memory when you are certain that you don&#x27;t need this pass anymore.
+ *
+ * @method dispose
+ */
+
+Pass.prototype.dispose = function() {
+
+	while(this.renderTargets.length &gt; 0) {
+
+		this.renderTargets.pop().dispose();
+
+	}
+
+	while(this.materials.length &gt; 0) {
+
+		this.materials.pop().dispose();
+
+	}
+
+	while(this.textures.length &gt; 0) {
+
+		this.textures.pop().dispose();
+
+	}
+
+};
 
     </pre>
 </div>

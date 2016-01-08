@@ -119,7 +119,8 @@
 
 
 <div class="box intro">
-    <p>A save pass.</p>
+    <p>A save pass that renders the result from a previous
+pass to an arbitrary render target.</p>
 
 </div>
 
@@ -168,7 +169,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The render target.</li>
+<li>The render target to use for saving the read buffer.</li>
 </ul>
 
                     </div>
@@ -199,6 +200,10 @@
 
                     <ul class="index-list methods extends">
                             <li class="index-item method inherited">
+                                <a href="#method_dispose">dispose</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -225,6 +230,10 @@
                                 <a href="#property_material">material</a>
 
                             </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_materials">materials</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
@@ -238,7 +247,15 @@
 
                             </li>
                             <li class="index-item property private inherited">
+                                <a href="#property_renderTargets">renderTargets</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_textures">textures</a>
 
                             </li>
                     </ul>
@@ -250,6 +267,39 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_dispose" class="method item inherited">
+    <h3 class="name"><code>dispose</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_dispose">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l136"><code>src\passes\pass.js:136</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Destroys all render targets, materials and textures created by this pass.</p>
+<p>The pass will be inoperative after this method has finished.
+Use it to free memory when you are certain that you don't need this pass anymore.</p>
+
+    </div>
+
+
+
+
+</div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
 
@@ -283,7 +333,7 @@
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_save.js.html#l65"><code>src\passes\save.js:65</code></a>
+        <a href="../files/src_passes_save.js.html#l71"><code>src\passes\save.js:71</code></a>
         </p>
 
 
@@ -357,7 +407,7 @@
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -379,9 +429,12 @@
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_save.js.html#l90"><code>src\passes\save.js:90</code></a>
         </p>
 
 
@@ -390,10 +443,6 @@
 
     <div class="description">
         <p>Updates this pass with the main render target's size.</p>
-<p>This is an abstract method that may be overriden in case
-you want to be informed about the main render size.</p>
-<p>The effect composer calls this method when the pass is added
-and when the effect composer is reset.</p>
 
     </div>
 
@@ -432,14 +481,6 @@ and when the effect composer is reset.</p>
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -458,7 +499,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
         </p>
 
 
@@ -484,7 +525,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
         </p>
 
 
@@ -511,7 +552,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_save.js.html#l18"><code>src\passes\save.js:18</code></a>
+        <a href="../files/src_passes_save.js.html#l19"><code>src\passes\save.js:19</code></a>
         </p>
 
 
@@ -519,6 +560,33 @@ and when the effect composer is reset.</p>
 
     <div class="description">
         <p>Copy shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_materials" class="property item private inherited">
+    <h3 class="name"><code>materials</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_materials">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The materials created by this pass.
+Used to keep track of materials to delete on demand.</p>
 
     </div>
 
@@ -536,7 +604,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
         </p>
 
 
@@ -544,6 +612,11 @@ and when the effect composer is reset.</p>
 
     <div class="description">
         <p>Render target swap flag.</p>
+<p>When set to true, the read and write buffers will be swapped
+after this pass is done with rendering so that any following<br>
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively
+renders into the read buffer.</p>
 
     </div>
 
@@ -563,14 +636,14 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_save.js.html#l49"><code>src\passes\save.js:49</code></a>
+        <a href="../files/src_passes_save.js.html#l55"><code>src\passes\save.js:55</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The quad mesh to use for rendering the 2D effect.</p>
+        <p>The quad mesh to use for rendering.</p>
 
     </div>
 
@@ -589,7 +662,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_save.js.html#l28"><code>src\passes\save.js:28</code></a>
+        <a href="../files/src_passes_save.js.html#l30"><code>src\passes\save.js:30</code></a>
         </p>
 
 
@@ -597,6 +670,33 @@ and when the effect composer is reset.</p>
 
     <div class="description">
         <p>The render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargets" class="property item private inherited">
+    <h3 class="name"><code>renderTargets</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The render targets created by this pass.
+Used to keep track of render targets to delete on demand.</p>
 
     </div>
 
@@ -615,7 +715,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -627,6 +727,33 @@ and when the effect composer is reset.</p>
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_textures" class="property item private inherited">
+    <h3 class="name"><code>textures</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_textures">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The textures created by this pass.
+Used to keep track of textures to delete on demand.</p>
+
+    </div>
+
 
 
 </div>

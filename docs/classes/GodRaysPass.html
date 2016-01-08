@@ -230,14 +230,14 @@
 
                                 <div class="param-description">
                                     <ul>
-<li>The length of god rays.</li>
+<li>The maximum length of god rays.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[decay=0.93]</code>
+                                    <code class="param-name optional">[decay=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -276,7 +276,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[intensity=0.69]</code>
+                                    <code class="param-name optional">[intensity=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -289,7 +289,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[resolutionScale=0.25]</code>
+                                    <code class="param-name optional">[resolutionScale=0.2]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -341,7 +341,15 @@
 
                     <ul class="index-list methods extends">
                             <li class="index-item method private">
-                                <a href="#method_computeAngleScalar">computeAngleScalar</a>
+                                <a href="#method_calculateStepSizes">calculateStepSizes</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_computeAngularScalar">computeAngularScalar</a>
+
+                            </li>
+                            <li class="index-item method inherited">
+                                <a href="#method_dispose">dispose</a>
 
                             </li>
                             <li class="index-item method inherited">
@@ -359,6 +367,10 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property__rayLength">_rayLength</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
@@ -371,7 +383,7 @@
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property private">
+                            <li class="index-item property">
                                 <a href="#property_exposure">exposure</a>
 
                             </li>
@@ -383,12 +395,20 @@
                                 <a href="#property_godRaysGenerateMaterial">godRaysGenerateMaterial</a>
 
                             </li>
-                            <li class="index-item property private">
+                            <li class="index-item property">
+                                <a href="#property_intensity">intensity</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_lightSource">lightSource</a>
 
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_maskMaterial">maskMaterial</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_materials">materials</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -399,8 +419,16 @@
                                 <a href="#property_quad">quad</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_rayLength">rayLength</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_renderTargets">renderTargets</a>
+
+                            </li>
                             <li class="index-item property private">
-                                <a href="#property_renderTarget">renderTarget</a>
+                                <a href="#property_renderTargetX">renderTargetX</a>
 
                             </li>
                             <li class="index-item property private">
@@ -411,8 +439,16 @@
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_resolution">resolution</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_resolutionScale">resolutionScale</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_samples">samples</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -424,11 +460,15 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_screenLightPos">screenLightPos</a>
+                                <a href="#property_screenLightPosition">screenLightPosition</a>
 
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_stepSizes">stepSizes</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_textures">textures</a>
 
                             </li>
                     </ul>
@@ -440,8 +480,40 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_computeAngleScalar" class="method item private">
-    <h3 class="name"><code>computeAngleScalar</code></h3>
+<div id="method_calculateStepSizes" class="method item private">
+    <h3 class="name"><code>calculateStepSizes</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+        <span class="flag private">private</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l323"><code>src\passes\god-rays.js:323</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adjusts the sampling step sizes for the three passes.</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_computeAngularScalar" class="method item private">
+    <h3 class="name"><code>computeAngularScalar</code></h3>
 
         <span class="paren">()</span>
 
@@ -459,7 +531,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l264"><code>src\passes\god-rays.js:264</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l402"><code>src\passes\god-rays.js:402</code></a>
         </p>
 
 
@@ -478,10 +550,43 @@ direction in order to create a scalar for the god rays exposure.</p>
 
             <div class="returns-description">
                         <span class="type">Number</span>:
-                    <p>A scalar in the range 0.0 to 1.0.</p>
+                    <p>A scalar in the range 0.0 to 1.0 for a linear transition.</p>
 
             </div>
         </div>
+
+
+</div>
+<div id="method_dispose" class="method item inherited">
+    <h3 class="name"><code>dispose</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_dispose">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l136"><code>src\passes\pass.js:136</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Destroys all render targets, materials and textures created by this pass.
+
+The pass will be inoperative after this method has finished.
+Use it to free memory when you are certain that you don't need this pass anymore.
+    </div>
+
+
 
 
 </div>
@@ -515,7 +620,7 @@ direction in order to create a scalar for the god rays exposure.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l202"><code>src\passes\god-rays.js:202</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l340"><code>src\passes\god-rays.js:340</code></a>
         </p>
 
 
@@ -603,7 +708,7 @@ direction in order to create a scalar for the god rays exposure.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l301"><code>src\passes\god-rays.js:301</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l440"><code>src\passes\god-rays.js:440</code></a>
         </p>
 
 
@@ -611,7 +716,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     </div>
 
     <div class="description">
-        <p>Updates this pass with the main render target's size.</p>
+        <p>Updates this pass's render size.</p>
 
     </div>
 
@@ -656,6 +761,32 @@ direction in order to create a scalar for the god rays exposure.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property__rayLength" class="property item private">
+    <h3 class="name"><code>_rayLength</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l142"><code>src\passes\god-rays.js:142</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The maximum length of god-rays (in texture space [0.0, 1.0]).</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -668,7 +799,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
         </p>
 
 
@@ -694,7 +825,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l175"><code>src\passes\god-rays.js:175</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l185"><code>src\passes\god-rays.js:185</code></a>
         </p>
 
 
@@ -719,7 +850,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
         </p>
 
 
@@ -733,12 +864,11 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
-<div id="property_exposure" class="property item private">
+<div id="property_exposure" class="property item">
     <h3 class="name"><code>exposure</code></h3>
     <span class="type">Number</span>
 
 
-        <span class="flag private">private</span>
 
 
 
@@ -753,6 +883,8 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     <div class="description">
         <p>The exposure coefficient.</p>
+<p>This value is scaled based on the user's view direction and
+is sent to the god rays shader every frame.</p>
 
     </div>
 
@@ -771,7 +903,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l116"><code>src\passes\god-rays.js:116</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l118"><code>src\passes\god-rays.js:118</code></a>
         </p>
 
 
@@ -797,7 +929,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l84"><code>src\passes\god-rays.js:84</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l90"><code>src\passes\god-rays.js:90</code></a>
         </p>
 
 
@@ -811,19 +943,43 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
-<div id="property_lightSource" class="property item private">
-    <h3 class="name"><code>lightSource</code></h3>
-    <span class="type">Object3D</span>
+<div id="property_intensity" class="property item">
+    <h3 class="name"><code>intensity</code></h3>
+    <span class="type">Number</span>
 
 
-        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l40"><code>src\passes\god-rays.js:40</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l239"><code>src\passes\god-rays.js:239</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The overall intensity of the effect.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_lightSource" class="property item">
+    <h3 class="name"><code>lightSource</code></h3>
+    <span class="type">Object3D</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l71"><code>src\passes\god-rays.js:71</code></a>
         </p>
 
 
@@ -849,7 +1005,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l128"><code>src\passes\god-rays.js:128</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l131"><code>src\passes\god-rays.js:131</code></a>
         </p>
 
 
@@ -858,6 +1014,32 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="description">
         <p>A material used for masking the scene objects.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_materials" class="property item private inherited">
+    <h3 class="name"><code>materials</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_materials">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The materials created by this pass.
+Used to keep track of materials to delete on demand.
     </div>
 
 
@@ -874,7 +1056,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
         </p>
 
 
@@ -882,6 +1064,12 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     <div class="description">
         Render target swap flag.
+
+When set to true, the read and write buffers will be swapped 
+after this pass is done with rendering so that any following  
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively 
+renders into the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -900,7 +1088,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l186"><code>src\passes\god-rays.js:186</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l196"><code>src\passes\god-rays.js:196</code></a>
         </p>
 
 
@@ -914,8 +1102,59 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
-<div id="property_renderTarget" class="property item private">
-    <h3 class="name"><code>renderTarget</code></h3>
+<div id="property_rayLength" class="property item">
+    <h3 class="name"><code>rayLength</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l262"><code>src\passes\god-rays.js:262</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The maximum length of god rays (in texture space [0.0, 1.0]).</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargets" class="property item private inherited">
+    <h3 class="name"><code>renderTargets</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The render targets created by this pass.
+Used to keep track of render targets to delete on demand.
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetX" class="property item private">
+    <h3 class="name"><code>renderTargetX</code></h3>
     <span class="type">WebGLRenderTarget</span>
 
 
@@ -926,7 +1165,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l60"><code>src\passes\god-rays.js:60</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l30"><code>src\passes\god-rays.js:30</code></a>
         </p>
 
 
@@ -952,14 +1191,14 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l74"><code>src\passes\god-rays.js:74</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l46"><code>src\passes\god-rays.js:46</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Another render target for ping-ponging.</p>
+        <p>Another render target.</p>
 
     </div>
 
@@ -977,7 +1216,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l155"><code>src\passes\god-rays.js:155</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l165"><code>src\passes\god-rays.js:165</code></a>
         </p>
 
 
@@ -989,6 +1228,31 @@ direction in order to create a scalar for the god rays exposure.</p>
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolution" class="property item">
+    <h3 class="name"><code>resolution</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l215"><code>src\passes\god-rays.js:215</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale, relative to the on-screen render size.</p>
+
+    </div>
+
 
 
 </div>
@@ -1004,7 +1268,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l30"><code>src\passes\god-rays.js:30</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l61"><code>src\passes\god-rays.js:61</code></a>
         </p>
 
 
@@ -1012,6 +1276,35 @@ direction in order to create a scalar for the god rays exposure.</p>
 
     <div class="description">
         <p>The resolution scale.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_samples" class="property item">
+    <h3 class="name"><code>samples</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l286"><code>src\passes\god-rays.js:286</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The number of samples per pixel.</p>
+<p>This value must be carefully chosen. A higher value increases
+the GPU load and doesn't necessarily yield better results!
+For a low render resolution, a value of 6 is recommended,
+whereas a value of 8 is best suited for high resolutions.</p>
 
     </div>
 
@@ -1030,7 +1323,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -1056,7 +1349,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l165"><code>src\passes\god-rays.js:165</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l175"><code>src\passes\god-rays.js:175</code></a>
         </p>
 
 
@@ -1070,8 +1363,8 @@ direction in order to create a scalar for the god rays exposure.</p>
 
 
 </div>
-<div id="property_screenLightPos" class="property item private">
-    <h3 class="name"><code>screenLightPos</code></h3>
+<div id="property_screenLightPosition" class="property item private">
+    <h3 class="name"><code>screenLightPosition</code></h3>
     <span class="type">Vector3</span>
 
 
@@ -1082,7 +1375,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l50"><code>src\passes\god-rays.js:50</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l80"><code>src\passes\god-rays.js:80</code></a>
         </p>
 
 
@@ -1108,16 +1401,41 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l138"><code>src\passes\god-rays.js:138</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l152"><code>src\passes\god-rays.js:152</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The maximum length of god-rays (in texture space [0.0, 1.0]).
-Translates to pre-computed step sizes for the 3 generate passes.</p>
+        <p>The maximum ray length translates to step sizes for the 3 generate passes.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_textures" class="property item private inherited">
+    <h3 class="name"><code>textures</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_textures">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The textures created by this pass.
+Used to keep track of textures to delete on demand.
     </div>
 
 

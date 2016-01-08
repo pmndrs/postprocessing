@@ -19,6 +19,8 @@ export function FilmPass(options) {
 
 	Pass.call(this);
 
+	if(options === undefined) { options = {}; }
+
 	/**
 	 * Film shader material.
 	 *
@@ -28,6 +30,7 @@ export function FilmPass(options) {
 	 */
 
 	this.material = new FilmMaterial();
+	this.materials.push(this.material);
 
 	if(options !== undefined) {
 
@@ -48,7 +51,7 @@ export function FilmPass(options) {
 
 	this.renderToScreen = false;
 
-	// Swap targets in this pass.
+	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
 	/**

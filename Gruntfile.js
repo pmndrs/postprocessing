@@ -110,8 +110,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-rollup");
 	grunt.loadNpmTasks("grunt-mocha");
 
-	grunt.registerTask("default", ["clean", "jshint", "build", "uglify", "mocha"]);
-	grunt.registerTask("build", ["fsinline", "rollup", "copy", "clean"]);
+	grunt.registerTask("default", ["clean", "build", "uglify", "mocha"]);
+	grunt.registerTask("build", ["jshint", "fsinline", "rollup", "copy", "clean"]);
 	grunt.registerTask("test", ["jshint", "mocha"]);
 
 };

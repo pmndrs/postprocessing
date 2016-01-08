@@ -3,12 +3,13 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * A save pass.
+ * A save pass that renders the result from a previous 
+ * pass to an arbitrary render target.
  *
  * @class SavePass
  * @constructor
  * @extends Pass
- * @param {Scene} renderTarget - The render target.
+ * @param {Scene} renderTarget - The render target to use for saving the read buffer.
  */
 
 export function SavePass(renderTarget) {
@@ -24,6 +25,7 @@ export function SavePass(renderTarget) {
 	 */
 
 	this.material = new CopyMaterial();
+	this.materials.push(this.material);
 
 	/**
 	 * The render target.
@@ -33,11 +35,9 @@ export function SavePass(renderTarget) {
 	 * @private
 	 */
 
-	this.renderTarget = renderTarget;
+	if(renderTarget === undefined) {
 
-	if(this.renderTarget === undefined) {
-
-		this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+		renderTarget = new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			format: THREE.RGBFormat,
@@ -46,8 +46,14 @@ export function SavePass(renderTarget) {
 
 	}
 
+	this.renderTarget = renderTarget;
+	this.renderTargets.push(this.renderTarget);
+
+	// MIP maps aren't needed.
+	this.renderTarget.texture.generateMipmaps = false;
+
 	/**
-	 * The quad mesh to use for rendering the 2D effect.
+	 * The quad mesh to use for rendering.
 	 *
 	 * @property quad
 	 * @type Mesh
@@ -78,5 +84,22 @@ SavePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 	this.quad.material = this.material;
 
 	renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
+
+};
+
+/**
+ * Updates this pass with the main render target's size.
+ *
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} height - The height.
+ */
+
+SavePass.prototype.setSize = function(width, height) {
+
+	this.renderTarget.setSize(width, height);
+
+	if(this.renderTarget.width <= 0) { this.renderTarget.width = 1; }
+	if(this.renderTarget.height <= 0) { this.renderTarget.height = 1; }
 
 };

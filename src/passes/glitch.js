@@ -8,14 +8,18 @@ import THREE from "three";
  * @class GlitchPass
  * @constructor
  * @extends Pass
- * @param {Number} [dtSize=64] - The size of the generated displacement map.
+ * @param {Object} [options] - The options.
+ * @param {Texture} [options.perturbMap] - A perturbation map.
+ * @param {Number} [options.dtSize=64] - The size of the generated noise map.
  */
 
-export function GlitchPass(dtSize) {
+export function GlitchPass(options) {
 
 	Pass.call(this);
 
-	if(dtSize === undefined) { dtSize = 64; }
+	if(options === undefined) { options = {}; }
+
+	if(options.dtSize === undefined) { options.dtSize = 64; }
 
 	/**
 	 * Glitch shader material.
@@ -26,7 +30,33 @@ export function GlitchPass(dtSize) {
 	 */
 
 	this.material = new GlitchMaterial();
-	this.generateHeightmap(dtSize);
+
+	/**
+	 * A perturbation map.
+	 *
+	 * If none is provided, a noise texture will be created.
+	 * You must delete the generated texture manually or by 
+	 * calling the dispose method of this pass. The latter 
+	 * approach requires you to create a new instance of 
+	 * this pass.
+	 *
+	 * @property perturbMap
+	 * @type Texture
+	 */
+
+	if(options.perturbMap !== undefined) {
+
+		this.perturbMap = options.perturbMap;
+		this.perturbMap.generateMipmaps = false;
+		this.material.uniforms.tDisp.value = this.perturbMap;
+
+	} else {
+
+		// Create a new texture.
+		this.perturbMap = null;
+		this.generatePerturbMap(options.dtSize);
+
+	}
 
 	/**
 	 * Render to screen flag.
@@ -38,7 +68,7 @@ export function GlitchPass(dtSize) {
 
 	this.renderToScreen = false;
 
-	// Swap in this pass.
+	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
 	/**
@@ -149,30 +179,37 @@ GlitchPass.prototype.generateTrigger = function() {
 };
 
 /**
- * Generates a randomised displacementmap for this pass.
+ * Destroys the currently set texture, if any, and 
+ * generates a simple noise map.
  *
- * @method generateHeightmap
+ * @method generatePerturbMap
  * @param {Number} size - The texture size.
+ * @private
  */
 
-GlitchPass.prototype.generateHeightmap = function(size) {
+GlitchPass.prototype.generatePerturbMap = function(size) {
 
-	var length = size * size;
-	var data = new Float32Array(length * 3);
-	var i, val, t;
+	var i, x;
+	var l = size * size;
+	var data = new Float32Array(l * 3);
 
-	for(i = 0; i < length; ++i) {
+	for(i = 0; i < l; ++i) {
 
-		val = THREE.Math.randFloat(0, 1);
-		data[i * 3] = val;
-		data[i * 3 + 1] = val;
-		data[i * 3 + 2] = val;
+		x = THREE.Math.randFloat(0, 1);
+
+		data[i * 3] = x;
+		data[i * 3 + 1] = x;
+		data[i * 3 + 2] = x;
 
 	}
 
-	t = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
-	t.needsUpdate = true;
+	// If a texture has already been generated before, delete it.
+	if(this.textures.length === 1) { this.textures[0].dispose(); }
 
-	this.material.uniforms.tDisp.value = t;
+	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
+	this.perturbMap.needsUpdate = true;
+	this.textures.push(this.perturbMap);
+
+	this.material.uniforms.tDisp.value = this.perturbMap;
 
 };

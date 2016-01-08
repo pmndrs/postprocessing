@@ -34,6 +34,37 @@ export function BloomPass(options) {
 	var kernelSize = (options.kernelSize !== undefined) ? options.kernelSize : 25;
 
 	/**
+	 * A render target.
+	 *
+	 * @property renderTargetX
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
+		minFilter: THREE.LinearFilter,
+		magFilter: THREE.LinearFilter,
+		format: THREE.RGBFormat
+	});
+
+	this.renderTargets.push(this.renderTargetX);
+
+	/**
+	 * Another render target.
+	 *
+	 * @property renderTargetY
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.renderTargetY = this.renderTargets[0].clone();
+	this.renderTargets.push(this.renderTargetY);
+
+	// MIP maps aren't needed.
+	this.renderTargetX.texture.generateMipmaps = false;
+	this.renderTargetY.texture.generateMipmaps = false;
+
+	/**
 	 * The resolution scale.
 	 *
 	 * @property resolutionScale
@@ -64,30 +95,6 @@ export function BloomPass(options) {
 	this.blurY = new THREE.Vector2(0.0, BLUR);
 
 	/**
-	 * A render target.
-	 *
-	 * @property renderTargetX
-	 * @type WebGLRenderTarget
-	 * @private
-	 */
-
-	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
-		minFilter: THREE.LinearFilter,
-		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat
-	});
-
-	/**
-	 * A second render target.
-	 *
-	 * @property renderTargetY
-	 * @type WebGLRenderTarget
-	 * @private
-	 */
-
-	this.renderTargetY = this.renderTargetX.clone();
-
-	/**
 	 * Copy shader material.
 	 *
 	 * @property copyMaterial
@@ -96,6 +103,8 @@ export function BloomPass(options) {
 	 */
 
 	this.copyMaterial = new CopyMaterial();
+	this.materials.push(this.copyMaterial);
+
 	this.copyMaterial.blending = THREE.AdditiveBlending;
 	this.copyMaterial.transparent = true;
 
@@ -110,13 +119,17 @@ export function BloomPass(options) {
 	 */
 
 	this.convolutionMaterial = new ConvolutionMaterial();
+	this.materials.push(this.convolutionMaterial);
 
 	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
 	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
 	this.convolutionMaterial.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
 
 	/**
-	 * Clear flag. If set to true, the blurring will occur.
+	 * Clear flag.
+	 *
+	 * This pass draws the blurred scene over the normal one.
+	 * Set to true to see the fully blurred scene.
 	 *
 	 * @property clear
 	 * @type Boolean
@@ -196,13 +209,6 @@ BloomPass.prototype.setSize = function(width, height) {
 
 	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
 	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
-
-	if(!THREE.Math.isPowerOfTwo(this.renderTargetX.width) || !THREE.Math.isPowerOfTwo(this.renderTargetX.height)) {
-
-		this.renderTargetX.texture.generateMipmaps = false;
-		this.renderTargetY.texture.generateMipmaps = false;
-
-	}
 
 	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 

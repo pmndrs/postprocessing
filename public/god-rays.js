@@ -123,13 +123,13 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 0.2,
+		resolution: 1.0,
 		rayLength: 1.0,
 		intensity: 1.0,
 		decay: 1.0,
 		weight: 1.0,
 		exposure: 1.0,
-		samples: 6
+		samples: 8
 	});
 
 	pass.renderToScreen = true;
@@ -139,7 +139,19 @@ window.addEventListener("load", function init() {
 	 * Effect toggle for closer light source.
 	 */
 
-	var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
+	//var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
+
+	var sunMaterial = new THREE.PointsMaterial({size: 600, sizeAttenuation: false, color: 0xffddaa, alphaTest: 0.0, transparent: true, fog: false});
+	var sunGeometry = new THREE.Geometry();
+	sunGeometry.vertices.push(new THREE.Vector3());
+	var sun = new THREE.Points(sunGeometry, sunMaterial);
+
+	textureLoader.load("textures/sun.png", function(texture) {
+
+		sunMaterial.map = texture;
+
+	});
+
 	sun.ignoreOverrideMaterial = true; // Hack.
 	sun.position.set(1440, 400, 2000);
 
@@ -153,6 +165,7 @@ window.addEventListener("load", function init() {
 
 				pass.godRaysGenerateMaterial.uniforms.weight.value = 0.58767;
 				pass.exposure = 3.0;
+				//pass.intensity = 0.75;
 				pass.lightSource = sun;
 				sky.ignoreOverrideMaterial = false;
 				scene.add(sun);
@@ -161,6 +174,7 @@ window.addEventListener("load", function init() {
 
 				pass.godRaysGenerateMaterial.uniforms.weight.value = 1.0;
 				pass.exposure = 1.0;
+				pass.intensity = 1.0;
 				pass.lightSource = directionalLight;
 				sky.ignoreOverrideMaterial = true;
 				scene.remove(sun);
@@ -190,8 +204,6 @@ window.addEventListener("load", function init() {
 	/**
 	 * Animation loop.
 	 */
-
-	var TWO_PI = 2.0 * Math.PI;
 
 	(function render(now) {
 

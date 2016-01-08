@@ -25,8 +25,10 @@ export function TexturePass(texture, opacity) {
 	 */
 
 	this.material = new CopyMaterial();
+	this.materials.push(this.material);
+
 	this.material.uniforms.tDiffuse.value = texture;
-	this.material.uniforms.opacity.value = (opacity !== undefined) ? opacity : 1.0;
+	this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
 
 	/**
 	 * The quad mesh to use for rendering the 2D effect.
@@ -36,7 +38,7 @@ export function TexturePass(texture, opacity) {
 	 * @private
 	 */
 
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
 	this.scene.add(this.quad);
 
 }
@@ -56,7 +58,6 @@ TexturePass.prototype.constructor = TexturePass;
 
 TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
-	this.quad.material = this.material;
 	renderer.render(this.scene, this.camera, readBuffer);
 
 };

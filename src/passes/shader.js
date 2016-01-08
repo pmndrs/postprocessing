@@ -58,7 +58,7 @@ export function ShaderPass(material, textureID) {
 	 * @private
 	 */
 
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
 	this.scene.add(this.quad);
 
 }
@@ -83,8 +83,6 @@ ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta)
 		this.material.uniforms[this.textureID].value = readBuffer;
 
 	}
-
-	this.quad.material = this.material;
 
 	if(this.renderToScreen) {
 

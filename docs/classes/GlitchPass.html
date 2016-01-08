@@ -131,7 +131,7 @@
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code class="optional">[dtSize=64]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -162,18 +162,46 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[dtSize=64]</code>
-                        <span class="type">Number</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The size of the generated displacement map.</li>
+<li>The options.</li>
 </ul>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[perturbMap]</code>
+                                    <span class="type">Texture</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A perturbation map.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[dtSize=64]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The size of the generated noise map.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -199,8 +227,12 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method">
-                                <a href="#method_generateHeightmap">generateHeightmap</a>
+                            <li class="index-item method inherited">
+                                <a href="#method_dispose">dispose</a>
+
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_generatePerturbMap">generatePerturbMap</a>
 
                             </li>
                             <li class="index-item method">
@@ -238,16 +270,28 @@
                                 <a href="#property_material">material</a>
 
                             </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_materials">materials</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_perturbMap">perturbMap</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_quad">quad</a>
 
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_quad">quad</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_quad">quad</a>
+                            <li class="index-item property private inherited">
+                                <a href="#property_renderTargets">renderTargets</a>
 
                             </li>
                             <li class="index-item property">
@@ -256,6 +300,10 @@
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
+                                <a href="#property_textures">textures</a>
 
                             </li>
                     </ul>
@@ -267,8 +315,41 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_generateHeightmap" class="method item">
-    <h3 class="name"><code>generateHeightmap</code></h3>
+<div id="method_dispose" class="method item inherited">
+    <h3 class="name"><code>dispose</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_dispose">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l136"><code>src\passes\pass.js:136</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Destroys all render targets, materials and textures created by this pass.
+
+The pass will be inoperative after this method has finished.
+Use it to free memory when you are certain that you don't need this pass anymore.
+    </div>
+
+
+
+
+</div>
+<div id="method_generatePerturbMap" class="method item private">
+    <h3 class="name"><code>generatePerturbMap</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
@@ -280,6 +361,7 @@
 
 
 
+        <span class="flag private">private</span>
 
 
 
@@ -288,7 +370,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l151"><code>src\passes\glitch.js:151</code></a>
+        <a href="../files/src_passes_glitch.js.html#l181"><code>src\passes\glitch.js:181</code></a>
         </p>
 
 
@@ -296,7 +378,8 @@
     </div>
 
     <div class="description">
-        <p>Generates a randomised displacementmap for this pass.</p>
+        <p>Destroys the currently set texture, if any, and
+generates a simple noise map.</p>
 
     </div>
 
@@ -338,7 +421,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l139"><code>src\passes\glitch.js:139</code></a>
+        <a href="../files/src_passes_glitch.js.html#l169"><code>src\passes\glitch.js:169</code></a>
         </p>
 
 
@@ -384,7 +467,7 @@
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l82"><code>src\passes\glitch.js:82</code></a>
+        <a href="../files/src_passes_glitch.js.html#l112"><code>src\passes\glitch.js:112</code></a>
         </p>
 
 
@@ -469,7 +552,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
+        <a href="../files/src_passes_pass.js.html#l118"><code>src\passes\pass.js:118</code></a>
         </p>
 
 
@@ -547,7 +630,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
         </p>
 
 
@@ -573,7 +656,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l64"><code>src\passes\glitch.js:64</code></a>
+        <a href="../files/src_passes_glitch.js.html#l94"><code>src\passes\glitch.js:94</code></a>
         </p>
 
 
@@ -598,7 +681,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
+        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
         </p>
 
 
@@ -624,7 +707,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l20"><code>src\passes\glitch.js:20</code></a>
+        <a href="../files/src_passes_glitch.js.html#l24"><code>src\passes\glitch.js:24</code></a>
         </p>
 
 
@@ -633,6 +716,32 @@ and when the effect composer is reset.
     <div class="description">
         <p>Glitch shader material.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_materials" class="property item private inherited">
+    <h3 class="name"><code>materials</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_materials">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The materials created by this pass.
+Used to keep track of materials to delete on demand.
     </div>
 
 
@@ -649,7 +758,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
         </p>
 
 
@@ -657,32 +766,42 @@ and when the effect composer is reset.
 
     <div class="description">
         Render target swap flag.
+
+When set to true, the read and write buffers will be swapped 
+after this pass is done with rendering so that any following  
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively 
+renders into the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
 
 
 </div>
-<div id="property_quad" class="property item private">
-    <h3 class="name"><code>quad</code></h3>
-    <span class="type">Mesh</span>
+<div id="property_perturbMap" class="property item">
+    <h3 class="name"><code>perturbMap</code></h3>
+    <span class="type">Texture</span>
 
 
-        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l44"><code>src\passes\glitch.js:44</code></a>
+        <a href="../files/src_passes_glitch.js.html#l34"><code>src\passes\glitch.js:34</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The quad mesh to use for rendering the 2D effect.</p>
+        <p>A perturbation map.</p>
+<p>If none is provided, a noise texture will be created.
+You must delete the generated texture manually or by
+calling the dispose method of this pass. The latter
+approach requires you to create a new instance of
+this pass.</p>
 
     </div>
 
@@ -700,7 +819,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l55"><code>src\passes\glitch.js:55</code></a>
+        <a href="../files/src_passes_glitch.js.html#l85"><code>src\passes\glitch.js:85</code></a>
         </p>
 
 
@@ -709,6 +828,58 @@ and when the effect composer is reset.
     <div class="description">
         <p>The quad mesh to render.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_quad" class="property item private">
+    <h3 class="name"><code>quad</code></h3>
+    <span class="type">Mesh</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l74"><code>src\passes\glitch.js:74</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The quad mesh to use for rendering the 2D effect.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargets" class="property item private inherited">
+    <h3 class="name"><code>renderTargets</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The render targets created by this pass.
+Used to keep track of render targets to delete on demand.
     </div>
 
 
@@ -725,7 +896,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l31"><code>src\passes\glitch.js:31</code></a>
+        <a href="../files/src_passes_glitch.js.html#l61"><code>src\passes\glitch.js:61</code></a>
         </p>
 
 
@@ -752,7 +923,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -763,6 +934,32 @@ and when the effect composer is reset.
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_textures" class="property item private inherited">
+    <h3 class="name"><code>textures</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_textures">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The textures created by this pass.
+Used to keep track of textures to delete on demand.
+    </div>
+
 
 
 </div>
