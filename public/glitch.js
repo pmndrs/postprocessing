@@ -67,9 +67,21 @@ window.addEventListener("load", function init() {
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
-	var pass = new POSTPROCESSING.GlitchPass();
-	pass.renderToScreen = true;
-	composer.addPass(pass);
+	var textureLoader = new THREE.TextureLoader();
+
+	textureLoader.load("textures/perturb.jpg", function(texture) {
+
+		texture.magFilter = texture.minFilter = THREE.NearestFilter;
+
+		var pass = new POSTPROCESSING.GlitchPass({
+			perturbMap: texture
+		});
+
+		//pass.goWild = true;
+		pass.renderToScreen = true;
+		composer.addPass(pass);
+
+	});
 
 	/**
 	 * Handles resizing.

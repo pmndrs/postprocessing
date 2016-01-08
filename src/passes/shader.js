@@ -36,6 +36,7 @@ export function ShaderPass(material, textureID) {
 	 */
 
 	this.material = material;
+	this.materials.push(this.material);
 
 	/**
 	 * Render to screen flag.

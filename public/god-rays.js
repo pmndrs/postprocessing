@@ -123,7 +123,7 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 1.0,
+		resolution: 512,
 		rayLength: 1.0,
 		intensity: 1.0,
 		decay: 1.0,
@@ -163,8 +163,8 @@ window.addEventListener("load", function init() {
 
 			if(sky.ignoreOverrideMaterial) {
 
-				pass.godRaysGenerateMaterial.uniforms.weight.value = 0.58767;
-				pass.exposure = 3.0;
+				//pass.godRaysGenerateMaterial.uniforms.weight.value = 0.58767;
+				pass.exposure = 1.33;
 				//pass.intensity = 0.75;
 				pass.lightSource = sun;
 				sky.ignoreOverrideMaterial = false;

@@ -22,7 +22,7 @@ var BLUR = 0.001953125;
  * @param {Number} [options.strength=1.0] - The bloom strength.
  * @param {Number} [options.kernelSize=25] - The kernel size.
  * @param {Number} [options.sigma=4.0] - The sigma value.
- * @param {Number} [options.resolutionScale=0.25] - The render resolution scale, relative to the on-screen render size.
+ * @param {Number} [options.resolution=256] - The render resolution.
  */
 
 export function BloomPass(options) {
@@ -57,7 +57,7 @@ export function BloomPass(options) {
 	 * @private
 	 */
 
-	this.renderTargetY = this.renderTargets[0].clone();
+	this.renderTargetY = this.renderTargetX.clone();
 	this.renderTargets.push(this.renderTargetY);
 
 	// MIP maps aren't needed.
@@ -65,14 +65,17 @@ export function BloomPass(options) {
 	this.renderTargetY.texture.generateMipmaps = false;
 
 	/**
-	 * The resolution scale.
+	 * The resolution scale, relative to the on-screen render size.
+	 * You have to call the reset method of the EffectComposer after modifying this field.
 	 *
 	 * @property resolutionScale
 	 * @type Number
-	 * @private
 	 */
 
-	this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+	//this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+
+	// Set the resolution.
+	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
 
 	/**
 	 * The horizontal blur factor.
@@ -155,6 +158,32 @@ BloomPass.prototype = Object.create(Pass.prototype);
 BloomPass.prototype.constructor = BloomPass;
 
 /**
+ * The resolution of the render targets. Needs to be a power of 2.
+ *
+ * @property resolution
+ * @type Number
+ */
+
+Object.defineProperty(BloomPass.prototype, "resolution", {
+
+	get: function() { return this.renderTargetX.width; },
+
+	set: function(x) {
+
+		if(!Number.isNaN(x)) {
+
+			if(x <= 0) { x = 1; }
+
+			this.renderTargetX.setSize(x, x);
+			this.renderTargetY.setSize(x, x);
+
+		}
+
+	}
+
+});
+
+/**
  * Renders the scene.
  *
  * @method render
@@ -200,16 +229,7 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 
 BloomPass.prototype.setSize = function(width, height) {
 
-	// Scale the factor with the render target ratio.
+	// Scale one of the blur factors with the render target ratio.
 	this.blurY.set(0.0, (width / height) * BLUR);
-
-	//width = height = 512;
-
-	this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
-
-	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
-	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
-
-	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 };

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.4</em>
+            <em>API Docs for: 0.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -289,20 +289,20 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[resolutionScale=0.2]</code>
+                                    <code class="param-name optional">[resolution=256]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The god rays render texture resolution scale, relative to the on-screen render size.</li>
+<li>The god rays render texture resolution.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[samples=6]</code>
+                                    <code class="param-name optional">[samples=8]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -443,10 +443,6 @@
                                 <a href="#property_resolution">resolution</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_resolutionScale">resolutionScale</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_samples">samples</a>
 
@@ -496,7 +492,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l323"><code>src\passes\god-rays.js:323</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l318"><code>src\passes\god-rays.js:318</code></a>
         </p>
 
 
@@ -531,7 +527,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l402"><code>src\passes\god-rays.js:402</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l397"><code>src\passes\god-rays.js:397</code></a>
         </p>
 
 
@@ -620,7 +616,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l340"><code>src\passes\god-rays.js:340</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l335"><code>src\passes\god-rays.js:335</code></a>
         </p>
 
 
@@ -681,7 +677,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
 
 
 </div>
-<div id="method_setSize" class="method item">
+<div id="method_setSize" class="method item inherited">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -703,12 +699,9 @@ Use it to free memory when you are certain that you don't need this pass anymore
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_setSize">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l440"><code>src\passes\god-rays.js:440</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_setSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l118"><code>src\passes\pass.js:118</code></a>
         </p>
 
 
@@ -716,8 +709,13 @@ Use it to free memory when you are certain that you don't need this pass anymore
     </div>
 
     <div class="description">
-        <p>Updates this pass's render size.</p>
+        Updates this pass with the main render target's size.
 
+This is an abstract method that may be overriden in case 
+you want to be informed about the main render size.
+
+The effect composer calls this method when the pass is added 
+and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -755,6 +753,14 @@ Use it to free memory when you are certain that you don't need this pass anymore
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.myRenderTarget.width = width / 2;</p>
+
+            </div>
+        </div>
 </div>
             </div>
 
@@ -773,7 +779,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l142"><code>src\passes\god-rays.js:142</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l135"><code>src\passes\god-rays.js:135</code></a>
         </p>
 
 
@@ -825,7 +831,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l185"><code>src\passes\god-rays.js:185</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l178"><code>src\passes\god-rays.js:178</code></a>
         </p>
 
 
@@ -875,7 +881,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l105"><code>src\passes\god-rays.js:105</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l98"><code>src\passes\god-rays.js:98</code></a>
         </p>
 
 
@@ -903,7 +909,7 @@ is sent to the god rays shader every frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l118"><code>src\passes\god-rays.js:118</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l111"><code>src\passes\god-rays.js:111</code></a>
         </p>
 
 
@@ -929,7 +935,7 @@ is sent to the god rays shader every frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l90"><code>src\passes\god-rays.js:90</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l83"><code>src\passes\god-rays.js:83</code></a>
         </p>
 
 
@@ -954,7 +960,7 @@ is sent to the god rays shader every frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l239"><code>src\passes\god-rays.js:239</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l208"><code>src\passes\god-rays.js:208</code></a>
         </p>
 
 
@@ -979,7 +985,7 @@ is sent to the god rays shader every frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l71"><code>src\passes\god-rays.js:71</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l64"><code>src\passes\god-rays.js:64</code></a>
         </p>
 
 
@@ -1005,7 +1011,7 @@ is sent to the god rays shader every frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l131"><code>src\passes\god-rays.js:131</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l124"><code>src\passes\god-rays.js:124</code></a>
         </p>
 
 
@@ -1088,7 +1094,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l196"><code>src\passes\god-rays.js:196</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l189"><code>src\passes\god-rays.js:189</code></a>
         </p>
 
 
@@ -1113,7 +1119,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l262"><code>src\passes\god-rays.js:262</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l257"><code>src\passes\god-rays.js:257</code></a>
         </p>
 
 
@@ -1216,7 +1222,7 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l165"><code>src\passes\god-rays.js:165</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l158"><code>src\passes\god-rays.js:158</code></a>
         </p>
 
 
@@ -1242,40 +1248,14 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l215"><code>src\passes\god-rays.js:215</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l231"><code>src\passes\god-rays.js:231</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The resolution scale, relative to the on-screen render size.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_resolutionScale" class="property item private">
-    <h3 class="name"><code>resolutionScale</code></h3>
-    <span class="type">Number</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l61"><code>src\passes\god-rays.js:61</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
+        <p>The resolution of the render targets. Needs to be a power of 2.</p>
 
     </div>
 
@@ -1293,7 +1273,7 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l286"><code>src\passes\god-rays.js:286</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l281"><code>src\passes\god-rays.js:281</code></a>
         </p>
 
 
@@ -1304,7 +1284,7 @@ Used to keep track of render targets to delete on demand.
 <p>This value must be carefully chosen. A higher value increases
 the GPU load and doesn't necessarily yield better results!
 For a low render resolution, a value of 6 is recommended,
-whereas a value of 8 is best suited for high resolutions.</p>
+whereas a value of 8 is best suited for higher resolutions.</p>
 
     </div>
 
@@ -1349,7 +1329,7 @@ whereas a value of 8 is best suited for high resolutions.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l175"><code>src\passes\god-rays.js:175</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l168"><code>src\passes\god-rays.js:168</code></a>
         </p>
 
 
@@ -1375,7 +1355,7 @@ whereas a value of 8 is best suited for high resolutions.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l80"><code>src\passes\god-rays.js:80</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l73"><code>src\passes\god-rays.js:73</code></a>
         </p>
 
 
@@ -1401,14 +1381,14 @@ whereas a value of 8 is best suited for high resolutions.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l152"><code>src\passes\god-rays.js:152</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l145"><code>src\passes\god-rays.js:145</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The maximum ray length translates to step sizes for the 3 generate passes.</p>
+        <p>The maximum ray length translated to step sizes for the 3 generate passes.</p>
 
     </div>
 

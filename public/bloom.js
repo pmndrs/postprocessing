@@ -71,7 +71,7 @@ window.addEventListener("load", function init() {
 		strength: 1.0,
 		kernelSize: 25,
 		sigma: 4,
-		resolutionScale: 0.25
+		resolution: 512
 	}));
 
 	var pass = new POSTPROCESSING.ShaderPass(new POSTPROCESSING.CopyMaterial());

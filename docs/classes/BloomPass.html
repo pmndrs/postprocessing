@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.4</em>
+            <em>API Docs for: 0.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -220,13 +220,13 @@ a CopyMaterial to render the texture to screen.</p>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[resolutionScale=0.25]</code>
+                                    <code class="param-name optional">[resolution=256]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The render resolution scale, relative to the on-screen render size.</li>
+<li>The render resolution.</li>
 </ul>
 
                                 </div>
@@ -329,7 +329,11 @@ a CopyMaterial to render the texture to screen.</p>
                                 <a href="#property_renderTargetY">renderTargetY</a>
 
                             </li>
-                            <li class="index-item property private">
+                            <li class="index-item property">
+                                <a href="#property_resolution">resolution</a>
+
+                            </li>
+                            <li class="index-item property">
                                 <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
@@ -419,7 +423,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l157"><code>src\passes\bloom.js:157</code></a>
+        <a href="../files/src_passes_bloom.js.html#l186"><code>src\passes\bloom.js:186</code></a>
         </p>
 
 
@@ -533,7 +537,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l193"><code>src\passes\bloom.js:193</code></a>
+        <a href="../files/src_passes_bloom.js.html#l222"><code>src\passes\bloom.js:222</code></a>
         </p>
 
 
@@ -598,7 +602,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l77"><code>src\passes\bloom.js:77</code></a>
+        <a href="../files/src_passes_bloom.js.html#l80"><code>src\passes\bloom.js:80</code></a>
         </p>
 
 
@@ -624,7 +628,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l87"><code>src\passes\bloom.js:87</code></a>
+        <a href="../files/src_passes_bloom.js.html#l90"><code>src\passes\bloom.js:90</code></a>
         </p>
 
 
@@ -675,7 +679,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l128"><code>src\passes\bloom.js:128</code></a>
+        <a href="../files/src_passes_bloom.js.html#l131"><code>src\passes\bloom.js:131</code></a>
         </p>
 
 
@@ -704,7 +708,7 @@ Set to true to see the fully blurred scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l113"><code>src\passes\bloom.js:113</code></a>
+        <a href="../files/src_passes_bloom.js.html#l116"><code>src\passes\bloom.js:116</code></a>
         </p>
 
 
@@ -730,7 +734,7 @@ Set to true to see the fully blurred scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l97"><code>src\passes\bloom.js:97</code></a>
+        <a href="../files/src_passes_bloom.js.html#l100"><code>src\passes\bloom.js:100</code></a>
         </p>
 
 
@@ -838,7 +842,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l141"><code>src\passes\bloom.js:141</code></a>
+        <a href="../files/src_passes_bloom.js.html#l144"><code>src\passes\bloom.js:144</code></a>
         </p>
 
 
@@ -930,12 +934,36 @@ Used to keep track of render targets to delete on demand.
 
 
 </div>
-<div id="property_resolutionScale" class="property item private">
+<div id="property_resolution" class="property item">
+    <h3 class="name"><code>resolution</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l160"><code>src\passes\bloom.js:160</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution of the render targets. Needs to be a power of 2.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_resolutionScale" class="property item">
     <h3 class="name"><code>resolutionScale</code></h3>
     <span class="type">Number</span>
 
 
-        <span class="flag private">private</span>
 
 
 
@@ -949,7 +977,8 @@ Used to keep track of render targets to delete on demand.
     </div>
 
     <div class="description">
-        <p>The resolution scale.</p>
+        <p>The resolution scale, relative to the on-screen render size.
+You have to call the reset method of the EffectComposer after modifying this field.</p>
 
     </div>
 

@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js. ",
-        "version": "0.0.4",
+        "version": "0.0.5",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -560,11 +560,11 @@
                             "optdefault": "4.0"
                         },
                         {
-                            "name": "resolutionScale",
-                            "description": "- The render resolution scale, relative to the on-screen render size.",
+                            "name": "resolution",
+                            "description": "- The render resolution.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "0.25"
+                            "optdefault": "256"
                         }
                     ]
                 }
@@ -870,18 +870,18 @@
                             "optdefault": "1.0"
                         },
                         {
-                            "name": "resolutionScale",
-                            "description": "- The god rays render texture resolution scale, relative to the on-screen render size.",
+                            "name": "resolution",
+                            "description": "- The god rays render texture resolution.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "0.2"
+                            "optdefault": "256"
                         },
                         {
                             "name": "samples",
                             "description": "- The number of samples per pixel.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "6"
+                            "optdefault": "8"
                         }
                     ]
                 }
@@ -1414,18 +1414,16 @@
         {
             "file": "src\\passes\\bloom.js",
             "line": 67,
-            "description": "The resolution scale.",
+            "description": "The resolution scale, relative to the on-screen render size.\nYou have to call the reset method of the EffectComposer after modifying this field.",
             "itemtype": "property",
             "name": "resolutionScale",
             "type": "Number",
-            "access": "private",
-            "tagname": "",
             "class": "BloomPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 77,
+            "line": 80,
             "description": "The horizontal blur factor.",
             "itemtype": "property",
             "name": "blurX",
@@ -1437,7 +1435,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 87,
+            "line": 90,
             "description": "The vertical blur factor.",
             "itemtype": "property",
             "name": "blurY",
@@ -1449,7 +1447,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 97,
+            "line": 100,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1461,7 +1459,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 113,
+            "line": 116,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1473,7 +1471,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 128,
+            "line": 131,
             "description": "Clear flag.\n\nThis pass draws the blurred scene over the normal one.\nSet to true to see the fully blurred scene.",
             "itemtype": "property",
             "name": "clear",
@@ -1484,7 +1482,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 141,
+            "line": 144,
             "description": "The quad mesh to render.",
             "itemtype": "property",
             "name": "quad",
@@ -1496,7 +1494,17 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 157,
+            "line": 160,
+            "description": "The resolution of the render targets. Needs to be a power of 2.",
+            "itemtype": "property",
+            "name": "resolution",
+            "type": "Number",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 186,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1532,7 +1540,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 193,
+            "line": 222,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1984,19 +1992,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 61,
-            "description": "The resolution scale.",
-            "itemtype": "property",
-            "name": "resolutionScale",
-            "type": "Number",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 71,
+            "line": 64,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -2006,7 +2002,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 80,
+            "line": 73,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenLightPosition",
@@ -2018,7 +2014,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 90,
+            "line": 83,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
             "name": "godRaysGenerateMaterial",
@@ -2030,7 +2026,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 105,
+            "line": 98,
             "description": "The exposure coefficient.\n\nThis value is scaled based on the user's view direction and \nis sent to the god rays shader every frame.",
             "itemtype": "property",
             "name": "exposure",
@@ -2040,7 +2036,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 118,
+            "line": 111,
             "description": "God rays shader material for the final composite phase.",
             "itemtype": "property",
             "name": "godRaysCombineMaterial",
@@ -2052,7 +2048,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 131,
+            "line": 124,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2064,7 +2060,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 142,
+            "line": 135,
             "description": "The maximum length of god-rays (in texture space [0.0, 1.0]).",
             "itemtype": "property",
             "name": "_rayLength",
@@ -2076,8 +2072,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 152,
-            "description": "The maximum ray length translates to step sizes for the 3 generate passes.",
+            "line": 145,
+            "description": "The maximum ray length translated to step sizes for the 3 generate passes.",
             "itemtype": "property",
             "name": "stepSizes",
             "type": "Float32Array",
@@ -2088,7 +2084,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 165,
+            "line": 158,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -2099,7 +2095,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 175,
+            "line": 168,
             "description": "A scene to render the god rays with.",
             "itemtype": "property",
             "name": "scene2",
@@ -2111,7 +2107,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 185,
+            "line": 178,
             "description": "A camera to render the god rays with.",
             "itemtype": "property",
             "name": "camera2",
@@ -2123,7 +2119,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 196,
+            "line": 189,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -2135,17 +2131,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 215,
-            "description": "The resolution scale, relative to the on-screen render size.",
-            "itemtype": "property",
-            "name": "resolution",
-            "type": "Number",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 239,
+            "line": 208,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2155,7 +2141,17 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 262,
+            "line": 231,
+            "description": "The resolution of the render targets. Needs to be a power of 2.",
+            "itemtype": "property",
+            "name": "resolution",
+            "type": "Number",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 257,
             "description": "The maximum length of god rays (in texture space [0.0, 1.0]).",
             "itemtype": "property",
             "name": "rayLength",
@@ -2165,8 +2161,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 286,
-            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases \nthe GPU load and doesn't necessarily yield better results!\nFor a low render resolution, a value of 6 is recommended, \nwhereas a value of 8 is best suited for high resolutions.",
+            "line": 281,
+            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases \nthe GPU load and doesn't necessarily yield better results!\nFor a low render resolution, a value of 6 is recommended, \nwhereas a value of 8 is best suited for higher resolutions.",
             "itemtype": "property",
             "name": "samples",
             "type": "Number",
@@ -2175,7 +2171,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 323,
+            "line": 318,
             "description": "Adjusts the sampling step sizes for the three passes.",
             "itemtype": "method",
             "name": "calculateStepSizes",
@@ -2186,7 +2182,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 340,
+            "line": 335,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2212,7 +2208,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 402,
+            "line": 397,
             "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
             "itemtype": "method",
             "name": "computeAngularScalar",
@@ -2222,27 +2218,6 @@
                 "description": "A scalar in the range 0.0 to 1.0 for a linear transition.",
                 "type": "Number"
             },
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 440,
-            "description": "Updates this pass's render size.",
-            "itemtype": "method",
-            "name": "setSize",
-            "params": [
-                {
-                    "name": "width",
-                    "description": "- The width.",
-                    "type": "Number"
-                },
-                {
-                    "name": "height",
-                    "description": "- The height.",
-                    "type": "Number"
-                }
-            ],
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
@@ -2663,7 +2638,7 @@
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 40,
+            "line": 41,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -2674,7 +2649,7 @@
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 53,
+            "line": 54,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -2686,7 +2661,7 @@
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 69,
+            "line": 70,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2729,7 +2704,7 @@
         },
         {
             "file": "src\\passes\\texture.js",
-            "line": 33,
+            "line": 35,
             "description": "The quad mesh to use for rendering the 2D effect.",
             "itemtype": "property",
             "name": "quad",
@@ -2741,7 +2716,7 @@
         },
         {
             "file": "src\\passes\\texture.js",
-            "line": 49,
+            "line": 51,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2957,7 +2932,7 @@
         {
             "file": "src\\effect-composer.js",
             "line": 273,
-            "description": "Destroys all passes.\n\nThis method deallocates any render targets, data textures \nand materials created by the passes.",
+            "description": "Destroys all passes and render targets.\n\nThis method deallocates any render targets, data textures and materials created by the passes.\nIt also deletes this composer's render targets.",
             "itemtype": "method",
             "name": "dispose",
             "class": "EffectComposer",

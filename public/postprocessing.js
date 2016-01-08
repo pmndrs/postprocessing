@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.0.4 build Jan 08 2016
+ * postprocessing v0.0.5 build Jan 08 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -12,7 +12,7 @@
 
 	THREE = 'default' in THREE ? THREE['default'] : THREE;
 
-	var shader$3 = {
+	var shader = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float opacity;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = opacity * texel;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -36,8 +36,8 @@
 
 			},
 
-			fragmentShader: shader$3.fragment,
-			vertexShader: shader$3.vertex,
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex,
 
 		});
 
@@ -46,7 +46,7 @@
 	CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	CopyMaterial.prototype.constructor = CopyMaterial;
 
-	var shader$1 = {
+	var shader$8 = {
 		fragment: "uniform sampler2D tDiffuse;\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tvec3 luma = vec3(0.299, 0.587, 0.114);\n\tfloat v = dot(texel.rgb, luma);\n\n\tgl_FragColor = vec4(v, v, v, texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -70,8 +70,8 @@
 
 			},
 
-			fragmentShader: shader$1.fragment,
-			vertexShader: shader$1.vertex,
+			fragmentShader: shader$8.fragment,
+			vertexShader: shader$8.vertex,
 
 		});
 
@@ -80,7 +80,7 @@
 	LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	LuminosityMaterial.prototype.constructor = LuminosityMaterial;
 
-	var shader = {
+	var shader$1 = {
 		fragment: "uniform sampler2D lastLum;\nuniform sampler2D currentLum;\nuniform float delta;\nuniform float tau;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 lastLum = texture2D(lastLum, vUv, MIP_LEVEL_1X1);\n\tvec4 currentLum = texture2D(currentLum, vUv, MIP_LEVEL_1X1);\n\n\tfloat fLastLum = lastLum.r;\n\tfloat fCurrentLum = currentLum.r;\n\n\t// Better results with squared input luminance.\n\tfCurrentLum *= fCurrentLum;\n\n\t// Adapt the luminance using Pattanaik's technique.\n\tfloat fAdaptedLum = fLastLum + (fCurrentLum - fLastLum) * (1.0 - exp(-delta * tau));\n\t// fAdaptedLum = sqrt(fAdaptedLum);\n\n\tgl_FragColor = vec4(fAdaptedLum, fAdaptedLum, fAdaptedLum, 1.0);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -112,8 +112,8 @@
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex,
+			fragmentShader: shader$1.fragment,
+			vertexShader: shader$1.vertex,
 
 		});
 
@@ -122,7 +122,7 @@
 	AdaptiveLuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	AdaptiveLuminosityMaterial.prototype.constructor = AdaptiveLuminosityMaterial;
 
-	var shader$6 = {
+	var shader$5 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float middleGrey;\nuniform float maxLuminance;\n\n#ifdef ADAPTED_LUMINANCE\n\n\tuniform sampler2D luminanceMap;\n\n#else\n\n\tuniform float averageLuminance;\n\n#endif\n\nvarying vec2 vUv;\n\nconst vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);\n\nvec3 toneMap(vec3 vColor) {\n\n\t#ifdef ADAPTED_LUMINANCE\n\n\t\t// Get the calculated average luminance.\n\t\tfloat fLumAvg = texture2D(luminanceMap, vec2(0.5, 0.5)).r;\n\n\t#else\n\n\t\tfloat fLumAvg = averageLuminance;\n\n\t#endif\n\n\t// Calculate the luminance of the current pixel.\n\tfloat fLumPixel = dot(vColor, LUM_CONVERT);\n\n\t// Apply the modified operator (Eq. 4).\n\tfloat fLumScaled = (fLumPixel * middleGrey) / fLumAvg;\n\n\tfloat fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (maxLuminance * maxLuminance)))) / (1.0 + fLumScaled);\n\treturn fLumCompressed * vColor;\n\n}\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -150,8 +150,8 @@
 
 			},
 
-			fragmentShader: shader$6.fragment,
-			vertexShader: shader$6.vertex,
+			fragmentShader: shader$5.fragment,
+			vertexShader: shader$5.vertex,
 
 		});
 
@@ -160,7 +160,7 @@
 	ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;
 
-	var shader$2 = {
+	var shader$3 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 center;\nuniform vec2 tSize;\nuniform float angle;\nuniform float scale;\n\nvarying vec2 vUv;\n\nfloat pattern() {\n\n\tfloat s = sin(angle);\n\tfloat c = cos(angle);\n\n\tvec2 tex = vUv * tSize - center;\n\tvec2 point = vec2(c * tex.x - s * tex.y, s * tex.x + c * tex.y) * scale;\n\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\n\n}\n\nvoid main() {\n\n\tvec4 color = texture2D(tDiffuse, vUv);\n\tfloat average = (color.r + color.g + color.b) / 3.0;\n\n\tgl_FragColor = vec4(vec3(average * 10.0 - 5.0 + pattern()), color.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -187,8 +187,8 @@
 
 			},
 
-			fragmentShader: shader$2.fragment,
-			vertexShader: shader$2.vertex,
+			fragmentShader: shader$3.fragment,
+			vertexShader: shader$3.vertex,
 
 		});
 
@@ -197,7 +197,7 @@
 	DotScreenMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	DotScreenMaterial.prototype.constructor = DotScreenMaterial;
 
-	var shader$5 = {
+	var shader$2 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform sampler2D tDisp;\nuniform int byp;\nuniform float amount;\nuniform float angle;\nuniform float seed;\nuniform float seedX;\nuniform float seedY;\nuniform float distortionX;\nuniform float distortionY;\nuniform float colS;\n\nvarying vec2 vUv;\n\nfloat rand(vec2 co) {\n\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n\n}\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\n\tfloat xs, ys;\n\tvec4 normal;\n\n\tvec2 offset;\n\tvec4 cr, cga, cb;\n\tvec4 snow, color;\n\n\tif(byp < 1) {\n\n\t\txs = floor(gl_FragCoord.x / 0.5);\n\t\tys = floor(gl_FragCoord.y / 0.5);\n\n\t\tnormal = texture2D(tDisp, coord * seed * seed);\n\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\n\n\t\t\tif(seedX > 0.0){\n\n\t\t\t\tcoord.y = 1.0 - (coord.y + distortionY);\n\n\t\t\t} else {\n\n\t\t\t\tcoord.y = distortionY;\n\n\t\t\t}\n\n\t\t}\n\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\n\n\t\t\tif(seedY > 0.0){\n\n\t\t\t\tcoord.x = distortionX;\n\n\t\t\t} else {\n\n\t\t\t\tcoord.x = 1. - (coord.x + distortionX);\n\n\t\t\t}\n\n\t\t}\n\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\n\n\t\t// Adopted from RGB shift shader.\n\t\toffset = amount * vec2(cos(angle), sin(angle));\n\t\tcr = texture2D(tDiffuse, coord + offset);\n\t\tcga = texture2D(tDiffuse, coord);\n\t\tcb = texture2D(tDiffuse, coord - offset);\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed,ys * seed * 50.0)) * 0.2);\n\t\tcolor += snow;\n\n\t} else {\n\n\t\tcolor = texture2D(tDiffuse, vUv);\n\n\t}\n\n\tgl_FragColor = color;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -231,8 +231,8 @@
 
 			},
 
-			fragmentShader: shader$5.fragment,
-			vertexShader: shader$5.vertex,
+			fragmentShader: shader$2.fragment,
+			vertexShader: shader$2.vertex,
 
 		});
 
@@ -403,7 +403,7 @@
 	BokehMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	BokehMaterial.prototype.constructor = BokehMaterial;
 
-	var shader$8 = {
+	var shader$6 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float time;\nuniform bool grayscale;\nuniform float nIntensity;\nuniform float sIntensity;\nuniform float sCount;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 cTextureScreen = texture2D(tDiffuse, vUv);\n\n\t// Noise.\n\n\tfloat x = vUv.x * vUv.y * time * 1000.0;\n\tx = mod(x, 13.0) * mod(x, 123.0);\n\tfloat dx = mod(x, 0.01);\n\n\tvec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp(0.1 + dx * 100.0, 0.0, 1.0);\n\n\tvec2 sc = vec2(sin(vUv.y * sCount), cos(vUv.y * sCount));\n\n\t// Scanlines.\n\n\tcResult += cTextureScreen.rgb * vec3(sc.x, sc.y, sc.x) * sIntensity;\n\n\tcResult = cTextureScreen.rgb + clamp(nIntensity, 0.0, 1.0) * (cResult - cTextureScreen.rgb);\n\n\tif(grayscale) {\n\n\t\tcResult = vec3(cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11);\n\n\t}\n\n\tgl_FragColor =  vec4(cResult, cTextureScreen.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -447,8 +447,8 @@
 
 			},
 
-			fragmentShader: shader$8.fragment,
-			vertexShader: shader$8.vertex,
+			fragmentShader: shader$6.fragment,
+			vertexShader: shader$6.vertex,
 
 		});
 
@@ -968,6 +968,7 @@
 		 */
 
 		this.material = material;
+		this.materials.push(this.material);
 
 		/**
 		 * Render to screen flag.
@@ -1170,6 +1171,8 @@
 		this.materials.push(this.material);
 
 		this.material.uniforms.tDiffuse.value = texture;
+		this.textures.push(texture);
+
 		this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
 
 		/**
@@ -1880,7 +1883,7 @@
 	 * @param {Number} [options.strength=1.0] - The bloom strength.
 	 * @param {Number} [options.kernelSize=25] - The kernel size.
 	 * @param {Number} [options.sigma=4.0] - The sigma value.
-	 * @param {Number} [options.resolutionScale=0.25] - The render resolution scale, relative to the on-screen render size.
+	 * @param {Number} [options.resolution=256] - The render resolution.
 	 */
 
 	function BloomPass(options) {
@@ -1915,7 +1918,7 @@
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargets[0].clone();
+		this.renderTargetY = this.renderTargetX.clone();
 		this.renderTargets.push(this.renderTargetY);
 
 		// MIP maps aren't needed.
@@ -1923,14 +1926,17 @@
 		this.renderTargetY.texture.generateMipmaps = false;
 
 		/**
-		 * The resolution scale.
+		 * The resolution scale, relative to the on-screen render size.
+		 * You have to call the reset method of the EffectComposer after modifying this field.
 		 *
 		 * @property resolutionScale
 		 * @type Number
-		 * @private
 		 */
 
-		this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+		//this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+
+		// Set the resolution.
+		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
 
 		/**
 		 * The horizontal blur factor.
@@ -2013,6 +2019,32 @@
 	BloomPass.prototype.constructor = BloomPass;
 
 	/**
+	 * The resolution of the render targets. Needs to be a power of 2.
+	 *
+	 * @property resolution
+	 * @type Number
+	 */
+
+	Object.defineProperty(BloomPass.prototype, "resolution", {
+
+		get: function() { return this.renderTargetX.width; },
+
+		set: function(x) {
+
+			if(!Number.isNaN(x)) {
+
+				if(x <= 0) { x = 1; }
+
+				this.renderTargetX.setSize(x, x);
+				this.renderTargetY.setSize(x, x);
+
+			}
+
+		}
+
+	});
+
+	/**
 	 * Renders the scene.
 	 *
 	 * @method render
@@ -2058,17 +2090,8 @@
 
 	BloomPass.prototype.setSize = function(width, height) {
 
-		// Scale the factor with the render target ratio.
+		// Scale one of the blur factors with the render target ratio.
 		this.blurY.set(0.0, (width / height) * BLUR);
-
-		//width = height = 512;
-
-		this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
-
-		if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
-		if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
-
-		this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 	};
 
@@ -2336,8 +2359,8 @@
 	 * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
 	 * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
 	 * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
-	 * @param {Number} [options.resolutionScale=0.2] - The god rays render texture resolution scale, relative to the on-screen render size.
-	 * @param {Number} [options.samples=6] - The number of samples per pixel.
+	 * @param {Number} [options.resolution=256] - The god rays render texture resolution.
+	 * @param {Number} [options.samples=8] - The number of samples per pixel.
 	 */
 
 	function GodRaysPass(scene, camera, lightSource, options) {
@@ -2370,22 +2393,15 @@
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargets[0].clone();
+		this.renderTargetY = this.renderTargetX.clone();
 		this.renderTargets.push(this.renderTargetY);
 
 		// MIP maps aren't needed.
 		this.renderTargetX.texture.generateMipmaps = false;
 		this.renderTargetY.texture.generateMipmaps = false;
 
-		/**
-		 * The resolution scale.
-		 *
-		 * @property resolutionScale
-		 * @type Number
-		 * @private
-		 */
-
-		this.resolutionScale = (options.resolution === undefined) ? 0.2 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+		// Set the resolution.
+		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
 
 		/**
 		 * The light source.
@@ -2469,7 +2485,7 @@
 		this._rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
 
 		/**
-		 * The maximum ray length translates to step sizes for the 3 generate passes.
+		 * The maximum ray length translated to step sizes for the 3 generate passes.
 		 *
 		 * @property stepSizes
 		 * @type Float32Array
@@ -2532,30 +2548,6 @@
 	GodRaysPass.prototype.constructor = GodRaysPass;
 
 	/**
-	 * The resolution scale, relative to the on-screen render size.
-	 *
-	 * @property resolution
-	 * @type Number
-	 */
-
-	Object.defineProperty(GodRaysPass.prototype, "resolution", {
-
-		get: function() { return this.resolutionScale; },
-
-		set: function(x) {
-
-			if(!Number.isNaN(x)) {
-
-				this.resolutionScale = THREE.Math.clamp(x, 0.0, 1.0);
-				this.setSize(this.renderTargetX.width, this.renderTargetX.height);
-
-			}
-
-		}
-
-	});
-
-	/**
 	 * The overall intensity of the effect.
 	 *
 	 * @property intensity
@@ -2571,6 +2563,32 @@
 			if(!Number.isNaN(x)) {
 
 				this.godRaysCombineMaterial.uniforms.intensity.value = x;
+
+			}
+
+		}
+
+	});
+
+	/**
+	 * The resolution of the render targets. Needs to be a power of 2.
+	 *
+	 * @property resolution
+	 * @type Number
+	 */
+
+	Object.defineProperty(GodRaysPass.prototype, "resolution", {
+
+		get: function() { return this.renderTargetX.width; },
+
+		set: function(x) {
+
+			if(!Number.isNaN(x)) {
+
+				if(x <= 0) { x = 1; }
+
+				this.renderTargetX.setSize(x, x);
+				this.renderTargetY.setSize(x, x);
 
 			}
 
@@ -2608,7 +2626,7 @@
 	 * This value must be carefully chosen. A higher value increases 
 	 * the GPU load and doesn't necessarily yield better results!
 	 * For a low render resolution, a value of 6 is recommended, 
-	 * whereas a value of 8 is best suited for high resolutions.
+	 * whereas a value of 8 is best suited for higher resolutions.
 	 *
 	 * @property samples
 	 * @type Number
@@ -2753,27 +2771,6 @@
 		// Compute the angle between the directions.
 		// Don't allow acute angles and make a scalar out of it.
 		return THREE.Math.clamp(cameraDirection.angleTo(lightDirection) - HALF_PI, 0.0, 1.0);
-
-	};
-
-	/**
-	 * Updates this pass's render size.
-	 *
-	 * @method setSize
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 */
-
-	GodRaysPass.prototype.setSize = function(width, height) {
-
-		//width = height = 1024;
-
-		this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
-
-		if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
-		if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
-
-		this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 	};
 
@@ -3046,15 +3043,19 @@
 	};
 
 	/**
-	 * Destroys all passes.
+	 * Destroys all passes and render targets.
 	 *
-	 * This method deallocates any render targets, data textures 
-	 * and materials created by the passes.
+	 * This method deallocates any render targets, data textures and materials created by the passes.
+	 * It also deletes this composer's render targets.
 	 *
 	 * @method dispose
 	 */
 
 	EffectComposer.prototype.dispose = function(width, height) {
+
+		this.renderTarget1.dispose();
+		this.renderTarget2.dispose();
+		this.copyPass.dispose();
 
 		while(this.passes.length > 0) {
 

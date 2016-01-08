@@ -17,8 +17,8 @@ import THREE from "three";
  * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.resolutionScale=0.2] - The god rays render texture resolution scale, relative to the on-screen render size.
- * @param {Number} [options.samples=6] - The number of samples per pixel.
+ * @param {Number} [options.resolution=256] - The god rays render texture resolution.
+ * @param {Number} [options.samples=8] - The number of samples per pixel.
  */
 
 export function GodRaysPass(scene, camera, lightSource, options) {
@@ -51,22 +51,15 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @private
 	 */
 
-	this.renderTargetY = this.renderTargets[0].clone();
+	this.renderTargetY = this.renderTargetX.clone();
 	this.renderTargets.push(this.renderTargetY);
 
 	// MIP maps aren't needed.
 	this.renderTargetX.texture.generateMipmaps = false;
 	this.renderTargetY.texture.generateMipmaps = false;
 
-	/**
-	 * The resolution scale.
-	 *
-	 * @property resolutionScale
-	 * @type Number
-	 * @private
-	 */
-
-	this.resolutionScale = (options.resolution === undefined) ? 0.2 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
+	// Set the resolution.
+	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
 
 	/**
 	 * The light source.
@@ -150,7 +143,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this._rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
 
 	/**
-	 * The maximum ray length translates to step sizes for the 3 generate passes.
+	 * The maximum ray length translated to step sizes for the 3 generate passes.
 	 *
 	 * @property stepSizes
 	 * @type Float32Array
@@ -213,30 +206,6 @@ GodRaysPass.prototype = Object.create(Pass.prototype);
 GodRaysPass.prototype.constructor = GodRaysPass;
 
 /**
- * The resolution scale, relative to the on-screen render size.
- *
- * @property resolution
- * @type Number
- */
-
-Object.defineProperty(GodRaysPass.prototype, "resolution", {
-
-	get: function() { return this.resolutionScale; },
-
-	set: function(x) {
-
-		if(!Number.isNaN(x)) {
-
-			this.resolutionScale = THREE.Math.clamp(x, 0.0, 1.0);
-			this.setSize(this.renderTargetX.width, this.renderTargetX.height);
-
-		}
-
-	}
-
-});
-
-/**
  * The overall intensity of the effect.
  *
  * @property intensity
@@ -252,6 +221,32 @@ Object.defineProperty(GodRaysPass.prototype, "intensity", {
 		if(!Number.isNaN(x)) {
 
 			this.godRaysCombineMaterial.uniforms.intensity.value = x;
+
+		}
+
+	}
+
+});
+
+/**
+ * The resolution of the render targets. Needs to be a power of 2.
+ *
+ * @property resolution
+ * @type Number
+ */
+
+Object.defineProperty(GodRaysPass.prototype, "resolution", {
+
+	get: function() { return this.renderTargetX.width; },
+
+	set: function(x) {
+
+		if(!Number.isNaN(x)) {
+
+			if(x <= 0) { x = 1; }
+
+			this.renderTargetX.setSize(x, x);
+			this.renderTargetY.setSize(x, x);
 
 		}
 
@@ -289,7 +284,7 @@ Object.defineProperty(GodRaysPass.prototype, "rayLength", {
  * This value must be carefully chosen. A higher value increases 
  * the GPU load and doesn't necessarily yield better results!
  * For a low render resolution, a value of 6 is recommended, 
- * whereas a value of 8 is best suited for high resolutions.
+ * whereas a value of 8 is best suited for higher resolutions.
  *
  * @property samples
  * @type Number
@@ -434,26 +429,5 @@ GodRaysPass.prototype.computeAngularScalar = function() {
 	// Compute the angle between the directions.
 	// Don't allow acute angles and make a scalar out of it.
 	return THREE.Math.clamp(cameraDirection.angleTo(lightDirection) - HALF_PI, 0.0, 1.0);
-
-};
-
-/**
- * Updates this pass's render size.
- *
- * @method setSize
- * @param {Number} width - The width.
- * @param {Number} height - The height.
- */
-
-GodRaysPass.prototype.setSize = function(width, height) {
-
-	//width = height = 1024;
-
-	this.renderTargetX.setSize(Math.floor(width * this.resolutionScale), Math.floor(height * this.resolutionScale));
-
-	if(this.renderTargetX.width <= 0) { this.renderTargetX.width = 1; }
-	if(this.renderTargetX.height <= 0) { this.renderTargetX.height = 1; }
-
-	this.renderTargetY.setSize(this.renderTargetX.width, this.renderTargetX.height);
 
 };
