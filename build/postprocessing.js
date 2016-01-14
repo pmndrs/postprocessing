@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.0.5 build Jan 08 2016
+ * postprocessing v0.0.6 build Jan 14 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -12,7 +12,7 @@
 
 	THREE = 'default' in THREE ? THREE['default'] : THREE;
 
-	var shader = {
+	var shader$3 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float opacity;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = opacity * texel;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -36,8 +36,8 @@
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex,
+			fragmentShader: shader$3.fragment,
+			vertexShader: shader$3.vertex,
 
 		});
 
@@ -46,7 +46,7 @@
 	CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	CopyMaterial.prototype.constructor = CopyMaterial;
 
-	var shader$8 = {
+	var shader$2 = {
 		fragment: "uniform sampler2D tDiffuse;\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tvec3 luma = vec3(0.299, 0.587, 0.114);\n\tfloat v = dot(texel.rgb, luma);\n\n\tgl_FragColor = vec4(v, v, v, texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -70,8 +70,8 @@
 
 			},
 
-			fragmentShader: shader$8.fragment,
-			vertexShader: shader$8.vertex,
+			fragmentShader: shader$2.fragment,
+			vertexShader: shader$2.vertex,
 
 		});
 
@@ -80,7 +80,7 @@
 	LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	LuminosityMaterial.prototype.constructor = LuminosityMaterial;
 
-	var shader$1 = {
+	var shader = {
 		fragment: "uniform sampler2D lastLum;\nuniform sampler2D currentLum;\nuniform float delta;\nuniform float tau;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 lastLum = texture2D(lastLum, vUv, MIP_LEVEL_1X1);\n\tvec4 currentLum = texture2D(currentLum, vUv, MIP_LEVEL_1X1);\n\n\tfloat fLastLum = lastLum.r;\n\tfloat fCurrentLum = currentLum.r;\n\n\t// Better results with squared input luminance.\n\tfCurrentLum *= fCurrentLum;\n\n\t// Adapt the luminance using Pattanaik's technique.\n\tfloat fAdaptedLum = fLastLum + (fCurrentLum - fLastLum) * (1.0 - exp(-delta * tau));\n\t// fAdaptedLum = sqrt(fAdaptedLum);\n\n\tgl_FragColor = vec4(fAdaptedLum, fAdaptedLum, fAdaptedLum, 1.0);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -112,8 +112,8 @@
 
 			},
 
-			fragmentShader: shader$1.fragment,
-			vertexShader: shader$1.vertex,
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex,
 
 		});
 
@@ -160,7 +160,7 @@
 	ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;
 
-	var shader$3 = {
+	var shader$1 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 center;\nuniform vec2 tSize;\nuniform float angle;\nuniform float scale;\n\nvarying vec2 vUv;\n\nfloat pattern() {\n\n\tfloat s = sin(angle);\n\tfloat c = cos(angle);\n\n\tvec2 tex = vUv * tSize - center;\n\tvec2 point = vec2(c * tex.x - s * tex.y, s * tex.x + c * tex.y) * scale;\n\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\n\n}\n\nvoid main() {\n\n\tvec4 color = texture2D(tDiffuse, vUv);\n\tfloat average = (color.r + color.g + color.b) / 3.0;\n\n\tgl_FragColor = vec4(vec3(average * 10.0 - 5.0 + pattern()), color.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -187,8 +187,8 @@
 
 			},
 
-			fragmentShader: shader$3.fragment,
-			vertexShader: shader$3.vertex,
+			fragmentShader: shader$1.fragment,
+			vertexShader: shader$1.vertex,
 
 		});
 
@@ -197,7 +197,7 @@
 	DotScreenMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	DotScreenMaterial.prototype.constructor = DotScreenMaterial;
 
-	var shader$2 = {
+	var shader$4 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform sampler2D tDisp;\nuniform int byp;\nuniform float amount;\nuniform float angle;\nuniform float seed;\nuniform float seedX;\nuniform float seedY;\nuniform float distortionX;\nuniform float distortionY;\nuniform float colS;\n\nvarying vec2 vUv;\n\nfloat rand(vec2 co) {\n\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n\n}\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\n\tfloat xs, ys;\n\tvec4 normal;\n\n\tvec2 offset;\n\tvec4 cr, cga, cb;\n\tvec4 snow, color;\n\n\tif(byp < 1) {\n\n\t\txs = floor(gl_FragCoord.x / 0.5);\n\t\tys = floor(gl_FragCoord.y / 0.5);\n\n\t\tnormal = texture2D(tDisp, coord * seed * seed);\n\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\n\n\t\t\tif(seedX > 0.0){\n\n\t\t\t\tcoord.y = 1.0 - (coord.y + distortionY);\n\n\t\t\t} else {\n\n\t\t\t\tcoord.y = distortionY;\n\n\t\t\t}\n\n\t\t}\n\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\n\n\t\t\tif(seedY > 0.0){\n\n\t\t\t\tcoord.x = distortionX;\n\n\t\t\t} else {\n\n\t\t\t\tcoord.x = 1. - (coord.x + distortionX);\n\n\t\t\t}\n\n\t\t}\n\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\n\n\t\t// Adopted from RGB shift shader.\n\t\toffset = amount * vec2(cos(angle), sin(angle));\n\t\tcr = texture2D(tDiffuse, coord + offset);\n\t\tcga = texture2D(tDiffuse, coord);\n\t\tcb = texture2D(tDiffuse, coord - offset);\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed,ys * seed * 50.0)) * 0.2);\n\t\tcolor += snow;\n\n\t} else {\n\n\t\tcolor = texture2D(tDiffuse, vUv);\n\n\t}\n\n\tgl_FragColor = color;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -231,8 +231,8 @@
 
 			},
 
-			fragmentShader: shader$2.fragment,
-			vertexShader: shader$2.vertex,
+			fragmentShader: shader$4.fragment,
+			vertexShader: shader$4.vertex,
 
 		});
 
@@ -241,7 +241,7 @@
 	GlitchMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	GlitchMaterial.prototype.constructor = GlitchMaterial;
 
-	var shader$4 = {
+	var shader$6 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 uImageIncrement;\nuniform float cKernel[KERNEL_SIZE_INT];\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\tvec4 sum = vec4(0.0, 0.0, 0.0, 0.0);\n\n\tfor(int i = 0; i < KERNEL_SIZE_INT; ++i) {\n\n\t\tsum += texture2D(tDiffuse, coord) * cKernel[i];\n\t\tcoord += uImageIncrement;\n\n\t}\n\n\tgl_FragColor = sum;\n\n}\n",
 		vertex: "uniform vec2 uImageIncrement;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv - ((KERNEL_SIZE_FLOAT - 1.0) / 2.0) * uImageIncrement;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -287,8 +287,8 @@
 
 			},
 
-			fragmentShader: shader$4.fragment,
-			vertexShader: shader$4.vertex,
+			fragmentShader: shader$6.fragment,
+			vertexShader: shader$6.vertex,
 
 		});
 
@@ -403,7 +403,7 @@
 	BokehMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	BokehMaterial.prototype.constructor = BokehMaterial;
 
-	var shader$6 = {
+	var shader$8 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float time;\nuniform bool grayscale;\nuniform float nIntensity;\nuniform float sIntensity;\nuniform float sCount;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 cTextureScreen = texture2D(tDiffuse, vUv);\n\n\t// Noise.\n\n\tfloat x = vUv.x * vUv.y * time * 1000.0;\n\tx = mod(x, 13.0) * mod(x, 123.0);\n\tfloat dx = mod(x, 0.01);\n\n\tvec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp(0.1 + dx * 100.0, 0.0, 1.0);\n\n\tvec2 sc = vec2(sin(vUv.y * sCount), cos(vUv.y * sCount));\n\n\t// Scanlines.\n\n\tcResult += cTextureScreen.rgb * vec3(sc.x, sc.y, sc.x) * sIntensity;\n\n\tcResult = cTextureScreen.rgb + clamp(nIntensity, 0.0, 1.0) * (cResult - cTextureScreen.rgb);\n\n\tif(grayscale) {\n\n\t\tcResult = vec3(cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11);\n\n\t}\n\n\tgl_FragColor =  vec4(cResult, cTextureScreen.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -447,8 +447,8 @@
 
 			},
 
-			fragmentShader: shader$6.fragment,
-			vertexShader: shader$6.vertex,
+			fragmentShader: shader$8.fragment,
+			vertexShader: shader$8.vertex,
 
 		});
 
@@ -520,13 +520,13 @@
 
 				tDiffuse: {type: "t", value: null},
 				tGodRays: {type: "t", value: null},
-				intensity: {type: "f", value: 0.69},
+				intensity: {type: "f", value: 1.0},
 
 			} : {
 
 				tDiffuse: {type: "t", value: null},
-				stepSize: {type: "f", value: 1.0},
-				decay: {type: "f", value: 0.93},
+				stepSize: {type: "f", value: 1.5},
+				decay: {type: "f", value: 1.0},
 				weight: {type: "f", value: 1.0},
 				exposure: {type: "f", value: 1.0},
 				lightPosition: {type: "v3", value: null}
@@ -544,7 +544,13 @@
 	GodRaysMaterial.prototype.constructor = GodRaysMaterial;
 
 	/**
-	 * An abstract render pass.
+	 * An abstract pass.
+	 *
+	 * This class implements a dispose method that frees memory on demand.
+	 * The EffectComposer calls this method when it is being destroyed.
+	 *
+	 * For this mechanism to work properly, please register any render targets, 
+	 * materials and textures by pushing them to the set of disposables!
 	 *
 	 * @class Pass
 	 * @constructor
@@ -555,37 +561,19 @@
 	function Pass(scene, camera) {
 
 		/**
-		 * The render targets created by this pass.
-		 * Used to keep track of render targets to delete on demand.
+		 * A set of disposable objects created by this pass.
 		 *
-		 * @property renderTargets
+		 * Used to keep track of:
+		 *  - render targets
+		 *  - materials
+		 *  - textures
+		 *
+		 * @property disposables
 		 * @type Array
 		 * @private
 		 */
 
-		this.renderTargets = [];
-
-		/**
-		 * The materials created by this pass.
-		 * Used to keep track of materials to delete on demand.
-		 *
-		 * @property materials
-		 * @type Array
-		 * @private
-		 */
-
-		this.materials = [];
-
-		/**
-		 * The textures created by this pass.
-		 * Used to keep track of textures to delete on demand.
-		 *
-		 * @property textures
-		 * @type Array
-		 * @private
-		 */
-
-		this.textures = [];
+		this.disposables = [];
 
 		/**
 		 * The scene to render.
@@ -687,21 +675,9 @@
 
 	Pass.prototype.dispose = function() {
 
-		while(this.renderTargets.length > 0) {
+		while(this.disposables.length > 0) {
 
-			this.renderTargets.pop().dispose();
-
-		}
-
-		while(this.materials.length > 0) {
-
-			this.materials.pop().dispose();
-
-		}
-
-		while(this.textures.length > 0) {
-
-			this.textures.pop().dispose();
+			this.disposables.pop().dispose();
 
 		}
 
@@ -730,7 +706,8 @@
 		 */
 
 		this.material = new CopyMaterial();
-		this.materials.push(this.material);
+
+		this.disposables.push(this.material);
 
 		/**
 		 * The render target.
@@ -752,10 +729,10 @@
 		}
 
 		this.renderTarget = renderTarget;
-		this.renderTargets.push(this.renderTarget);
 
-		// MIP maps aren't needed.
 		this.renderTarget.texture.generateMipmaps = false;
+
+		this.disposables.push(this.renderTarget);
 
 		/**
 		 * The quad mesh to use for rendering.
@@ -968,7 +945,8 @@
 		 */
 
 		this.material = material;
-		this.materials.push(this.material);
+
+		this.disposables.push(this.material);
 
 		/**
 		 * Render to screen flag.
@@ -980,7 +958,7 @@
 
 		this.renderToScreen = false;
 
-		// Request target swapping.
+		// Swap read and write buffer when done.
 		this.needsSwap = true;
 
 		/**
@@ -1168,12 +1146,11 @@
 		 */
 
 		this.material = new CopyMaterial();
-		this.materials.push(this.material);
-
 		this.material.uniforms.tDiffuse.value = texture;
-		this.textures.push(texture);
-
 		this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
+
+		this.disposables.push(this.material);
+		this.disposables.push(texture);
 
 		/**
 		 * The quad mesh to use for rendering the 2D effect.
@@ -1582,7 +1559,6 @@
 		 */
 
 		this.material = new DotScreenMaterial();
-		this.materials.push(this.material);
 
 		if(options !== undefined) {
 
@@ -1592,6 +1568,8 @@
 			if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
 		}
+
+		this.disposables.push(this.material);
 
 		/**
 		 * Render to screen flag.
@@ -1667,7 +1645,6 @@
 		Pass.call(this);
 
 		if(options === undefined) { options = {}; }
-
 		if(options.dtSize === undefined) { options.dtSize = 64; }
 
 		/**
@@ -1680,14 +1657,14 @@
 
 		this.material = new GlitchMaterial();
 
+		this.disposables.push(this.material);
+
 		/**
 		 * A perturbation map.
 		 *
 		 * If none is provided, a noise texture will be created.
-		 * You must delete the generated texture manually or by 
-		 * calling the dispose method of this pass. The latter 
-		 * approach requires you to create a new instance of 
-		 * this pass.
+		 * The texture will automatically be destroyed when the 
+		 * EffectComposer is deleted.
 		 *
 		 * @property perturbMap
 		 * @type Texture
@@ -1699,9 +1676,10 @@
 			this.perturbMap.generateMipmaps = false;
 			this.material.uniforms.tDisp.value = this.perturbMap;
 
+			this.disposables.push(this.perturbMap);
+
 		} else {
 
-			// Create a new texture.
 			this.perturbMap = null;
 			this.generatePerturbMap(options.dtSize);
 
@@ -1852,12 +1830,13 @@
 
 		}
 
-		// If a texture has already been generated before, delete it.
-		if(this.textures.length === 1) { this.textures[0].dispose(); }
+		// If there's a texture, delete it.
+		if(this.disposables.length > 1) { this.disposables.pop().dispose(); }
 
 		this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 		this.perturbMap.needsUpdate = true;
-		this.textures.push(this.perturbMap);
+
+		this.disposables.push(this.perturbMap);
 
 		this.material.uniforms.tDisp.value = this.perturbMap;
 
@@ -1891,8 +1870,7 @@
 		Pass.call(this);
 
 		if(options === undefined) { options = {}; }
-
-		var kernelSize = (options.kernelSize !== undefined) ? options.kernelSize : 25;
+		if(options.kernelSize !== undefined) { options.kernelSize = 25; }
 
 		/**
 		 * A render target.
@@ -1908,8 +1886,6 @@
 			format: THREE.RGBFormat
 		});
 
-		this.renderTargets.push(this.renderTargetX);
-
 		/**
 		 * Another render target.
 		 *
@@ -1919,24 +1895,15 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargets.push(this.renderTargetY);
 
-		// MIP maps aren't needed.
 		this.renderTargetX.texture.generateMipmaps = false;
 		this.renderTargetY.texture.generateMipmaps = false;
 
-		/**
-		 * The resolution scale, relative to the on-screen render size.
-		 * You have to call the reset method of the EffectComposer after modifying this field.
-		 *
-		 * @property resolutionScale
-		 * @type Number
-		 */
-
-		//this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
-
 		// Set the resolution.
 		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+
+		this.disposables.push(this.renderTargetX);
+		this.disposables.push(this.renderTargetY);
 
 		/**
 		 * The horizontal blur factor.
@@ -1967,12 +1934,12 @@
 		 */
 
 		this.copyMaterial = new CopyMaterial();
-		this.materials.push(this.copyMaterial);
-
 		this.copyMaterial.blending = THREE.AdditiveBlending;
 		this.copyMaterial.transparent = true;
 
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
+
+		this.disposables.push(this.copyMaterial);
 
 		/**
 		 * Convolution shader material.
@@ -1983,11 +1950,12 @@
 		 */
 
 		this.convolutionMaterial = new ConvolutionMaterial();
-		this.materials.push(this.convolutionMaterial);
 
 		this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
-		this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
-		this.convolutionMaterial.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
+		this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = options.kernelSize.toFixed(1);
+		this.convolutionMaterial.defines.KERNEL_SIZE_INT = options.kernelSize.toFixed(0);
+
+		this.disposables.push(this.convolutionMaterial);
 
 		/**
 		 * Clear flag.
@@ -2103,21 +2071,20 @@
 	 * @extends Pass
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
-	 * @param {Object} [params] - Additional parameters.
-	 * @param {Number} [params.focus] - The focus.
-	 * @param {Number} [params.aspect] - The aspect.
-	 * @param {Number} [params.aperture] - The aperture.
-	 * @param {Number} [params.maxBlur] - The maximum blur.
-	 * @param {Number} [params.resolution] - The render resolution.
+	 * @param {Object} [options] - Additional parameters.
+	 * @param {Number} [options.focus] - The focus.
+	 * @param {Number} [options.aspect] - The aspect.
+	 * @param {Number} [options.aperture] - The aperture.
+	 * @param {Number} [options.maxBlur] - The maximum blur.
+	 * @param {Number} [options.resolution] - The render resolution.
 	 */
 
-	function BokehPass(scene, camera, params) {
+	function BokehPass(scene, camera, options) {
 
 		Pass.call(this, scene, camera);
 
-		if(params === undefined) { params = {}; }
-
-		var resolution = (params.resolution !== undefined) ? resolution : 256;
+		if(options === undefined) { options = {}; }
+		if(options.resolution === undefined) { options.resolution = 256; }
 
 		/**
 		 * A render target.
@@ -2133,10 +2100,9 @@
 			format: THREE.RGBFormat
 		});
 
-		this.renderTargets.push(this.renderTargetDepth);
-
-		// MIP maps aren't needed.
 		this.renderTargetDepth.texture.generateMipmaps = false;
+
+		this.disposables.push(this.renderTargetDepth);
 
 		/**
 		 * Depth shader material.
@@ -2147,7 +2113,8 @@
 		 */
 
 		this.depthMaterial = new THREE.MeshDepthMaterial();
-		this.materials.push(this.depthMaterial);
+
+		this.disposables.push(this.depthMaterial);
 
 		/**
 		 * Bokeh shader material.
@@ -2158,14 +2125,14 @@
 		 */
 
 		this.bokehMaterial = new BokehMaterial();
-		this.materials.push(this.bokehMaterial);
-
 		this.bokehMaterial.uniforms.tDepth.value = this.renderTargetDepth;
 
-		if(params.focus !== undefined) { this.bokehMaterial.uniforms.focus.value = params.focus; }
-		if(params.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = params.aspect; }
-		if(params.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = params.aperture; }
-		if(params.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = params.maxBlur; }
+		if(options.focus !== undefined) { this.bokehMaterial.uniforms.focus.value = options.focus; }
+		if(options.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = options.aspect; }
+		if(options.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = options.aperture; }
+		if(options.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = options.maxBlur; }
+
+		this.disposables.push(this.bokehMaterial);
 
 		/**
 		 * Render to screen flag.
@@ -2275,7 +2242,6 @@
 		 */
 
 		this.material = new FilmMaterial();
-		this.materials.push(this.material);
 
 		if(options !== undefined) {
 
@@ -2285,6 +2251,8 @@
 			if(options.scanlinesCount !== undefined) { this.material.uniforms.sCount.value = options.scanlinesCount; }
 
 		}
+
+		this.disposables.push(this.material);
 
 		/**
 		 * Render to screen flag.
@@ -2383,7 +2351,9 @@
 			format: THREE.RGBFormat
 		});
 
-		this.renderTargets.push(this.renderTargetX);
+		this.renderTargetX.texture.generateMipmaps = false;
+
+		this.disposables.push(this.renderTargetX);
 
 		/**
 		 * Another render target.
@@ -2394,11 +2364,10 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargets.push(this.renderTargetY);
 
-		// MIP maps aren't needed.
-		this.renderTargetX.texture.generateMipmaps = false;
 		this.renderTargetY.texture.generateMipmaps = false;
+
+		this.disposables.push(this.renderTargetY);
 
 		// Set the resolution.
 		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -2432,22 +2401,24 @@
 
 		this.godRaysGenerateMaterial = new GodRaysMaterial(Phase.GENERATE);
 		this.godRaysGenerateMaterial.uniforms.lightPosition.value = this.screenLightPosition;
-		this.materials.push(this.godRaysGenerateMaterial);
 
 		if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
 		if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
+		this.disposables.push(this.godRaysGenerateMaterial);
+
 		/**
 		 * The exposure coefficient.
 		 *
-		 * This value is scaled based on the user's view direction and 
-		 * is sent to the god rays shader every frame.
+		 * This value is scaled based on the user's view direction. 
+		 * The product is sent to the god rays shader each frame.
 		 *
 		 * @property exposure
 		 * @type Number
 		 */
 
 		if(options.exposure !== undefined) { this.godRaysGenerateMaterial.uniforms.exposure.value = options.exposure; }
+
 		this.exposure = this.godRaysGenerateMaterial.uniforms.exposure.value;
 
 		/**
@@ -2459,9 +2430,10 @@
 		 */
 
 		this.godRaysCombineMaterial = new GodRaysMaterial(Phase.COMBINE);
-		this.materials.push(this.godRaysCombineMaterial);
 
 		if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
+
+		this.disposables.push(this.godRaysCombineMaterial);
 
 		/**
 		 * A material used for masking the scene objects.
@@ -2472,17 +2444,18 @@
 		 */
 
 		this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-		this.materials.push(this.maskMaterial);
+
+		this.disposables.push(this.maskMaterial);
 
 		/**
-		 * The maximum length of god-rays (in texture space [0.0, 1.0]).
+		 * The maximum length of god-rays.
 		 *
 		 * @property _rayLength
 		 * @type Number
 		 * @private
 		 */
 
-		this._rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
+		this._rayLength = (options.rayLength !== undefined) ? options.rayLength : 1.0;
 
 		/**
 		 * The maximum ray length translated to step sizes for the 3 generate passes.
@@ -2552,6 +2525,7 @@
 	 *
 	 * @property intensity
 	 * @type Number
+	 * @default 1.0
 	 */
 
 	Object.defineProperty(GodRaysPass.prototype, "intensity", {
@@ -2575,6 +2549,7 @@
 	 *
 	 * @property resolution
 	 * @type Number
+	 * @default 512
 	 */
 
 	Object.defineProperty(GodRaysPass.prototype, "resolution", {
@@ -2597,10 +2572,18 @@
 	});
 
 	/**
-	 * The maximum length of god rays (in texture space [0.0, 1.0]).
+	 * The maximum length of god rays.
+	 *
+	 * A value of 1.5 is recommended, to ensure that the effect 
+	 * fills the entire screen at all times.
+	 *
+	 * As a result, the whole effect will be spread out further 
+	 * which requires a slightly higher number of samples per pixel  
+	 * to prevent visual gaps along the rays. 
 	 *
 	 * @property rayLength
 	 * @type Number
+	 * @default 1.5
 	 */
 
 	Object.defineProperty(GodRaysPass.prototype, "rayLength", {
@@ -2609,9 +2592,9 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x)) {
+			if(!Number.isNaN(x) && x >= 0.0) {
 
-				this._rayLength = THREE.Math.clamp(x, 0.0, 1.0);
+				this._rayLength = x;
 				this.calculateStepSizes();
 
 			}
@@ -2623,13 +2606,19 @@
 	/**
 	 * The number of samples per pixel.
 	 *
-	 * This value must be carefully chosen. A higher value increases 
-	 * the GPU load and doesn't necessarily yield better results!
-	 * For a low render resolution, a value of 6 is recommended, 
-	 * whereas a value of 8 is best suited for higher resolutions.
+	 * This value must be carefully chosen. A higher value increases the 
+	 * GPU load directly and doesn't necessarily yield better results!
+	 *
+	 * The recommended number of samples is 9.
+	 * For render resolutions below 1024 and a ray length of 1.0, 7 samples 
+	 * might also be sufficient.
+	 *
+	 * Values above 9 don't have a noticable impact on the quality.
+	 * A slight performance drop could be observed at values around 50.
 	 *
 	 * @property samples
 	 * @type Number
+	 * @default 9
 	 */
 
 	Object.defineProperty(GodRaysPass.prototype, "samples", {
@@ -2642,7 +2631,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x)) {
+			if(!Number.isNaN(x) && x >= 1) {
 
 				x = Math.floor(x);
 
@@ -2658,7 +2647,7 @@
 	});
 
 	/**
-	 * Adjusts the sampling step sizes for the three passes.
+	 * Adjusts the sampling step sizes for the three generate passes.
 	 *
 	 * @method calculateStepSizes
 	 * @private
@@ -2699,6 +2688,7 @@
 		this.scene.overrideMaterial = this.maskMaterial;
 		clearColor = renderer.getClearColor().getHex();
 		renderer.setClearColor(0x000000);
+		//renderer.render(this.scene, this.camera, undefined, true);
 		renderer.render(this.scene, this.camera, this.renderTargetX, true);
 		renderer.setClearColor(clearColor);
 		this.scene.overrideMaterial = null;

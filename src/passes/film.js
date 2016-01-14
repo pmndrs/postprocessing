@@ -30,7 +30,6 @@ export function FilmPass(options) {
 	 */
 
 	this.material = new FilmMaterial();
-	this.materials.push(this.material);
 
 	if(options !== undefined) {
 
@@ -40,6 +39,8 @@ export function FilmPass(options) {
 		if(options.scanlinesCount !== undefined) { this.material.uniforms.sCount.value = options.scanlinesCount; }
 
 	}
+
+	this.disposables.push(this.material);
 
 	/**
 	 * Render to screen flag.

@@ -56,13 +56,13 @@ export function GodRaysMaterial(phase) {
 
 			tDiffuse: {type: "t", value: null},
 			tGodRays: {type: "t", value: null},
-			intensity: {type: "f", value: 0.69},
+			intensity: {type: "f", value: 1.0},
 
 		} : {
 
 			tDiffuse: {type: "t", value: null},
-			stepSize: {type: "f", value: 1.0},
-			decay: {type: "f", value: 0.93},
+			stepSize: {type: "f", value: 1.5},
+			decay: {type: "f", value: 1.0},
 			weight: {type: "f", value: 1.0},
 			exposure: {type: "f", value: 1.0},
 			lightPosition: {type: "v3", value: null}

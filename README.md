@@ -18,11 +18,11 @@ $ npm install postprocessing
 
 ```javascript
 // Attention: Three is not yet an ES6 module!
-import { WebGLRenderer, Scene, Camera } from "three";
+import { WebGLRenderer, Scene, PerspectiveCamera } from "three";
 import { EffectComposer, RenderPass, GlitchPass } from "postprocessing";
 
 var composer = new EffectComposer(new WebGLRenderer());
-composer.addPass(new RenderPass(new Scene(), new Camera()));
+composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
 
 var glitchPass = new GlitchPass();
 glitchPass.renderToScreen = true;
@@ -38,11 +38,14 @@ composer.addPass(glitchPass);
 
 
 ## Included Filters
+ - Adaptive Luminance 
  - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html) 
- - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html) 
- - [Film](http://vanruesc.github.io/postprocessing/public/film.html) 
+ - Tone-Mapping 
  - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html) 
  - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html) 
+ - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html) 
+ - Bokeh 
+ - [Film](http://vanruesc.github.io/postprocessing/public/film.html) 
 
 
 ## Documentation

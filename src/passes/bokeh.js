@@ -10,21 +10,20 @@ import THREE from "three";
  * @extends Pass
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
- * @param {Object} [params] - Additional parameters.
- * @param {Number} [params.focus] - The focus.
- * @param {Number} [params.aspect] - The aspect.
- * @param {Number} [params.aperture] - The aperture.
- * @param {Number} [params.maxBlur] - The maximum blur.
- * @param {Number} [params.resolution] - The render resolution.
+ * @param {Object} [options] - Additional parameters.
+ * @param {Number} [options.focus] - The focus.
+ * @param {Number} [options.aspect] - The aspect.
+ * @param {Number} [options.aperture] - The aperture.
+ * @param {Number} [options.maxBlur] - The maximum blur.
+ * @param {Number} [options.resolution] - The render resolution.
  */
 
-export function BokehPass(scene, camera, params) {
+export function BokehPass(scene, camera, options) {
 
 	Pass.call(this, scene, camera);
 
-	if(params === undefined) { params = {}; }
-
-	var resolution = (params.resolution !== undefined) ? resolution : 256;
+	if(options === undefined) { options = {}; }
+	if(options.resolution === undefined) { options.resolution = 256; }
 
 	/**
 	 * A render target.
@@ -40,10 +39,9 @@ export function BokehPass(scene, camera, params) {
 		format: THREE.RGBFormat
 	});
 
-	this.renderTargets.push(this.renderTargetDepth);
-
-	// MIP maps aren't needed.
 	this.renderTargetDepth.texture.generateMipmaps = false;
+
+	this.disposables.push(this.renderTargetDepth);
 
 	/**
 	 * Depth shader material.
@@ -54,7 +52,8 @@ export function BokehPass(scene, camera, params) {
 	 */
 
 	this.depthMaterial = new THREE.MeshDepthMaterial();
-	this.materials.push(this.depthMaterial);
+
+	this.disposables.push(this.depthMaterial);
 
 	/**
 	 * Bokeh shader material.
@@ -65,14 +64,14 @@ export function BokehPass(scene, camera, params) {
 	 */
 
 	this.bokehMaterial = new BokehMaterial();
-	this.materials.push(this.bokehMaterial);
-
 	this.bokehMaterial.uniforms.tDepth.value = this.renderTargetDepth;
 
-	if(params.focus !== undefined) { this.bokehMaterial.uniforms.focus.value = params.focus; }
-	if(params.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = params.aspect; }
-	if(params.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = params.aperture; }
-	if(params.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = params.maxBlur; }
+	if(options.focus !== undefined) { this.bokehMaterial.uniforms.focus.value = options.focus; }
+	if(options.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = options.aspect; }
+	if(options.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = options.aperture; }
+	if(options.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = options.maxBlur; }
+
+	this.disposables.push(this.bokehMaterial);
 
 	/**
 	 * Render to screen flag.

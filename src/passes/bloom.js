@@ -30,8 +30,7 @@ export function BloomPass(options) {
 	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
-
-	var kernelSize = (options.kernelSize !== undefined) ? options.kernelSize : 25;
+	if(options.kernelSize !== undefined) { options.kernelSize = 25; }
 
 	/**
 	 * A render target.
@@ -47,8 +46,6 @@ export function BloomPass(options) {
 		format: THREE.RGBFormat
 	});
 
-	this.renderTargets.push(this.renderTargetX);
-
 	/**
 	 * Another render target.
 	 *
@@ -58,24 +55,15 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-	this.renderTargets.push(this.renderTargetY);
 
-	// MIP maps aren't needed.
 	this.renderTargetX.texture.generateMipmaps = false;
 	this.renderTargetY.texture.generateMipmaps = false;
 
-	/**
-	 * The resolution scale, relative to the on-screen render size.
-	 * You have to call the reset method of the EffectComposer after modifying this field.
-	 *
-	 * @property resolutionScale
-	 * @type Number
-	 */
-
-	//this.resolutionScale = (options.resolution === undefined) ? 0.25 : THREE.Math.clamp(options.resolution, 0.0, 1.0);
-
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+
+	this.disposables.push(this.renderTargetX);
+	this.disposables.push(this.renderTargetY);
 
 	/**
 	 * The horizontal blur factor.
@@ -106,12 +94,12 @@ export function BloomPass(options) {
 	 */
 
 	this.copyMaterial = new CopyMaterial();
-	this.materials.push(this.copyMaterial);
-
 	this.copyMaterial.blending = THREE.AdditiveBlending;
 	this.copyMaterial.transparent = true;
 
 	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
+
+	this.disposables.push(this.copyMaterial);
 
 	/**
 	 * Convolution shader material.
@@ -122,11 +110,12 @@ export function BloomPass(options) {
 	 */
 
 	this.convolutionMaterial = new ConvolutionMaterial();
-	this.materials.push(this.convolutionMaterial);
 
 	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
-	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
-	this.convolutionMaterial.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
+	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = options.kernelSize.toFixed(1);
+	this.convolutionMaterial.defines.KERNEL_SIZE_INT = options.kernelSize.toFixed(0);
+
+	this.disposables.push(this.convolutionMaterial);
 
 	/**
 	 * Clear flag.

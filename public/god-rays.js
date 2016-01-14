@@ -94,7 +94,6 @@ window.addEventListener("load", function init() {
 			textureLoader.load("textures/woodnormals.jpg", function(normalMap) {
 
 				normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-				normalMap = normalMap;
 
 				var material = new THREE.MeshPhongMaterial({
 					color: 0xffffff,
@@ -124,12 +123,12 @@ window.addEventListener("load", function init() {
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
 		resolution: 512,
-		rayLength: 1.0,
+		rayLength: 1.5,
 		intensity: 1.0,
 		decay: 1.0,
 		weight: 1.0,
 		exposure: 1.0,
-		samples: 8
+		samples: 9
 	});
 
 	pass.renderToScreen = true;
@@ -139,12 +138,12 @@ window.addEventListener("load", function init() {
 	 * Effect toggle for closer light source.
 	 */
 
-	//var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
+	var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
 
-	var sunMaterial = new THREE.PointsMaterial({size: 600, sizeAttenuation: false, color: 0xffddaa, alphaTest: 0.0, transparent: true, fog: false});
+	/*var sunMaterial = new THREE.PointsMaterial({size: 600, sizeAttenuation: false, color: 0xffddaa, alphaTest: 0.0, transparent: true, fog: false});
 	var sunGeometry = new THREE.Geometry();
 	sunGeometry.vertices.push(new THREE.Vector3());
-	var sun = new THREE.Points(sunGeometry, sunMaterial);
+	var sun = new THREE.Points(sunGeometry, sunMaterial);*/
 
 	textureLoader.load("textures/sun.png", function(texture) {
 
@@ -163,9 +162,8 @@ window.addEventListener("load", function init() {
 
 			if(sky.ignoreOverrideMaterial) {
 
-				//pass.godRaysGenerateMaterial.uniforms.weight.value = 0.58767;
-				pass.exposure = 1.33;
-				//pass.intensity = 0.75;
+				pass.godRaysGenerateMaterial.uniforms.weight.value = 0.68767;
+				pass.exposure = 3.0;
 				pass.lightSource = sun;
 				sky.ignoreOverrideMaterial = false;
 				scene.add(sun);
@@ -174,7 +172,6 @@ window.addEventListener("load", function init() {
 
 				pass.godRaysGenerateMaterial.uniforms.weight.value = 1.0;
 				pass.exposure = 1.0;
-				pass.intensity = 1.0;
 				pass.lightSource = directionalLight;
 				sky.ignoreOverrideMaterial = true;
 				scene.remove(sun);

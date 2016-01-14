@@ -41,7 +41,9 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 		format: THREE.RGBFormat
 	});
 
-	this.renderTargets.push(this.renderTargetX);
+	this.renderTargetX.texture.generateMipmaps = false;
+
+	this.disposables.push(this.renderTargetX);
 
 	/**
 	 * Another render target.
@@ -52,11 +54,10 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-	this.renderTargets.push(this.renderTargetY);
 
-	// MIP maps aren't needed.
-	this.renderTargetX.texture.generateMipmaps = false;
 	this.renderTargetY.texture.generateMipmaps = false;
+
+	this.disposables.push(this.renderTargetY);
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -90,22 +91,24 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 
 	this.godRaysGenerateMaterial = new GodRaysMaterial(Phase.GENERATE);
 	this.godRaysGenerateMaterial.uniforms.lightPosition.value = this.screenLightPosition;
-	this.materials.push(this.godRaysGenerateMaterial);
 
 	if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
 	if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
+	this.disposables.push(this.godRaysGenerateMaterial);
+
 	/**
 	 * The exposure coefficient.
 	 *
-	 * This value is scaled based on the user's view direction and 
-	 * is sent to the god rays shader every frame.
+	 * This value is scaled based on the user's view direction. 
+	 * The product is sent to the god rays shader each frame.
 	 *
 	 * @property exposure
 	 * @type Number
 	 */
 
 	if(options.exposure !== undefined) { this.godRaysGenerateMaterial.uniforms.exposure.value = options.exposure; }
+
 	this.exposure = this.godRaysGenerateMaterial.uniforms.exposure.value;
 
 	/**
@@ -117,9 +120,10 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.godRaysCombineMaterial = new GodRaysMaterial(Phase.COMBINE);
-	this.materials.push(this.godRaysCombineMaterial);
 
 	if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
+
+	this.disposables.push(this.godRaysCombineMaterial);
 
 	/**
 	 * A material used for masking the scene objects.
@@ -130,17 +134,18 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-	this.materials.push(this.maskMaterial);
+
+	this.disposables.push(this.maskMaterial);
 
 	/**
-	 * The maximum length of god-rays (in texture space [0.0, 1.0]).
+	 * The maximum length of god-rays.
 	 *
 	 * @property _rayLength
 	 * @type Number
 	 * @private
 	 */
 
-	this._rayLength = (options.rayLength !== undefined) ? THREE.Math.clamp(options.rayLength, 0.0, 1.0) : 1.0;
+	this._rayLength = (options.rayLength !== undefined) ? options.rayLength : 1.0;
 
 	/**
 	 * The maximum ray length translated to step sizes for the 3 generate passes.
@@ -210,6 +215,7 @@ GodRaysPass.prototype.constructor = GodRaysPass;
  *
  * @property intensity
  * @type Number
+ * @default 1.0
  */
 
 Object.defineProperty(GodRaysPass.prototype, "intensity", {
@@ -233,6 +239,7 @@ Object.defineProperty(GodRaysPass.prototype, "intensity", {
  *
  * @property resolution
  * @type Number
+ * @default 512
  */
 
 Object.defineProperty(GodRaysPass.prototype, "resolution", {
@@ -255,10 +262,18 @@ Object.defineProperty(GodRaysPass.prototype, "resolution", {
 });
 
 /**
- * The maximum length of god rays (in texture space [0.0, 1.0]).
+ * The maximum length of god rays.
+ *
+ * A value of 1.5 is recommended, to ensure that the effect 
+ * fills the entire screen at all times.
+ *
+ * As a result, the whole effect will be spread out further 
+ * which requires a slightly higher number of samples per pixel  
+ * to prevent visual gaps along the rays. 
  *
  * @property rayLength
  * @type Number
+ * @default 1.5
  */
 
 Object.defineProperty(GodRaysPass.prototype, "rayLength", {
@@ -267,9 +282,9 @@ Object.defineProperty(GodRaysPass.prototype, "rayLength", {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x)) {
+		if(!Number.isNaN(x) && x >= 0.0) {
 
-			this._rayLength = THREE.Math.clamp(x, 0.0, 1.0);
+			this._rayLength = x;
 			this.calculateStepSizes();
 
 		}
@@ -281,13 +296,19 @@ Object.defineProperty(GodRaysPass.prototype, "rayLength", {
 /**
  * The number of samples per pixel.
  *
- * This value must be carefully chosen. A higher value increases 
- * the GPU load and doesn't necessarily yield better results!
- * For a low render resolution, a value of 6 is recommended, 
- * whereas a value of 8 is best suited for higher resolutions.
+ * This value must be carefully chosen. A higher value increases the 
+ * GPU load directly and doesn't necessarily yield better results!
+ *
+ * The recommended number of samples is 9.
+ * For render resolutions below 1024 and a ray length of 1.0, 7 samples 
+ * might also be sufficient.
+ *
+ * Values above 9 don't have a noticable impact on the quality.
+ * A slight performance drop could be observed at values around 50.
  *
  * @property samples
  * @type Number
+ * @default 9
  */
 
 Object.defineProperty(GodRaysPass.prototype, "samples", {
@@ -300,7 +321,7 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x)) {
+		if(!Number.isNaN(x) && x >= 1) {
 
 			x = Math.floor(x);
 
@@ -316,7 +337,7 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
 });
 
 /**
- * Adjusts the sampling step sizes for the three passes.
+ * Adjusts the sampling step sizes for the three generate passes.
  *
  * @method calculateStepSizes
  * @private
@@ -357,6 +378,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	this.scene.overrideMaterial = this.maskMaterial;
 	clearColor = renderer.getClearColor().getHex();
 	renderer.setClearColor(0x000000);
+	//renderer.render(this.scene, this.camera, undefined, true);
 	renderer.render(this.scene, this.camera, this.renderTargetX, true);
 	renderer.setClearColor(clearColor);
 	this.scene.overrideMaterial = null;

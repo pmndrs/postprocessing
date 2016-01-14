@@ -65,7 +65,8 @@ window.addEventListener("load", function init() {
 	// Post-Processing.
 
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
+	var pass = new POSTPROCESSING.RenderPass(scene, camera);
+	composer.addPass(pass);
 
 	var textureLoader = new THREE.TextureLoader();
 
@@ -73,13 +74,27 @@ window.addEventListener("load", function init() {
 
 		texture.magFilter = texture.minFilter = THREE.NearestFilter;
 
-		var pass = new POSTPROCESSING.GlitchPass({
+		pass = new POSTPROCESSING.GlitchPass({
 			perturbMap: texture
 		});
 
 		//pass.goWild = true;
 		pass.renderToScreen = true;
 		composer.addPass(pass);
+
+	});
+
+	// Effect toggle.
+
+	document.addEventListener("keyup", function(event) {
+
+		var key = event.keyCode || event.which;
+
+		if(key === 32) {
+
+			pass.goWild = !pass.goWild;
+
+		}
 
 	});
 

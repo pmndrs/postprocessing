@@ -1,7 +1,13 @@
 import THREE from "three";
 
 /**
- * An abstract render pass.
+ * An abstract pass.
+ *
+ * This class implements a dispose method that frees memory on demand.
+ * The EffectComposer calls this method when it is being destroyed.
+ *
+ * For this mechanism to work properly, please register any render targets, 
+ * materials and textures by pushing them to the set of disposables!
  *
  * @class Pass
  * @constructor
@@ -12,37 +18,19 @@ import THREE from "three";
 export function Pass(scene, camera) {
 
 	/**
-	 * The render targets created by this pass.
-	 * Used to keep track of render targets to delete on demand.
+	 * A set of disposable objects created by this pass.
 	 *
-	 * @property renderTargets
+	 * Used to keep track of:
+	 *  - render targets
+	 *  - materials
+	 *  - textures
+	 *
+	 * @property disposables
 	 * @type Array
 	 * @private
 	 */
 
-	this.renderTargets = [];
-
-	/**
-	 * The materials created by this pass.
-	 * Used to keep track of materials to delete on demand.
-	 *
-	 * @property materials
-	 * @type Array
-	 * @private
-	 */
-
-	this.materials = [];
-
-	/**
-	 * The textures created by this pass.
-	 * Used to keep track of textures to delete on demand.
-	 *
-	 * @property textures
-	 * @type Array
-	 * @private
-	 */
-
-	this.textures = [];
+	this.disposables = [];
 
 	/**
 	 * The scene to render.
@@ -144,21 +132,9 @@ Pass.prototype.setSize = function(width, height) {};
 
 Pass.prototype.dispose = function() {
 
-	while(this.renderTargets.length > 0) {
+	while(this.disposables.length > 0) {
 
-		this.renderTargets.pop().dispose();
-
-	}
-
-	while(this.materials.length > 0) {
-
-		this.materials.pop().dispose();
-
-	}
-
-	while(this.textures.length > 0) {
-
-		this.textures.pop().dispose();
+		this.disposables.pop().dispose();
 
 	}
 

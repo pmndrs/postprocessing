@@ -25,7 +25,8 @@ export function SavePass(renderTarget) {
 	 */
 
 	this.material = new CopyMaterial();
-	this.materials.push(this.material);
+
+	this.disposables.push(this.material);
 
 	/**
 	 * The render target.
@@ -47,10 +48,10 @@ export function SavePass(renderTarget) {
 	}
 
 	this.renderTarget = renderTarget;
-	this.renderTargets.push(this.renderTarget);
 
-	// MIP maps aren't needed.
 	this.renderTarget.texture.generateMipmaps = false;
+
+	this.disposables.push(this.renderTarget);
 
 	/**
 	 * The quad mesh to use for rendering.

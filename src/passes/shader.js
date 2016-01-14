@@ -36,7 +36,8 @@ export function ShaderPass(material, textureID) {
 	 */
 
 	this.material = material;
-	this.materials.push(this.material);
+
+	this.disposables.push(this.material);
 
 	/**
 	 * Render to screen flag.
@@ -48,7 +49,7 @@ export function ShaderPass(material, textureID) {
 
 	this.renderToScreen = false;
 
-	// Request target swapping.
+	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
 	/**

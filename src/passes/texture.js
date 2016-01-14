@@ -25,12 +25,11 @@ export function TexturePass(texture, opacity) {
 	 */
 
 	this.material = new CopyMaterial();
-	this.materials.push(this.material);
-
 	this.material.uniforms.tDiffuse.value = texture;
-	this.textures.push(texture);
-
 	this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
+
+	this.disposables.push(this.material);
+	this.disposables.push(texture);
 
 	/**
 	 * The quad mesh to use for rendering the 2D effect.

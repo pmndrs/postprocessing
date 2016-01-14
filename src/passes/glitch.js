@@ -18,7 +18,6 @@ export function GlitchPass(options) {
 	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
-
 	if(options.dtSize === undefined) { options.dtSize = 64; }
 
 	/**
@@ -31,14 +30,14 @@ export function GlitchPass(options) {
 
 	this.material = new GlitchMaterial();
 
+	this.disposables.push(this.material);
+
 	/**
 	 * A perturbation map.
 	 *
 	 * If none is provided, a noise texture will be created.
-	 * You must delete the generated texture manually or by 
-	 * calling the dispose method of this pass. The latter 
-	 * approach requires you to create a new instance of 
-	 * this pass.
+	 * The texture will automatically be destroyed when the 
+	 * EffectComposer is deleted.
 	 *
 	 * @property perturbMap
 	 * @type Texture
@@ -50,9 +49,10 @@ export function GlitchPass(options) {
 		this.perturbMap.generateMipmaps = false;
 		this.material.uniforms.tDisp.value = this.perturbMap;
 
+		this.disposables.push(this.perturbMap);
+
 	} else {
 
-		// Create a new texture.
 		this.perturbMap = null;
 		this.generatePerturbMap(options.dtSize);
 
@@ -203,12 +203,13 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 
 	}
 
-	// If a texture has already been generated before, delete it.
-	if(this.textures.length === 1) { this.textures[0].dispose(); }
+	// If there's a texture, delete it.
+	if(this.disposables.length > 1) { this.disposables.pop().dispose(); }
 
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 	this.perturbMap.needsUpdate = true;
-	this.textures.push(this.perturbMap);
+
+	this.disposables.push(this.perturbMap);
 
 	this.material.uniforms.tDisp.value = this.perturbMap;
 

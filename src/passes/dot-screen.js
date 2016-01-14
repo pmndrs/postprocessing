@@ -28,7 +28,6 @@ export function DotScreenPass(options) {
 	 */
 
 	this.material = new DotScreenMaterial();
-	this.materials.push(this.material);
 
 	if(options !== undefined) {
 
@@ -38,6 +37,8 @@ export function DotScreenPass(options) {
 		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
 	}
+
+	this.disposables.push(this.material);
 
 	/**
 	 * Render to screen flag.

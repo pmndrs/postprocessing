@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.5</em>
+            <em>API Docs for: 0.0.6</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -137,7 +137,7 @@
                         <code>camera</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[params]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -194,7 +194,7 @@
 
                 </li>
                 <li class="param">
-                        <code class="param-name optional">[params]</code>
+                        <code class="param-name optional">[options]</code>
                         <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -333,12 +333,12 @@
                                 <a href="#property_depthMaterial">depthMaterial</a>
 
                             </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_enabled">enabled</a>
+                            <li class="index-item property private inherited">
+                                <a href="#property_disposables">disposables</a>
 
                             </li>
-                            <li class="index-item property private inherited">
-                                <a href="#property_materials">materials</a>
+                            <li class="index-item property inherited">
+                                <a href="#property_enabled">enabled</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -353,10 +353,6 @@
                                 <a href="#property_renderTargetDepth">renderTargetDepth</a>
 
                             </li>
-                            <li class="index-item property private inherited">
-                                <a href="#property_renderTargets">renderTargets</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
@@ -367,10 +363,6 @@
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_scene2">scene2</a>
-
-                            </li>
-                            <li class="index-item property private inherited">
-                                <a href="#property_textures">textures</a>
 
                             </li>
                     </ul>
@@ -397,7 +389,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l136"><code>src\passes\pass.js:136</code></a>
+        <a href="../files/src_passes_pass.js.html#l124"><code>src\passes\pass.js:124</code></a>
         </p>
 
 
@@ -451,7 +443,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bokeh.js.html#l124"><code>src\passes\bokeh.js:124</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l123"><code>src\passes\bokeh.js:123</code></a>
         </p>
 
 
@@ -562,7 +554,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l118"><code>src\passes\pass.js:118</code></a>
+        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
         </p>
 
 
@@ -640,7 +632,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l59"><code>src\passes\bokeh.js:59</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l58"><code>src\passes\bokeh.js:58</code></a>
         </p>
 
 
@@ -666,7 +658,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l58"><code>src\passes\pass.js:58</code></a>
+        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
         </p>
 
 
@@ -692,7 +684,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l97"><code>src\passes\bokeh.js:97</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l96"><code>src\passes\bokeh.js:96</code></a>
         </p>
 
 
@@ -718,7 +710,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l48"><code>src\passes\bokeh.js:48</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l46"><code>src\passes\bokeh.js:46</code></a>
         </p>
 
 
@@ -727,6 +719,36 @@ and when the effect composer is reset.
     <div class="description">
         <p>Depth shader material.</p>
 
+    </div>
+
+
+
+</div>
+<div id="property_disposables" class="property item private inherited">
+    <h3 class="name"><code>disposables</code></h3>
+    <span class="type">Array</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_disposables">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l20"><code>src\passes\pass.js:20</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        A set of disposable objects created by this pass.
+
+Used to keep track of:
+ - render targets
+ - materials
+ - textures
     </div>
 
 
@@ -743,7 +765,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l71"><code>src\passes\pass.js:71</code></a>
+        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
         </p>
 
 
@@ -754,32 +776,6 @@ and when the effect composer is reset.
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_materials" class="property item private inherited">
-    <h3 class="name"><code>materials</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_materials">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l25"><code>src\passes\pass.js:25</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The materials created by this pass.
-Used to keep track of materials to delete on demand.
-    </div>
-
 
 
 </div>
@@ -794,7 +790,7 @@ Used to keep track of materials to delete on demand.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l81"><code>src\passes\pass.js:81</code></a>
+        <a href="../files/src_passes_pass.js.html#l69"><code>src\passes\pass.js:69</code></a>
         </p>
 
 
@@ -826,7 +822,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l108"><code>src\passes\bokeh.js:108</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l107"><code>src\passes\bokeh.js:107</code></a>
         </p>
 
 
@@ -852,7 +848,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l29"><code>src\passes\bokeh.js:29</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l28"><code>src\passes\bokeh.js:28</code></a>
         </p>
 
 
@@ -861,32 +857,6 @@ renders into the read buffer.
     <div class="description">
         <p>A render target.</p>
 
-    </div>
-
-
-
-</div>
-<div id="property_renderTargets" class="property item private inherited">
-    <h3 class="name"><code>renderTargets</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_renderTargets">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l14"><code>src\passes\pass.js:14</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The render targets created by this pass.
-Used to keep track of render targets to delete on demand.
     </div>
 
 
@@ -903,7 +873,7 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l77"><code>src\passes\bokeh.js:77</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l76"><code>src\passes\bokeh.js:76</code></a>
         </p>
 
 
@@ -930,7 +900,7 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
+        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
         </p>
 
 
@@ -956,7 +926,7 @@ Used to keep track of render targets to delete on demand.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l87"><code>src\passes\bokeh.js:87</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l86"><code>src\passes\bokeh.js:86</code></a>
         </p>
 
 
@@ -965,32 +935,6 @@ Used to keep track of render targets to delete on demand.
     <div class="description">
         <p>A scene to render the depth of field with.</p>
 
-    </div>
-
-
-
-</div>
-<div id="property_textures" class="property item private inherited">
-    <h3 class="name"><code>textures</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_textures">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l36"><code>src\passes\pass.js:36</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        The textures created by this pass.
-Used to keep track of textures to delete on demand.
     </div>
 
 
