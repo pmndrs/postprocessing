@@ -41,8 +41,6 @@ export function BokehPass(scene, camera, options) {
 
 	this.renderTargetDepth.texture.generateMipmaps = false;
 
-	this.disposables.push(this.renderTargetDepth);
-
 	/**
 	 * Depth shader material.
 	 *
@@ -52,8 +50,6 @@ export function BokehPass(scene, camera, options) {
 	 */
 
 	this.depthMaterial = new THREE.MeshDepthMaterial();
-
-	this.disposables.push(this.depthMaterial);
 
 	/**
 	 * Bokeh shader material.
@@ -70,8 +66,6 @@ export function BokehPass(scene, camera, options) {
 	if(options.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = options.aspect; }
 	if(options.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = options.aperture; }
 	if(options.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = options.maxBlur; }
-
-	this.disposables.push(this.bokehMaterial);
 
 	/**
 	 * Render to screen flag.

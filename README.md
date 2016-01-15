@@ -38,9 +38,8 @@ composer.addPass(glitchPass);
 
 
 ## Included Filters
- - Adaptive Luminance 
+ - Adaptive Tone Mapping 
  - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html) 
- - Tone-Mapping 
  - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html) 
  - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html) 
  - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html) 

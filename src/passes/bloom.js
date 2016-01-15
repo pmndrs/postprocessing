@@ -30,7 +30,7 @@ export function BloomPass(options) {
 	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
-	if(options.kernelSize !== undefined) { options.kernelSize = 25; }
+	if(options.kernelSize === undefined) { options.kernelSize = 25; }
 
 	/**
 	 * A render target.
@@ -46,6 +46,8 @@ export function BloomPass(options) {
 		format: THREE.RGBFormat
 	});
 
+	this.renderTargetX.texture.generateMipmaps = false;
+
 	/**
 	 * Another render target.
 	 *
@@ -55,15 +57,10 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-
-	this.renderTargetX.texture.generateMipmaps = false;
 	this.renderTargetY.texture.generateMipmaps = false;
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
-
-	this.disposables.push(this.renderTargetX);
-	this.disposables.push(this.renderTargetY);
 
 	/**
 	 * The horizontal blur factor.
@@ -99,8 +96,6 @@ export function BloomPass(options) {
 
 	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
-	this.disposables.push(this.copyMaterial);
-
 	/**
 	 * Convolution shader material.
 	 *
@@ -114,8 +109,6 @@ export function BloomPass(options) {
 	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
 	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = options.kernelSize.toFixed(1);
 	this.convolutionMaterial.defines.KERNEL_SIZE_INT = options.kernelSize.toFixed(0);
-
-	this.disposables.push(this.convolutionMaterial);
 
 	/**
 	 * Clear flag.
@@ -159,7 +152,7 @@ Object.defineProperty(BloomPass.prototype, "resolution", {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x)) {
+		if(typeof x === "number") {
 
 			if(x <= 0) { x = 1; }
 

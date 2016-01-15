@@ -224,7 +224,7 @@ AdaptiveToneMappingPass.prototype.reset = function(renderer) {
 
 	// Only mipmap the current luminosity. A down-sampled version is desired in the adaptive shader.
 	pars.minFilter = THREE.LinearMipMapLinearFilter;
-	this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);
+	this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);//change filter then?
 
 	if(this.adaptive) {
 

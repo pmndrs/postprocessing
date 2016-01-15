@@ -38,8 +38,6 @@ export function DotScreenPass(options) {
 
 	}
 
-	this.disposables.push(this.material);
-
 	/**
 	 * Render to screen flag.
 	 *

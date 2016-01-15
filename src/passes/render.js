@@ -25,7 +25,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * @type Material
 	 */
 
-	this.overrideMaterial = overrideMaterial;
+	this.overrideMaterial = (overrideMaterial !== undefined) ? overrideMaterial : null;
 
 	/**
 	 * Clear color.
@@ -34,7 +34,7 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	 * @type Color
 	 */
 
-	this.clearColor = clearColor;
+	this.clearColor = (clearColor !== undefined) ? clearColor : null;
 
 	/**
 	 * Clear alpha.

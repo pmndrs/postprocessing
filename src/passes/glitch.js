@@ -30,8 +30,6 @@ export function GlitchPass(options) {
 
 	this.material = new GlitchMaterial();
 
-	this.disposables.push(this.material);
-
 	/**
 	 * A perturbation map.
 	 *
@@ -48,8 +46,6 @@ export function GlitchPass(options) {
 		this.perturbMap = options.perturbMap;
 		this.perturbMap.generateMipmaps = false;
 		this.material.uniforms.tDisp.value = this.perturbMap;
-
-		this.disposables.push(this.perturbMap);
 
 	} else {
 
@@ -204,12 +200,10 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 	}
 
 	// If there's a texture, delete it.
-	if(this.disposables.length > 1) { this.disposables.pop().dispose(); }
+	if(this.perturbMap !== null) { this.perturbMap.dispose(); }
 
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 	this.perturbMap.needsUpdate = true;
-
-	this.disposables.push(this.perturbMap);
 
 	this.material.uniforms.tDisp.value = this.perturbMap;
 

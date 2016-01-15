@@ -143,13 +143,13 @@ window.addEventListener("load", function init() {
 	/*var sunMaterial = new THREE.PointsMaterial({size: 600, sizeAttenuation: false, color: 0xffddaa, alphaTest: 0.0, transparent: true, fog: false});
 	var sunGeometry = new THREE.Geometry();
 	sunGeometry.vertices.push(new THREE.Vector3());
-	var sun = new THREE.Points(sunGeometry, sunMaterial);*/
+	var sun = new THREE.Points(sunGeometry, sunMaterial);
 
 	textureLoader.load("textures/sun.png", function(texture) {
 
 		sunMaterial.map = texture;
 
-	});
+	});*/
 
 	sun.ignoreOverrideMaterial = true; // Hack.
 	sun.position.set(1440, 400, 2000);

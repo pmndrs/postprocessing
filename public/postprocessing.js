@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.0.6 build Jan 14 2016
+ * postprocessing v0.0.7 build Jan 16 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -46,7 +46,7 @@
 	CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	CopyMaterial.prototype.constructor = CopyMaterial;
 
-	var shader$2 = {
+	var shader$1 = {
 		fragment: "uniform sampler2D tDiffuse;\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tvec3 luma = vec3(0.299, 0.587, 0.114);\n\tfloat v = dot(texel.rgb, luma);\n\n\tgl_FragColor = vec4(v, v, v, texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -70,8 +70,8 @@
 
 			},
 
-			fragmentShader: shader$2.fragment,
-			vertexShader: shader$2.vertex,
+			fragmentShader: shader$1.fragment,
+			vertexShader: shader$1.vertex,
 
 		});
 
@@ -122,7 +122,7 @@
 	AdaptiveLuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	AdaptiveLuminosityMaterial.prototype.constructor = AdaptiveLuminosityMaterial;
 
-	var shader$5 = {
+	var shader$4 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float middleGrey;\nuniform float maxLuminance;\n\n#ifdef ADAPTED_LUMINANCE\n\n\tuniform sampler2D luminanceMap;\n\n#else\n\n\tuniform float averageLuminance;\n\n#endif\n\nvarying vec2 vUv;\n\nconst vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);\n\nvec3 toneMap(vec3 vColor) {\n\n\t#ifdef ADAPTED_LUMINANCE\n\n\t\t// Get the calculated average luminance.\n\t\tfloat fLumAvg = texture2D(luminanceMap, vec2(0.5, 0.5)).r;\n\n\t#else\n\n\t\tfloat fLumAvg = averageLuminance;\n\n\t#endif\n\n\t// Calculate the luminance of the current pixel.\n\tfloat fLumPixel = dot(vColor, LUM_CONVERT);\n\n\t// Apply the modified operator (Eq. 4).\n\tfloat fLumScaled = (fLumPixel * middleGrey) / fLumAvg;\n\n\tfloat fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (maxLuminance * maxLuminance)))) / (1.0 + fLumScaled);\n\treturn fLumCompressed * vColor;\n\n}\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -150,8 +150,8 @@
 
 			},
 
-			fragmentShader: shader$5.fragment,
-			vertexShader: shader$5.vertex,
+			fragmentShader: shader$4.fragment,
+			vertexShader: shader$4.vertex,
 
 		});
 
@@ -160,7 +160,7 @@
 	ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;
 
-	var shader$1 = {
+	var shader$2 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 center;\nuniform vec2 tSize;\nuniform float angle;\nuniform float scale;\n\nvarying vec2 vUv;\n\nfloat pattern() {\n\n\tfloat s = sin(angle);\n\tfloat c = cos(angle);\n\n\tvec2 tex = vUv * tSize - center;\n\tvec2 point = vec2(c * tex.x - s * tex.y, s * tex.x + c * tex.y) * scale;\n\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\n\n}\n\nvoid main() {\n\n\tvec4 color = texture2D(tDiffuse, vUv);\n\tfloat average = (color.r + color.g + color.b) / 3.0;\n\n\tgl_FragColor = vec4(vec3(average * 10.0 - 5.0 + pattern()), color.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -187,8 +187,8 @@
 
 			},
 
-			fragmentShader: shader$1.fragment,
-			vertexShader: shader$1.vertex,
+			fragmentShader: shader$2.fragment,
+			vertexShader: shader$2.vertex,
 
 		});
 
@@ -197,7 +197,7 @@
 	DotScreenMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	DotScreenMaterial.prototype.constructor = DotScreenMaterial;
 
-	var shader$4 = {
+	var shader$6 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform sampler2D tDisp;\nuniform int byp;\nuniform float amount;\nuniform float angle;\nuniform float seed;\nuniform float seedX;\nuniform float seedY;\nuniform float distortionX;\nuniform float distortionY;\nuniform float colS;\n\nvarying vec2 vUv;\n\nfloat rand(vec2 co) {\n\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n\n}\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\n\tfloat xs, ys;\n\tvec4 normal;\n\n\tvec2 offset;\n\tvec4 cr, cga, cb;\n\tvec4 snow, color;\n\n\tif(byp < 1) {\n\n\t\txs = floor(gl_FragCoord.x / 0.5);\n\t\tys = floor(gl_FragCoord.y / 0.5);\n\n\t\tnormal = texture2D(tDisp, coord * seed * seed);\n\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\n\n\t\t\tif(seedX > 0.0){\n\n\t\t\t\tcoord.y = 1.0 - (coord.y + distortionY);\n\n\t\t\t} else {\n\n\t\t\t\tcoord.y = distortionY;\n\n\t\t\t}\n\n\t\t}\n\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\n\n\t\t\tif(seedY > 0.0){\n\n\t\t\t\tcoord.x = distortionX;\n\n\t\t\t} else {\n\n\t\t\t\tcoord.x = 1. - (coord.x + distortionX);\n\n\t\t\t}\n\n\t\t}\n\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\n\n\t\t// Adopted from RGB shift shader.\n\t\toffset = amount * vec2(cos(angle), sin(angle));\n\t\tcr = texture2D(tDiffuse, coord + offset);\n\t\tcga = texture2D(tDiffuse, coord);\n\t\tcb = texture2D(tDiffuse, coord - offset);\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed,ys * seed * 50.0)) * 0.2);\n\t\tcolor += snow;\n\n\t} else {\n\n\t\tcolor = texture2D(tDiffuse, vUv);\n\n\t}\n\n\tgl_FragColor = color;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -231,8 +231,8 @@
 
 			},
 
-			fragmentShader: shader$4.fragment,
-			vertexShader: shader$4.vertex,
+			fragmentShader: shader$6.fragment,
+			vertexShader: shader$6.vertex,
 
 		});
 
@@ -241,7 +241,7 @@
 	GlitchMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	GlitchMaterial.prototype.constructor = GlitchMaterial;
 
-	var shader$6 = {
+	var shader$5 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 uImageIncrement;\nuniform float cKernel[KERNEL_SIZE_INT];\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\tvec4 sum = vec4(0.0, 0.0, 0.0, 0.0);\n\n\tfor(int i = 0; i < KERNEL_SIZE_INT; ++i) {\n\n\t\tsum += texture2D(tDiffuse, coord) * cKernel[i];\n\t\tcoord += uImageIncrement;\n\n\t}\n\n\tgl_FragColor = sum;\n\n}\n",
 		vertex: "uniform vec2 uImageIncrement;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv - ((KERNEL_SIZE_FLOAT - 1.0) / 2.0) * uImageIncrement;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -287,8 +287,8 @@
 
 			},
 
-			fragmentShader: shader$6.fragment,
-			vertexShader: shader$6.vertex,
+			fragmentShader: shader$5.fragment,
+			vertexShader: shader$5.vertex,
 
 		});
 
@@ -549,8 +549,11 @@
 	 * This class implements a dispose method that frees memory on demand.
 	 * The EffectComposer calls this method when it is being destroyed.
 	 *
-	 * For this mechanism to work properly, please register any render targets, 
-	 * materials and textures by pushing them to the set of disposables!
+	 * For this mechanism to work properly, please assign your render targets, 
+	 * materials or textures directly to your pass!
+	 *
+	 * You can prevent your disposable objects from being deleted by keeping 
+	 * them inside deeper structures such as arrays or objects.
 	 *
 	 * @class Pass
 	 * @constructor
@@ -559,21 +562,6 @@
 	 */
 
 	function Pass(scene, camera) {
-
-		/**
-		 * A set of disposable objects created by this pass.
-		 *
-		 * Used to keep track of:
-		 *  - render targets
-		 *  - materials
-		 *  - textures
-		 *
-		 * @property disposables
-		 * @type Array
-		 * @private
-		 */
-
-		this.disposables = [];
 
 		/**
 		 * The scene to render.
@@ -597,7 +585,7 @@
 
 		this.camera = (camera !== undefined) ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-		if(this.camera.parent === null) { this.scene.add(this.camera); }
+		if(this.scene !== null && this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
 
 		/**
 		 * Enabled flag.
@@ -665,19 +653,37 @@
 	Pass.prototype.setSize = function(width, height) {};
 
 	/**
-	 * Destroys all render targets, materials and textures created by this pass.
+	 * Performs a shallow search for properties that define a dispose
+	 * method and deletes them. The pass will be inoperative after 
+	 * this method was called!
 	 *
-	 * The pass will be inoperative after this method has finished.
-	 * Use it to free memory when you are certain that you don't need this pass anymore.
+	 * Disposable objects:
+	 *  - render targets
+	 *  - materials
+	 *  - textures
+	 *
+	 * The EffectComposer calls this method automatically when it is being
+	 * destroyed. You may, however, use it independently to free memory 
+	 * when you are certain that you don't need this pass anymore.
 	 *
 	 * @method dispose
 	 */
 
 	Pass.prototype.dispose = function() {
 
-		while(this.disposables.length > 0) {
+		var i, p;
+		var keys = Object.keys(this);
 
-			this.disposables.pop().dispose();
+		for(i = keys.length - 1; i >= 0; --i) {
+
+			p = this[keys[i]];
+
+			if(p !== null && typeof p.dispose === "function") {
+
+				p.dispose();
+				this[keys[i]] = null;
+
+			}
 
 		}
 
@@ -707,8 +713,6 @@
 
 		this.material = new CopyMaterial();
 
-		this.disposables.push(this.material);
-
 		/**
 		 * The render target.
 		 *
@@ -729,10 +733,7 @@
 		}
 
 		this.renderTarget = renderTarget;
-
 		this.renderTarget.texture.generateMipmaps = false;
-
-		this.disposables.push(this.renderTarget);
 
 		/**
 		 * The quad mesh to use for rendering.
@@ -944,9 +945,7 @@
 		 * @type ShaderMaterial
 		 */
 
-		this.material = material;
-
-		this.disposables.push(this.material);
+		this.material = (material !== undefined) ? material : null;
 
 		/**
 		 * Render to screen flag.
@@ -1031,7 +1030,7 @@
 		 * @type Material
 		 */
 
-		this.overrideMaterial = overrideMaterial;
+		this.overrideMaterial = (overrideMaterial !== undefined) ? overrideMaterial : null;
 
 		/**
 		 * Clear color.
@@ -1040,7 +1039,7 @@
 		 * @type Color
 		 */
 
-		this.clearColor = clearColor;
+		this.clearColor = (clearColor !== undefined) ? clearColor : null;
 
 		/**
 		 * Clear alpha.
@@ -1135,7 +1134,7 @@
 
 	function TexturePass(texture, opacity) {
 
-		Pass.call(this, new THREE.Scene(), new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1));
+		Pass.call(this);
 
 		/**
 		 * Copy shader material.
@@ -1148,9 +1147,6 @@
 		this.material = new CopyMaterial();
 		this.material.uniforms.tDiffuse.value = texture;
 		this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
-
-		this.disposables.push(this.material);
-		this.disposables.push(texture);
 
 		/**
 		 * The quad mesh to use for rendering the 2D effect.
@@ -1400,7 +1396,7 @@
 
 		// Only mipmap the current luminosity. A down-sampled version is desired in the adaptive shader.
 		pars.minFilter = THREE.LinearMipMapLinearFilter;
-		this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);
+		this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);//change filter then?
 
 		if(this.adaptive) {
 
@@ -1569,8 +1565,6 @@
 
 		}
 
-		this.disposables.push(this.material);
-
 		/**
 		 * Render to screen flag.
 		 *
@@ -1657,8 +1651,6 @@
 
 		this.material = new GlitchMaterial();
 
-		this.disposables.push(this.material);
-
 		/**
 		 * A perturbation map.
 		 *
@@ -1675,8 +1667,6 @@
 			this.perturbMap = options.perturbMap;
 			this.perturbMap.generateMipmaps = false;
 			this.material.uniforms.tDisp.value = this.perturbMap;
-
-			this.disposables.push(this.perturbMap);
 
 		} else {
 
@@ -1831,12 +1821,10 @@
 		}
 
 		// If there's a texture, delete it.
-		if(this.disposables.length > 1) { this.disposables.pop().dispose(); }
+		if(this.perturbMap !== null) { this.perturbMap.dispose(); }
 
 		this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 		this.perturbMap.needsUpdate = true;
-
-		this.disposables.push(this.perturbMap);
 
 		this.material.uniforms.tDisp.value = this.perturbMap;
 
@@ -1870,7 +1858,7 @@
 		Pass.call(this);
 
 		if(options === undefined) { options = {}; }
-		if(options.kernelSize !== undefined) { options.kernelSize = 25; }
+		if(options.kernelSize === undefined) { options.kernelSize = 25; }
 
 		/**
 		 * A render target.
@@ -1886,6 +1874,8 @@
 			format: THREE.RGBFormat
 		});
 
+		this.renderTargetX.texture.generateMipmaps = false;
+
 		/**
 		 * Another render target.
 		 *
@@ -1895,15 +1885,10 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-
-		this.renderTargetX.texture.generateMipmaps = false;
 		this.renderTargetY.texture.generateMipmaps = false;
 
 		// Set the resolution.
 		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
-
-		this.disposables.push(this.renderTargetX);
-		this.disposables.push(this.renderTargetY);
 
 		/**
 		 * The horizontal blur factor.
@@ -1939,8 +1924,6 @@
 
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
-		this.disposables.push(this.copyMaterial);
-
 		/**
 		 * Convolution shader material.
 		 *
@@ -1954,8 +1937,6 @@
 		this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
 		this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = options.kernelSize.toFixed(1);
 		this.convolutionMaterial.defines.KERNEL_SIZE_INT = options.kernelSize.toFixed(0);
-
-		this.disposables.push(this.convolutionMaterial);
 
 		/**
 		 * Clear flag.
@@ -1999,7 +1980,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x)) {
+			if(typeof x === "number") {
 
 				if(x <= 0) { x = 1; }
 
@@ -2102,8 +2083,6 @@
 
 		this.renderTargetDepth.texture.generateMipmaps = false;
 
-		this.disposables.push(this.renderTargetDepth);
-
 		/**
 		 * Depth shader material.
 		 *
@@ -2113,8 +2092,6 @@
 		 */
 
 		this.depthMaterial = new THREE.MeshDepthMaterial();
-
-		this.disposables.push(this.depthMaterial);
 
 		/**
 		 * Bokeh shader material.
@@ -2131,8 +2108,6 @@
 		if(options.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = options.aspect; }
 		if(options.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = options.aperture; }
 		if(options.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = options.maxBlur; }
-
-		this.disposables.push(this.bokehMaterial);
 
 		/**
 		 * Render to screen flag.
@@ -2252,8 +2227,6 @@
 
 		}
 
-		this.disposables.push(this.material);
-
 		/**
 		 * Render to screen flag.
 		 *
@@ -2353,8 +2326,6 @@
 
 		this.renderTargetX.texture.generateMipmaps = false;
 
-		this.disposables.push(this.renderTargetX);
-
 		/**
 		 * Another render target.
 		 *
@@ -2364,10 +2335,7 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-
 		this.renderTargetY.texture.generateMipmaps = false;
-
-		this.disposables.push(this.renderTargetY);
 
 		// Set the resolution.
 		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -2405,8 +2373,6 @@
 		if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
 		if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
-		this.disposables.push(this.godRaysGenerateMaterial);
-
 		/**
 		 * The exposure coefficient.
 		 *
@@ -2433,8 +2399,6 @@
 
 		if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
 
-		this.disposables.push(this.godRaysCombineMaterial);
-
 		/**
 		 * A material used for masking the scene objects.
 		 *
@@ -2444,8 +2408,6 @@
 		 */
 
 		this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-
-		this.disposables.push(this.maskMaterial);
 
 		/**
 		 * The maximum length of god-rays.
@@ -2534,7 +2496,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x)) {
+			if(typeof x === "number") {
 
 				this.godRaysCombineMaterial.uniforms.intensity.value = x;
 
@@ -2558,7 +2520,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x)) {
+			if(typeof x === "number") {
 
 				if(x <= 0) { x = 1; }
 
@@ -2592,7 +2554,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x) && x >= 0.0) {
+			if(typeof x === "number" && x >= 0.0) {
 
 				this._rayLength = x;
 				this.calculateStepSizes();
@@ -2614,7 +2576,6 @@
 	 * might also be sufficient.
 	 *
 	 * Values above 9 don't have a noticable impact on the quality.
-	 * A slight performance drop could be observed at values around 50.
 	 *
 	 * @property samples
 	 * @type Number
@@ -2631,7 +2592,7 @@
 
 		set: function(x) {
 
-			if(!Number.isNaN(x) && x >= 1) {
+			if(typeof x === "number" && x >= 1) {
 
 				x = Math.floor(x);
 
@@ -2789,7 +2750,7 @@
 		 * @type WebGLRenderer
 		 */
 
-		this.renderer = renderer;
+		this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 		this.renderer.autoClear = false;
 
 		/**
@@ -2802,9 +2763,9 @@
 
 		if(renderTarget === undefined) {
 
-			pixelRatio = renderer.getPixelRatio();
-			width = Math.floor(renderer.context.canvas.width / pixelRatio) || 1;
-			height = Math.floor(renderer.context.canvas.height / pixelRatio) || 1;
+			pixelRatio = this.renderer.getPixelRatio();
+			width = Math.floor(this.renderer.context.canvas.width / pixelRatio) || 1;
+			height = Math.floor(this.renderer.context.canvas.height / pixelRatio) || 1;
 
 			renderTarget = new THREE.WebGLRenderTarget(width, height, {
 				minFilter: THREE.LinearFilter,
@@ -3035,8 +2996,8 @@
 	/**
 	 * Destroys all passes and render targets.
 	 *
-	 * This method deallocates any render targets, data textures and materials created by the passes.
-	 * It also deletes this composer's render targets.
+	 * This method deallocates any render targets, textures and materials created by the passes.
+	 * It also deletes this composer's render targets and copy material.
 	 *
 	 * @method dispose
 	 */
@@ -3046,6 +3007,10 @@
 		this.renderTarget1.dispose();
 		this.renderTarget2.dispose();
 		this.copyPass.dispose();
+
+		this.renderTarget1 = null;
+		this.renderTarget2 = null;
+		this.copyPass = null;
 
 		while(this.passes.length > 0) {
 

@@ -6,8 +6,11 @@ import THREE from "three";
  * This class implements a dispose method that frees memory on demand.
  * The EffectComposer calls this method when it is being destroyed.
  *
- * For this mechanism to work properly, please register any render targets, 
- * materials and textures by pushing them to the set of disposables!
+ * For this mechanism to work properly, please assign your render targets, 
+ * materials or textures directly to your pass!
+ *
+ * You can prevent your disposable objects from being deleted by keeping 
+ * them inside deeper structures such as arrays or objects.
  *
  * @class Pass
  * @constructor
@@ -16,21 +19,6 @@ import THREE from "three";
  */
 
 export function Pass(scene, camera) {
-
-	/**
-	 * A set of disposable objects created by this pass.
-	 *
-	 * Used to keep track of:
-	 *  - render targets
-	 *  - materials
-	 *  - textures
-	 *
-	 * @property disposables
-	 * @type Array
-	 * @private
-	 */
-
-	this.disposables = [];
 
 	/**
 	 * The scene to render.
@@ -54,7 +42,7 @@ export function Pass(scene, camera) {
 
 	this.camera = (camera !== undefined) ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-	if(this.camera.parent === null) { this.scene.add(this.camera); }
+	if(this.scene !== null && this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
 
 	/**
 	 * Enabled flag.
@@ -122,19 +110,37 @@ Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 Pass.prototype.setSize = function(width, height) {};
 
 /**
- * Destroys all render targets, materials and textures created by this pass.
+ * Performs a shallow search for properties that define a dispose
+ * method and deletes them. The pass will be inoperative after 
+ * this method was called!
  *
- * The pass will be inoperative after this method has finished.
- * Use it to free memory when you are certain that you don't need this pass anymore.
+ * Disposable objects:
+ *  - render targets
+ *  - materials
+ *  - textures
+ *
+ * The EffectComposer calls this method automatically when it is being
+ * destroyed. You may, however, use it independently to free memory 
+ * when you are certain that you don't need this pass anymore.
  *
  * @method dispose
  */
 
 Pass.prototype.dispose = function() {
 
-	while(this.disposables.length > 0) {
+	var i, p;
+	var keys = Object.keys(this);
 
-		this.disposables.pop().dispose();
+	for(i = keys.length - 1; i >= 0; --i) {
+
+		p = this[keys[i]];
+
+		if(p !== null && typeof p.dispose === "function") {
+
+			p.dispose();
+			this[keys[i]] = null;
+
+		}
 
 	}
 

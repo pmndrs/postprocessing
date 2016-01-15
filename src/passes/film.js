@@ -40,8 +40,6 @@ export function FilmPass(options) {
 
 	}
 
-	this.disposables.push(this.material);
-
 	/**
 	 * Render to screen flag.
 	 *

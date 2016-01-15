@@ -27,7 +27,7 @@ export function EffectComposer(renderer, renderTarget) {
 	 * @type WebGLRenderer
 	 */
 
-	this.renderer = renderer;
+	this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 	this.renderer.autoClear = false;
 
 	/**
@@ -40,9 +40,9 @@ export function EffectComposer(renderer, renderTarget) {
 
 	if(renderTarget === undefined) {
 
-		pixelRatio = renderer.getPixelRatio();
-		width = Math.floor(renderer.context.canvas.width / pixelRatio) || 1;
-		height = Math.floor(renderer.context.canvas.height / pixelRatio) || 1;
+		pixelRatio = this.renderer.getPixelRatio();
+		width = Math.floor(this.renderer.context.canvas.width / pixelRatio) || 1;
+		height = Math.floor(this.renderer.context.canvas.height / pixelRatio) || 1;
 
 		renderTarget = new THREE.WebGLRenderTarget(width, height, {
 			minFilter: THREE.LinearFilter,
@@ -273,8 +273,8 @@ EffectComposer.prototype.setSize = function(width, height) {
 /**
  * Destroys all passes and render targets.
  *
- * This method deallocates any render targets, data textures and materials created by the passes.
- * It also deletes this composer's render targets.
+ * This method deallocates any render targets, textures and materials created by the passes.
+ * It also deletes this composer's render targets and copy material.
  *
  * @method dispose
  */
@@ -284,6 +284,10 @@ EffectComposer.prototype.dispose = function(width, height) {
 	this.renderTarget1.dispose();
 	this.renderTarget2.dispose();
 	this.copyPass.dispose();
+
+	this.renderTarget1 = null;
+	this.renderTarget2 = null;
+	this.copyPass = null;
 
 	while(this.passes.length > 0) {
 
