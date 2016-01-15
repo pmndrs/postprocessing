@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -119,8 +119,10 @@
     <p>An abstract pass.</p>
 <p>This class implements a dispose method that frees memory on demand.
 The EffectComposer calls this method when it is being destroyed.</p>
-<p>For this mechanism to work properly, please register any render targets,
-materials and textures by pushing them to the set of disposables!</p>
+<p>For this mechanism to work properly, please assign your render targets,
+materials or textures directly to your pass!</p>
+<p>You can prevent your disposable objects from being deleted by keeping
+them inside deeper structures such as arrays or objects.</p>
 
 </div>
 
@@ -240,10 +242,6 @@ materials and textures by pushing them to the set of disposables!</p>
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_disposables">disposables</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_enabled">enabled</a>
 
@@ -280,7 +278,7 @@ materials and textures by pushing them to the set of disposables!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l124"><code>src\passes\pass.js:124</code></a>
+        <a href="../files/src_passes_pass.js.html#l112"><code>src\passes\pass.js:112</code></a>
         </p>
 
 
@@ -288,9 +286,18 @@ materials and textures by pushing them to the set of disposables!</p>
     </div>
 
     <div class="description">
-        <p>Destroys all render targets, materials and textures created by this pass.</p>
-<p>The pass will be inoperative after this method has finished.
-Use it to free memory when you are certain that you don't need this pass anymore.</p>
+        <p>Performs a shallow search for properties that define a dispose
+method and deletes them. The pass will be inoperative after
+this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory
+when you are certain that you don't need this pass anymore.</p>
 
     </div>
 
@@ -328,7 +335,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l87"><code>src\passes\pass.js:87</code></a>
+        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
         </p>
 
 
@@ -436,7 +443,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
+        <a href="../files/src_passes_pass.js.html#l94"><code>src\passes\pass.js:94</code></a>
         </p>
 
 
@@ -513,7 +520,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l34"><code>src\passes\pass.js:34</code></a>
         </p>
 
 
@@ -528,38 +535,6 @@ and when the effect composer is reset.</p>
 
 
 </div>
-<div id="property_disposables" class="property item private">
-    <h3 class="name"><code>disposables</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_pass.js.html#l20"><code>src\passes\pass.js:20</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A set of disposable objects created by this pass.</p>
-<p>Used to keep track of:</p>
-<ul>
-<li>render targets</li>
-<li>materials</li>
-<li>textures</li>
-</ul>
-
-    </div>
-
-
-
-</div>
 <div id="property_enabled" class="property item">
     <h3 class="name"><code>enabled</code></h3>
     <span class="type">Boolean</span>
@@ -571,7 +546,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -597,7 +572,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l69"><code>src\passes\pass.js:69</code></a>
+        <a href="../files/src_passes_pass.js.html#l57"><code>src\passes\pass.js:57</code></a>
         </p>
 
 
@@ -629,7 +604,7 @@ renders into the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l23"><code>src\passes\pass.js:23</code></a>
         </p>
 
 

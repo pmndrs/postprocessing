@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -379,10 +379,6 @@
                                 <a href="#property_camera2">camera2</a>
 
                             </li>
-                            <li class="index-item property private inherited">
-                                <a href="#property_disposables">disposables</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
@@ -484,7 +480,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l339"><code>src\passes\god-rays.js:339</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l327"><code>src\passes\god-rays.js:327</code></a>
         </p>
 
 
@@ -519,7 +515,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l419"><code>src\passes\god-rays.js:419</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l407"><code>src\passes\god-rays.js:407</code></a>
         </p>
 
 
@@ -560,7 +556,7 @@ direction in order to create a scalar for the god rays exposure.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l124"><code>src\passes\pass.js:124</code></a>
+        <a href="../files/src_passes_pass.js.html#l112"><code>src\passes\pass.js:112</code></a>
         </p>
 
 
@@ -568,10 +564,18 @@ direction in order to create a scalar for the god rays exposure.</p>
     </div>
 
     <div class="description">
-        Destroys all render targets, materials and textures created by this pass.
+        Performs a shallow search for properties that define a dispose
+method and deletes them. The pass will be inoperative after 
+this method was called!
 
-The pass will be inoperative after this method has finished.
-Use it to free memory when you are certain that you don't need this pass anymore.
+Disposable objects:
+ - render targets
+ - materials
+ - textures
+
+The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory 
+when you are certain that you don't need this pass anymore.
     </div>
 
 
@@ -608,7 +612,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l356"><code>src\passes\god-rays.js:356</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l344"><code>src\passes\god-rays.js:344</code></a>
         </p>
 
 
@@ -693,7 +697,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
+        <a href="../files/src_passes_pass.js.html#l94"><code>src\passes\pass.js:94</code></a>
         </p>
 
 
@@ -771,7 +775,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l140"><code>src\passes\god-rays.js:140</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l129"><code>src\passes\god-rays.js:129</code></a>
         </p>
 
 
@@ -797,7 +801,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l34"><code>src\passes\pass.js:34</code></a>
         </p>
 
 
@@ -823,7 +827,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l183"><code>src\passes\god-rays.js:183</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l172"><code>src\passes\god-rays.js:172</code></a>
         </p>
 
 
@@ -832,36 +836,6 @@ and when the effect composer is reset.
     <div class="description">
         <p>A camera to render the god rays with.</p>
 
-    </div>
-
-
-
-</div>
-<div id="property_disposables" class="property item private inherited">
-    <h3 class="name"><code>disposables</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_disposables">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l20"><code>src\passes\pass.js:20</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        A set of disposable objects created by this pass.
-
-Used to keep track of:
- - render targets
- - materials
- - textures
     </div>
 
 
@@ -878,7 +852,7 @@ Used to keep track of:
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -903,7 +877,7 @@ Used to keep track of:
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l100"><code>src\passes\god-rays.js:100</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l93"><code>src\passes\god-rays.js:93</code></a>
         </p>
 
 
@@ -931,7 +905,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l114"><code>src\passes\god-rays.js:114</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l107"><code>src\passes\god-rays.js:107</code></a>
         </p>
 
 
@@ -957,7 +931,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l84"><code>src\passes\god-rays.js:84</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l79"><code>src\passes\god-rays.js:79</code></a>
         </p>
 
 
@@ -982,7 +956,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l213"><code>src\passes\god-rays.js:213</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l202"><code>src\passes\god-rays.js:202</code></a>
         </p>
 
 
@@ -1008,7 +982,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l65"><code>src\passes\god-rays.js:65</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l60"><code>src\passes\god-rays.js:60</code></a>
         </p>
 
 
@@ -1034,7 +1008,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l128"><code>src\passes\god-rays.js:128</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l119"><code>src\passes\god-rays.js:119</code></a>
         </p>
 
 
@@ -1059,7 +1033,7 @@ The product is sent to the god rays shader each frame.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l69"><code>src\passes\pass.js:69</code></a>
+        <a href="../files/src_passes_pass.js.html#l57"><code>src\passes\pass.js:57</code></a>
         </p>
 
 
@@ -1091,7 +1065,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l194"><code>src\passes\god-rays.js:194</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l183"><code>src\passes\god-rays.js:183</code></a>
         </p>
 
 
@@ -1116,7 +1090,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l264"><code>src\passes\god-rays.js:264</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l253"><code>src\passes\god-rays.js:253</code></a>
         </p>
 
 
@@ -1174,7 +1148,7 @@ to prevent visual gaps along the rays.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l48"><code>src\passes\god-rays.js:48</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l46"><code>src\passes\god-rays.js:46</code></a>
         </p>
 
 
@@ -1199,7 +1173,7 @@ to prevent visual gaps along the rays.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l163"><code>src\passes\god-rays.js:163</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l152"><code>src\passes\god-rays.js:152</code></a>
         </p>
 
 
@@ -1225,7 +1199,7 @@ to prevent visual gaps along the rays.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l237"><code>src\passes\god-rays.js:237</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l226"><code>src\passes\god-rays.js:226</code></a>
         </p>
 
 
@@ -1251,7 +1225,7 @@ to prevent visual gaps along the rays.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l296"><code>src\passes\god-rays.js:296</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l285"><code>src\passes\god-rays.js:285</code></a>
         </p>
 
 
@@ -1264,8 +1238,7 @@ GPU load directly and doesn't necessarily yield better results!</p>
 <p>The recommended number of samples is 9.
 For render resolutions below 1024 and a ray length of 1.0, 7 samples
 might also be sufficient.</p>
-<p>Values above 9 don't have a noticable impact on the quality.
-A slight performance drop could be observed at values around 50.</p>
+<p>Values above 9 don't have a noticable impact on the quality.</p>
 
     </div>
 
@@ -1285,7 +1258,7 @@ A slight performance drop could be observed at values around 50.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l23"><code>src\passes\pass.js:23</code></a>
         </p>
 
 
@@ -1311,7 +1284,7 @@ A slight performance drop could be observed at values around 50.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l173"><code>src\passes\god-rays.js:173</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l162"><code>src\passes\god-rays.js:162</code></a>
         </p>
 
 
@@ -1337,7 +1310,7 @@ A slight performance drop could be observed at values around 50.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l74"><code>src\passes\god-rays.js:74</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l69"><code>src\passes\god-rays.js:69</code></a>
         </p>
 
 
@@ -1363,7 +1336,7 @@ A slight performance drop could be observed at values around 50.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l150"><code>src\passes\god-rays.js:150</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l139"><code>src\passes\god-rays.js:139</code></a>
         </p>
 
 

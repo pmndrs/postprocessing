@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -143,9 +143,7 @@ export function ShaderPass(material, textureID) {
 	 * @type ShaderMaterial
 	 */
 
-	this.material = material;
-
-	this.disposables.push(this.material);
+	this.material = (material !== undefined) ? material : null;
 
 	/**
 	 * Render to screen flag.

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -138,8 +138,6 @@ export function GlitchPass(options) {
 
 	this.material = new GlitchMaterial();
 
-	this.disposables.push(this.material);
-
 	/**
 	 * A perturbation map.
 	 *
@@ -156,8 +154,6 @@ export function GlitchPass(options) {
 		this.perturbMap = options.perturbMap;
 		this.perturbMap.generateMipmaps = false;
 		this.material.uniforms.tDisp.value = this.perturbMap;
-
-		this.disposables.push(this.perturbMap);
 
 	} else {
 
@@ -312,12 +308,10 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 	}
 
 	// If there&#x27;s a texture, delete it.
-	if(this.disposables.length &gt; 1) { this.disposables.pop().dispose(); }
+	if(this.perturbMap !== null) { this.perturbMap.dispose(); }
 
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 	this.perturbMap.needsUpdate = true;
-
-	this.disposables.push(this.perturbMap);
 
 	this.material.uniforms.tDisp.value = this.perturbMap;
 

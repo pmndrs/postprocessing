@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -134,8 +134,6 @@ export function SavePass(renderTarget) {
 
 	this.material = new CopyMaterial();
 
-	this.disposables.push(this.material);
-
 	/**
 	 * The render target.
 	 *
@@ -156,10 +154,7 @@ export function SavePass(renderTarget) {
 	}
 
 	this.renderTarget = renderTarget;
-
 	this.renderTarget.texture.generateMipmaps = false;
-
-	this.disposables.push(this.renderTarget);
 
 	/**
 	 * The quad mesh to use for rendering.

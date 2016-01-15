@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -149,8 +149,6 @@ export function BokehPass(scene, camera, options) {
 
 	this.renderTargetDepth.texture.generateMipmaps = false;
 
-	this.disposables.push(this.renderTargetDepth);
-
 	/**
 	 * Depth shader material.
 	 *
@@ -160,8 +158,6 @@ export function BokehPass(scene, camera, options) {
 	 */
 
 	this.depthMaterial = new THREE.MeshDepthMaterial();
-
-	this.disposables.push(this.depthMaterial);
 
 	/**
 	 * Bokeh shader material.
@@ -178,8 +174,6 @@ export function BokehPass(scene, camera, options) {
 	if(options.aspect !== undefined) { this.bokehMaterial.uniforms.aspect.value = options.aspect; }
 	if(options.aperture !== undefined) { this.bokehMaterial.uniforms.aperture.value = options.aperture; }
 	if(options.maxBlur !== undefined) { this.bokehMaterial.uniforms.maxBlur.value = options.maxBlur; }
-
-	this.disposables.push(this.bokehMaterial);
 
 	/**
 	 * Render to screen flag.

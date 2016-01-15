@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -332,7 +332,7 @@ AdaptiveToneMappingPass.prototype.reset = function(renderer) {
 
 	// Only mipmap the current luminosity. A down-sampled version is desired in the adaptive shader.
 	pars.minFilter = THREE.LinearMipMapLinearFilter;
-	this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);
+	this.currentLuminanceRT = new THREE.WebGLRenderTarget(this.resolution, this.resolution, pars);//change filter then?
 
 	if(this.adaptive) {
 

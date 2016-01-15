@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -196,10 +196,6 @@
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property private inherited">
-                                <a href="#property_disposables">disposables</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
@@ -236,7 +232,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l124"><code>src\passes\pass.js:124</code></a>
+        <a href="../files/src_passes_pass.js.html#l112"><code>src\passes\pass.js:112</code></a>
         </p>
 
 
@@ -244,10 +240,18 @@
     </div>
 
     <div class="description">
-        Destroys all render targets, materials and textures created by this pass.
+        Performs a shallow search for properties that define a dispose
+method and deletes them. The pass will be inoperative after 
+this method was called!
 
-The pass will be inoperative after this method has finished.
-Use it to free memory when you are certain that you don't need this pass anymore.
+Disposable objects:
+ - render targets
+ - materials
+ - textures
+
+The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory 
+when you are certain that you don't need this pass anymore.
     </div>
 
 
@@ -401,7 +405,7 @@ Use it to free memory when you are certain that you don't need this pass anymore
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
+        <a href="../files/src_passes_pass.js.html#l94"><code>src\passes\pass.js:94</code></a>
         </p>
 
 
@@ -479,7 +483,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l34"><code>src\passes\pass.js:34</code></a>
         </p>
 
 
@@ -490,36 +494,6 @@ and when the effect composer is reset.
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
-
-
-</div>
-<div id="property_disposables" class="property item private inherited">
-    <h3 class="name"><code>disposables</code></h3>
-    <span class="type">Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_disposables">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l20"><code>src\passes\pass.js:20</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        A set of disposable objects created by this pass.
-
-Used to keep track of:
- - render targets
- - materials
- - textures
-    </div>
-
 
 
 </div>
@@ -534,7 +508,7 @@ Used to keep track of:
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
+        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
         </p>
 
 
@@ -559,7 +533,7 @@ Used to keep track of:
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l69"><code>src\passes\pass.js:69</code></a>
+        <a href="../files/src_passes_pass.js.html#l57"><code>src\passes\pass.js:57</code></a>
         </p>
 
 
@@ -591,7 +565,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l23"><code>src\passes\pass.js:23</code></a>
         </p>
 
 

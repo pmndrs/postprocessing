@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.6</em>
+            <em>API Docs for: 0.0.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -151,8 +151,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 
 	this.renderTargetX.texture.generateMipmaps = false;
 
-	this.disposables.push(this.renderTargetX);
-
 	/**
 	 * Another render target.
 	 *
@@ -162,10 +160,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-
 	this.renderTargetY.texture.generateMipmaps = false;
-
-	this.disposables.push(this.renderTargetY);
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -203,8 +198,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
 	if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
 
-	this.disposables.push(this.godRaysGenerateMaterial);
-
 	/**
 	 * The exposure coefficient.
 	 *
@@ -231,8 +224,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 
 	if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
 
-	this.disposables.push(this.godRaysCombineMaterial);
-
 	/**
 	 * A material used for masking the scene objects.
 	 *
@@ -242,8 +233,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
-
-	this.disposables.push(this.maskMaterial);
 
 	/**
 	 * The maximum length of god-rays.
@@ -332,7 +321,7 @@ Object.defineProperty(GodRaysPass.prototype, &quot;intensity&quot;, {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x)) {
+		if(typeof x === &quot;number&quot;) {
 
 			this.godRaysCombineMaterial.uniforms.intensity.value = x;
 
@@ -356,7 +345,7 @@ Object.defineProperty(GodRaysPass.prototype, &quot;resolution&quot;, {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x)) {
+		if(typeof x === &quot;number&quot;) {
 
 			if(x &lt;= 0) { x = 1; }
 
@@ -390,7 +379,7 @@ Object.defineProperty(GodRaysPass.prototype, &quot;rayLength&quot;, {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x) &amp;&amp; x &gt;= 0.0) {
+		if(typeof x === &quot;number&quot; &amp;&amp; x &gt;= 0.0) {
 
 			this._rayLength = x;
 			this.calculateStepSizes();
@@ -412,7 +401,6 @@ Object.defineProperty(GodRaysPass.prototype, &quot;rayLength&quot;, {
  * might also be sufficient.
  *
  * Values above 9 don&#x27;t have a noticable impact on the quality.
- * A slight performance drop could be observed at values around 50.
  *
  * @property samples
  * @type Number
@@ -429,7 +417,7 @@ Object.defineProperty(GodRaysPass.prototype, &quot;samples&quot;, {
 
 	set: function(x) {
 
-		if(!Number.isNaN(x) &amp;&amp; x &gt;= 1) {
+		if(typeof x === &quot;number&quot; &amp;&amp; x &gt;= 1) {
 
 			x = Math.floor(x);
 
