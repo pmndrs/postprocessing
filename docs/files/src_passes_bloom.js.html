@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.7</em>
+            <em>API Docs for: 0.0.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -165,6 +165,7 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
+
 	this.renderTargetY.texture.generateMipmaps = false;
 
 	// Set the resolution.
@@ -230,17 +231,6 @@ export function BloomPass(options) {
 	 */
 
 	this.clear = false;
-
-	/**
-	 * The quad mesh to render.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
 
 }
 
@@ -318,6 +308,9 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
  */
 
 BloomPass.prototype.setSize = function(width, height) {
+
+	if(width &lt;= 0) { width = 1; }
+	if(height &lt;= 0) { height = 1; }
 
 	// Scale one of the blur factors with the render target ratio.
 	this.blurY.set(0.0, (width / height) * BLUR);

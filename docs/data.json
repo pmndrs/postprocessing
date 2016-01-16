@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.0.7",
+        "version": "0.0.8",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -874,7 +874,7 @@
                             "description": "- The god rays render texture resolution.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "256"
+                            "optdefault": "512"
                         },
                         {
                             "name": "samples",
@@ -941,6 +941,12 @@
                     "description": "- The camera will be added to the given scene if it has no parent.",
                     "type": "Camera",
                     "optional": true
+                },
+                {
+                    "name": "quad",
+                    "description": "- A quad that fills the screen. Used for rendering the effect.",
+                    "type": "Mesh",
+                    "optional": true
                 }
             ]
         },
@@ -956,7 +962,7 @@
             "namespace": "",
             "file": "src\\passes\\render.js",
             "line": 4,
-            "description": "A render pass.",
+            "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1239,19 +1245,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 138,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "AdaptiveToneMappingPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 154,
+            "line": 143,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1282,7 +1276,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 203,
+            "line": 192,
             "description": "Resets this pass.",
             "itemtype": "method",
             "name": "reset",
@@ -1300,7 +1294,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 247,
+            "line": 236,
             "description": "Sets whether this pass uses adaptive luminosity.",
             "itemtype": "method",
             "name": "setAdaptive",
@@ -1316,7 +1310,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 274,
+            "line": 263,
             "description": "Sets the adaption rate (tau) for the adaptive luminosity.",
             "itemtype": "method",
             "name": "setAdaptionRate",
@@ -1332,7 +1326,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 291,
+            "line": 280,
             "description": "Sets the maximum luminosity value for the adaptive luminosity.",
             "itemtype": "method",
             "name": "setMaxLuminance",
@@ -1348,7 +1342,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 308,
+            "line": 297,
             "description": "Sets the average luminance value for tone-mapping.",
             "itemtype": "method",
             "name": "setAverageLuminance",
@@ -1364,7 +1358,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 325,
+            "line": 314,
             "description": "Sets the middle grey value for tone-mapping.",
             "itemtype": "method",
             "name": "setMiddleGrey",
@@ -1380,7 +1374,7 @@
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
-            "line": 342,
+            "line": 331,
             "description": "Deletes all render targets and materials.",
             "itemtype": "method",
             "name": "dispose",
@@ -1413,7 +1407,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 65,
+            "line": 66,
             "description": "The horizontal blur factor.",
             "itemtype": "property",
             "name": "blurX",
@@ -1425,7 +1419,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 75,
+            "line": 76,
             "description": "The vertical blur factor.",
             "itemtype": "property",
             "name": "blurY",
@@ -1437,7 +1431,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 85,
+            "line": 86,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1449,7 +1443,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 99,
+            "line": 100,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1461,7 +1455,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 113,
+            "line": 114,
             "description": "Clear flag.\n\nThis pass draws the blurred scene over the normal one.\nSet to true to see the fully blurred scene.",
             "itemtype": "property",
             "name": "clear",
@@ -1472,19 +1466,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 126,
-            "description": "The quad mesh to render.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "BloomPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\bloom.js",
-            "line": 142,
+            "line": 132,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
             "name": "resolution",
@@ -1494,7 +1476,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 168,
+            "line": 158,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1530,7 +1512,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 204,
+            "line": 194,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1599,42 +1581,26 @@
         {
             "file": "src\\passes\\bokeh.js",
             "line": 80,
-            "description": "A scene to render the depth of field with.",
+            "description": "A main scene.",
             "itemtype": "property",
-            "name": "scene2",
+            "name": "mainScene",
             "type": "Scene",
-            "access": "private",
-            "tagname": "",
             "class": "BokehPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 90,
-            "description": "A camera to render the depth of field effect with.",
+            "line": 89,
+            "description": "A main camera.",
             "itemtype": "property",
-            "name": "camera2",
+            "name": "mainCamera",
             "type": "Camera",
-            "access": "private",
-            "tagname": "",
             "class": "BokehPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 101,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "BokehPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\bokeh.js",
-            "line": 117,
+            "line": 106,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1729,19 +1695,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 54,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "DotScreenPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\dot-screen.js",
-            "line": 70,
+            "line": 59,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1795,19 +1749,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 56,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "TexturePass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\film.js",
-            "line": 72,
+            "line": 64,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1871,19 +1813,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 70,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "GlitchPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\glitch.js",
-            "line": 81,
+            "line": 67,
             "description": "The quad mesh to render.",
             "itemtype": "property",
             "name": "quad",
@@ -1893,7 +1823,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 90,
+            "line": 76,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "curF",
@@ -1905,7 +1835,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 108,
+            "line": 100,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1931,7 +1861,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 165,
+            "line": 157,
             "description": "Creates a new break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -1940,7 +1870,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 177,
+            "line": 169,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -1982,7 +1912,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 60,
+            "line": 61,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -1992,7 +1922,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 69,
+            "line": 70,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenLightPosition",
@@ -2004,7 +1934,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 79,
+            "line": 80,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
             "name": "godRaysGenerateMaterial",
@@ -2016,7 +1946,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 93,
+            "line": 94,
             "description": "The exposure coefficient.\n\nThis value is scaled based on the user's view direction. \nThe product is sent to the god rays shader each frame.",
             "itemtype": "property",
             "name": "exposure",
@@ -2026,7 +1956,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 107,
+            "line": 108,
             "description": "God rays shader material for the final composite phase.",
             "itemtype": "property",
             "name": "godRaysCombineMaterial",
@@ -2038,7 +1968,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 119,
+            "line": 120,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2050,7 +1980,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 129,
+            "line": 130,
             "description": "The maximum length of god-rays.",
             "itemtype": "property",
             "name": "_rayLength",
@@ -2062,7 +1992,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 139,
+            "line": 140,
             "description": "The maximum ray length translated to step sizes for the 3 generate passes.",
             "itemtype": "property",
             "name": "stepSizes",
@@ -2074,7 +2004,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 152,
+            "line": 153,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -2085,43 +2015,27 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 162,
-            "description": "A scene to render the god rays with.",
+            "line": 163,
+            "description": "A main scene.",
             "itemtype": "property",
-            "name": "scene2",
+            "name": "mainScene",
             "type": "Scene",
-            "access": "private",
-            "tagname": "",
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
             "line": 172,
-            "description": "A camera to render the god rays with.",
+            "description": "The main camera.",
             "itemtype": "property",
-            "name": "camera2",
+            "name": "mainCamera",
             "type": "Camera",
-            "access": "private",
-            "tagname": "",
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 183,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 202,
+            "line": 189,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2132,7 +2046,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 226,
+            "line": 213,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
             "name": "resolution",
@@ -2143,7 +2057,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 253,
+            "line": 240,
             "description": "The maximum length of god rays.\n\nA value of 1.5 is recommended, to ensure that the effect \nfills the entire screen at all times.\n\nAs a result, the whole effect will be spread out further \nwhich requires a slightly higher number of samples per pixel  \nto prevent visual gaps along the rays.",
             "itemtype": "property",
             "name": "rayLength",
@@ -2154,7 +2068,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 285,
+            "line": 272,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 9.\nFor render resolutions below 1024 and a ray length of 1.0, 7 samples \nmight also be sufficient.\n\nValues above 9 don't have a noticable impact on the quality.",
             "itemtype": "property",
             "name": "samples",
@@ -2165,7 +2079,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 327,
+            "line": 314,
             "description": "Adjusts the sampling step sizes for the three generate passes.",
             "itemtype": "method",
             "name": "calculateStepSizes",
@@ -2176,7 +2090,20 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 344,
+            "line": 331,
+            "description": "Used for saving the original clear color \nduring rendering the masked scene.",
+            "itemtype": "property",
+            "name": "clearColor",
+            "type": "Color",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 343,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2275,7 +2202,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 23,
+            "line": 24,
             "description": "The scene to render.",
             "itemtype": "property",
             "name": "scene",
@@ -2288,7 +2215,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 34,
+            "line": 35,
             "description": "The camera to render with.",
             "itemtype": "property",
             "name": "camera",
@@ -2301,7 +2228,23 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 47,
+            "line": 46,
+            "description": "The quad mesh to use for rendering.\nAssign your shader material to this mesh!",
+            "itemtype": "property",
+            "name": "quad",
+            "type": "Mesh",
+            "access": "private",
+            "tagname": "",
+            "default": "Mesh(PlaneBufferGeometry(2, 2), null)",
+            "example": [
+                "\n this.quad.material = this.myMaterial;"
+            ],
+            "class": "Pass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 60,
             "description": "Enabled flag.",
             "itemtype": "property",
             "name": "enabled",
@@ -2312,7 +2255,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 57,
+            "line": 70,
             "description": "Render target swap flag.\n\nWhen set to true, the read and write buffers will be swapped \nafter this pass is done with rendering so that any following  \npass can find the rendered result in the read buffer.\nSwapping is not necessary if, for example, a pass additively \nrenders into the read buffer.",
             "itemtype": "property",
             "name": "needsSwap",
@@ -2323,7 +2266,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 75,
+            "line": 96,
             "description": "Renders the scene.\n\nThis is an abstract method that must be overriden.",
             "itemtype": "method",
             "name": "render",
@@ -2358,7 +2301,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 94,
+            "line": 115,
             "description": "Updates this pass with the main render target's size.\n\nThis is an abstract method that may be overriden in case \nyou want to be informed about the main render size.\n\nThe effect composer calls this method when the pass is added \nand when the effect composer is reset.",
             "itemtype": "method",
             "name": "setSize",
@@ -2382,7 +2325,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 112,
+            "line": 133,
             "description": "Performs a shallow search for properties that define a dispose\nmethod and deletes them. The pass will be inoperative after \nthis method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory \nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -2391,7 +2334,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 21,
+            "line": 22,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
@@ -2401,7 +2344,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 30,
+            "line": 31,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
@@ -2411,7 +2354,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 39,
+            "line": 40,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
@@ -2421,31 +2364,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 48,
-            "description": "Old clear color.",
-            "itemtype": "property",
-            "name": "oldClearColor",
-            "type": "Color",
-            "access": "private",
-            "tagname": "",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 58,
-            "description": "Old clear alpha.",
-            "itemtype": "property",
-            "name": "oldClearAlpha",
-            "type": "Number",
-            "access": "private",
-            "tagname": "",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 68,
+            "line": 49,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
@@ -2456,7 +2375,31 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 83,
+            "line": 59,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "RenderPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 74,
+            "description": "Used for saving the original clear color during rendering.",
+            "itemtype": "property",
+            "name": "clearColor",
+            "type": "Color",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "RenderPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\render.js",
+            "line": 85,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2511,19 +2454,7 @@
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 51,
-            "description": "The quad mesh to use for rendering.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "SavePass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\save.js",
-            "line": 67,
+            "line": 60,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2554,7 +2485,7 @@
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 86,
+            "line": 78,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2576,7 +2507,7 @@
         {
             "file": "src\\passes\\shader.js",
             "line": 20,
-            "description": "The texture id used to set the read buffer render \ntexture in the shader.",
+            "description": "The name of the color sampler uniform of the given material.\nThe read buffer will be bound to this.",
             "itemtype": "property",
             "name": "textureID",
             "type": "String",
@@ -2607,19 +2538,7 @@
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 53,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "ShaderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\shader.js",
-            "line": 69,
+            "line": 61,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2662,19 +2581,7 @@
         },
         {
             "file": "src\\passes\\texture.js",
-            "line": 31,
-            "description": "The quad mesh to use for rendering the 2D effect.",
-            "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
-            "access": "private",
-            "tagname": "",
-            "class": "TexturePass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\texture.js",
-            "line": 47,
+            "line": 39,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",

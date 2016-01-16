@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.7</em>
+            <em>API Docs for: 0.0.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -139,6 +139,9 @@ them inside deeper structures such as arrays or objects.</p>
                 <li class="arg">
                         <code class="optional">[camera]</code>
                 </li>
+                <li class="arg">
+                        <code class="optional">[quad]</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -190,6 +193,20 @@ them inside deeper structures such as arrays or objects.</p>
                     <div class="param-description">
                         <ul>
 <li>The camera will be added to the given scene if it has no parent.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[quad]</code>
+                        <span class="type">Mesh</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>A quad that fills the screen. Used for rendering the effect.</li>
 </ul>
 
                     </div>
@@ -251,6 +268,10 @@ them inside deeper structures such as arrays or objects.</p>
 
                             </li>
                             <li class="index-item property private">
+                                <a href="#property_quad">quad</a>
+
+                            </li>
+                            <li class="index-item property private">
                                 <a href="#property_scene">scene</a>
 
                             </li>
@@ -278,7 +299,7 @@ them inside deeper structures such as arrays or objects.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l112"><code>src\passes\pass.js:112</code></a>
+        <a href="../files/src_passes_pass.js.html#l133"><code>src\passes\pass.js:133</code></a>
         </p>
 
 
@@ -335,7 +356,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
+        <a href="../files/src_passes_pass.js.html#l96"><code>src\passes\pass.js:96</code></a>
         </p>
 
 
@@ -443,7 +464,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l94"><code>src\passes\pass.js:94</code></a>
+        <a href="../files/src_passes_pass.js.html#l115"><code>src\passes\pass.js:115</code></a>
         </p>
 
 
@@ -520,7 +541,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l34"><code>src\passes\pass.js:34</code></a>
+        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
         </p>
 
 
@@ -546,7 +567,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l47"><code>src\passes\pass.js:47</code></a>
+        <a href="../files/src_passes_pass.js.html#l60"><code>src\passes\pass.js:60</code></a>
         </p>
 
 
@@ -572,7 +593,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l57"><code>src\passes\pass.js:57</code></a>
+        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
         </p>
 
 
@@ -592,6 +613,42 @@ renders into the read buffer.</p>
 
 
 </div>
+<div id="property_quad" class="property item private">
+    <h3 class="name"><code>quad</code></h3>
+    <span class="type">Mesh</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The quad mesh to use for rendering.
+Assign your shader material to this mesh!</p>
+
+    </div>
+
+        <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
+
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.quad.material = this.myMaterial;</p>
+
+            </div>
+        </div>
+
+</div>
 <div id="property_scene" class="property item private">
     <h3 class="name"><code>scene</code></h3>
     <span class="type">Scene</span>
@@ -604,7 +661,7 @@ renders into the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l23"><code>src\passes\pass.js:23</code></a>
+        <a href="../files/src_passes_pass.js.html#l24"><code>src\passes\pass.js:24</code></a>
         </p>
 
 
