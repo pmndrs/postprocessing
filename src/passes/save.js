@@ -46,18 +46,11 @@ export function SavePass(renderTarget) {
 	}
 
 	this.renderTarget = renderTarget;
+
 	this.renderTarget.texture.generateMipmaps = false;
 
-	/**
-	 * The quad mesh to use for rendering.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
+	// Set the material of the rendering quad.
+	this.quad.material = this.material;
 
 }
 
@@ -77,7 +70,6 @@ SavePass.prototype.constructor = SavePass;
 SavePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 	this.material.uniforms.tDiffuse.value = readBuffer;
-	this.quad.material = this.material;
 
 	renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
@@ -93,9 +85,9 @@ SavePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 SavePass.prototype.setSize = function(width, height) {
 
-	this.renderTarget.setSize(width, height);
+	if(width <= 0) { width = 1; }
+	if(height <= 0) { height = 1; }
 
-	if(this.renderTarget.width <= 0) { this.renderTarget.width = 1; }
-	if(this.renderTarget.height <= 0) { this.renderTarget.height = 1; }
+	this.renderTarget.setSize(width, height);
 
 };

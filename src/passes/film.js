@@ -50,19 +50,11 @@ export function FilmPass(options) {
 
 	this.renderToScreen = false;
 
+	// Set the material of the rendering quad once.
+	this.quad.material = this.material;
+
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
-
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
 
 }
 
@@ -83,8 +75,6 @@ FilmPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 	this.material.uniforms.tDiffuse.value = readBuffer;
 	this.material.uniforms.time.value += delta;
-
-	this.quad.material = this.material;
 
 	if(this.renderToScreen) {
 

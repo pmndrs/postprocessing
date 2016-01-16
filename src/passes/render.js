@@ -2,7 +2,8 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * A render pass.
+ * A pass that renders a given scene directly on screen
+ * or into the read buffer for further processing.
  *
  * @class RenderPass
  * @constructor
@@ -16,7 +17,7 @@ import THREE from "three";
 
 export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
 
-	Pass.call(this, scene, camera);
+	Pass.call(this, scene, camera, null);
 
 	/**
 	 * Override material.
@@ -46,26 +47,6 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 	this.clearAlpha = (clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(clearAlpha, 0.0, 1.0);
 
 	/**
-	 * Old clear color.
-	 *
-	 * @property oldClearColor
-	 * @type Color
-	 * @private
-	 */
-
-	this.oldClearColor = new THREE.Color();
-
-	/**
-	 * Old clear alpha.
-	 *
-	 * @property oldClearAlpha
-	 * @type Number
-	 * @private
-	 */
-
-	this.oldClearAlpha = 1.0;
-
-	/**
 	 * Clear flag.
 	 *
 	 * @property clear
@@ -75,10 +56,31 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 
 	this.clear = true;
 
+	/**
+	 * Render to screen flag.
+	 *
+	 * @property renderToScreen
+	 * @type Boolean
+	 * @default false
+	 */
+
+	this.renderToScreen = false;
+
 }
 
 RenderPass.prototype = Object.create(Pass.prototype);
 RenderPass.prototype.constructor = RenderPass;
+
+/**
+ * Used for saving the original clear color during rendering.
+ *
+ * @property clearColor
+ * @type Color
+ * @private
+ * @static
+ */
+
+var clearColor = new THREE.Color();
 
 /**
  * Renders the scene.
@@ -93,23 +95,32 @@ RenderPass.prototype.constructor = RenderPass;
 RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 	var clear = this.clearColor !== undefined;
+	var clearAlpha;
 
 	this.scene.overrideMaterial = this.overrideMaterial;
 
 	if(clear) {
 
-		this.oldClearColor.copy(renderer.getClearColor());
-		this.oldClearAlpha = renderer.getClearAlpha();
+		clearColor.copy(renderer.getClearColor());
+		clearAlpha = renderer.getClearAlpha();
 
 		renderer.setClearColor(this.clearColor, this.clearAlpha);
 
 	}
 
-	renderer.render(this.scene, this.camera, readBuffer, this.clear);
+	if(this.renderToScreen) {
+
+		renderer.render(this.scene, this.camera);
+
+	} else {
+
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+	}
 
 	if(clear) {
 
-		renderer.setClearColor(this.oldClearColor, this.oldClearAlpha);
+		renderer.setClearColor(clearColor, clearAlpha);
 
 	}
 

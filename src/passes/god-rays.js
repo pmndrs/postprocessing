@@ -17,13 +17,13 @@ import THREE from "three";
  * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.resolution=256] - The god rays render texture resolution.
+ * @param {Number} [options.resolution=512] - The god rays render texture resolution.
  * @param {Number} [options.samples=8] - The number of samples per pixel.
  */
 
 export function GodRaysPass(scene, camera, lightSource, options) {
 
-	Pass.call(this, scene, camera);
+	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
 
@@ -52,10 +52,11 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
+
 	this.renderTargetY.texture.generateMipmaps = false;
 
 	// Set the resolution.
-	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+	this.resolution = (options.resolution === undefined) ? 512 : options.resolution;
 
 	/**
 	 * The light source.
@@ -160,36 +161,22 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.renderToScreen = false;
 
 	/**
-	 * A scene to render the god rays with.
+	 * A main scene.
 	 *
-	 * @property scene2
+	 * @property mainScene
 	 * @type Scene
-	 * @private
 	 */
 
-	this.scene2  = new THREE.Scene();
+	this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
 
 	/**
-	 * A camera to render the god rays with.
+	 * The main camera.
 	 *
-	 * @property camera2
+	 * @property mainCamera
 	 * @type Camera
-	 * @private
 	 */
 
-	this.camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-	this.scene2.add(this.camera2);
-
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene2.add(this.quad);
+	this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
@@ -342,6 +329,18 @@ GodRaysPass.prototype.calculateStepSizes = function() {
 };
 
 /**
+ * Used for saving the original clear color 
+ * during rendering the masked scene.
+ *
+ * @property clearColor
+ * @type Color
+ * @private
+ * @static
+ */
+
+var clearColor = new THREE.Color();
+
+/**
  * Renders the scene.
  *
  * @method render
@@ -352,40 +351,41 @@ GodRaysPass.prototype.calculateStepSizes = function() {
 
 GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-	var clearColor;
+	var clearAlpha;
 
 	// Compute the screen light position and translate the coordinates to [-1, 1].
-	this.screenLightPosition.copy(this.lightSource.position).project(this.camera);
+	this.screenLightPosition.copy(this.lightSource.position).project(this.mainCamera);
 	this.screenLightPosition.x = THREE.Math.clamp((this.screenLightPosition.x + 1.0) * 0.5, -1.0, 1.0);
 	this.screenLightPosition.y = THREE.Math.clamp((this.screenLightPosition.y + 1.0) * 0.5, -1.0, 1.0);
 
-	// Don't show the rays from weird angles.
+	// Don't show the rays from acute angles.
 	this.godRaysGenerateMaterial.uniforms.exposure.value = this.computeAngularScalar() * this.exposure;
 
-	// Render masked scene into texture.
-	this.scene.overrideMaterial = this.maskMaterial;
-	clearColor = renderer.getClearColor().getHex();
-	renderer.setClearColor(0x000000);
-	//renderer.render(this.scene, this.camera, undefined, true);
-	renderer.render(this.scene, this.camera, this.renderTargetX, true);
-	renderer.setClearColor(clearColor);
-	this.scene.overrideMaterial = null;
+	// Render the masked scene into texture.
+	this.mainScene.overrideMaterial = this.maskMaterial;
+	clearColor.copy(renderer.getClearColor());
+	clearAlpha = renderer.getClearAlpha();
+	renderer.setClearColor(0x000000, 1);
+	//renderer.render(this.mainScene, this.mainCamera, undefined, true); // Debug.
+	renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
+	renderer.setClearColor(clearColor, clearAlpha);
+	this.mainScene.overrideMaterial = null;
 
 	// God rays - Pass 1.
 	this.quad.material = this.godRaysGenerateMaterial;
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[0];
 	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	renderer.render(this.scene2, this.camera2, this.renderTargetY);
+	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// God rays - Pass 2.
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[1];
 	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-	renderer.render(this.scene2, this.camera2, this.renderTargetX);
+	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	// God rays - Pass 3.
 	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[2];
 	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	renderer.render(this.scene2, this.camera2, this.renderTargetY);
+	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// Final pass - Composite god rays onto colors.
 	this.quad.material = this.godRaysCombineMaterial;
@@ -394,11 +394,11 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	if(this.renderToScreen) {
 
-		renderer.render(this.scene2, this.camera2);
+		renderer.render(this.scene, this.camera);
 
 	} else {
 
-		renderer.render(this.scene2, this.camera2, writeBuffer);
+		renderer.render(this.scene, this.camera, writeBuffer);
 
 	}
 
@@ -413,7 +413,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
  * @return {Number} A scalar in the range 0.0 to 1.0 for a linear transition.
  */
 
-// Computation helpers.
+// Static computation helpers.
 var HALF_PI = Math.PI * 0.5;
 var localPoint = new THREE.Vector3(0, 0, -1);
 var cameraDirection = new THREE.Vector3();
@@ -426,14 +426,14 @@ GodRaysPass.prototype.computeAngularScalar = function() {
 	// Save camera space point. Using lightDirection as a clipboard.
 	lightDirection.copy(localPoint);
 	// Camera space to world space.
-	cameraDirection.copy(localPoint.applyMatrix4(this.camera.matrixWorld));
+	cameraDirection.copy(localPoint.applyMatrix4(this.mainCamera.matrixWorld));
 	// Restore local point.
 	localPoint.copy(lightDirection);
 
 	// Let these be one and the same point.
 	lightDirection.copy(cameraDirection);
 	// Now compute the actual directions.
-	cameraDirection.sub(this.camera.position);
+	cameraDirection.sub(this.mainCamera.position);
 	lightDirection.sub(this.lightSource.position);
 
 	// Compute the angle between the directions.

@@ -20,7 +20,7 @@ import THREE from "three";
 
 export function BokehPass(scene, camera, options) {
 
-	Pass.call(this, scene, camera);
+	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
 	if(options.resolution === undefined) { options.resolution = 256; }
@@ -78,36 +78,25 @@ export function BokehPass(scene, camera, options) {
 	this.renderToScreen = false;
 
 	/**
-	 * A scene to render the depth of field with.
+	 * A main scene.
 	 *
-	 * @property scene2
+	 * @property mainScene
 	 * @type Scene
-	 * @private
 	 */
 
-	this.scene2  = new THREE.Scene();
+	this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
 
 	/**
-	 * A camera to render the depth of field effect with.
+	 * A main camera.
 	 *
-	 * @property camera2
+	 * @property mainCamera
 	 * @type Camera
-	 * @private
 	 */
 
-	this.camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-	this.scene2.add(this.camera2);
+	this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.bokehMaterial);
-	this.scene2.add(this.quad);
+	// Set the material of the rendering quad.
+	this.quad.material = this.bokehMaterial;
 
 }
 
@@ -128,20 +117,20 @@ BokehPass.prototype.constructor = BokehPass;
 BokehPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 
 	// Render depth into texture.
-	this.scene.overrideMaterial = this.depthMaterial;
-	renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
-	this.scene.overrideMaterial = null;
+	this.mainScene.overrideMaterial = this.depthMaterial;
+	renderer.render(this.mainScene, this.mainCamera, this.renderTargetDepth, true);
+	this.mainScene.overrideMaterial = null;
 
 	// Render bokeh composite.
 	this.bokehMaterial.uniforms.tColor.value = readBuffer;
 
 	if(this.renderToScreen) {
 
-		renderer.render(this.scene2, this.camera2);
+		renderer.render(this.scene, this.camera);
 
 	} else {
 
-		renderer.render(this.scene2, this.camera2, writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 	}
 

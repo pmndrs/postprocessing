@@ -18,8 +18,8 @@ export function ShaderPass(material, textureID) {
 	Pass.call(this);
 
 	/**
-	 * The texture id used to set the read buffer render 
-	 * texture in the shader.
+	 * The name of the color sampler uniform of the given material.
+	 * The read buffer will be bound to this.
 	 *
 	 * @property textureID
 	 * @type String
@@ -50,16 +50,8 @@ export function ShaderPass(material, textureID) {
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
-	this.scene.add(this.quad);
+	// Set the mateiral of the rendering quad.
+	this.quad.material = this.material;
 
 }
 

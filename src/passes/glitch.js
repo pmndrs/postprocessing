@@ -64,20 +64,6 @@ export function GlitchPass(options) {
 
 	this.renderToScreen = false;
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
-	this.scene.add(this.quad);
-
 	/**
 	 * The quad mesh to render.
 	 *
@@ -96,6 +82,12 @@ export function GlitchPass(options) {
 	 */
 
 	this.curF = 0;
+
+	// Set the material of the rendering quad.
+	this.quad.material = this.material;
+
+	// Swap read and write buffer when done.
+	this.needsSwap = true;
 
 	// Create a new glitch point.
 	this.generateTrigger();
@@ -136,7 +128,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	} else if(this.curF % this.randX < this.randX / 5) {
 
 		uniforms.amount.value = Math.random() / 90;
-		uniforms.angle.value = THREE.Math.randFloat(- Math.PI, Math.PI);
+		uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
 		uniforms.distortionX.value = THREE.Math.randFloat(0, 1);
 		uniforms.distortionY.value = THREE.Math.randFloat(0, 1);
 		uniforms.seedX.value = THREE.Math.randFloat(-0.3, 0.3);

@@ -16,9 +16,10 @@ import THREE from "three";
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
+ * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering the effect.
  */
 
-export function Pass(scene, camera) {
+export function Pass(scene, camera, quad) {
 
 	/**
 	 * The scene to render.
@@ -42,7 +43,19 @@ export function Pass(scene, camera) {
 
 	this.camera = (camera !== undefined) ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-	if(this.scene !== null && this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
+	/**
+	 * The quad mesh to use for rendering.
+	 * Assign your shader material to this mesh!
+	 *
+	 * @property quad
+	 * @type Mesh
+	 * @private
+	 * @default Mesh(PlaneBufferGeometry(2, 2), null)
+	 * @example
+	 *  this.quad.material = this.myMaterial;
+	 */
+
+	this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
 
 	/**
 	 * Enabled flag.
@@ -69,6 +82,14 @@ export function Pass(scene, camera) {
 	 */
 
 	this.needsSwap = false;
+
+	// Finally, add the camera and the quad to the scene.
+	if(this.scene !== null) {
+
+		if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
+		if(this.quad !== null) { this.scene.add(this.quad);	}
+
+	}
 
 }
 

@@ -78,7 +78,6 @@ window.addEventListener("load", function init() {
 			perturbMap: texture
 		});
 
-		//pass.goWild = true;
 		pass.renderToScreen = true;
 		composer.addPass(pass);
 

@@ -135,17 +135,6 @@ export function AdaptiveToneMappingPass(adaptive, resolution) {
 	// Swap the render targets in this pass.
 	this.needsSwap = true;
 
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
-
 }
 
 AdaptiveToneMappingPass.prototype = Object.create(Pass.prototype);

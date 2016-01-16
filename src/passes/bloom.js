@@ -57,6 +57,7 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
+
 	this.renderTargetY.texture.generateMipmaps = false;
 
 	// Set the resolution.
@@ -122,17 +123,6 @@ export function BloomPass(options) {
 	 */
 
 	this.clear = false;
-
-	/**
-	 * The quad mesh to render.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
 
 }
 
@@ -210,6 +200,9 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
  */
 
 BloomPass.prototype.setSize = function(width, height) {
+
+	if(width <= 0) { width = 1; }
+	if(height <= 0) { height = 1; }
 
 	// Scale one of the blur factors with the render target ratio.
 	this.blurY.set(0.0, (width / height) * BLUR);

@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.0.7 build Jan 16 2016
+ * postprocessing v0.0.8 build Jan 16 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -12,7 +12,7 @@
 
 	THREE = 'default' in THREE ? THREE['default'] : THREE;
 
-	var shader$3 = {
+	var shader = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float opacity;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = opacity * texel;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -36,8 +36,8 @@
 
 			},
 
-			fragmentShader: shader$3.fragment,
-			vertexShader: shader$3.vertex,
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex,
 
 		});
 
@@ -46,7 +46,7 @@
 	CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	CopyMaterial.prototype.constructor = CopyMaterial;
 
-	var shader$1 = {
+	var shader$2 = {
 		fragment: "uniform sampler2D tDiffuse;\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tvec3 luma = vec3(0.299, 0.587, 0.114);\n\tfloat v = dot(texel.rgb, luma);\n\n\tgl_FragColor = vec4(v, v, v, texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -70,8 +70,8 @@
 
 			},
 
-			fragmentShader: shader$1.fragment,
-			vertexShader: shader$1.vertex,
+			fragmentShader: shader$2.fragment,
+			vertexShader: shader$2.vertex,
 
 		});
 
@@ -80,7 +80,7 @@
 	LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	LuminosityMaterial.prototype.constructor = LuminosityMaterial;
 
-	var shader = {
+	var shader$1 = {
 		fragment: "uniform sampler2D lastLum;\nuniform sampler2D currentLum;\nuniform float delta;\nuniform float tau;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 lastLum = texture2D(lastLum, vUv, MIP_LEVEL_1X1);\n\tvec4 currentLum = texture2D(currentLum, vUv, MIP_LEVEL_1X1);\n\n\tfloat fLastLum = lastLum.r;\n\tfloat fCurrentLum = currentLum.r;\n\n\t// Better results with squared input luminance.\n\tfCurrentLum *= fCurrentLum;\n\n\t// Adapt the luminance using Pattanaik's technique.\n\tfloat fAdaptedLum = fLastLum + (fCurrentLum - fLastLum) * (1.0 - exp(-delta * tau));\n\t// fAdaptedLum = sqrt(fAdaptedLum);\n\n\tgl_FragColor = vec4(fAdaptedLum, fAdaptedLum, fAdaptedLum, 1.0);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -112,8 +112,8 @@
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex,
+			fragmentShader: shader$1.fragment,
+			vertexShader: shader$1.vertex,
 
 		});
 
@@ -122,7 +122,7 @@
 	AdaptiveLuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	AdaptiveLuminosityMaterial.prototype.constructor = AdaptiveLuminosityMaterial;
 
-	var shader$4 = {
+	var shader$3 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float middleGrey;\nuniform float maxLuminance;\n\n#ifdef ADAPTED_LUMINANCE\n\n\tuniform sampler2D luminanceMap;\n\n#else\n\n\tuniform float averageLuminance;\n\n#endif\n\nvarying vec2 vUv;\n\nconst vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);\n\nvec3 toneMap(vec3 vColor) {\n\n\t#ifdef ADAPTED_LUMINANCE\n\n\t\t// Get the calculated average luminance.\n\t\tfloat fLumAvg = texture2D(luminanceMap, vec2(0.5, 0.5)).r;\n\n\t#else\n\n\t\tfloat fLumAvg = averageLuminance;\n\n\t#endif\n\n\t// Calculate the luminance of the current pixel.\n\tfloat fLumPixel = dot(vColor, LUM_CONVERT);\n\n\t// Apply the modified operator (Eq. 4).\n\tfloat fLumScaled = (fLumPixel * middleGrey) / fLumAvg;\n\n\tfloat fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (maxLuminance * maxLuminance)))) / (1.0 + fLumScaled);\n\treturn fLumCompressed * vColor;\n\n}\n\nvoid main() {\n\n\tvec4 texel = texture2D(tDiffuse, vUv);\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -150,8 +150,8 @@
 
 			},
 
-			fragmentShader: shader$4.fragment,
-			vertexShader: shader$4.vertex,
+			fragmentShader: shader$3.fragment,
+			vertexShader: shader$3.vertex,
 
 		});
 
@@ -160,7 +160,7 @@
 	ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;
 
-	var shader$2 = {
+	var shader$4 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 center;\nuniform vec2 tSize;\nuniform float angle;\nuniform float scale;\n\nvarying vec2 vUv;\n\nfloat pattern() {\n\n\tfloat s = sin(angle);\n\tfloat c = cos(angle);\n\n\tvec2 tex = vUv * tSize - center;\n\tvec2 point = vec2(c * tex.x - s * tex.y, s * tex.x + c * tex.y) * scale;\n\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\n\n}\n\nvoid main() {\n\n\tvec4 color = texture2D(tDiffuse, vUv);\n\tfloat average = (color.r + color.g + color.b) / 3.0;\n\n\tgl_FragColor = vec4(vec3(average * 10.0 - 5.0 + pattern()), color.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -187,8 +187,8 @@
 
 			},
 
-			fragmentShader: shader$2.fragment,
-			vertexShader: shader$2.vertex,
+			fragmentShader: shader$4.fragment,
+			vertexShader: shader$4.vertex,
 
 		});
 
@@ -197,7 +197,7 @@
 	DotScreenMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	DotScreenMaterial.prototype.constructor = DotScreenMaterial;
 
-	var shader$6 = {
+	var shader$5 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform sampler2D tDisp;\nuniform int byp;\nuniform float amount;\nuniform float angle;\nuniform float seed;\nuniform float seedX;\nuniform float seedY;\nuniform float distortionX;\nuniform float distortionY;\nuniform float colS;\n\nvarying vec2 vUv;\n\nfloat rand(vec2 co) {\n\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\n\n}\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\n\tfloat xs, ys;\n\tvec4 normal;\n\n\tvec2 offset;\n\tvec4 cr, cga, cb;\n\tvec4 snow, color;\n\n\tif(byp < 1) {\n\n\t\txs = floor(gl_FragCoord.x / 0.5);\n\t\tys = floor(gl_FragCoord.y / 0.5);\n\n\t\tnormal = texture2D(tDisp, coord * seed * seed);\n\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\n\n\t\t\tif(seedX > 0.0){\n\n\t\t\t\tcoord.y = 1.0 - (coord.y + distortionY);\n\n\t\t\t} else {\n\n\t\t\t\tcoord.y = distortionY;\n\n\t\t\t}\n\n\t\t}\n\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\n\n\t\t\tif(seedY > 0.0){\n\n\t\t\t\tcoord.x = distortionX;\n\n\t\t\t} else {\n\n\t\t\t\tcoord.x = 1. - (coord.x + distortionX);\n\n\t\t\t}\n\n\t\t}\n\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\n\n\t\t// Adopted from RGB shift shader.\n\t\toffset = amount * vec2(cos(angle), sin(angle));\n\t\tcr = texture2D(tDiffuse, coord + offset);\n\t\tcga = texture2D(tDiffuse, coord);\n\t\tcb = texture2D(tDiffuse, coord - offset);\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed,ys * seed * 50.0)) * 0.2);\n\t\tcolor += snow;\n\n\t} else {\n\n\t\tcolor = texture2D(tDiffuse, vUv);\n\n\t}\n\n\tgl_FragColor = color;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -231,8 +231,8 @@
 
 			},
 
-			fragmentShader: shader$6.fragment,
-			vertexShader: shader$6.vertex,
+			fragmentShader: shader$5.fragment,
+			vertexShader: shader$5.vertex,
 
 		});
 
@@ -241,7 +241,7 @@
 	GlitchMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	GlitchMaterial.prototype.constructor = GlitchMaterial;
 
-	var shader$5 = {
+	var shader$7 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform vec2 uImageIncrement;\nuniform float cKernel[KERNEL_SIZE_INT];\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec2 coord = vUv;\n\tvec4 sum = vec4(0.0, 0.0, 0.0, 0.0);\n\n\tfor(int i = 0; i < KERNEL_SIZE_INT; ++i) {\n\n\t\tsum += texture2D(tDiffuse, coord) * cKernel[i];\n\t\tcoord += uImageIncrement;\n\n\t}\n\n\tgl_FragColor = sum;\n\n}\n",
 		vertex: "uniform vec2 uImageIncrement;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv - ((KERNEL_SIZE_FLOAT - 1.0) / 2.0) * uImageIncrement;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -287,8 +287,8 @@
 
 			},
 
-			fragmentShader: shader$5.fragment,
-			vertexShader: shader$5.vertex,
+			fragmentShader: shader$7.fragment,
+			vertexShader: shader$7.vertex,
 
 		});
 
@@ -329,7 +329,7 @@
 
 	};
 
-	var shader$7 = {
+	var shader$8 = {
 		fragment: "uniform sampler2D tColor;\nuniform sampler2D tDepth;\nuniform float textureWidth;\nuniform float textureHeight;\n\nuniform float focalDepth;\nuniform float focalLength;\nuniform float fstop;\nuniform bool showFocus;\n\nuniform float znear;\nuniform float zfar;\n\nuniform bool manualdof;\nuniform bool vignetting;\nuniform bool shaderFocus;\nuniform bool noise;\nuniform bool depthblur;\nuniform bool pentagon;\n\nuniform vec2 focusCoords;\nuniform float maxblur;\nuniform float threshold;\nuniform float gain;\nuniform float bias;\nuniform float fringe;\nuniform float dithering;\n\nvarying vec2 vUv;\n\nconst float PI = 3.14159265;\nconst float TWO_PI = PI * 2.0;\nconst int samples = SAMPLES; // Samples on the first ring.\nconst int rings = RINGS;\nconst int maxringsamples = rings * samples;\n\nfloat ndofstart = 1.0; \nfloat ndofdist = 2.0;\nfloat fdofstart = 1.0;\nfloat fdofdist = 3.0;\n\nfloat CoC = 0.03; // Circle of Confusion size in mm (35mm film = 0.03mm).\n\nfloat vignout = 1.3;\nfloat vignin = 0.0;\nfloat vignfade = 22.0; \n\nfloat dbsize = 1.25;\nfloat feather = 0.4;\n\n/**\n * Pentagonal shape creation.\n */\n\nfloat penta(vec2 coords) {\n\n\tfloat scale = float(rings) - 1.3;\n\n\tvec4  HS0 = vec4( 1.0,          0.0,         0.0,  1.0);\n\tvec4  HS1 = vec4( 0.309016994,  0.951056516, 0.0,  1.0);\n\tvec4  HS2 = vec4(-0.809016994,  0.587785252, 0.0,  1.0);\n\tvec4  HS3 = vec4(-0.809016994, -0.587785252, 0.0,  1.0);\n\tvec4  HS4 = vec4( 0.309016994, -0.951056516, 0.0,  1.0);\n\tvec4  HS5 = vec4( 0.0        ,  0.0        , 1.0,  1.0);\n\n\tvec4  one = vec4(1.0);\n\n\tvec4 P = vec4((coords), vec2(scale, scale));\n\n\tvec4 dist = vec4(0.0);\n\tfloat inorout = -4.0;\n\n\tdist.x = dot(P, HS0);\n\tdist.y = dot(P, HS1);\n\tdist.z = dot(P, HS2);\n\tdist.w = dot(P, HS3);\n\n\tdist = smoothstep(-feather, feather, dist);\n\n\tinorout += dot(dist, one);\n\n\tdist.x = dot(P, HS4);\n\tdist.y = HS5.w - abs(P.z);\n\n\tdist = smoothstep(-feather, feather, dist);\n\tinorout += dist.x;\n\n\treturn clamp(inorout, 0.0, 1.0);\n\n}\n\n/**\n * Depth buffer blur.\n */\n\nfloat bdepth(vec2 coords) {\n\n\tfloat d = 0.0;\n\tfloat kernel[9];\n\tvec2 offset[9];\n\n\tvec2 wh = vec2(1.0 / textureWidth,1.0 / textureHeight) * dbsize;\n\n\toffset[0] = vec2(-wh.x, -wh.y);\n\toffset[1] = vec2(0.0, -wh.y);\n\toffset[2] = vec2(wh.x -wh.y);\n\n\toffset[3] = vec2(-wh.x,  0.0);\n\toffset[4] = vec2(0.0,   0.0);\n\toffset[5] = vec2(wh.x,  0.0);\n\n\toffset[6] = vec2(-wh.x, wh.y);\n\toffset[7] = vec2(0.0, wh.y);\n\toffset[8] = vec2(wh.x, wh.y);\n\n\tkernel[0] = 1.0 / 16.0; kernel[1] = 2.0 / 16.0; kernel[2] = 1.0 / 16.0;\n\tkernel[3] = 2.0 / 16.0; kernel[4] = 4.0 / 16.0; kernel[5] = 2.0 / 16.0;\n\tkernel[6] = 1.0 / 16.0; kernel[7] = 2.0 / 16.0; kernel[8] = 1.0 / 16.0;\n\n\tfor(int i = 0; i < 9; ++i) {\n\n\t\tfloat tmp = texture2D(tDepth, coords + offset[i]).r;\n\t\td += tmp * kernel[i];\n\n\t}\n\n\treturn d;\n\n}\n\n/**\n * Processing the sample.\n */\n\nvec3 color(vec2 coords, float blur) {\n\n\tvec3 col = vec3(0.0);\n\tvec2 texel = vec2(1.0 / textureWidth, 1.0 / textureHeight);\n\n\tcol.r = texture2D(tColor, coords + vec2(0.0, 1.0) * texel * fringe * blur).r;\n\tcol.g = texture2D(tColor, coords + vec2(-0.866, -0.5) * texel * fringe * blur).g;\n\tcol.b = texture2D(tColor, coords + vec2(0.866, -0.5) * texel * fringe * blur).b;\n\n\tvec3 lumcoeff = vec3(0.299, 0.587, 0.114);\n\tfloat lum = dot(col.rgb, lumcoeff);\n\tfloat thresh = max((lum - threshold) * gain, 0.0);\n\n\treturn col + mix(vec3(0.0), col, thresh * blur);\n\n}\n\n/**\n * Generating noise/pattern texture for dithering.\n */\n\nvec2 rand(vec2 coord) {\n\n\tfloat noiseX = ((fract(1.0 - coord.s * (textureWidth / 2.0)) * 0.25) + (fract(coord.t * (textureHeight / 2.0)) * 0.75)) * 2.0 - 1.0;\n\tfloat noiseY = ((fract(1.0 - coord.s * (textureWidth / 2.0)) * 0.75) + (fract(coord.t * (textureHeight / 2.0)) * 0.25)) * 2.0 - 1.0;\n\n\tif(noise) {\n\n\t\tnoiseX = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233))) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;\n\t\tnoiseY = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233) * 2.0)) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;\n\n\t}\n\n\treturn vec2(noiseX, noiseY);\n\n}\n\n/**\n * Distance based edge smoothing.\n */\n\nvec3 debugFocus(vec3 col, float blur, float depth) {\n\n\tfloat edge = 0.002 * depth;\n\tfloat m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);\n\tfloat e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);\n\n\tcol = mix(col, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);\n\tcol = mix(col, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);\n\n\treturn col;\n\n}\n\nfloat linearize(float depth) {\n\n\treturn -zfar * znear / (depth * (zfar - znear) - zfar);\n\n}\n\nfloat vignette() {\n\n\tfloat dist = distance(vUv.xy, vec2(0.5, 0.5));\n\tdist = smoothstep(vignout + (fstop / vignfade), vignin + (fstop / vignfade), dist);\n\n\treturn clamp(dist, 0.0, 1.0);\n\n}\n\nfloat gather(float i, float j, int ringsamples, inout vec3 col, float w, float h, float blur) {\n\n\tfloat rings2 = float(rings);\n\tfloat step = TWO_PI / float(ringsamples);\n\tfloat pw = cos(j * step) * i;\n\tfloat ph = sin(j * step) * i;\n\tfloat p = 1.0;\n\n\tif(pentagon) {\n\n\t\tp = penta(vec2(pw,ph));\n\n\t}\n\n\tcol += color(vUv.xy + vec2(pw * w, ph * h), blur) * mix(1.0, i / rings2, bias) * p;\n\n\treturn 1.0 * mix(1.0, i / rings2, bias) * p;\n\n}\n\nvoid main() {\n\n\t// Scene depth calculation.\n\n\tfloat depth = linearize(texture2D(tDepth, vUv.xy).x);\n\n\tif(depthblur) { depth = linearize(bdepth(vUv.xy)); }\n\n\t// Focal plane calculation.\n\n\tfloat fDepth = focalDepth;\n\n\tif(shaderFocus) { fDepth = linearize(texture2D(tDepth, focusCoords).x); }\n\n\t// Dof blur factor calculation.\n\n\tfloat blur = 0.0;\n\n\tfloat a, b, c, d, o;\n\n\tif(manualdof) {\n\n\t\ta = depth - fDepth; // Focal plane.\n\t\tb = (a - fdofstart) / fdofdist; // Far DoF.\n\t\tc = (-a - ndofstart) / ndofdist; // Near Dof.\n\t\tblur = (a > 0.0) ? b : c;\n\n\t} else {\n\n\t\tf = focalLength; // Focal length in mm.\n\t\td = fDepth * 1000.0; // Focal plane in mm.\n\t\to = depth * 1000.0; // Depth in mm.\n\n\t\ta = (o * f) / (o - f);\n\t\tb = (d * f) / (d - f);\n\t\tc = (d - f) / (d * fstop * CoC);\n\n\t\tblur = abs(a - b) * c;\n\t}\n\n\tblur = clamp(blur, 0.0, 1.0);\n\n\t// Calculation of pattern for dithering.\n\n\tvec2 noise = rand(vUv.xy) * dithering * blur;\n\n\t// Getting blur x and y step factor.\n\n\tfloat w = (1.0 / textureWidth) * blur * maxblur + noise.x;\n\tfloat h = (1.0 / textureHeight) * blur * maxblur + noise.y;\n\n\t// Calculation of final color.\n\n\tvec3 col = vec3(0.0);\n\n\tif(blur < 0.05) {\n\n\t\t// Some optimization thingy.\n\t\tcol = texture2D(tColor, vUv.xy).rgb;\n\n\t} else {\n\n\t\tcol = texture2D(tColor, vUv.xy).rgb;\n\t\tfloat s = 1.0;\n\t\tint ringsamples;\n\n\t\tfor(int i = 1; i <= rings; ++i) {\n\n\t\t\t// Unboxing.\n\t\t\tringsamples = i * samples;\n\n\t\t\tfor(int j = 0; j < maxringsamples; ++j) {\n\n\t\t\t\tif(j >= ringsamples) { break; }\n\n\t\t\t\ts += gather(float(i), float(j), ringsamples, col, w, h, blur);\n\n\t\t\t}\n\n\t\t}\n\n\t\tcol /= s; // Divide by sample count.\n\n\t}\n\n\tif(showFocus) { col = debugFocus(col, blur, depth); }\n\n\tif(vignetting) { col *= vignette(); }\n\n\tgl_FragColor.rgb = col;\n\tgl_FragColor.a = 1.0;\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -393,8 +393,8 @@
 
 			},
 
-			fragmentShader: shader$7.fragment,
-			vertexShader: shader$7.vertex,
+			fragmentShader: shader$8.fragment,
+			vertexShader: shader$8.vertex,
 
 		});
 
@@ -403,7 +403,7 @@
 	BokehMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	BokehMaterial.prototype.constructor = BokehMaterial;
 
-	var shader$8 = {
+	var shader$6 = {
 		fragment: "uniform sampler2D tDiffuse;\nuniform float time;\nuniform bool grayscale;\nuniform float nIntensity;\nuniform float sIntensity;\nuniform float sCount;\n\nvarying vec2 vUv;\n\nvoid main() {\n\n\tvec4 cTextureScreen = texture2D(tDiffuse, vUv);\n\n\t// Noise.\n\n\tfloat x = vUv.x * vUv.y * time * 1000.0;\n\tx = mod(x, 13.0) * mod(x, 123.0);\n\tfloat dx = mod(x, 0.01);\n\n\tvec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp(0.1 + dx * 100.0, 0.0, 1.0);\n\n\tvec2 sc = vec2(sin(vUv.y * sCount), cos(vUv.y * sCount));\n\n\t// Scanlines.\n\n\tcResult += cTextureScreen.rgb * vec3(sc.x, sc.y, sc.x) * sIntensity;\n\n\tcResult = cTextureScreen.rgb + clamp(nIntensity, 0.0, 1.0) * (cResult - cTextureScreen.rgb);\n\n\tif(grayscale) {\n\n\t\tcResult = vec3(cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11);\n\n\t}\n\n\tgl_FragColor =  vec4(cResult, cTextureScreen.a);\n\n}\n",
 		vertex: "varying vec2 vUv;\n\nvoid main() {\n\n\tvUv = uv;\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n\n}\n",
 	};
@@ -447,8 +447,8 @@
 
 			},
 
-			fragmentShader: shader$8.fragment,
-			vertexShader: shader$8.vertex,
+			fragmentShader: shader$6.fragment,
+			vertexShader: shader$6.vertex,
 
 		});
 
@@ -559,9 +559,10 @@
 	 * @constructor
 	 * @param {Scene} [scene] - The scene to render.
 	 * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
+	 * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering the effect.
 	 */
 
-	function Pass(scene, camera) {
+	function Pass(scene, camera, quad) {
 
 		/**
 		 * The scene to render.
@@ -585,7 +586,19 @@
 
 		this.camera = (camera !== undefined) ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-		if(this.scene !== null && this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
+		/**
+		 * The quad mesh to use for rendering.
+		 * Assign your shader material to this mesh!
+		 *
+		 * @property quad
+		 * @type Mesh
+		 * @private
+		 * @default Mesh(PlaneBufferGeometry(2, 2), null)
+		 * @example
+		 *  this.quad.material = this.myMaterial;
+		 */
+
+		this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
 
 		/**
 		 * Enabled flag.
@@ -612,6 +625,14 @@
 		 */
 
 		this.needsSwap = false;
+
+		// Finally, add the camera and the quad to the scene.
+		if(this.scene !== null) {
+
+			if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
+			if(this.quad !== null) { this.scene.add(this.quad);	}
+
+		}
 
 	}
 
@@ -733,18 +754,11 @@
 		}
 
 		this.renderTarget = renderTarget;
+
 		this.renderTarget.texture.generateMipmaps = false;
 
-		/**
-		 * The quad mesh to use for rendering.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene.add(this.quad);
+		// Set the material of the rendering quad.
+		this.quad.material = this.material;
 
 	}
 
@@ -764,7 +778,6 @@
 	SavePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 		this.material.uniforms.tDiffuse.value = readBuffer;
-		this.quad.material = this.material;
 
 		renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
@@ -780,10 +793,10 @@
 
 	SavePass.prototype.setSize = function(width, height) {
 
-		this.renderTarget.setSize(width, height);
+		if(width <= 0) { width = 1; }
+		if(height <= 0) { height = 1; }
 
-		if(this.renderTarget.width <= 0) { this.renderTarget.width = 1; }
-		if(this.renderTarget.height <= 0) { this.renderTarget.height = 1; }
+		this.renderTarget.setSize(width, height);
 
 	};
 
@@ -799,7 +812,7 @@
 
 	function MaskPass(scene, camera) {
 
-		Pass.call(this, scene, camera);
+		Pass.call(this, scene, camera, null);
 
 		/**
 		 * Inverse flag.
@@ -887,7 +900,7 @@
 
 	function ClearMaskPass() {
 
-		Pass.call(this, null, null);
+		Pass.call(this, null, null, null);
 
 	}
 
@@ -928,8 +941,8 @@
 		Pass.call(this);
 
 		/**
-		 * The texture id used to set the read buffer render 
-		 * texture in the shader.
+		 * The name of the color sampler uniform of the given material.
+		 * The read buffer will be bound to this.
 		 *
 		 * @property textureID
 		 * @type String
@@ -960,16 +973,8 @@
 		// Swap read and write buffer when done.
 		this.needsSwap = true;
 
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
-		this.scene.add(this.quad);
+		// Set the mateiral of the rendering quad.
+		this.quad.material = this.material;
 
 	}
 
@@ -1007,7 +1012,8 @@
 	};
 
 	/**
-	 * A render pass.
+	 * A pass that renders a given scene directly on screen
+	 * or into the read buffer for further processing.
 	 *
 	 * @class RenderPass
 	 * @constructor
@@ -1021,7 +1027,7 @@
 
 	function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
 
-		Pass.call(this, scene, camera);
+		Pass.call(this, scene, camera, null);
 
 		/**
 		 * Override material.
@@ -1051,26 +1057,6 @@
 		this.clearAlpha = (clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(clearAlpha, 0.0, 1.0);
 
 		/**
-		 * Old clear color.
-		 *
-		 * @property oldClearColor
-		 * @type Color
-		 * @private
-		 */
-
-		this.oldClearColor = new THREE.Color();
-
-		/**
-		 * Old clear alpha.
-		 *
-		 * @property oldClearAlpha
-		 * @type Number
-		 * @private
-		 */
-
-		this.oldClearAlpha = 1.0;
-
-		/**
 		 * Clear flag.
 		 *
 		 * @property clear
@@ -1080,10 +1066,31 @@
 
 		this.clear = true;
 
+		/**
+		 * Render to screen flag.
+		 *
+		 * @property renderToScreen
+		 * @type Boolean
+		 * @default false
+		 */
+
+		this.renderToScreen = false;
+
 	}
 
 	RenderPass.prototype = Object.create(Pass.prototype);
 	RenderPass.prototype.constructor = RenderPass;
+
+	/**
+	 * Used for saving the original clear color during rendering.
+	 *
+	 * @property clearColor
+	 * @type Color
+	 * @private
+	 * @static
+	 */
+
+	var clearColor = new THREE.Color();
 
 	/**
 	 * Renders the scene.
@@ -1098,23 +1105,32 @@
 	RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 		var clear = this.clearColor !== undefined;
+		var clearAlpha;
 
 		this.scene.overrideMaterial = this.overrideMaterial;
 
 		if(clear) {
 
-			this.oldClearColor.copy(renderer.getClearColor());
-			this.oldClearAlpha = renderer.getClearAlpha();
+			clearColor.copy(renderer.getClearColor());
+			clearAlpha = renderer.getClearAlpha();
 
 			renderer.setClearColor(this.clearColor, this.clearAlpha);
 
 		}
 
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		if(this.renderToScreen) {
+
+			renderer.render(this.scene, this.camera);
+
+		} else {
+
+			renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+		}
 
 		if(clear) {
 
-			renderer.setClearColor(this.oldClearColor, this.oldClearAlpha);
+			renderer.setClearColor(clearColor, clearAlpha);
 
 		}
 
@@ -1148,16 +1164,8 @@
 		this.material.uniforms.tDiffuse.value = texture;
 		this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
 
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
-		this.scene.add(this.quad);
+		// Set the material of the rendering quad.
+		this.quad.material = this.material;
 
 	}
 
@@ -1306,17 +1314,6 @@
 
 		// Swap the render targets in this pass.
 		this.needsSwap = true;
-
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene.add(this.quad);
 
 	}
 
@@ -1578,17 +1575,6 @@
 		// Swap read and write buffer when done.
 		this.needsSwap = true;
 
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene.add(this.quad);
-
 	}
 
 	DotScreenPass.prototype = Object.create(Pass.prototype);
@@ -1685,20 +1671,6 @@
 
 		this.renderToScreen = false;
 
-		// Swap read and write buffer when done.
-		this.needsSwap = true;
-
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.material);
-		this.scene.add(this.quad);
-
 		/**
 		 * The quad mesh to render.
 		 *
@@ -1717,6 +1689,12 @@
 		 */
 
 		this.curF = 0;
+
+		// Set the material of the rendering quad.
+		this.quad.material = this.material;
+
+		// Swap read and write buffer when done.
+		this.needsSwap = true;
 
 		// Create a new glitch point.
 		this.generateTrigger();
@@ -1757,7 +1735,7 @@
 		} else if(this.curF % this.randX < this.randX / 5) {
 
 			uniforms.amount.value = Math.random() / 90;
-			uniforms.angle.value = THREE.Math.randFloat(- Math.PI, Math.PI);
+			uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
 			uniforms.distortionX.value = THREE.Math.randFloat(0, 1);
 			uniforms.distortionY.value = THREE.Math.randFloat(0, 1);
 			uniforms.seedX.value = THREE.Math.randFloat(-0.3, 0.3);
@@ -1885,6 +1863,7 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
+
 		this.renderTargetY.texture.generateMipmaps = false;
 
 		// Set the resolution.
@@ -1950,17 +1929,6 @@
 		 */
 
 		this.clear = false;
-
-		/**
-		 * The quad mesh to render.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene.add(this.quad);
 
 	}
 
@@ -2039,6 +2007,9 @@
 
 	BloomPass.prototype.setSize = function(width, height) {
 
+		if(width <= 0) { width = 1; }
+		if(height <= 0) { height = 1; }
+
 		// Scale one of the blur factors with the render target ratio.
 		this.blurY.set(0.0, (width / height) * BLUR);
 
@@ -2062,7 +2033,7 @@
 
 	function BokehPass(scene, camera, options) {
 
-		Pass.call(this, scene, camera);
+		Pass.call(this);
 
 		if(options === undefined) { options = {}; }
 		if(options.resolution === undefined) { options.resolution = 256; }
@@ -2120,36 +2091,25 @@
 		this.renderToScreen = false;
 
 		/**
-		 * A scene to render the depth of field with.
+		 * A main scene.
 		 *
-		 * @property scene2
+		 * @property mainScene
 		 * @type Scene
-		 * @private
 		 */
 
-		this.scene2  = new THREE.Scene();
+		this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
 
 		/**
-		 * A camera to render the depth of field effect with.
+		 * A main camera.
 		 *
-		 * @property camera2
+		 * @property mainCamera
 		 * @type Camera
-		 * @private
 		 */
 
-		this.camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-		this.scene2.add(this.camera2);
+		this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), this.bokehMaterial);
-		this.scene2.add(this.quad);
+		// Set the material of the rendering quad.
+		this.quad.material = this.bokehMaterial;
 
 	}
 
@@ -2170,20 +2130,20 @@
 	BokehPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 
 		// Render depth into texture.
-		this.scene.overrideMaterial = this.depthMaterial;
-		renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
-		this.scene.overrideMaterial = null;
+		this.mainScene.overrideMaterial = this.depthMaterial;
+		renderer.render(this.mainScene, this.mainCamera, this.renderTargetDepth, true);
+		this.mainScene.overrideMaterial = null;
 
 		// Render bokeh composite.
 		this.bokehMaterial.uniforms.tColor.value = readBuffer;
 
 		if(this.renderToScreen) {
 
-			renderer.render(this.scene2, this.camera2);
+			renderer.render(this.scene, this.camera);
 
 		} else {
 
-			renderer.render(this.scene2, this.camera2, writeBuffer, this.clear);
+			renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 		}
 
@@ -2237,19 +2197,11 @@
 
 		this.renderToScreen = false;
 
+		// Set the material of the rendering quad once.
+		this.quad.material = this.material;
+
 		// Swap read and write buffer when done.
 		this.needsSwap = true;
-
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene.add(this.quad);
 
 	}
 
@@ -2270,8 +2222,6 @@
 
 		this.material.uniforms.tDiffuse.value = readBuffer;
 		this.material.uniforms.time.value += delta;
-
-		this.quad.material = this.material;
 
 		if(this.renderToScreen) {
 
@@ -2300,13 +2250,13 @@
 	 * @param {Number} [options.weight=1.0] - A constant attenuation coefficient.
 	 * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
 	 * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
-	 * @param {Number} [options.resolution=256] - The god rays render texture resolution.
+	 * @param {Number} [options.resolution=512] - The god rays render texture resolution.
 	 * @param {Number} [options.samples=8] - The number of samples per pixel.
 	 */
 
 	function GodRaysPass(scene, camera, lightSource, options) {
 
-		Pass.call(this, scene, camera);
+		Pass.call(this);
 
 		if(options === undefined) { options = {}; }
 
@@ -2335,10 +2285,11 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
+
 		this.renderTargetY.texture.generateMipmaps = false;
 
 		// Set the resolution.
-		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+		this.resolution = (options.resolution === undefined) ? 512 : options.resolution;
 
 		/**
 		 * The light source.
@@ -2443,36 +2394,22 @@
 		this.renderToScreen = false;
 
 		/**
-		 * A scene to render the god rays with.
+		 * A main scene.
 		 *
-		 * @property scene2
+		 * @property mainScene
 		 * @type Scene
-		 * @private
 		 */
 
-		this.scene2  = new THREE.Scene();
+		this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
 
 		/**
-		 * A camera to render the god rays with.
+		 * The main camera.
 		 *
-		 * @property camera2
+		 * @property mainCamera
 		 * @type Camera
-		 * @private
 		 */
 
-		this.camera2 = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-		this.scene2.add(this.camera2);
-
-		/**
-		 * The quad mesh to use for rendering the 2D effect.
-		 *
-		 * @property quad
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-		this.scene2.add(this.quad);
+		this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
 		// Swap read and write buffer when done.
 		this.needsSwap = true;
@@ -2625,6 +2562,18 @@
 	};
 
 	/**
+	 * Used for saving the original clear color 
+	 * during rendering the masked scene.
+	 *
+	 * @property clearColor
+	 * @type Color
+	 * @private
+	 * @static
+	 */
+
+	var clearColor$1 = new THREE.Color();
+
+	/**
 	 * Renders the scene.
 	 *
 	 * @method render
@@ -2635,40 +2584,41 @@
 
 	GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-		var clearColor;
+		var clearAlpha;
 
 		// Compute the screen light position and translate the coordinates to [-1, 1].
-		this.screenLightPosition.copy(this.lightSource.position).project(this.camera);
+		this.screenLightPosition.copy(this.lightSource.position).project(this.mainCamera);
 		this.screenLightPosition.x = THREE.Math.clamp((this.screenLightPosition.x + 1.0) * 0.5, -1.0, 1.0);
 		this.screenLightPosition.y = THREE.Math.clamp((this.screenLightPosition.y + 1.0) * 0.5, -1.0, 1.0);
 
-		// Don't show the rays from weird angles.
+		// Don't show the rays from acute angles.
 		this.godRaysGenerateMaterial.uniforms.exposure.value = this.computeAngularScalar() * this.exposure;
 
-		// Render masked scene into texture.
-		this.scene.overrideMaterial = this.maskMaterial;
-		clearColor = renderer.getClearColor().getHex();
-		renderer.setClearColor(0x000000);
-		//renderer.render(this.scene, this.camera, undefined, true);
-		renderer.render(this.scene, this.camera, this.renderTargetX, true);
-		renderer.setClearColor(clearColor);
-		this.scene.overrideMaterial = null;
+		// Render the masked scene into texture.
+		this.mainScene.overrideMaterial = this.maskMaterial;
+		clearColor$1.copy(renderer.getClearColor());
+		clearAlpha = renderer.getClearAlpha();
+		renderer.setClearColor(0x000000, 1);
+		//renderer.render(this.mainScene, this.mainCamera, undefined, true); // Debug.
+		renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
+		renderer.setClearColor(clearColor$1, clearAlpha);
+		this.mainScene.overrideMaterial = null;
 
 		// God rays - Pass 1.
 		this.quad.material = this.godRaysGenerateMaterial;
 		this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[0];
 		this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-		renderer.render(this.scene2, this.camera2, this.renderTargetY);
+		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// God rays - Pass 2.
 		this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[1];
 		this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-		renderer.render(this.scene2, this.camera2, this.renderTargetX);
+		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// God rays - Pass 3.
 		this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[2];
 		this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-		renderer.render(this.scene2, this.camera2, this.renderTargetY);
+		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// Final pass - Composite god rays onto colors.
 		this.quad.material = this.godRaysCombineMaterial;
@@ -2677,11 +2627,11 @@
 
 		if(this.renderToScreen) {
 
-			renderer.render(this.scene2, this.camera2);
+			renderer.render(this.scene, this.camera);
 
 		} else {
 
-			renderer.render(this.scene2, this.camera2, writeBuffer);
+			renderer.render(this.scene, this.camera, writeBuffer);
 
 		}
 
@@ -2696,7 +2646,7 @@
 	 * @return {Number} A scalar in the range 0.0 to 1.0 for a linear transition.
 	 */
 
-	// Computation helpers.
+	// Static computation helpers.
 	var HALF_PI = Math.PI * 0.5;
 	var localPoint = new THREE.Vector3(0, 0, -1);
 	var cameraDirection = new THREE.Vector3();
@@ -2709,14 +2659,14 @@
 		// Save camera space point. Using lightDirection as a clipboard.
 		lightDirection.copy(localPoint);
 		// Camera space to world space.
-		cameraDirection.copy(localPoint.applyMatrix4(this.camera.matrixWorld));
+		cameraDirection.copy(localPoint.applyMatrix4(this.mainCamera.matrixWorld));
 		// Restore local point.
 		localPoint.copy(lightDirection);
 
 		// Let these be one and the same point.
 		lightDirection.copy(cameraDirection);
 		// Now compute the actual directions.
-		cameraDirection.sub(this.camera.position);
+		cameraDirection.sub(this.mainCamera.position);
 		lightDirection.sub(this.lightSource.position);
 
 		// Compute the angle between the directions.

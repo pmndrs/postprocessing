@@ -51,17 +51,6 @@ export function DotScreenPass(options) {
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
-	/**
-	 * The quad mesh to use for rendering the 2D effect.
-	 *
-	 * @property quad
-	 * @type Mesh
-	 * @private
-	 */
-
-	this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-	this.scene.add(this.quad);
-
 }
 
 DotScreenPass.prototype = Object.create(Pass.prototype);

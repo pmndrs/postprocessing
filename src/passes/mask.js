@@ -12,7 +12,7 @@ import { Pass } from "./pass";
 
 export function MaskPass(scene, camera) {
 
-	Pass.call(this, scene, camera);
+	Pass.call(this, scene, camera, null);
 
 	/**
 	 * Inverse flag.
