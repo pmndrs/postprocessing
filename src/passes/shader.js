@@ -4,7 +4,7 @@ import THREE from "three";
 /**
  * A shader pass.
  *
- * Used to render simple shader materials as 2D filters.
+ * Used to render any shader material as a 2D filter.
  *
  * @class ShaderPass
  * @constructor
@@ -36,16 +36,6 @@ export function ShaderPass(material, textureID) {
 	 */
 
 	this.material = (material !== undefined) ? material : null;
-
-	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
 
 	// Swap read and write buffer when done.
 	this.needsSwap = true;

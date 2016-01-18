@@ -56,16 +56,6 @@ export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlp
 
 	this.clear = true;
 
-	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
-
 }
 
 RenderPass.prototype = Object.create(Pass.prototype);

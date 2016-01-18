@@ -25,6 +25,7 @@ export {
 
 export {
 	CopyMaterial,
+	CombineMaterial,
 	LuminosityMaterial,
 	AdaptiveLuminosityMaterial,
 	ToneMappingMaterial,

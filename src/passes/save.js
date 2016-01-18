@@ -46,7 +46,6 @@ export function SavePass(renderTarget) {
 	}
 
 	this.renderTarget = renderTarget;
-
 	this.renderTarget.texture.generateMipmaps = false;
 
 	// Set the material of the rendering quad.

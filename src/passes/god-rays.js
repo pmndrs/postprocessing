@@ -1,4 +1,4 @@
-import { GodRaysMaterial, Phase } from "../materials";
+import { CombineMaterial, GodRaysMaterial } from "../materials";
 import { Pass } from "./pass";
 import THREE from "three";
 
@@ -18,7 +18,7 @@ import THREE from "three";
  * @param {Number} [options.exposure=1.0] - A constant attenuation coefficient.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
  * @param {Number} [options.resolution=512] - The god rays render texture resolution.
- * @param {Number} [options.samples=8] - The number of samples per pixel.
+ * @param {Number} [options.samples=9] - The number of samples per pixel.
  */
 
 export function GodRaysPass(scene, camera, lightSource, options) {
@@ -52,8 +52,8 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-
-	this.renderTargetY.texture.generateMipmaps = false;
+	this.renderTargetY.stencilBuffer = false;
+	this.renderTargetY.depthBuffer = false;
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 512 : options.resolution;
@@ -80,16 +80,16 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	/**
 	 * God rays shader material for the generate phase.
 	 *
-	 * @property godRaysGenerateMaterial
+	 * @property godRaysMaterial
 	 * @type GodRaysMaterial
 	 * @private
 	 */
 
-	this.godRaysGenerateMaterial = new GodRaysMaterial(Phase.GENERATE);
-	this.godRaysGenerateMaterial.uniforms.lightPosition.value = this.screenLightPosition;
+	this.godRaysMaterial = new GodRaysMaterial();
+	this.godRaysMaterial.uniforms.lightPosition.value = this.screenLightPosition;
 
-	if(options.decay !== undefined) { this.godRaysGenerateMaterial.uniforms.decay.value = options.decay; }
-	if(options.weight !== undefined) { this.godRaysGenerateMaterial.uniforms.weight.value = options.weight; }
+	if(options.decay !== undefined) { this.godRaysMaterial.uniforms.decay.value = options.decay; }
+	if(options.weight !== undefined) { this.godRaysMaterial.uniforms.weight.value = options.weight; }
 
 	/**
 	 * The exposure coefficient.
@@ -101,21 +101,21 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @type Number
 	 */
 
-	if(options.exposure !== undefined) { this.godRaysGenerateMaterial.uniforms.exposure.value = options.exposure; }
+	if(options.exposure !== undefined) { this.godRaysMaterial.uniforms.exposure.value = options.exposure; }
 
-	this.exposure = this.godRaysGenerateMaterial.uniforms.exposure.value;
+	this.exposure = this.godRaysMaterial.uniforms.exposure.value;
 
 	/**
-	 * God rays shader material for the final composite phase.
+	 * Combine shader material for the final composite phase.
 	 *
-	 * @property godRaysCombineMaterial
-	 * @type GodRaysMaterial
+	 * @property combineMaterial
+	 * @type CombineMaterial
 	 * @private
 	 */
 
-	this.godRaysCombineMaterial = new GodRaysMaterial(Phase.COMBINE);
+	this.combineMaterial = new CombineMaterial();
 
-	if(options.intensity !== undefined) { this.godRaysCombineMaterial.uniforms.intensity.value = options.intensity; }
+	if(options.intensity !== undefined) { this.combineMaterial.uniforms.opacity2.value = options.intensity; }
 
 	/**
 	 * A material used for masking the scene objects.
@@ -149,16 +149,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 
 	// Setting the amount of samples indirectly computes the actual step sizes.
 	this.samples = options.samples;
-
-	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
 
 	/**
 	 * A main scene.
@@ -196,13 +186,13 @@ GodRaysPass.prototype.constructor = GodRaysPass;
 
 Object.defineProperty(GodRaysPass.prototype, "intensity", {
 
-	get: function() { return this.godRaysCombineMaterial.uniforms.intensity.value; },
+	get: function() { return this.combineMaterial.uniforms.intensity.value; },
 
 	set: function(x) {
 
 		if(typeof x === "number") {
 
-			this.godRaysCombineMaterial.uniforms.intensity.value = x;
+			this.combineMaterial.uniforms.intensity.value = x;
 
 		}
 
@@ -290,7 +280,7 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
 
 	get: function() {
 
-		return Number.parseInt(this.godRaysGenerateMaterial.defines.NUM_SAMPLES_INT);
+		return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT);
 
 	},
 
@@ -300,8 +290,8 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
 
 			x = Math.floor(x);
 
-			this.godRaysGenerateMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-			this.godRaysGenerateMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+			this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+			this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
 
 		}
 
@@ -343,6 +333,15 @@ var clearColor = new THREE.Color();
 /**
  * Renders the scene.
  *
+ * The god rays pass has two phases with a total of 4 render steps.
+ *
+ * Generate-phase:
+ *  In the first pass, the masked scene is blurred along radial lines towards the light source.
+ *  The result of the previous pass is re-blurred twice with a decreased distance between the samples.
+ *
+ * Combine-phase:
+ *  The result is added to the normal scene.
+ *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -359,7 +358,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	this.screenLightPosition.y = THREE.Math.clamp((this.screenLightPosition.y + 1.0) * 0.5, -1.0, 1.0);
 
 	// Don't show the rays from acute angles.
-	this.godRaysGenerateMaterial.uniforms.exposure.value = this.computeAngularScalar() * this.exposure;
+	this.godRaysMaterial.uniforms.exposure.value = this.computeAngularScalar() * this.exposure;
 
 	// Render the masked scene into texture.
 	this.mainScene.overrideMaterial = this.maskMaterial;
@@ -372,25 +371,25 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	this.mainScene.overrideMaterial = null;
 
 	// God rays - Pass 1.
-	this.quad.material = this.godRaysGenerateMaterial;
-	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[0];
-	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	this.quad.material = this.godRaysMaterial;
+	this.godRaysMaterial.uniforms.stepSize.value = this.stepSizes[0];
+	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// God rays - Pass 2.
-	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[1];
-	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	this.godRaysMaterial.uniforms.stepSize.value = this.stepSizes[1];
+	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	// God rays - Pass 3.
-	this.godRaysGenerateMaterial.uniforms.stepSize.value = this.stepSizes[2];
-	this.godRaysGenerateMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	this.godRaysMaterial.uniforms.stepSize.value = this.stepSizes[2];
+	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// Final pass - Composite god rays onto colors.
-	this.quad.material = this.godRaysCombineMaterial;
-	this.godRaysCombineMaterial.uniforms.tDiffuse.value = readBuffer;
-	this.godRaysCombineMaterial.uniforms.tGodRays.value = this.renderTargetY;
+	this.quad.material = this.combineMaterial;
+	this.combineMaterial.uniforms.texture1.value = readBuffer;
+	this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 	if(this.renderToScreen) {
 

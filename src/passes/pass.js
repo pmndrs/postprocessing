@@ -68,6 +68,16 @@ export function Pass(scene, camera, quad) {
 	this.enabled = true;
 
 	/**
+	 * Render to screen flag.
+	 *
+	 * @property renderToScreen
+	 * @type Boolean
+	 * @default false
+	 */
+
+	this.renderToScreen = false;
+
+	/**
 	 * Render target swap flag.
 	 *
 	 * When set to true, the read and write buffers will be swapped 

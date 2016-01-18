@@ -7,6 +7,7 @@
  */
 
 export { CopyMaterial } from "./copy";
+export { CombineMaterial } from "./combine";
 export { LuminosityMaterial } from "./luminosity";
 export { AdaptiveLuminosityMaterial } from "./adaptive-luminosity";
 export { ToneMappingMaterial } from "./tone-mapping";

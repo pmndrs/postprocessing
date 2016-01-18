@@ -36,7 +36,8 @@ export function BokehPass(scene, camera, options) {
 	this.renderTargetDepth = new THREE.WebGLRenderTarget(1, 1, {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat
+		format: THREE.RGBFormat,
+		stencilBuffer: false
 	});
 
 	this.renderTargetDepth.texture.generateMipmaps = false;

@@ -1,9 +1,11 @@
-import { CopyMaterial } from "../materials";
+import { CombineMaterial, CopyMaterial } from "../materials";
 import { Pass } from "./pass";
 import THREE from "three";
 
 /**
  * A texture pass.
+ *
+ * This pass doesn't destroy the given texture when it's being disposed.
  *
  * @class TexturePass
  * @constructor
@@ -17,19 +19,32 @@ export function TexturePass(texture, opacity) {
 	Pass.call(this);
 
 	/**
+	 * Combine shader material.
+	 *
+	 * @property combineMaterial
+	 * @type CombineMaterial
+	 * @private
+	 */
+
+	this.combineMaterial = new CombineMaterial();
+	this.combineMaterial.uniforms.texture2.value = texture;
+
+	if(opacity !== undefined) { this.combineMaterial.uniforms.opacity2.value = opacity; }
+
+	/**
 	 * Copy shader material.
 	 *
-	 * @property material
+	 * @property copyMaterial
 	 * @type CopyMaterial
 	 * @private
 	 */
 
-	this.material = new CopyMaterial();
-	this.material.uniforms.tDiffuse.value = texture;
-	this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
+	this.copyMaterial = new CopyMaterial();
+	this.copyMaterial.blending = THREE.AdditiveBlending;
+	this.copyMaterial.transparent = true;
 
-	// Set the material of the rendering quad.
-	this.quad.material = this.material;
+	this.copyMaterial.uniforms.tDiffuse.value = texture;
+	this.copyMaterial.uniforms.opacity.value = (opacity === undefined) ? 1.0 : opacity;
 
 }
 
@@ -48,6 +63,19 @@ TexturePass.prototype.constructor = TexturePass;
 
 TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
-	renderer.render(this.scene, this.camera, readBuffer);
+	if(this.renderToScreen) {
+
+		this.quad.material = this.combineMaterial;
+		this.combineMaterial.uniforms.texture1.value = readBuffer;
+
+		renderer.render(this.scene, this.camera);
+
+	} else {
+
+		this.quad.material = this.copyMaterial;
+
+		renderer.render(this.scene, this.camera, readBuffer, false);
+
+	}
 
 };

@@ -2,27 +2,6 @@ import shader from "./inlined/shader";
 import THREE from "three";
 
 /**
- * Phase enumeration.
- *
- * Generate-phase:
- *  In the first pass, the masked scene is blurred along radial lines towards the light source.
- *  The result of the previous pass is re-blurred twice with a decreased distance between the samples.
- *
- * Combine-phase:
- *  The result is added to the normal scene.
- *
- * @property Phase
- * @type Object
- * @static
- * @final
- */
-
-export var Phase = Object.freeze({
-	GENERATE: 0,
-	COMBINE: 1
-});
-
-/**
  * A crepuscular rays shader material.
  *
  * References:
@@ -38,10 +17,9 @@ export var Phase = Object.freeze({
  * @class GodRaysMaterial
  * @constructor
  * @extends ShaderMaterial
- * @param {Phase} [phase=Phase.GENERATE] - Determines which shader code to use. See Phase enumeration.
  */
 
-export function GodRaysMaterial(phase) {
+export function GodRaysMaterial() {
 
 	THREE.ShaderMaterial.call(this, {
 
@@ -52,13 +30,7 @@ export function GodRaysMaterial(phase) {
 
 		},
 
-		uniforms: (phase === Phase.COMBINE) ? {
-
-			tDiffuse: {type: "t", value: null},
-			tGodRays: {type: "t", value: null},
-			intensity: {type: "f", value: 1.0},
-
-		} : {
+		uniforms: {
 
 			tDiffuse: {type: "t", value: null},
 			stepSize: {type: "f", value: 1.5},
@@ -69,7 +41,7 @@ export function GodRaysMaterial(phase) {
 
 		},
 
-		fragmentShader: (phase === Phase.COMBINE) ? shader.fragment.combine : shader.fragment.generate,
+		fragmentShader: shader.fragment,
 		vertexShader: shader.vertex
 
 	});

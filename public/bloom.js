@@ -67,14 +67,13 @@ window.addEventListener("load", function init() {
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
-	composer.addPass(new POSTPROCESSING.BloomPass({
+	var pass = new POSTPROCESSING.BloomPass({
 		strength: 1.0,
 		kernelSize: 25,
 		sigma: 4,
-		resolution: 256
-	}));
+		resolution: 512
+	});
 
-	var pass = new POSTPROCESSING.ShaderPass(new POSTPROCESSING.CopyMaterial());
 	pass.renderToScreen = true;
 	composer.addPass(pass);
 

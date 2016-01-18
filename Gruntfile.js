@@ -57,7 +57,7 @@ module.exports = function(grunt) {
 				files: [
 					{expand: false, src: ["build/<%= name %>.js"], dest: "public/<%= name %>.js", filter: "isFile"},
 				],
-			},
+			}
 		},
 
 		uglify: {
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
 			test: {
 				src: ["test/**/*.html"],
 				options: {
-					run: false
+					run: true
 				}
 			}
 		},

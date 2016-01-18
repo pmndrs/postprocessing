@@ -1,4 +1,4 @@
-import { CopyMaterial, ConvolutionMaterial } from "../materials";
+import { CopyMaterial, CombineMaterial, ConvolutionMaterial } from "../materials";
 import { Pass } from "./pass";
 import THREE from "three";
 
@@ -57,8 +57,8 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-
-	this.renderTargetY.texture.generateMipmaps = false;
+	this.renderTargetY.stencilBuffer = false;
+	this.renderTargetY.depthBuffer = false;
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -82,6 +82,18 @@ export function BloomPass(options) {
 	 */
 
 	this.blurY = new THREE.Vector2(0.0, BLUR);
+
+	/**
+	 * Combine shader material.
+	 *
+	 * @property combineMaterial
+	 * @type CombineMaterial
+	 * @private
+	 */
+
+	this.combineMaterial = new CombineMaterial();
+
+	if(options.strength !== undefined) { this.combineMaterial.uniforms.opacity2.value = options.strength; }
 
 	/**
 	 * Copy shader material.
@@ -181,13 +193,27 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurY);
 	renderer.render(this.scene, this.camera, this.renderTargetY, true);
 
-	// Render original scene with superimposed blur (-> onto readBuffer).
-	this.quad.material = this.copyMaterial;
-	this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-
 	if(maskActive) { renderer.context.enable(renderer.context.STENCIL_TEST); }
 
-	renderer.render(this.scene, this.camera, readBuffer, this.clear);
+	// Render original scene with superimposed blur.
+	if(this.renderToScreen) {
+
+		// Combine read buffer with the generated blur and render the result to screen.
+		this.quad.material = this.combineMaterial;
+		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+
+		renderer.render(this.scene, this.camera);
+
+	} else {
+
+		// Render directly onto the read buffer. Saves one texel fetch compared to the combine strategy.
+		this.quad.material = this.copyMaterial;
+		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+	}
 
 };
 

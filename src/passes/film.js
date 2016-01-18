@@ -40,16 +40,6 @@ export function FilmPass(options) {
 
 	}
 
-	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
-
 	// Set the material of the rendering quad once.
 	this.quad.material = this.material;
 

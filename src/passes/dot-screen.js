@@ -38,16 +38,6 @@ export function DotScreenPass(options) {
 
 	}
 
-	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
-
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 

@@ -162,7 +162,7 @@ window.addEventListener("load", function init() {
 
 			if(sky.ignoreOverrideMaterial) {
 
-				pass.godRaysGenerateMaterial.uniforms.weight.value = 0.68767;
+				pass.godRaysMaterial.uniforms.weight.value = 0.68767;
 				pass.exposure = 3.0;
 				pass.lightSource = sun;
 				sky.ignoreOverrideMaterial = false;
@@ -170,7 +170,7 @@ window.addEventListener("load", function init() {
 
 			} else {
 
-				pass.godRaysGenerateMaterial.uniforms.weight.value = 1.0;
+				pass.godRaysMaterial.uniforms.weight.value = 1.0;
 				pass.exposure = 1.0;
 				pass.lightSource = directionalLight;
 				sky.ignoreOverrideMaterial = true;

@@ -55,16 +55,6 @@ export function GlitchPass(options) {
 	}
 
 	/**
-	 * Render to screen flag.
-	 *
-	 * @property renderToScreen
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.renderToScreen = false;
-
-	/**
 	 * The quad mesh to render.
 	 *
 	 * @property quad
