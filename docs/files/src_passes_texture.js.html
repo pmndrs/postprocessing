@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -106,12 +107,14 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { CopyMaterial } from &quot;../materials&quot;;
+import { CombineMaterial, CopyMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
 
 /**
  * A texture pass.
+ *
+ * This pass doesn&#x27;t destroy the given texture when it&#x27;s being disposed.
  *
  * @class TexturePass
  * @constructor
@@ -125,19 +128,32 @@ export function TexturePass(texture, opacity) {
 	Pass.call(this);
 
 	/**
+	 * Combine shader material.
+	 *
+	 * @property combineMaterial
+	 * @type CombineMaterial
+	 * @private
+	 */
+
+	this.combineMaterial = new CombineMaterial();
+	this.combineMaterial.uniforms.texture2.value = texture;
+
+	if(opacity !== undefined) { this.combineMaterial.uniforms.opacity2.value = opacity; }
+
+	/**
 	 * Copy shader material.
 	 *
-	 * @property material
+	 * @property copyMaterial
 	 * @type CopyMaterial
 	 * @private
 	 */
 
-	this.material = new CopyMaterial();
-	this.material.uniforms.tDiffuse.value = texture;
-	this.material.uniforms.opacity.value = (opacity === undefined) ? 1.0 : THREE.Math.clamp(opacity, 0.0, 1.0);
+	this.copyMaterial = new CopyMaterial();
+	this.copyMaterial.blending = THREE.AdditiveBlending;
+	this.copyMaterial.transparent = true;
 
-	// Set the material of the rendering quad.
-	this.quad.material = this.material;
+	this.copyMaterial.uniforms.tDiffuse.value = texture;
+	this.copyMaterial.uniforms.opacity.value = (opacity === undefined) ? 1.0 : opacity;
 
 }
 
@@ -156,7 +172,20 @@ TexturePass.prototype.constructor = TexturePass;
 
 TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
-	renderer.render(this.scene, this.camera, readBuffer);
+	if(this.renderToScreen) {
+
+		this.quad.material = this.combineMaterial;
+		this.combineMaterial.uniforms.texture1.value = readBuffer;
+
+		renderer.render(this.scene, this.camera);
+
+	} else {
+
+		this.quad.material = this.copyMaterial;
+
+		renderer.render(this.scene, this.camera, readBuffer, false);
+
+	}
 
 };
 

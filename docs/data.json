@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.0.8",
+        "version": "0.0.9",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -20,6 +20,15 @@
             "modules": {},
             "classes": {
                 "BokehMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\combine\\index.js": {
+            "name": "src\\materials\\combine\\index.js",
+            "modules": {},
+            "classes": {
+                "CombineMaterial": 1
             },
             "fors": {},
             "namespaces": {}
@@ -268,6 +277,7 @@
             "classes": {
                 "AdaptiveLuminosityMaterial": 1,
                 "BokehMaterial": 1,
+                "CombineMaterial": 1,
                 "ConvolutionMaterial": 1,
                 "CopyMaterial": 1,
                 "DotScreenMaterial": 1,
@@ -358,6 +368,37 @@
             "is_constructor": 1,
             "extends": "ShaderMaterial"
         },
+        "CombineMaterial": {
+            "name": "CombineMaterial",
+            "shortname": "CombineMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "postprocessing",
+            "file": "src\\materials\\combine\\index.js",
+            "line": 4,
+            "description": "A material for combining two textures.",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial",
+            "params": [
+                {
+                    "name": "invertTexture1",
+                    "description": "- Invert the first texture's rgb values.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                },
+                {
+                    "name": "invertTexture2",
+                    "description": "- Invert the second texture's rgb values.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ]
+        },
         "ConvolutionMaterial": {
             "name": "ConvolutionMaterial",
             "shortname": "ConvolutionMaterial",
@@ -443,19 +484,10 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\god-rays\\index.js",
-            "line": 25,
+            "line": 4,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
             "is_constructor": 1,
-            "extends": "ShaderMaterial",
-            "params": [
-                {
-                    "name": "phase",
-                    "description": "- Determines which shader code to use. See Phase enumeration.",
-                    "type": "Phase",
-                    "optional": true,
-                    "optdefault": "Phase.GENERATE"
-                }
-            ]
+            "extends": "ShaderMaterial"
         },
         "LuminosityMaterial": {
             "name": "LuminosityMaterial",
@@ -716,7 +748,7 @@
             "namespace": "",
             "file": "src\\passes\\texture.js",
             "line": 5,
-            "description": "A texture pass.",
+            "description": "A texture pass.\n\nThis pass doesn't destroy the given texture when it's being disposed.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -881,7 +913,7 @@
                             "description": "- The number of samples per pixel.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "8"
+                            "optdefault": "9"
                         }
                     ]
                 }
@@ -1028,7 +1060,7 @@
             "namespace": "",
             "file": "src\\passes\\shader.js",
             "line": 4,
-            "description": "A shader pass.\n\nUsed to render simple shader materials as 2D filters.",
+            "description": "A shader pass.\n\nUsed to render any shader material as a 2D filter.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1114,17 +1146,6 @@
             "access": "private",
             "tagname": "",
             "class": "ConvolutionMaterial"
-        },
-        {
-            "file": "src\\materials\\god-rays\\index.js",
-            "line": 4,
-            "description": "Phase enumeration.\n\nGenerate-phase:\n In the first pass, the masked scene is blurred along radial lines towards the light source.\n The result of the previous pass is re-blurred twice with a decreased distance between the samples.\n\nCombine-phase:\n The result is added to the normal scene.",
-            "itemtype": "property",
-            "name": "Phase",
-            "type": "Object",
-            "static": 1,
-            "final": 1,
-            "class": "GodRaysMaterial"
         },
         {
             "file": "src\\passes\\adaptive-tone-mapping.js",
@@ -1432,6 +1453,18 @@
         {
             "file": "src\\passes\\bloom.js",
             "line": 86,
+            "description": "Combine shader material.",
+            "itemtype": "property",
+            "name": "combineMaterial",
+            "type": "CombineMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 98,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1443,7 +1476,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 100,
+            "line": 112,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1455,7 +1488,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 114,
+            "line": 126,
             "description": "Clear flag.\n\nThis pass draws the blurred scene over the normal one.\nSet to true to see the fully blurred scene.",
             "itemtype": "property",
             "name": "clear",
@@ -1466,7 +1499,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 132,
+            "line": 144,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
             "name": "resolution",
@@ -1476,7 +1509,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 158,
+            "line": 170,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1512,7 +1545,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 194,
+            "line": 220,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1545,7 +1578,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 44,
+            "line": 45,
             "description": "Depth shader material.",
             "itemtype": "property",
             "name": "depthMaterial",
@@ -1557,7 +1590,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 54,
+            "line": 55,
             "description": "Bokeh shader material.",
             "itemtype": "property",
             "name": "bokehMaterial",
@@ -1569,7 +1602,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 70,
+            "line": 71,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -1580,7 +1613,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 80,
+            "line": 81,
             "description": "A main scene.",
             "itemtype": "property",
             "name": "mainScene",
@@ -1590,7 +1623,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 89,
+            "line": 90,
             "description": "A main camera.",
             "itemtype": "property",
             "name": "mainCamera",
@@ -1600,7 +1633,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 106,
+            "line": 107,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1684,18 +1717,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 41,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "DotScreenPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\dot-screen.js",
-            "line": 59,
+            "line": 49,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1738,18 +1760,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 43,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "TexturePass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\film.js",
-            "line": 64,
+            "line": 54,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1803,17 +1814,6 @@
         {
             "file": "src\\passes\\glitch.js",
             "line": 57,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "GlitchPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\glitch.js",
-            "line": 67,
             "description": "The quad mesh to render.",
             "itemtype": "property",
             "name": "quad",
@@ -1823,7 +1823,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 76,
+            "line": 66,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "curF",
@@ -1835,7 +1835,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 100,
+            "line": 90,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1861,7 +1861,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 157,
+            "line": 147,
             "description": "Creates a new break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -1870,7 +1870,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 169,
+            "line": 159,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -1937,7 +1937,7 @@
             "line": 80,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
-            "name": "godRaysGenerateMaterial",
+            "name": "godRaysMaterial",
             "type": "GodRaysMaterial",
             "access": "private",
             "tagname": "",
@@ -1957,10 +1957,10 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 108,
-            "description": "God rays shader material for the final composite phase.",
+            "description": "Combine shader material for the final composite phase.",
             "itemtype": "property",
-            "name": "godRaysCombineMaterial",
-            "type": "GodRaysMaterial",
+            "name": "combineMaterial",
+            "type": "CombineMaterial",
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
@@ -2005,17 +2005,6 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 153,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 163,
             "description": "A main scene.",
             "itemtype": "property",
             "name": "mainScene",
@@ -2025,7 +2014,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 172,
+            "line": 162,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
@@ -2035,7 +2024,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 189,
+            "line": 179,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2046,7 +2035,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 213,
+            "line": 203,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
             "name": "resolution",
@@ -2057,7 +2046,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 240,
+            "line": 230,
             "description": "The maximum length of god rays.\n\nA value of 1.5 is recommended, to ensure that the effect \nfills the entire screen at all times.\n\nAs a result, the whole effect will be spread out further \nwhich requires a slightly higher number of samples per pixel  \nto prevent visual gaps along the rays.",
             "itemtype": "property",
             "name": "rayLength",
@@ -2068,7 +2057,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 272,
+            "line": 262,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 9.\nFor render resolutions below 1024 and a ray length of 1.0, 7 samples \nmight also be sufficient.\n\nValues above 9 don't have a noticable impact on the quality.",
             "itemtype": "property",
             "name": "samples",
@@ -2079,7 +2068,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 314,
+            "line": 304,
             "description": "Adjusts the sampling step sizes for the three generate passes.",
             "itemtype": "method",
             "name": "calculateStepSizes",
@@ -2090,7 +2079,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 331,
+            "line": 321,
             "description": "Used for saving the original clear color \nduring rendering the masked scene.",
             "itemtype": "property",
             "name": "clearColor",
@@ -2103,8 +2092,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 343,
-            "description": "Renders the scene.",
+            "line": 333,
+            "description": "Renders the scene.\n\nThe god rays pass has two phases with a total of 4 render steps.\n\nGenerate-phase:\n In the first pass, the masked scene is blurred along radial lines towards the light source.\n The result of the previous pass is re-blurred twice with a decreased distance between the samples.\n\nCombine-phase:\n The result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
             "params": [
@@ -2129,7 +2118,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 407,
+            "line": 406,
             "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
             "itemtype": "method",
             "name": "computeAngularScalar",
@@ -2256,6 +2245,17 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 70,
+            "description": "Render to screen flag.",
+            "itemtype": "property",
+            "name": "renderToScreen",
+            "type": "Boolean",
+            "default": "false",
+            "class": "Pass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\pass.js",
+            "line": 80,
             "description": "Render target swap flag.\n\nWhen set to true, the read and write buffers will be swapped \nafter this pass is done with rendering so that any following  \npass can find the rendered result in the read buffer.\nSwapping is not necessary if, for example, a pass additively \nrenders into the read buffer.",
             "itemtype": "property",
             "name": "needsSwap",
@@ -2266,7 +2266,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 96,
+            "line": 106,
             "description": "Renders the scene.\n\nThis is an abstract method that must be overriden.",
             "itemtype": "method",
             "name": "render",
@@ -2301,7 +2301,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 115,
+            "line": 125,
             "description": "Updates this pass with the main render target's size.\n\nThis is an abstract method that may be overriden in case \nyou want to be informed about the main render size.\n\nThe effect composer calls this method when the pass is added \nand when the effect composer is reset.",
             "itemtype": "method",
             "name": "setSize",
@@ -2325,7 +2325,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 133,
+            "line": 143,
             "description": "Performs a shallow search for properties that define a dispose\nmethod and deletes them. The pass will be inoperative after \nthis method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory \nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -2375,18 +2375,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 59,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 74,
+            "line": 64,
             "description": "Used for saving the original clear color during rendering.",
             "itemtype": "property",
             "name": "clearColor",
@@ -2399,7 +2388,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 85,
+            "line": 75,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2454,7 +2443,7 @@
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 60,
+            "line": 59,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2485,7 +2474,7 @@
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 78,
+            "line": 77,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2527,18 +2516,7 @@
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 40,
-            "description": "Render to screen flag.",
-            "itemtype": "property",
-            "name": "renderToScreen",
-            "type": "Boolean",
-            "default": "false",
-            "class": "ShaderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\shader.js",
-            "line": 61,
+            "line": 51,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2569,10 +2547,22 @@
         },
         {
             "file": "src\\passes\\texture.js",
-            "line": 19,
+            "line": 21,
+            "description": "Combine shader material.",
+            "itemtype": "property",
+            "name": "combineMaterial",
+            "type": "CombineMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "TexturePass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\texture.js",
+            "line": 34,
             "description": "Copy shader material.",
             "itemtype": "property",
-            "name": "material",
+            "name": "copyMaterial",
             "type": "CopyMaterial",
             "access": "private",
             "tagname": "",
@@ -2581,7 +2571,7 @@
         },
         {
             "file": "src\\passes\\texture.js",
-            "line": 39,
+            "line": 54,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",

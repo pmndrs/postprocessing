@@ -7,6 +7,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "BokehMaterial",
         "BokehPass",
         "ClearMaskPass",
+        "CombineMaterial",
         "ConvolutionMaterial",
         "CopyMaterial",
         "DotScreenMaterial",

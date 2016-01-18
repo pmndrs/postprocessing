@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -315,6 +316,10 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -832,7 +837,7 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l115"><code>src\passes\pass.js:115</code></a>
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
         </p>
 
 
@@ -1188,7 +1193,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
         </p>
 
 
@@ -1267,6 +1272,31 @@ Assign your shader material to this mesh!
 
             </div>
         </div>
+
+</div>
+<div id="property_renderToScreen" class="property item inherited">
+    <h3 class="name"><code>renderToScreen</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Render to screen flag.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
 
 </div>
 <div id="property_scene" class="property item private inherited">

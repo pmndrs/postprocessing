@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\copy\index.js - postprocessing</title>
+    <title>src\materials\combine\index.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -103,7 +103,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\copy\index.js</h1>
+<h1 class="file-heading">File: src\materials\combine\index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -111,33 +111,41 @@ import shader from &quot;./inlined/shader&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * A simple copy shader material.
+ * A material for combining two textures.
  *
- * @class CopyMaterial
+ * @class CombineMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Boolean} [invertTexture1=false] - Invert the first texture&#x27;s rgb values.
+ * @param {Boolean} [invertTexture2=false] - Invert the second texture&#x27;s rgb values.
  */
 
-export function CopyMaterial() {
+export function CombineMaterial(invertTexture1, invertTexture2) {
 
 	THREE.ShaderMaterial.call(this, {
 
 		uniforms: {
 
-			tDiffuse: {type: &quot;t&quot;, value: null},
-			opacity: {type: &quot;f&quot;, value: 1.0}
+			texture1: {type: &quot;t&quot;, value: null},
+			texture2: {type: &quot;t&quot;, value: null},
+
+			opacity1: {type: &quot;f&quot;, value: 1.0},
+			opacity2: {type: &quot;f&quot;, value: 1.0}
 
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 
+	if(invertTexture1) { this.defines.INVERT_TEX1 = &quot;1&quot;; }
+	if(invertTexture2) { this.defines.INVERT_TEX2 = &quot;1&quot;; }
+
 }
 
-CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-CopyMaterial.prototype.constructor = CopyMaterial;
+CombineMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
+CombineMaterial.prototype.constructor = CombineMaterial;
 
     </pre>
 </div>

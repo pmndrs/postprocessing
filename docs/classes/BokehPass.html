@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -353,7 +354,7 @@
                                 <a href="#property_renderTargetDepth">renderTargetDepth</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
@@ -385,7 +386,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l133"><code>src\passes\pass.js:133</code></a>
+        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
         </p>
 
 
@@ -447,7 +448,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bokeh.js.html#l106"><code>src\passes\bokeh.js:106</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l107"><code>src\passes\bokeh.js:107</code></a>
         </p>
 
 
@@ -558,7 +559,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l115"><code>src\passes\pass.js:115</code></a>
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
         </p>
 
 
@@ -636,7 +637,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l54"><code>src\passes\bokeh.js:54</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l55"><code>src\passes\bokeh.js:55</code></a>
         </p>
 
 
@@ -688,7 +689,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l44"><code>src\passes\bokeh.js:44</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l45"><code>src\passes\bokeh.js:45</code></a>
         </p>
 
 
@@ -738,7 +739,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l89"><code>src\passes\bokeh.js:89</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l90"><code>src\passes\bokeh.js:90</code></a>
         </p>
 
 
@@ -763,7 +764,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l80"><code>src\passes\bokeh.js:80</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l81"><code>src\passes\bokeh.js:81</code></a>
         </p>
 
 
@@ -788,7 +789,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
         </p>
 
 
@@ -878,9 +879,12 @@ Assign your shader material to this mesh!
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bokeh.js.html#l70"><code>src\passes\bokeh.js:70</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#property_renderToScreen">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh.js.html#l71"><code>src\passes\bokeh.js:71</code></a>
         </p>
 
 

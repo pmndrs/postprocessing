@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -271,6 +272,10 @@ them inside deeper structures such as arrays or objects.</p>
                                 <a href="#property_quad">quad</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_scene">scene</a>
 
@@ -299,7 +304,7 @@ them inside deeper structures such as arrays or objects.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l133"><code>src\passes\pass.js:133</code></a>
+        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
         </p>
 
 
@@ -356,7 +361,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l96"><code>src\passes\pass.js:96</code></a>
+        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
         </p>
 
 
@@ -464,7 +469,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l115"><code>src\passes\pass.js:115</code></a>
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
         </p>
 
 
@@ -593,7 +598,7 @@ and when the effect composer is reset.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
         </p>
 
 
@@ -647,6 +652,32 @@ Assign your shader material to this mesh!</p>
 
             </div>
         </div>
+
+</div>
+<div id="property_renderToScreen" class="property item">
+    <h3 class="name"><code>renderToScreen</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Render to screen flag.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
 
 </div>
 <div id="property_scene" class="property item private">

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -110,27 +111,6 @@ import shader from &quot;./inlined/shader&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * Phase enumeration.
- *
- * Generate-phase:
- *  In the first pass, the masked scene is blurred along radial lines towards the light source.
- *  The result of the previous pass is re-blurred twice with a decreased distance between the samples.
- *
- * Combine-phase:
- *  The result is added to the normal scene.
- *
- * @property Phase
- * @type Object
- * @static
- * @final
- */
-
-export var Phase = Object.freeze({
-	GENERATE: 0,
-	COMBINE: 1
-});
-
-/**
  * A crepuscular rays shader material.
  *
  * References:
@@ -146,10 +126,9 @@ export var Phase = Object.freeze({
  * @class GodRaysMaterial
  * @constructor
  * @extends ShaderMaterial
- * @param {Phase} [phase=Phase.GENERATE] - Determines which shader code to use. See Phase enumeration.
  */
 
-export function GodRaysMaterial(phase) {
+export function GodRaysMaterial() {
 
 	THREE.ShaderMaterial.call(this, {
 
@@ -160,13 +139,7 @@ export function GodRaysMaterial(phase) {
 
 		},
 
-		uniforms: (phase === Phase.COMBINE) ? {
-
-			tDiffuse: {type: &quot;t&quot;, value: null},
-			tGodRays: {type: &quot;t&quot;, value: null},
-			intensity: {type: &quot;f&quot;, value: 1.0},
-
-		} : {
+		uniforms: {
 
 			tDiffuse: {type: &quot;t&quot;, value: null},
 			stepSize: {type: &quot;f&quot;, value: 1.5},
@@ -177,7 +150,7 @@ export function GodRaysMaterial(phase) {
 
 		},
 
-		fragmentShader: (phase === Phase.COMBINE) ? shader.fragment.combine : shader.fragment.generate,
+		fragmentShader: shader.fragment,
 		vertexShader: shader.vertex
 
 	});

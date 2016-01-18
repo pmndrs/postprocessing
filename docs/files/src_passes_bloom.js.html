@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -106,7 +107,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { CopyMaterial, ConvolutionMaterial } from &quot;../materials&quot;;
+import { CopyMaterial, CombineMaterial, ConvolutionMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
 
@@ -165,8 +166,8 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-
-	this.renderTargetY.texture.generateMipmaps = false;
+	this.renderTargetY.stencilBuffer = false;
+	this.renderTargetY.depthBuffer = false;
 
 	// Set the resolution.
 	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
@@ -190,6 +191,18 @@ export function BloomPass(options) {
 	 */
 
 	this.blurY = new THREE.Vector2(0.0, BLUR);
+
+	/**
+	 * Combine shader material.
+	 *
+	 * @property combineMaterial
+	 * @type CombineMaterial
+	 * @private
+	 */
+
+	this.combineMaterial = new CombineMaterial();
+
+	if(options.strength !== undefined) { this.combineMaterial.uniforms.opacity2.value = options.strength; }
 
 	/**
 	 * Copy shader material.
@@ -289,13 +302,27 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurY);
 	renderer.render(this.scene, this.camera, this.renderTargetY, true);
 
-	// Render original scene with superimposed blur (-&gt; onto readBuffer).
-	this.quad.material = this.copyMaterial;
-	this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-
 	if(maskActive) { renderer.context.enable(renderer.context.STENCIL_TEST); }
 
-	renderer.render(this.scene, this.camera, readBuffer, this.clear);
+	// Render original scene with superimposed blur.
+	if(this.renderToScreen) {
+
+		// Combine read buffer with the generated blur and render the result to screen.
+		this.quad.material = this.combineMaterial;
+		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+
+		renderer.render(this.scene, this.camera);
+
+	} else {
+
+		// Render directly onto the read buffer. Saves one texel fetch compared to the combine strategy.
+		this.quad.material = this.copyMaterial;
+		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+	}
 
 };
 

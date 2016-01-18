@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -120,6 +121,7 @@
 
 <div class="box intro">
     <p>A texture pass.</p>
+<p>This pass doesn't destroy the given texture when it's being disposed.</p>
 
 </div>
 
@@ -280,12 +282,16 @@
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_enabled">enabled</a>
+                            <li class="index-item property private">
+                                <a href="#property_combineMaterial">combineMaterial</a>
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_material">material</a>
+                                <a href="#property_copyMaterial">copyMaterial</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_enabled">enabled</a>
 
                             </li>
                             <li class="index-item property private">
@@ -300,7 +306,7 @@
                                 <a href="#property_quad">quad</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
@@ -332,7 +338,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l133"><code>src\passes\pass.js:133</code></a>
+        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
         </p>
 
 
@@ -391,7 +397,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l64"><code>src\passes\film.js:64</code></a>
+        <a href="../files/src_passes_film.js.html#l54"><code>src\passes\film.js:54</code></a>
         </p>
 
 
@@ -495,7 +501,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_texture.js.html#l39"><code>src\passes\texture.js:39</code></a>
+        <a href="../files/src_passes_texture.js.html#l54"><code>src\passes\texture.js:54</code></a>
         </p>
 
 
@@ -593,7 +599,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l115"><code>src\passes\pass.js:115</code></a>
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
         </p>
 
 
@@ -685,6 +691,58 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_combineMaterial" class="property item private">
+    <h3 class="name"><code>combineMaterial</code></h3>
+    <span class="type"><a href="../classes/CombineMaterial.html" class="crosslink">CombineMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_texture.js.html#l21"><code>src\passes\texture.js:21</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Combine shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_copyMaterial" class="property item private">
+    <h3 class="name"><code>copyMaterial</code></h3>
+    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_texture.js.html#l34"><code>src\passes\texture.js:34</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Copy shader material.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_enabled" class="property item inherited">
     <h3 class="name"><code>enabled</code></h3>
     <span class="type">Boolean</span>
@@ -736,32 +794,6 @@ and when the effect composer is reset.
 
 
 </div>
-<div id="property_material" class="property item private">
-    <h3 class="name"><code>material</code></h3>
-    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_texture.js.html#l19"><code>src\passes\texture.js:19</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Copy shader material.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_needsSwap" class="property item inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
@@ -773,7 +805,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
         </p>
 
 
@@ -828,7 +860,7 @@ Assign your shader material to this mesh!
         </div>
 
 </div>
-<div id="property_renderToScreen" class="property item">
+<div id="property_renderToScreen" class="property item inherited">
     <h3 class="name"><code>renderToScreen</code></h3>
     <span class="type">Boolean</span>
 
@@ -837,17 +869,16 @@ Assign your shader material to this mesh!
 
 
     <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_film.js.html#l43"><code>src\passes\film.js:43</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Render to screen flag.</p>
-
+        Render to screen flag.
     </div>
 
         <p><strong>Default:</strong> false</p>

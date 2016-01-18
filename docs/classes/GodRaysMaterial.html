@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.8</em>
+            <em>API Docs for: 0.0.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -44,6 +44,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
@@ -110,7 +111,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_materials_god-rays_index.js.html#l25"><code>src\materials\god-rays\index.js:25</code></a>
+            Defined in: <a href="../files/src_materials_god-rays_index.js.html#l4"><code>src\materials\god-rays\index.js:4</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -135,13 +136,7 @@ Crysis Next Gen Effects
 <div id="method_GodRaysMaterial" class="method item">
     <h3 class="name"><code>GodRaysMaterial</code></h3>
 
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code class="optional">[phase=Phase.GENERATE]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
+        <span class="paren">()</span>
 
 
 
@@ -153,7 +148,7 @@ Crysis Next Gen Effects
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_god-rays_index.js.html#l25"><code>src\materials\god-rays\index.js:25</code></a>
+        <a href="../files/src_materials_god-rays_index.js.html#l4"><code>src\materials\god-rays\index.js:4</code></a>
         </p>
 
 
@@ -164,26 +159,6 @@ Crysis Next Gen Effects
         
     </div>
 
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name optional">[phase=Phase.GENERATE]</code>
-                        <span class="type">Phase</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Determines which shader code to use. See Phase enumeration.</li>
-</ul>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
 
 
 
@@ -194,7 +169,6 @@ Crysis Next Gen Effects
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
     </ul>
 
     <div>
@@ -202,58 +176,11 @@ Crysis Next Gen Effects
             <h2 class="off-left">Item Index</h2>
 
 
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                            <li class="index-item property">
-                                <a href="#property_Phase">Phase</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
-                    </ul>
-                </div>
 
 
         </div>
 
 
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-<div id="property_Phase" class="property item">
-    <h3 class="name"><code>Phase</code></h3>
-    <span class="type">Object</span>
-
-
-
-        <span class="flag final">final</span>
-
-        <span class="flag static">static</span>
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_god-rays_index.js.html#l4"><code>src\materials\god-rays\index.js:4</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Phase enumeration.</p>
-<p>Generate-phase:
-In the first pass, the masked scene is blurred along radial lines towards the light source.
-The result of the previous pass is re-blurred twice with a decreased distance between the samples.</p>
-<p>Combine-phase:
-The result is added to the normal scene.</p>
-
-    </div>
-
-
-
-</div>
-            </div>
 
 
     </div>
