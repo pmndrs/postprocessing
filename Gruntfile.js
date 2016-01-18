@@ -39,6 +39,9 @@ module.exports = function(grunt) {
 				format: "umd",
 				moduleName: "<%= name.toUpperCase() %>",
 				banner: "<%= banner %>",
+				globals: {
+					three: "THREE"
+				},
 				plugins: [
 					require("rollup-plugin-npm")({
 						jsnext: true,
