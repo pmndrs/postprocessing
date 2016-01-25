@@ -14,6 +14,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "DotScreenPass",
         "EffectComposer",
         "FilmMaterial",
+        "FilmPass",
         "GlitchMaterial",
         "GlitchPass",
         "GodRaysMaterial",

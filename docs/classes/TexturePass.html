@@ -51,6 +51,7 @@
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
+                                <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
@@ -133,7 +134,10 @@
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code class="optional">[options]</code>
+                        <code>texture</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[opacity]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -164,72 +168,31 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[options]</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">texture</code>
+                        <span class="type">Texture</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The texture.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[opacity]</code>
+                        <span class="type">Number</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The options.</li>
+<li>The opacity to apply to the texture.</li>
 </ul>
 
                     </div>
 
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name optional">[grayscale=true]</code>
-                                    <span class="type">Boolean</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>Convert to greyscale.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[noiseIntensity=0.5]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The noise intensity. 0.0 to 1.0.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[scanlinesIntensity=0.05]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The scanline intensity. 0.0 to 1.0.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[scanlinesCount=4096.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The number of scanlines. 0.0 to 4096.0.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                        </ul>
                 </li>
             </ul>
         </div>
@@ -263,10 +226,6 @@
                                 <a href="#method_render">render</a>
 
                             </li>
-                            <li class="index-item method">
-                                <a href="#method_render">render</a>
-
-                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_setSize">setSize</a>
 
@@ -292,10 +251,6 @@
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_material">material</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -346,18 +301,19 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose
-method and deletes them. The pass will be inoperative after 
-this method was called!
+        <p>Performs a shallow search for properties that define a dispose
+method and deletes them. The pass will be inoperative after
+this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory
+when you are certain that you don't need this pass anymore.</p>
 
-Disposable objects:
- - render targets
- - materials
- - textures
-
-The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory 
-when you are certain that you don't need this pass anymore.
     </div>
 
 
@@ -397,110 +353,6 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l54"><code>src\passes\film.js:54</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Renders the scene.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">renderer</code>
-                        <span class="type">WebGLRenderer</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The renderer to use.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">writeBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">readBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The read buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">delta</code>
-                        <span class="type">Number</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The render delta time.</li>
-</ul>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
-<div id="method_render" class="method item">
-    <h3 class="name"><code>render</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>renderer</code>
-                </li>
-                <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>readBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>delta</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
         <a href="../files/src_passes_texture.js.html#l54"><code>src\passes\texture.js:54</code></a>
         </p>
 
@@ -607,13 +459,12 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Updates this pass with the main render target's size.
+        <p>Updates this pass with the main render target's size.</p>
+<p>This is an abstract method that may be overriden in case
+you want to be informed about the main render size.</p>
+<p>The effect composer calls this method when the pass is added
+and when the effect composer is reset.</p>
 
-This is an abstract method that may be overriden in case 
-you want to be informed about the main render size.
-
-The effect composer calls this method when the pass is added 
-and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -684,7 +535,8 @@ and when the effect composer is reset.
     </div>
 
     <div class="description">
-        The camera to render with.
+        <p>The camera to render with.</p>
+
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
@@ -761,36 +613,11 @@ and when the effect composer is reset.
     </div>
 
     <div class="description">
-        Enabled flag.
+        <p>Enabled flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_material" class="property item private">
-    <h3 class="name"><code>material</code></h3>
-    <span class="type"><a href="../classes/FilmMaterial.html" class="crosslink">FilmMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_film.js.html#l24"><code>src\passes\film.js:24</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Film shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -812,13 +639,13 @@ and when the effect composer is reset.
     </div>
 
     <div class="description">
-        Render target swap flag.
-
-When set to true, the read and write buffers will be swapped 
-after this pass is done with rendering so that any following  
+        <p>Render target swap flag.</p>
+<p>When set to true, the read and write buffers will be swapped
+after this pass is done with rendering so that any following<br>
 pass can find the rendered result in the read buffer.
-Swapping is not necessary if, for example, a pass additively 
-renders into the read buffer.
+Swapping is not necessary if, for example, a pass additively
+renders into the read buffer.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -844,8 +671,9 @@ renders into the read buffer.
     </div>
 
     <div class="description">
-        The quad mesh to use for rendering.
-Assign your shader material to this mesh!
+        <p>The quad mesh to use for rendering.
+Assign your shader material to this mesh!</p>
+
     </div>
 
         <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
@@ -878,7 +706,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        Render to screen flag.
+        <p>Render to screen flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -904,7 +733,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        The scene to render.
+        <p>The scene to render.</p>
+
     </div>
 
         <p><strong>Default:</strong> Scene()</p>

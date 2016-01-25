@@ -60,4 +60,4 @@ This library is licensed under the [Zlib license](https://github.com/vanruesc/po
 The original code was written by [alteredq](http://alteredqualia.com), 
 [miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), 
 [felixturner](http://airtight.cc) and [huwb](http://huwbowles.com) 
-and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).  
+and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE). 

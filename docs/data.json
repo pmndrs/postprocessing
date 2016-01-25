@@ -162,7 +162,9 @@
         "src\\passes\\film.js": {
             "name": "src\\passes\\film.js",
             "modules": {},
-            "classes": {},
+            "classes": {
+                "FilmPass": 1
+            },
             "fors": {},
             "namespaces": {}
         },
@@ -291,7 +293,7 @@
                 "BokehPass": 1,
                 "ClearMaskPass": 1,
                 "DotScreenPass": 1,
-                "TexturePass": 1,
+                "FilmPass": 1,
                 "GlitchPass": 1,
                 "GodRaysPass": 1,
                 "MaskPass": 1,
@@ -299,6 +301,7 @@
                 "RenderPass": 1,
                 "SavePass": 1,
                 "ShaderPass": 1,
+                "TexturePass": 1,
                 "EffectComposer": 1
             },
             "fors": {},
@@ -736,9 +739,9 @@
                 }
             ]
         },
-        "TexturePass": {
-            "name": "TexturePass",
-            "shortname": "TexturePass",
+        "FilmPass": {
+            "name": "FilmPass",
+            "shortname": "FilmPass",
             "classitems": [],
             "plugins": [],
             "extensions": [],
@@ -746,9 +749,9 @@
             "extension_for": [],
             "module": "postprocessing",
             "namespace": "",
-            "file": "src\\passes\\texture.js",
+            "file": "src\\passes\\film.js",
             "line": 5,
-            "description": "A texture pass.\n\nThis pass doesn't destroy the given texture when it's being disposed.",
+            "description": "A film pass providing scan lines, greyscale and noise effects.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1075,6 +1078,35 @@
                     "type": "String",
                     "optional": true,
                     "optdefault": "tDiffuse"
+                }
+            ]
+        },
+        "TexturePass": {
+            "name": "TexturePass",
+            "shortname": "TexturePass",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "postprocessing",
+            "namespace": "",
+            "file": "src\\passes\\texture.js",
+            "line": 5,
+            "description": "A texture pass.\n\nThis pass doesn't destroy the given texture when it's being disposed.",
+            "is_constructor": 1,
+            "extends": "Pass",
+            "params": [
+                {
+                    "name": "texture",
+                    "description": "- The texture.",
+                    "type": "Texture"
+                },
+                {
+                    "name": "opacity",
+                    "description": "- The opacity to apply to the texture.",
+                    "type": "Number",
+                    "optional": true
                 }
             ]
         },
@@ -1755,7 +1787,7 @@
             "type": "FilmMaterial",
             "access": "private",
             "tagname": "",
-            "class": "TexturePass",
+            "class": "FilmPass",
             "module": "postprocessing"
         },
         {
@@ -1786,7 +1818,7 @@
                     "type": "Number"
                 }
             ],
-            "class": "TexturePass",
+            "class": "FilmPass",
             "module": "postprocessing"
         },
         {

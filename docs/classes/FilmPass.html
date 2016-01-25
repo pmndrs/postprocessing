@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ShaderPass - postprocessing</title>
+    <title>FilmPass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -104,7 +104,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ShaderPass Class</h1>
+<h1>FilmPass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -112,7 +112,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_shader.js.html#l4"><code>src\passes\shader.js:4</code></a>
+            Defined in: <a href="../files/src_passes_film.js.html#l5"><code>src\passes\film.js:5</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -121,23 +121,19 @@
 
 
 <div class="box intro">
-    <p>A shader pass.</p>
-<p>Used to render any shader material as a 2D filter.</p>
+    <p>A film pass providing scan lines, greyscale and noise effects.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_ShaderPass" class="method item">
-    <h3 class="name"><code>ShaderPass</code></h3>
+<div id="method_FilmPass" class="method item">
+    <h3 class="name"><code>FilmPass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>material</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[textureID=tDiffuse]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -152,7 +148,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_shader.js.html#l4"><code>src\passes\shader.js:4</code></a>
+        <a href="../files/src_passes_film.js.html#l5"><code>src\passes\film.js:5</code></a>
         </p>
 
 
@@ -168,31 +164,72 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">material</code>
-                        <span class="type">ShaderMaterial</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The shader material to use.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[textureID=tDiffuse]</code>
-                        <span class="type">String</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The texture uniform identifier.</li>
+<li>The options.</li>
 </ul>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[grayscale=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Convert to greyscale.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[noiseIntensity=0.5]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The noise intensity. 0.0 to 1.0.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[scanlinesIntensity=0.05]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The scanline intensity. 0.0 to 1.0.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[scanlinesCount=4096.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The number of scanlines. 0.0 to 4096.0.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -245,7 +282,7 @@
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
+                            <li class="index-item property private">
                                 <a href="#property_material">material</a>
 
                             </li>
@@ -263,10 +300,6 @@
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_textureID">textureID</a>
 
                             </li>
                     </ul>
@@ -301,19 +334,18 @@
     </div>
 
     <div class="description">
-        <p>Performs a shallow search for properties that define a dispose
-method and deletes them. The pass will be inoperative after
-this method was called!</p>
-<p>Disposable objects:</p>
-<ul>
-<li>render targets</li>
-<li>materials</li>
-<li>textures</li>
-</ul>
-<p>The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory
-when you are certain that you don't need this pass anymore.</p>
+        Performs a shallow search for properties that define a dispose
+method and deletes them. The pass will be inoperative after 
+this method was called!
 
+Disposable objects:
+ - render targets
+ - materials
+ - textures
+
+The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory 
+when you are certain that you don't need this pass anymore.
     </div>
 
 
@@ -353,7 +385,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_shader.js.html#l51"><code>src\passes\shader.js:51</code></a>
+        <a href="../files/src_passes_film.js.html#l54"><code>src\passes\film.js:54</code></a>
         </p>
 
 
@@ -459,12 +491,13 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Updates this pass with the main render target's size.</p>
-<p>This is an abstract method that may be overriden in case
-you want to be informed about the main render size.</p>
-<p>The effect composer calls this method when the pass is added
-and when the effect composer is reset.</p>
+        Updates this pass with the main render target's size.
 
+This is an abstract method that may be overriden in case 
+you want to be informed about the main render size.
+
+The effect composer calls this method when the pass is added 
+and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -535,8 +568,7 @@ and when the effect composer is reset.</p>
     </div>
 
     <div class="description">
-        <p>The camera to render with.</p>
-
+        The camera to render with.
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
@@ -561,33 +593,33 @@ and when the effect composer is reset.</p>
     </div>
 
     <div class="description">
-        <p>Enabled flag.</p>
-
+        Enabled flag.
     </div>
 
         <p><strong>Default:</strong> true</p>
 
 
 </div>
-<div id="property_material" class="property item">
+<div id="property_material" class="property item private">
     <h3 class="name"><code>material</code></h3>
-    <span class="type">ShaderMaterial</span>
+    <span class="type"><a href="../classes/FilmMaterial.html" class="crosslink">FilmMaterial</a></span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_shader.js.html#l31"><code>src\passes\shader.js:31</code></a>
+        <a href="../files/src_passes_film.js.html#l24"><code>src\passes\film.js:24</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The shader material to use for rendering.</p>
+        <p>Film shader material.</p>
 
     </div>
 
@@ -612,13 +644,13 @@ and when the effect composer is reset.</p>
     </div>
 
     <div class="description">
-        <p>Render target swap flag.</p>
-<p>When set to true, the read and write buffers will be swapped
-after this pass is done with rendering so that any following<br>
-pass can find the rendered result in the read buffer.
-Swapping is not necessary if, for example, a pass additively
-renders into the read buffer.</p>
+        Render target swap flag.
 
+When set to true, the read and write buffers will be swapped 
+after this pass is done with rendering so that any following  
+pass can find the rendered result in the read buffer.
+Swapping is not necessary if, for example, a pass additively 
+renders into the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -644,9 +676,8 @@ renders into the read buffer.</p>
     </div>
 
     <div class="description">
-        <p>The quad mesh to use for rendering.
-Assign your shader material to this mesh!</p>
-
+        The quad mesh to use for rendering.
+Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
@@ -679,8 +710,7 @@ Assign your shader material to this mesh!</p>
     </div>
 
     <div class="description">
-        <p>Render to screen flag.</p>
-
+        Render to screen flag.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -706,38 +736,10 @@ Assign your shader material to this mesh!</p>
     </div>
 
     <div class="description">
-        <p>The scene to render.</p>
-
+        The scene to render.
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
-
-
-</div>
-<div id="property_textureID" class="property item">
-    <h3 class="name"><code>textureID</code></h3>
-    <span class="type">String</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_shader.js.html#l20"><code>src\passes\shader.js:20</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The name of the color sampler uniform of the given material.
-The read buffer will be bound to this.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> tDiffuse</p>
 
 
 </div>

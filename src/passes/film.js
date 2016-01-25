@@ -3,9 +3,9 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * Depth-of-field pass using a bokeh shader.
+ * A film pass providing scan lines, greyscale and noise effects.
  *
- * @class TexturePass
+ * @class FilmPass
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
