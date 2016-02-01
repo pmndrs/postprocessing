@@ -1,97 +1,92 @@
-describe("Post Processing", function() {
+var lib = require("../build/postprocessing");
 
-	describe("Passes", function() {
+module.exports = {
 
-		describe("Sanity checks", function() {
+	"a pass defines a dispose method": function(test) {
 
-			it("define a dispose method", function() {
+		test.equals(typeof lib.Pass.prototype.dispose, "function");
+		test.done();
 
-				assert(typeof POSTPROCESSING.Pass.prototype.dispose === "function");
+	},
 
-			});
+	"all passes can be created and destroyed": function(test) {
 
-			it("can all be created and destroyed", function() {
+		//var x = new lib.AdaptiveToneMappingPass();
+		//test.equals(typeof x, "object");
+		//x.dispose();
 
-				//var x = new POSTPROCESSING.AdaptiveToneMappingPass();
-				//assert(typeof x === "object");
-				//x.dispose();
+		var x = new lib.BloomPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				var x = new POSTPROCESSING.BloomPass();
-				assert(typeof x === "object");
-				x.dispose();
+		//x = new lib.BokehPass();
+		//test.equals(typeof x, "object");
+		//x.dispose();
 
-				//x = new POSTPROCESSING.BokehPass();
-				//assert(typeof x === "object");
-				//x.dispose();
+		x = new lib.ClearMaskPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.ClearMaskPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.DotScreenPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.DotScreenPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.FilmPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.FilmPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.GlitchPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.GlitchPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.GodRaysPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.GodRaysPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.MaskPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.MaskPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.RenderPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.RenderPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.SavePass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.SavePass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.ShaderPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.ShaderPass();
-				assert(typeof x === "object");
-				x.dispose();
+		x = new lib.TexturePass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
-				x = new POSTPROCESSING.TexturePass();
-				assert(typeof x === "object");
-				x.dispose();
+		test.done();
 
-			});
+	},
 
-		});
+	"should find and destroy all disposable properties": function(test) {
 
-		describe("Memory Management", function() {
+		var x = new lib.GlitchPass();
 
-			it("should find and destroy all disposable properties", function() {
+		var i, p, c;
+		var keys = Object.keys(x);
 
-				var x = new POSTPROCESSING.GlitchPass();
+		x.dispose();
 
-				var i, p, c;
-				var keys = Object.keys(x);
+		for(i = keys.length - 1, c = 0; i >= 0; --i) {
 
-				x.dispose();
+			p = x[keys[i]];
+			if(p === null) { ++c; }
 
-				for(i = keys.length - 1, c = 0; i >= 0; --i) {
+		}
 
-					p = x[keys[i]];
-					if(p === null) { ++c; }
+		test.equals(c, 2);
 
-				}
+		test.done();
 
-				assert(c === 2);
+	}
 
-			});
-
-		});
-
-	});
-
-});
+};
