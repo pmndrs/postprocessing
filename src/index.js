@@ -7,32 +7,33 @@
 export { EffectComposer } from "./effect-composer";
 
 export {
-	Pass,
-	SavePass,
-	MaskPass,
-	ClearMaskPass,
-	ShaderPass,
-	RenderPass,
-	TexturePass,
 	AdaptiveToneMappingPass,
-	DotScreenPass,
-	GlitchPass,
 	BloomPass,
 	BokehPass,
+	ClearMaskPass,
+	DotScreenPass,
 	FilmPass,
-	GodRaysPass
+	GlitchPass, GlitchMode,
+	GodRaysPass,
+	MaskPass,
+	Pass,
+	RenderPass,
+	SavePass,
+	ShaderPass,
+	TexturePass
 } from "./passes";
 
 export {
-	CopyMaterial,
-	CombineMaterial,
-	LuminosityMaterial,
 	AdaptiveLuminosityMaterial,
-	ToneMappingMaterial,
-	DotScreenMaterial,
-	GlitchMaterial,
-	ConvolutionMaterial,
+	BlurMaterial, BlurDirection,
 	BokehMaterial,
+	CombineMaterial,
+	ConvolutionMaterial,
+	CopyMaterial,
+	DotScreenMaterial,
 	FilmMaterial,
-	GodRaysMaterial
+	GlitchMaterial,
+	GodRaysMaterial,
+	LuminosityMaterial,
+	ToneMappingMaterial
 } from "./materials";

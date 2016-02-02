@@ -1,18 +1,17 @@
 uniform sampler2D tDiffuse;
-uniform vec2 center;
-uniform vec2 tSize;
+
 uniform float angle;
 uniform float scale;
 
 varying vec2 vUv;
+varying vec2 vUvPattern;
 
 float pattern() {
 
 	float s = sin(angle);
 	float c = cos(angle);
 
-	vec2 tex = vUv * tSize - center;
-	vec2 point = vec2(c * tex.x - s * tex.y, s * tex.x + c * tex.y) * scale;
+	vec2 point = vec2(c * vUvPattern.x - s * vUvPattern.y, s * vUvPattern.x + c * vUvPattern.y) * scale;
 
 	return (sin(point.x) * sin(point.y)) * 4.0;
 

@@ -16,10 +16,11 @@ export function DotScreenMaterial() {
 		uniforms: {
 
 			tDiffuse: {type: "t", value: null},
-			tSize: {type: "v2", value: new THREE.Vector2(256.0, 256.0)},
-			center: {type: "v2", value: new THREE.Vector2(0.5, 0.5)},
+
 			angle: {type: "f", value: 1.57},
-			scale: {type: "f", value: 1.0}
+			scale: {type: "f", value: 1.0},
+
+			offsetRepeat: {type: "v4", value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
 
 		},
 

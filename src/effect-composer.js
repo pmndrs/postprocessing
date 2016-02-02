@@ -66,7 +66,7 @@ export function EffectComposer(renderer, renderTarget) {
 	this.renderTarget2 = renderTarget.clone();
 
 	/**
-	 * The write buffer. Alias for renderTarget1.
+	 * The write buffer.
 	 *
 	 * @property writeBuffer
 	 * @type WebGLRenderTarget
@@ -76,7 +76,7 @@ export function EffectComposer(renderer, renderTarget) {
 	this.writeBuffer = this.renderTarget1;
 
 	/**
-	 * The read buffer. Alias for renderTarget2.
+	 * The read buffer.
 	 *
 	 * @property readBuffer
 	 * @type WebGLRenderTarget
@@ -108,22 +108,6 @@ export function EffectComposer(renderer, renderTarget) {
 }
 
 /**
- * Swaps the render targets on demand.
- * You can toggle swapping in your pass by setting the needsSwap flag.
- *
- * @method swapBuffers
- * @private
- */
-
-EffectComposer.prototype.swapBuffers = function() {
-
-	var tmp = this.readBuffer;
-	this.readBuffer = this.writeBuffer;
-	this.writeBuffer = tmp;
-
-};
-
-/**
  * Adds another pass.
  *
  * @method addPass
@@ -149,6 +133,22 @@ EffectComposer.prototype.insertPass = function(pass, index) {
 
 	pass.setSize(this.renderTarget1.width, this.renderTarget1.height);
 	this.passes.splice(index, 0, pass);
+
+};
+
+/**
+ * Swaps the render targets on demand.
+ * You can toggle swapping in your pass by setting the needsSwap flag.
+ *
+ * @method swapBuffers
+ * @private
+ */
+
+EffectComposer.prototype.swapBuffers = function() {
+
+	var tmp = this.readBuffer;
+	this.readBuffer = this.writeBuffer;
+	this.writeBuffer = tmp;
 
 };
 

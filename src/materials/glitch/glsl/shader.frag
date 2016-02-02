@@ -1,6 +1,8 @@
 uniform sampler2D tDiffuse;
-uniform sampler2D tDisp;
-uniform int byp;
+uniform sampler2D tPerturb;
+
+uniform bool active;
+
 uniform float amount;
 uniform float angle;
 uniform float seed;
@@ -29,51 +31,40 @@ void main() {
 	vec4 cr, cga, cb;
 	vec4 snow, color;
 
-	if(byp < 1) {
+	float sx, sy;
+
+	if(active) {
 
 		xs = floor(gl_FragCoord.x / 0.5);
 		ys = floor(gl_FragCoord.y / 0.5);
 
-		normal = texture2D(tDisp, coord * seed * seed);
+		normal = texture2D(tPerturb, coord * seed * seed);
 
 		if(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {
 
-			if(seedX > 0.0){
-
-				coord.y = 1.0 - (coord.y + distortionY);
-
-			} else {
-
-				coord.y = distortionY;
-
-			}
+			sx = clamp(ceil(seedX), 0.0, 1.0);
+			coord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;
 
 		}
 
 		if(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {
 
-			if(seedY > 0.0){
-
-				coord.x = distortionX;
-
-			} else {
-
-				coord.x = 1. - (coord.x + distortionX);
-
-			}
+			sy = clamp(ceil(seedY), 0.0, 1.0);
+			coord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));
 
 		}
 
 		coord.x += normal.x * seedX * (seed / 5.0);
 		coord.y += normal.y * seedY * (seed / 5.0);
 
-		// Adopted from RGB shift shader.
 		offset = amount * vec2(cos(angle), sin(angle));
+
 		cr = texture2D(tDiffuse, coord + offset);
 		cga = texture2D(tDiffuse, coord);
 		cb = texture2D(tDiffuse, coord - offset);
+
 		color = vec4(cr.r, cga.g, cb.b, cga.a);
-		snow = 200.0 * amount * vec4(rand(vec2(xs * seed,ys * seed * 50.0)) * 0.2);
+		snow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);
 		color += snow;
 
 	} else {

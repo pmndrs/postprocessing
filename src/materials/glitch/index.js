@@ -17,8 +17,10 @@ export function GlitchMaterial() {
 		uniforms: {
 
 			tDiffuse: {type: "t", value: null},
-			tDisp: {type: "t", value: null},
-			byp: {type: "i", value: 0},
+			tPerturb: {type: "t", value: null},
+
+			active: {type: "i", value: 1},
+
 			amount: {type: "f", value: 0.8},
 			angle: {type: "f", value: 0.02},
 			seed: {type: "f", value: 0.02},

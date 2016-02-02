@@ -1,9 +1,11 @@
 uniform sampler2D tDiffuse;
-uniform float stepSize;
-uniform float decay;
-uniform float weight;
-uniform float exposure;
 uniform vec3 lightPosition;
+
+uniform float exposure;
+uniform float decay;
+uniform float density;
+uniform float weight;
+uniform float clampMax;
 
 varying vec2 vUv;
 
@@ -13,46 +15,30 @@ void main() {
 
 	// Calculate vector from pixel to light source in screen space.
 	vec2 deltaTexCoord = texCoord - lightPosition.st;
-	float distance = length(deltaTexCoord);
+	deltaTexCoord *= 1.0 / NUM_SAMPLES_FLOAT * density;
 
-	// Step vector (uv space).
-	vec2 step = stepSize * deltaTexCoord / distance;
-
-	// Number of iterations between pixel and sun.
-	int iterations = int(distance / stepSize);
-
-	// Set up illumination decay factor.
+	// A decreasing illumination factor.
 	float illuminationDecay = 1.0;
 
-	// Sample color.
 	vec4 sample;
-
-	// Color accumulator.
 	vec4 color = vec4(0.0);
 
 	// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light source.
 	for(int i = 0; i < NUM_SAMPLES_INT; ++i) {
 
-		// Don't do more than necessary.
-		if(i <= iterations && texCoord.y < 1.0) {
+		texCoord -= deltaTexCoord;
+		sample = texture2D(tDiffuse, texCoord);
 
-			sample = texture2D(tDiffuse, texCoord);
+		// Apply sample attenuation scale/decay factors.
+		sample *= illuminationDecay * weight;
 
-			// Apply sample attenuation scale/decay factors.
-			sample *= illuminationDecay * weight;
+		color += sample;
 
-			color += sample;
-
-			// Update exponential decay factor.
-			illuminationDecay *= decay;
-
-		}
-
-		texCoord -= step;
+		// Update exponential decay factor.
+		illuminationDecay *= decay;
 
 	}
 
-	// Output final color with a further scale control factor.
-	gl_FragColor = (color / NUM_SAMPLES_FLOAT) * exposure;
+	gl_FragColor = clamp(color * exposure, 0.0, clampMax);
 
 }

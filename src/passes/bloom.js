@@ -11,18 +11,13 @@ var BLUR = 0.001953125;
  * This pass renders a scene with superimposed blur 
  * by utilising an approximated gauss kernel.
  *
- * Since the effect will be written to the readBuffer 
- * render texture, you'll need to use a ShaderPass with 
- * a CopyMaterial to render the texture to screen.
- *
  * @class BloomPass
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
+ * @param {Number} [options.resolution=256] - The render resolution. Power of two is recommended.
  * @param {Number} [options.strength=1.0] - The bloom strength.
- * @param {Number} [options.kernelSize=25] - The kernel size.
- * @param {Number} [options.sigma=4.0] - The sigma value.
- * @param {Number} [options.resolution=256] - The render resolution.
+ * @param {Number} [options.sigma=4.0] - Defines the size of the kernel.
  */
 
 export function BloomPass(options) {
@@ -30,7 +25,6 @@ export function BloomPass(options) {
 	Pass.call(this);
 
 	if(options === undefined) { options = {}; }
-	if(options.kernelSize === undefined) { options.kernelSize = 25; }
 
 	/**
 	 * A render target.
@@ -120,8 +114,6 @@ export function BloomPass(options) {
 	this.convolutionMaterial = new ConvolutionMaterial();
 
 	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
-	this.convolutionMaterial.defines.KERNEL_SIZE_FLOAT = options.kernelSize.toFixed(1);
-	this.convolutionMaterial.defines.KERNEL_SIZE_INT = options.kernelSize.toFixed(0);
 
 	/**
 	 * Clear flag.

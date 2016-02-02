@@ -3,6 +3,23 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
+ * A glitch mode enumeration.
+ *
+ * SPORADIC is the default mode (randomly timed glitches).
+ *
+ * @property GlitchMode
+ * @type Object
+ * @static
+ * @final
+ */
+
+export var GlitchMode = Object.freeze({
+	SPORADIC: 0,
+	CONSTANT_MILD: 1,
+	CONSTANT_WILD: 2
+});
+
+/**
  * A glitch pass.
  *
  * @class GlitchPass
@@ -45,7 +62,7 @@ export function GlitchPass(options) {
 
 		this.perturbMap = options.perturbMap;
 		this.perturbMap.generateMipmaps = false;
-		this.material.uniforms.tDisp.value = this.perturbMap;
+		this.material.uniforms.tPerturb.value = this.perturbMap;
 
 	} else {
 
@@ -55,23 +72,26 @@ export function GlitchPass(options) {
 	}
 
 	/**
-	 * The quad mesh to render.
+	 * The effect mode.
 	 *
-	 * @property quad
-	 * @type Mesh
+	 * Check the GlitchMode enumeration for available modes.
+	 *
+	 * @property mode
+	 * @type GlitchMode
+	 * @default GlitchMode.SPORADIC
 	 */
 
-	this.goWild = false;
+	this.mode = GlitchMode.SPORADIC;
 
 	/**
 	 * Counter for glitch activation/deactivation.
 	 *
-	 * @property curF
+	 * @property counter
 	 * @type Number
 	 * @private
 	 */
 
-	this.curF = 0;
+	this.counter = 0;
 
 	// Set the material of the rendering quad.
 	this.quad.material = this.material;
@@ -102,35 +122,35 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	uniforms.tDiffuse.value = readBuffer;
 	uniforms.seed.value = Math.random();
-	uniforms.byp.value = 0;
+	uniforms.active.value = true;
 
-	if(this.curF % this.randX === 0 || this.goWild) {
+	if(this.counter % this.breakPoint === 0 || this.mode === GlitchMode.CONSTANT_WILD) {
 
-		uniforms.amount.value = Math.random() / 30;
+		uniforms.amount.value = Math.random() / 30.0;
 		uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
-		uniforms.seedX.value = THREE.Math.randFloat(-1, 1);
-		uniforms.seedY.value = THREE.Math.randFloat(-1, 1);
-		uniforms.distortionX.value = THREE.Math.randFloat(0, 1);
-		uniforms.distortionY.value = THREE.Math.randFloat(0, 1);
-		this.curF = 0;
+		uniforms.seedX.value = THREE.Math.randFloat(-1.0, 1.0);
+		uniforms.seedY.value = THREE.Math.randFloat(-1.0, 1.0);
+		uniforms.distortionX.value = THREE.Math.randFloat(0.0, 1.0);
+		uniforms.distortionY.value = THREE.Math.randFloat(0.0, 1.0);
+		this.counter = 0;
 		this.generateTrigger();
 
-	} else if(this.curF % this.randX < this.randX / 5) {
+	} else if(this.counter % this.breakPoint < this.breakPoint / 5 || this.mode === GlitchMode.CONSTANT_MILD) {
 
-		uniforms.amount.value = Math.random() / 90;
+		uniforms.amount.value = Math.random() / 90.0;
 		uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
-		uniforms.distortionX.value = THREE.Math.randFloat(0, 1);
-		uniforms.distortionY.value = THREE.Math.randFloat(0, 1);
+		uniforms.distortionX.value = THREE.Math.randFloat(0.0, 1.0);
+		uniforms.distortionY.value = THREE.Math.randFloat(0.0, 1.0);
 		uniforms.seedX.value = THREE.Math.randFloat(-0.3, 0.3);
 		uniforms.seedY.value = THREE.Math.randFloat(-0.3, 0.3);
 
-	} else if(!this.goWild) {
+	} else if(this.mode === GlitchMode.SPORADIC) {
 
-		uniforms.byp.value = 1;
+		uniforms.active.value = false;
 
 	}
 
-	++this.curF;
+	++this.counter;
 
 	if(this.renderToScreen) {
 
@@ -145,16 +165,12 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 };
 
 /**
- * Creates a new break point for the glitch effect.
+ * Creates a random break point for the glitch effect.
  *
  * @method generateTrigger
  */
 
-GlitchPass.prototype.generateTrigger = function() {
-
-	this.randX = THREE.Math.randInt(120, 240);
-
-};
+GlitchPass.prototype.generateTrigger = function() { this.breakPoint = THREE.Math.randInt(120, 240); };
 
 /**
  * Destroys the currently set texture, if any, and 
@@ -187,6 +203,6 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
 	this.perturbMap.needsUpdate = true;
 
-	this.material.uniforms.tDisp.value = this.perturbMap;
+	this.material.uniforms.tPerturb.value = this.perturbMap;
 
 };

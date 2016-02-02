@@ -29,8 +29,8 @@ export function ConvolutionMaterial() {
 
 		defines: {
 
-			KERNEL_SIZE_FLOAT: "25.0",
-			KERNEL_SIZE_INT: "25"
+			KERNEL_SIZE_FLOAT: "0.0",
+			KERNEL_SIZE_INT: "0"
 
 		},
 
@@ -81,5 +81,9 @@ ConvolutionMaterial.prototype.buildKernel = function(sigma) {
 
 	// Normalize the kernel.
 	for(i = 0; i < kernelSize; ++i) { values[i] /= sum; }
+
+	// Define the kernel size for the shader.
+	this.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
+	this.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
 
 };

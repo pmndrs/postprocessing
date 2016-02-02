@@ -9,15 +9,16 @@ import THREE from "three";
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
- * @param {Vector2} [tSize=(256.0, 256.0)] - The pattern texture size.
- * @param {Vector2} [center=(0.5, 0.5)] - The center.
- * @param {Number} [angle=1.57] - The angle.
- * @param {Number} [scale=1.0] - The scale.
+ * @param {Number} [patternSize=1.0] - The pattern size.
+ * @param {Number} [angle=1.57] - The angle of the pattern.
+ * @param {Number} [scale=1.0] - The scale of the overall effect.
  */
 
 export function DotScreenPass(options) {
 
 	Pass.call(this);
+
+	if(options === undefined) { options = {}; }
 
 	/**
 	 * Dot screen shader material description.
@@ -29,14 +30,8 @@ export function DotScreenPass(options) {
 
 	this.material = new DotScreenMaterial();
 
-	if(options !== undefined) {
-
-		if(options.tSize !== undefined) { this.material.uniforms.tSize.value.copy(options.tSize); }
-		if(options.center !== undefined) { this.material.uniforms.center.value.copy(options.center); }
-		if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
-		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
-
-	}
+	if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
+	if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
@@ -59,8 +54,6 @@ DotScreenPass.prototype.constructor = DotScreenPass;
 DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 	this.material.uniforms.tDiffuse.value = readBuffer;
-	this.material.uniforms.tSize.value.set(readBuffer.width, readBuffer.height);
-
 	this.quad.material = this.material;
 
 	if(this.renderToScreen) {
@@ -72,5 +65,23 @@ DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer, del
 		renderer.render(this.scene, this.camera, writeBuffer, false);
 
 	}
+
+};
+
+/**
+ * Sets the pattern size relative to the render size.
+ *
+ * @method setSize
+ * @param {Number} width - The width.
+ * @param {Number} heght - The height.
+ */
+
+DotScreenPass.prototype.setSize = function(width, height) {
+
+	if(width <= 0) { width = 1; }
+	if(height <= 0) { height = 1; }
+
+	this.material.uniforms.offsetRepeat.value.z = width;
+	this.material.uniforms.offsetRepeat.value.w = height;
 
 };

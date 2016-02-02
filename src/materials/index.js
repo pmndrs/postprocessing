@@ -6,14 +6,15 @@
  * @submodule materials
  */
 
-export { CopyMaterial } from "./copy";
-export { CombineMaterial } from "./combine";
-export { LuminosityMaterial } from "./luminosity";
 export { AdaptiveLuminosityMaterial } from "./adaptive-luminosity";
-export { ToneMappingMaterial } from "./tone-mapping";
-export { DotScreenMaterial } from "./dot-screen";
-export { GlitchMaterial } from "./glitch";
-export { ConvolutionMaterial } from "./convolution";
+export { BlurMaterial, BlurDirection } from "./blur";
 export { BokehMaterial } from "./bokeh";
+export { CombineMaterial } from "./combine";
+export { ConvolutionMaterial } from "./convolution";
+export { CopyMaterial } from "./copy";
+export { DotScreenMaterial } from "./dot-screen";
 export { FilmMaterial } from "./film";
-export { GodRaysMaterial, Phase } from "./god-rays";
+export { GlitchMaterial } from "./glitch";
+export { GodRaysMaterial } from "./god-rays";
+export { LuminosityMaterial } from "./luminosity";
+export { ToneMappingMaterial } from "./tone-mapping";
