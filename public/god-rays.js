@@ -1,12 +1,88 @@
-window.addEventListener("load", function init() {
+/**
+ * Manual asset loading.
+ */
 
-	window.removeEventListener("load", init);
+window.addEventListener("load", function loadAssets() {
+
+	window.removeEventListener("load", loadAssets);
+
+	var loadingManager = new THREE.LoadingManager();
+	var textureLoader = new THREE.TextureLoader(loadingManager);
+	var modelLoader = new THREE.ObjectLoader(loadingManager);
+	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+
+	var assets = {};
+
+	loadingManager.onProgress = function(item, loaded, total) {
+
+		if(loaded === total) { setupScene(assets); }
+
+	};
+
+	var path = "textures/skies/starry/";
+	var format = ".png";
+	var urls = [
+		path + "px" + format, path + "nx" + format,
+		path + "py" + format, path + "ny" + format,
+		path + "pz" + format, path + "nz" + format
+	];
+
+	cubeTextureLoader.load(urls, function(textureCube) {
+
+		var shader = THREE.ShaderLib.cube;
+		shader.uniforms.tCube.value = textureCube;
+
+		var skyBoxMaterial = new THREE.ShaderMaterial( {
+			fragmentShader: shader.fragmentShader,
+			vertexShader: shader.vertexShader,
+			uniforms: shader.uniforms,
+			depthWrite: false,
+			side: THREE.BackSide,
+			fog: false
+		});
+
+		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(100000, 100000, 100000), skyBoxMaterial);
+
+	});
+
+	modelLoader.load("models/waggon.json", function(object) {
+
+		textureLoader.load("textures/wood.jpg", function(colorMap) {
+
+			colorMap.wrapS = colorMap.wrapT = THREE.RepeatWrapping;
+
+			textureLoader.load("textures/woodnormals.jpg", function(normalMap) {
+
+				normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+
+				var material = new THREE.MeshPhongMaterial({
+					color: 0xffffff,
+					map: colorMap,
+					normalMap: normalMap,
+					fog: true
+				});
+
+				object.scale.multiplyScalar(100.0);
+				object.rotation.y = Math.PI * 0.75;
+				object.rotation.x = Math.PI * 0.25;
+				object.traverse(function(child) { child.material = material; })
+				assets.waggon = object;
+
+			});
+
+		});
+
+	});
+
+});
+
+function setupScene(assets) {
 
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.00025);
+	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
@@ -56,41 +132,14 @@ window.addEventListener("load", function init() {
 	scene.add(directionalLight);
 	scene.add(hemisphereLight);
 
-	// Load a model.
+	// Sky.
 
-	var object;
+	// Move the sky with the camera.
+	camera.add(assets.sky);
 
-	var loader = new THREE.ObjectLoader();
-	var textureLoader = new THREE.TextureLoader();
+	// Waggon model.
 
-	loader.load("models/waggon.json", function(object) {
-
-		textureLoader.load("textures/wood.jpg", function(colorMap) {
-
-			colorMap.wrapS = colorMap.wrapT = THREE.RepeatWrapping;
-
-			textureLoader.load("textures/woodnormals.jpg", function(normalMap) {
-
-				normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
-
-				var material = new THREE.MeshPhongMaterial({
-					color: 0xffffff,
-					map: colorMap,
-					normalMap: normalMap,
-					fog: true
-				});
-
-				object.scale.multiplyScalar(100.0);
-				object.rotation.y = Math.PI * 0.75;
-				object.rotation.x = Math.PI * 0.25;
-				object.traverse(function(child) { child.material = material; })
-				scene.add(object);
-
-			});
-
-		});
-
-	});
+	scene.add(assets.waggon);
 
 	// Sun.
 
@@ -110,13 +159,13 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolutionScale: 0.5,
+		resolutionScale: 0.4,
 		intensity: 1.0,
 		density: 0.96,
 		decay: 0.93,
 		weight: 0.4,
 		exposure: 0.6,
-		samples: 80,
+		samples: 100,
 		blurriness: 1.0,
 		clampMax: 1.0
 	});
@@ -135,7 +184,8 @@ window.addEventListener("load", function init() {
 		"exposure": pass.godRaysMaterial.uniforms.exposure.value,
 		"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
 		"samples": pass.samples/*,
-		"blurriness": pass.blurriness*/
+		"blurriness": pass.blurriness*/,
+		"color": sun.material.color.getHex()
 	};
 
 	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.reset(); });
@@ -147,6 +197,7 @@ window.addEventListener("load", function init() {
 	gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params["clampMax"]; });
 	gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params["samples"]; });
 	//gui.add(params, "blurriness").min(0.0).max(4.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; composer.reset(); });
+	gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params["color"]); });
 
 	/**
 	 * Handles resizing.
@@ -180,4 +231,4 @@ window.addEventListener("load", function init() {
 
 	}());
 
-});
+};
