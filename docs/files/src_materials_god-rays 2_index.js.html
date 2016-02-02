@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\passes\shader.js - postprocessing</title>
+    <title>src\materials\god-rays 2\index.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -105,89 +105,62 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\passes\shader.js</h1>
+<h1 class="file-heading">File: src\materials\god-rays 2\index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { Pass } from &quot;./pass&quot;;
+import shader from &quot;./inlined/shader&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * A shader pass.
+ * A crepuscular rays shader material.
  *
- * Used to render any shader material as a 2D filter.
+ * References:
  *
- * @class ShaderPass
+ * Nvidia, GPU Gems 3 - Chapter 13:
+ *  Volumetric Light Scattering as a Post-Process
+ *  http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html
+ *
+ * Crytek, Sousa - GDC2008:
+ *  Crysis Next Gen Effects
+ *  http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt
+ *
+ * @class GodRaysMaterial
  * @constructor
- * @extends Pass
- * @param {ShaderMaterial} material - The shader material to use.
- * @param {String} [textureID=tDiffuse] - The texture uniform identifier.
+ * @extends ShaderMaterial
  */
 
-export function ShaderPass(material, textureID) {
+export function GodRaysMaterial() {
 
-	Pass.call(this);
+	THREE.ShaderMaterial.call(this, {
 
-	/**
-	 * The name of the color sampler uniform of the given material.
-	 * The read buffer will be bound to this.
-	 *
-	 * @property textureID
-	 * @type String
-	 * @default tDiffuse
-	 */
+		defines: {
 
-	this.textureID = (textureID !== undefined) ? textureID : &quot;tDiffuse&quot;;
+			NUM_SAMPLES_FLOAT: &quot;6.0&quot;,
+			NUM_SAMPLES_INT: &quot;6&quot;
 
-	/**
-	 * The shader material to use for rendering.
-	 *
-	 * @property material
-	 * @type ShaderMaterial
-	 */
+		},
 
-	this.material = (material !== undefined) ? material : null;
+		uniforms: {
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
+			tDiffuse: {type: &quot;t&quot;, value: null},
+			stepSize: {type: &quot;f&quot;, value: 1.5},
+			decay: {type: &quot;f&quot;, value: 1.0},
+			weight: {type: &quot;f&quot;, value: 1.0},
+			exposure: {type: &quot;f&quot;, value: 1.0},
+			lightPosition: {type: &quot;v3&quot;, value: null}
 
-	// Set the mateiral of the rendering quad.
-	this.quad.material = this.material;
+		},
+
+		fragmentShader: shader.fragment,
+		vertexShader: shader.vertex
+
+	});
 
 }
 
-ShaderPass.prototype = Object.create(Pass.prototype);
-ShaderPass.prototype.constructor = ShaderPass;
-
-/**
- * Renders the scene.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
- */
-
-ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
-
-	if(this.material.uniforms[this.textureID] !== undefined) {
-
-		this.material.uniforms[this.textureID].value = readBuffer;
-
-	}
-
-	if(this.renderToScreen) {
-
-		renderer.render(this.scene, this.camera);
-
-	} else {
-
-		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
-
-	}
-
-};
+GodRaysMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
+GodRaysMaterial.prototype.constructor = GodRaysMaterial;
 
     </pre>
 </div>

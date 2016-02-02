@@ -41,6 +41,7 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -126,10 +127,11 @@ export function DotScreenMaterial() {
 		uniforms: {
 
 			tDiffuse: {type: &quot;t&quot;, value: null},
-			tSize: {type: &quot;v2&quot;, value: new THREE.Vector2(256.0, 256.0)},
-			center: {type: &quot;v2&quot;, value: new THREE.Vector2(0.5, 0.5)},
+
 			angle: {type: &quot;f&quot;, value: 1.57},
-			scale: {type: &quot;f&quot;, value: 1.0}
+			scale: {type: &quot;f&quot;, value: 1.0},
+
+			offsetRepeat: {type: &quot;v4&quot;, value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
 
 		},
 

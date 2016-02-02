@@ -41,6 +41,7 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -112,7 +113,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+            Defined in: <a href="../files/src_passes_glitch.js.html#l22"><code>src\passes\glitch.js:22</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -148,7 +149,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+        <a href="../files/src_passes_glitch.js.html#l22"><code>src\passes\glitch.js:22</code></a>
         </p>
 
 
@@ -261,15 +262,24 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_curF">curF</a>
+                                <a href="#property_counter">counter</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_GlitchMode">GlitchMode</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_material">material</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_mode">mode</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -280,7 +290,7 @@
                                 <a href="#property_perturbMap">perturbMap</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
 
                             </li>
@@ -364,7 +374,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l159"><code>src\passes\glitch.js:159</code></a>
+        <a href="../files/src_passes_glitch.js.html#l175"><code>src\passes\glitch.js:175</code></a>
         </p>
 
 
@@ -415,7 +425,7 @@ generates a simple noise map.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l147"><code>src\passes\glitch.js:147</code></a>
+        <a href="../files/src_passes_glitch.js.html#l167"><code>src\passes\glitch.js:167</code></a>
         </p>
 
 
@@ -423,7 +433,7 @@ generates a simple noise map.</p>
     </div>
 
     <div class="description">
-        <p>Creates a new break point for the glitch effect.</p>
+        <p>Creates a random break point for the glitch effect.</p>
 
     </div>
 
@@ -461,7 +471,7 @@ generates a simple noise map.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l90"><code>src\passes\glitch.js:90</code></a>
+        <a href="../files/src_passes_glitch.js.html#l110"><code>src\passes\glitch.js:110</code></a>
         </p>
 
 
@@ -638,8 +648,8 @@ and when the effect composer is reset.
 
 
 </div>
-<div id="property_curF" class="property item private">
-    <h3 class="name"><code>curF</code></h3>
+<div id="property_counter" class="property item private">
+    <h3 class="name"><code>counter</code></h3>
     <span class="type">Number</span>
 
 
@@ -650,7 +660,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l66"><code>src\passes\glitch.js:66</code></a>
+        <a href="../files/src_passes_glitch.js.html#l86"><code>src\passes\glitch.js:86</code></a>
         </p>
 
 
@@ -689,6 +699,34 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_GlitchMode" class="property item">
+    <h3 class="name"><code>GlitchMode</code></h3>
+    <span class="type">Object</span>
+
+
+
+        <span class="flag final">final</span>
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A glitch mode enumeration.</p>
+<p>SPORADIC is the default mode (randomly timed glitches).</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_material" class="property item private">
     <h3 class="name"><code>material</code></h3>
     <span class="type"><a href="../classes/GlitchMaterial.html" class="crosslink">GlitchMaterial</a></span>
@@ -701,7 +739,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l23"><code>src\passes\glitch.js:23</code></a>
+        <a href="../files/src_passes_glitch.js.html#l40"><code>src\passes\glitch.js:40</code></a>
         </p>
 
 
@@ -712,6 +750,33 @@ and when the effect composer is reset.
 
     </div>
 
+
+
+</div>
+<div id="property_mode" class="property item">
+    <h3 class="name"><code>mode</code></h3>
+    <span class="type">GlitchMode</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l74"><code>src\passes\glitch.js:74</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The effect mode.</p>
+<p>Check the GlitchMode enumeration for available modes.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> GlitchMode.SPORADIC</p>
 
 
 </div>
@@ -757,7 +822,7 @@ renders into the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l33"><code>src\passes\glitch.js:33</code></a>
+        <a href="../files/src_passes_glitch.js.html#l50"><code>src\passes\glitch.js:50</code></a>
         </p>
 
 
@@ -774,32 +839,39 @@ EffectComposer is deleted.</p>
 
 
 </div>
-<div id="property_quad" class="property item">
+<div id="property_quad" class="property item private inherited">
     <h3 class="name"><code>quad</code></h3>
     <span class="type">Mesh</span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#property_quad">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l57"><code>src\passes\glitch.js:57</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_quad">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The quad mesh to render.</p>
-
+        The quad mesh to use for rendering.
+Assign your shader material to this mesh!
     </div>
 
+        <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.quad.material = this.myMaterial;</p>
+
+            </div>
+        </div>
 
 </div>
 <div id="property_renderToScreen" class="property item inherited">

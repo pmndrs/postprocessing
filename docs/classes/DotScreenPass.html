@@ -41,6 +41,7 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -136,10 +137,7 @@
                         <code class="optional">[options]</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[tSize=(256.0, 256.0)]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[center=(0.5, 0.5)]</code>
+                        <code class="optional">[patternSize=1.0]</code>
                 </li>
                 <li class="arg">
                         <code class="optional">[angle=1.57]</code>
@@ -190,28 +188,14 @@
 
                 </li>
                 <li class="param">
-                        <code class="param-name optional">[tSize=(256.0, 256.0)]</code>
-                        <span class="type">Vector2</span>
+                        <code class="param-name optional">[patternSize=1.0]</code>
+                        <span class="type">Number</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The pattern texture size.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[center=(0.5, 0.5)]</code>
-                        <span class="type">Vector2</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The center.</li>
+<li>The pattern size.</li>
 </ul>
 
                     </div>
@@ -225,7 +209,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The angle.</li>
+<li>The angle of the pattern.</li>
 </ul>
 
                     </div>
@@ -239,7 +223,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The scale.</li>
+<li>The scale of the overall effect.</li>
 </ul>
 
                     </div>
@@ -399,7 +383,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_dot-screen.js.html#l49"><code>src\passes\dot-screen.js:49</code></a>
+        <a href="../files/src_passes_dot-screen.js.html#l44"><code>src\passes\dot-screen.js:44</code></a>
         </p>
 
 
@@ -473,7 +457,7 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -482,7 +466,7 @@ when you are certain that you don't need this pass anymore.
                         <code>width</code>
                 </li>
                 <li class="arg">
-                        <code>height</code>
+                        <code>heght</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -495,9 +479,12 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_dot-screen.js.html#l71"><code>src\passes\dot-screen.js:71</code></a>
         </p>
 
 
@@ -505,13 +492,8 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Updates this pass with the main render target's size.
+        <p>Sets the pattern size relative to the render size.</p>
 
-This is an abstract method that may be overriden in case 
-you want to be informed about the main render size.
-
-The effect composer calls this method when the pass is added 
-and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -532,7 +514,7 @@ and when the effect composer is reset.
 
                 </li>
                 <li class="param">
-                        <code class="param-name">height</code>
+                        <code class="param-name">heght</code>
                         <span class="type">Number</span>
 
 
@@ -549,14 +531,6 @@ and when the effect composer is reset.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -626,7 +600,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_dot-screen.js.html#l22"><code>src\passes\dot-screen.js:22</code></a>
+        <a href="../files/src_passes_dot-screen.js.html#l23"><code>src\passes\dot-screen.js:23</code></a>
         </p>
 
 

@@ -41,6 +41,7 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -116,13 +117,13 @@ import THREE from &quot;three&quot;;
  *
  * References:
  *
+ * Thibaut Despoulain, 2012:
+ *  (WebGL) Volumetric Light Approximation in Three.js
+ *  http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html
+ *
  * Nvidia, GPU Gems 3 - Chapter 13:
  *  Volumetric Light Scattering as a Post-Process
  *  http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html
- *
- * Crytek, Sousa - GDC2008:
- *  Crysis Next Gen Effects
- *  http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt
  *
  * @class GodRaysMaterial
  * @constructor
@@ -135,19 +136,21 @@ export function GodRaysMaterial() {
 
 		defines: {
 
-			NUM_SAMPLES_FLOAT: &quot;6.0&quot;,
-			NUM_SAMPLES_INT: &quot;6&quot;
+			NUM_SAMPLES_FLOAT: &quot;20.0&quot;,
+			NUM_SAMPLES_INT: &quot;20&quot;
 
 		},
 
 		uniforms: {
 
 			tDiffuse: {type: &quot;t&quot;, value: null},
-			stepSize: {type: &quot;f&quot;, value: 1.5},
-			decay: {type: &quot;f&quot;, value: 1.0},
-			weight: {type: &quot;f&quot;, value: 1.0},
-			exposure: {type: &quot;f&quot;, value: 1.0},
-			lightPosition: {type: &quot;v3&quot;, value: null}
+			lightPosition: {type: &quot;v3&quot;, value: null},
+
+			exposure: {type: &quot;f&quot;, value: 0.6},
+			decay: {type: &quot;f&quot;, value: 0.93},
+			density: {type: &quot;f&quot;, value: 0.96},
+			weight: {type: &quot;f&quot;, value: 0.4},
+			clampMax: {type: &quot;f&quot;, value: 1.0}
 
 		},
 

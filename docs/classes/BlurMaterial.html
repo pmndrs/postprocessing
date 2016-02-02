@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\passes\shader.js - postprocessing</title>
+    <title>BlurMaterial - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -105,91 +105,149 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\passes\shader.js</h1>
+<h1>BlurMaterial Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-import { Pass } from &quot;./pass&quot;;
-import THREE from &quot;three&quot;;
+        <div class="extends">
+            Extends ShaderMaterial
+        </div>
 
-/**
- * A shader pass.
- *
- * Used to render any shader material as a 2D filter.
- *
- * @class ShaderPass
- * @constructor
- * @extends Pass
- * @param {ShaderMaterial} material - The shader material to use.
- * @param {String} [textureID=tDiffuse] - The texture uniform identifier.
- */
+        <div class="foundat">
+            Defined in: <a href="../files/src_materials_blur_index.js.html#l18"><code>src\materials\blur\index.js:18</code></a>
+        </div>
 
-export function ShaderPass(material, textureID) {
+            Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
-	Pass.call(this);
+</div>
 
-	/**
-	 * The name of the color sampler uniform of the given material.
-	 * The read buffer will be bound to this.
-	 *
-	 * @property textureID
-	 * @type String
-	 * @default tDiffuse
-	 */
 
-	this.textureID = (textureID !== undefined) ? textureID : &quot;tDiffuse&quot;;
+<div class="box intro">
+    <p>A blur shader material.</p>
+<p><a href="http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader">http://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader</a></p>
 
-	/**
-	 * The shader material to use for rendering.
-	 *
-	 * @property material
-	 * @type ShaderMaterial
-	 */
+</div>
 
-	this.material = (material !== undefined) ? material : null;
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_BlurMaterial" class="method item">
+    <h3 class="name"><code>BlurMaterial</code></h3>
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>direction</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
-	// Set the mateiral of the rendering quad.
-	this.quad.material = this.material;
 
-}
 
-ShaderPass.prototype = Object.create(Pass.prototype);
-ShaderPass.prototype.constructor = ShaderPass;
 
-/**
- * Renders the scene.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
- */
 
-ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
-	if(this.material.uniforms[this.textureID] !== undefined) {
 
-		this.material.uniforms[this.textureID].value = readBuffer;
 
-	}
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_blur_index.js.html#l18"><code>src\materials\blur\index.js:18</code></a>
+        </p>
 
-	if(this.renderToScreen) {
 
-		renderer.render(this.scene, this.camera);
 
-	} else {
+    </div>
 
-		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+    <div class="description">
+        
+    </div>
 
-	}
+        <div class="params">
+            <h4>Parameters:</h4>
 
-};
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">direction</code>
+                        <span class="type">BlurDirection</span>
 
-    </pre>
+
+                    <div class="param-description">
+                        <ul>
+<li>The blur direction.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties extends">
+                            <li class="index-item property">
+                                <a href="#property_BlurDirection">BlurDirection</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_BlurDirection" class="property item">
+    <h3 class="name"><code>BlurDirection</code></h3>
+    <span class="type">Object</span>
+
+
+
+        <span class="flag final">final</span>
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_blur_index.js.html#l4"><code>src\materials\blur\index.js:4</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>An enumeration of blur directions.</p>
+
+    </div>
+
+
+
+</div>
+            </div>
+
+
+    </div>
 </div>
                     </div>
                 </div>

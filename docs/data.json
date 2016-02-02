@@ -15,6 +15,15 @@
             "fors": {},
             "namespaces": {}
         },
+        "src\\materials\\blur\\index.js": {
+            "name": "src\\materials\\blur\\index.js",
+            "modules": {},
+            "classes": {
+                "BlurMaterial": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
         "src\\materials\\bokeh\\index.js": {
             "name": "src\\materials\\bokeh\\index.js",
             "modules": {},
@@ -80,6 +89,13 @@
         },
         "src\\materials\\god-rays\\index.js": {
             "name": "src\\materials\\god-rays\\index.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\materials\\god-rays 2\\index.js": {
+            "name": "src\\materials\\god-rays 2\\index.js",
             "modules": {},
             "classes": {
                 "GodRaysMaterial": 1
@@ -174,6 +190,13 @@
             "classes": {
                 "GlitchPass": 1
             },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src\\passes\\god-rays 2.js": {
+            "name": "src\\passes\\god-rays 2.js",
+            "modules": {},
+            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -278,6 +301,7 @@
             "elements": {},
             "classes": {
                 "AdaptiveLuminosityMaterial": 1,
+                "BlurMaterial": 1,
                 "BokehMaterial": 1,
                 "CombineMaterial": 1,
                 "ConvolutionMaterial": 1,
@@ -355,6 +379,28 @@
             "description": "An adaptive luminosity shader material.",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
+        },
+        "BlurMaterial": {
+            "name": "BlurMaterial",
+            "shortname": "BlurMaterial",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "postprocessing",
+            "file": "src\\materials\\blur\\index.js",
+            "line": 18,
+            "description": "A blur shader material.\n\nhttp://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader",
+            "is_constructor": 1,
+            "extends": "ShaderMaterial",
+            "params": [
+                {
+                    "name": "direction",
+                    "description": "- The blur direction.",
+                    "type": "BlurDirection"
+                }
+            ]
         },
         "BokehMaterial": {
             "name": "BokehMaterial",
@@ -486,7 +532,7 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "postprocessing",
-            "file": "src\\materials\\god-rays\\index.js",
+            "file": "src\\materials\\god-rays 2\\index.js",
             "line": 4,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
             "is_constructor": 1,
@@ -563,7 +609,7 @@
             "namespace": "",
             "file": "src\\passes\\bloom.js",
             "line": 8,
-            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.\n\nSince the effect will be written to the readBuffer \nrender texture, you'll need to use a ShaderPass with \na CopyMaterial to render the texture to screen.",
+            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -574,6 +620,13 @@
                     "optional": true,
                     "props": [
                         {
+                            "name": "resolution",
+                            "description": "- The render resolution. Power of two is recommended.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "256"
+                        },
+                        {
                             "name": "strength",
                             "description": "- The bloom strength.",
                             "type": "Number",
@@ -581,25 +634,11 @@
                             "optdefault": "1.0"
                         },
                         {
-                            "name": "kernelSize",
-                            "description": "- The kernel size.",
-                            "type": "Number",
-                            "optional": true,
-                            "optdefault": "25"
-                        },
-                        {
                             "name": "sigma",
-                            "description": "- The sigma value.",
+                            "description": "- Defines the size of the kernel.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "4.0"
-                        },
-                        {
-                            "name": "resolution",
-                            "description": "- The render resolution.",
-                            "type": "Number",
-                            "optional": true,
-                            "optdefault": "256"
                         }
                     ]
                 }
@@ -710,29 +749,22 @@
                     "optional": true
                 },
                 {
-                    "name": "tSize",
-                    "description": "- The pattern texture size.",
-                    "type": "Vector2",
+                    "name": "patternSize",
+                    "description": "- The pattern size.",
+                    "type": "Number",
                     "optional": true,
-                    "optdefault": "(256.0, 256.0)"
-                },
-                {
-                    "name": "center",
-                    "description": "- The center.",
-                    "type": "Vector2",
-                    "optional": true,
-                    "optdefault": "(0.5, 0.5)"
+                    "optdefault": "1.0"
                 },
                 {
                     "name": "angle",
-                    "description": "- The angle.",
+                    "description": "- The angle of the pattern.",
                     "type": "Number",
                     "optional": true,
                     "optdefault": "1.57"
                 },
                 {
                     "name": "scale",
-                    "description": "- The scale.",
+                    "description": "- The scale of the overall effect.",
                     "type": "Number",
                     "optional": true,
                     "optdefault": "1.0"
@@ -804,7 +836,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\glitch.js",
-            "line": 5,
+            "line": 22,
             "description": "A glitch pass.",
             "is_constructor": 1,
             "extends": "Pass",
@@ -843,7 +875,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\god-rays.js",
-            "line": 5,
+            "line": 11,
             "description": "A crepuscular rays pass.",
             "is_constructor": 1,
             "extends": "Pass",
@@ -1142,6 +1174,17 @@
     "elements": {},
     "classitems": [
         {
+            "file": "src\\materials\\blur\\index.js",
+            "line": 4,
+            "description": "An enumeration of blur directions.",
+            "itemtype": "property",
+            "name": "BlurDirection",
+            "type": "Object",
+            "static": 1,
+            "final": 1,
+            "class": "BlurMaterial"
+        },
+        {
             "file": "src\\materials\\convolution\\index.js",
             "line": 4,
             "description": "Gauss kernel.\n\nDropped [ sqrt(2 * pi) * sigma ] term (unnecessary when normalizing).",
@@ -1436,7 +1479,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 35,
+            "line": 29,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1448,7 +1491,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 51,
+            "line": 45,
             "description": "Another render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1460,7 +1503,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 66,
+            "line": 60,
             "description": "The horizontal blur factor.",
             "itemtype": "property",
             "name": "blurX",
@@ -1472,7 +1515,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 76,
+            "line": 70,
             "description": "The vertical blur factor.",
             "itemtype": "property",
             "name": "blurY",
@@ -1484,7 +1527,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 86,
+            "line": 80,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1496,7 +1539,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 98,
+            "line": 92,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1508,7 +1551,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 112,
+            "line": 106,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1520,7 +1563,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 126,
+            "line": 118,
             "description": "Clear flag.\n\nThis pass draws the blurred scene over the normal one.\nSet to true to see the fully blurred scene.",
             "itemtype": "property",
             "name": "clear",
@@ -1531,7 +1574,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 144,
+            "line": 136,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
             "name": "resolution",
@@ -1541,7 +1584,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 170,
+            "line": 162,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1577,7 +1620,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 220,
+            "line": 212,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1737,7 +1780,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 22,
+            "line": 23,
             "description": "Dot screen shader material description.",
             "itemtype": "property",
             "name": "material",
@@ -1749,7 +1792,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 49,
+            "line": 44,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1772,6 +1815,27 @@
                 {
                     "name": "delta",
                     "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "DotScreenPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\dot-screen.js",
+            "line": 71,
+            "description": "Sets the pattern size relative to the render size.",
+            "itemtype": "method",
+            "name": "setSize",
+            "params": [
+                {
+                    "name": "width",
+                    "description": "- The width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "heght",
+                    "description": "- The height.",
                     "type": "Number"
                 }
             ],
@@ -1823,7 +1887,19 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 23,
+            "line": 5,
+            "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
+            "itemtype": "property",
+            "name": "GlitchMode",
+            "type": "Object",
+            "static": 1,
+            "final": 1,
+            "class": "GlitchPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 40,
             "description": "Glitch shader material.",
             "itemtype": "property",
             "name": "material",
@@ -1835,7 +1911,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 33,
+            "line": 50,
             "description": "A perturbation map.\n\nIf none is provided, a noise texture will be created.\nThe texture will automatically be destroyed when the \nEffectComposer is deleted.",
             "itemtype": "property",
             "name": "perturbMap",
@@ -1845,20 +1921,21 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 57,
-            "description": "The quad mesh to render.",
+            "line": 74,
+            "description": "The effect mode.\n\nCheck the GlitchMode enumeration for available modes.",
             "itemtype": "property",
-            "name": "quad",
-            "type": "Mesh",
+            "name": "mode",
+            "type": "GlitchMode",
+            "default": "GlitchMode.SPORADIC",
             "class": "GlitchPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 66,
+            "line": 86,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
-            "name": "curF",
+            "name": "counter",
             "type": "Number",
             "access": "private",
             "tagname": "",
@@ -1867,7 +1944,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 90,
+            "line": 110,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1893,8 +1970,8 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 147,
-            "description": "Creates a new break point for the glitch effect.",
+            "line": 167,
+            "description": "Creates a random break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
             "class": "GlitchPass",
@@ -1902,7 +1979,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 159,
+            "line": 175,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -1919,7 +1996,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 30,
             "description": "A render target.",
             "itemtype": "property",
@@ -1931,7 +2008,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 46,
             "description": "Another render target.",
             "itemtype": "property",
@@ -1943,7 +2020,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 61,
             "description": "The light source.",
             "itemtype": "property",
@@ -1953,7 +2030,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 70,
             "description": "The light position in screen space.",
             "itemtype": "property",
@@ -1965,7 +2042,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 80,
             "description": "God rays shader material for the generate phase.",
             "itemtype": "property",
@@ -1977,7 +2054,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 94,
             "description": "The exposure coefficient.\n\nThis value is scaled based on the user's view direction. \nThe product is sent to the god rays shader each frame.",
             "itemtype": "property",
@@ -1987,7 +2064,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 108,
             "description": "Combine shader material for the final composite phase.",
             "itemtype": "property",
@@ -1999,7 +2076,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 120,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
@@ -2011,7 +2088,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 130,
             "description": "The maximum length of god-rays.",
             "itemtype": "property",
@@ -2023,7 +2100,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 140,
             "description": "The maximum ray length translated to step sizes for the 3 generate passes.",
             "itemtype": "property",
@@ -2035,7 +2112,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 153,
             "description": "A main scene.",
             "itemtype": "property",
@@ -2045,7 +2122,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 162,
             "description": "The main camera.",
             "itemtype": "property",
@@ -2055,7 +2132,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 179,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
@@ -2066,7 +2143,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 203,
             "description": "The resolution of the render targets. Needs to be a power of 2.",
             "itemtype": "property",
@@ -2077,7 +2154,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 230,
             "description": "The maximum length of god rays.\n\nA value of 1.5 is recommended, to ensure that the effect \nfills the entire screen at all times.\n\nAs a result, the whole effect will be spread out further \nwhich requires a slightly higher number of samples per pixel  \nto prevent visual gaps along the rays.",
             "itemtype": "property",
@@ -2088,7 +2165,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 262,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 9.\nFor render resolutions below 1024 and a ray length of 1.0, 7 samples \nmight also be sufficient.\n\nValues above 9 don't have a noticable impact on the quality.",
             "itemtype": "property",
@@ -2099,7 +2176,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 304,
             "description": "Adjusts the sampling step sizes for the three generate passes.",
             "itemtype": "method",
@@ -2110,7 +2187,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 321,
             "description": "Used for saving the original clear color \nduring rendering the masked scene.",
             "itemtype": "property",
@@ -2123,7 +2200,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 333,
             "description": "Renders the scene.\n\nThe god rays pass has two phases with a total of 4 render steps.\n\nGenerate-phase:\n In the first pass, the masked scene is blurred along radial lines towards the light source.\n The result of the previous pass is re-blurred twice with a decreased distance between the samples.\n\nCombine-phase:\n The result is added to the normal scene.",
             "itemtype": "method",
@@ -2149,7 +2226,7 @@
             "module": "postprocessing"
         },
         {
-            "file": "src\\passes\\god-rays.js",
+            "file": "src\\passes\\god-rays 2.js",
             "line": 406,
             "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
             "itemtype": "method",
@@ -2160,6 +2237,275 @@
                 "description": "A scalar in the range 0.0 to 1.0 for a linear transition.",
                 "type": "Number"
             },
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 38,
+            "description": "A render target.",
+            "itemtype": "property",
+            "name": "renderTargetX",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 55,
+            "description": "Another render target.",
+            "itemtype": "property",
+            "name": "renderTargetY",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 66,
+            "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer \nafter changing this value.",
+            "itemtype": "property",
+            "name": "renderTargetY",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 79,
+            "description": "The light source.",
+            "itemtype": "property",
+            "name": "lightSource",
+            "type": "Object3D",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 88,
+            "description": "The light position in screen space.",
+            "itemtype": "property",
+            "name": "screenPosition",
+            "type": "Vector3",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 98,
+            "description": "A horizontal blur shader material.",
+            "itemtype": "property",
+            "name": "horizontalBlurMaterial",
+            "type": "BlurMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 108,
+            "description": "A vertical blur shader material.",
+            "itemtype": "property",
+            "name": "verticalBlurMaterial",
+            "type": "BlurMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 118,
+            "description": "A combine shader material used for rendering to screen.",
+            "itemtype": "property",
+            "name": "combineMaterial",
+            "type": "CombineMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 128,
+            "description": "A copy shader material used for rendering to texture.",
+            "itemtype": "property",
+            "name": "copyMaterial",
+            "type": "CopyMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 140,
+            "description": "A material used for masking the scene objects.",
+            "itemtype": "property",
+            "name": "maskMaterial",
+            "type": "MeshBasicMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 150,
+            "description": "God rays shader material.",
+            "itemtype": "property",
+            "name": "godRaysMaterial",
+            "type": "GodRaysMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 170,
+            "description": "The strength of the preliminary blur phase.\n\nYou need to call the reset method of the EffectComposer\nafter changing this value.",
+            "itemtype": "property",
+            "name": "blurriness",
+            "type": "Number",
+            "default": "3.0",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 183,
+            "description": "A main scene.",
+            "itemtype": "property",
+            "name": "mainScene",
+            "type": "Scene",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 192,
+            "description": "The main camera.",
+            "itemtype": "property",
+            "name": "mainCamera",
+            "type": "Camera",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 209,
+            "description": "The overall intensity of the effect.",
+            "itemtype": "property",
+            "name": "intensity",
+            "type": "Number",
+            "default": "1.0",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 234,
+            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 20.",
+            "itemtype": "property",
+            "name": "samples",
+            "type": "Number",
+            "default": "20",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 271,
+            "description": "Used for saving the original clear color \nduring rendering the masked scene.",
+            "itemtype": "property",
+            "name": "clearColor",
+            "type": "Color",
+            "access": "private",
+            "tagname": "",
+            "static": 1,
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 283,
+            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 7 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPrelminiary Blur Phase:\n The masked scene is blurred horizontally and vertically, two times each.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result of these 5 blur steps is added to the normal scene.",
+            "itemtype": "method",
+            "name": "render",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer to use.",
+                    "type": "WebGLRenderer"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                }
+            ],
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 374,
+            "description": "Computes the screen position of the light object.",
+            "itemtype": "method",
+            "name": "computeScreenPosition",
+            "access": "private",
+            "tagname": "",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 399,
+            "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
+            "itemtype": "method",
+            "name": "computeAngularScalar",
+            "access": "private",
+            "tagname": "",
+            "return": {
+                "description": "A scalar in the range 0.0 to 1.0 for a linear transition.",
+                "type": "Number"
+            },
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 437,
+            "description": "Updates this pass with the main render target's size.",
+            "itemtype": "method",
+            "name": "setSize",
+            "params": [
+                {
+                    "name": "width",
+                    "description": "- The width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "height",
+                    "description": "- The height.",
+                    "type": "Number"
+                }
+            ],
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
@@ -2669,7 +3015,7 @@
         {
             "file": "src\\effect-composer.js",
             "line": 68,
-            "description": "The write buffer. Alias for renderTarget1.",
+            "description": "The write buffer.",
             "itemtype": "property",
             "name": "writeBuffer",
             "type": "WebGLRenderTarget",
@@ -2681,7 +3027,7 @@
         {
             "file": "src\\effect-composer.js",
             "line": 78,
-            "description": "The read buffer. Alias for renderTarget2.",
+            "description": "The read buffer.",
             "itemtype": "property",
             "name": "readBuffer",
             "type": "WebGLRenderTarget",
@@ -2717,17 +3063,6 @@
         {
             "file": "src\\effect-composer.js",
             "line": 110,
-            "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass by setting the needsSwap flag.",
-            "itemtype": "method",
-            "name": "swapBuffers",
-            "access": "private",
-            "tagname": "",
-            "class": "EffectComposer",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\effect-composer.js",
-            "line": 126,
             "description": "Adds another pass.",
             "itemtype": "method",
             "name": "addPass",
@@ -2743,7 +3078,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 140,
+            "line": 124,
             "description": "Inserts a new pass at a specific index.",
             "itemtype": "method",
             "name": "insertPass",
@@ -2759,6 +3094,17 @@
                     "type": "Number"
                 }
             ],
+            "class": "EffectComposer",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 139,
+            "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass by setting the needsSwap flag.",
+            "itemtype": "method",
+            "name": "swapBuffers",
+            "access": "private",
+            "tagname": "",
             "class": "EffectComposer",
             "module": "postprocessing"
         },
