@@ -20,13 +20,30 @@ window.addEventListener("load", function init() {
 	camera.position.set(0, 200, 450);
 	camera.lookAt(controls.target);
 
-	// FPS.
+	scene.add(camera);
+
+	// Overlays.
 
 	var stats = new Stats();
 	stats.setMode(0);
-	document.body.appendChild(stats.domElement);
+	var aside = document.getElementById("aside");
+	aside.style.visibility = "visible";
+	aside.appendChild(stats.domElement);
 
-	scene.add(camera);
+	var gui = new dat.GUI();
+	aside.appendChild(gui.domElement.parentNode);
+
+	// Hide interface on alt key press.
+	document.addEventListener("keydown", function(event) {
+
+		if(event.altKey) {
+
+			event.preventDefault();
+			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+
+		}
+
+	});
 
 	// Lights.
 
@@ -68,10 +85,30 @@ window.addEventListener("load", function init() {
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
 	var pass = new POSTPROCESSING.DotScreenPass({
-		scale: 0.5
+		scale: 0.5,
+		angle: Math.PI * 0.5,
+		patternSize: 1.0
 	});
+
 	pass.renderToScreen = true;
 	composer.addPass(pass);
+
+	// Shader settings.
+
+	var params = {
+		"scale": pass.material.uniforms.scale.value,
+		"angle": pass.material.uniforms.angle.value,
+		"center X": pass.material.uniforms.offsetRepeat.value.x,
+		"center Y": pass.material.uniforms.offsetRepeat.value.y
+	};
+
+	gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params["scale"]; });
+	gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params["angle"]; });
+
+	var f = gui.addFolder("Center");
+	f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
+	f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
+	f.open();
 
 	/**
 	 * Handles resizing.
@@ -99,8 +136,8 @@ window.addEventListener("load", function init() {
 
 		stats.begin();
 
-		object.rotation.x += 0.005;
-		object.rotation.y += 0.01;
+		object.rotation.x += 0.0005;
+		object.rotation.y += 0.001;
 
 		composer.render();
 

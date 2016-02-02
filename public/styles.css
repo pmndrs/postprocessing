@@ -5,6 +5,8 @@ html {
 }
 
 body {
+ background-color: black;
+ color: rgb(175, 170, 160);
  font-family: sans-serif;
  font-weight: 100;
  font-size: 100%;
@@ -15,18 +17,72 @@ body {
 }
 
 a {
- color: silver;
+ color: grey;
  transition: color 0.2s;
- text-decoration: none;
 }
 
 a:hover,
-a:active {
+a:active,
+.active {
  color: white;
 }
 
-.active {
- color: white;
+ul#options {
+ margin: 0;
+ padding: 0;
+}
+
+ul#options li {
+ display: inline-block;
+ list-stlye: none;
+ padding: 0 10px;
+}
+
+h1, h2, h3, h4 {
+ font-size: 150%;
+ font-weight: normal;
+ padding: 0;
+ margin: 20px 0 10px 0px;
+}
+
+h2 {
+ font-size: 100%;
+ margin: 0 0 20px 0px;
+}
+
+p {
+ margin: 0;
+}
+
+div[role="complementary"] {
+ background-color: rgba(20, 20, 20, 0.8);
+ display: -webkit-flex;
+ display: flex;
+ -webkit-justify-content: space-between;
+         justify-content: space-between;
+ -webkit-align-items: center;
+         align-items: center;
+ padding: 5px 20px;
+ position: fixed;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ visibility: hidden;
+}
+
+div[role="complementary"] h3 {
+ font-size: 90%;
+ margin: 0;
+}
+
+div[role="complementary"] p,
+div[role="complementary"] h4 {
+ font-size: 75%;
+ margin: 0;
+}
+
+div[role="complementary"] p {
+ color: rgb(80, 85, 80);
 }
 
 canvas {
@@ -41,19 +97,8 @@ canvas:active {
  cursor: grabbing;
 }
 
-p {
- background-color: rgba(0, 0, 0, 0.3);
- color: white;
- font-family: Helvetica, sans-serif;
- position: fixed;
- right: 100px;
- top: 10px;
- margin: 0;
- padding: 6px;
-}
-
 #stats {
  position: fixed;
- right: 5px;
+ left: 5px;
  top: 5px;
 }

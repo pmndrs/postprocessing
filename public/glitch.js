@@ -20,13 +20,30 @@ window.addEventListener("load", function init() {
 	camera.position.set(0, 200, 450);
 	camera.lookAt(controls.target);
 
-	// FPS.
+	scene.add(camera);
+
+	// Overlays.
 
 	var stats = new Stats();
 	stats.setMode(0);
-	document.body.appendChild(stats.domElement);
+	var aside = document.getElementById("aside");
+	aside.style.visibility = "visible";
+	aside.appendChild(stats.domElement);
 
-	scene.add(camera);
+	var gui = new dat.GUI();
+	aside.appendChild(gui.domElement.parentNode);
+
+	// Hide interface on alt key press.
+	document.addEventListener("keydown", function(event) {
+
+		if(event.altKey) {
+
+			event.preventDefault();
+			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+
+		}
+
+	});
 
 	// Lights.
 
@@ -81,19 +98,13 @@ window.addEventListener("load", function init() {
 		pass.renderToScreen = true;
 		composer.addPass(pass);
 
-	});
+		// Shader settings.
 
-	// Effect toggle.
+		var params = {
+			"mode": pass.mode
+		};
 
-	document.addEventListener("keyup", function(event) {
-
-		var key = event.keyCode || event.which;
-
-		if(key === 32) {
-
-			pass.goWild = !pass.goWild;
-
-		}
+		gui.add(params, "mode").min(POSTPROCESSING.GlitchMode.SPORADIC).max(POSTPROCESSING.GlitchMode.CONSTANT_WILD).step(1).onChange(function() { pass.mode = params["mode"]; });
 
 	});
 

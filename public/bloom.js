@@ -9,7 +9,7 @@ window.addEventListener("load", function init() {
 	scene.fog = new THREE.FogExp2(0x000000, 0.00025);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
+	document.getElementById("viewport").appendChild(renderer.domElement);
 
 	// Camera.
 
@@ -20,13 +20,30 @@ window.addEventListener("load", function init() {
 	camera.position.set(-1000, 1000, 1500);
 	camera.lookAt(controls.target);
 
-	// FPS.
+	scene.add(camera);
+
+	// Overlays.
 
 	var stats = new Stats();
 	stats.setMode(0);
-	document.body.appendChild(stats.domElement);
+	var aside = document.getElementById("aside");
+	aside.style.visibility = "visible";
+	aside.appendChild(stats.domElement);
 
-	scene.add(camera);
+	var gui = new dat.GUI();
+	aside.appendChild(gui.domElement.parentNode);
+
+	// Hide interface on alt key press.
+	document.addEventListener("keydown", function(event) {
+
+		if(event.altKey) {
+
+			event.preventDefault();
+			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+
+		}
+
+	});
 
 	// Lights.
 
@@ -65,7 +82,7 @@ window.addEventListener("load", function init() {
 	// Cage.
 
 	var geometry = new THREE.BoxGeometry(25, 825, 25);
-	var material = new THREE.MeshLambertMaterial({color: 0x060606});
+	var material = new THREE.MeshLambertMaterial({color: 0x080808});
 	var mesh = new THREE.Mesh(geometry, material);
 
 	var o = new THREE.Object3D();
@@ -103,14 +120,26 @@ window.addEventListener("load", function init() {
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
 	var pass = new POSTPROCESSING.BloomPass({
+		resolution: 512,
 		strength: 1.0,
 		kernelSize: 25,
-		sigma: 4,
-		resolution: 512
+		sigma: 4
 	});
 
 	pass.renderToScreen = true;
 	composer.addPass(pass);
+
+	// Shader settings.
+
+	var params = {
+		"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+		"strength": pass.copyMaterial.uniforms.opacity.value,
+		"sigma": (parseInt(pass.convolutionMaterial.defines.KERNEL_SIZE_INT) - 1) / 2 / 3
+	};
+
+	gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
+	gui.add(params, "strength").min(0.0).max(3.0).step(0.01).onChange(function() { pass.copyMaterial.uniforms.opacity.value = pass.combineMaterial.uniforms.opacity2.value = params["strength"]; });
+	gui.add(params, "sigma").min(4.0).max(12.0).step(0.1).onChange(function() { pass.convolutionMaterial.buildKernel(params["sigma"]); });
 
 	/**
 	 * Handles resizing.

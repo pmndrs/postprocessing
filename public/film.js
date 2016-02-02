@@ -20,13 +20,30 @@ window.addEventListener("load", function init() {
 	camera.position.set(0, 200, 450);
 	camera.lookAt(controls.target);
 
-	// FPS.
+	scene.add(camera);
+
+	// Overlays.
 
 	var stats = new Stats();
 	stats.setMode(0);
-	document.body.appendChild(stats.domElement);
+	var aside = document.getElementById("aside");
+	aside.style.visibility = "visible";
+	aside.appendChild(stats.domElement);
 
-	scene.add(camera);
+	var gui = new dat.GUI();
+	aside.appendChild(gui.domElement.parentNode);
+
+	// Hide interface on alt key press.
+	document.addEventListener("keydown", function(event) {
+
+		if(event.altKey) {
+
+			event.preventDefault();
+			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+
+		}
+
+	});
 
 	// Lights.
 
@@ -77,6 +94,20 @@ window.addEventListener("load", function init() {
 	pass.renderToScreen = true;
 	composer.addPass(pass);
 
+	// Shader settings.
+
+	var params = {
+		"grayscale": pass.material.uniforms.grayscale.value,
+		"noise intensity": pass.material.uniforms.nIntensity.value,
+		"scanlines intensity": pass.material.uniforms.sIntensity.value,
+		"scanlines count": pass.material.uniforms.sCount.value
+	};
+
+	gui.add(params, "grayscale").onChange(function() { pass.material.uniforms.grayscale.value = params["grayscale"]; });
+	gui.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.nIntensity.value = params["noise intensity"]; });
+	gui.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.sIntensity.value = params["scanlines intensity"]; });
+	gui.add(params, "scanlines count").min(0.0).max(2048.0).step(1.0).onChange(function() { pass.material.uniforms.sCount.value = params["scanlines count"]; });
+
 	/**
 	 * Handles resizing.
 	 */
@@ -103,8 +134,8 @@ window.addEventListener("load", function init() {
 
 		stats.begin();
 
-		object.rotation.x += 0.005;
-		object.rotation.y += 0.01;
+		object.rotation.x += 0.0005;
+		object.rotation.y += 0.001;
 
 		composer.render();
 

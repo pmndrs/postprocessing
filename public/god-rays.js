@@ -17,66 +17,44 @@ window.addEventListener("load", function init() {
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 50, 0);
 	controls.damping = 0.2;
-	camera.position.set(-550, -175, -400);
+	camera.position.set(-550, -50, -400);
 	camera.lookAt(controls.target);
 
-	// FPS.
+	scene.add(camera);
+
+	// Overlays.
 
 	var stats = new Stats();
 	stats.setMode(0);
-	document.body.appendChild(stats.domElement);
+	var aside = document.getElementById("aside");
+	aside.style.visibility = "visible";
+	aside.appendChild(stats.domElement);
 
-	scene.add(camera);
+	var gui = new dat.GUI();
+	aside.appendChild(gui.domElement.parentNode);
+
+	// Hide interface on alt key press.
+	document.addEventListener("keydown", function(event) {
+
+		if(event.altKey) {
+
+			event.preventDefault();
+			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+
+		}
+
+	});
 
 	// Lights.
 
 	var hemisphereLight = new THREE.HemisphereLight(0xffffee, 0x080820, 1);
 	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
 
-	directionalLight.position.set(38000, 5000, 50000);
+	directionalLight.position.set(1440, 200, 2000);
 	directionalLight.target.position.copy(scene.position);
 
 	scene.add(directionalLight);
 	scene.add(hemisphereLight);
-
-	// Helpers.
-
-	//scene.add(new THREE.DirectionalLightHelper(directionalLight, 1.0));
-
-	// Sky.
-
-	var path = "textures/skies/sunset/";
-	var format = ".png";
-	var urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
-
-	var sky;
-
-	var cubeTextureLoader = new THREE.CubeTextureLoader();
-	cubeTextureLoader.load(urls, function(textureCube) {
-
-		var shader = THREE.ShaderLib.cube;
-		shader.uniforms.tCube.value = textureCube;
-
-		var skyBoxMaterial = new THREE.ShaderMaterial( {
-			fragmentShader: shader.fragmentShader,
-			vertexShader: shader.vertexShader,
-			uniforms: shader.uniforms,
-			depthWrite: false,
-			side: THREE.BackSide,
-			fog: false
-		});
-
-		sky = new THREE.Mesh(new THREE.BoxGeometry(100000, 100000, 100000), skyBoxMaterial);
-		sky.ignoreOverrideMaterial = true; // Hack.
-
-		// Move the sky with the camera.
-		camera.add(sky);
-
-	});
 
 	// Load a model.
 
@@ -102,7 +80,6 @@ window.addEventListener("load", function init() {
 					fog: true
 				});
 
-				//object = o;
 				object.scale.multiplyScalar(100.0);
 				object.rotation.y = Math.PI * 0.75;
 				object.rotation.x = Math.PI * 0.25;
@@ -115,6 +92,17 @@ window.addEventListener("load", function init() {
 
 	});
 
+	// Sun.
+
+	var sun = new THREE.Mesh(
+		new THREE.SphereBufferGeometry(600, 32, 32),
+		new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false})
+	);
+
+	sun.ignoreOverrideMaterial = true; // Hack.
+	sun.position.copy(directionalLight.position);
+	scene.add(sun);
+
 	// Post-Processing.
 
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
@@ -122,65 +110,43 @@ window.addEventListener("load", function init() {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolution: 512,
-		rayLength: 1.5,
+		resolutionScale: 0.5,
 		intensity: 1.0,
-		decay: 1.0,
-		weight: 1.0,
-		exposure: 1.0,
-		samples: 9
+		density: 0.96,
+		decay: 0.93,
+		weight: 0.4,
+		exposure: 0.6,
+		samples: 80,
+		blurriness: 1.0,
+		clampMax: 1.0
 	});
 
 	pass.renderToScreen = true;
 	composer.addPass(pass);
 
-	/**
-	 * Effect toggle for closer light source.
-	 */
+	// Shader settings.
 
-	var sun = new THREE.Mesh(new THREE.SphereBufferGeometry(600, 32, 32), new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false}));
+	var params = {
+		"resolution": pass.resolutionScale,
+		"intensity": pass.intensity,
+		"density": pass.godRaysMaterial.uniforms.density.value,
+		"decay": pass.godRaysMaterial.uniforms.decay.value,
+		"weight": pass.godRaysMaterial.uniforms.weight.value,
+		"exposure": pass.godRaysMaterial.uniforms.exposure.value,
+		"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
+		"samples": pass.samples/*,
+		"blurriness": pass.blurriness*/
+	};
 
-	/*var sunMaterial = new THREE.PointsMaterial({size: 600, sizeAttenuation: false, color: 0xffddaa, alphaTest: 0.0, transparent: true, fog: false});
-	var sunGeometry = new THREE.Geometry();
-	sunGeometry.vertices.push(new THREE.Vector3());
-	var sun = new THREE.Points(sunGeometry, sunMaterial);
-
-	textureLoader.load("textures/sun.png", function(texture) {
-
-		sunMaterial.map = texture;
-
-	});*/
-
-	sun.ignoreOverrideMaterial = true; // Hack.
-	sun.position.set(1440, 400, 2000);
-
-	document.addEventListener("keyup", function(event) {
-
-		var key = event.keyCode || event.which;
-
-		if(key === 32) {
-
-			if(sky.ignoreOverrideMaterial) {
-
-				pass.godRaysMaterial.uniforms.weight.value = 0.68767;
-				pass.exposure = 3.0;
-				pass.lightSource = sun;
-				sky.ignoreOverrideMaterial = false;
-				scene.add(sun);
-
-			} else {
-
-				pass.godRaysMaterial.uniforms.weight.value = 1.0;
-				pass.exposure = 1.0;
-				pass.lightSource = directionalLight;
-				sky.ignoreOverrideMaterial = true;
-				scene.remove(sun);
-
-			}
-
-		}
-
-	});
+	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.reset(); });
+	gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.intensity = params["intensity"]; });
+	gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.density.value = params["density"]; });
+	gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.decay.value = params["decay"]; });
+	gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.weight.value = params["weight"]; });
+	gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.exposure.value = params["exposure"]; });
+	gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params["clampMax"]; });
+	gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params["samples"]; });
+	//gui.add(params, "blurriness").min(0.0).max(4.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; composer.reset(); });
 
 	/**
 	 * Handles resizing.
