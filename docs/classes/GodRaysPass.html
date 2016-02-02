@@ -206,7 +206,7 @@
 
                     <div class="param-description">
                         <ul>
-<li>The most important light source.</li>
+<li>The main light source.</li>
 </ul>
 
                     </div>
@@ -227,20 +227,46 @@
 
                         <ul class="params-list">
                             <li class="param">
-                                    <code class="param-name optional">[rayLength=1.0]</code>
+                                    <code class="param-name optional">[density=0.96]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The maximum length of god rays.</li>
+<li>The density of the light rays.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[decay=1.0]</code>
+                                    <code class="param-name optional">[decay=0.93]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>An illumination decay factor.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[weight=0.4]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A light ray weight factor.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[exposure=0.6]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -253,26 +279,13 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[weight=1.0]</code>
+                                    <code class="param-name optional">[clampMax=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>A constant attenuation coefficient.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[exposure=1.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>A constant attenuation coefficient.</li>
+<li>An upper bound for the saturation of the overall effect.</li>
 </ul>
 
                                 </div>
@@ -292,20 +305,33 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[resolution=512]</code>
+                                    <code class="param-name optional">[blurriness=3.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The god rays render texture resolution.</li>
+<li>The strength of the preliminary blur phase.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[samples=9]</code>
+                                    <code class="param-name optional">[resolutionScale=0.5]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The render texture resolution scale, relative to the screen render size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[samples=20]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -344,14 +370,6 @@
 
                     <ul class="index-list methods extends">
                             <li class="index-item method private">
-                                <a href="#method_calculateStepSizes">calculateStepSizes</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_computeAngularScalar">computeAngularScalar</a>
-
-                            </li>
-                            <li class="index-item method private">
                                 <a href="#method_computeAngularScalar">computeAngularScalar</a>
 
                             </li>
@@ -367,10 +385,6 @@
                                 <a href="#method_render">render</a>
 
                             </li>
-                            <li class="index-item method">
-                                <a href="#method_render">render</a>
-
-                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_setSize">setSize</a>
 
@@ -382,10 +396,6 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property private">
-                                <a href="#property__rayLength">_rayLength</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_blurriness">blurriness</a>
 
@@ -400,15 +410,6 @@
                                     <span class="flag static">static</span>
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_clearColor">clearColor</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_combineMaterial">combineMaterial</a>
-
-                            </li>
-                            <li class="index-item property private">
                                 <a href="#property_combineMaterial">combineMaterial</a>
 
                             </li>
@@ -418,14 +419,6 @@
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_exposure">exposure</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_godRaysMaterial">godRaysMaterial</a>
 
                             </li>
                             <li class="index-item property private">
@@ -441,14 +434,6 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_intensity">intensity</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_lightSource">lightSource</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_lightSource">lightSource</a>
 
                             </li>
@@ -457,19 +442,7 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_mainCamera">mainCamera</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_mainScene">mainScene</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_mainScene">mainScene</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_maskMaterial">maskMaterial</a>
 
                             </li>
                             <li class="index-item property private">
@@ -484,20 +457,8 @@
                                 <a href="#property_quad">quad</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_rayLength">rayLength</a>
-
-                            </li>
                             <li class="index-item property private">
                                 <a href="#property_renderTargetX">renderTargetX</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetX">renderTargetX</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetY">renderTargetY</a>
 
                             </li>
                             <li class="index-item property private">
@@ -513,14 +474,6 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_resolution">resolution</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_samples">samples</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_samples">samples</a>
 
                             </li>
@@ -529,15 +482,7 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_screenLightPosition">screenLightPosition</a>
-
-                            </li>
-                            <li class="index-item property private">
                                 <a href="#property_screenPosition">screenPosition</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_stepSizes">stepSizes</a>
 
                             </li>
                             <li class="index-item property private">
@@ -553,83 +498,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_calculateStepSizes" class="method item private">
-    <h3 class="name"><code>calculateStepSizes</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l304"><code>src\passes\god-rays 2.js:304</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Adjusts the sampling step sizes for the three generate passes.</p>
-
-    </div>
-
-
-
-
-</div>
-<div id="method_computeAngularScalar" class="method item private">
-    <h3 class="name"><code>computeAngularScalar</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type">Number</span>
-        </span>
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l406"><code>src\passes\god-rays 2.js:406</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Computes the angle between the camera look direction and the light
-direction in order to create a scalar for the god rays exposure.</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Number</span>:
-                    <p>A scalar in the range 0.0 to 1.0 for a linear transition.</p>
-
-            </div>
-        </div>
-
-
-</div>
 <div id="method_computeAngularScalar" class="method item private">
     <h3 class="name"><code>computeAngularScalar</code></h3>
 
@@ -778,100 +646,6 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays 2.js.html#l333"><code>src\passes\god-rays 2.js:333</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Renders the scene.</p>
-<p>The god rays pass has two phases with a total of 4 render steps.</p>
-<p>Generate-phase:
-In the first pass, the masked scene is blurred along radial lines towards the light source.
-The result of the previous pass is re-blurred twice with a decreased distance between the samples.</p>
-<p>Combine-phase:
-The result is added to the normal scene.</p>
-
-    </div>
-
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name">renderer</code>
-                        <span class="type">WebGLRenderer</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The renderer to use.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">writeBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">readBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The read buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-            </ul>
-        </div>
-
-
-
-</div>
-<div id="method_render" class="method item">
-    <h3 class="name"><code>render</code></h3>
-
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code>renderer</code>
-                </li>
-                <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>readBuffer</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
-
-
-
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
         <a href="../files/src_passes_god-rays.js.html#l283"><code>src\passes\god-rays.js:283</code></a>
         </p>
 
@@ -1023,32 +797,6 @@ The final result of these 5 blur steps is added to the normal scene.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property__rayLength" class="property item private">
-    <h3 class="name"><code>_rayLength</code></h3>
-    <span class="type">Number</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l130"><code>src\passes\god-rays 2.js:130</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The maximum length of god-rays.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_blurriness" class="property item">
     <h3 class="name"><code>blurriness</code></h3>
     <span class="type">Number</span>
@@ -1116,34 +864,6 @@ after changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l321"><code>src\passes\god-rays 2.js:321</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Used for saving the original clear color
-during rendering the masked scene.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_clearColor" class="property item private">
-    <h3 class="name"><code>clearColor</code></h3>
-    <span class="type">Color</span>
-
-
-        <span class="flag private">private</span>
-
-
-        <span class="flag static">static</span>
-
-    <div class="meta">
-                <p>
-                Defined in
         <a href="../files/src_passes_god-rays.js.html#l271"><code>src\passes\god-rays.js:271</code></a>
         </p>
 
@@ -1153,32 +873,6 @@ during rendering the masked scene.</p>
     <div class="description">
         <p>Used for saving the original clear color
 during rendering the masked scene.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_combineMaterial" class="property item private">
-    <h3 class="name"><code>combineMaterial</code></h3>
-    <span class="type"><a href="../classes/CombineMaterial.html" class="crosslink">CombineMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l108"><code>src\passes\god-rays 2.js:108</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Combine shader material for the final composite phase.</p>
 
     </div>
 
@@ -1262,33 +956,6 @@ during rendering the masked scene.</p>
 
 
 </div>
-<div id="property_exposure" class="property item">
-    <h3 class="name"><code>exposure</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l94"><code>src\passes\god-rays 2.js:94</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The exposure coefficient.</p>
-<p>This value is scaled based on the user's view direction.
-The product is sent to the god rays shader each frame.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_godRaysMaterial" class="property item private">
     <h3 class="name"><code>godRaysMaterial</code></h3>
     <span class="type"><a href="../classes/GodRaysMaterial.html" class="crosslink">GodRaysMaterial</a></span>
@@ -1309,32 +976,6 @@ The product is sent to the god rays shader each frame.</p>
 
     <div class="description">
         <p>God rays shader material.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_godRaysMaterial" class="property item private">
-    <h3 class="name"><code>godRaysMaterial</code></h3>
-    <span class="type"><a href="../classes/GodRaysMaterial.html" class="crosslink">GodRaysMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l80"><code>src\passes\god-rays 2.js:80</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>God rays shader material for the generate phase.</p>
 
     </div>
 
@@ -1393,57 +1034,6 @@ The product is sent to the god rays shader each frame.</p>
 
 
 </div>
-<div id="property_intensity" class="property item">
-    <h3 class="name"><code>intensity</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l179"><code>src\passes\god-rays 2.js:179</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The overall intensity of the effect.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.0</p>
-
-
-</div>
-<div id="property_lightSource" class="property item">
-    <h3 class="name"><code>lightSource</code></h3>
-    <span class="type">Object3D</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l61"><code>src\passes\god-rays 2.js:61</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The light source.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_lightSource" class="property item">
     <h3 class="name"><code>lightSource</code></h3>
     <span class="type">Object3D</span>
@@ -1494,31 +1084,6 @@ The product is sent to the god rays shader each frame.</p>
 
 
 </div>
-<div id="property_mainCamera" class="property item">
-    <h3 class="name"><code>mainCamera</code></h3>
-    <span class="type">Camera</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l162"><code>src\passes\god-rays 2.js:162</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The main camera.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_mainScene" class="property item">
     <h3 class="name"><code>mainScene</code></h3>
     <span class="type">Scene</span>
@@ -1531,31 +1096,6 @@ The product is sent to the god rays shader each frame.</p>
                 <p>
                 Defined in
         <a href="../files/src_passes_god-rays.js.html#l183"><code>src\passes\god-rays.js:183</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A main scene.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_mainScene" class="property item">
-    <h3 class="name"><code>mainScene</code></h3>
-    <span class="type">Scene</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l153"><code>src\passes\god-rays 2.js:153</code></a>
         </p>
 
 
@@ -1582,32 +1122,6 @@ The product is sent to the god rays shader each frame.</p>
                 <p>
                 Defined in
         <a href="../files/src_passes_god-rays.js.html#l140"><code>src\passes\god-rays.js:140</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A material used for masking the scene objects.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_maskMaterial" class="property item private">
-    <h3 class="name"><code>maskMaterial</code></h3>
-    <span class="type">MeshBasicMaterial</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l120"><code>src\passes\god-rays 2.js:120</code></a>
         </p>
 
 
@@ -1687,63 +1201,6 @@ Assign your shader material to this mesh!
         </div>
 
 </div>
-<div id="property_rayLength" class="property item">
-    <h3 class="name"><code>rayLength</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l230"><code>src\passes\god-rays 2.js:230</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The maximum length of god rays.</p>
-<p>A value of 1.5 is recommended, to ensure that the effect
-fills the entire screen at all times.</p>
-<p>As a result, the whole effect will be spread out further
-which requires a slightly higher number of samples per pixel<br>
-to prevent visual gaps along the rays.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.5</p>
-
-
-</div>
-<div id="property_renderTargetX" class="property item private">
-    <h3 class="name"><code>renderTargetX</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l30"><code>src\passes\god-rays 2.js:30</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A render target.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_renderTargetX" class="property item private">
     <h3 class="name"><code>renderTargetX</code></h3>
     <span class="type">WebGLRenderTarget</span>
@@ -1782,7 +1239,7 @@ to prevent visual gaps along the rays.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l46"><code>src\passes\god-rays 2.js:46</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l55"><code>src\passes\god-rays.js:55</code></a>
         </p>
 
 
@@ -1824,32 +1281,6 @@ after changing this value.</p>
 
 
 </div>
-<div id="property_renderTargetY" class="property item private">
-    <h3 class="name"><code>renderTargetY</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l55"><code>src\passes\god-rays.js:55</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Another render target.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_renderToScreen" class="property item inherited">
     <h3 class="name"><code>renderToScreen</code></h3>
     <span class="type">Boolean</span>
@@ -1872,32 +1303,6 @@ after changing this value.</p>
     </div>
 
         <p><strong>Default:</strong> false</p>
-
-
-</div>
-<div id="property_resolution" class="property item">
-    <h3 class="name"><code>resolution</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l203"><code>src\passes\god-rays 2.js:203</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution of the render targets. Needs to be a power of 2.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 512</p>
 
 
 </div>
@@ -1930,38 +1335,6 @@ GPU load directly and doesn't necessarily yield better results!</p>
 
 
 </div>
-<div id="property_samples" class="property item">
-    <h3 class="name"><code>samples</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l262"><code>src\passes\god-rays 2.js:262</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The number of samples per pixel.</p>
-<p>This value must be carefully chosen. A higher value increases the
-GPU load directly and doesn't necessarily yield better results!</p>
-<p>The recommended number of samples is 9.
-For render resolutions below 1024 and a ray length of 1.0, 7 samples
-might also be sufficient.</p>
-<p>Values above 9 don't have a noticable impact on the quality.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 9</p>
-
-
-</div>
 <div id="property_scene" class="property item private inherited">
     <h3 class="name"><code>scene</code></h3>
     <span class="type">Scene</span>
@@ -1988,32 +1361,6 @@ might also be sufficient.</p>
 
 
 </div>
-<div id="property_screenLightPosition" class="property item private">
-    <h3 class="name"><code>screenLightPosition</code></h3>
-    <span class="type">Vector3</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l70"><code>src\passes\god-rays 2.js:70</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The light position in screen space.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_screenPosition" class="property item private">
     <h3 class="name"><code>screenPosition</code></h3>
     <span class="type">Vector3</span>
@@ -2034,32 +1381,6 @@ might also be sufficient.</p>
 
     <div class="description">
         <p>The light position in screen space.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_stepSizes" class="property item private">
-    <h3 class="name"><code>stepSizes</code></h3>
-    <span class="type">Float32Array</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays 2.js.html#l140"><code>src\passes\god-rays 2.js:140</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The maximum ray length translated to step sizes for the 3 generate passes.</p>
 
     </div>
 

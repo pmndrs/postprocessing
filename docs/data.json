@@ -90,13 +90,6 @@
         "src\\materials\\god-rays\\index.js": {
             "name": "src\\materials\\god-rays\\index.js",
             "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "src\\materials\\god-rays 2\\index.js": {
-            "name": "src\\materials\\god-rays 2\\index.js",
-            "modules": {},
             "classes": {
                 "GodRaysMaterial": 1
             },
@@ -190,13 +183,6 @@
             "classes": {
                 "GlitchPass": 1
             },
-            "fors": {},
-            "namespaces": {}
-        },
-        "src\\passes\\god-rays 2.js": {
-            "name": "src\\passes\\god-rays 2.js",
-            "modules": {},
-            "classes": {},
             "fors": {},
             "namespaces": {}
         },
@@ -532,9 +518,9 @@
             "plugin_for": [],
             "extension_for": [],
             "module": "postprocessing",
-            "file": "src\\materials\\god-rays 2\\index.js",
+            "file": "src\\materials\\god-rays\\index.js",
             "line": 4,
-            "description": "A crepuscular rays shader material.\n\nReferences:\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html\n\nCrytek, Sousa - GDC2008:\n Crysis Next Gen Effects\n http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt",
+            "description": "A crepuscular rays shader material.\n\nReferences:\n\nThibaut Despoulain, 2012:\n (WebGL) Volumetric Light Approximation in Three.js\n http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html\n\nNvidia, GPU Gems 3 - Chapter 13:\n Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
         },
@@ -892,7 +878,7 @@
                 },
                 {
                     "name": "lightSource",
-                    "description": "- The most important light source.",
+                    "description": "- The main light source.",
                     "type": "Vector3"
                 },
                 {
@@ -902,29 +888,36 @@
                     "optional": true,
                     "props": [
                         {
-                            "name": "rayLength",
-                            "description": "- The maximum length of god rays.",
+                            "name": "density",
+                            "description": "- The density of the light rays.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "1.0"
+                            "optdefault": "0.96"
                         },
                         {
                             "name": "decay",
-                            "description": "- A constant attenuation coefficient.",
+                            "description": "- An illumination decay factor.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "1.0"
+                            "optdefault": "0.93"
                         },
                         {
                             "name": "weight",
-                            "description": "- A constant attenuation coefficient.",
+                            "description": "- A light ray weight factor.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "1.0"
+                            "optdefault": "0.4"
                         },
                         {
                             "name": "exposure",
                             "description": "- A constant attenuation coefficient.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.6"
+                        },
+                        {
+                            "name": "clampMax",
+                            "description": "- An upper bound for the saturation of the overall effect.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1.0"
@@ -937,18 +930,25 @@
                             "optdefault": "1.0"
                         },
                         {
-                            "name": "resolution",
-                            "description": "- The god rays render texture resolution.",
+                            "name": "blurriness",
+                            "description": "- The strength of the preliminary blur phase.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "512"
+                            "optdefault": "3.0"
+                        },
+                        {
+                            "name": "resolutionScale",
+                            "description": "- The render texture resolution scale, relative to the screen render size.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "0.5"
                         },
                         {
                             "name": "samples",
                             "description": "- The number of samples per pixel.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "9"
+                            "optdefault": "20"
                         }
                     ]
                 }
@@ -1993,251 +1993,6 @@
             "access": "private",
             "tagname": "",
             "class": "GlitchPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 30,
-            "description": "A render target.",
-            "itemtype": "property",
-            "name": "renderTargetX",
-            "type": "WebGLRenderTarget",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 46,
-            "description": "Another render target.",
-            "itemtype": "property",
-            "name": "renderTargetY",
-            "type": "WebGLRenderTarget",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 61,
-            "description": "The light source.",
-            "itemtype": "property",
-            "name": "lightSource",
-            "type": "Object3D",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 70,
-            "description": "The light position in screen space.",
-            "itemtype": "property",
-            "name": "screenLightPosition",
-            "type": "Vector3",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 80,
-            "description": "God rays shader material for the generate phase.",
-            "itemtype": "property",
-            "name": "godRaysMaterial",
-            "type": "GodRaysMaterial",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 94,
-            "description": "The exposure coefficient.\n\nThis value is scaled based on the user's view direction. \nThe product is sent to the god rays shader each frame.",
-            "itemtype": "property",
-            "name": "exposure",
-            "type": "Number",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 108,
-            "description": "Combine shader material for the final composite phase.",
-            "itemtype": "property",
-            "name": "combineMaterial",
-            "type": "CombineMaterial",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 120,
-            "description": "A material used for masking the scene objects.",
-            "itemtype": "property",
-            "name": "maskMaterial",
-            "type": "MeshBasicMaterial",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 130,
-            "description": "The maximum length of god-rays.",
-            "itemtype": "property",
-            "name": "_rayLength",
-            "type": "Number",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 140,
-            "description": "The maximum ray length translated to step sizes for the 3 generate passes.",
-            "itemtype": "property",
-            "name": "stepSizes",
-            "type": "Float32Array",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 153,
-            "description": "A main scene.",
-            "itemtype": "property",
-            "name": "mainScene",
-            "type": "Scene",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 162,
-            "description": "The main camera.",
-            "itemtype": "property",
-            "name": "mainCamera",
-            "type": "Camera",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 179,
-            "description": "The overall intensity of the effect.",
-            "itemtype": "property",
-            "name": "intensity",
-            "type": "Number",
-            "default": "1.0",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 203,
-            "description": "The resolution of the render targets. Needs to be a power of 2.",
-            "itemtype": "property",
-            "name": "resolution",
-            "type": "Number",
-            "default": "512",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 230,
-            "description": "The maximum length of god rays.\n\nA value of 1.5 is recommended, to ensure that the effect \nfills the entire screen at all times.\n\nAs a result, the whole effect will be spread out further \nwhich requires a slightly higher number of samples per pixel  \nto prevent visual gaps along the rays.",
-            "itemtype": "property",
-            "name": "rayLength",
-            "type": "Number",
-            "default": "1.5",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 262,
-            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 9.\nFor render resolutions below 1024 and a ray length of 1.0, 7 samples \nmight also be sufficient.\n\nValues above 9 don't have a noticable impact on the quality.",
-            "itemtype": "property",
-            "name": "samples",
-            "type": "Number",
-            "default": "9",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 304,
-            "description": "Adjusts the sampling step sizes for the three generate passes.",
-            "itemtype": "method",
-            "name": "calculateStepSizes",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 321,
-            "description": "Used for saving the original clear color \nduring rendering the masked scene.",
-            "itemtype": "property",
-            "name": "clearColor",
-            "type": "Color",
-            "access": "private",
-            "tagname": "",
-            "static": 1,
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 333,
-            "description": "Renders the scene.\n\nThe god rays pass has two phases with a total of 4 render steps.\n\nGenerate-phase:\n In the first pass, the masked scene is blurred along radial lines towards the light source.\n The result of the previous pass is re-blurred twice with a decreased distance between the samples.\n\nCombine-phase:\n The result is added to the normal scene.",
-            "itemtype": "method",
-            "name": "render",
-            "params": [
-                {
-                    "name": "renderer",
-                    "description": "- The renderer to use.",
-                    "type": "WebGLRenderer"
-                },
-                {
-                    "name": "writeBuffer",
-                    "description": "- The write buffer.",
-                    "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "readBuffer",
-                    "description": "- The read buffer.",
-                    "type": "WebGLRenderTarget"
-                }
-            ],
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays 2.js",
-            "line": 406,
-            "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
-            "itemtype": "method",
-            "name": "computeAngularScalar",
-            "access": "private",
-            "tagname": "",
-            "return": {
-                "description": "A scalar in the range 0.0 to 1.0 for a linear transition.",
-                "type": "Number"
-            },
-            "class": "GodRaysPass",
             "module": "postprocessing"
         },
         {
