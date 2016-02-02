@@ -1,6 +1,5 @@
 # Post Processing 
 [![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing) 
-[![GitHub version](https://badge.fury.io/gh/vanruesc%2Fpostprocessing.svg)](http://badge.fury.io/gh/vanruesc%2Fpostprocessing) 
 [![npm version](https://badge.fury.io/js/postprocessing.svg)](http://badge.fury.io/js/postprocessing) 
 [![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
 
