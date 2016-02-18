@@ -121,9 +121,7 @@ window.addEventListener("load", function init() {
 
 	var pass = new POSTPROCESSING.BloomPass({
 		resolution: 512,
-		strength: 1.0,
-		kernelSize: 25,
-		sigma: 4
+		strength: 1.0
 	});
 
 	pass.renderToScreen = true;
@@ -132,14 +130,16 @@ window.addEventListener("load", function init() {
 	// Shader settings.
 
 	var params = {
-		"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+		//"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+		"resolution": pass.resolutionScale,
 		"strength": pass.copyMaterial.uniforms.opacity.value,
-		"sigma": (parseInt(pass.convolutionMaterial.defines.KERNEL_SIZE_INT) - 1) / 2 / 3
+		"blurriness": pass.blurriness
 	};
 
-	gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
+	//gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
+	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.reset(); });
+	gui.add(params, "blurriness").min(0.0).max(3.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; });
 	gui.add(params, "strength").min(0.0).max(3.0).step(0.01).onChange(function() { pass.copyMaterial.uniforms.opacity.value = pass.combineMaterial.uniforms.opacity2.value = params["strength"]; });
-	gui.add(params, "sigma").min(4.0).max(12.0).step(0.1).onChange(function() { pass.convolutionMaterial.buildKernel(params["sigma"]); });
 
 	/**
 	 * Handles resizing.
@@ -165,7 +165,7 @@ window.addEventListener("load", function init() {
 
 	(function render(now) {
 
-		stats.begin();
+		requestAnimationFrame(render);
 
 		object.rotation.x += 0.001;
 		object.rotation.y += 0.005;
@@ -176,9 +176,7 @@ window.addEventListener("load", function init() {
 		if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
 		if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
-		stats.end();
-
-		requestAnimationFrame(render);
+		stats.update();
 
 	}());
 

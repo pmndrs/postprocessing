@@ -47,30 +47,30 @@ window.addEventListener("load", function loadAssets() {
 
 	modelLoader.load("models/waggon.json", function(object) {
 
-		textureLoader.load("textures/wood.jpg", function(colorMap) {
+		object.scale.multiplyScalar(100.0);
+		object.rotation.y = Math.PI * 0.75;
+		object.rotation.x = Math.PI * 0.25;
+		assets.waggon = object;
 
-			colorMap.wrapS = colorMap.wrapT = THREE.RepeatWrapping;
+	});
 
-			textureLoader.load("textures/woodnormals.jpg", function(normalMap) {
+	textureLoader.load("textures/wood.jpg", function(texture) {
 
-				normalMap.wrapS = normalMap.wrapT = THREE.RepeatWrapping;
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		assets.waggonColorMap = texture;
 
-				var material = new THREE.MeshPhongMaterial({
-					color: 0xffffff,
-					map: colorMap,
-					normalMap: normalMap,
-					fog: true
-				});
+	});
 
-				object.scale.multiplyScalar(100.0);
-				object.rotation.y = Math.PI * 0.75;
-				object.rotation.x = Math.PI * 0.25;
-				object.traverse(function(child) { child.material = material; })
-				assets.waggon = object;
+	textureLoader.load("textures/woodnormals.jpg", function(texture) {
 
-			});
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		assets.waggonNormalMap = texture;
 
-		});
+	});
+
+	textureLoader.load("textures/sun.png", function(texture) {
+
+		assets.sunTexture = texture;
 
 	});
 
@@ -139,6 +139,15 @@ function setupScene(assets) {
 
 	// Waggon model.
 
+	var waggonMaterial = new THREE.MeshPhongMaterial({
+		color: 0xffffff,
+		map: assets.waggonColorMap,
+		normalMap: assets.waggonNormalMap,
+		fog: true
+	});
+
+	assets.waggon.traverse(function(child) { child.material = waggonMaterial; });
+
 	scene.add(assets.waggon);
 
 	// Sun.
@@ -147,6 +156,20 @@ function setupScene(assets) {
 		new THREE.SphereBufferGeometry(600, 32, 32),
 		new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false})
 	);
+
+	/*var sunMaterial = new THREE.PointsMaterial({
+		map: assets.sunTexture,
+		size: 600,
+		sizeAttenuation: false,
+		color: 0xffddaa,
+		alphaTest: 0.0,
+		transparent: true,
+		fog: false
+	});
+
+	var sunGeometry = new THREE.Geometry();
+	sunGeometry.vertices.push(new THREE.Vector3());
+	var sun = new THREE.Points(sunGeometry, sunMaterial);*/
 
 	sun.ignoreOverrideMaterial = true; // Hack.
 	sun.position.copy(directionalLight.position);
@@ -159,14 +182,14 @@ function setupScene(assets) {
 	composer.addPass(pass);
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
-		resolutionScale: 0.4,
+		resolutionScale: 0.6,
+		blurriness: 0.0,
 		intensity: 1.0,
 		density: 0.96,
 		decay: 0.93,
 		weight: 0.4,
 		exposure: 0.6,
-		samples: 100,
-		blurriness: 1.0,
+		samples: 60,
 		clampMax: 1.0
 	});
 
@@ -183,12 +206,13 @@ function setupScene(assets) {
 		"weight": pass.godRaysMaterial.uniforms.weight.value,
 		"exposure": pass.godRaysMaterial.uniforms.exposure.value,
 		"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
-		"samples": pass.samples/*,
-		"blurriness": pass.blurriness*/,
+		"samples": pass.samples,
+		"blurriness": pass.blurriness,
 		"color": sun.material.color.getHex()
 	};
 
 	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.reset(); });
+	gui.add(params, "blurriness").min(0.0).max(4.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; });
 	gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.intensity = params["intensity"]; });
 	gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.density.value = params["density"]; });
 	gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.decay.value = params["decay"]; });
@@ -196,7 +220,6 @@ function setupScene(assets) {
 	gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.exposure.value = params["exposure"]; });
 	gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params["clampMax"]; });
 	gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params["samples"]; });
-	//gui.add(params, "blurriness").min(0.0).max(4.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; composer.reset(); });
 	gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params["color"]); });
 
 	/**
@@ -221,13 +244,11 @@ function setupScene(assets) {
 
 	(function render(now) {
 
-		stats.begin();
+		requestAnimationFrame(render);
 
 		composer.render();
 
-		stats.end();
-
-		requestAnimationFrame(render);
+		stats.update();
 
 	}());
 

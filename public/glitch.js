@@ -104,7 +104,7 @@ window.addEventListener("load", function init() {
 			"mode": pass.mode
 		};
 
-		gui.add(params, "mode").min(POSTPROCESSING.GlitchMode.SPORADIC).max(POSTPROCESSING.GlitchMode.CONSTANT_WILD).step(1).onChange(function() { pass.mode = params["mode"]; });
+		gui.add(params, "mode").min(POSTPROCESSING.GlitchPass.Mode.SPORADIC).max(POSTPROCESSING.GlitchPass.Mode.CONSTANT_WILD).step(1).onChange(function() { pass.mode = params["mode"]; });
 
 	});
 
