@@ -15,15 +15,6 @@
             "fors": {},
             "namespaces": {}
         },
-        "src\\materials\\blur\\index.js": {
-            "name": "src\\materials\\blur\\index.js",
-            "modules": {},
-            "classes": {
-                "BlurMaterial": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
         "src\\materials\\bokeh\\index.js": {
             "name": "src\\materials\\bokeh\\index.js",
             "modules": {},
@@ -287,7 +278,6 @@
             "elements": {},
             "classes": {
                 "AdaptiveLuminosityMaterial": 1,
-                "BlurMaterial": 1,
                 "BokehMaterial": 1,
                 "CombineMaterial": 1,
                 "ConvolutionMaterial": 1,
@@ -366,28 +356,6 @@
             "is_constructor": 1,
             "extends": "ShaderMaterial"
         },
-        "BlurMaterial": {
-            "name": "BlurMaterial",
-            "shortname": "BlurMaterial",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "postprocessing",
-            "file": "src\\materials\\blur\\index.js",
-            "line": 18,
-            "description": "A blur shader material.\n\nhttp://www.gamerendering.com/2008/10/11/gaussian-blur-filter-shader",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial",
-            "params": [
-                {
-                    "name": "direction",
-                    "description": "- The blur direction.",
-                    "type": "BlurDirection"
-                }
-            ]
-        },
         "BokehMaterial": {
             "name": "BokehMaterial",
             "shortname": "BokehMaterial",
@@ -444,10 +412,17 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\convolution\\index.js",
-            "line": 18,
-            "description": "A convolution shader material.",
+            "line": 4,
+            "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/\n OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//\n apple_ref/doc/uid/TP40008793-CH7-SW15",
             "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "extends": "ShaderMaterial",
+            "params": [
+                {
+                    "name": "texelSize",
+                    "description": "- The absolute screen texel size.",
+                    "type": "Vector2"
+                }
+            ]
         },
         "CopyMaterial": {
             "name": "CopyMaterial",
@@ -594,8 +569,8 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\bloom.js",
-            "line": 8,
-            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising an approximated gauss kernel.",
+            "line": 5,
+            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising the fast Kawase convolution approach.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -606,11 +581,18 @@
                     "optional": true,
                     "props": [
                         {
-                            "name": "resolution",
-                            "description": "- The render resolution. Power of two is recommended.",
+                            "name": "resolutionScale",
+                            "description": "- The render texture resolution scale, relative to the screen render size.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "256"
+                            "optdefault": "0.5"
+                        },
+                        {
+                            "name": "blurriness",
+                            "description": "- The strength of the blur.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1.0"
                         },
                         {
                             "name": "strength",
@@ -618,13 +600,6 @@
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1.0"
-                        },
-                        {
-                            "name": "sigma",
-                            "description": "- Defines the size of the kernel.",
-                            "type": "Number",
-                            "optional": true,
-                            "optdefault": "4.0"
                         }
                     ]
                 }
@@ -822,7 +797,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\glitch.js",
-            "line": 22,
+            "line": 5,
             "description": "A glitch pass.",
             "is_constructor": 1,
             "extends": "Pass",
@@ -934,7 +909,7 @@
                             "description": "- The strength of the preliminary blur phase.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "3.0"
+                            "optdefault": "1.0"
                         },
                         {
                             "name": "resolutionScale",
@@ -1174,52 +1149,58 @@
     "elements": {},
     "classitems": [
         {
-            "file": "src\\materials\\blur\\index.js",
-            "line": 4,
-            "description": "An enumeration of blur directions.",
-            "itemtype": "property",
-            "name": "BlurDirection",
-            "type": "Object",
-            "static": 1,
-            "final": 1,
-            "class": "BlurMaterial"
-        },
-        {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 4,
-            "description": "Gauss kernel.\n\nDropped [ sqrt(2 * pi) * sigma ] term (unnecessary when normalizing).",
-            "itemtype": "method",
-            "name": "gauss",
-            "params": [
-                {
-                    "name": "x",
-                    "description": "- X.",
-                    "type": "Number"
-                },
-                {
-                    "name": "sigma",
-                    "description": "- Sigma.",
-                    "type": "Number"
-                }
-            ],
+            "line": 43,
+            "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
+            "itemtype": "property",
+            "name": "kernels",
+            "type": "Number",
             "access": "private",
             "tagname": "",
-            "static": 1,
             "class": "ConvolutionMaterial"
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 55,
-            "description": "Creates a new kernel for this material.",
-            "params": [
-                {
-                    "name": "sigma",
-                    "description": "- Sigma value.",
-                    "type": "Number"
-                }
-            ],
+            "line": 54,
+            "description": "Scales the kernels.",
+            "itemtype": "property",
+            "name": "blurriness",
+            "type": "Number",
+            "default": "1.0",
+            "class": "ConvolutionMaterial"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 64,
+            "description": "The current kernel.",
+            "itemtype": "property",
+            "name": "i",
+            "type": "Number",
             "access": "private",
             "tagname": "",
+            "class": "ConvolutionMaterial"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 82,
+            "description": "Sets the texel size.",
+            "itemtype": "method",
+            "name": "setTexelSize",
+            "params": [
+                {
+                    "name": "texelSize",
+                    "description": "- The new texel size.",
+                    "type": "Vector2"
+                }
+            ],
+            "class": "ConvolutionMaterial"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 100,
+            "description": "Adjusts the kernel for the next blur pass.\nCall this method before each render iteration.",
+            "itemtype": "method",
+            "name": "adjustKernel",
             "class": "ConvolutionMaterial"
         },
         {
@@ -1479,7 +1460,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 29,
+            "line": 26,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1491,7 +1472,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 45,
+            "line": 42,
             "description": "Another render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1503,10 +1484,22 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 60,
-            "description": "The horizontal blur factor.",
+            "line": 54,
+            "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer \nafter changing this value.",
             "itemtype": "property",
-            "name": "blurX",
+            "name": "renderTargetY",
+            "type": "WebGLRenderTarget",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 67,
+            "description": "The texel size for the blur.",
+            "itemtype": "property",
+            "name": "texelSize",
             "type": "Vector2",
             "access": "private",
             "tagname": "",
@@ -1515,19 +1508,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 70,
-            "description": "The vertical blur factor.",
-            "itemtype": "property",
-            "name": "blurY",
-            "type": "Vector2",
-            "access": "private",
-            "tagname": "",
-            "class": "BloomPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\bloom.js",
-            "line": 80,
+            "line": 77,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1539,7 +1520,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 92,
+            "line": 89,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1551,7 +1532,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 106,
+            "line": 103,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1563,28 +1544,18 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 118,
-            "description": "Clear flag.\n\nThis pass draws the blurred scene over the normal one.\nSet to true to see the fully blurred scene.",
+            "line": 121,
+            "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
-            "name": "clear",
-            "type": "Boolean",
-            "default": "true",
-            "class": "BloomPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\bloom.js",
-            "line": 136,
-            "description": "The resolution of the render targets. Needs to be a power of 2.",
-            "itemtype": "property",
-            "name": "resolution",
+            "name": "blurriness",
             "type": "Number",
+            "default": "1.0",
             "class": "BloomPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 162,
+            "line": 145,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1620,7 +1591,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 212,
+            "line": 206,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1887,19 +1858,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 5,
-            "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
-            "itemtype": "property",
-            "name": "GlitchMode",
-            "type": "Object",
-            "static": 1,
-            "final": 1,
-            "class": "GlitchPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\glitch.js",
-            "line": 40,
+            "line": 23,
             "description": "Glitch shader material.",
             "itemtype": "property",
             "name": "material",
@@ -1911,7 +1870,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 50,
+            "line": 33,
             "description": "A perturbation map.\n\nIf none is provided, a noise texture will be created.\nThe texture will automatically be destroyed when the \nEffectComposer is deleted.",
             "itemtype": "property",
             "name": "perturbMap",
@@ -1921,18 +1880,18 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 74,
-            "description": "The effect mode.\n\nCheck the GlitchMode enumeration for available modes.",
+            "line": 57,
+            "description": "The effect mode.\n\nCheck the Mode enumeration for available modes.",
             "itemtype": "property",
             "name": "mode",
-            "type": "GlitchMode",
-            "default": "GlitchMode.SPORADIC",
+            "type": "GlitchPass.Mode",
+            "default": "GlitchPass.Mode.SPORADIC",
             "class": "GlitchPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 86,
+            "line": 69,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "counter",
@@ -1944,7 +1903,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 110,
+            "line": 93,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1970,7 +1929,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 167,
+            "line": 150,
             "description": "Creates a random break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -1979,7 +1938,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 175,
+            "line": 158,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -1992,6 +1951,18 @@
             ],
             "access": "private",
             "tagname": "",
+            "class": "GlitchPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\glitch.js",
+            "line": 193,
+            "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
+            "itemtype": "property",
+            "name": "GlitchPass.Mode",
+            "type": "Object",
+            "static": 1,
+            "final": 1,
             "class": "GlitchPass",
             "module": "postprocessing"
         },
@@ -2056,10 +2027,10 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 98,
-            "description": "A horizontal blur shader material.",
+            "description": "The texel size for the blur.",
             "itemtype": "property",
-            "name": "horizontalBlurMaterial",
-            "type": "BlurMaterial",
+            "name": "texelSize",
+            "type": "Vector2",
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
@@ -2068,10 +2039,10 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 108,
-            "description": "A vertical blur shader material.",
+            "description": "A convolution blur shader material.",
             "itemtype": "property",
-            "name": "verticalBlurMaterial",
-            "type": "BlurMaterial",
+            "name": "convolutionMaterial",
+            "type": "ConvolutionMaterial",
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
@@ -2128,17 +2099,6 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 170,
-            "description": "The strength of the preliminary blur phase.\n\nYou need to call the reset method of the EffectComposer\nafter changing this value.",
-            "itemtype": "property",
-            "name": "blurriness",
-            "type": "Number",
-            "default": "3.0",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 183,
             "description": "A main scene.",
             "itemtype": "property",
             "name": "mainScene",
@@ -2148,7 +2108,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 192,
+            "line": 179,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
@@ -2158,7 +2118,18 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 209,
+            "line": 199,
+            "description": "The strength of the preliminary blur phase.",
+            "itemtype": "property",
+            "name": "blurriness",
+            "type": "Number",
+            "default": "1.0",
+            "class": "GodRaysPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\god-rays.js",
+            "line": 223,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2169,8 +2140,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 234,
-            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!\n\nThe recommended number of samples is 20.",
+            "line": 248,
+            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!",
             "itemtype": "property",
             "name": "samples",
             "type": "Number",
@@ -2180,8 +2151,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 271,
-            "description": "Used for saving the original clear color \nduring rendering the masked scene.",
+            "line": 283,
+            "description": "Used for saving the original clear color \nduring the rendering process of the masked scene.",
             "itemtype": "property",
             "name": "clearColor",
             "type": "Color",
@@ -2193,8 +2164,8 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 283,
-            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 7 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPrelminiary Blur Phase:\n The masked scene is blurred horizontally and vertically, two times each.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result of these 5 blur steps is added to the normal scene.",
+            "line": 295,
+            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPrelminiary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
             "params": [
@@ -2219,33 +2190,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 374,
-            "description": "Computes the screen position of the light object.",
-            "itemtype": "method",
-            "name": "computeScreenPosition",
-            "access": "private",
-            "tagname": "",
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 399,
-            "description": "Computes the angle between the camera look direction and the light\ndirection in order to create a scalar for the god rays exposure.",
-            "itemtype": "method",
-            "name": "computeAngularScalar",
-            "access": "private",
-            "tagname": "",
-            "return": {
-                "description": "A scalar in the range 0.0 to 1.0 for a linear transition.",
-                "type": "Number"
-            },
-            "class": "GodRaysPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\god-rays.js",
-            "line": 437,
+            "line": 389,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2882,7 +2827,7 @@
         {
             "file": "src\\effect-composer.js",
             "line": 209,
-            "description": "Resets the composer's render textures.\nCall this method when the size of the renderer's canvas changed or\nif you want to drop the old read/write buffers and create new ones.",
+            "description": "Resets the composer's render textures.\n\nCall this method when the size of the renderer's canvas has changed or\nif you want to drop the old read/write buffers and create new ones.",
             "itemtype": "method",
             "name": "reset",
             "params": [
@@ -2898,7 +2843,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 249,
+            "line": 250,
             "description": "Sets the render size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2919,7 +2864,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 273,
+            "line": 274,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates any render targets, textures and materials created by the passes.\nIt also deletes this composer's render targets and copy material.",
             "itemtype": "method",
             "name": "dispose",
@@ -2927,10 +2872,5 @@
             "module": "postprocessing"
         }
     ],
-    "warnings": [
-        {
-            "message": "Missing item type\nCreates a new kernel for this material.",
-            "line": " src\\materials\\convolution\\index.js:55"
-        }
-    ]
+    "warnings": []
 }

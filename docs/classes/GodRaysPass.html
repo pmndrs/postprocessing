@@ -41,7 +41,6 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
-                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -305,7 +304,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[blurriness=3.0]</code>
+                                    <code class="param-name optional">[blurriness=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -369,14 +368,6 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
-                            <li class="index-item method private">
-                                <a href="#method_computeAngularScalar">computeAngularScalar</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_computeScreenPosition">computeScreenPosition</a>
-
-                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_dispose">dispose</a>
 
@@ -414,6 +405,10 @@
 
                             </li>
                             <li class="index-item property private">
+                                <a href="#property_convolutionMaterial">convolutionMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
                                 <a href="#property_copyMaterial">copyMaterial</a>
 
                             </li>
@@ -423,10 +418,6 @@
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_godRaysMaterial">godRaysMaterial</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_horizontalBlurMaterial">horizontalBlurMaterial</a>
 
                             </li>
                             <li class="index-item property">
@@ -486,7 +477,7 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_verticalBlurMaterial">verticalBlurMaterial</a>
+                                <a href="#property_texelSize">texelSize</a>
 
                             </li>
                     </ul>
@@ -498,83 +489,6 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
-<div id="method_computeAngularScalar" class="method item private">
-    <h3 class="name"><code>computeAngularScalar</code></h3>
-
-        <span class="paren">()</span>
-
-        <span class="returns-inline">
-            <span class="type">Number</span>
-        </span>
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l399"><code>src\passes\god-rays.js:399</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Computes the angle between the camera look direction and the light
-direction in order to create a scalar for the god rays exposure.</p>
-
-    </div>
-
-
-        <div class="returns">
-            <h4>Returns:</h4>
-
-            <div class="returns-description">
-                        <span class="type">Number</span>:
-                    <p>A scalar in the range 0.0 to 1.0 for a linear transition.</p>
-
-            </div>
-        </div>
-
-
-</div>
-<div id="method_computeScreenPosition" class="method item private">
-    <h3 class="name"><code>computeScreenPosition</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l374"><code>src\passes\god-rays.js:374</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Computes the screen position of the light object.</p>
-
-    </div>
-
-
-
-
-</div>
 <div id="method_dispose" class="method item inherited">
     <h3 class="name"><code>dispose</code></h3>
 
@@ -646,7 +560,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l283"><code>src\passes\god-rays.js:283</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l295"><code>src\passes\god-rays.js:295</code></a>
         </p>
 
 
@@ -656,15 +570,15 @@ when you are certain that you don't need this pass anymore.
     <div class="description">
         <p>Renders the scene.</p>
 <p>The read buffer is assumed to contain the normally rendered scene.
-The god rays pass has four phases with a total of 7 render steps.</p>
+The god rays pass has four phases with a total of 8 render steps.</p>
 <p>Mask Phase:
 The scene is rendered using a mask material.</p>
 <p>Prelminiary Blur Phase:
-The masked scene is blurred horizontally and vertically, two times each.</p>
+The masked scene is blurred five consecutive times.</p>
 <p>God Rays Phase:
 The blurred scene is blurred again, but this time along radial lines towards the light source.</p>
 <p>Composite Phase:
-The final result of these 5 blur steps is added to the normal scene.</p>
+The final result is added to the normal scene.</p>
 
     </div>
 
@@ -744,7 +658,7 @@ The final result of these 5 blur steps is added to the normal scene.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l437"><code>src\passes\god-rays.js:437</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l389"><code>src\passes\god-rays.js:389</code></a>
         </p>
 
 
@@ -808,7 +722,7 @@ The final result of these 5 blur steps is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l170"><code>src\passes\god-rays.js:170</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l199"><code>src\passes\god-rays.js:199</code></a>
         </p>
 
 
@@ -816,12 +730,10 @@ The final result of these 5 blur steps is added to the normal scene.</p>
 
     <div class="description">
         <p>The strength of the preliminary blur phase.</p>
-<p>You need to call the reset method of the EffectComposer
-after changing this value.</p>
 
     </div>
 
-        <p><strong>Default:</strong> 3.0</p>
+        <p><strong>Default:</strong> 1.0</p>
 
 
 </div>
@@ -864,7 +776,7 @@ after changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l271"><code>src\passes\god-rays.js:271</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l283"><code>src\passes\god-rays.js:283</code></a>
         </p>
 
 
@@ -872,7 +784,7 @@ after changing this value.</p>
 
     <div class="description">
         <p>Used for saving the original clear color
-during rendering the masked scene.</p>
+during the rendering process of the masked scene.</p>
 
     </div>
 
@@ -899,6 +811,32 @@ during rendering the masked scene.</p>
 
     <div class="description">
         <p>A combine shader material used for rendering to screen.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_convolutionMaterial" class="property item private">
+    <h3 class="name"><code>convolutionMaterial</code></h3>
+    <span class="type"><a href="../classes/ConvolutionMaterial.html" class="crosslink">ConvolutionMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l108"><code>src\passes\god-rays.js:108</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A convolution blur shader material.</p>
 
     </div>
 
@@ -982,32 +920,6 @@ during rendering the masked scene.</p>
 
 
 </div>
-<div id="property_horizontalBlurMaterial" class="property item private">
-    <h3 class="name"><code>horizontalBlurMaterial</code></h3>
-    <span class="type"><a href="../classes/BlurMaterial.html" class="crosslink">BlurMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l98"><code>src\passes\god-rays.js:98</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A horizontal blur shader material.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_intensity" class="property item">
     <h3 class="name"><code>intensity</code></h3>
     <span class="type">Number</span>
@@ -1019,7 +931,7 @@ during rendering the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l209"><code>src\passes\god-rays.js:209</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l223"><code>src\passes\god-rays.js:223</code></a>
         </p>
 
 
@@ -1070,7 +982,7 @@ during rendering the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l192"><code>src\passes\god-rays.js:192</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l179"><code>src\passes\god-rays.js:179</code></a>
         </p>
 
 
@@ -1095,7 +1007,7 @@ during rendering the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l183"><code>src\passes\god-rays.js:183</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l170"><code>src\passes\god-rays.js:170</code></a>
         </p>
 
 
@@ -1317,7 +1229,7 @@ after changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l234"><code>src\passes\god-rays.js:234</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l248"><code>src\passes\god-rays.js:248</code></a>
         </p>
 
 
@@ -1327,7 +1239,6 @@ after changing this value.</p>
         <p>The number of samples per pixel.</p>
 <p>This value must be carefully chosen. A higher value increases the
 GPU load directly and doesn't necessarily yield better results!</p>
-<p>The recommended number of samples is 20.</p>
 
     </div>
 
@@ -1387,9 +1298,9 @@ GPU load directly and doesn't necessarily yield better results!</p>
 
 
 </div>
-<div id="property_verticalBlurMaterial" class="property item private">
-    <h3 class="name"><code>verticalBlurMaterial</code></h3>
-    <span class="type"><a href="../classes/BlurMaterial.html" class="crosslink">BlurMaterial</a></span>
+<div id="property_texelSize" class="property item private">
+    <h3 class="name"><code>texelSize</code></h3>
+    <span class="type">Vector2</span>
 
 
         <span class="flag private">private</span>
@@ -1399,14 +1310,14 @@ GPU load directly and doesn't necessarily yield better results!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l108"><code>src\passes\god-rays.js:108</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l98"><code>src\passes\god-rays.js:98</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A vertical blur shader material.</p>
+        <p>The texel size for the blur.</p>
 
     </div>
 

@@ -4,7 +4,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "AdaptiveLuminosityMaterial",
         "AdaptiveToneMappingPass",
         "BloomPass",
-        "BlurMaterial",
         "BokehMaterial",
         "BokehPass",
         "ClearMaskPass",

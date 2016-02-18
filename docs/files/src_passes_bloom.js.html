@@ -41,7 +41,6 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
-                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -113,22 +112,19 @@ import { CopyMaterial, CombineMaterial, ConvolutionMaterial } from &quot;../mate
 import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
 
-// A constant blur spread factor.
-var BLUR = 0.001953125;
-
 /**
  * A bloom pass.
  *
  * This pass renders a scene with superimposed blur 
- * by utilising an approximated gauss kernel.
+ * by utilising the fast Kawase convolution approach.
  *
  * @class BloomPass
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
- * @param {Number} [options.resolution=256] - The render resolution. Power of two is recommended.
+ * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+ * @param {Number} [options.blurriness=1.0] - The strength of the blur.
  * @param {Number} [options.strength=1.0] - The bloom strength.
- * @param {Number} [options.sigma=4.0] - Defines the size of the kernel.
  */
 
 export function BloomPass(options) {
@@ -165,28 +161,28 @@ export function BloomPass(options) {
 	this.renderTargetY.stencilBuffer = false;
 	this.renderTargetY.depthBuffer = false;
 
-	// Set the resolution.
-	this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+	/**
+	 * The resolution scale.
+	 *
+	 * You need to call the reset method of the EffectComposer 
+	 * after changing this value.
+	 *
+	 * @property renderTargetY
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
 
 	/**
-	 * The horizontal blur factor.
+	 * The texel size for the blur.
 	 *
-	 * @property blurX
+	 * @property texelSize
 	 * @type Vector2
 	 * @private
 	 */
 
-	this.blurX = new THREE.Vector2(BLUR, 0.0);
-
-	/**
-	 * The vertical blur factor.
-	 *
-	 * @property blurY
-	 * @type Vector2
-	 * @private
-	 */
-
-	this.blurY = new THREE.Vector2(0.0, BLUR);
+	this.texelSize = new THREE.Vector2();
 
 	/**
 	 * Combine shader material.
@@ -224,20 +220,8 @@ export function BloomPass(options) {
 
 	this.convolutionMaterial = new ConvolutionMaterial();
 
-	this.convolutionMaterial.buildKernel((options.sigma !== undefined) ? options.sigma : 4.0);
-
-	/**
-	 * Clear flag.
-	 *
-	 * This pass draws the blurred scene over the normal one.
-	 * Set to true to see the fully blurred scene.
-	 *
-	 * @property clear
-	 * @type Boolean
-	 * @default true
-	 */
-
-	this.clear = false;
+	// Set the blur strength.
+	this.blurriness = options.blurriness;
 
 }
 
@@ -245,24 +229,22 @@ BloomPass.prototype = Object.create(Pass.prototype);
 BloomPass.prototype.constructor = BloomPass;
 
 /**
- * The resolution of the render targets. Needs to be a power of 2.
+ * The strength of the preliminary blur phase.
  *
- * @property resolution
+ * @property blurriness
  * @type Number
+ * @default 1.0
  */
 
-Object.defineProperty(BloomPass.prototype, &quot;resolution&quot;, {
+Object.defineProperty(BloomPass.prototype, &quot;blurriness&quot;, {
 
-	get: function() { return this.renderTargetX.width; },
+	get: function() { return this.convolutionMaterial.blurriness; },
 
 	set: function(x) {
 
 		if(typeof x === &quot;number&quot;) {
 
-			if(x &lt;= 0) { x = 1; }
-
-			this.renderTargetX.setSize(x, x);
-			this.renderTargetY.setSize(x, x);
+			this.convolutionMaterial.blurriness = x;
 
 		}
 
@@ -285,36 +267,47 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 
 	if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
 
-	// Render quad with blurred scene into texture (convolution pass 1).
+	// Convolution blur (5 passes).
 	this.quad.material = this.convolutionMaterial;
-	this.convolutionMaterial.uniforms.tDiffuse.value = readBuffer;
-	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurX);
-	renderer.render(this.scene, this.camera, this.renderTargetX, true);
 
-	// Render quad with blurred scene into texture (convolution pass 2).
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = readBuffer;
+	renderer.render(this.scene, this.camera, this.renderTargetY);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
+
+	this.convolutionMaterial.adjustKernel();
 	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	this.convolutionMaterial.uniforms.uImageIncrement.value.copy(this.blurY);
-	renderer.render(this.scene, this.camera, this.renderTargetY, true);
+	renderer.render(this.scene, this.camera, this.renderTargetY);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	if(maskActive) { renderer.context.enable(renderer.context.STENCIL_TEST); }
 
 	// Render original scene with superimposed blur.
 	if(this.renderToScreen) {
 
-		// Combine read buffer with the generated blur and render the result to screen.
 		this.quad.material = this.combineMaterial;
 		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		//this.combineMaterial.uniforms.opacity1.value = 0.0;
 		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 		renderer.render(this.scene, this.camera);
 
 	} else {
 
-		// Render directly onto the read buffer. Saves one texel fetch compared to the combine strategy.
 		this.quad.material = this.copyMaterial;
 		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, readBuffer, false);
 
 	}
 
@@ -330,11 +323,17 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 
 BloomPass.prototype.setSize = function(width, height) {
 
+	width = Math.floor(width * this.resolutionScale);
+	height = Math.floor(height * this.resolutionScale);
+
 	if(width &lt;= 0) { width = 1; }
 	if(height &lt;= 0) { height = 1; }
 
-	// Scale one of the blur factors with the render target ratio.
-	this.blurY.set(0.0, (width / height) * BLUR);
+	this.renderTargetX.setSize(width, height);
+	this.renderTargetY.setSize(width, height);
+
+	this.texelSize.set(1.0 / width, 1.0 / height);
+	this.convolutionMaterial.setTexelSize(this.texelSize);
 
 };
 

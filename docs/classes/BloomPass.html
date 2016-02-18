@@ -41,7 +41,6 @@
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
-                                <li><a href="../classes/BlurMaterial.html">BlurMaterial</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -113,7 +112,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_bloom.js.html#l8"><code>src\passes\bloom.js:8</code></a>
+            Defined in: <a href="../files/src_passes_bloom.js.html#l5"><code>src\passes\bloom.js:5</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -124,7 +123,7 @@
 <div class="box intro">
     <p>A bloom pass.</p>
 <p>This pass renders a scene with superimposed blur
-by utilising an approximated gauss kernel.</p>
+by utilising the fast Kawase convolution approach.</p>
 
 </div>
 
@@ -151,7 +150,7 @@ by utilising an approximated gauss kernel.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l8"><code>src\passes\bloom.js:8</code></a>
+        <a href="../files/src_passes_bloom.js.html#l5"><code>src\passes\bloom.js:5</code></a>
         </p>
 
 
@@ -181,13 +180,26 @@ by utilising an approximated gauss kernel.</p>
 
                         <ul class="params-list">
                             <li class="param">
-                                    <code class="param-name optional">[resolution=256]</code>
+                                    <code class="param-name optional">[resolutionScale=0.5]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The render resolution. Power of two is recommended.</li>
+<li>The render texture resolution scale, relative to the screen render size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[blurriness=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The strength of the blur.</li>
 </ul>
 
                                 </div>
@@ -201,19 +213,6 @@ by utilising an approximated gauss kernel.</p>
                                 <div class="param-description">
                                     <ul>
 <li>The bloom strength.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[sigma=4.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>Defines the size of the kernel.</li>
 </ul>
 
                                 </div>
@@ -264,20 +263,12 @@ by utilising an approximated gauss kernel.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property private">
-                                <a href="#property_blurX">blurX</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_blurY">blurY</a>
+                            <li class="index-item property">
+                                <a href="#property_blurriness">blurriness</a>
 
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_clear">clear</a>
 
                             </li>
                             <li class="index-item property private">
@@ -312,16 +303,20 @@ by utilising an approximated gauss kernel.</p>
                                 <a href="#property_renderTargetY">renderTargetY</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetY">renderTargetY</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_resolution">resolution</a>
-
-                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_texelSize">texelSize</a>
 
                             </li>
                     </ul>
@@ -410,7 +405,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l162"><code>src\passes\bloom.js:162</code></a>
+        <a href="../files/src_passes_bloom.js.html#l145"><code>src\passes\bloom.js:145</code></a>
         </p>
 
 
@@ -524,7 +519,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l212"><code>src\passes\bloom.js:212</code></a>
+        <a href="../files/src_passes_bloom.js.html#l206"><code>src\passes\bloom.js:206</code></a>
         </p>
 
 
@@ -577,55 +572,29 @@ when you are certain that you don't need this pass anymore.
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_blurX" class="property item private">
-    <h3 class="name"><code>blurX</code></h3>
-    <span class="type">Vector2</span>
+<div id="property_blurriness" class="property item">
+    <h3 class="name"><code>blurriness</code></h3>
+    <span class="type">Number</span>
 
 
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The horizontal blur factor.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_blurY" class="property item private">
-    <h3 class="name"><code>blurY</code></h3>
-    <span class="type">Vector2</span>
-
-
-        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l70"><code>src\passes\bloom.js:70</code></a>
+        <a href="../files/src_passes_bloom.js.html#l121"><code>src\passes\bloom.js:121</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The vertical blur factor.</p>
+        <p>The strength of the preliminary blur phase.</p>
 
     </div>
 
+        <p><strong>Default:</strong> 1.0</p>
 
 
 </div>
@@ -655,34 +624,6 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="property_clear" class="property item">
-    <h3 class="name"><code>clear</code></h3>
-    <span class="type">Boolean</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l118"><code>src\passes\bloom.js:118</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Clear flag.</p>
-<p>This pass draws the blurred scene over the normal one.
-Set to true to see the fully blurred scene.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> true</p>
-
-
-</div>
 <div id="property_combineMaterial" class="property item private">
     <h3 class="name"><code>combineMaterial</code></h3>
     <span class="type"><a href="../classes/CombineMaterial.html" class="crosslink">CombineMaterial</a></span>
@@ -695,7 +636,7 @@ Set to true to see the fully blurred scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l80"><code>src\passes\bloom.js:80</code></a>
+        <a href="../files/src_passes_bloom.js.html#l77"><code>src\passes\bloom.js:77</code></a>
         </p>
 
 
@@ -721,7 +662,7 @@ Set to true to see the fully blurred scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l106"><code>src\passes\bloom.js:106</code></a>
+        <a href="../files/src_passes_bloom.js.html#l103"><code>src\passes\bloom.js:103</code></a>
         </p>
 
 
@@ -747,7 +688,7 @@ Set to true to see the fully blurred scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l92"><code>src\passes\bloom.js:92</code></a>
+        <a href="../files/src_passes_bloom.js.html#l89"><code>src\passes\bloom.js:89</code></a>
         </p>
 
 
@@ -864,7 +805,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l29"><code>src\passes\bloom.js:29</code></a>
+        <a href="../files/src_passes_bloom.js.html#l26"><code>src\passes\bloom.js:26</code></a>
         </p>
 
 
@@ -890,7 +831,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l45"><code>src\passes\bloom.js:45</code></a>
+        <a href="../files/src_passes_bloom.js.html#l42"><code>src\passes\bloom.js:42</code></a>
         </p>
 
 
@@ -898,6 +839,34 @@ Assign your shader material to this mesh!
 
     <div class="description">
         <p>Another render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetY" class="property item private">
+    <h3 class="name"><code>renderTargetY</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l54"><code>src\passes\bloom.js:54</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call the reset method of the EffectComposer
+after changing this value.</p>
 
     </div>
 
@@ -929,31 +898,6 @@ Assign your shader material to this mesh!
 
 
 </div>
-<div id="property_resolution" class="property item">
-    <h3 class="name"><code>resolution</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l136"><code>src\passes\bloom.js:136</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution of the render targets. Needs to be a power of 2.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_scene" class="property item private inherited">
     <h3 class="name"><code>scene</code></h3>
     <span class="type">Scene</span>
@@ -977,6 +921,32 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_texelSize" class="property item private">
+    <h3 class="name"><code>texelSize</code></h3>
+    <span class="type">Vector2</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l67"><code>src\passes\bloom.js:67</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The texel size for the blur.</p>
+
+    </div>
+
 
 
 </div>
