@@ -1,5 +1,5 @@
 import {
-	BlurMaterial, BlurDirection,
+	ConvolutionMaterial,
 	CombineMaterial,
 	CopyMaterial,
 	GodRaysMaterial
@@ -24,7 +24,7 @@ import THREE from "three";
  * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
  * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.blurriness=3.0] - The strength of the preliminary blur phase.
+ * @param {Number} [options.blurriness=1.0] - The strength of the preliminary blur phase.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
  * @param {Number} [options.samples=20] - The number of samples per pixel.
  */
@@ -96,24 +96,24 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.screenPosition = new THREE.Vector3();
 
 	/**
-	 * A horizontal blur shader material.
+	 * The texel size for the blur.
 	 *
-	 * @property horizontalBlurMaterial
-	 * @type BlurMaterial
+	 * @property texelSize
+	 * @type Vector2
 	 * @private
 	 */
 
-	this.horizontalBlurMaterial = new BlurMaterial(BlurDirection.HORIZONTAL);
+	this.texelSize = new THREE.Vector2();
 
 	/**
-	 * A vertical blur shader material.
+	 * A convolution blur shader material.
 	 *
-	 * @property verticalBlurMaterial
-	 * @type BlurMaterial
+	 * @property convolutionMaterial
+	 * @type ConvolutionMaterial
 	 * @private
 	 */
 
-	this.verticalBlurMaterial = new BlurMaterial(BlurDirection.VERTICAL);
+	this.convolutionMaterial = new ConvolutionMaterial();
 
 	/**
 	 * A combine shader material used for rendering to screen.
@@ -168,19 +168,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.intensity = options.intensity;
 
 	/**
-	 * The strength of the preliminary blur phase.
-	 *
-	 * You need to call the reset method of the EffectComposer
-	 * after changing this value.
-	 *
-	 * @property blurriness
-	 * @type Number
-	 * @default 3.0
-	 */
-
-	this.blurriness = (options.blurriness === undefined) ? 3.0 : options.blurriness;
-
-	/**
 	 * A main scene.
 	 *
 	 * @property mainScene
@@ -201,10 +188,37 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
+	// Set the blur strength.
+	this.blurriness = options.blurriness;
+
 }
 
 GodRaysPass.prototype = Object.create(Pass.prototype);
 GodRaysPass.prototype.constructor = GodRaysPass;
+
+/**
+ * The strength of the preliminary blur phase.
+ *
+ * @property blurriness
+ * @type Number
+ * @default 1.0
+ */
+
+Object.defineProperty(GodRaysPass.prototype, "blurriness", {
+
+	get: function() { return this.convolutionMaterial.blurriness; },
+
+	set: function(x) {
+
+		if(typeof x === "number") {
+
+			this.convolutionMaterial.blurriness = x;
+
+		}
+
+	}
+
+});
 
 /**
  * The overall intensity of the effect.
@@ -237,8 +251,6 @@ Object.defineProperty(GodRaysPass.prototype, "intensity", {
  * This value must be carefully chosen. A higher value increases the 
  * GPU load directly and doesn't necessarily yield better results!
  *
- * The recommended number of samples is 20.
- *
  * @property samples
  * @type Number
  * @default 20
@@ -270,7 +282,7 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
 
 /**
  * Used for saving the original clear color 
- * during rendering the masked scene.
+ * during the rendering process of the masked scene.
  *
  * @property clearColor
  * @type Color
@@ -284,19 +296,19 @@ var clearColor = new THREE.Color();
  * Renders the scene.
  *
  * The read buffer is assumed to contain the normally rendered scene.
- * The god rays pass has four phases with a total of 7 render steps.
+ * The god rays pass has four phases with a total of 8 render steps.
  *
  * Mask Phase:
  *  The scene is rendered using a mask material.
  *
  * Prelminiary Blur Phase:
- *  The masked scene is blurred horizontally and vertically, two times each.
+ *  The masked scene is blurred five consecutive times.
  *
  * God Rays Phase:
  *  The blurred scene is blurred again, but this time along radial lines towards the light source.
  *
  * Composite Phase:
- *  The final result of these 5 blur steps is added to the normal scene.
+ *  The final result is added to the normal scene.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
@@ -321,116 +333,56 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	clearColor.copy(renderer.getClearColor());
 	clearAlpha = renderer.getClearAlpha();
 	renderer.setClearColor(0x000000, 1);
-	//renderer.render(this.mainScene, this.mainCamera, undefined, true); // Debug.
+	//renderer.render(this.mainScene, this.mainCamera, null, true); // Debug.
 	renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
 	renderer.setClearColor(clearColor, clearAlpha);
 	this.mainScene.overrideMaterial = null;
 
-	// First horizontal blur pass.
-	/*this.quad.material = this.horizontalBlurMaterial;
-	this.horizontalBlurMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	renderer.render(this.scene, this.camera, this.renderTargetY, true);
+	// Convolution phase (5 passes).
+	this.quad.material = this.convolutionMaterial;
 
-	// First vertical blur pass.
-	this.quad.material = this.verticalBlurMaterial;
-	this.verticalBlurMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-	renderer.render(this.scene, this.camera, this.renderTargetX);
-
-	// Second horizontal blur pass.
-	this.quad.material = this.horizontalBlurMaterial;
-	this.horizontalBlurMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene, this.camera, this.renderTargetY);
 
-	// Second vertical blur pass.
-	this.quad.material = this.verticalBlurMaterial;
-	this.verticalBlurMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-	renderer.render(this.scene, this.camera, this.renderTargetX);*/
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	renderer.render(this.scene, this.camera, this.renderTargetY);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// God rays pass.
 	this.quad.material = this.godRaysMaterial;
-	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	renderer.render(this.scene, this.camera, this.renderTargetY);
+	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
 
-	// Final pass - Composite god rays onto colors.
+	// Final pass - composite god rays onto colors.
 	if(this.renderToScreen) {
 
 		this.quad.material = this.combineMaterial;
 		this.combineMaterial.uniforms.texture1.value = readBuffer;
-		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+		this.combineMaterial.uniforms.texture2.value = this.renderTargetX;
 
 		renderer.render(this.scene, this.camera);
 
 	} else {
 
 		this.quad.material = this.copyMaterial;
-		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 
 		renderer.render(this.scene, this.camera, readBuffer);
 
 	}
-
-};
-
-/**
- * Computes the screen position of the light object.
- *
- * @method computeScreenPosition
- * @private
- */
-
-var mat = new THREE.Matrix4();
-
-GodRaysPass.prototype.computeScreenPosition = function() {
-
-	var c, e;
-
-	mat.multiplyMatrices(this.mainCamera.matrixWorldInverse, this.lightSource.matrixWorld);
-	mat.multiplyMatrices(this.mainCamera.projectionMatrix, mat);
-
-	e = mat.elements;
-	c = e[15];
-
-	this.screenPosition.set(e[12] / c, e[13] / c, e[14] / c);
-	this.screenPosition.multiplyScalar(0.5);
-	this.screenPosition.addScalar(0.5);
-
-};
-
-/**
- * Computes the angle between the camera look direction and the light
- * direction in order to create a scalar for the god rays exposure.
- *
- * @method computeAngularScalar
- * @private
- * @return {Number} A scalar in the range 0.0 to 1.0 for a linear transition.
- */
-
-// Static computation helpers.
-var HALF_PI = Math.PI * 0.5;
-var localPoint = new THREE.Vector3(0, 0, -1);
-var cameraDirection = new THREE.Vector3();
-var lightDirection = new THREE.Vector3();
-
-GodRaysPass.prototype.computeAngularScalar = function() {
-
-	//this.camera.getWorldDirection(cameraDirection);
-
-	// Save camera space point. Using lightDirection as a clipboard.
-	lightDirection.copy(localPoint);
-	// Camera space to world space.
-	cameraDirection.copy(localPoint.applyMatrix4(this.mainCamera.matrixWorld));
-	// Restore local point.
-	localPoint.copy(lightDirection);
-
-	// Let these be one and the same point.
-	lightDirection.copy(cameraDirection);
-	// Now compute the actual directions.
-	cameraDirection.sub(this.mainCamera.position);
-	lightDirection.sub(this.lightSource.position);
-
-	// Compute the angle between the directions.
-	// Don't allow acute angles and make a scalar out of it.
-	return THREE.Math.clamp(cameraDirection.angleTo(lightDirection) - HALF_PI, 0.0, 1.0);
 
 };
 
@@ -444,9 +396,6 @@ GodRaysPass.prototype.computeAngularScalar = function() {
 
 GodRaysPass.prototype.setSize = function(width, height) {
 
-	this.horizontalBlurMaterial.uniforms.strength.value = this.blurriness / width;
-	this.verticalBlurMaterial.uniforms.strength.value = this.blurriness / height;
-
 	width = Math.floor(width * this.resolutionScale);
 	height = Math.floor(height * this.resolutionScale);
 
@@ -455,5 +404,8 @@ GodRaysPass.prototype.setSize = function(width, height) {
 
 	this.renderTargetX.setSize(width, height);
 	this.renderTargetY.setSize(width, height);
+
+	this.texelSize.set(1.0 / width, 1.0 / height);
+	this.convolutionMaterial.setTexelSize(this.texelSize);
 
 };

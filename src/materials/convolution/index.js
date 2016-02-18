@@ -2,43 +2,36 @@ import shader from "./inlined/shader";
 import THREE from "three";
 
 /**
- * Gauss kernel.
+ * A convolution blur shader material.
  *
- * Dropped [ sqrt(2 * pi) * sigma ] term (unnecessary when normalizing).
+ * Use this shader five times in a row while adjusting the kernel 
+ * before each render call in order to get the same result as with 
+ * a 35x35 Gauss filter.
  *
- * @method gauss
- * @param {Number} x - X.
- * @param {Number} sigma - Sigma.
- * @private
- * @static
- */
-
-function gauss(x, sigma) { return Math.exp(-(x * x) / (2.0 * sigma * sigma)); }
-
-/**
- * A convolution shader material.
+ * Implementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
+ * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ *
+ * Further modified according to:
+ *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/
+ *  OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//
+ *  apple_ref/doc/uid/TP40008793-CH7-SW15
  *
  * @class ConvolutionMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Vector2} texelSize - The absolute screen texel size.
  */
 
-export function ConvolutionMaterial() {
+export function ConvolutionMaterial(texelSize) {
 
 	THREE.ShaderMaterial.call(this, {
-
-		defines: {
-
-			KERNEL_SIZE_FLOAT: "0.0",
-			KERNEL_SIZE_INT: "0"
-
-		},
 
 		uniforms: {
 
 			tDiffuse: {type: "t", value: null},
-			uImageIncrement: {type: "v2", value: new THREE.Vector2(0.001953125, 0.0)},
-			cKernel: {type: "fv1", value: []}
+			texelSize: {type: "v2", value: new THREE.Vector2()},
+			halfTexelSize: {type: "v2", value: new THREE.Vector2()},
+			kernel: {type: "f", value: 0.0}
 
 		},
 
@@ -47,43 +40,73 @@ export function ConvolutionMaterial() {
 
 	});
 
+	/**
+	 * The Kawase blur kernels for five consecutive convolution passes.
+	 * The result matches the 35x35 Gauss filter.
+	 *
+	 * @property kernels
+	 * @type Number
+	 * @private
+	 */
+
+	this.kernels = new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]);
+
+	/**
+	 * Scales the kernels.
+	 *
+	 * @property blurriness
+	 * @type Number
+	 * @default 1.0
+	 */
+
+	this.blurriness = 1.0;
+
+	/**
+	 * The current kernel.
+	 *
+	 * @property i
+	 * @type Number
+	 * @private
+	 */
+
+	this.i = 0;
+
+	// Set the texel size if already provided.
+	this.setTexelSize(texelSize);
+
 }
 
 ConvolutionMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 ConvolutionMaterial.prototype.constructor = ConvolutionMaterial;
 
 /**
- * Creates a new kernel for this material.
+ * Sets the texel size.
  *
- * @param {Number} sigma - Sigma value.
- * @private
+ * @method setTexelSize
+ * @param {Vector2} texelSize - The new texel size.
  */
 
-ConvolutionMaterial.prototype.buildKernel = function(sigma) {
+ConvolutionMaterial.prototype.setTexelSize = function(texelSize) {
 
-	var i, values, sum, halfWidth;
-	var kMaxKernelSize = 25;
-	var kernelSize = 2 * Math.ceil(sigma * 3.0) + 1;
+	if(texelSize !== undefined) {
 
-	if(kernelSize > kMaxKernelSize) { kernelSize = kMaxKernelSize; }
-
-	halfWidth = (kernelSize - 1) * 0.5;
-	values = this.uniforms.cKernel.value;
-	values.length = 0;
-	sum = 0.0;
-
-	for(i = 0; i < kernelSize; ++i) {
-
-		values[i] = gauss(i - halfWidth, sigma);
-		sum += values[i];
+		this.uniforms.texelSize.value.copy(texelSize);
+		this.uniforms.halfTexelSize.value.copy(texelSize).multiplyScalar(0.5);
 
 	}
 
-	// Normalize the kernel.
-	for(i = 0; i < kernelSize; ++i) { values[i] /= sum; }
+};
 
-	// Define the kernel size for the shader.
-	this.defines.KERNEL_SIZE_FLOAT = kernelSize.toFixed(1);
-	this.defines.KERNEL_SIZE_INT = kernelSize.toFixed(0);
+/**
+ * Adjusts the kernel for the next blur pass.
+ * Call this method before each render iteration.
+ *
+ * @method adjustKernel
+ */
+
+ConvolutionMaterial.prototype.adjustKernel = function() {
+
+	this.uniforms.kernel.value = this.kernels[this.i] * this.blurriness;
+	if(++this.i >= this.kernels.length) { this.i = 0; }
 
 };

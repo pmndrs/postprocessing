@@ -11,7 +11,7 @@ export { BokehPass } from "./bokeh";
 export { ClearMaskPass } from "./clear-mask";
 export { DotScreenPass } from "./dot-screen";
 export { FilmPass } from "./film";
-export { GlitchPass, GlitchMode } from "./glitch";
+export { GlitchPass } from "./glitch";
 export { GodRaysPass } from "./god-rays";
 export { MaskPass } from "./mask";
 export { Pass } from "./pass";

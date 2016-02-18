@@ -1,21 +1,25 @@
 uniform sampler2D tDiffuse;
-uniform vec2 uImageIncrement;
-uniform float cKernel[KERNEL_SIZE_INT];
 
-varying vec2 vUv;
+varying vec2 vUv0;
+varying vec2 vUv1;
+varying vec2 vUv2;
+varying vec2 vUv3;
 
 void main() {
 
-	vec2 coord = vUv;
-	vec4 sum = vec4(0.0);
+	// Sample top left texel.
+	vec4 sum = texture2D(tDiffuse, vUv0);
 
-	for(int i = 0; i < KERNEL_SIZE_INT; ++i) {
+	// Sample top right texel.
+	sum += texture2D(tDiffuse, vUv1);
 
-		sum += texture2D(tDiffuse, coord) * cKernel[i];
-		coord += uImageIncrement;
+	// Sample bottom right texel.
+	sum += texture2D(tDiffuse, vUv2);
 
-	}
+	// Sample bottom left texel.
+	sum += texture2D(tDiffuse, vUv3);
 
-	gl_FragColor = sum;
+	// Compute the average.
+	gl_FragColor = sum * 0.25;
 
 }

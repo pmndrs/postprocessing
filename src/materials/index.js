@@ -7,7 +7,6 @@
  */
 
 export { AdaptiveLuminosityMaterial } from "./adaptive-luminosity";
-export { BlurMaterial, BlurDirection } from "./blur";
 export { BokehMaterial } from "./bokeh";
 export { CombineMaterial } from "./combine";
 export { ConvolutionMaterial } from "./convolution";

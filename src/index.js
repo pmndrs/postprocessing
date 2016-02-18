@@ -13,7 +13,7 @@ export {
 	ClearMaskPass,
 	DotScreenPass,
 	FilmPass,
-	GlitchPass, GlitchMode,
+	GlitchPass,
 	GodRaysPass,
 	MaskPass,
 	Pass,
@@ -25,7 +25,6 @@ export {
 
 export {
 	AdaptiveLuminosityMaterial,
-	BlurMaterial, BlurDirection,
 	BokehMaterial,
 	CombineMaterial,
 	ConvolutionMaterial,
