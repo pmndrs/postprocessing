@@ -3,23 +3,6 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * A glitch mode enumeration.
- *
- * SPORADIC is the default mode (randomly timed glitches).
- *
- * @property GlitchMode
- * @type Object
- * @static
- * @final
- */
-
-export var GlitchMode = Object.freeze({
-	SPORADIC: 0,
-	CONSTANT_MILD: 1,
-	CONSTANT_WILD: 2
-});
-
-/**
  * A glitch pass.
  *
  * @class GlitchPass
@@ -74,14 +57,14 @@ export function GlitchPass(options) {
 	/**
 	 * The effect mode.
 	 *
-	 * Check the GlitchMode enumeration for available modes.
+	 * Check the Mode enumeration for available modes.
 	 *
 	 * @property mode
-	 * @type GlitchMode
-	 * @default GlitchMode.SPORADIC
+	 * @type GlitchPass.Mode
+	 * @default GlitchPass.Mode.SPORADIC
 	 */
 
-	this.mode = GlitchMode.SPORADIC;
+	this.mode = GlitchPass.Mode.SPORADIC;
 
 	/**
 	 * Counter for glitch activation/deactivation.
@@ -124,7 +107,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	uniforms.seed.value = Math.random();
 	uniforms.active.value = true;
 
-	if(this.counter % this.breakPoint === 0 || this.mode === GlitchMode.CONSTANT_WILD) {
+	if(this.counter % this.breakPoint === 0 || this.mode === GlitchPass.Mode.CONSTANT_WILD) {
 
 		uniforms.amount.value = Math.random() / 30.0;
 		uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
@@ -135,7 +118,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 		this.counter = 0;
 		this.generateTrigger();
 
-	} else if(this.counter % this.breakPoint < this.breakPoint / 5 || this.mode === GlitchMode.CONSTANT_MILD) {
+	} else if(this.counter % this.breakPoint < this.breakPoint / 5 || this.mode === GlitchPass.Mode.CONSTANT_MILD) {
 
 		uniforms.amount.value = Math.random() / 90.0;
 		uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
@@ -144,7 +127,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 		uniforms.seedX.value = THREE.Math.randFloat(-0.3, 0.3);
 		uniforms.seedY.value = THREE.Math.randFloat(-0.3, 0.3);
 
-	} else if(this.mode === GlitchMode.SPORADIC) {
+	} else if(this.mode === GlitchPass.Mode.SPORADIC) {
 
 		uniforms.active.value = false;
 
@@ -206,3 +189,20 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 	this.material.uniforms.tPerturb.value = this.perturbMap;
 
 };
+
+/**
+ * A glitch mode enumeration.
+ *
+ * SPORADIC is the default mode (randomly timed glitches).
+ *
+ * @property GlitchPass.Mode
+ * @type Object
+ * @static
+ * @final
+ */
+
+GlitchPass.Mode = Object.freeze({
+	SPORADIC: 0,
+	CONSTANT_MILD: 1,
+	CONSTANT_WILD: 2
+});
