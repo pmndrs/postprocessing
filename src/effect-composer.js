@@ -208,7 +208,8 @@ EffectComposer.prototype.render = function(delta) {
 
 /**
  * Resets the composer's render textures.
- * Call this method when the size of the renderer's canvas changed or
+ *
+ * Call this method when the size of the renderer's canvas has changed or
  * if you want to drop the old read/write buffers and create new ones.
  *
  * @method reset
