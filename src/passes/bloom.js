@@ -1,4 +1,10 @@
-import { CopyMaterial, CombineMaterial, ConvolutionMaterial } from "../materials";
+import {
+	CopyMaterial,
+	CombineMaterial,
+	ToneMappingMaterial,
+	ConvolutionMaterial
+} from "../materials";
+
 import { Pass } from "./pass";
 import THREE from "three";
 
@@ -13,7 +19,7 @@ import THREE from "three";
  * @extends Pass
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.blurriness=1.0] - The strength of the blur.
+ * @param {Number} [options.blurriness=1.0] - The scale of the blur kernels.
  * @param {Number} [options.strength=1.0] - The bloom strength.
  */
 
@@ -34,7 +40,9 @@ export function BloomPass(options) {
 	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
 		minFilter: THREE.LinearFilter,
 		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat
+		format: THREE.RGBFormat,
+		stencilBuffer: false,
+		depthBuffer: false
 	});
 
 	this.renderTargetX.texture.generateMipmaps = false;
@@ -48,8 +56,6 @@ export function BloomPass(options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-	this.renderTargetY.stencilBuffer = false;
-	this.renderTargetY.depthBuffer = false;
 
 	/**
 	 * The resolution scale.
@@ -101,6 +107,16 @@ export function BloomPass(options) {
 	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
 	/**
+	 * Tone-mapping shader material.
+	 *
+	 * @property toneMappingMaterial
+	 * @type ToneMappingMaterial
+	 * @private
+	 */
+
+	this.toneMappingMaterial = new ToneMappingMaterial();
+
+	/**
 	 * Convolution shader material.
 	 *
 	 * @property convolutionMaterial
@@ -143,7 +159,11 @@ Object.defineProperty(BloomPass.prototype, "blurriness", {
 });
 
 /**
- * Renders the scene.
+ * Renders the bloom effect.
+ *
+ * Applies a tone-mapping pass and convolution blur to the readBuffer and 
+ * renders the result into a seperate render target. The result is additively 
+ * blended with the readBuffer.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
@@ -157,11 +177,16 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 
 	if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
 
+	// Tone-mapping.
+	this.quad.material = this.toneMappingMaterial;
+	this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
+
 	// Convolution blur (5 passes).
 	this.quad.material = this.convolutionMaterial;
 
 	this.convolutionMaterial.adjustKernel();
-	this.convolutionMaterial.uniforms.tDiffuse.value = readBuffer;
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	this.convolutionMaterial.adjustKernel();

@@ -15,28 +15,29 @@ uniform float maxLuminance;
 varying vec2 vUv;
 
 const vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);
+const vec2 CENTER = vec2(0.5, 0.5);
 
-vec3 toneMap(vec3 vColor) {
+vec3 toneMap(vec3 c) {
 
 	#ifdef ADAPTED_LUMINANCE
 
 		// Get the calculated average luminance.
-		float fLumAvg = texture2D(luminanceMap, vec2(0.5, 0.5)).r;
+		float lumAvg = texture2D(luminanceMap, CENTER).r;
 
 	#else
 
-		float fLumAvg = averageLuminance;
+		float lumAvg = averageLuminance;
 
 	#endif
 
 	// Calculate the luminance of the current pixel.
-	float fLumPixel = dot(vColor, LUM_CONVERT);
+	float lumPixel = dot(c, LUM_CONVERT);
 
 	// Apply the modified operator (Eq. 4).
-	float fLumScaled = (fLumPixel * middleGrey) / fLumAvg;
+	float lumScaled = (lumPixel * middleGrey) / lumAvg;
 
-	float fLumCompressed = (fLumScaled * (1.0 + (fLumScaled / (maxLuminance * maxLuminance)))) / (1.0 + fLumScaled);
-	return fLumCompressed * vColor;
+	float lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);
+	return lumCompressed * c;
 
 }
 

@@ -1,5 +1,5 @@
-uniform sampler2D lastLum;
-uniform sampler2D currentLum;
+uniform sampler2D lastLuminanceMap;
+uniform sampler2D currentLuminanceMap;
 uniform float delta;
 uniform float tau;
 
@@ -7,19 +7,19 @@ varying vec2 vUv;
 
 void main() {
 
-	vec4 lastLum = texture2D(lastLum, vUv, MIP_LEVEL_1X1);
-	vec4 currentLum = texture2D(currentLum, vUv, MIP_LEVEL_1X1);
+	vec4 lastLumTexel = texture2D(lastLuminanceMap, vUv, MIP_LEVEL_1X1);
+	vec4 currentLumTexel = texture2D(currentLuminanceMap, vUv, MIP_LEVEL_1X1);
 
-	float fLastLum = lastLum.r;
-	float fCurrentLum = currentLum.r;
+	float lastLum = lastLumTexel.r;
+	float currentLum = currentLumTexel.r;
 
 	// Better results with squared input luminance.
-	fCurrentLum *= fCurrentLum;
+	currentLum *= currentLum;
 
 	// Adapt the luminance using Pattanaik's technique.
-	float fAdaptedLum = fLastLum + (fCurrentLum - fLastLum) * (1.0 - exp(-delta * tau));
-	// fAdaptedLum = sqrt(fAdaptedLum);
+	float adaptedLum = lastLum + (currentLum - lastLum) * (1.0 - exp(-delta * tau));
+	//adaptedLum = sqrt(adaptedLum);
 
-	gl_FragColor = vec4(fAdaptedLum, fAdaptedLum, fAdaptedLum, 1.0);
+	gl_FragColor = vec4(adaptedLum, adaptedLum, adaptedLum, 1.0);
 
 }
