@@ -120,7 +120,7 @@ window.addEventListener("load", function init() {
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
 	var pass = new POSTPROCESSING.BloomPass({
-		resolution: 512,
+		resolutionScale: 0.5,
 		blurriness: 1.0,
 		strength: 1.6
 	});

@@ -60,8 +60,8 @@ export function BloomPass(options) {
 	/**
 	 * The resolution scale.
 	 *
-	 * You need to call the reset method of the EffectComposer 
-	 * after changing this value.
+	 * You need to call the reset method of the EffectComposer after 
+	 * changing this value.
 	 *
 	 * @property renderTargetY
 	 * @type WebGLRenderTarget

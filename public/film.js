@@ -88,7 +88,7 @@ window.addEventListener("load", function init() {
 		grayscale: false,
 		noiseIntensity: 0.5,
 		scanlinesIntensity: 0.5,
-		scanlinesCount: 1024.0
+		scanlines: 1.25
 	});
 
 	pass.renderToScreen = true;
@@ -100,13 +100,13 @@ window.addEventListener("load", function init() {
 		"grayscale": pass.material.uniforms.grayscale.value,
 		"noise intensity": pass.material.uniforms.nIntensity.value,
 		"scanlines intensity": pass.material.uniforms.sIntensity.value,
-		"scanlines count": pass.material.uniforms.sCount.value
+		"scanlines count": pass.scanlines
 	};
 
 	gui.add(params, "grayscale").onChange(function() { pass.material.uniforms.grayscale.value = params["grayscale"]; });
 	gui.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.nIntensity.value = params["noise intensity"]; });
 	gui.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.sIntensity.value = params["scanlines intensity"]; });
-	gui.add(params, "scanlines count").min(0.0).max(2048.0).step(1.0).onChange(function() { pass.material.uniforms.sCount.value = params["scanlines count"]; });
+	gui.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function() { pass.scanlines = params["scanlines count"]; composer.reset(); });
 
 	/**
 	 * Handles resizing.
