@@ -108,7 +108,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-fs-inline");
 	grunt.loadNpmTasks("grunt-rollup");
 
-	grunt.registerTask("default", ["clean", "build", "uglify", "nodeunit"]);
+	//grunt.registerTask("default", ["clean", "build", "uglify", "nodeunit"]);
+	grunt.registerTask("default", ["clean", "build", "nodeunit"]);
 	grunt.registerTask("build", ["jshint", "fsinline", "rollup", "copy", "clean"]);
 	grunt.registerTask("test", ["jshint", "nodeunit"]);
 
