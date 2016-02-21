@@ -25,8 +25,8 @@ export function GodRaysMaterial() {
 
 		defines: {
 
-			NUM_SAMPLES_FLOAT: "20.0",
-			NUM_SAMPLES_INT: "20"
+			NUM_SAMPLES_FLOAT: "60.0",
+			NUM_SAMPLES_INT: "60"
 
 		},
 

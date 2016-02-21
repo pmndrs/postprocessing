@@ -24,9 +24,9 @@ import THREE from "three";
  * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
  * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.blurriness=1.0] - The strength of the preliminary blur phase.
+ * @param {Number} [options.blurriness=0.1] - The strength of the preliminary blur phase.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.samples=20] - The number of samples per pixel.
+ * @param {Number} [options.samples=60] - The number of samples per pixel.
  */
 
 export function GodRaysPass(scene, camera, lightSource, options) {
@@ -189,7 +189,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.needsSwap = true;
 
 	// Set the blur strength.
-	this.blurriness = options.blurriness;
+	this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
 
 }
 
@@ -201,7 +201,7 @@ GodRaysPass.prototype.constructor = GodRaysPass;
  *
  * @property blurriness
  * @type Number
- * @default 1.0
+ * @default 0.1
  */
 
 Object.defineProperty(GodRaysPass.prototype, "blurriness", {
@@ -253,7 +253,7 @@ Object.defineProperty(GodRaysPass.prototype, "intensity", {
  *
  * @property samples
  * @type Number
- * @default 20
+ * @default 60
  */
 
 Object.defineProperty(GodRaysPass.prototype, "samples", {
@@ -284,13 +284,13 @@ Object.defineProperty(GodRaysPass.prototype, "samples", {
  * Used for saving the original clear color 
  * during the rendering process of the masked scene.
  *
- * @property clearColor
+ * @property CLEAR_COLOR
  * @type Color
  * @private
  * @static
  */
 
-var clearColor = new THREE.Color();
+const CLEAR_COLOR = new THREE.Color();
 
 /**
  * Renders the scene.
@@ -318,24 +318,21 @@ var clearColor = new THREE.Color();
 
 GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-	var clearAlpha;
+	let clearAlpha;
 
 	// Compute the screen light position and translate the coordinates to [0, 1].
 	this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
 	this.screenPosition.x = THREE.Math.clamp((this.screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
 	this.screenPosition.y = THREE.Math.clamp((this.screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
-	// Don't show the rays from acute angles.
-	//this.godRaysMaterial.uniforms.exposure.value = this.computeAngularScalar() * 0.6;
-
 	// Render the masked scene.
 	this.mainScene.overrideMaterial = this.maskMaterial;
-	clearColor.copy(renderer.getClearColor());
+	CLEAR_COLOR.copy(renderer.getClearColor());
 	clearAlpha = renderer.getClearAlpha();
 	renderer.setClearColor(0x000000, 1);
 	//renderer.render(this.mainScene, this.mainCamera, null, true); // Debug.
 	renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
-	renderer.setClearColor(clearColor, clearAlpha);
+	renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 	this.mainScene.overrideMaterial = null;
 
 	// Convolution phase (5 passes).

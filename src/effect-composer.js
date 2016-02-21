@@ -3,22 +3,23 @@ import { ShaderPass, MaskPass, ClearMaskPass } from "./passes";
 import THREE from "three";
 
 /**
- * The effect composer may be used in place of a normal WebGLRenderer.
+ * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
- * The composer will disable the auto clear behaviour of the provided
- * renderer in order to prevent unnecessary clear operations. 
- * You might want to use a RenderPass as your first pass to automatically 
+ * The composer will disable the auto clear behaviour of the provided 
+ * renderer in order to prevent unnecessary clear operations.
+ *
+ * You may want to use a RenderPass as your first pass to automatically 
  * clear the screen and render the scene to a texture for further processing. 
  *
  * @class EffectComposer
  * @constructor
- * @param {WebGLRenderer} renderer - The renderer that should be used.
- * @param {WebGLRenderTarget} [renderTarget] - A render target to use for the post processing. If none is provided, a new one will be created.
+ * @param {WebGLRenderer} [renderer] - The pre-configured renderer that should be used for rendering the passes.
+ * @param {WebGLRenderTarget} [renderTarget] - A pre-configured render target to use for the post processing.
  */
 
 export function EffectComposer(renderer, renderTarget) {
 
-	var pixelRatio, width, height;
+	let pixelRatio, width, height;
 
 	/**
 	 * The renderer.
@@ -164,8 +165,8 @@ EffectComposer.prototype.render = function(delta) {
 	this.writeBuffer = this.renderTarget1;
 	this.readBuffer = this.renderTarget2;
 
-	var maskActive = false;
-	var i, l, pass, context;
+	let maskActive = false;
+	let i, l, pass, context;
 
 	for(i = 0, l = this.passes.length; i < l; ++i) {
 
@@ -218,7 +219,7 @@ EffectComposer.prototype.render = function(delta) {
 
 EffectComposer.prototype.reset = function(renderTarget) {
 
-	var pixelRatio, width, height;
+	let pixelRatio, width, height;
 
 	if(renderTarget === undefined) {
 
@@ -257,7 +258,7 @@ EffectComposer.prototype.reset = function(renderTarget) {
 
 EffectComposer.prototype.setSize = function(width, height) {
 
-	var i, l;
+	let i, l;
 
 	this.renderTarget1.setSize(width, height);
 	this.renderTarget2.setSize(width, height);

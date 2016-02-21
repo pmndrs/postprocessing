@@ -101,7 +101,7 @@ GlitchPass.prototype.constructor = GlitchPass;
 
 GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-	var uniforms = this.material.uniforms;
+	let uniforms = this.material.uniforms;
 
 	uniforms.tDiffuse.value = readBuffer;
 	uniforms.seed.value = Math.random();
@@ -153,7 +153,11 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
  * @method generateTrigger
  */
 
-GlitchPass.prototype.generateTrigger = function() { this.breakPoint = THREE.Math.randInt(120, 240); };
+GlitchPass.prototype.generateTrigger = function() {
+
+	this.breakPoint = THREE.Math.randInt(120, 240);
+
+};
 
 /**
  * Destroys the currently set texture, if any, and 
@@ -166,9 +170,9 @@ GlitchPass.prototype.generateTrigger = function() { this.breakPoint = THREE.Math
 
 GlitchPass.prototype.generatePerturbMap = function(size) {
 
-	var i, x;
-	var l = size * size;
-	var data = new Float32Array(l * 3);
+	let i, x;
+	let l = size * size;
+	let data = new Float32Array(l * 3);
 
 	for(i = 0; i < l; ++i) {
 

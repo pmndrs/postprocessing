@@ -3,16 +3,16 @@ import THREE from "three";
 
 /**
  * A pass that renders a given scene directly on screen
- * or into the read buffer for further processing.
+ * or into the readBuffer for further processing.
  *
  * @class RenderPass
  * @constructor
  * @extends Pass
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
- * @param {Material} overrideMaterial - An override material for the scene.
- * @param {Color} clearColor - A clear color.
- * @param {Number} clearAlpha - A clear alpha value.
+ * @param {Material} [overrideMaterial] - An override material for the scene.
+ * @param {Color} [clearColor] - A clear color.
+ * @param {Number} [clearAlpha] - A clear alpha value.
  */
 
 export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
@@ -64,13 +64,13 @@ RenderPass.prototype.constructor = RenderPass;
 /**
  * Used for saving the original clear color during rendering.
  *
- * @property clearColor
+ * @property CLEAR_COLOR
  * @type Color
  * @private
  * @static
  */
 
-var clearColor = new THREE.Color();
+const CLEAR_COLOR = new THREE.Color();
 
 /**
  * Renders the scene.
@@ -84,16 +84,14 @@ var clearColor = new THREE.Color();
 
 RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
-	var clear = this.clearColor !== undefined;
-	var clearAlpha;
+	let clearAlpha;
 
 	this.scene.overrideMaterial = this.overrideMaterial;
 
-	if(clear) {
+	if(this.clearColor !== null) {
 
-		clearColor.copy(renderer.getClearColor());
+		CLEAR_COLOR.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
-
 		renderer.setClearColor(this.clearColor, this.clearAlpha);
 
 	}
@@ -108,9 +106,9 @@ RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta)
 
 	}
 
-	if(clear) {
+	if(this.clearColor !== null) {
 
-		renderer.setClearColor(clearColor, clearAlpha);
+		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
 	}
 

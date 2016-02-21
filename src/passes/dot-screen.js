@@ -48,10 +48,9 @@ DotScreenPass.prototype.constructor = DotScreenPass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
  */
 
-DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	this.material.uniforms.tDiffuse.value = readBuffer;
 	this.quad.material = this.material;

@@ -46,18 +46,16 @@ MaskPass.prototype.constructor = MaskPass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
- * @param {Boolean} maskActive - This flag is supposed to mask this pass, but it isn't used here :/ hm.
  */
 
-MaskPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
+MaskPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-	var context = renderer.context;
-	var writeValue, clearValue;
+	let ctx = renderer.context;
+	let writeValue, clearValue;
 
 	// Don't update color or depth.
-	context.colorMask(false, false, false, false);
-	context.depthMask(false);
+	ctx.colorMask(false, false, false, false);
+	ctx.depthMask(false);
 
 	if(this.inverse) {
 
@@ -71,21 +69,21 @@ MaskPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, m
 
 	}
 
-	context.enable(context.STENCIL_TEST);
-	context.stencilOp(context.REPLACE, context.REPLACE, context.REPLACE);
-	context.stencilFunc(context.ALWAYS, writeValue, 0xffffffff);
-	context.clearStencil(clearValue);
+	ctx.enable(ctx.STENCIL_TEST);
+	ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
+	ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
+	ctx.clearStencil(clearValue);
 
 	// Draw into the stencil buffer.
 	renderer.render(this.scene, this.camera, readBuffer, this.clear);
 	renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 	// Re-enable update of color and depth.
-	context.colorMask(true, true, true, true);
-	context.depthMask(true);
+	ctx.colorMask(true, true, true, true);
+	ctx.depthMask(true);
 
 	// Only render where stencil is set to 1.
-	context.stencilFunc(context.EQUAL, 1, 0xffffffff);
-	context.stencilOp(context.KEEP, context.KEEP, context.KEEP);
+	ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
+	ctx.stencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
 
 };

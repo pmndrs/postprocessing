@@ -11,7 +11,7 @@ import THREE from "three";
  * @constructor
  * @extends Pass
  * @param {Texture} texture - The texture.
- * @param {Number} [opacity] - The opacity to apply to the texture.
+ * @param {Number} [opacity=1.0] - The opacity to apply to the texture.
  */
 
 export function TexturePass(texture, opacity) {
@@ -58,10 +58,9 @@ TexturePass.prototype.constructor = TexturePass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
  */
 
-TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+TexturePass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	if(this.renderToScreen) {
 

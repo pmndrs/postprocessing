@@ -22,13 +22,9 @@ ClearMaskPass.prototype.constructor = ClearMaskPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
- * @param {Boolean} maskActive - This flag is supposed to mask this pass, but it isn't used here :/ hm.
  */
 
-ClearMaskPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
+ClearMaskPass.prototype.render = function(renderer) {
 
 	renderer.context.disable(context.STENCIL_TEST);
 

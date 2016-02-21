@@ -10,7 +10,7 @@ import THREE from "three";
  * @constructor
  * @extends Pass
  * @param {ShaderMaterial} material - The shader material to use.
- * @param {String} [textureID=tDiffuse] - The texture uniform identifier.
+ * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
  */
 
 export function ShaderPass(material, textureID) {
@@ -23,7 +23,7 @@ export function ShaderPass(material, textureID) {
 	 *
 	 * @property textureID
 	 * @type String
-	 * @default tDiffuse
+	 * @default "tDiffuse"
 	 */
 
 	this.textureID = (textureID !== undefined) ? textureID : "tDiffuse";
@@ -40,7 +40,7 @@ export function ShaderPass(material, textureID) {
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
-	// Set the mateiral of the rendering quad.
+	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
 }
@@ -55,10 +55,9 @@ ShaderPass.prototype.constructor = ShaderPass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
  */
 
-ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	if(this.material.uniforms[this.textureID] !== undefined) {
 

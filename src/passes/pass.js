@@ -16,7 +16,7 @@ import THREE from "three";
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
- * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering the effect.
+ * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.
  */
 
 export function Pass(scene, camera, quad) {
@@ -113,10 +113,11 @@ export function Pass(scene, camera, quad) {
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
+ * @param {Number} [delta] - The render delta time.
+ * @param {Boolean} [maskActive] - Disable stencil test.
  */
 
-Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
 
 	throw new Error("Render method not implemented!");
 

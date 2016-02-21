@@ -4,12 +4,12 @@ import THREE from "three";
 
 /**
  * A save pass that renders the result from a previous 
- * pass to an arbitrary render target.
+ * pass (readBuffer) to an arbitrary render target.
  *
  * @class SavePass
  * @constructor
  * @extends Pass
- * @param {Scene} renderTarget - The render target to use for saving the read buffer.
+ * @param {Scene} [renderTarget] - The render target to use for saving the read buffer.
  */
 
 export function SavePass(renderTarget) {
@@ -63,13 +63,11 @@ SavePass.prototype.constructor = SavePass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
  */
 
-SavePass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+SavePass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	this.material.uniforms.tDiffuse.value = readBuffer;
-
 	renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
 };
