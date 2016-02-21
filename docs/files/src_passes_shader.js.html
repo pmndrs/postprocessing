@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -120,7 +120,7 @@ import THREE from &quot;three&quot;;
  * @constructor
  * @extends Pass
  * @param {ShaderMaterial} material - The shader material to use.
- * @param {String} [textureID=tDiffuse] - The texture uniform identifier.
+ * @param {String} [textureID=&quot;tDiffuse&quot;] - The texture uniform identifier.
  */
 
 export function ShaderPass(material, textureID) {
@@ -133,7 +133,7 @@ export function ShaderPass(material, textureID) {
 	 *
 	 * @property textureID
 	 * @type String
-	 * @default tDiffuse
+	 * @default &quot;tDiffuse&quot;
 	 */
 
 	this.textureID = (textureID !== undefined) ? textureID : &quot;tDiffuse&quot;;
@@ -150,7 +150,7 @@ export function ShaderPass(material, textureID) {
 	// Swap read and write buffer when done.
 	this.needsSwap = true;
 
-	// Set the mateiral of the rendering quad.
+	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
 }
@@ -165,10 +165,9 @@ ShaderPass.prototype.constructor = ShaderPass;
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} delta - The render delta time.
  */
 
-ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	if(this.material.uniforms[this.textureID] !== undefined) {
 

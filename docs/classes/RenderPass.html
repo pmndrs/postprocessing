@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -122,7 +122,7 @@
 
 <div class="box intro">
     <p>A pass that renders a given scene directly on screen
-or into the read buffer for further processing.</p>
+or into the readBuffer for further processing.</p>
 
 </div>
 
@@ -140,13 +140,13 @@ or into the read buffer for further processing.</p>
                         <code>camera</code>
                 </li>
                 <li class="arg">
-                        <code>overrideMaterial</code>
+                        <code class="optional">[overrideMaterial]</code>
                 </li>
                 <li class="arg">
-                        <code>clearColor</code>
+                        <code class="optional">[clearColor]</code>
                 </li>
                 <li class="arg">
-                        <code>clearAlpha</code>
+                        <code class="optional">[clearAlpha]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -203,8 +203,9 @@ or into the read buffer for further processing.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">overrideMaterial</code>
+                        <code class="param-name optional">[overrideMaterial]</code>
                         <span class="type">Material</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -216,8 +217,9 @@ or into the read buffer for further processing.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">clearColor</code>
+                        <code class="param-name optional">[clearColor]</code>
                         <span class="type">Color</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -229,8 +231,9 @@ or into the read buffer for further processing.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">clearAlpha</code>
+                        <code class="param-name optional">[clearAlpha]</code>
                         <span class="type">Number</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -292,14 +295,14 @@ or into the read buffer for further processing.</p>
                                 <a href="#property_clear">clear</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_clearAlpha">clearAlpha</a>
 
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_clearColor">clearColor</a>
-
-                                    <span class="flag static">static</span>
                             </li>
                             <li class="index-item property">
                                 <a href="#property_clearColor">clearColor</a>
@@ -353,7 +356,7 @@ or into the read buffer for further processing.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
         </p>
 
 
@@ -511,7 +514,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+        <a href="../files/src_passes_pass.js.html#l126"><code>src\passes\pass.js:126</code></a>
         </p>
 
 
@@ -629,33 +632,8 @@ and when the effect composer is reset.</p>
 
 
 </div>
-<div id="property_clearAlpha" class="property item">
-    <h3 class="name"><code>clearAlpha</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l40"><code>src\passes\render.js:40</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Clear alpha.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_clearColor" class="property item private">
-    <h3 class="name"><code>clearColor</code></h3>
+<div id="property_CLEAR_COLOR" class="property item private">
+    <h3 class="name"><code>CLEAR_COLOR</code></h3>
     <span class="type">Color</span>
 
 
@@ -675,6 +653,31 @@ and when the effect composer is reset.</p>
 
     <div class="description">
         <p>Used for saving the original clear color during rendering.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_clearAlpha" class="property item">
+    <h3 class="name"><code>clearAlpha</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l40"><code>src\passes\render.js:40</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Clear alpha.</p>
 
     </div>
 

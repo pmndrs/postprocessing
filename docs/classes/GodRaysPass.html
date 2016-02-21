@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -304,7 +304,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[blurriness=1.0]</code>
+                                    <code class="param-name optional">[blurriness=0.1]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -330,7 +330,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[samples=20]</code>
+                                    <code class="param-name optional">[samples=60]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -396,7 +396,7 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_clearColor">clearColor</a>
+                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
 
                                     <span class="flag static">static</span>
                             </li>
@@ -504,7 +504,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
         </p>
 
 
@@ -658,7 +658,7 @@ The final result is added to the normal scene.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l389"><code>src\passes\god-rays.js:389</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l386"><code>src\passes\god-rays.js:386</code></a>
         </p>
 
 
@@ -733,7 +733,7 @@ The final result is added to the normal scene.</p>
 
     </div>
 
-        <p><strong>Default:</strong> 1.0</p>
+        <p><strong>Default:</strong> 0.1</p>
 
 
 </div>
@@ -763,8 +763,8 @@ The final result is added to the normal scene.</p>
 
 
 </div>
-<div id="property_clearColor" class="property item private">
-    <h3 class="name"><code>clearColor</code></h3>
+<div id="property_CLEAR_COLOR" class="property item private">
+    <h3 class="name"><code>CLEAR_COLOR</code></h3>
     <span class="type">Color</span>
 
 
@@ -1242,7 +1242,7 @@ GPU load directly and doesn't necessarily yield better results!</p>
 
     </div>
 
-        <p><strong>Default:</strong> 20</p>
+        <p><strong>Default:</strong> 60</p>
 
 
 </div>

@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -569,7 +569,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\bloom.js",
-            "line": 5,
+            "line": 11,
             "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising the fast Kawase convolution approach.",
             "is_constructor": 1,
             "extends": "Pass",
@@ -589,7 +589,7 @@
                         },
                         {
                             "name": "blurriness",
-                            "description": "- The strength of the blur.",
+                            "description": "- The scale of the blur kernels.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1.0"
@@ -909,7 +909,7 @@
                             "description": "- The strength of the preliminary blur phase.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "1.0"
+                            "optdefault": "0.1"
                         },
                         {
                             "name": "resolutionScale",
@@ -923,7 +923,7 @@
                             "description": "- The number of samples per pixel.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "20"
+                            "optdefault": "60"
                         }
                     ]
                 }
@@ -986,7 +986,7 @@
                 },
                 {
                     "name": "quad",
-                    "description": "- A quad that fills the screen. Used for rendering the effect.",
+                    "description": "- A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.",
                     "type": "Mesh",
                     "optional": true
                 }
@@ -1004,7 +1004,7 @@
             "namespace": "",
             "file": "src\\passes\\render.js",
             "line": 4,
-            "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.",
+            "description": "A pass that renders a given scene directly on screen\nor into the readBuffer for further processing.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1021,17 +1021,20 @@
                 {
                     "name": "overrideMaterial",
                     "description": "- An override material for the scene.",
-                    "type": "Material"
+                    "type": "Material",
+                    "optional": true
                 },
                 {
                     "name": "clearColor",
                     "description": "- A clear color.",
-                    "type": "Color"
+                    "type": "Color",
+                    "optional": true
                 },
                 {
                     "name": "clearAlpha",
                     "description": "- A clear alpha value.",
-                    "type": "Number"
+                    "type": "Number",
+                    "optional": true
                 }
             ]
         },
@@ -1047,14 +1050,15 @@
             "namespace": "",
             "file": "src\\passes\\save.js",
             "line": 5,
-            "description": "A save pass that renders the result from a previous \npass to an arbitrary render target.",
+            "description": "A save pass that renders the result from a previous \npass (readBuffer) to an arbitrary render target.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
                 {
                     "name": "renderTarget",
                     "description": "- The render target to use for saving the read buffer.",
-                    "type": "Scene"
+                    "type": "Scene",
+                    "optional": true
                 }
             ]
         },
@@ -1084,7 +1088,7 @@
                     "description": "- The texture uniform identifier.",
                     "type": "String",
                     "optional": true,
-                    "optdefault": "tDiffuse"
+                    "optdefault": "\"tDiffuse\""
                 }
             ]
         },
@@ -1113,7 +1117,8 @@
                     "name": "opacity",
                     "description": "- The opacity to apply to the texture.",
                     "type": "Number",
-                    "optional": true
+                    "optional": true,
+                    "optdefault": "1.0"
                 }
             ]
         },
@@ -1129,17 +1134,18 @@
             "namespace": "",
             "file": "src\\effect-composer.js",
             "line": 5,
-            "description": "The effect composer may be used in place of a normal WebGLRenderer.\n\nThe composer will disable the auto clear behaviour of the provided\nrenderer in order to prevent unnecessary clear operations. \nYou might want to use a RenderPass as your first pass to automatically \nclear the screen and render the scene to a texture for further processing.",
+            "description": "The EffectComposer may be used in place of a normal WebGLRenderer.\n\nThe composer will disable the auto clear behaviour of the provided \nrenderer in order to prevent unnecessary clear operations.\n\nYou may want to use a RenderPass as your first pass to automatically \nclear the screen and render the scene to a texture for further processing.",
             "is_constructor": 1,
             "params": [
                 {
                     "name": "renderer",
-                    "description": "- The renderer that should be used.",
-                    "type": "WebGLRenderer"
+                    "description": "- The pre-configured renderer that should be used for rendering the passes.",
+                    "type": "WebGLRenderer",
+                    "optional": true
                 },
                 {
                     "name": "renderTarget",
-                    "description": "- A render target to use for the post processing. If none is provided, a new one will be created.",
+                    "description": "- A pre-configured render target to use for the post processing.",
                     "type": "WebGLRenderTarget",
                     "optional": true
                 }
@@ -1460,7 +1466,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 26,
+            "line": 32,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1472,7 +1478,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 42,
+            "line": 50,
             "description": "Another render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1484,7 +1490,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 54,
+            "line": 60,
             "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer \nafter changing this value.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1496,7 +1502,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 67,
+            "line": 73,
             "description": "The texel size for the blur.",
             "itemtype": "property",
             "name": "texelSize",
@@ -1508,7 +1514,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 77,
+            "line": 83,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1520,7 +1526,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 89,
+            "line": 95,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1532,7 +1538,19 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 103,
+            "line": 109,
+            "description": "Tone-mapping shader material.",
+            "itemtype": "property",
+            "name": "toneMappingMaterial",
+            "type": "ToneMappingMaterial",
+            "access": "private",
+            "tagname": "",
+            "class": "BloomPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\bloom.js",
+            "line": 119,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1544,7 +1562,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 121,
+            "line": 137,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -1555,8 +1573,8 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 145,
-            "description": "Renders the scene.",
+            "line": 161,
+            "description": "Renders the bloom effect.\n\nApplies a tone-mapping pass and convolution blur to the readBuffer and \nrenders the result into a seperate render target. The result is additively \nblended with the readBuffer.",
             "itemtype": "method",
             "name": "render",
             "params": [
@@ -1591,7 +1609,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 206,
+            "line": 231,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1724,26 +1742,6 @@
                     "name": "renderer",
                     "description": "- The renderer to use.",
                     "type": "WebGLRenderer"
-                },
-                {
-                    "name": "writeBuffer",
-                    "description": "- The write buffer.",
-                    "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "readBuffer",
-                    "description": "- The read buffer.",
-                    "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
-                },
-                {
-                    "name": "maskActive",
-                    "description": "- This flag is supposed to mask this pass, but it isn't used here :/ hm.",
-                    "type": "Boolean"
                 }
             ],
             "class": "ClearMaskPass",
@@ -1782,11 +1780,6 @@
                     "name": "readBuffer",
                     "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
                 }
             ],
             "class": "DotScreenPass",
@@ -1794,7 +1787,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 71,
+            "line": 70,
             "description": "Sets the pattern size relative to the render size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1938,7 +1931,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 158,
+            "line": 162,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -1956,7 +1949,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 193,
+            "line": 197,
             "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
             "itemtype": "property",
             "name": "GlitchPass.Mode",
@@ -2123,7 +2116,7 @@
             "itemtype": "property",
             "name": "blurriness",
             "type": "Number",
-            "default": "1.0",
+            "default": "0.1",
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
@@ -2145,7 +2138,7 @@
             "itemtype": "property",
             "name": "samples",
             "type": "Number",
-            "default": "20",
+            "default": "60",
             "class": "GodRaysPass",
             "module": "postprocessing"
         },
@@ -2154,7 +2147,7 @@
             "line": 283,
             "description": "Used for saving the original clear color \nduring the rendering process of the masked scene.",
             "itemtype": "property",
-            "name": "clearColor",
+            "name": "CLEAR_COLOR",
             "type": "Color",
             "access": "private",
             "tagname": "",
@@ -2190,7 +2183,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 389,
+            "line": 386,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2252,16 +2245,6 @@
                     "name": "readBuffer",
                     "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
-                },
-                {
-                    "name": "maskActive",
-                    "description": "- This flag is supposed to mask this pass, but it isn't used here :/ hm.",
-                    "type": "Boolean"
                 }
             ],
             "class": "MaskPass",
@@ -2371,7 +2354,14 @@
                 {
                     "name": "delta",
                     "description": "- The render delta time.",
-                    "type": "Number"
+                    "type": "Number",
+                    "optional": true
+                },
+                {
+                    "name": "maskActive",
+                    "description": "- Disable stencil test.",
+                    "type": "Boolean",
+                    "optional": true
                 }
             ],
             "class": "Pass",
@@ -2379,7 +2369,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 125,
+            "line": 126,
             "description": "Updates this pass with the main render target's size.\n\nThis is an abstract method that may be overriden in case \nyou want to be informed about the main render size.\n\nThe effect composer calls this method when the pass is added \nand when the effect composer is reset.",
             "itemtype": "method",
             "name": "setSize",
@@ -2403,7 +2393,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 143,
+            "line": 144,
             "description": "Performs a shallow search for properties that define a dispose\nmethod and deletes them. The pass will be inoperative after \nthis method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory \nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -2456,7 +2446,7 @@
             "line": 64,
             "description": "Used for saving the original clear color during rendering.",
             "itemtype": "property",
-            "name": "clearColor",
+            "name": "CLEAR_COLOR",
             "type": "Color",
             "access": "private",
             "tagname": "",
@@ -2540,11 +2530,6 @@
                     "name": "readBuffer",
                     "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
                 }
             ],
             "class": "SavePass",
@@ -2552,7 +2537,7 @@
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 77,
+            "line": 75,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2578,7 +2563,7 @@
             "itemtype": "property",
             "name": "textureID",
             "type": "String",
-            "default": "tDiffuse",
+            "default": "\"tDiffuse\"",
             "class": "ShaderPass",
             "module": "postprocessing"
         },
@@ -2613,11 +2598,6 @@
                     "name": "readBuffer",
                     "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
                 }
             ],
             "class": "ShaderPass",
@@ -2668,11 +2648,6 @@
                     "name": "readBuffer",
                     "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
-                },
-                {
-                    "name": "delta",
-                    "description": "- The render delta time.",
-                    "type": "Number"
                 }
             ],
             "class": "TexturePass",
@@ -2680,7 +2655,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 23,
+            "line": 24,
             "description": "The renderer.",
             "itemtype": "property",
             "name": "renderer",
@@ -2690,7 +2665,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 33,
+            "line": 34,
             "description": "The render target.",
             "itemtype": "property",
             "name": "renderTarget1",
@@ -2702,7 +2677,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 58,
+            "line": 59,
             "description": "A copy of the render target.",
             "itemtype": "property",
             "name": "renderTarget2",
@@ -2714,7 +2689,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 68,
+            "line": 69,
             "description": "The write buffer.",
             "itemtype": "property",
             "name": "writeBuffer",
@@ -2726,7 +2701,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 78,
+            "line": 79,
             "description": "The read buffer.",
             "itemtype": "property",
             "name": "readBuffer",
@@ -2738,7 +2713,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 88,
+            "line": 89,
             "description": "The render passes.",
             "itemtype": "property",
             "name": "passes",
@@ -2750,7 +2725,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 98,
+            "line": 99,
             "description": "A copy pass.",
             "itemtype": "property",
             "name": "copyPass",
@@ -2762,7 +2737,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 110,
+            "line": 111,
             "description": "Adds another pass.",
             "itemtype": "method",
             "name": "addPass",
@@ -2778,7 +2753,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 124,
+            "line": 125,
             "description": "Inserts a new pass at a specific index.",
             "itemtype": "method",
             "name": "insertPass",
@@ -2799,7 +2774,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 139,
+            "line": 140,
             "description": "Swaps the render targets on demand.\nYou can toggle swapping in your pass by setting the needsSwap flag.",
             "itemtype": "method",
             "name": "swapBuffers",
@@ -2810,7 +2785,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 155,
+            "line": 156,
             "description": "Renders all passes in order.",
             "itemtype": "method",
             "name": "render",
@@ -2826,7 +2801,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 209,
+            "line": 210,
             "description": "Resets the composer's render textures.\n\nCall this method when the size of the renderer's canvas has changed or\nif you want to drop the old read/write buffers and create new ones.",
             "itemtype": "method",
             "name": "reset",
@@ -2843,7 +2818,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 250,
+            "line": 251,
             "description": "Sets the render size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2864,7 +2839,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 274,
+            "line": 275,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates any render targets, textures and materials created by the passes.\nIt also deletes this composer's render targets and copy material.",
             "itemtype": "method",
             "name": "dispose",

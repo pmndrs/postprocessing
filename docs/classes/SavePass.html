@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -122,7 +122,7 @@
 
 <div class="box intro">
     <p>A save pass that renders the result from a previous
-pass to an arbitrary render target.</p>
+pass (readBuffer) to an arbitrary render target.</p>
 
 </div>
 
@@ -134,7 +134,7 @@ pass to an arbitrary render target.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>renderTarget</code>
+                        <code class="optional">[renderTarget]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -165,8 +165,9 @@ pass to an arbitrary render target.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">renderTarget</code>
+                        <code class="param-name optional">[renderTarget]</code>
                         <span class="type">Scene</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -276,7 +277,7 @@ pass to an arbitrary render target.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
         </p>
 
 
@@ -316,9 +317,6 @@ when you are certain that you don't need this pass anymore.</p>
                 </li>
                 <li class="arg">
                         <code>readBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>delta</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -391,19 +389,6 @@ when you are certain that you don't need this pass anymore.</p>
                     </div>
 
                 </li>
-                <li class="param">
-                        <code class="param-name">delta</code>
-                        <span class="type">Number</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The render delta time.</li>
-</ul>
-
-                    </div>
-
-                </li>
             </ul>
         </div>
 
@@ -437,7 +422,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_save.js.html#l77"><code>src\passes\save.js:77</code></a>
+        <a href="../files/src_passes_save.js.html#l75"><code>src\passes\save.js:75</code></a>
         </p>
 
 

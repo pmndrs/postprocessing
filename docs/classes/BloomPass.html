@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -112,7 +112,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_bloom.js.html#l5"><code>src\passes\bloom.js:5</code></a>
+            Defined in: <a href="../files/src_passes_bloom.js.html#l11"><code>src\passes\bloom.js:11</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -150,7 +150,7 @@ by utilising the fast Kawase convolution approach.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l5"><code>src\passes\bloom.js:5</code></a>
+        <a href="../files/src_passes_bloom.js.html#l11"><code>src\passes\bloom.js:11</code></a>
         </p>
 
 
@@ -199,7 +199,7 @@ by utilising the fast Kawase convolution approach.</p>
 
                                 <div class="param-description">
                                     <ul>
-<li>The strength of the blur.</li>
+<li>The scale of the blur kernels.</li>
 </ul>
 
                                 </div>
@@ -319,6 +319,10 @@ by utilising the fast Kawase convolution approach.</p>
                                 <a href="#property_texelSize">texelSize</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_toneMappingMaterial">toneMappingMaterial</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -343,7 +347,7 @@ by utilising the fast Kawase convolution approach.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
         </p>
 
 
@@ -405,7 +409,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l145"><code>src\passes\bloom.js:145</code></a>
+        <a href="../files/src_passes_bloom.js.html#l161"><code>src\passes\bloom.js:161</code></a>
         </p>
 
 
@@ -413,7 +417,10 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Renders the scene.</p>
+        <p>Renders the bloom effect.</p>
+<p>Applies a tone-mapping pass and convolution blur to the readBuffer and
+renders the result into a seperate render target. The result is additively
+blended with the readBuffer.</p>
 
     </div>
 
@@ -519,7 +526,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l206"><code>src\passes\bloom.js:206</code></a>
+        <a href="../files/src_passes_bloom.js.html#l231"><code>src\passes\bloom.js:231</code></a>
         </p>
 
 
@@ -583,7 +590,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l121"><code>src\passes\bloom.js:121</code></a>
+        <a href="../files/src_passes_bloom.js.html#l137"><code>src\passes\bloom.js:137</code></a>
         </p>
 
 
@@ -636,7 +643,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l77"><code>src\passes\bloom.js:77</code></a>
+        <a href="../files/src_passes_bloom.js.html#l83"><code>src\passes\bloom.js:83</code></a>
         </p>
 
 
@@ -662,7 +669,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l103"><code>src\passes\bloom.js:103</code></a>
+        <a href="../files/src_passes_bloom.js.html#l119"><code>src\passes\bloom.js:119</code></a>
         </p>
 
 
@@ -688,7 +695,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l89"><code>src\passes\bloom.js:89</code></a>
+        <a href="../files/src_passes_bloom.js.html#l95"><code>src\passes\bloom.js:95</code></a>
         </p>
 
 
@@ -805,7 +812,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l26"><code>src\passes\bloom.js:26</code></a>
+        <a href="../files/src_passes_bloom.js.html#l32"><code>src\passes\bloom.js:32</code></a>
         </p>
 
 
@@ -831,7 +838,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l42"><code>src\passes\bloom.js:42</code></a>
+        <a href="../files/src_passes_bloom.js.html#l50"><code>src\passes\bloom.js:50</code></a>
         </p>
 
 
@@ -857,7 +864,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l54"><code>src\passes\bloom.js:54</code></a>
+        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
         </p>
 
 
@@ -936,7 +943,7 @@ after changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l67"><code>src\passes\bloom.js:67</code></a>
+        <a href="../files/src_passes_bloom.js.html#l73"><code>src\passes\bloom.js:73</code></a>
         </p>
 
 
@@ -944,6 +951,32 @@ after changing this value.</p>
 
     <div class="description">
         <p>The texel size for the blur.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_toneMappingMaterial" class="property item private">
+    <h3 class="name"><code>toneMappingMaterial</code></h3>
+    <span class="type"><a href="../classes/ToneMappingMaterial.html" class="crosslink">ToneMappingMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l109"><code>src\passes\bloom.js:109</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Tone-mapping shader material.</p>
 
     </div>
 

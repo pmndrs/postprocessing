@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -118,10 +118,10 @@
 
 
 <div class="box intro">
-    <p>The effect composer may be used in place of a normal WebGLRenderer.</p>
+    <p>The EffectComposer may be used in place of a normal WebGLRenderer.</p>
 <p>The composer will disable the auto clear behaviour of the provided
-renderer in order to prevent unnecessary clear operations.
-You might want to use a RenderPass as your first pass to automatically
+renderer in order to prevent unnecessary clear operations.</p>
+<p>You may want to use a RenderPass as your first pass to automatically
 clear the screen and render the scene to a texture for further processing.</p>
 
 </div>
@@ -134,7 +134,7 @@ clear the screen and render the scene to a texture for further processing.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>renderer</code>
+                        <code class="optional">[renderer]</code>
                 </li>
                 <li class="arg">
                         <code class="optional">[renderTarget]</code>
@@ -168,13 +168,14 @@ clear the screen and render the scene to a texture for further processing.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">renderer</code>
+                        <code class="param-name optional">[renderer]</code>
                         <span class="type">WebGLRenderer</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The renderer that should be used.</li>
+<li>The pre-configured renderer that should be used for rendering the passes.</li>
 </ul>
 
                     </div>
@@ -188,7 +189,7 @@ clear the screen and render the scene to a texture for further processing.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A render target to use for the post processing. If none is provided, a new one will be created.</li>
+<li>A pre-configured render target to use for the post processing.</li>
 </ul>
 
                     </div>
@@ -311,7 +312,7 @@ clear the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l110"><code>src\effect-composer.js:110</code></a>
+        <a href="../files/src_effect-composer.js.html#l111"><code>src\effect-composer.js:111</code></a>
         </p>
 
 
@@ -361,7 +362,7 @@ clear the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l274"><code>src\effect-composer.js:274</code></a>
+        <a href="../files/src_effect-composer.js.html#l275"><code>src\effect-composer.js:275</code></a>
         </p>
 
 
@@ -403,7 +404,7 @@ It also deletes this composer's render targets and copy material.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l124"><code>src\effect-composer.js:124</code></a>
+        <a href="../files/src_effect-composer.js.html#l125"><code>src\effect-composer.js:125</code></a>
         </p>
 
 
@@ -472,7 +473,7 @@ It also deletes this composer's render targets and copy material.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l155"><code>src\effect-composer.js:155</code></a>
+        <a href="../files/src_effect-composer.js.html#l156"><code>src\effect-composer.js:156</code></a>
         </p>
 
 
@@ -528,7 +529,7 @@ It also deletes this composer's render targets and copy material.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l209"><code>src\effect-composer.js:209</code></a>
+        <a href="../files/src_effect-composer.js.html#l210"><code>src\effect-composer.js:210</code></a>
         </p>
 
 
@@ -590,7 +591,7 @@ if you want to drop the old read/write buffers and create new ones.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l250"><code>src\effect-composer.js:250</code></a>
+        <a href="../files/src_effect-composer.js.html#l251"><code>src\effect-composer.js:251</code></a>
         </p>
 
 
@@ -654,7 +655,7 @@ if you want to drop the old read/write buffers and create new ones.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l139"><code>src\effect-composer.js:139</code></a>
+        <a href="../files/src_effect-composer.js.html#l140"><code>src\effect-composer.js:140</code></a>
         </p>
 
 
@@ -688,7 +689,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l98"><code>src\effect-composer.js:98</code></a>
+        <a href="../files/src_effect-composer.js.html#l99"><code>src\effect-composer.js:99</code></a>
         </p>
 
 
@@ -714,7 +715,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l88"><code>src\effect-composer.js:88</code></a>
+        <a href="../files/src_effect-composer.js.html#l89"><code>src\effect-composer.js:89</code></a>
         </p>
 
 
@@ -740,7 +741,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l78"><code>src\effect-composer.js:78</code></a>
+        <a href="../files/src_effect-composer.js.html#l79"><code>src\effect-composer.js:79</code></a>
         </p>
 
 
@@ -765,7 +766,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l23"><code>src\effect-composer.js:23</code></a>
+        <a href="../files/src_effect-composer.js.html#l24"><code>src\effect-composer.js:24</code></a>
         </p>
 
 
@@ -791,7 +792,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l33"><code>src\effect-composer.js:33</code></a>
+        <a href="../files/src_effect-composer.js.html#l34"><code>src\effect-composer.js:34</code></a>
         </p>
 
 
@@ -817,7 +818,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l58"><code>src\effect-composer.js:58</code></a>
+        <a href="../files/src_effect-composer.js.html#l59"><code>src\effect-composer.js:59</code></a>
         </p>
 
 
@@ -843,7 +844,7 @@ You can toggle swapping in your pass by setting the needsSwap flag.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l68"><code>src\effect-composer.js:68</code></a>
+        <a href="../files/src_effect-composer.js.html#l69"><code>src\effect-composer.js:69</code></a>
         </p>
 
 

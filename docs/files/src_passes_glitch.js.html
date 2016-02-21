@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -211,7 +211,7 @@ GlitchPass.prototype.constructor = GlitchPass;
 
 GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
-	var uniforms = this.material.uniforms;
+	let uniforms = this.material.uniforms;
 
 	uniforms.tDiffuse.value = readBuffer;
 	uniforms.seed.value = Math.random();
@@ -263,7 +263,11 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
  * @method generateTrigger
  */
 
-GlitchPass.prototype.generateTrigger = function() { this.breakPoint = THREE.Math.randInt(120, 240); };
+GlitchPass.prototype.generateTrigger = function() {
+
+	this.breakPoint = THREE.Math.randInt(120, 240);
+
+};
 
 /**
  * Destroys the currently set texture, if any, and 
@@ -276,9 +280,9 @@ GlitchPass.prototype.generateTrigger = function() { this.breakPoint = THREE.Math
 
 GlitchPass.prototype.generatePerturbMap = function(size) {
 
-	var i, x;
-	var l = size * size;
-	var data = new Float32Array(l * 3);
+	let i, x;
+	let l = size * size;
+	let data = new Float32Array(l * 3);
 
 	for(i = 0; i &lt; l; ++i) {
 

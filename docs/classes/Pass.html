@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.0</em>
+            <em>API Docs for: 0.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -208,7 +208,7 @@ them inside deeper structures such as arrays or objects.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A quad that fills the screen. Used for rendering the effect.</li>
+<li>A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.</li>
 </ul>
 
                     </div>
@@ -305,7 +305,7 @@ them inside deeper structures such as arrays or objects.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
         </p>
 
 
@@ -347,7 +347,10 @@ when you are certain that you don't need this pass anymore.</p>
                         <code>readBuffer</code>
                 </li>
                 <li class="arg">
-                        <code>delta</code>
+                        <code class="optional">[delta]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[maskActive]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -419,13 +422,28 @@ when you are certain that you don't need this pass anymore.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">delta</code>
+                        <code class="param-name optional">[delta]</code>
                         <span class="type">Number</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
 <li>The render delta time.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[maskActive]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Disable stencil test.</li>
 </ul>
 
                     </div>
@@ -470,7 +488,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+        <a href="../files/src_passes_pass.js.html#l126"><code>src\passes\pass.js:126</code></a>
         </p>
 
 
