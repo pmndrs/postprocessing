@@ -50,7 +50,7 @@
 	},
 
 	"devDependencies": {
-		"grunt": "0.x.x",
+		"grunt": ">= 0.4.0",
 		"grunt-contrib-nodeunit": "x.x.x",
 		"grunt-contrib-jshint": "x.x.x",
 		"grunt-contrib-uglify": "x.x.x",
@@ -60,6 +60,10 @@
 		"grunt-contrib-copy": "x.x.x",
 		"grunt-fs-inline": "x.x.x",
 		"grunt-rollup": "x.x.x",
-		"rollup-plugin-npm": "x.x.x"
+		"rollup-plugin-node-resolve": "x.x.x"
+	},
+
+	"peerDependencies": {
+		"grunt": ">= 0.4.0"
 	}
 }

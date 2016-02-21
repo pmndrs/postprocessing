@@ -43,7 +43,7 @@ module.exports = function(grunt) {
 					three: "THREE"
 				},
 				plugins: [
-					require("rollup-plugin-npm")({
+					require("rollup-plugin-node-resolve")({
 						jsnext: true,
 						skip: ["three"]
 					})
