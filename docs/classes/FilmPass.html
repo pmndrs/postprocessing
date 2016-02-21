@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.1</em>
+            <em>API Docs for: 0.1.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -217,13 +217,13 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[scanlinesCount=4096.0]</code>
+                                    <code class="param-name optional">[scanlines=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The number of scanlines. 0.0 to 4096.0.</li>
+<li>The number of scanlines in percent, relative to the screen height.</li>
 </ul>
 
                                 </div>
@@ -296,6 +296,10 @@
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_scanlines">scanlines</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -385,7 +389,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l54"><code>src\passes\film.js:54</code></a>
+        <a href="../files/src_passes_film.js.html#l65"><code>src\passes\film.js:65</code></a>
         </p>
 
 
@@ -459,7 +463,7 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -481,9 +485,12 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l126"><code>src\passes\pass.js:126</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_film.js.html#l92"><code>src\passes\film.js:92</code></a>
         </p>
 
 
@@ -491,13 +498,8 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Updates this pass with the main render target's size.
+        <p>Updates this pass with the main render target's size.</p>
 
-This is an abstract method that may be overriden in case 
-you want to be informed about the main render size.
-
-The effect composer calls this method when the pass is added 
-and when the effect composer is reset.
     </div>
 
         <div class="params">
@@ -535,14 +537,6 @@ and when the effect composer is reset.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -714,6 +708,33 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_scanlines" class="property item">
+    <h3 class="name"><code>scanlines</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_film.js.html#l42"><code>src\passes\film.js:42</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The amount of scanlines in percent, relative to the screen height.</p>
+<p>You need to call the reset method of the EffectComposer after
+changing this value.</p>
+
+    </div>
+
 
 
 </div>

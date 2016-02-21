@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -776,11 +776,11 @@
                             "optdefault": "0.05"
                         },
                         {
-                            "name": "scanlinesCount",
-                            "description": "- The number of scanlines. 0.0 to 4096.0.",
+                            "name": "scanlines",
+                            "description": "- The number of scanlines in percent, relative to the screen height.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "4096.0"
+                            "optdefault": "1.0"
                         }
                     ]
                 }
@@ -1491,7 +1491,7 @@
         {
             "file": "src\\passes\\bloom.js",
             "line": 60,
-            "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer \nafter changing this value.",
+            "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer after \nchanging this value.",
             "itemtype": "property",
             "name": "renderTargetY",
             "type": "WebGLRenderTarget",
@@ -1820,7 +1820,17 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 54,
+            "line": 42,
+            "description": "The amount of scanlines in percent, relative to the screen height.\n\nYou need to call the reset method of the EffectComposer after \nchanging this value.",
+            "itemtype": "property",
+            "name": "scanlines",
+            "type": "Number",
+            "class": "FilmPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 65,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -1843,6 +1853,27 @@
                 {
                     "name": "delta",
                     "description": "- The render delta time.",
+                    "type": "Number"
+                }
+            ],
+            "class": "FilmPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 92,
+            "description": "Updates this pass with the main render target's size.",
+            "itemtype": "method",
+            "name": "setSize",
+            "params": [
+                {
+                    "name": "width",
+                    "description": "- The width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "height",
+                    "description": "- The height.",
                     "type": "Number"
                 }
             ],
