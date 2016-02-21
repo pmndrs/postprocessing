@@ -66,7 +66,7 @@ window.addEventListener("load", function init() {
 
 	for(i = 0; i < 100; ++i) {
 
-		material = new THREE.MeshPhongMaterial({color: 0xffffff, shading: THREE.FlatShading});
+		material = new THREE.MeshPhongMaterial({color: 0xffffff * Math.random(), shading: THREE.FlatShading});
 
 		mesh = new THREE.Mesh(geometry, material);
 		mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
@@ -122,16 +122,13 @@ window.addEventListener("load", function init() {
 	var pass = new POSTPROCESSING.BloomPass({
 		resolution: 512,
 		blurriness: 1.0,
-		strength: 1.0
+		strength: 1.6
 	});
 
 	pass.renderToScreen = true;
 	composer.addPass(pass);
 
 	// Shader settings.
-
-	//"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
-	//gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
 
 	var params = {
 		"resolution": pass.resolutionScale,
