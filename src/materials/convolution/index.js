@@ -36,7 +36,7 @@ export function ConvolutionMaterial(texelSize) {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

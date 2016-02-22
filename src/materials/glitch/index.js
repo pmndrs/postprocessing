@@ -33,7 +33,7 @@ export function GlitchMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

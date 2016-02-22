@@ -21,7 +21,7 @@ export function LuminosityMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

@@ -25,7 +25,7 @@ export function ToneMappingMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

@@ -21,7 +21,7 @@ export function CopyMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

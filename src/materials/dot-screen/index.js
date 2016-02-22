@@ -25,7 +25,7 @@ export function DotScreenMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 

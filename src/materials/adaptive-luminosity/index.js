@@ -29,7 +29,7 @@ export function AdaptiveLuminosityMaterial() {
 		},
 
 		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex,
+		vertexShader: shader.vertex
 
 	});
 
