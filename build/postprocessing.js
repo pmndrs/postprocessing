@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.1.2 build Feb 21 2016
+ * postprocessing v0.1.2 build Feb 22 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -45,7 +45,7 @@
 			},
 
 			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex,
+			vertexShader: shader.vertex
 
 		});
 
@@ -119,7 +119,7 @@
 			},
 
 			fragmentShader: shader$1.fragment,
-			vertexShader: shader$1.vertex,
+			vertexShader: shader$1.vertex
 
 		});
 
@@ -210,7 +210,7 @@
 			},
 
 			fragmentShader: shader$3.fragment,
-			vertexShader: shader$3.vertex,
+			vertexShader: shader$3.vertex
 
 		});
 
@@ -310,7 +310,7 @@
 			},
 
 			fragmentShader: shader$4.fragment,
-			vertexShader: shader$4.vertex,
+			vertexShader: shader$4.vertex
 
 		});
 
@@ -348,7 +348,7 @@
 			},
 
 			fragmentShader: shader$5.fragment,
-			vertexShader: shader$5.vertex,
+			vertexShader: shader$5.vertex
 
 		});
 
@@ -402,7 +402,7 @@
 			},
 
 			fragmentShader: shader$6.fragment,
-			vertexShader: shader$6.vertex,
+			vertexShader: shader$6.vertex
 
 		});
 
@@ -448,7 +448,7 @@
 			},
 
 			fragmentShader: shader$7.fragment,
-			vertexShader: shader$7.vertex,
+			vertexShader: shader$7.vertex
 
 		});
 
@@ -539,7 +539,7 @@
 			},
 
 			fragmentShader: shader$9.fragment,
-			vertexShader: shader$9.vertex,
+			vertexShader: shader$9.vertex
 
 		});
 
@@ -577,7 +577,7 @@
 			},
 
 			fragmentShader: shader$10.fragment,
-			vertexShader: shader$10.vertex,
+			vertexShader: shader$10.vertex
 
 		});
 
