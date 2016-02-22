@@ -132,6 +132,8 @@ window.addEventListener("load", function init() {
 
 	(function render(now) {
 
+		requestAnimationFrame(render);
+
 		stats.begin();
 
 		object.rotation.x += 0.0005;
@@ -144,8 +146,6 @@ window.addEventListener("load", function init() {
 		if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
 		stats.end();
-
-		requestAnimationFrame(render);
 
 	}());
 

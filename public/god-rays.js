@@ -246,9 +246,11 @@ function setupScene(assets) {
 
 		requestAnimationFrame(render);
 
+		stats.begin();
+
 		composer.render();
 
-		stats.update();
+		stats.end();
 
 	}());
 
