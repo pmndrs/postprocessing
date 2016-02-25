@@ -183,7 +183,7 @@ function setupScene(assets) {
 
 	pass = new POSTPROCESSING.GodRaysPass(scene, camera, directionalLight, {
 		resolutionScale: 0.6,
-		blurriness: 0.0,
+		blurriness: 0.1,
 		intensity: 1.0,
 		density: 0.96,
 		decay: 0.93,
@@ -211,8 +211,8 @@ function setupScene(assets) {
 		"color": sun.material.color.getHex()
 	};
 
-	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.reset(); });
-	gui.add(params, "blurriness").min(0.0).max(4.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; });
+	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.setSize(); });
+	gui.add(params, "blurriness").min(0.0).max(2.0).step(0.01).onChange(function() { pass.blurriness = params["blurriness"]; });
 	gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.intensity = params["intensity"]; });
 	gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.density.value = params["density"]; });
 	gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.decay.value = params["decay"]; });
@@ -231,10 +231,9 @@ function setupScene(assets) {
 		var width = window.innerWidth;
 		var height = window.innerHeight;
 
-		renderer.setSize(width, height);
+		composer.setSize(width, height);
 		camera.aspect = width / height;
 		camera.updateProjectionMatrix();
-		composer.reset();
 
 	});
 

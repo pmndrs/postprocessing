@@ -106,7 +106,7 @@ window.addEventListener("load", function init() {
 	gui.add(params, "grayscale").onChange(function() { pass.material.uniforms.grayscale.value = params["grayscale"]; });
 	gui.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.nIntensity.value = params["noise intensity"]; });
 	gui.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.sIntensity.value = params["scanlines intensity"]; });
-	gui.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function() { pass.scanlines = params["scanlines count"]; composer.reset(); });
+	gui.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function() { pass.scanlines = params["scanlines count"]; composer.setSize(); });
 
 	/**
 	 * Handles resizing.
@@ -117,10 +117,9 @@ window.addEventListener("load", function init() {
 		var width = window.innerWidth;
 		var height = window.innerHeight;
 
-		renderer.setSize(width, height);
+		composer.setSize(width, height);
 		camera.aspect = width / height;
 		camera.updateProjectionMatrix();
-		composer.reset();
 
 	});
 
