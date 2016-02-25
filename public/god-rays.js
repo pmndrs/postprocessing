@@ -220,7 +220,7 @@ function setupScene(assets) {
 	gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.exposure.value = params["exposure"]; });
 	gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params["clampMax"]; });
 	gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params["samples"]; });
-	gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params["color"]); });
+	gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params["color"]); directionalLight.color.setHex(params["color"]); });
 
 	/**
 	 * Handles resizing.
