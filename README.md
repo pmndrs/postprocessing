@@ -56,7 +56,7 @@ Maintain the existing coding style. Add unit tests for any new or changed functi
 
 ## License
 This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).  
-The original code was written by [alteredq](http://alteredqualia.com), 
+The original code that this library is based on, was written by [alteredq](http://alteredqualia.com), 
 [miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), 
 [felixturner](http://airtight.cc) and [huwb](http://huwbowles.com) 
 and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE). 
