@@ -25,7 +25,6 @@ YUI.add("yuidoc-meta", function(Y) {
         "RenderPass",
         "SavePass",
         "ShaderPass",
-        "TexturePass",
         "ToneMappingMaterial"
     ],
     "modules": [

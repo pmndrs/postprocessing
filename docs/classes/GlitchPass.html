@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.2</em>
+            <em>API Docs for: 0.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -62,7 +62,6 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
-                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                             </ul>
                 
@@ -281,10 +280,6 @@
                                 <a href="#property_mode">mode</a>
 
                             </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_needsSwap">needsSwap</a>
-
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_perturbMap">perturbMap</a>
 
@@ -325,7 +320,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
+        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
         </p>
 
 
@@ -373,7 +368,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l162"><code>src\passes\glitch.js:162</code></a>
+        <a href="../files/src_passes_glitch.js.html#l158"><code>src\passes\glitch.js:158</code></a>
         </p>
 
 
@@ -424,7 +419,7 @@ generates a simple noise map.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l150"><code>src\passes\glitch.js:150</code></a>
+        <a href="../files/src_passes_glitch.js.html#l146"><code>src\passes\glitch.js:146</code></a>
         </p>
 
 
@@ -449,10 +444,7 @@ generates a simple noise map.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>readBuffer</code>
+                        <code>buffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -470,7 +462,7 @@ generates a simple noise map.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l93"><code>src\passes\glitch.js:93</code></a>
+        <a href="../files/src_passes_glitch.js.html#l90"><code>src\passes\glitch.js:90</code></a>
         </p>
 
 
@@ -500,26 +492,13 @@ generates a simple noise map.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">writeBuffer</code>
+                        <code class="param-name">buffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">readBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The read buffer.</li>
+<li>The read/write buffer.</li>
 </ul>
 
                     </div>
@@ -555,7 +534,7 @@ generates a simple noise map.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l126"><code>src\passes\pass.js:126</code></a>
+        <a href="../files/src_passes_pass.js.html#l109"><code>src\passes\pass.js:109</code></a>
         </p>
 
 
@@ -711,7 +690,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l197"><code>src\passes\glitch.js:197</code></a>
+        <a href="../files/src_passes_glitch.js.html#l192"><code>src\passes\glitch.js:192</code></a>
         </p>
 
 
@@ -776,37 +755,6 @@ and when the effect composer is reset.
     </div>
 
         <p><strong>Default:</strong> GlitchPass.Mode.SPORADIC</p>
-
-
-</div>
-<div id="property_needsSwap" class="property item inherited">
-    <h3 class="name"><code>needsSwap</code></h3>
-    <span class="type">Boolean</span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        Render target swap flag.
-
-When set to true, the read and write buffers will be swapped 
-after this pass is done with rendering so that any following  
-pass can find the rendered result in the read buffer.
-Swapping is not necessary if, for example, a pass additively 
-renders into the read buffer.
-    </div>
-
-        <p><strong>Default:</strong> false</p>
 
 
 </div>

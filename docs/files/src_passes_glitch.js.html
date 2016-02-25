@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.2</em>
+            <em>API Docs for: 0.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -62,7 +62,6 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
-                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                             </ul>
                 
@@ -189,9 +188,6 @@ export function GlitchPass(options) {
 	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
 	// Create a new glitch point.
 	this.generateTrigger();
 
@@ -205,15 +201,14 @@ GlitchPass.prototype.constructor = GlitchPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+GlitchPass.prototype.render = function(renderer, buffer) {
 
 	let uniforms = this.material.uniforms;
 
-	uniforms.tDiffuse.value = readBuffer;
+	uniforms.tDiffuse.value = buffer;
 	uniforms.seed.value = Math.random();
 	uniforms.active.value = true;
 
@@ -251,7 +246,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		renderer.render(this.scene, this.camera, buffer, false);
 
 	}
 
@@ -294,7 +289,6 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 
 	}
 
-	// If there&#x27;s a texture, delete it.
 	if(this.perturbMap !== null) { this.perturbMap.dispose(); }
 
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);

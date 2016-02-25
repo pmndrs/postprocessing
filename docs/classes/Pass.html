@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.2</em>
+            <em>API Docs for: 0.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -62,7 +62,6 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
-                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                             </ul>
                 
@@ -265,10 +264,6 @@ them inside deeper structures such as arrays or objects.</p>
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_needsSwap">needsSwap</a>
-
-                            </li>
                             <li class="index-item property private">
                                 <a href="#property_quad">quad</a>
 
@@ -305,7 +300,7 @@ them inside deeper structures such as arrays or objects.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
+        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
         </p>
 
 
@@ -341,10 +336,7 @@ when you are certain that you don't need this pass anymore.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>readBuffer</code>
+                        <code>buffer</code>
                 </li>
                 <li class="arg">
                         <code class="optional">[delta]</code>
@@ -365,7 +357,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l106"><code>src\passes\pass.js:106</code></a>
+        <a href="../files/src_passes_pass.js.html#l90"><code>src\passes\pass.js:90</code></a>
         </p>
 
 
@@ -396,26 +388,13 @@ when you are certain that you don't need this pass anymore.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">writeBuffer</code>
+                        <code class="param-name">buffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">readBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The read buffer.</li>
+<li>A read/write buffer.</li>
 </ul>
 
                     </div>
@@ -429,7 +408,7 @@ when you are certain that you don't need this pass anymore.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The render delta time.</li>
+<li>The delta time.</li>
 </ul>
 
                     </div>
@@ -443,7 +422,7 @@ when you are certain that you don't need this pass anymore.</p>
 
                     <div class="param-description">
                         <ul>
-<li>Disable stencil test.</li>
+<li>Indicates whether the stencil test is active or not.</li>
 </ul>
 
                     </div>
@@ -488,7 +467,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_pass.js.html#l126"><code>src\passes\pass.js:126</code></a>
+        <a href="../files/src_passes_pass.js.html#l109"><code>src\passes\pass.js:109</code></a>
         </p>
 
 
@@ -603,37 +582,6 @@ and when the effect composer is reset.</p>
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_needsSwap" class="property item">
-    <h3 class="name"><code>needsSwap</code></h3>
-    <span class="type">Boolean</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Render target swap flag.</p>
-<p>When set to true, the read and write buffers will be swapped
-after this pass is done with rendering so that any following<br>
-pass can find the rendered result in the read buffer.
-Swapping is not necessary if, for example, a pass additively
-renders into the read buffer.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> false</p>
 
 
 </div>

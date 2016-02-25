@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.2</em>
+            <em>API Docs for: 0.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -62,7 +62,6 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
-                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                             </ul>
                 
@@ -136,6 +135,9 @@ pass (readBuffer) to an arbitrary render target.</p>
                 <li class="arg">
                         <code class="optional">[renderTarget]</code>
                 </li>
+                <li class="arg">
+                        <code class="optional">[resize]</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -173,6 +175,20 @@ pass (readBuffer) to an arbitrary render target.</p>
                     <div class="param-description">
                         <ul>
 <li>The render target to use for saving the read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[resize]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the render target should adjust to the size of the read/write buffer.</li>
 </ul>
 
                     </div>
@@ -233,10 +249,6 @@ pass (readBuffer) to an arbitrary render target.</p>
                                 <a href="#property_material">material</a>
 
                             </li>
-                            <li class="index-item property inherited">
-                                <a href="#property_needsSwap">needsSwap</a>
-
-                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
 
@@ -247,6 +259,10 @@ pass (readBuffer) to an arbitrary render target.</p>
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_resize">resize</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -277,7 +293,7 @@ pass (readBuffer) to an arbitrary render target.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l144"><code>src\passes\pass.js:144</code></a>
+        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
         </p>
 
 
@@ -313,10 +329,7 @@ when you are certain that you don't need this pass anymore.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>readBuffer</code>
+                        <code>buffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -334,7 +347,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_save.js.html#l59"><code>src\passes\save.js:59</code></a>
+        <a href="../files/src_passes_save.js.html#l71"><code>src\passes\save.js:71</code></a>
         </p>
 
 
@@ -364,26 +377,13 @@ when you are certain that you don't need this pass anymore.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">writeBuffer</code>
+                        <code class="param-name">buffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">readBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The read buffer.</li>
+<li>The read/write buffer.</li>
 </ul>
 
                     </div>
@@ -422,7 +422,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_save.js.html#l75"><code>src\passes\save.js:75</code></a>
+        <a href="../files/src_passes_save.js.html#l86"><code>src\passes\save.js:86</code></a>
         </p>
 
 
@@ -540,7 +540,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_save.js.html#l19"><code>src\passes\save.js:19</code></a>
+        <a href="../files/src_passes_save.js.html#l20"><code>src\passes\save.js:20</code></a>
         </p>
 
 
@@ -551,37 +551,6 @@ when you are certain that you don't need this pass anymore.</p>
 
     </div>
 
-
-
-</div>
-<div id="property_needsSwap" class="property item inherited">
-    <h3 class="name"><code>needsSwap</code></h3>
-    <span class="type">Boolean</span>
-
-
-
-
-
-    <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l80"><code>src\passes\pass.js:80</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Render target swap flag.</p>
-<p>When set to true, the read and write buffers will be swapped
-after this pass is done with rendering so that any following<br>
-pass can find the rendered result in the read buffer.
-Swapping is not necessary if, for example, a pass additively
-renders into the read buffer.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -633,7 +602,7 @@ Assign your shader material to this mesh!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_save.js.html#l29"><code>src\passes\save.js:29</code></a>
+        <a href="../files/src_passes_save.js.html#l30"><code>src\passes\save.js:30</code></a>
         </p>
 
 
@@ -670,6 +639,33 @@ Assign your shader material to this mesh!</p>
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resize" class="property item">
+    <h3 class="name"><code>resize</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_save.js.html#l52"><code>src\passes\save.js:52</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Indicates whether the render target should be resized when
+the size of the composer's read/write buffer changes.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> true</p>
 
 
 </div>

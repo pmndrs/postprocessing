@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.1.2</em>
+            <em>API Docs for: 0.2.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -62,7 +62,6 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
-                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                             </ul>
                 
@@ -187,12 +186,11 @@ const CLEAR_COLOR = new THREE.Color();
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  * @param {Number} delta - The render delta time.
  */
 
-RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+RenderPass.prototype.render = function(renderer, buffer, delta) {
 
 	let clearAlpha;
 
@@ -212,7 +210,7 @@ RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta)
 
 	} else {
 
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, buffer, this.clear);
 
 	}
 
