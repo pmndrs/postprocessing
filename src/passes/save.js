@@ -10,9 +10,10 @@ import THREE from "three";
  * @constructor
  * @extends Pass
  * @param {Scene} [renderTarget] - The render target to use for saving the read buffer.
+ * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
  */
 
-export function SavePass(renderTarget) {
+export function SavePass(renderTarget, resize) {
 
 	Pass.call(this);
 
@@ -48,6 +49,17 @@ export function SavePass(renderTarget) {
 	this.renderTarget = renderTarget;
 	this.renderTarget.texture.generateMipmaps = false;
 
+	/**
+	 * Indicates whether the render target should be resized when
+	 * the size of the composer's read/write buffer changes.
+	 *
+	 * @property resize
+	 * @type Boolean
+	 * @default true
+	 */
+
+	this.resize = (resize !== undefined) ? resize : true;
+
 	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
@@ -61,13 +73,12 @@ SavePass.prototype.constructor = SavePass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-SavePass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+SavePass.prototype.render = function(renderer, buffer) {
 
-	this.material.uniforms.tDiffuse.value = readBuffer;
+	this.material.uniforms.tDiffuse.value = buffer;
 	renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
 };
@@ -82,9 +93,13 @@ SavePass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 SavePass.prototype.setSize = function(width, height) {
 
-	if(width <= 0) { width = 1; }
-	if(height <= 0) { height = 1; }
+	if(this.resize) {
 
-	this.renderTarget.setSize(width, height);
+		if(width <= 0) { width = 1; }
+		if(height <= 0) { height = 1; }
+
+		this.renderTarget.setSize(width, height);
+
+	}
 
 };

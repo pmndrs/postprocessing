@@ -312,11 +312,10 @@ const CLEAR_COLOR = new THREE.Color();
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+GodRaysPass.prototype.render = function(renderer, buffer) {
 
 	let clearAlpha;
 
@@ -367,7 +366,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	if(this.renderToScreen) {
 
 		this.quad.material = this.combineMaterial;
-		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		this.combineMaterial.uniforms.texture1.value = buffer;
 		this.combineMaterial.uniforms.texture2.value = this.renderTargetX;
 
 		renderer.render(this.scene, this.camera);
@@ -377,7 +376,7 @@ GodRaysPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 		this.quad.material = this.copyMaterial;
 		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 
-		renderer.render(this.scene, this.camera, readBuffer);
+		renderer.render(this.scene, this.camera, buffer);
 
 	}
 

@@ -79,9 +79,6 @@ export function GlitchPass(options) {
 	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
 	// Create a new glitch point.
 	this.generateTrigger();
 
@@ -95,15 +92,14 @@ GlitchPass.prototype.constructor = GlitchPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+GlitchPass.prototype.render = function(renderer, buffer) {
 
 	let uniforms = this.material.uniforms;
 
-	uniforms.tDiffuse.value = readBuffer;
+	uniforms.tDiffuse.value = buffer;
 	uniforms.seed.value = Math.random();
 	uniforms.active.value = true;
 
@@ -141,7 +137,7 @@ GlitchPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		renderer.render(this.scene, this.camera, buffer, false);
 
 	}
 
@@ -184,7 +180,6 @@ GlitchPass.prototype.generatePerturbMap = function(size) {
 
 	}
 
-	// If there's a texture, delete it.
 	if(this.perturbMap !== null) { this.perturbMap.dispose(); }
 
 	this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);

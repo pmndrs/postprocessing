@@ -77,22 +77,6 @@ export function Pass(scene, camera, quad) {
 
 	this.renderToScreen = false;
 
-	/**
-	 * Render target swap flag.
-	 *
-	 * When set to true, the read and write buffers will be swapped 
-	 * after this pass is done with rendering so that any following  
-	 * pass can find the rendered result in the read buffer.
-	 * Swapping is not necessary if, for example, a pass additively 
-	 * renders into the read buffer.
-	 *
-	 * @property needsSwap
-	 * @type Boolean
-	 * @default false
-	 */
-
-	this.needsSwap = false;
-
 	// Finally, add the camera and the quad to the scene.
 	if(this.scene !== null) {
 
@@ -111,13 +95,12 @@ export function Pass(scene, camera, quad) {
  * @method render
  * @throws {Error} An error is thrown if the method is not overridden.
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {Number} [delta] - The render delta time.
- * @param {Boolean} [maskActive] - Disable stencil test.
+ * @param {WebGLRenderTarget} buffer - A read/write buffer.
+ * @param {Number} [delta] - The delta time.
+ * @param {Boolean} [maskActive] - Indicates whether the stencil test is active or not.
  */
 
-Pass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
+Pass.prototype.render = function(renderer, buffer, delta, maskActive) {
 
 	throw new Error("Render method not implemented!");
 
@@ -160,8 +143,8 @@ Pass.prototype.setSize = function(width, height) {};
 
 Pass.prototype.dispose = function() {
 
-	var i, p;
-	var keys = Object.keys(this);
+	let i, p;
+	let keys = Object.keys(this);
 
 	for(i = keys.length - 1; i >= 0; --i) {
 

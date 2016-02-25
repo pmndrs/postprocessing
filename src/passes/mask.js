@@ -40,15 +40,14 @@ MaskPass.prototype = Object.create(Pass.prototype);
 MaskPass.prototype.constructor = MaskPass;
 
 /**
- * Renders the scene.
+ * Renders the scene as a mask into the stencil buffer.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-MaskPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+MaskPass.prototype.render = function(renderer, buffer) {
 
 	let ctx = renderer.context;
 	let writeValue, clearValue;
@@ -75,8 +74,7 @@ MaskPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 	ctx.clearStencil(clearValue);
 
 	// Draw into the stencil buffer.
-	renderer.render(this.scene, this.camera, readBuffer, this.clear);
-	renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+	renderer.render(this.scene, this.camera, buffer, this.clear);
 
 	// Re-enable update of color and depth.
 	ctx.colorMask(true, true, true, true);

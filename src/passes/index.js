@@ -18,4 +18,3 @@ export { Pass } from "./pass";
 export { RenderPass } from "./render";
 export { SavePass } from "./save";
 export { ShaderPass } from "./shader";
-export { TexturePass } from "./texture";

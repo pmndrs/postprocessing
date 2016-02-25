@@ -54,9 +54,6 @@ export function FilmPass(options) {
 	// Set the material of the rendering quad once.
 	this.quad.material = this.material;
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
 }
 
 FilmPass.prototype = Object.create(Pass.prototype);
@@ -67,14 +64,13 @@ FilmPass.prototype.constructor = FilmPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  * @param {Number} delta - The render delta time.
  */
 
-FilmPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+FilmPass.prototype.render = function(renderer, buffer, delta) {
 
-	this.material.uniforms.tDiffuse.value = readBuffer;
+	this.material.uniforms.tDiffuse.value = buffer;
 	this.material.uniforms.time.value += delta;
 
 	if(this.renderToScreen) {
@@ -83,7 +79,7 @@ FilmPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		renderer.render(this.scene, this.camera, buffer, false);
 
 	}
 
@@ -99,6 +95,6 @@ FilmPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
 
 FilmPass.prototype.setSize = function(width, height) {
 
-	this.material.uniforms.sCount.value = Math.floor(height * this.scanlines);
+	this.material.uniforms.sCount.value = Math.round(height * this.scanlines);
 
 };

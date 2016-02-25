@@ -19,8 +19,7 @@ export {
 	Pass,
 	RenderPass,
 	SavePass,
-	ShaderPass,
-	TexturePass
+	ShaderPass
 } from "./passes";
 
 export {

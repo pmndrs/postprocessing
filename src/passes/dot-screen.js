@@ -33,9 +33,6 @@ export function DotScreenPass(options) {
 	if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
 	if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
 }
 
 DotScreenPass.prototype = Object.create(Pass.prototype);
@@ -46,13 +43,12 @@ DotScreenPass.prototype.constructor = DotScreenPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+DotScreenPass.prototype.render = function(renderer, buffer) {
 
-	this.material.uniforms.tDiffuse.value = readBuffer;
+	this.material.uniforms.tDiffuse.value = buffer;
 	this.quad.material = this.material;
 
 	if(this.renderToScreen) {
@@ -61,7 +57,7 @@ DotScreenPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		renderer.render(this.scene, this.camera, buffer, false);
 
 	}
 

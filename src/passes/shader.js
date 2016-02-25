@@ -37,9 +37,6 @@ export function ShaderPass(material, textureID) {
 
 	this.material = (material !== undefined) ? material : null;
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
 	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
@@ -53,15 +50,14 @@ ShaderPass.prototype.constructor = ShaderPass;
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
+ShaderPass.prototype.render = function(renderer, buffer) {
 
 	if(this.material.uniforms[this.textureID] !== undefined) {
 
-		this.material.uniforms[this.textureID].value = readBuffer;
+		this.material.uniforms[this.textureID].value = buffer;
 
 	}
 
@@ -71,7 +67,7 @@ ShaderPass.prototype.render = function(renderer, writeBuffer, readBuffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, buffer, this.clear);
 
 	}
 

@@ -167,19 +167,18 @@ Object.defineProperty(BloomPass.prototype, "blurriness", {
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  * @param {Number} delta - The render delta time.
  * @param {Boolean} maskActive - Disable stencil test.
  */
 
-BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, maskActive) {
+BloomPass.prototype.render = function(renderer, buffer, delta, maskActive) {
 
 	if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
 
 	// Tone-mapping.
 	this.quad.material = this.toneMappingMaterial;
-	this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
+	this.toneMappingMaterial.uniforms.tDiffuse.value = buffer;
 	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	// Convolution blur (5 passes).
@@ -211,7 +210,7 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 	if(this.renderToScreen) {
 
 		this.quad.material = this.combineMaterial;
-		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		this.combineMaterial.uniforms.texture1.value = buffer;
 		//this.combineMaterial.uniforms.opacity1.value = 0.0;
 		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
@@ -222,7 +221,7 @@ BloomPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta, 
 		this.quad.material = this.copyMaterial;
 		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
-		renderer.render(this.scene, this.camera, readBuffer, false);
+		renderer.render(this.scene, this.camera, buffer, false);
 
 	}
 

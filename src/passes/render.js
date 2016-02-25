@@ -77,12 +77,11 @@ const CLEAR_COLOR = new THREE.Color();
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} buffer - The read/write buffer.
  * @param {Number} delta - The render delta time.
  */
 
-RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta) {
+RenderPass.prototype.render = function(renderer, buffer, delta) {
 
 	let clearAlpha;
 
@@ -102,7 +101,7 @@ RenderPass.prototype.render = function(renderer, writeBuffer, readBuffer, delta)
 
 	} else {
 
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, buffer, this.clear);
 
 	}
 
