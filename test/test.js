@@ -59,10 +59,6 @@ module.exports = {
 		test.equals(typeof x, "object");
 		x.dispose();
 
-		x = new lib.TexturePass();
-		test.equals(typeof x, "object");
-		x.dispose();
-
 		test.done();
 
 	},
