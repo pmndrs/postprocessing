@@ -77,15 +77,19 @@ export function EffectComposer(renderer, renderTarget) {
 
 EffectComposer.prototype.addPass = function(pass, index) {
 
-	pass.setSize(this.buffer.width, this.buffer.height);
+	if(this.buffer !== null) {
 
-	if(index !== undefined) {
+		pass.setSize(this.buffer.width, this.buffer.height);
 
-		this.passes.splice(index, 0, pass);
+		if(index !== undefined) {
 
-	}	else {
+			this.passes.splice(index, 0, pass);
 
-		this.passes.push(pass);
+		}	else {
+
+			this.passes.push(pass);
+
+		}
 
 	}
 
@@ -141,20 +145,6 @@ EffectComposer.prototype.render = function(delta) {
 };
 
 /**
- * Resets this composer by deleting all registered passes 
- * and creating a new buffer.
- *
- * @method reset
- * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
- */
-
-EffectComposer.prototype.reset = function(renderTarget) {
-
-	this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
-
-};
-
-/**
  * Sets the size of the render targets and the output canvas.
  *
  * Every pass will be informed of the new size. It's up to each pass 
@@ -187,15 +177,29 @@ EffectComposer.prototype.setSize = function(width, height) {
 };
 
 /**
+ * Resets this composer by deleting all registered passes 
+ * and creating a new buffer.
+ *
+ * @method reset
+ * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
+ */
+
+EffectComposer.prototype.reset = function(renderTarget) {
+
+	this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
+
+};
+
+/**
  * Destroys all passes and render targets.
  *
  * This method deallocates all render targets, textures and materials created by the passes.
- * It also deletes this composer's render targets and copy pass.
+ * It also deletes this composer's frame buffer.
  *
- * The reset method uses the dispose method internally.
+ * Note: the reset method uses the dispose method internally.
  *
  * @method dispose
- * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer may be discarded.
+ * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.
  */
 
 EffectComposer.prototype.dispose = function(renderTarget) {
