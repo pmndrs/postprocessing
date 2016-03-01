@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.2.1 build Mar 01 2016
+ * postprocessing v0.2.2 build Mar 01 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -1204,6 +1204,8 @@
 		 */
 
 		this.luminosityMaterial = new LuminosityMaterial(true);
+
+		if(options.distinction !== undefined) { this.luminosityMaterial.uniforms.distinction.value = options.distinction; }
 
 		/**
 		 * Convolution shader material.
