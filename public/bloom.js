@@ -122,7 +122,8 @@ window.addEventListener("load", function init() {
 	var pass = new POSTPROCESSING.BloomPass({
 		resolutionScale: 0.5,
 		blurriness: 1.0,
-		strength: 1.0
+		strength: 1.0,
+		distinction: 1.0
 	});
 
 	pass.renderToScreen = true;

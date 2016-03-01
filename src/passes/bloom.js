@@ -117,6 +117,8 @@ export function BloomPass(options) {
 
 	this.luminosityMaterial = new LuminosityMaterial(true);
 
+	if(options.distinction !== undefined) { this.luminosityMaterial.uniforms.distinction.value = options.distinction; }
+
 	/**
 	 * Convolution shader material.
 	 *
