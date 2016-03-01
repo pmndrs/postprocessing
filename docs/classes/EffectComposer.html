@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.0</em>
+            <em>API Docs for: 0.2.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -364,7 +364,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l189"><code>src\effect-composer.js:189</code></a>
+        <a href="../files/src_effect-composer.js.html#l193"><code>src\effect-composer.js:193</code></a>
         </p>
 
 
@@ -374,8 +374,8 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="description">
         <p>Destroys all passes and render targets.</p>
 <p>This method deallocates all render targets, textures and materials created by the passes.
-It also deletes this composer's render targets and copy pass.</p>
-<p>The reset method uses the dispose method internally.</p>
+It also deletes this composer's frame buffer.</p>
+<p>Note: the reset method uses the dispose method internally.</p>
 
     </div>
 
@@ -391,7 +391,7 @@ It also deletes this composer's render targets and copy pass.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A new render target. If none is provided, the composer may be discarded.</li>
+<li>A new render target. If none is provided, the composer will become inoperative.</li>
 </ul>
 
                     </div>
@@ -424,7 +424,7 @@ It also deletes this composer's render targets and copy pass.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l94"><code>src\effect-composer.js:94</code></a>
+        <a href="../files/src_effect-composer.js.html#l98"><code>src\effect-composer.js:98</code></a>
         </p>
 
 
@@ -480,7 +480,7 @@ It also deletes this composer's render targets and copy pass.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l107"><code>src\effect-composer.js:107</code></a>
+        <a href="../files/src_effect-composer.js.html#l111"><code>src\effect-composer.js:111</code></a>
         </p>
 
 
@@ -536,7 +536,7 @@ It also deletes this composer's render targets and copy pass.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l143"><code>src\effect-composer.js:143</code></a>
+        <a href="../files/src_effect-composer.js.html#l179"><code>src\effect-composer.js:179</code></a>
         </p>
 
 
@@ -597,7 +597,7 @@ and creating a new buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l157"><code>src\effect-composer.js:157</code></a>
+        <a href="../files/src_effect-composer.js.html#l147"><code>src\effect-composer.js:147</code></a>
         </p>
 
 

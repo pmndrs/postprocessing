@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.0</em>
+            <em>API Docs for: 0.2.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -111,21 +111,31 @@ import shader from &quot;./inlined/shader&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * A luminosity shader material.
- * http://en.wikipedia.org/wiki/Luminosity
+ * A luminance shader material.
+ *
+ * This shader produces a greyscale luminance map. 
+ * It can also be configured to output colors that are scaled with their 
+ * respective luminance value. Additionally, a range may be provided to 
+ * mask out undesired texels.
+ *
+ * The alpha channel will remain unaffected in all cases.
  *
  * @class LuminosityMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @params {Boolean} [color=false] - Defines whether the shader should output colors scaled with their luminance value.
+ * @params {Vector2} [range] - If provided, the shader will mask out texels that aren&#x27;t in the specified range.
  */
 
-export function LuminosityMaterial() {
+export function LuminosityMaterial(color, range) {
 
 	THREE.ShaderMaterial.call(this, {
 
 		uniforms: {
 
-			tDiffuse: {type: &quot;t&quot;, value: null}
+			tDiffuse: {type: &quot;t&quot;, value: null},
+			distinction: {type: &quot;f&quot;, value: 1.0},
+			range: {type: &quot;v2&quot;, value: (range !== undefined) ? range : new THREE.Vector2()}
 
 		},
 
@@ -133,6 +143,9 @@ export function LuminosityMaterial() {
 		vertexShader: shader.vertex
 
 	});
+
+	if(color !== undefined) { this.defines.COLOR = &quot;1&quot;; }
+	if(range !== undefined) { this.defines.RANGE = &quot;1&quot;; }
 
 }
 

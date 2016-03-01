@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.2.0",
+        "version": "0.2.1",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -403,7 +403,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\convolution\\index.js",
             "line": 4,
-            "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/\n OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//\n apple_ref/doc/uid/TP40008793-CH7-SW15",
+            "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
             "params": [
@@ -500,9 +500,24 @@
             "module": "postprocessing",
             "file": "src\\materials\\luminosity\\index.js",
             "line": 4,
-            "description": "A luminosity shader material.\nhttp://en.wikipedia.org/wiki/Luminosity",
+            "description": "A luminance shader material.\n\nThis shader produces a greyscale luminance map. \nIt can also be configured to output colors that are scaled with their \nrespective luminance value. Additionally, a range may be provided to \nmask out undesired texels.\n\nThe alpha channel will remain unaffected in all cases.",
             "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "extends": "ShaderMaterial",
+            "params": [
+                {
+                    "name": "color",
+                    "description": "- Defines whether the shader should output colors scaled with their luminance value.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                },
+                {
+                    "name": "range",
+                    "description": "- If provided, the shader will mask out texels that aren't in the specified range.",
+                    "type": "Vector2",
+                    "optional": true
+                }
+            ]
         },
         "ToneMappingMaterial": {
             "name": "ToneMappingMaterial",
@@ -587,6 +602,13 @@
                         {
                             "name": "strength",
                             "description": "- The bloom strength.",
+                            "type": "Number",
+                            "optional": true,
+                            "optdefault": "1.0"
+                        },
+                        {
+                            "name": "distinction",
+                            "description": "- The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "1.0"
@@ -1122,7 +1144,7 @@
     "classitems": [
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 43,
+            "line": 41,
             "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
             "itemtype": "property",
             "name": "kernels",
@@ -1133,7 +1155,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 54,
+            "line": 52,
             "description": "Scales the kernels.",
             "itemtype": "property",
             "name": "blurriness",
@@ -1143,7 +1165,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 64,
+            "line": 62,
             "description": "The current kernel.",
             "itemtype": "property",
             "name": "i",
@@ -1154,7 +1176,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 82,
+            "line": 80,
             "description": "Sets the texel size.",
             "itemtype": "method",
             "name": "setTexelSize",
@@ -1169,7 +1191,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 100,
+            "line": 98,
             "description": "Adjusts the kernel for the next blur pass.\nCall this method before each render iteration.",
             "itemtype": "method",
             "name": "adjustKernel",
@@ -1432,7 +1454,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 32,
+            "line": 33,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1444,7 +1466,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 50,
+            "line": 51,
             "description": "Another render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1456,7 +1478,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 60,
+            "line": 61,
             "description": "The resolution scale.\n\nYou need to call the reset method of the EffectComposer after \nchanging this value.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1468,7 +1490,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 73,
+            "line": 74,
             "description": "The texel size for the blur.",
             "itemtype": "property",
             "name": "texelSize",
@@ -1480,7 +1502,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 83,
+            "line": 84,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1492,7 +1514,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 95,
+            "line": 96,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1504,11 +1526,11 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 109,
-            "description": "Tone-mapping shader material.",
+            "line": 110,
+            "description": "Luminance shader material.",
             "itemtype": "property",
-            "name": "toneMappingMaterial",
-            "type": "ToneMappingMaterial",
+            "name": "luminosityMaterial",
+            "type": "LuminosityMaterial",
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
@@ -1516,7 +1538,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 119,
+            "line": 120,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1528,7 +1550,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 137,
+            "line": 138,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -1539,7 +1561,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 161,
+            "line": 162,
             "description": "Renders the bloom effect.\n\nApplies a tone-mapping pass and convolution blur to the readBuffer and \nrenders the result into a seperate render target. The result is additively \nblended with the readBuffer.",
             "itemtype": "method",
             "name": "render",
@@ -2608,7 +2630,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 94,
+            "line": 98,
             "description": "Removes a pass.",
             "itemtype": "method",
             "name": "removePass",
@@ -2624,7 +2646,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 107,
+            "line": 111,
             "description": "Renders all passes in order.",
             "itemtype": "method",
             "name": "render",
@@ -2640,24 +2662,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 143,
-            "description": "Resets this composer by deleting all registered passes \nand creating a new buffer.",
-            "itemtype": "method",
-            "name": "reset",
-            "params": [
-                {
-                    "name": "renderTarget",
-                    "description": "- A new render target to use. If none is provided, the settings of the old buffer will be used.",
-                    "type": "WebGLRenderTarget",
-                    "optional": true
-                }
-            ],
-            "class": "EffectComposer",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\effect-composer.js",
-            "line": 157,
+            "line": 147,
             "description": "Sets the size of the render targets and the output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass \nhow that information will be handled.\n\nIf no width or height is specified, the render targets and passes \nwill be updated with the current size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2680,14 +2685,31 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 189,
-            "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created by the passes.\nIt also deletes this composer's render targets and copy pass.\n\nThe reset method uses the dispose method internally.",
+            "line": 179,
+            "description": "Resets this composer by deleting all registered passes \nand creating a new buffer.",
+            "itemtype": "method",
+            "name": "reset",
+            "params": [
+                {
+                    "name": "renderTarget",
+                    "description": "- A new render target to use. If none is provided, the settings of the old buffer will be used.",
+                    "type": "WebGLRenderTarget",
+                    "optional": true
+                }
+            ],
+            "class": "EffectComposer",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\effect-composer.js",
+            "line": 193,
+            "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created by the passes.\nIt also deletes this composer's frame buffer.\n\nNote: the reset method uses the dispose method internally.",
             "itemtype": "method",
             "name": "dispose",
             "params": [
                 {
                     "name": "renderTarget",
-                    "description": "- A new render target. If none is provided, the composer may be discarded.",
+                    "description": "- A new render target. If none is provided, the composer will become inoperative.",
                     "type": "WebGLRenderTarget",
                     "optional": true
                 }
@@ -2696,5 +2718,14 @@
             "module": "postprocessing"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "replacing incorrect tag: params with param",
+            "line": " src\\materials\\luminosity\\index.js:4"
+        },
+        {
+            "message": "replacing incorrect tag: params with param",
+            "line": " src\\materials\\luminosity\\index.js:4"
+        }
+    ]
 }

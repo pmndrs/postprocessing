@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.0</em>
+            <em>API Docs for: 0.2.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -217,6 +217,19 @@ by utilising the fast Kawase convolution approach.</p>
                                 </div>
 
                             </li>
+                            <li class="param">
+                                    <code class="param-name optional">[distinction=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.</li>
+</ul>
+
+                                </div>
+
+                            </li>
                         </ul>
                 </li>
             </ul>
@@ -286,6 +299,10 @@ by utilising the fast Kawase convolution approach.</p>
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_luminosityMaterial">luminosityMaterial</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
 
@@ -312,10 +329,6 @@ by utilising the fast Kawase convolution approach.</p>
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_texelSize">texelSize</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_toneMappingMaterial">toneMappingMaterial</a>
 
                             </li>
                     </ul>
@@ -401,7 +414,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l161"><code>src\passes\bloom.js:161</code></a>
+        <a href="../files/src_passes_bloom.js.html#l162"><code>src\passes\bloom.js:162</code></a>
         </p>
 
 
@@ -569,7 +582,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l137"><code>src\passes\bloom.js:137</code></a>
+        <a href="../files/src_passes_bloom.js.html#l138"><code>src\passes\bloom.js:138</code></a>
         </p>
 
 
@@ -622,7 +635,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l83"><code>src\passes\bloom.js:83</code></a>
+        <a href="../files/src_passes_bloom.js.html#l84"><code>src\passes\bloom.js:84</code></a>
         </p>
 
 
@@ -648,7 +661,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l119"><code>src\passes\bloom.js:119</code></a>
+        <a href="../files/src_passes_bloom.js.html#l120"><code>src\passes\bloom.js:120</code></a>
         </p>
 
 
@@ -674,7 +687,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l95"><code>src\passes\bloom.js:95</code></a>
+        <a href="../files/src_passes_bloom.js.html#l96"><code>src\passes\bloom.js:96</code></a>
         </p>
 
 
@@ -710,6 +723,32 @@ blended with the readBuffer.</p>
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_luminosityMaterial" class="property item private">
+    <h3 class="name"><code>luminosityMaterial</code></h3>
+    <span class="type"><a href="../classes/LuminosityMaterial.html" class="crosslink">LuminosityMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l110"><code>src\passes\bloom.js:110</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Luminance shader material.</p>
+
+    </div>
+
 
 
 </div>
@@ -760,7 +799,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l32"><code>src\passes\bloom.js:32</code></a>
+        <a href="../files/src_passes_bloom.js.html#l33"><code>src\passes\bloom.js:33</code></a>
         </p>
 
 
@@ -786,7 +825,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l50"><code>src\passes\bloom.js:50</code></a>
+        <a href="../files/src_passes_bloom.js.html#l51"><code>src\passes\bloom.js:51</code></a>
         </p>
 
 
@@ -812,7 +851,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
+        <a href="../files/src_passes_bloom.js.html#l61"><code>src\passes\bloom.js:61</code></a>
         </p>
 
 
@@ -891,7 +930,7 @@ changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l73"><code>src\passes\bloom.js:73</code></a>
+        <a href="../files/src_passes_bloom.js.html#l74"><code>src\passes\bloom.js:74</code></a>
         </p>
 
 
@@ -899,32 +938,6 @@ changing this value.</p>
 
     <div class="description">
         <p>The texel size for the blur.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_toneMappingMaterial" class="property item private">
-    <h3 class="name"><code>toneMappingMaterial</code></h3>
-    <span class="type"><a href="../classes/ToneMappingMaterial.html" class="crosslink">ToneMappingMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l109"><code>src\passes\bloom.js:109</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Tone-mapping shader material.</p>
 
     </div>
 

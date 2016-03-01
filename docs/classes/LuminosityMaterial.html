@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.0</em>
+            <em>API Docs for: 0.2.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -120,8 +120,12 @@
 
 
 <div class="box intro">
-    <p>A luminosity shader material.
-<a href="http://en.wikipedia.org/wiki/Luminosity">http://en.wikipedia.org/wiki/Luminosity</a></p>
+    <p>A luminance shader material.</p>
+<p>This shader produces a greyscale luminance map.
+It can also be configured to output colors that are scaled with their
+respective luminance value. Additionally, a range may be provided to
+mask out undesired texels.</p>
+<p>The alpha channel will remain unaffected in all cases.</p>
 
 </div>
 
@@ -130,7 +134,16 @@
 <div id="method_LuminosityMaterial" class="method item">
     <h3 class="name"><code>LuminosityMaterial</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[color=false]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[range]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
 
 
@@ -153,6 +166,40 @@
         
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[color=false]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Defines whether the shader should output colors scaled with their luminance value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[range]</code>
+                        <span class="type">Vector2</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>If provided, the shader will mask out texels that aren't in the specified range.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
