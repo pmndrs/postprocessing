@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.2.0 build Feb 25 2016
+ * postprocessing v0.2.1 build Mar 01 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -186,9 +186,7 @@
 	 * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
 	 *
 	 * Further modified according to:
-	 *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/
-	 *  OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//
-	 *  apple_ref/doc/uid/TP40008793-CH7-SW15
+	 *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
 	 *
 	 * @class ConvolutionMaterial
 	 * @constructor
@@ -515,26 +513,36 @@
 	GodRaysMaterial.prototype.constructor = GodRaysMaterial;
 
 	var shader$9 = {
-		fragment: "uniform sampler2D tDiffuse;\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 luma = vec3(0.299, 0.587, 0.114);\r\n\tfloat v = dot(texel.rgb, luma);\r\n\r\n\tgl_FragColor = vec4(v, v, v, texel.a);\r\n\r\n}\r\n",
+		fragment: "uniform sampler2D tDiffuse;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tfloat v = dot(texel, LUM_COEFF);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, v);\r\n\t\tfloat high = step(v, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tv *= low * high;\r\n\r\n\t#endif\r\n\r\n\tv = pow(v, distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * v, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(v, v, v, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
 
 	/**
-	 * A luminosity shader material.
-	 * http://en.wikipedia.org/wiki/Luminosity
+	 * A luminance shader material.
+	 *
+	 * This shader produces a greyscale luminance map. 
+	 * It can also be configured to output colors that are scaled with their 
+	 * respective luminance value. Additionally, a range may be provided to 
+	 * mask out undesired texels.
+	 *
+	 * The alpha channel will remain unaffected in all cases.
 	 *
 	 * @class LuminosityMaterial
 	 * @constructor
 	 * @extends ShaderMaterial
+	 * @params {Boolean} [color=false] - Defines whether the shader should output colors scaled with their luminance value.
+	 * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
 	 */
 
-	function LuminosityMaterial() {
+	function LuminosityMaterial(color, range) {
 
 		THREE.ShaderMaterial.call(this, {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null}
+				tDiffuse: {type: "t", value: null},
+				distinction: {type: "f", value: 1.0},
+				range: {type: "v2", value: (range !== undefined) ? range : new THREE.Vector2()}
 
 			},
 
@@ -543,13 +551,16 @@
 
 		});
 
+		if(color !== undefined) { this.defines.COLOR = "1"; }
+		if(range !== undefined) { this.defines.RANGE = "1"; }
+
 	}
 
 	LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
 	LuminosityMaterial.prototype.constructor = LuminosityMaterial;
 
 	var shader$10 = {
-		fragment: "uniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);\r\nconst vec2 CENTER = vec2(0.5, 0.5);\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, CENTER).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = dot(c, LUM_CONVERT);\r\n\r\n\t// Apply the modified operator (Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n}\r\n",
+		fragment: "uniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\nconst vec2 CENTER = vec2(0.5, 0.5);\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, CENTER).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = dot(c, LUM_COEFF);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
 
@@ -1098,6 +1109,7 @@
 	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
 	 * @param {Number} [options.blurriness=1.0] - The scale of the blur kernels.
 	 * @param {Number} [options.strength=1.0] - The bloom strength.
+	 * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
 	 */
 
 	function BloomPass(options) {
@@ -1184,14 +1196,14 @@
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
 		/**
-		 * Tone-mapping shader material.
+		 * Luminance shader material.
 		 *
-		 * @property toneMappingMaterial
-		 * @type ToneMappingMaterial
+		 * @property luminosityMaterial
+		 * @type LuminosityMaterial
 		 * @private
 		 */
 
-		this.toneMappingMaterial = new ToneMappingMaterial();
+		this.luminosityMaterial = new LuminosityMaterial(true);
 
 		/**
 		 * Convolution shader material.
@@ -1253,9 +1265,9 @@
 
 		if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
 
-		// Tone-mapping.
-		this.quad.material = this.toneMappingMaterial;
-		this.toneMappingMaterial.uniforms.tDiffuse.value = buffer;
+		// Luminance threshold.
+		this.quad.material = this.luminosityMaterial;
+		this.luminosityMaterial.uniforms.tDiffuse.value = buffer;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// Convolution blur (5 passes).
@@ -1288,7 +1300,6 @@
 
 			this.quad.material = this.combineMaterial;
 			this.combineMaterial.uniforms.texture1.value = buffer;
-			//this.combineMaterial.uniforms.opacity1.value = 0.0;
 			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 			renderer.render(this.scene, this.camera);
@@ -2721,15 +2732,19 @@
 
 	EffectComposer.prototype.addPass = function(pass, index) {
 
-		pass.setSize(this.buffer.width, this.buffer.height);
+		if(this.buffer !== null) {
 
-		if(index !== undefined) {
+			pass.setSize(this.buffer.width, this.buffer.height);
 
-			this.passes.splice(index, 0, pass);
+			if(index !== undefined) {
 
-		}	else {
+				this.passes.splice(index, 0, pass);
 
-			this.passes.push(pass);
+			}	else {
+
+				this.passes.push(pass);
+
+			}
 
 		}
 
@@ -2785,20 +2800,6 @@
 	};
 
 	/**
-	 * Resets this composer by deleting all registered passes 
-	 * and creating a new buffer.
-	 *
-	 * @method reset
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
-	 */
-
-	EffectComposer.prototype.reset = function(renderTarget) {
-
-		this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
-
-	};
-
-	/**
 	 * Sets the size of the render targets and the output canvas.
 	 *
 	 * Every pass will be informed of the new size. It's up to each pass 
@@ -2831,15 +2832,29 @@
 	};
 
 	/**
+	 * Resets this composer by deleting all registered passes 
+	 * and creating a new buffer.
+	 *
+	 * @method reset
+	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
+	 */
+
+	EffectComposer.prototype.reset = function(renderTarget) {
+
+		this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
+
+	};
+
+	/**
 	 * Destroys all passes and render targets.
 	 *
 	 * This method deallocates all render targets, textures and materials created by the passes.
-	 * It also deletes this composer's render targets and copy pass.
+	 * It also deletes this composer's frame buffer.
 	 *
-	 * The reset method uses the dispose method internally.
+	 * Note: the reset method uses the dispose method internally.
 	 *
 	 * @method dispose
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer may be discarded.
+	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.
 	 */
 
 	EffectComposer.prototype.dispose = function(renderTarget) {
