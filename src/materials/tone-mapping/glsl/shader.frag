@@ -14,7 +14,7 @@ uniform float maxLuminance;
 
 varying vec2 vUv;
 
-const vec3 LUM_CONVERT = vec3(0.299, 0.587, 0.114);
+const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
 const vec2 CENTER = vec2(0.5, 0.5);
 
 vec3 toneMap(vec3 c) {
@@ -31,12 +31,13 @@ vec3 toneMap(vec3 c) {
 	#endif
 
 	// Calculate the luminance of the current pixel.
-	float lumPixel = dot(c, LUM_CONVERT);
+	float lumPixel = dot(c, LUM_COEFF);
 
-	// Apply the modified operator (Eq. 4).
+	// Apply the modified operator (Reinhard Eq. 4).
 	float lumScaled = (lumPixel * middleGrey) / lumAvg;
 
 	float lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);
+
 	return lumCompressed * c;
 
 }
