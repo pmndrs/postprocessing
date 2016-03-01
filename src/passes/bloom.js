@@ -1,7 +1,7 @@
 import {
 	CopyMaterial,
 	CombineMaterial,
-	ToneMappingMaterial,
+	LuminosityMaterial,
 	ConvolutionMaterial
 } from "../materials";
 
@@ -21,6 +21,7 @@ import THREE from "three";
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
  * @param {Number} [options.blurriness=1.0] - The scale of the blur kernels.
  * @param {Number} [options.strength=1.0] - The bloom strength.
+ * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
  */
 
 export function BloomPass(options) {
@@ -107,14 +108,14 @@ export function BloomPass(options) {
 	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
 	/**
-	 * Tone-mapping shader material.
+	 * Luminance shader material.
 	 *
-	 * @property toneMappingMaterial
-	 * @type ToneMappingMaterial
+	 * @property luminosityMaterial
+	 * @type LuminosityMaterial
 	 * @private
 	 */
 
-	this.toneMappingMaterial = new ToneMappingMaterial();
+	this.luminosityMaterial = new LuminosityMaterial(true);
 
 	/**
 	 * Convolution shader material.
@@ -176,9 +177,9 @@ BloomPass.prototype.render = function(renderer, buffer, delta, maskActive) {
 
 	if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
 
-	// Tone-mapping.
-	this.quad.material = this.toneMappingMaterial;
-	this.toneMappingMaterial.uniforms.tDiffuse.value = buffer;
+	// Luminance threshold.
+	this.quad.material = this.luminosityMaterial;
+	this.luminosityMaterial.uniforms.tDiffuse.value = buffer;
 	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	// Convolution blur (5 passes).
@@ -211,7 +212,6 @@ BloomPass.prototype.render = function(renderer, buffer, delta, maskActive) {
 
 		this.quad.material = this.combineMaterial;
 		this.combineMaterial.uniforms.texture1.value = buffer;
-		//this.combineMaterial.uniforms.opacity1.value = 0.0;
 		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 		renderer.render(this.scene, this.camera);
