@@ -122,7 +122,7 @@ window.addEventListener("load", function init() {
 	var pass = new POSTPROCESSING.BloomPass({
 		resolutionScale: 0.5,
 		blurriness: 1.0,
-		strength: 1.6
+		strength: 1.0
 	});
 
 	pass.renderToScreen = true;
@@ -134,9 +134,7 @@ window.addEventListener("load", function init() {
 		"resolution": pass.resolutionScale,
 		"blurriness": pass.blurriness,
 		"strength": pass.combineMaterial.uniforms.opacity2.value,
-		"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
-		"max luminance": pass.toneMappingMaterial.uniforms.maxLuminance.value,
-		"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value,
+		"distinction": pass.luminosityMaterial.uniforms.distinction.value,
 		"blend": true
 	};
 
@@ -144,10 +142,8 @@ window.addEventListener("load", function init() {
 	gui.add(params, "blurriness").min(0.0).max(3.0).step(0.1).onChange(function() { pass.blurriness = params["blurriness"]; });
 	gui.add(params, "strength").min(0.0).max(3.0).step(0.01).onChange(function() { pass.combineMaterial.uniforms.opacity2.value = params["strength"]; });
 
-	var f = gui.addFolder("Tone-mapping");
-	f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
-	f.add(params, "max luminance").min(0.0).max(16.0).step(0.1).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max luminance"]; });
-	f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
+	var f = gui.addFolder("Luminance");
+	f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params["distinction"]; });
 	f.open();
 
 	gui.add(params, "blend").onChange(function() {
