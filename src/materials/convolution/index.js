@@ -12,9 +12,7 @@ import THREE from "three";
  * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
  *
  * Further modified according to:
- *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/
- *  OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//
- *  apple_ref/doc/uid/TP40008793-CH7-SW15
+ *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
  *
  * @class ConvolutionMaterial
  * @constructor
