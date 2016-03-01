@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1538,7 +1538,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 120,
+            "line": 122,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1550,7 +1550,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 138,
+            "line": 140,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -1561,7 +1561,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 162,
+            "line": 164,
             "description": "Renders the bloom effect.\n\nApplies a tone-mapping pass and convolution blur to the readBuffer and \nrenders the result into a seperate render target. The result is additively \nblended with the readBuffer.",
             "itemtype": "method",
             "name": "render",
@@ -1592,7 +1592,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 230,
+            "line": 232,
             "description": "Updates this pass with the main render target's size.",
             "itemtype": "method",
             "name": "setSize",
