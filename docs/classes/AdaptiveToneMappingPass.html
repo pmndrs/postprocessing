@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.2</em>
+            <em>API Docs for: 0.3.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -224,6 +224,10 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
                             </li>
                             <li class="index-item method inherited">
+                                <a href="#method_initialise">initialise</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -306,6 +310,10 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
                                 <a href="#property_needsInit">needsInit</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
                             <li class="index-item property private">
                                 <a href="#property_previousLuminanceRT">previousLuminanceRT</a>
 
@@ -361,6 +369,78 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
 
     </div>
 
+
+
+
+</div>
+<div id="method_initialise" class="method item inherited">
+    <h3 class="name"><code>initialise</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>alpha</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Performs advanced initialisation tasks.
+
+By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the 
+appropriate format (RGB or RGBA).
+
+The provided renderer can be used to warm up special off-screen render 
+targets by performing a preliminary render operation.
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        - The renderer.
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">alpha</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        - Whether the renderer uses the alpha channel or not.
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -833,7 +913,7 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l109"><code>src\passes\pass.js:109</code></a>
+        <a href="../files/src_passes_pass.js.html#l142"><code>src\passes\pass.js:142</code></a>
         </p>
 
 
@@ -841,13 +921,12 @@ Based on a GDC2007 presentation by Wolfgang Engel titled &quot;Post-Processing P
     </div>
 
     <div class="description">
-        Updates this pass with the main render target's size.
+        Updates this pass with the renderer's size.
 
-This is an abstract method that may be overriden in case 
-you want to be informed about the main render size.
+This is an abstract method that may be overriden in case you want to be 
+informed about the main render size.
 
-The effect composer calls this method when the pass is added 
-and when the effect composer is reset.
+The effect composer calls this method when its own size is updated.
     </div>
 
         <div class="params">
@@ -860,7 +939,7 @@ and when the effect composer is reset.
 
 
                     <div class="param-description">
-                        - The width.
+                        - The renderer's width.
                     </div>
 
                 </li>
@@ -870,7 +949,7 @@ and when the effect composer is reset.
 
 
                     <div class="param-description">
-                        - The height.
+                        - The renderer's height.
                     </div>
 
                 </li>
@@ -1008,7 +1087,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l60"><code>src\passes\pass.js:60</code></a>
+        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
         </p>
 
 
@@ -1178,6 +1257,35 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Indicates whether the read and write buffers should be swapped after this 
+pass has finished rendering.
+
+Set this to true if this pass renders to the write buffer so that a 
+following pass can find the result in the read buffer.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
 <div id="property_previousLuminanceRT" class="property item private">
     <h3 class="name"><code>previousLuminanceRT</code></h3>
     <span class="type">WebGLRenderTarget</span>
@@ -1224,6 +1332,7 @@ and when the effect composer is reset.
 
     <div class="description">
         The quad mesh to use for rendering.
+
 Assign your shader material to this mesh!
     </div>
 
@@ -1250,7 +1359,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
         </p>
 
 

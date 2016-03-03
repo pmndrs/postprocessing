@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.2</em>
+            <em>API Docs for: 0.3.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -139,7 +139,7 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>texelSize</code>
+                        <code class="optional">[texelSize]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -170,8 +170,9 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">texelSize</code>
+                        <code class="param-name optional">[texelSize]</code>
                         <span class="type">Vector2</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -221,16 +222,16 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property">
-                                <a href="#property_blurriness">blurriness</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_i">i</a>
-
-                            </li>
                             <li class="index-item property private">
                                 <a href="#property_kernels">kernels</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_scale">scale</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_step">step</a>
 
                             </li>
                     </ul>
@@ -257,7 +258,7 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l98"><code>src\materials\convolution\index.js:98</code></a>
+        <a href="../files/src_materials_convolution_index.js.html#l95"><code>src\materials\convolution\index.js:95</code></a>
         </p>
 
 
@@ -280,7 +281,10 @@ Call this method before each render iteration.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>texelSize</code>
+                        <code>x</code>
+                </li>
+                <li class="arg">
+                        <code>y</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -312,13 +316,26 @@ Call this method before each render iteration.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">texelSize</code>
-                        <span class="type">Vector2</span>
+                        <code class="param-name">x</code>
+                        <span class="type">Number</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The new texel size.</li>
+<li>The texel width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">y</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The texel height.</li>
 </ul>
 
                     </div>
@@ -335,8 +352,35 @@ Call this method before each render iteration.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_blurriness" class="property item">
-    <h3 class="name"><code>blurriness</code></h3>
+<div id="property_kernels" class="property item private">
+    <h3 class="name"><code>kernels</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l41"><code>src\materials\convolution\index.js:41</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The Kawase blur kernels for five consecutive convolution passes.
+The result matches the 35x35 Gauss filter.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_scale" class="property item">
+    <h3 class="name"><code>scale</code></h3>
     <span class="type">Number</span>
 
 
@@ -361,8 +405,8 @@ Call this method before each render iteration.</p>
 
 
 </div>
-<div id="property_i" class="property item private">
-    <h3 class="name"><code>i</code></h3>
+<div id="property_step" class="property item private">
+    <h3 class="name"><code>step</code></h3>
     <span class="type">Number</span>
 
 
@@ -381,33 +425,6 @@ Call this method before each render iteration.</p>
 
     <div class="description">
         <p>The current kernel.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_kernels" class="property item private">
-    <h3 class="name"><code>kernels</code></h3>
-    <span class="type">Number</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l41"><code>src\materials\convolution\index.js:41</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The Kawase blur kernels for five consecutive convolution passes.
-The result matches the 35x35 Gauss filter.</p>
 
     </div>
 

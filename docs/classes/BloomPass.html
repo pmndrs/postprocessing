@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.2</em>
+            <em>API Docs for: 0.3.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -198,7 +198,7 @@ by utilising the fast Kawase convolution approach.</p>
 
                                 <div class="param-description">
                                     <ul>
-<li>The scale of the blur kernels.</li>
+<li>The scale of the blur.</li>
 </ul>
 
                                 </div>
@@ -261,6 +261,10 @@ by utilising the fast Kawase convolution approach.</p>
 
                             </li>
                             <li class="index-item method inherited">
+                                <a href="#method_initialise">initialise</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -303,6 +307,10 @@ by utilising the fast Kawase convolution approach.</p>
                                 <a href="#property_luminosityMaterial">luminosityMaterial</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
 
@@ -325,10 +333,6 @@ by utilising the fast Kawase convolution approach.</p>
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_texelSize">texelSize</a>
 
                             </li>
                     </ul>
@@ -355,7 +359,7 @@ by utilising the fast Kawase convolution approach.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
+        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
         </p>
 
 
@@ -363,9 +367,8 @@ by utilising the fast Kawase convolution approach.</p>
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose
-method and deletes them. The pass will be inoperative after 
-this method was called!
+        Performs a shallow search for properties that define a dispose method and 
+deletes them. The pass will be inoperative after this method was called!
 
 Disposable objects:
  - render targets
@@ -381,6 +384,81 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
+<div id="method_initialise" class="method item">
+    <h3 class="name"><code>initialise</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>alpha</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bloom.js.html#l212"><code>src\passes\bloom.js:212</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Adjusts the format and size of the render targets.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The renderer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">alpha</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the renderer uses the alpha channel or not.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
 
@@ -390,13 +468,7 @@ when you are certain that you don't need this pass anymore.
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>buffer</code>
-                </li>
-                <li class="arg">
-                        <code>delta</code>
-                </li>
-                <li class="arg">
-                        <code>maskActive</code>
+                        <code>readBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -414,7 +486,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l164"><code>src\passes\bloom.js:164</code></a>
+        <a href="../files/src_passes_bloom.js.html#l150"><code>src\passes\bloom.js:150</code></a>
         </p>
 
 
@@ -422,10 +494,10 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Renders the bloom effect.</p>
-<p>Applies a tone-mapping pass and convolution blur to the readBuffer and
+        <p>Renders the effect.</p>
+<p>Applies a luminance filter and convolution blur to the read buffer and
 renders the result into a seperate render target. The result is additively
-blended with the readBuffer.</p>
+blended with the read buffer.</p>
 
     </div>
 
@@ -447,39 +519,13 @@ blended with the readBuffer.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">buffer</code>
+                        <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The read/write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">delta</code>
-                        <span class="type">Number</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The render delta time.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">maskActive</code>
-                        <span class="type">Boolean</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Disable stencil test.</li>
+<li>The read buffer.</li>
 </ul>
 
                     </div>
@@ -518,7 +564,7 @@ blended with the readBuffer.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l232"><code>src\passes\bloom.js:232</code></a>
+        <a href="../files/src_passes_bloom.js.html#l234"><code>src\passes\bloom.js:234</code></a>
         </p>
 
 
@@ -526,7 +572,7 @@ blended with the readBuffer.</p>
     </div>
 
     <div class="description">
-        <p>Updates this pass with the main render target's size.</p>
+        <p>Updates this pass with the renderer's size.</p>
 
     </div>
 
@@ -582,7 +628,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l140"><code>src\passes\bloom.js:140</code></a>
+        <a href="../files/src_passes_bloom.js.html#l126"><code>src\passes\bloom.js:126</code></a>
         </p>
 
 
@@ -635,7 +681,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l84"><code>src\passes\bloom.js:84</code></a>
+        <a href="../files/src_passes_bloom.js.html#l73"><code>src\passes\bloom.js:73</code></a>
         </p>
 
 
@@ -661,7 +707,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l122"><code>src\passes\bloom.js:122</code></a>
+        <a href="../files/src_passes_bloom.js.html#l109"><code>src\passes\bloom.js:109</code></a>
         </p>
 
 
@@ -687,7 +733,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l96"><code>src\passes\bloom.js:96</code></a>
+        <a href="../files/src_passes_bloom.js.html#l85"><code>src\passes\bloom.js:85</code></a>
         </p>
 
 
@@ -712,7 +758,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l60"><code>src\passes\pass.js:60</code></a>
+        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
         </p>
 
 
@@ -738,7 +784,7 @@ blended with the readBuffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l110"><code>src\passes\bloom.js:110</code></a>
+        <a href="../files/src_passes_bloom.js.html#l97"><code>src\passes\bloom.js:97</code></a>
         </p>
 
 
@@ -749,6 +795,35 @@ blended with the readBuffer.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Indicates whether the read and write buffers should be swapped after this 
+pass has finished rendering.
+
+Set this to true if this pass renders to the write buffer so that a 
+following pass can find the result in the read buffer.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -772,6 +847,7 @@ blended with the readBuffer.</p>
 
     <div class="description">
         The quad mesh to use for rendering.
+
 Assign your shader material to this mesh!
     </div>
 
@@ -825,14 +901,14 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l51"><code>src\passes\bloom.js:51</code></a>
+        <a href="../files/src_passes_bloom.js.html#l50"><code>src\passes\bloom.js:50</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Another render target.</p>
+        <p>A second render target.</p>
 
     </div>
 
@@ -851,7 +927,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l61"><code>src\passes\bloom.js:61</code></a>
+        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
         </p>
 
 
@@ -878,7 +954,7 @@ changing this value.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
         </p>
 
 
@@ -915,32 +991,6 @@ changing this value.</p>
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
-
-
-</div>
-<div id="property_texelSize" class="property item private">
-    <h3 class="name"><code>texelSize</code></h3>
-    <span class="type">Vector2</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l74"><code>src\passes\bloom.js:74</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The texel size for the blur.</p>
-
-    </div>
-
 
 
 </div>

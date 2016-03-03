@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.2</em>
+            <em>API Docs for: 0.3.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -241,6 +241,10 @@
 
                             </li>
                             <li class="index-item method inherited">
+                                <a href="#method_initialise">initialise</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -255,6 +259,10 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property_breakPoint">breakPoint</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
@@ -278,6 +286,10 @@
                             </li>
                             <li class="index-item property">
                                 <a href="#property_mode">mode</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
                             <li class="index-item property">
@@ -320,7 +332,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
+        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
         </p>
 
 
@@ -328,9 +340,8 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose
-method and deletes them. The pass will be inoperative after 
-this method was called!
+        Performs a shallow search for properties that define a dispose method and 
+deletes them. The pass will be inoperative after this method was called!
 
 Disposable objects:
  - render targets
@@ -368,7 +379,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l158"><code>src\passes\glitch.js:158</code></a>
+        <a href="../files/src_passes_glitch.js.html#l168"><code>src\passes\glitch.js:168</code></a>
         </p>
 
 
@@ -419,7 +430,7 @@ generates a simple noise map.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l146"><code>src\passes\glitch.js:146</code></a>
+        <a href="../files/src_passes_glitch.js.html#l156"><code>src\passes\glitch.js:156</code></a>
         </p>
 
 
@@ -435,6 +446,84 @@ generates a simple noise map.</p>
 
 
 </div>
+<div id="method_initialise" class="method item inherited">
+    <h3 class="name"><code>initialise</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>alpha</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Performs advanced initialisation tasks.
+
+By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the 
+appropriate format (RGB or RGBA).
+
+The provided renderer can be used to warm up special off-screen render 
+targets by performing a preliminary render operation.
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The renderer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">alpha</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the renderer uses the alpha channel or not.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
 
@@ -444,7 +533,10 @@ generates a simple noise map.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>buffer</code>
+                        <code>readBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -462,7 +554,7 @@ generates a simple noise map.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l90"><code>src\passes\glitch.js:90</code></a>
+        <a href="../files/src_passes_glitch.js.html#l99"><code>src\passes\glitch.js:99</code></a>
         </p>
 
 
@@ -470,7 +562,7 @@ generates a simple noise map.</p>
     </div>
 
     <div class="description">
-        <p>Renders the scene.</p>
+        <p>Renders the effect.</p>
 
     </div>
 
@@ -492,13 +584,26 @@ generates a simple noise map.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">buffer</code>
+                        <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The read/write buffer.</li>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -534,7 +639,7 @@ generates a simple noise map.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l109"><code>src\passes\pass.js:109</code></a>
+        <a href="../files/src_passes_pass.js.html#l142"><code>src\passes\pass.js:142</code></a>
         </p>
 
 
@@ -542,13 +647,12 @@ generates a simple noise map.</p>
     </div>
 
     <div class="description">
-        Updates this pass with the main render target's size.
+        Updates this pass with the renderer's size.
 
-This is an abstract method that may be overriden in case 
-you want to be informed about the main render size.
+This is an abstract method that may be overriden in case you want to be 
+informed about the main render size.
 
-The effect composer calls this method when the pass is added 
-and when the effect composer is reset.
+The effect composer calls this method when its own size is updated.
     </div>
 
         <div class="params">
@@ -562,7 +666,7 @@ and when the effect composer is reset.
 
                     <div class="param-description">
                         <ul>
-<li>The width.</li>
+<li>The renderer's width.</li>
 </ul>
 
                     </div>
@@ -575,7 +679,7 @@ and when the effect composer is reset.
 
                     <div class="param-description">
                         <ul>
-<li>The height.</li>
+<li>The renderer's height.</li>
 </ul>
 
                     </div>
@@ -600,6 +704,32 @@ and when the effect composer is reset.
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_breakPoint" class="property item private">
+    <h3 class="name"><code>breakPoint</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l83"><code>src\passes\glitch.js:83</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A random break point for the sporadic glitch activation.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -638,7 +768,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l69"><code>src\passes\glitch.js:69</code></a>
+        <a href="../files/src_passes_glitch.js.html#l73"><code>src\passes\glitch.js:73</code></a>
         </p>
 
 
@@ -663,7 +793,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l60"><code>src\passes\pass.js:60</code></a>
+        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
         </p>
 
 
@@ -690,7 +820,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l192"><code>src\passes\glitch.js:192</code></a>
+        <a href="../files/src_passes_glitch.js.html#l202"><code>src\passes\glitch.js:202</code></a>
         </p>
 
 
@@ -717,7 +847,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l23"><code>src\passes\glitch.js:23</code></a>
+        <a href="../files/src_passes_glitch.js.html#l25"><code>src\passes\glitch.js:25</code></a>
         </p>
 
 
@@ -742,7 +872,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l57"><code>src\passes\glitch.js:57</code></a>
+        <a href="../files/src_passes_glitch.js.html#l61"><code>src\passes\glitch.js:61</code></a>
         </p>
 
 
@@ -758,6 +888,35 @@ and when the effect composer is reset.
 
 
 </div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Indicates whether the read and write buffers should be swapped after this 
+pass has finished rendering.
+
+Set this to true if this pass renders to the write buffer so that a 
+following pass can find the result in the read buffer.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
 <div id="property_perturbMap" class="property item">
     <h3 class="name"><code>perturbMap</code></h3>
     <span class="type">Texture</span>
@@ -769,7 +928,7 @@ and when the effect composer is reset.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l33"><code>src\passes\glitch.js:33</code></a>
+        <a href="../files/src_passes_glitch.js.html#l37"><code>src\passes\glitch.js:37</code></a>
         </p>
 
 
@@ -806,6 +965,7 @@ EffectComposer is deleted.</p>
 
     <div class="description">
         The quad mesh to use for rendering.
+
 Assign your shader material to this mesh!
     </div>
 
@@ -832,7 +992,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
         </p>
 
 

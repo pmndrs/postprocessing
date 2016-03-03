@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.2.2</em>
+            <em>API Docs for: 0.3.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -259,6 +259,10 @@
 
                             </li>
                             <li class="index-item method inherited">
+                                <a href="#method_initialise">initialise</a>
+
+                            </li>
+                            <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
 
                             </li>
@@ -283,6 +287,10 @@
                             </li>
                             <li class="index-item property private">
                                 <a href="#property_material">material</a>
+
+                            </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -325,7 +333,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l127"><code>src\passes\pass.js:127</code></a>
+        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
         </p>
 
 
@@ -333,9 +341,8 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose
-method and deletes them. The pass will be inoperative after 
-this method was called!
+        Performs a shallow search for properties that define a dispose method and 
+deletes them. The pass will be inoperative after this method was called!
 
 Disposable objects:
  - render targets
@@ -347,6 +354,84 @@ destroyed. You may, however, use it independently to free memory
 when you are certain that you don't need this pass anymore.
     </div>
 
+
+
+
+</div>
+<div id="method_initialise" class="method item inherited">
+    <h3 class="name"><code>initialise</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>alpha</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        Performs advanced initialisation tasks.
+
+By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the 
+appropriate format (RGB or RGBA).
+
+The provided renderer can be used to warm up special off-screen render 
+targets by performing a preliminary render operation.
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The renderer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">alpha</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the renderer uses the alpha channel or not.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
@@ -381,7 +466,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l62"><code>src\passes\film.js:62</code></a>
+        <a href="../files/src_passes_film.js.html#l59"><code>src\passes\film.js:59</code></a>
         </p>
 
 
@@ -389,7 +474,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Renders the scene.</p>
+        <p>Renders the effect.</p>
 
     </div>
 
@@ -469,7 +554,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l88"><code>src\passes\film.js:88</code></a>
+        <a href="../files/src_passes_film.js.html#l85"><code>src\passes\film.js:85</code></a>
         </p>
 
 
@@ -477,7 +562,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Updates this pass with the main render target's size.</p>
+        <p>Updates this pass with the renderer's size.</p>
 
     </div>
 
@@ -559,7 +644,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l60"><code>src\passes\pass.js:60</code></a>
+        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
         </p>
 
 
@@ -585,7 +670,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_film.js.html#l24"><code>src\passes\film.js:24</code></a>
+        <a href="../files/src_passes_film.js.html#l26"><code>src\passes\film.js:26</code></a>
         </p>
 
 
@@ -596,6 +681,35 @@ when you are certain that you don't need this pass anymore.
 
     </div>
 
+
+
+</div>
+<div id="property_needsSwap" class="property item inherited">
+    <h3 class="name"><code>needsSwap</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        Indicates whether the read and write buffers should be swapped after this 
+pass has finished rendering.
+
+Set this to true if this pass renders to the write buffer so that a 
+following pass can find the result in the read buffer.
+    </div>
+
+        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -619,6 +733,7 @@ when you are certain that you don't need this pass anymore.
 
     <div class="description">
         The quad mesh to use for rendering.
+
 Assign your shader material to this mesh!
     </div>
 
@@ -645,7 +760,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l70"><code>src\passes\pass.js:70</code></a>
+        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
         </p>
 
 
