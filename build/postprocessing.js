@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.3.0 build Mar 03 2016
+ * postprocessing v0.3.1 build Mar 03 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -1207,6 +1207,8 @@
 		 */
 
 		this.copyMaterial = new CopyMaterial();
+		this.copyMaterial.blending = THREE.AdditiveBlending;
+		this.copyMaterial.transparent = true;
 
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
@@ -2067,6 +2069,8 @@
 		 */
 
 		this.copyMaterial = new CopyMaterial();
+		this.copyMaterial.blending = THREE.AdditiveBlending;
+		this.copyMaterial.transparent = true;
 
 		/**
 		 * A material used for masking the scene objects.
