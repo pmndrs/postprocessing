@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.2.2 build Mar 01 2016
+ * postprocessing v0.3.0 build Mar 03 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -191,7 +191,7 @@
 	 * @class ConvolutionMaterial
 	 * @constructor
 	 * @extends ShaderMaterial
-	 * @param {Vector2} texelSize - The absolute screen texel size.
+	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
 
 	function ConvolutionMaterial(texelSize) {
@@ -226,25 +226,25 @@
 		/**
 		 * Scales the kernels.
 		 *
-		 * @property blurriness
+		 * @property scale
 		 * @type Number
 		 * @default 1.0
 		 */
 
-		this.blurriness = 1.0;
+		this.scale = 1.0;
 
 		/**
 		 * The current kernel.
 		 *
-		 * @property i
+		 * @property step
 		 * @type Number
 		 * @private
 		 */
 
-		this.i = 0;
+		this.currentKernel = 0;
 
 		// Set the texel size if already provided.
-		this.setTexelSize(texelSize);
+		if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
 
 	}
 
@@ -255,17 +255,14 @@
 	 * Sets the texel size.
 	 *
 	 * @method setTexelSize
-	 * @param {Vector2} texelSize - The new texel size.
+	 * @param {Number} x - The texel width.
+	 * @param {Number} y - The texel height.
 	 */
 
-	ConvolutionMaterial.prototype.setTexelSize = function(texelSize) {
+	ConvolutionMaterial.prototype.setTexelSize = function(x, y) {
 
-		if(texelSize !== undefined) {
-
-			this.uniforms.texelSize.value.copy(texelSize);
-			this.uniforms.halfTexelSize.value.copy(texelSize).multiplyScalar(0.5);
-
-		}
+		this.uniforms.texelSize.value.set(x, y);
+		this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
 
 	};
 
@@ -278,8 +275,8 @@
 
 	ConvolutionMaterial.prototype.adjustKernel = function() {
 
-		this.uniforms.kernel.value = this.kernels[this.i] * this.blurriness;
-		if(++this.i >= this.kernels.length) { this.i = 0; }
+		this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
+		if(++this.currentKernel >= this.kernels.length) { this.currentKernel = 0; }
 
 	};
 
@@ -606,8 +603,8 @@
 	 * For this mechanism to work properly, please assign your render targets, 
 	 * materials or textures directly to your pass!
 	 *
-	 * You can prevent your disposable objects from being deleted by keeping 
-	 * them inside deeper structures such as arrays or objects.
+	 * You can prevent your disposable objects from being deleted by keeping them 
+	 * inside deeper structures such as arrays or objects.
 	 *
 	 * @class Pass
 	 * @constructor
@@ -642,6 +639,7 @@
 
 		/**
 		 * The quad mesh to use for rendering.
+		 *
 		 * Assign your shader material to this mesh!
 		 *
 		 * @property quad
@@ -653,6 +651,20 @@
 		 */
 
 		this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+
+		/**
+		 * Indicates whether the read and write buffers should be swapped after this 
+		 * pass has finished rendering.
+		 *
+		 * Set this to true if this pass renders to the write buffer so that a 
+		 * following pass can find the result in the read buffer.
+		 *
+		 * @property needsSwap
+		 * @type Boolean
+		 * @default false
+		 */
+
+		this.needsSwap = false;
 
 		/**
 		 * Enabled flag.
@@ -685,16 +697,17 @@
 	}
 
 	/**
-	 * Renders the scene.
+	 * Renders the effect.
 	 *
-	 * This is an abstract method that must be overriden.
+	 * This is an abstract method that must be overridden.
 	 *
 	 * @method render
 	 * @throws {Error} An error is thrown if the method is not overridden.
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - A read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target.
 	 * @param {Number} [delta] - The delta time.
-	 * @param {Boolean} [maskActive] - Indicates whether the stencil test is active or not.
+	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
 
 	Pass.prototype.render = function(renderer, buffer, delta, maskActive) {
@@ -704,17 +717,33 @@
 	};
 
 	/**
-	 * Updates this pass with the main render target's size.
+	 * Performs advanced initialisation tasks.
 	 *
-	 * This is an abstract method that may be overriden in case 
-	 * you want to be informed about the main render size.
+	 * By implementing this abstract method you gain access to the renderer.
+	 * You'll also be able to configure your custom render targets to use the 
+	 * appropriate format (RGB or RGBA).
 	 *
-	 * The effect composer calls this method when the pass is added 
-	 * and when the effect composer is reset.
+	 * The provided renderer can be used to warm up special off-screen render 
+	 * targets by performing a preliminary render operation.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	Pass.prototype.initialise = function(renderer, alpha) {};
+
+	/**
+	 * Updates this pass with the renderer's size.
+	 *
+	 * This is an abstract method that may be overriden in case you want to be 
+	 * informed about the main render size.
+	 *
+	 * The effect composer calls this method when its own size is updated.
 	 *
 	 * @method setSize
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
+	 * @param {Number} width - The renderer's width.
+	 * @param {Number} height - The renderer's height.
 	 * @example
 	 *  this.myRenderTarget.width = width / 2;
 	 */
@@ -722,9 +751,8 @@
 	Pass.prototype.setSize = function(width, height) {};
 
 	/**
-	 * Performs a shallow search for properties that define a dispose
-	 * method and deletes them. The pass will be inoperative after 
-	 * this method was called!
+	 * Performs a shallow search for properties that define a dispose method and 
+	 * deletes them. The pass will be inoperative after this method was called!
 	 *
 	 * Disposable objects:
 	 *  - render targets
@@ -1107,7 +1135,7 @@
 	 * @extends Pass
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
-	 * @param {Number} [options.blurriness=1.0] - The scale of the blur kernels.
+	 * @param {Number} [options.blurriness=1.0] - The scale of the blur.
 	 * @param {Number} [options.strength=1.0] - The bloom strength.
 	 * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
 	 */
@@ -1129,7 +1157,6 @@
 		this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
-			format: THREE.RGBFormat,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
@@ -1137,7 +1164,7 @@
 		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
-		 * Another render target.
+		 * A second render target.
 		 *
 		 * @property renderTargetY
 		 * @type WebGLRenderTarget
@@ -1160,16 +1187,6 @@
 		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
 
 		/**
-		 * The texel size for the blur.
-		 *
-		 * @property texelSize
-		 * @type Vector2
-		 * @private
-		 */
-
-		this.texelSize = new THREE.Vector2();
-
-		/**
 		 * Combine shader material.
 		 *
 		 * @property combineMaterial
@@ -1190,8 +1207,6 @@
 		 */
 
 		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = THREE.AdditiveBlending;
-		this.copyMaterial.transparent = true;
 
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
@@ -1217,7 +1232,6 @@
 
 		this.convolutionMaterial = new ConvolutionMaterial();
 
-		// Set the blur strength.
 		this.blurriness = options.blurriness;
 
 	}
@@ -1235,13 +1249,13 @@
 
 	Object.defineProperty(BloomPass.prototype, "blurriness", {
 
-		get: function() { return this.convolutionMaterial.blurriness; },
+		get: function() { return this.convolutionMaterial.scale; },
 
 		set: function(x) {
 
 			if(typeof x === "number") {
 
-				this.convolutionMaterial.blurriness = x;
+				this.convolutionMaterial.scale = x;
 
 			}
 
@@ -1250,29 +1264,25 @@
 	});
 
 	/**
-	 * Renders the bloom effect.
+	 * Renders the effect.
 	 *
-	 * Applies a tone-mapping pass and convolution blur to the readBuffer and 
+	 * Applies a luminance filter and convolution blur to the read buffer and 
 	 * renders the result into a seperate render target. The result is additively 
-	 * blended with the readBuffer.
+	 * blended with the read buffer.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
-	 * @param {Number} delta - The render delta time.
-	 * @param {Boolean} maskActive - Disable stencil test.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
-	BloomPass.prototype.render = function(renderer, buffer, delta, maskActive) {
+	BloomPass.prototype.render = function(renderer, readBuffer) {
 
-		if(maskActive) { renderer.context.disable(renderer.context.STENCIL_TEST); }
-
-		// Luminance threshold.
+		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
-		this.luminosityMaterial.uniforms.tDiffuse.value = buffer;
+		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
-		// Convolution blur (5 passes).
+		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;
 
 		this.convolutionMaterial.adjustKernel();
@@ -1295,13 +1305,11 @@
 		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
-		if(maskActive) { renderer.context.enable(renderer.context.STENCIL_TEST); }
-
 		// Render original scene with superimposed blur.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = buffer;
+			this.combineMaterial.uniforms.texture1.value = readBuffer;
 			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 			renderer.render(this.scene, this.camera);
@@ -1311,14 +1319,36 @@
 			this.quad.material = this.copyMaterial;
 			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
-			renderer.render(this.scene, this.camera, buffer, false);
+			renderer.render(this.scene, this.camera, readBuffer, false);
 
 		}
 
 	};
 
 	/**
-	 * Updates this pass with the main render target's size.
+	 * Adjusts the format and size of the render targets.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	BloomPass.prototype.initialise = function(renderer, alpha) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
+
+		if(!alpha) {
+
+			this.renderTargetX.texture.format = THREE.RGBFormat;
+			this.renderTargetY.texture.format = THREE.RGBFormat;
+
+		}
+
+	};
+
+	/**
+	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
@@ -1336,8 +1366,7 @@
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
 
-		this.texelSize.set(1.0 / width, 1.0 / height);
-		this.convolutionMaterial.setTexelSize(this.texelSize);
+		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	};
 
@@ -1494,7 +1523,7 @@
 	ClearMaskPass.prototype.constructor = ClearMaskPass;
 
 	/**
-	 * This pass's render method disables the stencil test.
+	 * This pass disables the stencil test.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
@@ -1522,6 +1551,8 @@
 
 		Pass.call(this);
 
+		this.needsSwap = true;
+
 		if(options === undefined) { options = {}; }
 
 		/**
@@ -1537,23 +1568,25 @@
 		if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
 		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
+		this.quad.material = this.material;
+
 	}
 
 	DotScreenPass.prototype = Object.create(Pass.prototype);
 	DotScreenPass.prototype.constructor = DotScreenPass;
 
 	/**
-	 * Renders the scene.
+	 * Renders the effect.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	DotScreenPass.prototype.render = function(renderer, buffer) {
+	DotScreenPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
-		this.material.uniforms.tDiffuse.value = buffer;
-		this.quad.material = this.material;
+		this.material.uniforms.tDiffuse.value = readBuffer;
 
 		if(this.renderToScreen) {
 
@@ -1561,14 +1594,28 @@
 
 		} else {
 
-			renderer.render(this.scene, this.camera, buffer, false);
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
 		}
 
 	};
 
 	/**
-	 * Sets the pattern size relative to the render size.
+	 * Adjusts the size of the effect.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	DotScreenPass.prototype.initialise = function(renderer) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
+
+	};
+
+	/**
+	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
@@ -1602,6 +1649,8 @@
 
 		Pass.call(this);
 
+		this.needsSwap = true;
+
 		if(options === undefined) { options = {}; }
 
 		/**
@@ -1614,13 +1663,11 @@
 
 		this.material = new FilmMaterial();
 
-		if(options !== undefined) {
+		if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
+		if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
+		if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
 
-			if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
-			if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
-			if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
-
-		}
+		this.quad.material = this.material;
 
 		/**
 		 * The amount of scanlines in percent, relative to the screen height.
@@ -1634,16 +1681,13 @@
 
 		this.scanlines = (options.scanlines === undefined) ? 1.0 : options.scanlines;
 
-		// Set the material of the rendering quad once.
-		this.quad.material = this.material;
-
 	}
 
 	FilmPass.prototype = Object.create(Pass.prototype);
 	FilmPass.prototype.constructor = FilmPass;
 
 	/**
-	 * Renders the scene.
+	 * Renders the effect.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
@@ -1651,9 +1695,9 @@
 	 * @param {Number} delta - The render delta time.
 	 */
 
-	FilmPass.prototype.render = function(renderer, buffer, delta) {
+	FilmPass.prototype.render = function(renderer, readBuffer, writeBuffer, delta) {
 
-		this.material.uniforms.tDiffuse.value = buffer;
+		this.material.uniforms.tDiffuse.value = readBuffer;
 		this.material.uniforms.time.value += delta;
 
 		if(this.renderToScreen) {
@@ -1662,14 +1706,14 @@
 
 		} else {
 
-			renderer.render(this.scene, this.camera, buffer, false);
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
 		}
 
 	};
 
 	/**
-	 * Updates this pass with the main render target's size.
+	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
@@ -1697,6 +1741,8 @@
 
 		Pass.call(this);
 
+		this.needsSwap = true;
+
 		if(options === undefined) { options = {}; }
 		if(options.dtSize === undefined) { options.dtSize = 64; }
 
@@ -1709,6 +1755,8 @@
 		 */
 
 		this.material = new GlitchMaterial();
+
+		this.quad.material = this.material;
 
 		/**
 		 * A perturbation map.
@@ -1756,10 +1804,15 @@
 
 		this.counter = 0;
 
-		// Set the material of the rendering quad.
-		this.quad.material = this.material;
+		/**
+		 * A random break point for the sporadic glitch activation.
+		 *
+		 * @property breakPoint
+		 * @type Number
+		 * @private
+		 */
 
-		// Create a new glitch point.
+		this.breakPoint = 0;
 		this.generateTrigger();
 
 	}
@@ -1768,18 +1821,19 @@
 	GlitchPass.prototype.constructor = GlitchPass;
 
 	/**
-	 * Renders the scene.
+	 * Renders the effect.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	GlitchPass.prototype.render = function(renderer, buffer) {
+	GlitchPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
 		let uniforms = this.material.uniforms;
 
-		uniforms.tDiffuse.value = buffer;
+		uniforms.tDiffuse.value = readBuffer;
 		uniforms.seed.value = Math.random();
 		uniforms.active.value = true;
 
@@ -1817,7 +1871,7 @@
 
 		} else {
 
-			renderer.render(this.scene, this.camera, buffer, false);
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
 		}
 
@@ -1840,8 +1894,8 @@
 	 * generates a simple noise map.
 	 *
 	 * @method generatePerturbMap
-	 * @param {Number} size - The texture size.
 	 * @private
+	 * @param {Number} size - The texture size.
 	 */
 
 	GlitchPass.prototype.generatePerturbMap = function(size) {
@@ -1914,6 +1968,21 @@
 		if(options === undefined) { options = {}; }
 
 		/**
+		 * A render target for rendering the masked scene.
+		 *
+		 * @property renderTargetMask
+		 * @type WebGLRenderTarget
+		 * @private
+		 */
+
+		this.renderTargetMask = new THREE.WebGLRenderTarget(1, 1, {
+			minFilter: THREE.LinearFilter,
+			magFilter: THREE.LinearFilter
+		});
+
+		this.renderTargetMask.texture.generateMipmaps = false;
+
+		/**
 		 * A render target.
 		 *
 		 * @property renderTargetX
@@ -1921,17 +1990,12 @@
 		 * @private
 		 */
 
-		this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			format: THREE.RGBFormat,
-			stencilBuffer: false
-		});
-
-		this.renderTargetX.texture.generateMipmaps = false;
+		this.renderTargetX = this.renderTargetMask.clone();
+		this.renderTargetX.stencilBuffer = false;
+		this.renderTargetX.depthBuffer = false;
 
 		/**
-		 * Another render target.
+		 * A second render target.
 		 *
 		 * @property renderTargetY
 		 * @type WebGLRenderTarget
@@ -1939,12 +2003,11 @@
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargetY.depthBuffer = false;
 
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call the reset method of the EffectComposer 
+		 * You need to call the setSize method of the EffectComposer 
 		 * after changing this value.
 		 *
 		 * @property renderTargetY
@@ -1974,16 +2037,6 @@
 		this.screenPosition = new THREE.Vector3();
 
 		/**
-		 * The texel size for the blur.
-		 *
-		 * @property texelSize
-		 * @type Vector2
-		 * @private
-		 */
-
-		this.texelSize = new THREE.Vector2();
-
-		/**
 		 * A convolution blur shader material.
 		 *
 		 * @property convolutionMaterial
@@ -1992,6 +2045,8 @@
 		 */
 
 		this.convolutionMaterial = new ConvolutionMaterial();
+
+		this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
 
 		/**
 		 * A combine shader material used for rendering to screen.
@@ -2012,8 +2067,6 @@
 		 */
 
 		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = THREE.AdditiveBlending;
-		this.copyMaterial.transparent = true;
 
 		/**
 		 * A material used for masking the scene objects.
@@ -2046,7 +2099,7 @@
 		this.intensity = options.intensity;
 
 		/**
-		 * A main scene.
+		 * The main scene.
 		 *
 		 * @property mainScene
 		 * @type Scene
@@ -2063,12 +2116,6 @@
 
 		this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
-		// Swap read and write buffer when done.
-		this.needsSwap = true;
-
-		// Set the blur strength.
-		this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
-
 	}
 
 	GodRaysPass.prototype = Object.create(Pass.prototype);
@@ -2084,13 +2131,13 @@
 
 	Object.defineProperty(GodRaysPass.prototype, "blurriness", {
 
-		get: function() { return this.convolutionMaterial.blurriness; },
+		get: function() { return this.convolutionMaterial.scale; },
 
 		set: function(x) {
 
 			if(typeof x === "number") {
 
-				this.convolutionMaterial.blurriness = x;
+				this.convolutionMaterial.scale = x;
 
 			}
 
@@ -2190,10 +2237,10 @@
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
-	GodRaysPass.prototype.render = function(renderer, buffer) {
+	GodRaysPass.prototype.render = function(renderer, readBuffer) {
 
 		let clearAlpha;
 
@@ -2208,7 +2255,7 @@
 		clearAlpha = renderer.getClearAlpha();
 		renderer.setClearColor(0x000000, 1);
 		//renderer.render(this.mainScene, this.mainCamera, null, true); // Debug.
-		renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
+		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
 		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 		this.mainScene.overrideMaterial = null;
 
@@ -2216,11 +2263,7 @@
 		this.quad.material = this.convolutionMaterial;
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetMask;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
@@ -2234,34 +2277,61 @@
 		this.convolutionMaterial.adjustKernel();
 		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
+
+		this.convolutionMaterial.adjustKernel();
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// God rays pass.
 		this.quad.material = this.godRaysMaterial;
-		this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// Final pass - composite god rays onto colors.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = buffer;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetX;
+			this.combineMaterial.uniforms.texture1.value = readBuffer;
+			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 			renderer.render(this.scene, this.camera);
 
 		} else {
 
 			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
-			renderer.render(this.scene, this.camera, buffer);
+			renderer.render(this.scene, this.camera, readBuffer);
 
 		}
 
 	};
 
 	/**
-	 * Updates this pass with the main render target's size.
+	 * Adjusts the format and size of the render targets.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	GodRaysPass.prototype.initialise = function(renderer, alpha) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
+
+		if(!alpha) {
+
+			this.renderTargetMask.texture.format = THREE.RGBFormat;
+			this.renderTargetX.texture.format = THREE.RGBFormat;
+			this.renderTargetY.texture.format = THREE.RGBFormat;
+
+		}
+
+	};
+
+	/**
+	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
@@ -2276,11 +2346,11 @@
 		if(width <= 0) { width = 1; }
 		if(height <= 0) { height = 1; }
 
+		this.renderTargetMask.setSize(width, height);
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
 
-		this.texelSize.set(1.0 / width, 1.0 / height);
-		this.convolutionMaterial.setTexelSize(this.texelSize);
+		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	};
 
@@ -2324,41 +2394,33 @@
 	MaskPass.prototype.constructor = MaskPass;
 
 	/**
-	 * Renders the scene as a mask into the stencil buffer.
+	 * Renders the scene as a mask by only setting the stencil bits.
+	 * The buffers will both be cleared first.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer containing the result of the previous pass.
+	 * @param {WebGLRenderTarget} readBuffer - The write buffer.
 	 */
 
-	MaskPass.prototype.render = function(renderer, buffer) {
+	MaskPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
 		let ctx = renderer.context;
-		let writeValue, clearValue;
+		let writeValue = this.inverse ? 0 : 1;
+		let clearValue = 1 - writeValue;
 
 		// Don't update color or depth.
 		ctx.colorMask(false, false, false, false);
 		ctx.depthMask(false);
-
-		if(this.inverse) {
-
-			writeValue = 0;
-			clearValue = 1;
-
-		} else {
-
-			writeValue = 1;
-			clearValue = 0;
-
-		}
 
 		ctx.enable(ctx.STENCIL_TEST);
 		ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
 		ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
 		ctx.clearStencil(clearValue);
 
-		// Draw into the stencil buffer.
-		renderer.render(this.scene, this.camera, buffer, this.clear);
+		// Draw the mask into both buffers.
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 		// Re-enable update of color and depth.
 		ctx.colorMask(true, true, true, true);
@@ -2372,7 +2434,7 @@
 
 	/**
 	 * A pass that renders a given scene directly on screen
-	 * or into the readBuffer for further processing.
+	 * or into the read buffer for further processing.
 	 *
 	 * @class RenderPass
 	 * @constructor
@@ -2446,11 +2508,10 @@
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
-	 * @param {Number} delta - The render delta time.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
-	RenderPass.prototype.render = function(renderer, buffer, delta) {
+	RenderPass.prototype.render = function(renderer, readBuffer) {
 
 		let clearAlpha;
 
@@ -2470,7 +2531,7 @@
 
 		} else {
 
-			renderer.render(this.scene, this.camera, buffer, this.clear);
+			renderer.render(this.scene, this.camera, readBuffer, this.clear);
 
 		}
 
@@ -2509,6 +2570,8 @@
 
 		this.material = new CopyMaterial();
 
+		this.quad.material = this.material;
+
 		/**
 		 * The render target.
 		 *
@@ -2542,8 +2605,6 @@
 
 		this.resize = (resize !== undefined) ? resize : true;
 
-		// Set the material of the rendering quad.
-		this.quad.material = this.material;
 
 	}
 
@@ -2551,22 +2612,22 @@
 	SavePass.prototype.constructor = SavePass;
 
 	/**
-	 * Renders the scene.
+	 * Saves the read buffer.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
-	SavePass.prototype.render = function(renderer, buffer) {
+	SavePass.prototype.render = function(renderer, readBuffer) {
 
-		this.material.uniforms.tDiffuse.value = buffer;
+		this.material.uniforms.tDiffuse.value = readBuffer;
 		renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
 	};
 
 	/**
-	 * Updates this pass with the main render target's size.
+	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
@@ -2602,6 +2663,8 @@
 
 		Pass.call(this);
 
+		this.needsSwap = true;
+
 		/**
 		 * The name of the color sampler uniform of the given material.
 		 * The read buffer will be bound to this.
@@ -2622,7 +2685,6 @@
 
 		this.material = (material !== undefined) ? material : null;
 
-		// Set the material of the rendering quad.
 		this.quad.material = this.material;
 
 	}
@@ -2631,18 +2693,18 @@
 	ShaderPass.prototype.constructor = ShaderPass;
 
 	/**
-	 * Renders the scene.
+	 * Renders the effect.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
 	 */
 
-	ShaderPass.prototype.render = function(renderer, buffer) {
+	ShaderPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
 		if(this.material.uniforms[this.textureID] !== undefined) {
 
-			this.material.uniforms[this.textureID].value = buffer;
+			this.material.uniforms[this.textureID].value = readBuffer;
 
 		}
 
@@ -2652,7 +2714,7 @@
 
 		} else {
 
-			renderer.render(this.scene, this.camera, buffer, this.clear);
+			renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 		}
 
@@ -2675,8 +2737,6 @@
 
 	function EffectComposer(renderer, renderTarget) {
 
-		let pixelRatio, width, height, alpha;
-
 		/**
 		 * The renderer.
 		 *
@@ -2688,29 +2748,43 @@
 		this.renderer.autoClear = false;
 
 		/**
-		 * The read/write buffer.
+		 * The read buffer.
 		 *
-		 * @property buffer
+		 * Reading from and writing to the same render target should be avoided. 
+		 * Therefore, two seperate, yet identical buffers are used.
+		 *
+		 * @property readBuffer
 		 * @type WebGLRenderTarget
 		 * @private
 		 */
 
 		if(renderTarget === undefined) {
 
-			pixelRatio = this.renderer.getPixelRatio();
-			width = Math.floor(this.renderer.context.canvas.width / pixelRatio) || 1;
-			height = Math.floor(this.renderer.context.canvas.height / pixelRatio) || 1;
-			alpha = this.renderer.context.getContextAttributes().alpha;
-
-			renderTarget = new THREE.WebGLRenderTarget(width, height, {
-				minFilter: THREE.LinearFilter,
-				magFilter: THREE.LinearFilter,
-				format: alpha ? THREE.RGBAFormat : THREE.RGBFormat
-			});
+			renderTarget = this.createBuffer();
 
 		}
 
-		this.buffer = renderTarget;
+		this.readBuffer = renderTarget;
+
+		/**
+		 * The write buffer.
+		 *
+		 * @property writeBuffer
+		 * @type WebGLRenderTarget
+		 * @private
+		 */
+
+		this.writeBuffer = renderTarget.clone();
+
+		/**
+		 * A copy pass used to copy masked scenes.
+		 *
+		 * @property copyPass
+		 * @type ShaderPass
+		 * @private
+		 */
+
+		this.copyPass = new ShaderPass(new CopyMaterial());
 
 		/**
 		 * The render passes.
@@ -2725,6 +2799,26 @@
 	}
 
 	/**
+	 * Creates a new render target by replicating the renderer's canvas.
+	 *
+	 * @method createBuffer
+	 * @return {WebGLRenderTarget} A fresh render target that equals the renderer's canvas.
+	 */
+
+	EffectComposer.prototype.createBuffer = function() {
+
+		let size = this.renderer.getSize();
+		let alpha = this.renderer.context.getContextAttributes().alpha;
+
+		return new THREE.WebGLRenderTarget(size.width, size.height, {
+			minFilter: THREE.LinearFilter,
+			magFilter: THREE.LinearFilter,
+			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat
+		});
+
+	};
+
+	/**
 	 * Adds a pass, optionally at a specific index.
 	 *
 	 * @method addPass
@@ -2734,19 +2828,15 @@
 
 	EffectComposer.prototype.addPass = function(pass, index) {
 
-		if(this.buffer !== null) {
+		pass.initialise(this.renderer, this.renderer.context.getContextAttributes().alpha);
 
-			pass.setSize(this.buffer.width, this.buffer.height);
+		if(index !== undefined) {
 
-			if(index !== undefined) {
+			this.passes.splice(index, 0, pass);
 
-				this.passes.splice(index, 0, pass);
+		}	else {
 
-			}	else {
-
-				this.passes.push(pass);
-
-			}
+			this.passes.push(pass);
 
 		}
 
@@ -2766,7 +2856,7 @@
 	};
 
 	/**
-	 * Renders all passes in order.
+	 * Renders all enabled passes in the order in which they were added.
 	 *
 	 * @method render
 	 * @param {Number} delta - The time between the last frame and the current one.
@@ -2774,8 +2864,11 @@
 
 	EffectComposer.prototype.render = function(delta) {
 
+		let readBuffer = this.readBuffer;
+		let writeBuffer = this.writeBuffer;
+
 		let maskActive = false;
-		let i, l, pass;
+		let i, l, pass, buffer, ctx;
 
 		for(i = 0, l = this.passes.length; i < l; ++i) {
 
@@ -2783,7 +2876,24 @@
 
 			if(pass.enabled) {
 
-				pass.render(this.renderer, this.buffer, delta, maskActive);
+				pass.render(this.renderer, readBuffer, writeBuffer, delta, maskActive);
+
+				if(pass.needsSwap) {
+
+					if(maskActive) {
+
+						ctx = this.renderer.context;
+						ctx.stencilFunc(ctx.NOTEQUAL, 1, 0xffffffff);
+						this.copyPass.render(this.renderer, readBuffer, writeBuffer, delta);
+						ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
+
+					}
+
+					buffer = readBuffer;
+					readBuffer = writeBuffer;
+					writeBuffer = buffer;
+
+				}
 
 				if(pass instanceof MaskPass) {
 
@@ -2804,11 +2914,11 @@
 	/**
 	 * Sets the size of the render targets and the output canvas.
 	 *
-	 * Every pass will be informed of the new size. It's up to each pass 
-	 * how that information will be handled.
+	 * Every pass will be informed of the new size. It's up to each pass how that 
+	 * information is used.
 	 *
-	 * If no width or height is specified, the render targets and passes 
-	 * will be updated with the current size.
+	 * If no width or height is specified, the render targets and passes will be 
+	 * updated with the current size.
 	 *
 	 * @method setSize
 	 * @param {Number} [width] - The width.
@@ -2819,11 +2929,12 @@
 
 		let i, l;
 
-		if(width === undefined) { width = this.buffer.width; }
-		if(height === undefined) { height = this.buffer.height; }
+		if(width === undefined) { width = this.readBuffer.width; }
+		if(height === undefined) { height = this.readBuffer.height; }
 
 		this.renderer.setSize(width, height);
-		this.buffer.setSize(width, height);
+		this.readBuffer.setSize(width, height);
+		this.writeBuffer.setSize(width, height);
 
 		for(i = 0, l = this.passes.length; i < l; ++i) {
 
@@ -2834,24 +2945,23 @@
 	};
 
 	/**
-	 * Resets this composer by deleting all registered passes 
-	 * and creating a new buffer.
+	 * Resets this composer by deleting all passes and creating new buffers.
 	 *
 	 * @method reset
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
+	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffers will be used.
 	 */
 
 	EffectComposer.prototype.reset = function(renderTarget) {
 
-		this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
+		this.dispose((renderTarget === undefined) ? this.createBuffer() : renderTarget);
 
 	};
 
 	/**
 	 * Destroys all passes and render targets.
 	 *
-	 * This method deallocates all render targets, textures and materials created by the passes.
-	 * It also deletes this composer's frame buffer.
+	 * This method deallocates all render targets, textures and materials created 
+	 * by the passes. It also deletes this composer's frame buffers.
 	 *
 	 * Note: the reset method uses the dispose method internally.
 	 *
@@ -2861,12 +2971,26 @@
 
 	EffectComposer.prototype.dispose = function(renderTarget) {
 
-		this.buffer.dispose();
-		this.buffer = (renderTarget !== undefined) ? renderTarget : null;
+		this.readBuffer.dispose();
+		this.writeBuffer.dispose();
+
+		this.readBuffer = this.writeBuffer = null;
 
 		while(this.passes.length > 0) {
 
 			this.passes.pop().dispose();
+
+		}
+
+		if(renderTarget !== undefined) {
+
+			// Reanimate.
+			this.readBuffer = renderTarget;
+			this.writeBuffer = this.readBuffer.clone();
+
+		} else {
+
+			this.copyPass.dispose();
 
 		}
 
