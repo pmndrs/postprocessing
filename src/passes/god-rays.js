@@ -135,6 +135,8 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.copyMaterial = new CopyMaterial();
+	this.copyMaterial.blending = THREE.AdditiveBlending;
+	this.copyMaterial.transparent = true;
 
 	/**
 	 * A material used for masking the scene objects.

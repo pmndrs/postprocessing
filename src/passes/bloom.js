@@ -91,6 +91,8 @@ export function BloomPass(options) {
 	 */
 
 	this.copyMaterial = new CopyMaterial();
+	this.copyMaterial.blending = THREE.AdditiveBlending;
+	this.copyMaterial.transparent = true;
 
 	if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
