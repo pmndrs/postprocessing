@@ -9,8 +9,8 @@ import THREE from "three";
  * For this mechanism to work properly, please assign your render targets, 
  * materials or textures directly to your pass!
  *
- * You can prevent your disposable objects from being deleted by keeping 
- * them inside deeper structures such as arrays or objects.
+ * You can prevent your disposable objects from being deleted by keeping them 
+ * inside deeper structures such as arrays or objects.
  *
  * @class Pass
  * @constructor
@@ -45,6 +45,7 @@ export function Pass(scene, camera, quad) {
 
 	/**
 	 * The quad mesh to use for rendering.
+	 *
 	 * Assign your shader material to this mesh!
 	 *
 	 * @property quad
@@ -56,6 +57,20 @@ export function Pass(scene, camera, quad) {
 	 */
 
 	this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+
+	/**
+	 * Indicates whether the read and write buffers should be swapped after this 
+	 * pass has finished rendering.
+	 *
+	 * Set this to true if this pass renders to the write buffer so that a 
+	 * following pass can find the result in the read buffer.
+	 *
+	 * @property needsSwap
+	 * @type Boolean
+	 * @default false
+	 */
+
+	this.needsSwap = false;
 
 	/**
 	 * Enabled flag.
@@ -88,16 +103,17 @@ export function Pass(scene, camera, quad) {
 }
 
 /**
- * Renders the scene.
+ * Renders the effect.
  *
- * This is an abstract method that must be overriden.
+ * This is an abstract method that must be overridden.
  *
  * @method render
  * @throws {Error} An error is thrown if the method is not overridden.
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - A read/write buffer.
+ * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
+ * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target.
  * @param {Number} [delta] - The delta time.
- * @param {Boolean} [maskActive] - Indicates whether the stencil test is active or not.
+ * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
  */
 
 Pass.prototype.render = function(renderer, buffer, delta, maskActive) {
@@ -107,17 +123,33 @@ Pass.prototype.render = function(renderer, buffer, delta, maskActive) {
 };
 
 /**
- * Updates this pass with the main render target's size.
+ * Performs advanced initialisation tasks.
  *
- * This is an abstract method that may be overriden in case 
- * you want to be informed about the main render size.
+ * By implementing this abstract method you gain access to the renderer.
+ * You'll also be able to configure your custom render targets to use the 
+ * appropriate format (RGB or RGBA).
  *
- * The effect composer calls this method when the pass is added 
- * and when the effect composer is reset.
+ * The provided renderer can be used to warm up special off-screen render 
+ * targets by performing a preliminary render operation.
+ *
+ * @method initialise
+ * @param {WebGLRenderer} renderer - The renderer.
+ * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+ */
+
+Pass.prototype.initialise = function(renderer, alpha) {};
+
+/**
+ * Updates this pass with the renderer's size.
+ *
+ * This is an abstract method that may be overriden in case you want to be 
+ * informed about the main render size.
+ *
+ * The effect composer calls this method when its own size is updated.
  *
  * @method setSize
- * @param {Number} width - The width.
- * @param {Number} height - The height.
+ * @param {Number} width - The renderer's width.
+ * @param {Number} height - The renderer's height.
  * @example
  *  this.myRenderTarget.width = width / 2;
  */
@@ -125,9 +157,8 @@ Pass.prototype.render = function(renderer, buffer, delta, maskActive) {
 Pass.prototype.setSize = function(width, height) {};
 
 /**
- * Performs a shallow search for properties that define a dispose
- * method and deletes them. The pass will be inoperative after 
- * this method was called!
+ * Performs a shallow search for properties that define a dispose method and 
+ * deletes them. The pass will be inoperative after this method was called!
  *
  * Disposable objects:
  *  - render targets
