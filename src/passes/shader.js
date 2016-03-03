@@ -17,6 +17,8 @@ export function ShaderPass(material, textureID) {
 
 	Pass.call(this);
 
+	this.needsSwap = true;
+
 	/**
 	 * The name of the color sampler uniform of the given material.
 	 * The read buffer will be bound to this.
@@ -37,7 +39,6 @@ export function ShaderPass(material, textureID) {
 
 	this.material = (material !== undefined) ? material : null;
 
-	// Set the material of the rendering quad.
 	this.quad.material = this.material;
 
 }
@@ -46,18 +47,18 @@ ShaderPass.prototype = Object.create(Pass.prototype);
 ShaderPass.prototype.constructor = ShaderPass;
 
 /**
- * Renders the scene.
+ * Renders the effect.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
  * @param {WebGLRenderTarget} buffer - The read/write buffer.
  */
 
-ShaderPass.prototype.render = function(renderer, buffer) {
+ShaderPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
 	if(this.material.uniforms[this.textureID] !== undefined) {
 
-		this.material.uniforms[this.textureID].value = buffer;
+		this.material.uniforms[this.textureID].value = readBuffer;
 
 	}
 
@@ -67,7 +68,7 @@ ShaderPass.prototype.render = function(renderer, buffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, buffer, this.clear);
+		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 	}
 

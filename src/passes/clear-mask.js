@@ -18,7 +18,7 @@ ClearMaskPass.prototype = Object.create(Pass.prototype);
 ClearMaskPass.prototype.constructor = ClearMaskPass;
 
 /**
- * This pass's render method disables the stencil test.
+ * This pass disables the stencil test.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.

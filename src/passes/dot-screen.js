@@ -18,6 +18,8 @@ export function DotScreenPass(options) {
 
 	Pass.call(this);
 
+	this.needsSwap = true;
+
 	if(options === undefined) { options = {}; }
 
 	/**
@@ -33,23 +35,25 @@ export function DotScreenPass(options) {
 	if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
 	if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
 
+	this.quad.material = this.material;
+
 }
 
 DotScreenPass.prototype = Object.create(Pass.prototype);
 DotScreenPass.prototype.constructor = DotScreenPass;
 
 /**
- * Renders the scene.
+ * Renders the effect.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
+ * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  */
 
-DotScreenPass.prototype.render = function(renderer, buffer) {
+DotScreenPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
-	this.material.uniforms.tDiffuse.value = buffer;
-	this.quad.material = this.material;
+	this.material.uniforms.tDiffuse.value = readBuffer;
 
 	if(this.renderToScreen) {
 
@@ -57,14 +61,28 @@ DotScreenPass.prototype.render = function(renderer, buffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, buffer, false);
+		renderer.render(this.scene, this.camera, writeBuffer, false);
 
 	}
 
 };
 
 /**
- * Sets the pattern size relative to the render size.
+ * Adjusts the size of the effect.
+ *
+ * @method initialise
+ * @param {WebGLRenderer} renderer - The renderer.
+ */
+
+DotScreenPass.prototype.initialise = function(renderer) {
+
+	let size = renderer.getSize();
+	this.setSize(size.width, size.height);
+
+};
+
+/**
+ * Updates this pass with the renderer's size.
  *
  * @method setSize
  * @param {Number} width - The width.

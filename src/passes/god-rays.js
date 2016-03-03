@@ -36,6 +36,21 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	if(options === undefined) { options = {}; }
 
 	/**
+	 * A render target for rendering the masked scene.
+	 *
+	 * @property renderTargetMask
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.renderTargetMask = new THREE.WebGLRenderTarget(1, 1, {
+		minFilter: THREE.LinearFilter,
+		magFilter: THREE.LinearFilter
+	});
+
+	this.renderTargetMask.texture.generateMipmaps = false;
+
+	/**
 	 * A render target.
 	 *
 	 * @property renderTargetX
@@ -43,17 +58,12 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 * @private
 	 */
 
-	this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
-		minFilter: THREE.LinearFilter,
-		magFilter: THREE.LinearFilter,
-		format: THREE.RGBFormat,
-		stencilBuffer: false
-	});
-
-	this.renderTargetX.texture.generateMipmaps = false;
+	this.renderTargetX = this.renderTargetMask.clone();
+	this.renderTargetX.stencilBuffer = false;
+	this.renderTargetX.depthBuffer = false;
 
 	/**
-	 * Another render target.
+	 * A second render target.
 	 *
 	 * @property renderTargetY
 	 * @type WebGLRenderTarget
@@ -61,12 +71,11 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.renderTargetY = this.renderTargetX.clone();
-	this.renderTargetY.depthBuffer = false;
 
 	/**
 	 * The resolution scale.
 	 *
-	 * You need to call the reset method of the EffectComposer 
+	 * You need to call the setSize method of the EffectComposer 
 	 * after changing this value.
 	 *
 	 * @property renderTargetY
@@ -96,16 +105,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.screenPosition = new THREE.Vector3();
 
 	/**
-	 * The texel size for the blur.
-	 *
-	 * @property texelSize
-	 * @type Vector2
-	 * @private
-	 */
-
-	this.texelSize = new THREE.Vector2();
-
-	/**
 	 * A convolution blur shader material.
 	 *
 	 * @property convolutionMaterial
@@ -114,6 +113,8 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.convolutionMaterial = new ConvolutionMaterial();
+
+	this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
 
 	/**
 	 * A combine shader material used for rendering to screen.
@@ -134,8 +135,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	 */
 
 	this.copyMaterial = new CopyMaterial();
-	this.copyMaterial.blending = THREE.AdditiveBlending;
-	this.copyMaterial.transparent = true;
 
 	/**
 	 * A material used for masking the scene objects.
@@ -168,7 +167,7 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 	this.intensity = options.intensity;
 
 	/**
-	 * A main scene.
+	 * The main scene.
 	 *
 	 * @property mainScene
 	 * @type Scene
@@ -185,12 +184,6 @@ export function GodRaysPass(scene, camera, lightSource, options) {
 
 	this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
 
-	// Swap read and write buffer when done.
-	this.needsSwap = true;
-
-	// Set the blur strength.
-	this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
-
 }
 
 GodRaysPass.prototype = Object.create(Pass.prototype);
@@ -206,13 +199,13 @@ GodRaysPass.prototype.constructor = GodRaysPass;
 
 Object.defineProperty(GodRaysPass.prototype, "blurriness", {
 
-	get: function() { return this.convolutionMaterial.blurriness; },
+	get: function() { return this.convolutionMaterial.scale; },
 
 	set: function(x) {
 
 		if(typeof x === "number") {
 
-			this.convolutionMaterial.blurriness = x;
+			this.convolutionMaterial.scale = x;
 
 		}
 
@@ -312,10 +305,10 @@ const CLEAR_COLOR = new THREE.Color();
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
+ * @param {WebGLRenderTarget} readBuffer - The read buffer.
  */
 
-GodRaysPass.prototype.render = function(renderer, buffer) {
+GodRaysPass.prototype.render = function(renderer, readBuffer) {
 
 	let clearAlpha;
 
@@ -330,7 +323,7 @@ GodRaysPass.prototype.render = function(renderer, buffer) {
 	clearAlpha = renderer.getClearAlpha();
 	renderer.setClearColor(0x000000, 1);
 	//renderer.render(this.mainScene, this.mainCamera, null, true); // Debug.
-	renderer.render(this.mainScene, this.mainCamera, this.renderTargetX, true);
+	renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
 	renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 	this.mainScene.overrideMaterial = null;
 
@@ -338,11 +331,7 @@ GodRaysPass.prototype.render = function(renderer, buffer) {
 	this.quad.material = this.convolutionMaterial;
 
 	this.convolutionMaterial.adjustKernel();
-	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
-	renderer.render(this.scene, this.camera, this.renderTargetY);
-
-	this.convolutionMaterial.adjustKernel();
-	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetMask;
 	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	this.convolutionMaterial.adjustKernel();
@@ -356,34 +345,61 @@ GodRaysPass.prototype.render = function(renderer, buffer) {
 	this.convolutionMaterial.adjustKernel();
 	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 	renderer.render(this.scene, this.camera, this.renderTargetY);
+
+	this.convolutionMaterial.adjustKernel();
+	this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+	renderer.render(this.scene, this.camera, this.renderTargetX);
 
 	// God rays pass.
 	this.quad.material = this.godRaysMaterial;
-	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetY;
-	renderer.render(this.scene, this.camera, this.renderTargetX);
+	this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+	renderer.render(this.scene, this.camera, this.renderTargetY);
 
 	// Final pass - composite god rays onto colors.
 	if(this.renderToScreen) {
 
 		this.quad.material = this.combineMaterial;
-		this.combineMaterial.uniforms.texture1.value = buffer;
-		this.combineMaterial.uniforms.texture2.value = this.renderTargetX;
+		this.combineMaterial.uniforms.texture1.value = readBuffer;
+		this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 		renderer.render(this.scene, this.camera);
 
 	} else {
 
 		this.quad.material = this.copyMaterial;
-		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
 
-		renderer.render(this.scene, this.camera, buffer);
+		renderer.render(this.scene, this.camera, readBuffer);
 
 	}
 
 };
 
 /**
- * Updates this pass with the main render target's size.
+ * Adjusts the format and size of the render targets.
+ *
+ * @method initialise
+ * @param {WebGLRenderer} renderer - The renderer.
+ * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+ */
+
+GodRaysPass.prototype.initialise = function(renderer, alpha) {
+
+	let size = renderer.getSize();
+	this.setSize(size.width, size.height);
+
+	if(!alpha) {
+
+		this.renderTargetMask.texture.format = THREE.RGBFormat;
+		this.renderTargetX.texture.format = THREE.RGBFormat;
+		this.renderTargetY.texture.format = THREE.RGBFormat;
+
+	}
+
+};
+
+/**
+ * Updates this pass with the renderer's size.
  *
  * @method setSize
  * @param {Number} width - The width.
@@ -398,10 +414,10 @@ GodRaysPass.prototype.setSize = function(width, height) {
 	if(width <= 0) { width = 1; }
 	if(height <= 0) { height = 1; }
 
+	this.renderTargetMask.setSize(width, height);
 	this.renderTargetX.setSize(width, height);
 	this.renderTargetY.setSize(width, height);
 
-	this.texelSize.set(1.0 / width, 1.0 / height);
-	this.convolutionMaterial.setTexelSize(this.texelSize);
+	this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 };

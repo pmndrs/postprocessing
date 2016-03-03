@@ -19,6 +19,8 @@ export function FilmPass(options) {
 
 	Pass.call(this);
 
+	this.needsSwap = true;
+
 	if(options === undefined) { options = {}; }
 
 	/**
@@ -31,13 +33,11 @@ export function FilmPass(options) {
 
 	this.material = new FilmMaterial();
 
-	if(options !== undefined) {
+	if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
+	if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
+	if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
 
-		if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
-		if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
-		if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
-
-	}
+	this.quad.material = this.material;
 
 	/**
 	 * The amount of scanlines in percent, relative to the screen height.
@@ -51,16 +51,13 @@ export function FilmPass(options) {
 
 	this.scanlines = (options.scanlines === undefined) ? 1.0 : options.scanlines;
 
-	// Set the material of the rendering quad once.
-	this.quad.material = this.material;
-
 }
 
 FilmPass.prototype = Object.create(Pass.prototype);
 FilmPass.prototype.constructor = FilmPass;
 
 /**
- * Renders the scene.
+ * Renders the effect.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
@@ -68,9 +65,9 @@ FilmPass.prototype.constructor = FilmPass;
  * @param {Number} delta - The render delta time.
  */
 
-FilmPass.prototype.render = function(renderer, buffer, delta) {
+FilmPass.prototype.render = function(renderer, readBuffer, writeBuffer, delta) {
 
-	this.material.uniforms.tDiffuse.value = buffer;
+	this.material.uniforms.tDiffuse.value = readBuffer;
 	this.material.uniforms.time.value += delta;
 
 	if(this.renderToScreen) {
@@ -79,14 +76,14 @@ FilmPass.prototype.render = function(renderer, buffer, delta) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, buffer, false);
+		renderer.render(this.scene, this.camera, writeBuffer, false);
 
 	}
 
 };
 
 /**
- * Updates this pass with the main render target's size.
+ * Updates this pass with the renderer's size.
  *
  * @method setSize
  * @param {Number} width - The width.

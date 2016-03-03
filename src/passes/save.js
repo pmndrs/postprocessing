@@ -27,6 +27,8 @@ export function SavePass(renderTarget, resize) {
 
 	this.material = new CopyMaterial();
 
+	this.quad.material = this.material;
+
 	/**
 	 * The render target.
 	 *
@@ -60,8 +62,6 @@ export function SavePass(renderTarget, resize) {
 
 	this.resize = (resize !== undefined) ? resize : true;
 
-	// Set the material of the rendering quad.
-	this.quad.material = this.material;
 
 }
 
@@ -69,22 +69,22 @@ SavePass.prototype = Object.create(Pass.prototype);
 SavePass.prototype.constructor = SavePass;
 
 /**
- * Renders the scene.
+ * Saves the read buffer.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
+ * @param {WebGLRenderTarget} readBuffer - The read buffer.
  */
 
-SavePass.prototype.render = function(renderer, buffer) {
+SavePass.prototype.render = function(renderer, readBuffer) {
 
-	this.material.uniforms.tDiffuse.value = buffer;
+	this.material.uniforms.tDiffuse.value = readBuffer;
 	renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
 
 };
 
 /**
- * Updates this pass with the main render target's size.
+ * Updates this pass with the renderer's size.
  *
  * @method setSize
  * @param {Number} width - The width.

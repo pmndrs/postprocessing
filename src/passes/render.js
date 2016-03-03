@@ -3,7 +3,7 @@ import THREE from "three";
 
 /**
  * A pass that renders a given scene directly on screen
- * or into the readBuffer for further processing.
+ * or into the read buffer for further processing.
  *
  * @class RenderPass
  * @constructor
@@ -77,11 +77,10 @@ const CLEAR_COLOR = new THREE.Color();
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
- * @param {Number} delta - The render delta time.
+ * @param {WebGLRenderTarget} readBuffer - The read buffer.
  */
 
-RenderPass.prototype.render = function(renderer, buffer, delta) {
+RenderPass.prototype.render = function(renderer, readBuffer) {
 
 	let clearAlpha;
 
@@ -101,7 +100,7 @@ RenderPass.prototype.render = function(renderer, buffer, delta) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, buffer, this.clear);
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
 
 	}
 

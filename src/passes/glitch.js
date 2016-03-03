@@ -17,6 +17,8 @@ export function GlitchPass(options) {
 
 	Pass.call(this);
 
+	this.needsSwap = true;
+
 	if(options === undefined) { options = {}; }
 	if(options.dtSize === undefined) { options.dtSize = 64; }
 
@@ -29,6 +31,8 @@ export function GlitchPass(options) {
 	 */
 
 	this.material = new GlitchMaterial();
+
+	this.quad.material = this.material;
 
 	/**
 	 * A perturbation map.
@@ -76,10 +80,15 @@ export function GlitchPass(options) {
 
 	this.counter = 0;
 
-	// Set the material of the rendering quad.
-	this.quad.material = this.material;
+	/**
+	 * A random break point for the sporadic glitch activation.
+	 *
+	 * @property breakPoint
+	 * @type Number
+	 * @private
+	 */
 
-	// Create a new glitch point.
+	this.breakPoint = 0;
 	this.generateTrigger();
 
 }
@@ -88,18 +97,19 @@ GlitchPass.prototype = Object.create(Pass.prototype);
 GlitchPass.prototype.constructor = GlitchPass;
 
 /**
- * Renders the scene.
+ * Renders the effect.
  *
  * @method render
  * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
+ * @param {WebGLRenderTarget} readBuffer - The read buffer.
+ * @param {WebGLRenderTarget} writeBuffer - The write buffer.
  */
 
-GlitchPass.prototype.render = function(renderer, buffer) {
+GlitchPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
 
 	let uniforms = this.material.uniforms;
 
-	uniforms.tDiffuse.value = buffer;
+	uniforms.tDiffuse.value = readBuffer;
 	uniforms.seed.value = Math.random();
 	uniforms.active.value = true;
 
@@ -137,7 +147,7 @@ GlitchPass.prototype.render = function(renderer, buffer) {
 
 	} else {
 
-		renderer.render(this.scene, this.camera, buffer, false);
+		renderer.render(this.scene, this.camera, writeBuffer, false);
 
 	}
 
@@ -160,8 +170,8 @@ GlitchPass.prototype.generateTrigger = function() {
  * generates a simple noise map.
  *
  * @method generatePerturbMap
- * @param {Number} size - The texture size.
  * @private
+ * @param {Number} size - The texture size.
  */
 
 GlitchPass.prototype.generatePerturbMap = function(size) {
