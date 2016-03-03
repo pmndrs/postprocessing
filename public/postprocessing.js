@@ -1,5 +1,5 @@
 /**
- * postprocessing v0.3.1 build Mar 03 2016
+ * postprocessing v0.3.2 build Mar 03 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -1711,6 +1711,20 @@
 			renderer.render(this.scene, this.camera, writeBuffer, false);
 
 		}
+
+	};
+
+	/**
+	 * Adjusts the scanlines to the render height.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	FilmPass.prototype.initialise = function(renderer) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
 
 	};
 
