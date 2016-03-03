@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.3.1",
+        "version": "0.3.2",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1861,6 +1861,22 @@
         {
             "file": "src\\passes\\film.js",
             "line": 85,
+            "description": "Adjusts the scanlines to the render height.",
+            "itemtype": "method",
+            "name": "initialise",
+            "params": [
+                {
+                    "name": "renderer",
+                    "description": "- The renderer.",
+                    "type": "WebGLRenderer"
+                }
+            ],
+            "class": "FilmPass",
+            "module": "postprocessing"
+        },
+        {
+            "file": "src\\passes\\film.js",
+            "line": 99,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",

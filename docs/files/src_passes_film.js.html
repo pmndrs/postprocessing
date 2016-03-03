@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.1</em>
+            <em>API Docs for: 0.3.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -188,6 +188,20 @@ FilmPass.prototype.render = function(renderer, readBuffer, writeBuffer, delta) {
 		renderer.render(this.scene, this.camera, writeBuffer, false);
 
 	}
+
+};
+
+/**
+ * Adjusts the scanlines to the render height.
+ *
+ * @method initialise
+ * @param {WebGLRenderer} renderer - The renderer.
+ */
+
+FilmPass.prototype.initialise = function(renderer) {
+
+	let size = renderer.getSize();
+	this.setSize(size.width, size.height);
 
 };
 

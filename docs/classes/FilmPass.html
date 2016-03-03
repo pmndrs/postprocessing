@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.1</em>
+            <em>API Docs for: 0.3.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -358,16 +358,13 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="method_initialise" class="method item inherited">
+<div id="method_initialise" class="method item">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
                         <code>renderer</code>
-                </li>
-                <li class="arg">
-                        <code>alpha</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -380,9 +377,12 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_film.js.html#l85"><code>src\passes\film.js:85</code></a>
         </p>
 
 
@@ -390,14 +390,8 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Performs advanced initialisation tasks.
+        <p>Adjusts the scanlines to the render height.</p>
 
-By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the 
-appropriate format (RGB or RGBA).
-
-The provided renderer can be used to warm up special off-screen render 
-targets by performing a preliminary render operation.
     </div>
 
         <div class="params">
@@ -412,19 +406,6 @@ targets by performing a preliminary render operation.
                     <div class="param-description">
                         <ul>
 <li>The renderer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">alpha</code>
-                        <span class="type">Boolean</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Whether the renderer uses the alpha channel or not.</li>
 </ul>
 
                     </div>
@@ -554,7 +535,7 @@ targets by performing a preliminary render operation.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l85"><code>src\passes\film.js:85</code></a>
+        <a href="../files/src_passes_film.js.html#l99"><code>src\passes\film.js:99</code></a>
         </p>
 
 
