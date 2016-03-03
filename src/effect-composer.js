@@ -1,4 +1,10 @@
-import { MaskPass, ClearMaskPass } from "./passes";
+import {
+	ClearMaskPass,
+	MaskPass,
+	ShaderPass
+} from "./passes";
+
+import { CopyMaterial } from "./materials";
 import THREE from "three";
 
 /**
@@ -18,8 +24,6 @@ import THREE from "three";
 
 export function EffectComposer(renderer, renderTarget) {
 
-	let pixelRatio, width, height, alpha;
-
 	/**
 	 * The renderer.
 	 *
@@ -31,29 +35,43 @@ export function EffectComposer(renderer, renderTarget) {
 	this.renderer.autoClear = false;
 
 	/**
-	 * The read/write buffer.
+	 * The read buffer.
 	 *
-	 * @property buffer
+	 * Reading from and writing to the same render target should be avoided. 
+	 * Therefore, two seperate, yet identical buffers are used.
+	 *
+	 * @property readBuffer
 	 * @type WebGLRenderTarget
 	 * @private
 	 */
 
 	if(renderTarget === undefined) {
 
-		pixelRatio = this.renderer.getPixelRatio();
-		width = Math.floor(this.renderer.context.canvas.width / pixelRatio) || 1;
-		height = Math.floor(this.renderer.context.canvas.height / pixelRatio) || 1;
-		alpha = this.renderer.context.getContextAttributes().alpha;
-
-		renderTarget = new THREE.WebGLRenderTarget(width, height, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat
-		});
+		renderTarget = this.createBuffer();
 
 	}
 
-	this.buffer = renderTarget;
+	this.readBuffer = renderTarget;
+
+	/**
+	 * The write buffer.
+	 *
+	 * @property writeBuffer
+	 * @type WebGLRenderTarget
+	 * @private
+	 */
+
+	this.writeBuffer = renderTarget.clone();
+
+	/**
+	 * A copy pass used to copy masked scenes.
+	 *
+	 * @property copyPass
+	 * @type ShaderPass
+	 * @private
+	 */
+
+	this.copyPass = new ShaderPass(new CopyMaterial());
 
 	/**
 	 * The render passes.
@@ -68,6 +86,26 @@ export function EffectComposer(renderer, renderTarget) {
 }
 
 /**
+ * Creates a new render target by replicating the renderer's canvas.
+ *
+ * @method createBuffer
+ * @return {WebGLRenderTarget} A fresh render target that equals the renderer's canvas.
+ */
+
+EffectComposer.prototype.createBuffer = function() {
+
+	let size = this.renderer.getSize();
+	let alpha = this.renderer.context.getContextAttributes().alpha;
+
+	return new THREE.WebGLRenderTarget(size.width, size.height, {
+		minFilter: THREE.LinearFilter,
+		magFilter: THREE.LinearFilter,
+		format: alpha ? THREE.RGBAFormat : THREE.RGBFormat
+	});
+
+};
+
+/**
  * Adds a pass, optionally at a specific index.
  *
  * @method addPass
@@ -77,19 +115,15 @@ export function EffectComposer(renderer, renderTarget) {
 
 EffectComposer.prototype.addPass = function(pass, index) {
 
-	if(this.buffer !== null) {
+	pass.initialise(this.renderer, this.renderer.context.getContextAttributes().alpha);
 
-		pass.setSize(this.buffer.width, this.buffer.height);
+	if(index !== undefined) {
 
-		if(index !== undefined) {
+		this.passes.splice(index, 0, pass);
 
-			this.passes.splice(index, 0, pass);
+	}	else {
 
-		}	else {
-
-			this.passes.push(pass);
-
-		}
+		this.passes.push(pass);
 
 	}
 
@@ -109,7 +143,7 @@ EffectComposer.prototype.removePass = function(pass) {
 };
 
 /**
- * Renders all passes in order.
+ * Renders all enabled passes in the order in which they were added.
  *
  * @method render
  * @param {Number} delta - The time between the last frame and the current one.
@@ -117,8 +151,11 @@ EffectComposer.prototype.removePass = function(pass) {
 
 EffectComposer.prototype.render = function(delta) {
 
+	let readBuffer = this.readBuffer;
+	let writeBuffer = this.writeBuffer;
+
 	let maskActive = false;
-	let i, l, pass;
+	let i, l, pass, buffer, ctx;
 
 	for(i = 0, l = this.passes.length; i < l; ++i) {
 
@@ -126,7 +163,24 @@ EffectComposer.prototype.render = function(delta) {
 
 		if(pass.enabled) {
 
-			pass.render(this.renderer, this.buffer, delta, maskActive);
+			pass.render(this.renderer, readBuffer, writeBuffer, delta, maskActive);
+
+			if(pass.needsSwap) {
+
+				if(maskActive) {
+
+					ctx = this.renderer.context;
+					ctx.stencilFunc(ctx.NOTEQUAL, 1, 0xffffffff);
+					this.copyPass.render(this.renderer, readBuffer, writeBuffer, delta);
+					ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
+
+				}
+
+				buffer = readBuffer;
+				readBuffer = writeBuffer;
+				writeBuffer = buffer;
+
+			}
 
 			if(pass instanceof MaskPass) {
 
@@ -147,11 +201,11 @@ EffectComposer.prototype.render = function(delta) {
 /**
  * Sets the size of the render targets and the output canvas.
  *
- * Every pass will be informed of the new size. It's up to each pass 
- * how that information will be handled.
+ * Every pass will be informed of the new size. It's up to each pass how that 
+ * information is used.
  *
- * If no width or height is specified, the render targets and passes 
- * will be updated with the current size.
+ * If no width or height is specified, the render targets and passes will be 
+ * updated with the current size.
  *
  * @method setSize
  * @param {Number} [width] - The width.
@@ -162,11 +216,12 @@ EffectComposer.prototype.setSize = function(width, height) {
 
 	let i, l;
 
-	if(width === undefined) { width = this.buffer.width; }
-	if(height === undefined) { height = this.buffer.height; }
+	if(width === undefined) { width = this.readBuffer.width; }
+	if(height === undefined) { height = this.readBuffer.height; }
 
 	this.renderer.setSize(width, height);
-	this.buffer.setSize(width, height);
+	this.readBuffer.setSize(width, height);
+	this.writeBuffer.setSize(width, height);
 
 	for(i = 0, l = this.passes.length; i < l; ++i) {
 
@@ -177,24 +232,23 @@ EffectComposer.prototype.setSize = function(width, height) {
 };
 
 /**
- * Resets this composer by deleting all registered passes 
- * and creating a new buffer.
+ * Resets this composer by deleting all passes and creating new buffers.
  *
  * @method reset
- * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffer will be used.
+ * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffers will be used.
  */
 
 EffectComposer.prototype.reset = function(renderTarget) {
 
-	this.dispose((renderTarget === undefined) ? this.buffer.clone() : renderTarget);
+	this.dispose((renderTarget === undefined) ? this.createBuffer() : renderTarget);
 
 };
 
 /**
  * Destroys all passes and render targets.
  *
- * This method deallocates all render targets, textures and materials created by the passes.
- * It also deletes this composer's frame buffer.
+ * This method deallocates all render targets, textures and materials created 
+ * by the passes. It also deletes this composer's frame buffers.
  *
  * Note: the reset method uses the dispose method internally.
  *
@@ -204,12 +258,26 @@ EffectComposer.prototype.reset = function(renderTarget) {
 
 EffectComposer.prototype.dispose = function(renderTarget) {
 
-	this.buffer.dispose();
-	this.buffer = (renderTarget !== undefined) ? renderTarget : null;
+	this.readBuffer.dispose();
+	this.writeBuffer.dispose();
+
+	this.readBuffer = this.writeBuffer = null;
 
 	while(this.passes.length > 0) {
 
 		this.passes.pop().dispose();
+
+	}
+
+	if(renderTarget !== undefined) {
+
+		// Reanimate.
+		this.readBuffer = renderTarget;
+		this.writeBuffer = this.readBuffer.clone();
+
+	} else {
+
+		this.copyPass.dispose();
 
 	}
 
