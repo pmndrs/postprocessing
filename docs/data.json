@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1520,7 +1520,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 97,
+            "line": 99,
             "description": "Luminance shader material.",
             "itemtype": "property",
             "name": "luminosityMaterial",
@@ -1532,7 +1532,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 109,
+            "line": 111,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1544,7 +1544,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 126,
+            "line": 128,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -1555,7 +1555,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 150,
+            "line": 152,
             "description": "Renders the effect.\n\nApplies a luminance filter and convolution blur to the read buffer and \nrenders the result into a seperate render target. The result is additively \nblended with the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -1576,7 +1576,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 212,
+            "line": 214,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -1597,7 +1597,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 234,
+            "line": 236,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2109,7 +2109,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 139,
+            "line": 141,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2121,7 +2121,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 149,
+            "line": 151,
             "description": "God rays shader material.",
             "itemtype": "property",
             "name": "godRaysMaterial",
@@ -2133,7 +2133,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 169,
+            "line": 171,
             "description": "The main scene.",
             "itemtype": "property",
             "name": "mainScene",
@@ -2143,7 +2143,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 178,
+            "line": 180,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
@@ -2153,7 +2153,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 192,
+            "line": 194,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -2164,7 +2164,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 216,
+            "line": 218,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2175,7 +2175,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 241,
+            "line": 243,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!",
             "itemtype": "property",
             "name": "samples",
@@ -2186,7 +2186,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 276,
+            "line": 278,
             "description": "Used for saving the original clear color \nduring the rendering process of the masked scene.",
             "itemtype": "property",
             "name": "CLEAR_COLOR",
@@ -2199,7 +2199,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 288,
+            "line": 290,
             "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPrelminiary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
@@ -2220,7 +2220,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 378,
+            "line": 380,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2241,7 +2241,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 401,
+            "line": 403,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
