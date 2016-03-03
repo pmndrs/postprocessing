@@ -17,7 +17,7 @@ import THREE from "three";
  * @class ConvolutionMaterial
  * @constructor
  * @extends ShaderMaterial
- * @param {Vector2} texelSize - The absolute screen texel size.
+ * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
 export function ConvolutionMaterial(texelSize) {
@@ -52,25 +52,25 @@ export function ConvolutionMaterial(texelSize) {
 	/**
 	 * Scales the kernels.
 	 *
-	 * @property blurriness
+	 * @property scale
 	 * @type Number
 	 * @default 1.0
 	 */
 
-	this.blurriness = 1.0;
+	this.scale = 1.0;
 
 	/**
 	 * The current kernel.
 	 *
-	 * @property i
+	 * @property step
 	 * @type Number
 	 * @private
 	 */
 
-	this.i = 0;
+	this.currentKernel = 0;
 
 	// Set the texel size if already provided.
-	this.setTexelSize(texelSize);
+	if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
 
 }
 
@@ -81,17 +81,14 @@ ConvolutionMaterial.prototype.constructor = ConvolutionMaterial;
  * Sets the texel size.
  *
  * @method setTexelSize
- * @param {Vector2} texelSize - The new texel size.
+ * @param {Number} x - The texel width.
+ * @param {Number} y - The texel height.
  */
 
-ConvolutionMaterial.prototype.setTexelSize = function(texelSize) {
+ConvolutionMaterial.prototype.setTexelSize = function(x, y) {
 
-	if(texelSize !== undefined) {
-
-		this.uniforms.texelSize.value.copy(texelSize);
-		this.uniforms.halfTexelSize.value.copy(texelSize).multiplyScalar(0.5);
-
-	}
+	this.uniforms.texelSize.value.set(x, y);
+	this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
 
 };
 
@@ -104,7 +101,7 @@ ConvolutionMaterial.prototype.setTexelSize = function(texelSize) {
 
 ConvolutionMaterial.prototype.adjustKernel = function() {
 
-	this.uniforms.kernel.value = this.kernels[this.i] * this.blurriness;
-	if(++this.i >= this.kernels.length) { this.i = 0; }
+	this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
+	if(++this.currentKernel >= this.kernels.length) { this.currentKernel = 0; }
 
 };
