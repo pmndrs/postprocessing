@@ -83,6 +83,20 @@ FilmPass.prototype.render = function(renderer, readBuffer, writeBuffer, delta) {
 };
 
 /**
+ * Adjusts the scanlines to the render height.
+ *
+ * @method initialise
+ * @param {WebGLRenderer} renderer - The renderer.
+ */
+
+FilmPass.prototype.initialise = function(renderer) {
+
+	let size = renderer.getSize();
+	this.setSize(size.width, size.height);
+
+};
+
+/**
  * Updates this pass with the renderer's size.
  *
  * @method setSize
