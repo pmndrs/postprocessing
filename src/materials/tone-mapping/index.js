@@ -10,26 +10,27 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function ToneMappingMaterial() {
+export class ToneMappingMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			luminanceMap: {type: "t", value: null},
-			averageLuminance: {type: "f", value: 1.0},
-			maxLuminance: {type: "f", value: 16.0},
-			middleGrey: {type: "f", value: 0.6}
+			uniforms: {
 
-		},
+				tDiffuse: {type: "t", value: null},
+				luminanceMap: {type: "t", value: null},
+				averageLuminance: {type: "f", value: 1.0},
+				maxLuminance: {type: "f", value: 16.0},
+				middleGrey: {type: "f", value: 0.6}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;

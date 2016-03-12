@@ -7,7 +7,7 @@
 export { EffectComposer } from "./effect-composer";
 
 export {
-	AdaptiveToneMappingPass,
+	ToneMappingPass,
 	BloomPass,
 	BokehPass,
 	ClearMaskPass,

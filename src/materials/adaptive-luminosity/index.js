@@ -9,31 +9,32 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function AdaptiveLuminosityMaterial() {
+export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		defines: {
+		super({
 
-			MIP_LEVEL_1X1: 0.0
+			defines: {
 
-		},
+				MIP_LEVEL_1X1: "0.0"
 
-		uniforms: {
+			},
 
-			lastLum: {type: "t", value: null},
-			currentLum: {type: "t", value: null},
-			delta: {type: "f", value: 0.016},
-			tau: {type: "f", value: 1.0}
+			uniforms: {
 
-		},
+				tPreviousLum: {type: "t", value: null},
+				tCurrentLum: {type: "t", value: null},
+				delta: {type: "f", value: 0.0},
+				tau: {type: "f", value: 1.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-AdaptiveLuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-AdaptiveLuminosityMaterial.prototype.constructor = AdaptiveLuminosityMaterial;
