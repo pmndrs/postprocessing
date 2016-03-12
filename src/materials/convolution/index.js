@@ -20,88 +20,89 @@ import THREE from "three";
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export function ConvolutionMaterial(texelSize) {
+export class ConvolutionMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(texelSize) {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			texelSize: {type: "v2", value: new THREE.Vector2()},
-			halfTexelSize: {type: "v2", value: new THREE.Vector2()},
-			kernel: {type: "f", value: 0.0}
+			uniforms: {
 
-		},
+				tDiffuse: {type: "t", value: null},
+				texelSize: {type: "v2", value: new THREE.Vector2()},
+				halfTexelSize: {type: "v2", value: new THREE.Vector2()},
+				kernel: {type: "f", value: 0.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+		/**
+		 * The Kawase blur kernels for five consecutive convolution passes.
+		 * The result matches the 35x35 Gauss filter.
+		 *
+		 * @property kernels
+		 * @type Number
+		 * @private
+		 */
+
+		this.kernels = new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]);
+
+		/**
+		 * Scales the kernels.
+		 *
+		 * @property scale
+		 * @type Number
+		 * @default 1.0
+		 */
+
+		this.scale = 1.0;
+
+		/**
+		 * The current kernel.
+		 *
+		 * @property currentKernel
+		 * @type Number
+		 * @private
+		 */
+
+		this.currentKernel = 0;
+
+		// Set the texel size if already provided.
+		if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
+
+	}
 
 	/**
-	 * The Kawase blur kernels for five consecutive convolution passes.
-	 * The result matches the 35x35 Gauss filter.
+	 * Sets the texel size.
 	 *
-	 * @property kernels
-	 * @type Number
-	 * @private
+	 * @method setTexelSize
+	 * @param {Number} x - The texel width.
+	 * @param {Number} y - The texel height.
 	 */
 
-	this.kernels = new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]);
+	setTexelSize(x, y) {
+
+		this.uniforms.texelSize.value.set(x, y);
+		this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
+
+	}
 
 	/**
-	 * Scales the kernels.
+	 * Adjusts the kernel for the next blur pass.
+	 * Call this method before each render iteration.
 	 *
-	 * @property scale
-	 * @type Number
-	 * @default 1.0
+	 * @method adjustKernel
 	 */
 
-	this.scale = 1.0;
+	adjustKernel() {
 
-	/**
-	 * The current kernel.
-	 *
-	 * @property step
-	 * @type Number
-	 * @private
-	 */
+		this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
+		if(++this.currentKernel >= this.kernels.length) { this.currentKernel = 0; }
 
-	this.currentKernel = 0;
-
-	// Set the texel size if already provided.
-	if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
+	}
 
 }
-
-ConvolutionMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-ConvolutionMaterial.prototype.constructor = ConvolutionMaterial;
-
-/**
- * Sets the texel size.
- *
- * @method setTexelSize
- * @param {Number} x - The texel width.
- * @param {Number} y - The texel height.
- */
-
-ConvolutionMaterial.prototype.setTexelSize = function(x, y) {
-
-	this.uniforms.texelSize.value.set(x, y);
-	this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
-
-};
-
-/**
- * Adjusts the kernel for the next blur pass.
- * Call this method before each render iteration.
- *
- * @method adjustKernel
- */
-
-ConvolutionMaterial.prototype.adjustKernel = function() {
-
-	this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
-	if(++this.currentKernel >= this.kernels.length) { this.currentKernel = 0; }
-
-};

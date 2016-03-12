@@ -15,97 +15,98 @@ import THREE from "three";
  * @param {Number} [options.scanlines=1.0] - The number of scanlines in percent, relative to the screen height.
  */
 
-export function FilmPass(options) {
+export class FilmPass extends Pass {
 
-	Pass.call(this);
+	constructor(options) {
 
-	this.needsSwap = true;
+		super();
 
-	if(options === undefined) { options = {}; }
+		this.needsSwap = true;
 
-	/**
-	 * Film shader material.
-	 *
-	 * @property material
-	 * @type FilmMaterial
-	 * @private
-	 */
+		if(options === undefined) { options = {}; }
 
-	this.material = new FilmMaterial();
+		/**
+		 * Film shader material.
+		 *
+		 * @property material
+		 * @type FilmMaterial
+		 * @private
+		 */
 
-	if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
-	if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
-	if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
+		this.material = new FilmMaterial();
 
-	this.quad.material = this.material;
+		if(options.grayscale !== undefined) { this.material.uniforms.grayscale.value = options.grayscale; }
+		if(options.noiseIntensity !== undefined) { this.material.uniforms.nIntensity.value = options.noiseIntensity; }
+		if(options.scanlinesIntensity !== undefined) { this.material.uniforms.sIntensity.value = options.scanlinesIntensity; }
 
-	/**
-	 * The amount of scanlines in percent, relative to the screen height.
-	 *
-	 * You need to call the reset method of the EffectComposer after 
-	 * changing this value.
-	 *
-	 * @property scanlines
-	 * @type Number
-	 */
+		this.quad.material = this.material;
 
-	this.scanlines = (options.scanlines === undefined) ? 1.0 : options.scanlines;
+		/**
+		 * The amount of scanlines in percent, relative to the screen height.
+		 *
+		 * You need to call the reset method of the EffectComposer after 
+		 * changing this value.
+		 *
+		 * @property scanlines
+		 * @type Number
+		 */
 
-}
-
-FilmPass.prototype = Object.create(Pass.prototype);
-FilmPass.prototype.constructor = FilmPass;
-
-/**
- * Renders the effect.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} buffer - The read/write buffer.
- * @param {Number} delta - The render delta time.
- */
-
-FilmPass.prototype.render = function(renderer, readBuffer, writeBuffer, delta) {
-
-	this.material.uniforms.tDiffuse.value = readBuffer;
-	this.material.uniforms.time.value += delta;
-
-	if(this.renderToScreen) {
-
-		renderer.render(this.scene, this.camera);
-
-	} else {
-
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		this.scanlines = (options.scanlines === undefined) ? 1.0 : options.scanlines;
 
 	}
 
-};
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {Number} delta - The render delta time.
+	 */
 
-/**
- * Adjusts the scanlines to the render height.
- *
- * @method initialise
- * @param {WebGLRenderer} renderer - The renderer.
- */
+	render(renderer, readBuffer, writeBuffer, delta) {
 
-FilmPass.prototype.initialise = function(renderer) {
+		this.material.uniforms.tDiffuse.value = readBuffer;
+		this.material.uniforms.time.value += delta;
 
-	let size = renderer.getSize();
-	this.setSize(size.width, size.height);
+		if(this.renderToScreen) {
 
-};
+			renderer.render(this.scene, this.camera);
 
-/**
- * Updates this pass with the renderer's size.
- *
- * @method setSize
- * @param {Number} width - The width.
- * @param {Number} height - The height.
- */
+		} else {
 
-FilmPass.prototype.setSize = function(width, height) {
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
-	this.material.uniforms.sCount.value = Math.round(height * this.scanlines);
+		}
 
-};
+	}
+
+	/**
+	 * Adjusts the scanlines to the render height.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	initialise(renderer) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
+
+	}
+
+	/**
+	 * Updates this pass with the renderer's size.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.material.uniforms.sCount.value = Math.round(height * this.scanlines);
+
+	}
+
+}

@@ -10,34 +10,35 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function GlitchMaterial() {
+export class GlitchMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			tPerturb: {type: "t", value: null},
+			uniforms: {
 
-			active: {type: "i", value: 1},
+				tDiffuse: {type: "t", value: null},
+				tPerturb: {type: "t", value: null},
 
-			amount: {type: "f", value: 0.8},
-			angle: {type: "f", value: 0.02},
-			seed: {type: "f", value: 0.02},
-			seedX: {type: "f", value: 0.02},
-			seedY: {type: "f", value: 0.02},
-			distortionX: {type: "f", value: 0.5},
-			distortionY: {type: "f", value: 0.6},
-			colS: {type: "f", value: 0.05}
+				active: {type: "i", value: 1},
 
-		},
+				amount: {type: "f", value: 0.8},
+				angle: {type: "f", value: 0.02},
+				seed: {type: "f", value: 0.02},
+				seedX: {type: "f", value: 0.02},
+				seedY: {type: "f", value: 0.02},
+				distortionX: {type: "f", value: 0.5},
+				distortionY: {type: "f", value: 0.6},
+				colS: {type: "f", value: 0.05}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-GlitchMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-GlitchMaterial.prototype.constructor = GlitchMaterial;

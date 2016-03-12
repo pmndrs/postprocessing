@@ -9,23 +9,24 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function CopyMaterial() {
+export class CopyMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			opacity: {type: "f", value: 1.0}
+			uniforms: {
 
-		},
+				tDiffuse: {type: "t", value: null},
+				opacity: {type: "f", value: 1.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-CopyMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-CopyMaterial.prototype.constructor = CopyMaterial;

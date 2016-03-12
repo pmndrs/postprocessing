@@ -25,27 +25,28 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function FilmMaterial() {
+export class FilmMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			time: {type: "f", value: 0.0},
-			nIntensity: {type: "f", value: 0.5},
-			sIntensity: {type: "f", value: 0.05},
-			sCount: {type: "f", value: 4096.0},
-			grayscale: {type: "i", value: 1}
+			uniforms: {
 
-		},
+				tDiffuse: {type: "t", value: null},
+				time: {type: "f", value: 0.0},
+				nIntensity: {type: "f", value: 0.5},
+				sIntensity: {type: "f", value: 0.05},
+				sCount: {type: "f", value: 4096.0},
+				grayscale: {type: "i", value: 1}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-FilmMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-FilmMaterial.prototype.constructor = FilmMaterial;

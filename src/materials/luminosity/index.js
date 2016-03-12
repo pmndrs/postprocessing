@@ -11,6 +11,9 @@ import THREE from "three";
  *
  * The alpha channel will remain unaffected in all cases.
  *
+ * Luminance range reference:
+ *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
+ *
  * @class LuminosityMaterial
  * @constructor
  * @extends ShaderMaterial
@@ -18,27 +21,28 @@ import THREE from "three";
  * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
  */
 
-export function LuminosityMaterial(color, range) {
+export class LuminosityMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(color, range) {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: "t", value: null},
-			distinction: {type: "f", value: 1.0},
-			range: {type: "v2", value: (range !== undefined) ? range : new THREE.Vector2()}
+			uniforms: {
 
-		},
+				tDiffuse: {type: "t", value: null},
+				distinction: {type: "f", value: 1.0},
+				range: {type: "v2", value: (range !== undefined) ? range : new THREE.Vector2()}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
 
-	if(color !== undefined) { this.defines.COLOR = "1"; }
-	if(range !== undefined) { this.defines.RANGE = "1"; }
+		});
+
+		if(color !== undefined) { this.defines.COLOR = "1"; }
+		if(range !== undefined) { this.defines.RANGE = "1"; }
+
+	}
 
 }
-
-LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-LuminosityMaterial.prototype.constructor = LuminosityMaterial;

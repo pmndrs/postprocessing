@@ -10,8 +10,8 @@ import THREE from "three";
  *  (WebGL) Volumetric Light Approximation in Three.js
  *  http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html
  *
- * Nvidia, GPU Gems 3 - Chapter 13:
- *  Volumetric Light Scattering as a Post-Process
+ * Nvidia, GPU Gems 3, 2008:
+ *  Chapter 13. Volumetric Light Scattering as a Post-Process
  *  http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html
  *
  * @class GodRaysMaterial
@@ -19,36 +19,37 @@ import THREE from "three";
  * @extends ShaderMaterial
  */
 
-export function GodRaysMaterial() {
+export class GodRaysMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		defines: {
+		super({
 
-			NUM_SAMPLES_FLOAT: "60.0",
-			NUM_SAMPLES_INT: "60"
+			defines: {
 
-		},
+				NUM_SAMPLES_FLOAT: "60.0",
+				NUM_SAMPLES_INT: "60"
 
-		uniforms: {
+			},
 
-			tDiffuse: {type: "t", value: null},
-			lightPosition: {type: "v3", value: null},
+			uniforms: {
 
-			exposure: {type: "f", value: 0.6},
-			decay: {type: "f", value: 0.93},
-			density: {type: "f", value: 0.96},
-			weight: {type: "f", value: 0.4},
-			clampMax: {type: "f", value: 1.0}
+				tDiffuse: {type: "t", value: null},
+				lightPosition: {type: "v3", value: null},
 
-		},
+				exposure: {type: "f", value: 0.6},
+				decay: {type: "f", value: 0.93},
+				density: {type: "f", value: 0.96},
+				weight: {type: "f", value: 0.4},
+				clampMax: {type: "f", value: 1.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-GodRaysMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-GodRaysMaterial.prototype.constructor = GodRaysMaterial;

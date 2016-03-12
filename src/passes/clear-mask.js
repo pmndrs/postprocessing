@@ -8,24 +8,25 @@ import { Pass } from "./pass";
  * @extends Pass
  */
 
-export function ClearMaskPass() {
+export class ClearMaskPass extends Pass {
 
-	Pass.call(this, null, null, null);
+	constructor() {
+
+		super(null, null, null);
+
+	}
+
+	/**
+	 * This pass disables the stencil test.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 */
+
+	render(renderer) {
+
+		renderer.context.disable(context.STENCIL_TEST);
+
+	}
 
 }
-
-ClearMaskPass.prototype = Object.create(Pass.prototype);
-ClearMaskPass.prototype.constructor = ClearMaskPass;
-
-/**
- * This pass disables the stencil test.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- */
-
-ClearMaskPass.prototype.render = function(renderer) {
-
-	renderer.context.disable(context.STENCIL_TEST);
-
-};

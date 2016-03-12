@@ -11,29 +11,30 @@ import THREE from "three";
  * @param {Boolean} [invertTexture2=false] - Invert the second texture's rgb values.
  */
 
-export function CombineMaterial(invertTexture1, invertTexture2) {
+export class CombineMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(invertTexture1, invertTexture2) {
 
-		uniforms: {
+		super({
 
-			texture1: {type: "t", value: null},
-			texture2: {type: "t", value: null},
+			uniforms: {
 
-			opacity1: {type: "f", value: 1.0},
-			opacity2: {type: "f", value: 1.0}
+				texture1: {type: "t", value: null},
+				texture2: {type: "t", value: null},
 
-		},
+				opacity1: {type: "f", value: 1.0},
+				opacity2: {type: "f", value: 1.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
 
-	if(invertTexture1) { this.defines.INVERT_TEX1 = "1"; }
-	if(invertTexture2) { this.defines.INVERT_TEX2 = "1"; }
+		});
+
+		if(invertTexture1) { this.defines.INVERT_TEX1 = "1"; }
+		if(invertTexture2) { this.defines.INVERT_TEX2 = "1"; }
+
+	}
 
 }
-
-CombineMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-CombineMaterial.prototype.constructor = CombineMaterial;
