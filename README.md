@@ -6,6 +6,16 @@
 A post processing library that provides the means to implement 2D filter effects for three.js. 
 
 
+## Preface
+
+This module uses modern ECMAScript features and requires one of the following browsers.
+ - Chrome ≥ 42
+ - Firefox ≥ 45
+ - IE Edge ≥ 13
+
+[Semantic versioning](http://semver.org/) is used in this module to indicate whether an update introduces breaking changes. However, backwards-compatibility regarding ECMAScript versions is entirely neglected in favor of cleaner code and less build tasks.
+
+
 ## Installation
 
 ```sh
@@ -29,21 +39,22 @@ composer.addPass(glitchPass);
 
 (function render(now) {
 
-	composer.render();
 	requestAnimationFrame(render);
+	composer.render();
 
 }());
 ```
 
 
 ## Included Filters
- - Adaptive Tone Mapping 
- - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html) 
- - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html) 
- - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html) 
- - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html) 
- - Bokeh 
- - [Film](http://vanruesc.github.io/postprocessing/public/film.html) 
+ - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/tone-mapping.html)
+ - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html)
+ - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html)
+ - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html)
+ - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html)
+ - [Bokeh](http://vanruesc.github.io/postprocessing/public/bokeh.html)
+ - [SMAA](http://vanruesc.github.io/postprocessing/public/smaa.html)
+ - [Film](http://vanruesc.github.io/postprocessing/public/film.html)
 
 
 ## Documentation
