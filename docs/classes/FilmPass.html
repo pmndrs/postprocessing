@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -177,13 +181,78 @@
 
                         <ul class="params-list">
                             <li class="param">
-                                    <code class="param-name optional">[grayscale=true]</code>
+                                    <code class="param-name optional">[greyscale=false]</code>
                                     <span class="type">Boolean</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>Convert to greyscale.</li>
+<li>Enable greyscale effect. Greyscale and sepia are mutually exclusive.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[sepia=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enable sepia effect. Greyscale and sepia are mutually exclusive.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[vignette=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Apply vignette effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[eskil=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Use Eskil's vignette approach. The default looks dusty while Eskil looks more burned out.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[scanlines=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Show scanlines.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[noise=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Show noise-based film grain.</li>
 </ul>
 
                                 </div>
@@ -203,7 +272,7 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[scanlinesIntensity=0.05]</code>
+                                    <code class="param-name optional">[scanlineIntensity=0.05]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -216,13 +285,65 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[scanlines=1.0]</code>
+                                    <code class="param-name optional">[scanlineDensity=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
 <li>The number of scanlines in percent, relative to the screen height.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[greyscaleIntensity=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The intensity of the greyscale effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[sepiaIntensity=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The intensity of the sepia effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[vignetteOffset=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The offset of the vignette effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[vignetteDarkness=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The darkness of the vignette effect.</li>
 </ul>
 
                                 </div>
@@ -289,7 +410,7 @@
                                 <a href="#property_material">material</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
@@ -302,7 +423,7 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_scanlines">scanlines</a>
+                                <a href="#property_scanlineDensity">scanlineDensity</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -333,7 +454,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
+        <a href="../files/src_passes_pass.js.html#l162"><code>src\passes\pass.js:162</code></a>
         </p>
 
 
@@ -382,7 +503,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l85"><code>src\passes\film.js:85</code></a>
+        <a href="../files/src_passes_film.js.html#l91"><code>src\passes\film.js:91</code></a>
         </p>
 
 
@@ -390,7 +511,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Adjusts the scanlines to the render height.</p>
+        <p>Adjusts the scanline count using the renderer's height.</p>
 
     </div>
 
@@ -426,7 +547,10 @@ when you are certain that you don't need this pass anymore.
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>buffer</code>
+                        <code>readBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
                 </li>
                 <li class="arg">
                         <code>delta</code>
@@ -447,7 +571,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l59"><code>src\passes\film.js:59</code></a>
+        <a href="../files/src_passes_film.js.html#l64"><code>src\passes\film.js:64</code></a>
         </p>
 
 
@@ -477,13 +601,26 @@ when you are certain that you don't need this pass anymore.
 
                 </li>
                 <li class="param">
-                        <code class="param-name">buffer</code>
+                        <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The read/write buffer.</li>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -535,7 +672,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_film.js.html#l99"><code>src\passes\film.js:99</code></a>
+        <a href="../files/src_passes_film.js.html#l105"><code>src\passes\film.js:105</code></a>
         </p>
 
 
@@ -543,7 +680,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Updates this pass with the renderer's size.</p>
+        <p>Adjusts the scanline count using the renderer's height.</p>
 
     </div>
 
@@ -600,7 +737,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -625,7 +762,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
+        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
         </p>
 
 
@@ -651,7 +788,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_film.js.html#l26"><code>src\passes\film.js:26</code></a>
+        <a href="../files/src_passes_film.js.html#l37"><code>src\passes\film.js:37</code></a>
         </p>
 
 
@@ -665,18 +802,19 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="property_needsSwap" class="property item inherited">
+<div id="property_needsSwap" class="property item private inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        <a href="../files/src_passes_pass.js.html#l63"><code>src\passes\pass.js:63</code></a>
         </p>
 
 
@@ -706,7 +844,7 @@ following pass can find the result in the read buffer.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
@@ -741,7 +879,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
+        <a href="../files/src_passes_pass.js.html#l88"><code>src\passes\pass.js:88</code></a>
         </p>
 
 
@@ -755,8 +893,8 @@ Assign your shader material to this mesh!
 
 
 </div>
-<div id="property_scanlines" class="property item">
-    <h3 class="name"><code>scanlines</code></h3>
+<div id="property_scanlineDensity" class="property item">
+    <h3 class="name"><code>scanlineDensity</code></h3>
     <span class="type">Number</span>
 
 
@@ -766,7 +904,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_film.js.html#l42"><code>src\passes\film.js:42</code></a>
+        <a href="../files/src_passes_film.js.html#l49"><code>src\passes\film.js:49</code></a>
         </p>
 
 
@@ -774,11 +912,12 @@ Assign your shader material to this mesh!
 
     <div class="description">
         <p>The amount of scanlines in percent, relative to the screen height.</p>
-<p>You need to call the reset method of the EffectComposer after
+<p>You need to call the setSize method of the EffectComposer after
 changing this value.</p>
 
     </div>
 
+        <p><strong>Default:</strong> 1.25</p>
 
 
 </div>
@@ -794,7 +933,7 @@ changing this value.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l24"><code>src\passes\pass.js:24</code></a>
+        <a href="../files/src_passes_pass.js.html#l26"><code>src\passes\pass.js:26</code></a>
         </p>
 
 

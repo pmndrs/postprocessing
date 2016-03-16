@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -120,32 +124,33 @@ import THREE from &quot;three&quot;;
  * @param {Boolean} [invertTexture2=false] - Invert the second texture&#x27;s rgb values.
  */
 
-export function CombineMaterial(invertTexture1, invertTexture2) {
+export class CombineMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(invertTexture1, invertTexture2) {
 
-		uniforms: {
+		super({
 
-			texture1: {type: &quot;t&quot;, value: null},
-			texture2: {type: &quot;t&quot;, value: null},
+			uniforms: {
 
-			opacity1: {type: &quot;f&quot;, value: 1.0},
-			opacity2: {type: &quot;f&quot;, value: 1.0}
+				texture1: {type: &quot;t&quot;, value: null},
+				texture2: {type: &quot;t&quot;, value: null},
 
-		},
+				opacity1: {type: &quot;f&quot;, value: 1.0},
+				opacity2: {type: &quot;f&quot;, value: 1.0}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
 
-	if(invertTexture1) { this.defines.INVERT_TEX1 = &quot;1&quot;; }
-	if(invertTexture2) { this.defines.INVERT_TEX2 = &quot;1&quot;; }
+		});
+
+		if(invertTexture1) { this.defines.INVERT_TEX1 = &quot;1&quot;; }
+		if(invertTexture2) { this.defines.INVERT_TEX2 = &quot;1&quot;; }
+
+	}
 
 }
-
-CombineMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-CombineMaterial.prototype.constructor = CombineMaterial;
 
     </pre>
 </div>

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -118,95 +122,98 @@ import THREE from &quot;three&quot;;
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
- * @param {Number} [patternSize=1.0] - The pattern size.
- * @param {Number} [angle=1.57] - The angle of the pattern.
- * @param {Number} [scale=1.0] - The scale of the overall effect.
+ * @param {Number} [options.angle=1.57] - The angle of the pattern.
+ * @param {Number} [options.scale=1.0] - The scale of the overall effect.
+ * @param {Number} [options.intensity=1.0] - The intensity of the effect.
+ * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
  */
 
-export function DotScreenPass(options) {
+export class DotScreenPass extends Pass {
 
-	Pass.call(this);
+	constructor(options) {
 
-	this.needsSwap = true;
+		super();
 
-	if(options === undefined) { options = {}; }
+		this.needsSwap = true;
 
-	/**
-	 * Dot screen shader material description.
-	 *
-	 * @property material
-	 * @type DotScreenMaterial
-	 * @private
-	 */
+		if(options === undefined) { options = {}; }
 
-	this.material = new DotScreenMaterial();
+		/**
+		 * Dot screen shader material description.
+		 *
+		 * @property material
+		 * @type DotScreenMaterial
+		 * @private
+		 */
 
-	if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
-	if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
+		this.material = new DotScreenMaterial(options.average);
 
-	this.quad.material = this.material;
+		if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
+		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
+		if(options.intensity !== undefined) { this.material.uniforms.intensity.value = options.intensity; }
 
-}
-
-DotScreenPass.prototype = Object.create(Pass.prototype);
-DotScreenPass.prototype.constructor = DotScreenPass;
-
-/**
- * Renders the effect.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- * @param {WebGLRenderTarget} writeBuffer - The write buffer.
- */
-
-DotScreenPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
-
-	this.material.uniforms.tDiffuse.value = readBuffer;
-
-	if(this.renderToScreen) {
-
-		renderer.render(this.scene, this.camera);
-
-	} else {
-
-		renderer.render(this.scene, this.camera, writeBuffer, false);
+		this.quad.material = this.material;
 
 	}
 
-};
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 */
 
-/**
- * Adjusts the size of the effect.
- *
- * @method initialise
- * @param {WebGLRenderer} renderer - The renderer.
- */
+	render(renderer, readBuffer, writeBuffer) {
 
-DotScreenPass.prototype.initialise = function(renderer) {
+		this.material.uniforms.tDiffuse.value = readBuffer;
 
-	let size = renderer.getSize();
-	this.setSize(size.width, size.height);
+		if(this.renderToScreen) {
 
-};
+			renderer.render(this.scene, this.camera);
 
-/**
- * Updates this pass with the renderer&#x27;s size.
- *
- * @method setSize
- * @param {Number} width - The width.
- * @param {Number} heght - The height.
- */
+		} else {
 
-DotScreenPass.prototype.setSize = function(width, height) {
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
-	if(width &lt;= 0) { width = 1; }
-	if(height &lt;= 0) { height = 1; }
+		}
 
-	this.material.uniforms.offsetRepeat.value.z = width;
-	this.material.uniforms.offsetRepeat.value.w = height;
+	}
 
-};
+	/**
+	 * Adjusts the size of the effect.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 */
+
+	initialise(renderer) {
+
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
+
+	}
+
+	/**
+	 * Updates this pass with the renderer&#x27;s size.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The width.
+	 * @param {Number} heght - The height.
+	 */
+
+	setSize(width, height) {
+
+		if(width &lt;= 0) { width = 1; }
+		if(height &lt;= 0) { height = 1; }
+
+		this.material.uniforms.offsetRepeat.value.z = width;
+		this.material.uniforms.offsetRepeat.value.w = height;
+
+	}
+
+}
 
     </pre>
 </div>

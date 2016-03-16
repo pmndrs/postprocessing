@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -119,73 +123,74 @@ import { Pass } from &quot;./pass&quot;;
  * @param {Camera} camera - The camera to use to render the scene.
  */
 
-export function MaskPass(scene, camera) {
+export class MaskPass extends Pass {
 
-	Pass.call(this, scene, camera, null);
+	constructor(scene, camera) {
+
+		super(scene, camera, null);
+
+		/**
+		 * Inverse flag.
+		 *
+		 * @property inverse
+		 * @type Boolean
+		 * @default false
+		 */
+
+		this.inverse = false;
+
+		/**
+		 * Clear flag.
+		 *
+		 * @property clear
+		 * @type Boolean
+		 * @default true
+		 */
+
+		this.clear = true;
+
+	}
 
 	/**
-	 * Inverse flag.
+	 * Renders the scene as a mask by only setting the stencil bits.
+	 * The buffers will both be cleared first.
 	 *
-	 * @property inverse
-	 * @type Boolean
-	 * @default false
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer containing the result of the previous pass.
+	 * @param {WebGLRenderTarget} readBuffer - The write buffer.
 	 */
 
-	this.inverse = false;
+	render(renderer, readBuffer, writeBuffer) {
 
-	/**
-	 * Clear flag.
-	 *
-	 * @property clear
-	 * @type Boolean
-	 * @default true
-	 */
+		let ctx = renderer.context;
+		let writeValue = this.inverse ? 0 : 1;
+		let clearValue = 1 - writeValue;
 
-	this.clear = true;
+		// Don&#x27;t update color or depth.
+		ctx.colorMask(false, false, false, false);
+		ctx.depthMask(false);
+
+		ctx.enable(ctx.STENCIL_TEST);
+		ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
+		ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
+		ctx.clearStencil(clearValue);
+
+		// Draw the mask into both buffers.
+		renderer.render(this.scene, this.camera, readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+
+		// Re-enable update of color and depth.
+		ctx.colorMask(true, true, true, true);
+		ctx.depthMask(true);
+
+		// Only render where stencil is set to 1.
+		ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
+		ctx.stencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
+
+	}
 
 }
-
-MaskPass.prototype = Object.create(Pass.prototype);
-MaskPass.prototype.constructor = MaskPass;
-
-/**
- * Renders the scene as a mask by only setting the stencil bits.
- * The buffers will both be cleared first.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} readBuffer - The read buffer containing the result of the previous pass.
- * @param {WebGLRenderTarget} readBuffer - The write buffer.
- */
-
-MaskPass.prototype.render = function(renderer, readBuffer, writeBuffer) {
-
-	let ctx = renderer.context;
-	let writeValue = this.inverse ? 0 : 1;
-	let clearValue = 1 - writeValue;
-
-	// Don&#x27;t update color or depth.
-	ctx.colorMask(false, false, false, false);
-	ctx.depthMask(false);
-
-	ctx.enable(ctx.STENCIL_TEST);
-	ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
-	ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
-	ctx.clearStencil(clearValue);
-
-	// Draw the mask into both buffers.
-	renderer.render(this.scene, this.camera, readBuffer, this.clear);
-	renderer.render(this.scene, this.camera, writeBuffer, this.clear);
-
-	// Re-enable update of color and depth.
-	ctx.colorMask(true, true, true, true);
-	ctx.depthMask(true);
-
-	// Only render where stencil is set to 1.
-	ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
-	ctx.stencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
-
-};
 
     </pre>
 </div>

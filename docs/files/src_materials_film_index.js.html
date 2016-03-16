@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -111,53 +115,86 @@ import shader from &quot;./inlined/shader&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * Film grain &amp; scanlines shader
+ * A cinematic shader that provides the following effects:
+ *  - Film Grain
+ *  - Scanlines
+ *  - Vignette
+ *  - Greyscale
+ *  - Sepia
  *
- * - ported from HLSL to WebGL / GLSL
+ * Original scanlines algorithm by Pat &quot;Hawthorne&quot; Shearon.
  * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  *
- * Screen Space Static Postprocessor
- *
- * Produces an analogue noise overlay similar to a film grain / TV static
- *
- * Original implementation and noise algorithm
- * Pat &quot;Hawthorne&quot; Shearon
- *
- * Optimized scanlines + noise version with intensity scaling
- * Georg &quot;Leviathan&quot; Steinrohder
- *
+ * Optimized scanlines + noise version with intensity scaling by Georg &quot;Leviathan&quot; Steinrohder.
  * This version is provided under a Creative Commons Attribution 3.0 License
  * http://creativecommons.org/licenses/by/3.0/
+ *
+ * The sepia effect is based on:
+ *  https://github.com/evanw/glfx.js
+ *
+ * The vignette code is based on PaintEffect postprocess from ro.me:
+ *  http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js
  *
  * @class FilmMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Object} [options] - The options.
+ * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.
+ * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
+ * @param {Boolean} [options.vignette=false] - Apply vignette effect.
+ * @param {Boolean} [options.eskil=false] - Use Eskil&#x27;s vignette approach. The default looks dusty while Eskil looks burned out.
+ * @param {Boolean} [options.scanlines=true] - Show scanlines.
+ * @param {Boolean} [options.noise=true] - Show noise-based film grain.
+ * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
+ * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
+ * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect.
+ * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect.
+ * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect.
+ * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect.
  */
 
-export function FilmMaterial() {
+export class FilmMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(options) {
 
-		uniforms: {
+		if(options === undefined) { options = {}; }
 
-			tDiffuse: {type: &quot;t&quot;, value: null},
-			time: {type: &quot;f&quot;, value: 0.0},
-			nIntensity: {type: &quot;f&quot;, value: 0.5},
-			sIntensity: {type: &quot;f&quot;, value: 0.05},
-			sCount: {type: &quot;f&quot;, value: 4096.0},
-			grayscale: {type: &quot;i&quot;, value: 1}
+		super({
 
-		},
+			uniforms: {
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+				tDiffuse: {type: &quot;t&quot;, value: null},
+				time: {type: &quot;f&quot;, value: 0.0},
 
-	});
+				noiseIntensity: {type: &quot;f&quot;, value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
+				scanlineIntensity: {type: &quot;f&quot;, value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
+				scanlineCount: {type: &quot;f&quot;, value: 0.0},
+
+				greyscaleIntensity: {type: &quot;f&quot;, value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
+				sepiaIntensity: {type: &quot;f&quot;, value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
+
+				vignetteOffset: {type: &quot;f&quot;, value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
+				vignetteDarkness: {type: &quot;f&quot;, value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
+
+			},
+
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+		// These are enabled by default.
+		if(options.scanlines === undefined || options.scanlines) { this.defines.SCANLINES = &quot;1&quot;; }
+		if(options.noise === undefined || options.noise) { this.defines.NOISE = &quot;1&quot;; }
+
+		if(options.greyscale) { this.defines.GREYSCALE = &quot;1&quot;; }
+		if(options.sepia) { this.defines.SEPIA = &quot;1&quot;; }
+		if(options.vignette) { this.defines.VIGNETTE = &quot;1&quot;; }
+		if(options.eskil) { this.defines.ESKIL = &quot;1&quot;; }
+
+	}
 
 }
-
-FilmMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-FilmMaterial.prototype.constructor = FilmMaterial;
 
     </pre>
 </div>

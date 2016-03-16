@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -116,32 +120,37 @@ import THREE from &quot;three&quot;;
  * @class DotScreenMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Boolean} [average] - Whether the shader should output the colour average (black and white).
  */
 
-export function DotScreenMaterial() {
+export class DotScreenMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(average) {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: &quot;t&quot;, value: null},
+			uniforms: {
 
-			angle: {type: &quot;f&quot;, value: 1.57},
-			scale: {type: &quot;f&quot;, value: 1.0},
+				tDiffuse: {type: &quot;t&quot;, value: null},
 
-			offsetRepeat: {type: &quot;v4&quot;, value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
+				angle: {type: &quot;f&quot;, value: 1.57},
+				scale: {type: &quot;f&quot;, value: 1.0},
+				intensity: {type: &quot;f&quot;, value: 1.0},
 
-		},
+				offsetRepeat: {type: &quot;v4&quot;, value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
+
+	if(average) { this.defines.AVERAGE = &quot;1&quot;; }
 
 }
-
-DotScreenMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-DotScreenMaterial.prototype.constructor = DotScreenMaterial;
 
     </pre>
 </div>

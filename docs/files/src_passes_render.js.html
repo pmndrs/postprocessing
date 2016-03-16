@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -111,6 +115,17 @@ import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
 
 /**
+ * Used for saving the original clear color during rendering.
+ *
+ * @property clearColor
+ * @type Color
+ * @private
+ * @static
+ */
+
+const clearColor = new THREE.Color();
+
+/**
  * A pass that renders a given scene directly on screen
  * or into the read buffer for further processing.
  *
@@ -119,109 +134,210 @@ import THREE from &quot;three&quot;;
  * @extends Pass
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
- * @param {Material} [overrideMaterial] - An override material for the scene.
- * @param {Color} [clearColor] - A clear color.
- * @param {Number} [clearAlpha] - A clear alpha value.
+ * @param {Object} [options] - Additional options.
+ * @param {Boolean} [options.depth=false] - Indicates whether this pass should render the scene depth into an additional texture.
+ * @param {Boolean} [options.depthResolutionScale=0.5] - The resolution scale of the depth texture, relative to the main render size.
+ * @param {Material} [options.overrideMaterial] - An override material for the scene.
+ * @param {Color} [options.clearColor] - An override clear color.
+ * @param {Number} [options.clearAlpha] - An override clear alpha.
  */
 
-export function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
+export class RenderPass extends Pass {
 
-	Pass.call(this, scene, camera, null);
+	constructor(scene, camera, options) {
+
+		if(options === undefined) { options = {}; }
+
+		super(scene, camera, null);
+
+		/**
+		 * Depth render flag.
+		 *
+		 * @property depth
+		 * @type Boolean
+		 * @default false
+		 */
+
+		this.depth = (options.depth !== undefined) ? options.depth : false;
+
+		/**
+		 * The depth texture.
+		 *
+		 * @property depthTexture
+		 * @type WebGLRenderTarget
+		 */
+
+		this.depthTexture = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
+			minFilter: THREE.LinearFilter,
+			magFilter: THREE.LinearFilter,
+			generateMipmaps: false
+		});
+
+		/**
+		 * A depth shader material.
+		 *
+		 * @property MeshDepthMaterial
+		 * @type Material
+		 * @private
+		 */
+
+		this.depthMaterial = !this.depth ? null : new THREE.MeshDepthMaterial();
+
+		/**
+		 * The resolution scale of the depth texture, relative to the main 
+		 * render size.
+		 *
+		 * You need to call the setSize method of the EffectComposer after 
+		 * changing this value.
+		 *
+		 * @property depthResolutionScale
+		 * @type Number
+		 * @default 0.5
+		 */
+
+		this.depthResolutionScale = (options.depthResolutionScale === undefined) ? 0.5 : options.depthResolutionScale;
+
+		/**
+		 * Override material.
+		 *
+		 * @property overrideMaterial
+		 * @type Material
+		 */
+
+		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
+
+		/**
+		 * Clear color.
+		 *
+		 * @property clearColor
+		 * @type Color
+		 */
+
+		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
+
+		/**
+		 * Clear alpha.
+		 *
+		 * @property clearAlpha
+		 * @type Number
+		 */
+
+		this.clearAlpha = (options.clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(options.clearAlpha, 0.0, 1.0);
+
+		/**
+		 * Clear flag.
+		 *
+		 * @property clear
+		 * @type Boolean
+		 * @default true
+		 */
+
+		this.clear = true;
+
+	}
 
 	/**
-	 * Override material.
+	 * Renders the scene.
 	 *
-	 * @property overrideMaterial
-	 * @type Material
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
-	this.overrideMaterial = (overrideMaterial !== undefined) ? overrideMaterial : null;
+	render(renderer, readBuffer) {
+
+		let clearAlpha;
+
+		if(this.depth) {
+
+			this.scene.overrideMaterial = this.depthMaterial;
+			renderer.render(this.scene, this.camera, this.depthTexture, true);
+			this.scene.overrideMaterial = null;
+
+		}
+
+		this.scene.overrideMaterial = this.overrideMaterial;
+
+		if(this.clearColor !== null) {
+
+			clearColor.copy(renderer.getClearColor());
+			clearAlpha = renderer.getClearAlpha();
+			renderer.setClearColor(this.clearColor, this.clearAlpha);
+
+		}
+
+		if(this.renderToScreen) {
+
+			renderer.render(this.scene, this.camera, null, this.clear);
+
+		} else {
+
+			renderer.render(this.scene, this.camera, readBuffer, this.clear);
+
+		}
+
+		if(this.clearColor !== null) {
+
+			renderer.setClearColor(clearColor, clearAlpha);
+
+		}
+
+		this.scene.overrideMaterial = null;
+
+	}
 
 	/**
-	 * Clear color.
+	 * Adjusts the format and size of the depth render target.
 	 *
-	 * @property clearColor
-	 * @type Color
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	this.clearColor = (clearColor !== undefined) ? clearColor : null;
+	initialise(renderer, alpha) {
+
+		let size;
+
+		if(this.depth) {
+
+			size = renderer.getSize();
+			this.setSize(size.width, size.height);
+
+			if(!alpha) {
+
+				this.depthTexture.texture.format = THREE.RGBFormat;
+
+			}
+
+		}
+
+	}
 
 	/**
-	 * Clear alpha.
+	 * Updates the depth render target with the renderer&#x27;s size.
 	 *
-	 * @property clearAlpha
-	 * @type Number
+	 * @method setSize
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
 	 */
 
-	this.clearAlpha = (clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(clearAlpha, 0.0, 1.0);
+	setSize(width, height) {
 
-	/**
-	 * Clear flag.
-	 *
-	 * @property clear
-	 * @type Boolean
-	 * @default true
-	 */
+		if(this.depth) {
 
-	this.clear = true;
+			width = Math.floor(width * this.depthResolutionScale);
+			height = Math.floor(height * this.depthResolutionScale);
+
+			if(width &lt;= 0) { width = 1; }
+			if(height &lt;= 0) { height = 1; }
+
+			this.depthTexture.setSize(width, height);
+
+		}
+
+	}
 
 }
-
-RenderPass.prototype = Object.create(Pass.prototype);
-RenderPass.prototype.constructor = RenderPass;
-
-/**
- * Used for saving the original clear color during rendering.
- *
- * @property CLEAR_COLOR
- * @type Color
- * @private
- * @static
- */
-
-const CLEAR_COLOR = new THREE.Color();
-
-/**
- * Renders the scene.
- *
- * @method render
- * @param {WebGLRenderer} renderer - The renderer to use.
- * @param {WebGLRenderTarget} readBuffer - The read buffer.
- */
-
-RenderPass.prototype.render = function(renderer, readBuffer) {
-
-	let clearAlpha;
-
-	this.scene.overrideMaterial = this.overrideMaterial;
-
-	if(this.clearColor !== null) {
-
-		CLEAR_COLOR.copy(renderer.getClearColor());
-		clearAlpha = renderer.getClearAlpha();
-		renderer.setClearColor(this.clearColor, this.clearAlpha);
-
-	}
-
-	if(this.renderToScreen) {
-
-		renderer.render(this.scene, this.camera);
-
-	} else {
-
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
-
-	}
-
-	if(this.clearColor !== null) {
-
-		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
-
-	}
-
-	this.scene.overrideMaterial = null;
-
-};
 
     </pre>
 </div>

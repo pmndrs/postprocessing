@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -120,6 +124,9 @@ import THREE from &quot;three&quot;;
  *
  * The alpha channel will remain unaffected in all cases.
  *
+ * Luminance range reference:
+ *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
+ *
  * @class LuminosityMaterial
  * @constructor
  * @extends ShaderMaterial
@@ -127,30 +134,31 @@ import THREE from &quot;three&quot;;
  * @params {Vector2} [range] - If provided, the shader will mask out texels that aren&#x27;t in the specified range.
  */
 
-export function LuminosityMaterial(color, range) {
+export class LuminosityMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(color, range) {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: &quot;t&quot;, value: null},
-			distinction: {type: &quot;f&quot;, value: 1.0},
-			range: {type: &quot;v2&quot;, value: (range !== undefined) ? range : new THREE.Vector2()}
+			uniforms: {
 
-		},
+				tDiffuse: {type: &quot;t&quot;, value: null},
+				distinction: {type: &quot;f&quot;, value: 1.0},
+				range: {type: &quot;v2&quot;, value: (range !== undefined) ? range : new THREE.Vector2()}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
 
-	if(color !== undefined) { this.defines.COLOR = &quot;1&quot;; }
-	if(range !== undefined) { this.defines.RANGE = &quot;1&quot;; }
+		});
+
+		if(color !== undefined) { this.defines.COLOR = &quot;1&quot;; }
+		if(range !== undefined) { this.defines.RANGE = &quot;1&quot;; }
+
+	}
 
 }
-
-LuminosityMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-LuminosityMaterial.prototype.constructor = LuminosityMaterial;
 
     </pre>
 </div>

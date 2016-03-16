@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -111,7 +115,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_god-rays.js.html#l11"><code>src\passes\god-rays.js:11</code></a>
+            Defined in: <a href="../files/src_passes_god-rays.js.html#l23"><code>src\passes\god-rays.js:23</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -156,7 +160,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l11"><code>src\passes\god-rays.js:11</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l23"><code>src\passes\god-rays.js:23</code></a>
         </p>
 
 
@@ -399,7 +403,7 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
+                                <a href="#property_clearColor">clearColor</a>
 
                                     <span class="flag static">static</span>
                             </li>
@@ -443,7 +447,7 @@
                                 <a href="#property_maskMaterial">maskMaterial</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
@@ -463,12 +467,12 @@
                                 <a href="#property_renderTargetY">renderTargetY</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetY">renderTargetY</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property">
@@ -507,7 +511,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
+        <a href="../files/src_passes_pass.js.html#l162"><code>src\passes\pass.js:162</code></a>
         </p>
 
 
@@ -559,7 +563,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l380"><code>src\passes\god-rays.js:380</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l361"><code>src\passes\god-rays.js:361</code></a>
         </p>
 
 
@@ -634,7 +638,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l290"><code>src\passes\god-rays.js:290</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l272"><code>src\passes\god-rays.js:272</code></a>
         </p>
 
 
@@ -719,7 +723,7 @@ The final result is added to the normal scene.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l403"><code>src\passes\god-rays.js:403</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l384"><code>src\passes\god-rays.js:384</code></a>
         </p>
 
 
@@ -783,7 +787,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l194"><code>src\passes\god-rays.js:194</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l204"><code>src\passes\god-rays.js:204</code></a>
         </p>
 
 
@@ -810,7 +814,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -824,8 +828,8 @@ The final result is added to the normal scene.</p>
 
 
 </div>
-<div id="property_CLEAR_COLOR" class="property item private">
-    <h3 class="name"><code>CLEAR_COLOR</code></h3>
+<div id="property_clearColor" class="property item private">
+    <h3 class="name"><code>clearColor</code></h3>
     <span class="type">Color</span>
 
 
@@ -837,15 +841,15 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l278"><code>src\passes\god-rays.js:278</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l11"><code>src\passes\god-rays.js:11</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Used for saving the original clear color
-during the rendering process of the masked scene.</p>
+        <p>Used for saving the original clear color during
+the rendering process of the masked scene.</p>
 
     </div>
 
@@ -864,7 +868,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l119"><code>src\passes\god-rays.js:119</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l132"><code>src\passes\god-rays.js:132</code></a>
         </p>
 
 
@@ -890,7 +894,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l107"><code>src\passes\god-rays.js:107</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l120"><code>src\passes\god-rays.js:120</code></a>
         </p>
 
 
@@ -916,7 +920,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l129"><code>src\passes\god-rays.js:129</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l142"><code>src\passes\god-rays.js:142</code></a>
         </p>
 
 
@@ -941,7 +945,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
+        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
         </p>
 
 
@@ -967,7 +971,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l151"><code>src\passes\god-rays.js:151</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l164"><code>src\passes\god-rays.js:164</code></a>
         </p>
 
 
@@ -992,7 +996,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l218"><code>src\passes\god-rays.js:218</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l224"><code>src\passes\god-rays.js:224</code></a>
         </p>
 
 
@@ -1018,7 +1022,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l88"><code>src\passes\god-rays.js:88</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l101"><code>src\passes\god-rays.js:101</code></a>
         </p>
 
 
@@ -1043,7 +1047,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l180"><code>src\passes\god-rays.js:180</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l193"><code>src\passes\god-rays.js:193</code></a>
         </p>
 
 
@@ -1068,7 +1072,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l171"><code>src\passes\god-rays.js:171</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l184"><code>src\passes\god-rays.js:184</code></a>
         </p>
 
 
@@ -1094,7 +1098,7 @@ during the rendering process of the masked scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l141"><code>src\passes\god-rays.js:141</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l154"><code>src\passes\god-rays.js:154</code></a>
         </p>
 
 
@@ -1108,18 +1112,19 @@ during the rendering process of the masked scene.</p>
 
 
 </div>
-<div id="property_needsSwap" class="property item inherited">
+<div id="property_needsSwap" class="property item private inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        <a href="../files/src_passes_pass.js.html#l63"><code>src\passes\pass.js:63</code></a>
         </p>
 
 
@@ -1149,7 +1154,7 @@ following pass can find the result in the read buffer.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
@@ -1185,7 +1190,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l38"><code>src\passes\god-rays.js:38</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l52"><code>src\passes\god-rays.js:52</code></a>
         </p>
 
 
@@ -1211,7 +1216,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l53"><code>src\passes\god-rays.js:53</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l66"><code>src\passes\god-rays.js:66</code></a>
         </p>
 
 
@@ -1237,35 +1242,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l75"><code>src\passes\god-rays.js:75</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer
-after changing this value.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_renderTargetY" class="property item private">
-    <h3 class="name"><code>renderTargetY</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l65"><code>src\passes\god-rays.js:65</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l78"><code>src\passes\god-rays.js:78</code></a>
         </p>
 
 
@@ -1290,7 +1267,7 @@ after changing this value.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
+        <a href="../files/src_passes_pass.js.html#l88"><code>src\passes\pass.js:88</code></a>
         </p>
 
 
@@ -1301,6 +1278,34 @@ after changing this value.</p>
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolutionScale" class="property item">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l88"><code>src\passes\god-rays.js:88</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call the setSize method of the EffectComposer
+after changing this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>
@@ -1315,7 +1320,7 @@ after changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l243"><code>src\passes\god-rays.js:243</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l245"><code>src\passes\god-rays.js:245</code></a>
         </p>
 
 
@@ -1344,7 +1349,7 @@ GPU load directly and doesn't necessarily yield better results!</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l24"><code>src\passes\pass.js:24</code></a>
+        <a href="../files/src_passes_pass.js.html#l26"><code>src\passes\pass.js:26</code></a>
         </p>
 
 
@@ -1370,7 +1375,7 @@ GPU load directly and doesn't necessarily yield better results!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l97"><code>src\passes\god-rays.js:97</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l110"><code>src\passes\god-rays.js:110</code></a>
         </p>
 
 

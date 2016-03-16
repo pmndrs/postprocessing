@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\adaptive-luminosity\index.js - postprocessing</title>
+    <title>src\materials\smaa-weights\index.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -107,39 +107,51 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\adaptive-luminosity\index.js</h1>
+<h1 class="file-heading">File: src\materials\smaa-weights\index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 import shader from &quot;./inlined/shader&quot;;
+import areaImage from &quot;./area-image&quot;;
+import searchImage from &quot;./search-image&quot;;
 import THREE from &quot;three&quot;;
 
 /**
- * An adaptive luminosity shader material.
+ * Subpixel Morphological Antialiasing (SMAA) v2.8
  *
- * @class AdaptiveLuminosityMaterial
+ * Preset: SMAA 1x Medium (with color edge detection).
+ *  https://github.com/iryoku/smaa/releases/tag/v2.8
+ *
+ * @class SMAAWeightsMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
+export class SMAAWeightsMaterial extends THREE.ShaderMaterial {
 
-	constructor() {
+	constructor(texelSize) {
 
 		super({
 
 			defines: {
 
-				MIP_LEVEL_1X1: &quot;0.0&quot;
+				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
+				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
+
+				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
+
+				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
+				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
 
 			},
 
 			uniforms: {
 
-				tPreviousLum: {type: &quot;t&quot;, value: null},
-				tCurrentLum: {type: &quot;t&quot;, value: null},
-				delta: {type: &quot;f&quot;, value: 0.0},
-				tau: {type: &quot;f&quot;, value: 1.0}
+				tDiffuse: {type: &quot;t&quot;, value: null},
+				tArea: {type: &quot;t&quot;, value: null},
+				tSearch: {type: &quot;t&quot;, value: null},
+				texelSize: {type: &quot;v2&quot;, value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 			},
 
@@ -147,6 +159,24 @@ export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
 			vertexShader: shader.vertex
 
 		});
+
+		/**
+		 * The area pattern recognition image.
+		 *
+		 * @property areaImage
+		 * @type String
+		 */
+
+		this.areaImage = areaImage;
+
+		/**
+		 * The search image.
+		 *
+		 * @property searchImage
+		 * @type String
+		 */
+
+		this.searchImage = searchImage;
 
 	}
 

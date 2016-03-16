@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -120,7 +124,7 @@
 
 
 <div class="box intro">
-    <p>Depth-of-field pass using a bokeh shader.</p>
+    <p>Depth of Field pass using a bokeh shader.</p>
 
 </div>
 
@@ -132,10 +136,7 @@
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>scene</code>
-                </li>
-                <li class="arg">
-                        <code>camera</code>
+                        <code>depthTexture</code>
                 </li>
                 <li class="arg">
                         <code class="optional">[options]</code>
@@ -169,26 +170,13 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">scene</code>
-                        <span class="type">Scene</span>
+                        <code class="param-name">depthTexture</code>
+                        <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The scene to render.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">camera</code>
-                        <span class="type">Camera</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The camera to use to render the scene.</li>
+<li>A render texture that contains the depth of the scene.</li>
 </ul>
 
                     </div>
@@ -209,65 +197,39 @@
 
                         <ul class="params-list">
                             <li class="param">
-                                    <code class="param-name optional">[focus]</code>
+                                    <code class="param-name optional">[focus=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The focus.</li>
+<li>Focus distance.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[aspect]</code>
+                                    <code class="param-name optional">[aperture=0.025]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The aspect.</li>
+<li>Camera aperture scale. Bigger values for shallower depth of field.</li>
 </ul>
 
                                 </div>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[aperture]</code>
+                                    <code class="param-name optional">[maxBlur=1.0]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
                                 <div class="param-description">
                                     <ul>
-<li>The aperture.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[maxBlur]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The maximum blur.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[resolution]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The render resolution.</li>
+<li>Maximum blur strength.</li>
 </ul>
 
                                 </div>
@@ -330,32 +292,16 @@
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_depthMaterial">depthMaterial</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_mainCamera">mainCamera</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_mainScene">mainScene</a>
-
-                            </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetDepth">renderTargetDepth</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -390,7 +336,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
+        <a href="../files/src_passes_pass.js.html#l162"><code>src\passes\pass.js:162</code></a>
         </p>
 
 
@@ -415,7 +361,7 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="method_initialise" class="method item inherited">
+<div id="method_initialise" class="method item">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
@@ -437,9 +383,12 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh.js.html#l67"><code>src\passes\bokeh.js:67</code></a>
         </p>
 
 
@@ -447,14 +396,8 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Performs advanced initialisation tasks.
+        <p>Adjusts the format and size of the render targets.</p>
 
-By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the 
-appropriate format (RGB or RGBA).
-
-The provided renderer can be used to warm up special off-screen render 
-targets by performing a preliminary render operation.
     </div>
 
         <div class="params">
@@ -502,16 +445,10 @@ targets by performing a preliminary render operation.
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
-                <li class="arg">
                         <code>readBuffer</code>
                 </li>
                 <li class="arg">
-                        <code>delta</code>
-                </li>
-                <li class="arg">
-                        <code>maskActive</code>
+                        <code>writeBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -529,7 +466,7 @@ targets by performing a preliminary render operation.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bokeh.js.html#l107"><code>src\passes\bokeh.js:107</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l42"><code>src\passes\bokeh.js:42</code></a>
         </p>
 
 
@@ -537,7 +474,7 @@ targets by performing a preliminary render operation.
     </div>
 
     <div class="description">
-        <p>Renders the scene.</p>
+        <p>Renders the effect.</p>
 
     </div>
 
@@ -559,19 +496,6 @@ targets by performing a preliminary render operation.
 
                 </li>
                 <li class="param">
-                        <code class="param-name">writeBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
                         <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
@@ -585,26 +509,13 @@ targets by performing a preliminary render operation.
 
                 </li>
                 <li class="param">
-                        <code class="param-name">delta</code>
-                        <span class="type">Number</span>
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The render delta time.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">maskActive</code>
-                        <span class="type">Boolean</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Disable stencil test.</li>
+<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -616,7 +527,7 @@ targets by performing a preliminary render operation.
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -638,9 +549,12 @@ targets by performing a preliminary render operation.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l142"><code>src\passes\pass.js:142</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh.js.html#l82"><code>src\passes\bokeh.js:82</code></a>
         </p>
 
 
@@ -648,12 +562,8 @@ targets by performing a preliminary render operation.
     </div>
 
     <div class="description">
-        Updates this pass with the renderer's size.
+        <p>Updates this pass with the renderer's size.</p>
 
-This is an abstract method that may be overriden in case you want to be 
-informed about the main render size.
-
-The effect composer calls this method when its own size is updated.
     </div>
 
         <div class="params">
@@ -667,7 +577,7 @@ The effect composer calls this method when its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
@@ -680,7 +590,7 @@ The effect composer calls this method when its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
@@ -691,14 +601,6 @@ The effect composer calls this method when its own size is updated.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -717,7 +619,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh.js.html#l55"><code>src\passes\bokeh.js:55</code></a>
+        <a href="../files/src_passes_bokeh.js.html#l26"><code>src\passes\bokeh.js:26</code></a>
         </p>
 
 
@@ -743,7 +645,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -754,32 +656,6 @@ The effect composer calls this method when its own size is updated.
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
-
-
-</div>
-<div id="property_depthMaterial" class="property item private">
-    <h3 class="name"><code>depthMaterial</code></h3>
-    <span class="type">MeshDepthMaterial</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bokeh.js.html#l45"><code>src\passes\bokeh.js:45</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Depth shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -794,7 +670,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
+        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
         </p>
 
 
@@ -808,68 +684,19 @@ The effect composer calls this method when its own size is updated.
 
 
 </div>
-<div id="property_mainCamera" class="property item">
-    <h3 class="name"><code>mainCamera</code></h3>
-    <span class="type">Camera</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bokeh.js.html#l90"><code>src\passes\bokeh.js:90</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A main camera.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_mainScene" class="property item">
-    <h3 class="name"><code>mainScene</code></h3>
-    <span class="type">Scene</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bokeh.js.html#l81"><code>src\passes\bokeh.js:81</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A main scene.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_needsSwap" class="property item inherited">
+<div id="property_needsSwap" class="property item private inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        <a href="../files/src_passes_pass.js.html#l63"><code>src\passes\pass.js:63</code></a>
         </p>
 
 
@@ -899,7 +726,7 @@ following pass can find the result in the read buffer.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
@@ -923,33 +750,7 @@ Assign your shader material to this mesh!
         </div>
 
 </div>
-<div id="property_renderTargetDepth" class="property item private">
-    <h3 class="name"><code>renderTargetDepth</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bokeh.js.html#l28"><code>src\passes\bokeh.js:28</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A render target.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_renderToScreen" class="property item">
+<div id="property_renderToScreen" class="property item inherited">
     <h3 class="name"><code>renderToScreen</code></h3>
     <span class="type">Boolean</span>
 
@@ -958,20 +759,16 @@ Assign your shader material to this mesh!
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#property_renderToScreen">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_bokeh.js.html#l71"><code>src\passes\bokeh.js:71</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l88"><code>src\passes\pass.js:88</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Render to screen flag.</p>
-
+        Render to screen flag.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -990,7 +787,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l24"><code>src\passes\pass.js:24</code></a>
+        <a href="../files/src_passes_pass.js.html#l26"><code>src\passes\pass.js:26</code></a>
         </p>
 
 

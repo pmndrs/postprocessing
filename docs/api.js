@@ -2,7 +2,6 @@ YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
         "AdaptiveLuminosityMaterial",
-        "AdaptiveToneMappingPass",
         "BloomPass",
         "BokehMaterial",
         "BokehPass",
@@ -23,9 +22,14 @@ YUI.add("yuidoc-meta", function(Y) {
         "MaskPass",
         "Pass",
         "RenderPass",
+        "SMAABlendMaterial",
+        "SMAAColorEdgesMaterial",
+        "SMAAPass",
+        "SMAAWeightsMaterial",
         "SavePass",
         "ShaderPass",
-        "ToneMappingMaterial"
+        "ToneMappingMaterial",
+        "ToneMappingPass"
     ],
     "modules": [
         "materials",

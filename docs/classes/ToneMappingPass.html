@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>MaskPass - postprocessing</title>
+    <title>ToneMappingPass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -107,7 +107,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>MaskPass Class</h1>
+<h1>ToneMappingPass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -115,7 +115,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_mask.js.html#l3"><code>src\passes\mask.js:3</code></a>
+            Defined in: <a href="../files/src_passes_tone-mapping.js.html#l11"><code>src\passes\tone-mapping.js:11</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -124,22 +124,25 @@
 
 
 <div class="box intro">
-    <p>A mask pass.</p>
+    <p>A tone mapping pass that supports adaptive luminosity.</p>
+<p>If adaptivity is enabled, this pass generates a texture that represents
+the luminosity of the current scene and adjusts it over time to simulate
+the optic nerve responding to the amount of light it is receiving.</p>
+<p>Reference:
+GDC2007 - Wolfgang Engel, Post-Processing Pipeline
+<a href="http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf">http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf</a></p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_MaskPass" class="method item">
-    <h3 class="name"><code>MaskPass</code></h3>
+<div id="method_ToneMappingPass" class="method item">
+    <h3 class="name"><code>ToneMappingPass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>scene</code>
-                </li>
-                <li class="arg">
-                        <code>camera</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -154,7 +157,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_mask.js.html#l3"><code>src\passes\mask.js:3</code></a>
+        <a href="../files/src_passes_tone-mapping.js.html#l11"><code>src\passes\tone-mapping.js:11</code></a>
         </p>
 
 
@@ -170,30 +173,59 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">scene</code>
-                        <span class="type">Scene</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The scene to render.</li>
+<li>The options.</li>
 </ul>
 
                     </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name">camera</code>
-                        <span class="type">Camera</span>
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[adaptive=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
-<li>The camera to use to render the scene.</li>
+                                <div class="param-description">
+                                    <ul>
+<li>Whether the tone mapping should use an adaptive luminance map.</li>
 </ul>
 
-                    </div>
+                                </div>
 
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[resolution=256]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The render texture resolution.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[distinction=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>A luminance distinction factor.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -242,20 +274,28 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property">
+                                <a href="#property_adaptive">adaptive</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_adaptiveLuminosityMaterial">adaptiveLuminosityMaterial</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_clear">clear</a>
+                            <li class="index-item property private">
+                                <a href="#property_copyMaterial">copyMaterial</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_inverse">inverse</a>
+                            <li class="index-item property private">
+                                <a href="#property_luminosityMaterial">luminosityMaterial</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -266,12 +306,32 @@
                                 <a href="#property_quad">quad</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetLuminosity">renderTargetLuminosity</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetLuminosity">renderTargetLuminosity</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetX">renderTargetX</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_resolution">resolution</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_toneMappingMaterial">toneMappingMaterial</a>
 
                             </li>
                     </ul>
@@ -306,33 +366,31 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose method and 
-deletes them. The pass will be inoperative after this method was called!
+        <p>Performs a shallow search for properties that define a dispose method and
+deletes them. The pass will be inoperative after this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory
+when you are certain that you don't need this pass anymore.</p>
 
-Disposable objects:
- - render targets
- - materials
- - textures
-
-The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory 
-when you are certain that you don't need this pass anymore.
     </div>
 
 
 
 
 </div>
-<div id="method_initialise" class="method item inherited">
+<div id="method_initialise" class="method item">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
                         <code>renderer</code>
-                </li>
-                <li class="arg">
-                        <code>alpha</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -345,9 +403,12 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l128"><code>src\passes\pass.js:128</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_tone-mapping.js.html#l229"><code>src\passes\tone-mapping.js:229</code></a>
         </p>
 
 
@@ -355,14 +416,8 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Performs advanced initialisation tasks.
+        <p>Renders something into the previous luminosity texture.</p>
 
-By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the 
-appropriate format (RGB or RGBA).
-
-The provided renderer can be used to warm up special off-screen render 
-targets by performing a preliminary render operation.
     </div>
 
         <div class="params">
@@ -377,19 +432,6 @@ targets by performing a preliminary render operation.
                     <div class="param-description">
                         <ul>
 <li>The renderer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">alpha</code>
-                        <span class="type">Boolean</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>Whether the renderer uses the alpha channel or not.</li>
 </ul>
 
                     </div>
@@ -413,7 +455,10 @@ targets by performing a preliminary render operation.
                         <code>readBuffer</code>
                 </li>
                 <li class="arg">
-                        <code>readBuffer</code>
+                        <code>writeBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>delta</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -431,7 +476,7 @@ targets by performing a preliminary render operation.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_mask.js.html#l41"><code>src\passes\mask.js:41</code></a>
+        <a href="../files/src_passes_tone-mapping.js.html#l180"><code>src\passes\tone-mapping.js:180</code></a>
         </p>
 
 
@@ -439,8 +484,7 @@ targets by performing a preliminary render operation.
     </div>
 
     <div class="description">
-        <p>Renders the scene as a mask by only setting the stencil bits.
-The buffers will both be cleared first.</p>
+        <p>Renders the effect.</p>
 
     </div>
 
@@ -468,20 +512,33 @@ The buffers will both be cleared first.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The read buffer containing the result of the previous pass.</li>
+<li>The read buffer.</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">readBuffer</code>
+                        <code class="param-name">writeBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
 <li>The write buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">delta</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The render delta time.</li>
 </ul>
 
                     </div>
@@ -525,12 +582,11 @@ The buffers will both be cleared first.</p>
     </div>
 
     <div class="description">
-        Updates this pass with the renderer's size.
+        <p>Updates this pass with the renderer's size.</p>
+<p>This is an abstract method that may be overriden in case you want to be
+informed about the main render size.</p>
+<p>The effect composer calls this method when its own size is updated.</p>
 
-This is an abstract method that may be overriden in case you want to be 
-informed about the main render size.
-
-The effect composer calls this method when its own size is updated.
     </div>
 
         <div class="params">
@@ -582,6 +638,57 @@ The effect composer calls this method when its own size is updated.
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_adaptive" class="property item">
+    <h3 class="name"><code>adaptive</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l153"><code>src\passes\tone-mapping.js:153</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Whether this pass uses adaptive luminosity.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_adaptiveLuminosityMaterial" class="property item private">
+    <h3 class="name"><code>adaptiveLuminosityMaterial</code></h3>
+    <span class="type"><a href="../classes/AdaptiveLuminosityMaterial.html" class="crosslink">AdaptiveLuminosityMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l102"><code>src\passes\tone-mapping.js:102</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Adaptive luminance shader material.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -601,36 +708,37 @@ The effect composer calls this method when its own size is updated.
     </div>
 
     <div class="description">
-        The camera to render with.
+        <p>The camera to render with.</p>
+
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
 
 
 </div>
-<div id="property_clear" class="property item">
-    <h3 class="name"><code>clear</code></h3>
-    <span class="type">Boolean</span>
+<div id="property_copyMaterial" class="property item private">
+    <h3 class="name"><code>copyMaterial</code></h3>
+    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_mask.js.html#l29"><code>src\passes\mask.js:29</code></a>
+        <a href="../files/src_passes_tone-mapping.js.html#l80"><code>src\passes\tone-mapping.js:80</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Clear flag.</p>
+        <p>Copy shader material used for saving the luminance map.</p>
 
     </div>
 
-        <p><strong>Default:</strong> true</p>
 
 
 </div>
@@ -652,36 +760,37 @@ The effect composer calls this method when its own size is updated.
     </div>
 
     <div class="description">
-        Enabled flag.
+        <p>Enabled flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> true</p>
 
 
 </div>
-<div id="property_inverse" class="property item">
-    <h3 class="name"><code>inverse</code></h3>
-    <span class="type">Boolean</span>
+<div id="property_luminosityMaterial" class="property item private">
+    <h3 class="name"><code>luminosityMaterial</code></h3>
+    <span class="type"><a href="../classes/LuminosityMaterial.html" class="crosslink">LuminosityMaterial</a></span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_mask.js.html#l19"><code>src\passes\mask.js:19</code></a>
+        <a href="../files/src_passes_tone-mapping.js.html#l90"><code>src\passes\tone-mapping.js:90</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Inverse flag.</p>
+        <p>Luminosity shader material.</p>
 
     </div>
 
-        <p><strong>Default:</strong> false</p>
 
 
 </div>
@@ -704,11 +813,11 @@ The effect composer calls this method when its own size is updated.
     </div>
 
     <div class="description">
-        Indicates whether the read and write buffers should be swapped after this 
-pass has finished rendering.
+        <p>Indicates whether the read and write buffers should be swapped after this
+pass has finished rendering.</p>
+<p>Set this to true if this pass renders to the write buffer so that a
+following pass can find the result in the read buffer.</p>
 
-Set this to true if this pass renders to the write buffer so that a 
-following pass can find the result in the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -734,9 +843,9 @@ following pass can find the result in the read buffer.
     </div>
 
     <div class="description">
-        The quad mesh to use for rendering.
+        <p>The quad mesh to use for rendering.</p>
+<p>Assign your shader material to this mesh!</p>
 
-Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
@@ -749,6 +858,84 @@ Assign your shader material to this mesh!
 
             </div>
         </div>
+
+</div>
+<div id="property_renderTargetLuminosity" class="property item private">
+    <h3 class="name"><code>renderTargetLuminosity</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l57"><code>src\passes\tone-mapping.js:57</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Adapted luminance render target.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetLuminosity" class="property item private">
+    <h3 class="name"><code>renderTargetLuminosity</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l41"><code>src\passes\tone-mapping.js:41</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Render target for the current limonosity.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_renderTargetX" class="property item private">
+    <h3 class="name"><code>renderTargetX</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l70"><code>src\passes\tone-mapping.js:70</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Render target that holds a copy of the adapted limonosity.</p>
+
+    </div>
+
+
 
 </div>
 <div id="property_renderToScreen" class="property item inherited">
@@ -769,10 +956,37 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        Render to screen flag.
+        <p>Render to screen flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolution" class="property item">
+    <h3 class="name"><code>resolution</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l128"><code>src\passes\tone-mapping.js:128</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution of the render targets. Must be a power of two for mipmapping.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 256</p>
 
 
 </div>
@@ -795,10 +1009,37 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        The scene to render.
+        <p>The scene to render.</p>
+
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_toneMappingMaterial" class="property item private">
+    <h3 class="name"><code>toneMappingMaterial</code></h3>
+    <span class="type"><a href="../classes/ToneMappingMaterial.html" class="crosslink">ToneMappingMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_tone-mapping.js.html#l114"><code>src\passes\tone-mapping.js:114</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Tone mapping shader material.</p>
+
+    </div>
+
 
 
 </div>

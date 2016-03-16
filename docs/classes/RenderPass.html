@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -111,7 +115,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_render.js.html#l4"><code>src\passes\render.js:4</code></a>
+            Defined in: <a href="../files/src_passes_render.js.html#l15"><code>src\passes\render.js:15</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -139,13 +143,7 @@ or into the read buffer for further processing.</p>
                         <code>camera</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[overrideMaterial]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[clearColor]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[clearAlpha]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -160,7 +158,7 @@ or into the read buffer for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l4"><code>src\passes\render.js:4</code></a>
+        <a href="../files/src_passes_render.js.html#l15"><code>src\passes\render.js:15</code></a>
         </p>
 
 
@@ -202,46 +200,85 @@ or into the read buffer for further processing.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name optional">[overrideMaterial]</code>
-                        <span class="type">Material</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
+<li>Additional options.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[depth=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Indicates whether this pass should render the scene depth into an additional texture.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[depthResolutionScale=0.5]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The resolution scale of the depth texture, relative to the main render size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[overrideMaterial]</code>
+                                    <span class="type">Material</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
 <li>An override material for the scene.</li>
 </ul>
 
-                    </div>
+                                </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[clearColor]</code>
-                        <span class="type">Color</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[clearColor]</code>
+                                    <span class="type">Color</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
-<li>A clear color.</li>
+                                <div class="param-description">
+                                    <ul>
+<li>An override clear color.</li>
 </ul>
 
-                    </div>
+                                </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[clearAlpha]</code>
-                        <span class="type">Number</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[clearAlpha]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
-
-                    <div class="param-description">
-                        <ul>
-<li>A clear alpha value.</li>
+                                <div class="param-description">
+                                    <ul>
+<li>An override clear alpha.</li>
 </ul>
 
-                    </div>
+                                </div>
 
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -298,24 +335,40 @@ or into the read buffer for further processing.</p>
                                 <a href="#property_clear">clear</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_clearAlpha">clearAlpha</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_clearColor">clearColor</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_clearColor">clearColor</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_depth">depth</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_depthResolutionScale">depthResolutionScale</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_depthTexture">depthTexture</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property inherited">
+                            <li class="index-item property private">
+                                <a href="#property_MeshDepthMaterial">MeshDepthMaterial</a>
+
+                            </li>
+                            <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
@@ -359,7 +412,7 @@ or into the read buffer for further processing.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l159"><code>src\passes\pass.js:159</code></a>
+        <a href="../files/src_passes_pass.js.html#l162"><code>src\passes\pass.js:162</code></a>
         </p>
 
 
@@ -385,7 +438,7 @@ when you are certain that you don't need this pass anymore.</p>
 
 
 </div>
-<div id="method_initialise" class="method item inherited">
+<div id="method_initialise" class="method item">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
@@ -407,9 +460,12 @@ when you are certain that you don't need this pass anymore.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l125"><code>src\passes\pass.js:125</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_render.js.html#l176"><code>src\passes\render.js:176</code></a>
         </p>
 
 
@@ -417,12 +473,7 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Performs advanced initialisation tasks.</p>
-<p>By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).</p>
-<p>The provided renderer can be used to warm up special off-screen render
-targets by performing a preliminary render operation.</p>
+        <p>Adjusts the format and size of the depth render target.</p>
 
     </div>
 
@@ -489,7 +540,7 @@ targets by performing a preliminary render operation.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l75"><code>src\passes\render.js:75</code></a>
+        <a href="../files/src_passes_render.js.html#l126"><code>src\passes\render.js:126</code></a>
         </p>
 
 
@@ -537,7 +588,7 @@ targets by performing a preliminary render operation.</p>
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -559,9 +610,12 @@ targets by performing a preliminary render operation.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l142"><code>src\passes\pass.js:142</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_render.js.html#l203"><code>src\passes\render.js:203</code></a>
         </p>
 
 
@@ -569,10 +623,7 @@ targets by performing a preliminary render operation.</p>
     </div>
 
     <div class="description">
-        <p>Updates this pass with the renderer's size.</p>
-<p>This is an abstract method that may be overriden in case you want to be
-informed about the main render size.</p>
-<p>The effect composer calls this method when its own size is updated.</p>
+        <p>Updates the depth render target with the renderer's size.</p>
 
     </div>
 
@@ -587,7 +638,7 @@ informed about the main render size.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
@@ -600,7 +651,7 @@ informed about the main render size.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
@@ -611,14 +662,6 @@ informed about the main render size.</p>
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.width = width / 2;</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -637,7 +680,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l35"><code>src\passes\pass.js:35</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -663,7 +706,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l49"><code>src\passes\render.js:49</code></a>
+        <a href="../files/src_passes_render.js.html#l114"><code>src\passes\render.js:114</code></a>
         </p>
 
 
@@ -678,33 +721,6 @@ informed about the main render size.</p>
 
 
 </div>
-<div id="property_CLEAR_COLOR" class="property item private">
-    <h3 class="name"><code>CLEAR_COLOR</code></h3>
-    <span class="type">Color</span>
-
-
-        <span class="flag private">private</span>
-
-
-        <span class="flag static">static</span>
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l64"><code>src\passes\render.js:64</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Used for saving the original clear color during rendering.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_clearAlpha" class="property item">
     <h3 class="name"><code>clearAlpha</code></h3>
     <span class="type">Number</span>
@@ -716,7 +732,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l40"><code>src\passes\render.js:40</code></a>
+        <a href="../files/src_passes_render.js.html#l105"><code>src\passes\render.js:105</code></a>
         </p>
 
 
@@ -724,6 +740,33 @@ informed about the main render size.</p>
 
     <div class="description">
         <p>Clear alpha.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_clearColor" class="property item private">
+    <h3 class="name"><code>clearColor</code></h3>
+    <span class="type">Color</span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l4"><code>src\passes\render.js:4</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Used for saving the original clear color during rendering.</p>
 
     </div>
 
@@ -741,7 +784,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l31"><code>src\passes\render.js:31</code></a>
+        <a href="../files/src_passes_render.js.html#l96"><code>src\passes\render.js:96</code></a>
         </p>
 
 
@@ -749,6 +792,86 @@ informed about the main render size.</p>
 
     <div class="description">
         <p>Clear color.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_depth" class="property item">
+    <h3 class="name"><code>depth</code></h3>
+    <span class="type">Boolean</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l40"><code>src\passes\render.js:40</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Depth render flag.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_depthResolutionScale" class="property item">
+    <h3 class="name"><code>depthResolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l73"><code>src\passes\render.js:73</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale of the depth texture, relative to the main
+render size.</p>
+<p>You need to call the setSize method of the EffectComposer after
+changing this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.5</p>
+
+
+</div>
+<div id="property_depthTexture" class="property item">
+    <h3 class="name"><code>depthTexture</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l50"><code>src\passes\render.js:50</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The depth texture.</p>
 
     </div>
 
@@ -766,7 +889,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l75"><code>src\passes\pass.js:75</code></a>
+        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
         </p>
 
 
@@ -781,18 +904,45 @@ informed about the main render size.</p>
 
 
 </div>
-<div id="property_needsSwap" class="property item inherited">
+<div id="property_MeshDepthMaterial" class="property item private">
+    <h3 class="name"><code>MeshDepthMaterial</code></h3>
+    <span class="type">Material</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l63"><code>src\passes\render.js:63</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A depth shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_needsSwap" class="property item private inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l61"><code>src\passes\pass.js:61</code></a>
+        <a href="../files/src_passes_pass.js.html#l63"><code>src\passes\pass.js:63</code></a>
         </p>
 
 
@@ -821,7 +971,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l22"><code>src\passes\render.js:22</code></a>
+        <a href="../files/src_passes_render.js.html#l87"><code>src\passes\render.js:87</code></a>
         </p>
 
 
@@ -847,7 +997,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l46"><code>src\passes\pass.js:46</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
@@ -882,7 +1032,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l85"><code>src\passes\pass.js:85</code></a>
+        <a href="../files/src_passes_pass.js.html#l88"><code>src\passes\pass.js:88</code></a>
         </p>
 
 
@@ -909,7 +1059,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l24"><code>src\passes\pass.js:24</code></a>
+        <a href="../files/src_passes_pass.js.html#l26"><code>src\passes\pass.js:26</code></a>
         </p>
 
 

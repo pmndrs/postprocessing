@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -223,15 +227,15 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
 
                     <ul class="index-list properties extends">
                             <li class="index-item property private">
+                                <a href="#property_currentKernel">currentKernel</a>
+
+                            </li>
+                            <li class="index-item property private">
                                 <a href="#property_kernels">kernels</a>
 
                             </li>
                             <li class="index-item property">
                                 <a href="#property_scale">scale</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_step">step</a>
 
                             </li>
                     </ul>
@@ -258,7 +262,7 @@ Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l95"><code>src\materials\convolution\index.js:95</code></a>
+        <a href="../files/src_materials_convolution_index.js.html#l93"><code>src\materials\convolution\index.js:93</code></a>
         </p>
 
 
@@ -299,7 +303,7 @@ Call this method before each render iteration.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l80"><code>src\materials\convolution\index.js:80</code></a>
+        <a href="../files/src_materials_convolution_index.js.html#l78"><code>src\materials\convolution\index.js:78</code></a>
         </p>
 
 
@@ -352,6 +356,32 @@ Call this method before each render iteration.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_currentKernel" class="property item private">
+    <h3 class="name"><code>currentKernel</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l64"><code>src\materials\convolution\index.js:64</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The current kernel.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_kernels" class="property item private">
     <h3 class="name"><code>kernels</code></h3>
     <span class="type">Number</span>
@@ -364,7 +394,7 @@ Call this method before each render iteration.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l41"><code>src\materials\convolution\index.js:41</code></a>
+        <a href="../files/src_materials_convolution_index.js.html#l43"><code>src\materials\convolution\index.js:43</code></a>
         </p>
 
 
@@ -390,7 +420,7 @@ The result matches the 35x35 Gauss filter.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l52"><code>src\materials\convolution\index.js:52</code></a>
+        <a href="../files/src_materials_convolution_index.js.html#l54"><code>src\materials\convolution\index.js:54</code></a>
         </p>
 
 
@@ -402,32 +432,6 @@ The result matches the 35x35 Gauss filter.</p>
     </div>
 
         <p><strong>Default:</strong> 1.0</p>
-
-
-</div>
-<div id="property_step" class="property item private">
-    <h3 class="name"><code>step</code></h3>
-    <span class="type">Number</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_convolution_index.js.html#l62"><code>src\materials\convolution\index.js:62</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The current kernel.</p>
-
-    </div>
-
 
 
 </div>

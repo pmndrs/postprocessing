@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.3.2</em>
+            <em>API Docs for: 1.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -39,7 +39,6 @@
                         <div id="api-tabview-panel">
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
-                                <li><a href="../classes/AdaptiveToneMappingPass.html">AdaptiveToneMappingPass</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
@@ -62,7 +61,12 @@
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
+                                <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
+                                <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
+                                <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
+                                <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
@@ -119,29 +123,30 @@ import THREE from &quot;three&quot;;
  * @extends ShaderMaterial
  */
 
-export function ToneMappingMaterial() {
+export class ToneMappingMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor() {
 
-		uniforms: {
+		super({
 
-			tDiffuse: {type: &quot;t&quot;, value: null},
-			luminanceMap: {type: &quot;t&quot;, value: null},
-			averageLuminance: {type: &quot;f&quot;, value: 1.0},
-			maxLuminance: {type: &quot;f&quot;, value: 16.0},
-			middleGrey: {type: &quot;f&quot;, value: 0.6}
+			uniforms: {
 
-		},
+				tDiffuse: {type: &quot;t&quot;, value: null},
+				luminanceMap: {type: &quot;t&quot;, value: null},
+				averageLuminance: {type: &quot;f&quot;, value: 1.0},
+				maxLuminance: {type: &quot;f&quot;, value: 16.0},
+				middleGrey: {type: &quot;f&quot;, value: 0.6}
 
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
+			},
 
-	});
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
+
+		});
+
+	}
 
 }
-
-ToneMappingMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-ToneMappingMaterial.prototype.constructor = ToneMappingMaterial;
 
     </pre>
 </div>
