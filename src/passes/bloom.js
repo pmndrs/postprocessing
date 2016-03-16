@@ -43,11 +43,10 @@ export class BloomPass extends Pass {
 		this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
+			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
-
-		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.
@@ -67,6 +66,7 @@ export class BloomPass extends Pass {
 		 *
 		 * @property resolutionScale
 		 * @type Number
+		 * @default 0.5
 		 */
 
 		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
@@ -185,7 +185,7 @@ export class BloomPass extends Pass {
 		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
-		// Render original scene with superimposed blur.
+		// Render the original scene with superimposed blur.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
