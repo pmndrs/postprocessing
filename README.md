@@ -8,7 +8,7 @@ A post processing library that provides the means to implement 2D filter effects
 
 ## Preface
 
-This module uses modern ECMAScript features and requires one of the following browsers.
+This module uses modern ECMAScript features and requires one of the following browsers:
  - Chrome ≥ 42
  - Firefox ≥ 45
  - IE Edge ≥ 13
