@@ -2,70 +2,46 @@ import shader from "./inlined/shader";
 import THREE from "three";
 
 /**
- * Depth-of-field shader with bokeh ported from GLSL shader by Martins Upitis.
- * http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
+ * Depth of Field shader (Bokeh).
+ *
+ * Original code by Martins Upitis:
+ *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
  *
  * @class BokehMaterial
  * @constructor
  * @extends ShaderMaterial
+ * @param {Object} [options] - The options.
+ * @param {Number} [options.focus=1.0] - Focus distance.
+ * @param {Number} [options.aspect=1.0] - Camera aspect factor.
+ * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
+ * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
  */
 
-export function BokehMaterial() {
+export class BokehMaterial extends THREE.ShaderMaterial {
 
-	THREE.ShaderMaterial.call(this, {
+	constructor(options) {
 
-		defines: {
+		if(options === undefined) {	options = {}; }
 
-			RINGS: "3",
-			SAMPLES: "4"
+		super({
 
-		},
+			uniforms: {
 
-		uniforms: {
+				tDiffuse: {type: "t", value: null},
+				tDepth: {type: "t", value: null},
 
-			textureWidth: {type: "f", value: 1.0},
-			textureHeight: {type: "f", value: 1.0},
+				focus: {type: "f", value: (options.focus !== undefined) ? options.focus : 1.0},
+				aspect: {type: "f", value: (options.aspect !== undefined) ? options.aspect : 1.0},
+				aperture: {type: "f", value: (options.aperture !== undefined) ? options.aperture : 0.025},
+				maxBlur: {type: "f", value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
 
-			focalDepth: {type: "f", value: 1.0}, // Metres.
-			focalLength: {type: "f", value: 24.0}, // Milimetres.
-			fstop: {type: "f", value: 0.9},
+			},
 
-			tColor: {type: "t", value: null},
-			tDepth: {type: "t", value: null},
+			fragmentShader: shader.fragment,
+			vertexShader: shader.vertex
 
-			maxblur: {type: "f", value: 1.0},
+		});
 
-			showFocus: {type: "i", value: 0},
-			manualdof: {type: "i", value: 0},
-			vignetting: {type: "i", value: 0},
-			depthblur: {type: "i", value: 0},
-
-			threshold: {type: "f", value: 0.5},
-			gain: {type: "f", value: 2.0},
-			bias: {type: "f", value: 0.5},
-			fringe: {type: "f", value: 0.7},
-
-			/* Make sure that these are the same as your camera's. */
-			znear: {type: "f", value: 0.1},
-			zfar: {type: "f", value: 2000},
-
-			noise: {type: "i", value: 1}, // Use noise instead of sampling.
-			dithering: {type: "f", value: 0.0001},
-			pentagon: {type: "i", value: 0},
-
-			shaderFocus: {type: "i", value: 1}, // Disable if you use external focalDepth value
-
-			/* Autofocus point on screen (0.0, 0.0 - leftLowerCorner, 1.0, 1.0 - upperRightCorner). If center of screen use vec2(0.5, 0.5) */
-			focusCoords: {type: "v2", value: new THREE.Vector2()},
-
-		},
-
-		fragmentShader: shader.fragment,
-		vertexShader: shader.vertex
-
-	});
+	}
 
 }
-
-BokehMaterial.prototype = Object.create(THREE.ShaderMaterial.prototype);
-BokehMaterial.prototype.constructor = BokehMaterial;
