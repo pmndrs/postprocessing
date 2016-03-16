@@ -1,12 +1,53 @@
-window.addEventListener("load", function init() {
+window.addEventListener("load", function loadAssets() {
 
-	window.removeEventListener("load", init);
+	window.removeEventListener("load", loadAssets);
+
+	var loadingManager = new THREE.LoadingManager();
+	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+
+	var assets = {};
+
+	loadingManager.onProgress = function(item, loaded, total) {
+
+		if(loaded === total) { setupScene(assets); }
+
+	};
+
+	var path = "textures/skies/space2/";
+	var format = ".jpg";
+	var urls = [
+		path + "px" + format, path + "nx" + format,
+		path + "py" + format, path + "ny" + format,
+		path + "pz" + format, path + "nz" + format
+	];
+
+	cubeTextureLoader.load(urls, function(textureCube) {
+
+		var shader = THREE.ShaderLib.cube;
+		shader.uniforms.tCube.value = textureCube;
+
+		var skyBoxMaterial = new THREE.ShaderMaterial( {
+			fragmentShader: shader.fragmentShader,
+			vertexShader: shader.vertexShader,
+			uniforms: shader.uniforms,
+			depthWrite: false,
+			side: THREE.BackSide,
+			fog: false
+		});
+
+		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(20000, 20000, 20000), skyBoxMaterial);
+
+	});
+
+});
+
+function setupScene(assets) {
 
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.00025);
+	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.getElementById("viewport").appendChild(renderer.domElement);
@@ -17,6 +58,7 @@ window.addEventListener("load", function init() {
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 0, 0);
 	controls.damping = 0.2;
+	controls.maxDistance = 10000;
 	camera.position.set(-1000, 1000, 1500);
 	camera.lookAt(controls.target);
 
@@ -56,13 +98,17 @@ window.addEventListener("load", function init() {
 	scene.add(directionalLight);
 	scene.add(ambientLight);
 
+	// Sky.
+
+	camera.add(assets.sky);
+
 	// Random objects.
 
 	object = new THREE.Object3D();
 
 	var i, mesh;
 	var geometry = new THREE.SphereBufferGeometry(1, 4, 4);
-	var material = new THREE.MeshPhongMaterial({color: 0xffffff, shading: THREE.FlatShading});
+	var material = new THREE.MeshBasicMaterial({color: 0xffffff, shading: THREE.FlatShading});
 
 	for(i = 0; i < 100; ++i) {
 
@@ -123,7 +169,7 @@ window.addEventListener("load", function init() {
 		resolutionScale: 0.5,
 		blurriness: 1.0,
 		strength: 1.0,
-		distinction: 1.0
+		distinction: 4.0
 	});
 
 	pass.renderToScreen = true;
@@ -193,4 +239,4 @@ window.addEventListener("load", function init() {
 
 	}());
 
-});
+}

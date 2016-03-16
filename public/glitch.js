@@ -1,12 +1,53 @@
-window.addEventListener("load", function init() {
+window.addEventListener("load", function loadAssets() {
 
-	window.removeEventListener("load", init);
+	window.removeEventListener("load", loadAssets);
+
+	var loadingManager = new THREE.LoadingManager();
+	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+
+	var assets = {};
+
+	loadingManager.onProgress = function(item, loaded, total) {
+
+		if(loaded === total) { setupScene(assets); }
+
+	};
+
+	var path = "textures/skies/space4/";
+	var format = ".jpg";
+	var urls = [
+		path + "px" + format, path + "nx" + format,
+		path + "py" + format, path + "ny" + format,
+		path + "pz" + format, path + "nz" + format
+	];
+
+	cubeTextureLoader.load(urls, function(textureCube) {
+
+		var shader = THREE.ShaderLib.cube;
+		shader.uniforms.tCube.value = textureCube;
+
+		var skyBoxMaterial = new THREE.ShaderMaterial( {
+			fragmentShader: shader.fragmentShader,
+			vertexShader: shader.vertexShader,
+			uniforms: shader.uniforms,
+			depthWrite: false,
+			side: THREE.BackSide,
+			fog: false
+		});
+
+		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(20000, 20000, 20000), skyBoxMaterial);
+
+	});
+
+});
+
+function setupScene(assets) {
 
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.001);
+	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
@@ -55,6 +96,10 @@ window.addEventListener("load", function init() {
 
 	scene.add(directionalLight);
 	scene.add(hemisphereLight);
+
+	// Sky.
+
+	camera.add(assets.sky);
 
 	// Random objects.
 
@@ -149,4 +194,4 @@ window.addEventListener("load", function init() {
 
 	}());
 
-});
+}

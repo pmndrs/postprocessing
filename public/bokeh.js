@@ -47,18 +47,20 @@ function setupScene(assets) {
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.001);
+	scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
 	// Camera.
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 20000);
+	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 0, 0);
 	controls.damping = 0.2;
-	camera.position.set(0, 200, 450);
+	controls.enablePan = false;
+	controls.minDistance = 2.5;
+	camera.position.set(3, 1, 3);
 	camera.lookAt(controls.target);
 
 	scene.add(camera);
@@ -88,51 +90,40 @@ function setupScene(assets) {
 
 	// Lights.
 
-	var hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+	var ambientLight = new THREE.AmbientLight(0x888888);
 	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
 
-	directionalLight.position.set(-1, 1, 1);
+	directionalLight.position.set(1440, 200, 2000);
 	directionalLight.target.position.copy(scene.position);
 
+	scene.add(ambientLight);
 	scene.add(directionalLight);
-	scene.add(hemisphereLight);
 
 	// Sky.
 
 	camera.add(assets.sky);
 
-	// Random objects.
+	// Objects.
 
-	object = new THREE.Object3D();
+	var geometry = new THREE.SphereBufferGeometry(1, 64, 64);
+	var material = new THREE.MeshBasicMaterial({
+		color: 0xffff00,
+		envMap: assets.sky.material.uniforms.tCube.value
+	});
 
-	var i, mesh;
-	var geometry = new THREE.SphereBufferGeometry(1, 4, 4);
-	var material = new THREE.MeshPhongMaterial({color: 0xffffff, shading: THREE.FlatShading});
-
-	for(i = 0; i < 100; ++i) {
-
-		material = new THREE.MeshPhongMaterial({color: 0xffffff * Math.random(), shading: THREE.FlatShading});
-
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-		mesh.position.multiplyScalar(Math.random() * 400);
-		mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-		mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 50;
-		object.add(mesh);
-
-	}
-
-	scene.add(object);
+	mesh = new THREE.Mesh(geometry, material);
+	scene.add(mesh);
 
 	// Post-Processing.
 
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
+	var renderPass = new POSTPROCESSING.RenderPass(scene, camera, {depth: true});
+	composer.addPass(renderPass);
 
-	var pass = new POSTPROCESSING.DotScreenPass({
-		scale: 0.8,
-		angle: Math.PI * 0.5,
-		intensity: 0.25
+	var pass = new POSTPROCESSING.BokehPass(renderPass.depthTexture, {
+		focus: 1.0,
+		aperture: 0.007,
+		maxBlur: 0.025
 	});
 
 	pass.renderToScreen = true;
@@ -141,27 +132,16 @@ function setupScene(assets) {
 	// Shader settings.
 
 	var params = {
-		"average": pass.material.defines.AVERAGE !== undefined,
-		"scale": pass.material.uniforms.scale.value,
-		"angle": pass.material.uniforms.angle.value,
-		"intensity": pass.material.uniforms.intensity.value,
-		"center X": pass.material.uniforms.offsetRepeat.value.x,
-		"center Y": pass.material.uniforms.offsetRepeat.value.y
+		"depth resolution": renderPass.depthResolutionScale,
+		"focus": pass.bokehMaterial.uniforms.focus.value,
+		"aperture": pass.bokehMaterial.uniforms.aperture.value,
+		"max blur": pass.bokehMaterial.uniforms.maxBlur.value
 	};
 
-	gui.add(params, "average").onChange(function() {
-		if(params["average"]) { pass.material.defines.AVERAGE = "1"; }
-		else { delete pass.material.defines.AVERAGE; }
-		pass.material.needsUpdate = true;
-	});
-
-	gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params["scale"]; });
-	gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params["angle"]; });
-	gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params["intensity"]; });
-
-	var f = gui.addFolder("Center");
-	f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
-	f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
+	gui.add(params, "depth resolution").min(0.0).max(1.0).step(0.01).onChange(function() { renderPass.depthResolutionScale = params["depth resolution"]; composer.setSize(); });
+	gui.add(params, "focus").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
+	gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params["aperture"]; });
+	gui.add(params, "max blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
 
 	/**
 	 * Handles resizing.
@@ -183,6 +163,7 @@ function setupScene(assets) {
 	 */
 
 	var TWO_PI = 2.0 * Math.PI;
+	var clock = new THREE.Clock(true);
 
 	(function render(now) {
 
@@ -190,17 +171,10 @@ function setupScene(assets) {
 
 		stats.begin();
 
-		object.rotation.x += 0.0005;
-		object.rotation.y += 0.001;
-
-		composer.render();
-
-		// Prevent overflow.
-		if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-		if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+		composer.render(clock.getDelta());
 
 		stats.end();
 
 	}());
 
-}
+};

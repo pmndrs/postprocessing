@@ -18,7 +18,7 @@ window.addEventListener("load", function loadAssets() {
 
 	};
 
-	var path = "textures/skies/space/";
+	var path = "textures/skies/space5/";
 	var format = ".jpg";
 	var urls = [
 		path + "px" + format, path + "nx" + format,
@@ -107,7 +107,7 @@ function setupScene(assets) {
 
 	// Lights.
 
-	var ambientLight = new THREE.AmbientLight(0x433a2e);
+	var ambientLight = new THREE.AmbientLight(0x2d200f);
 	var directionalLight = new THREE.DirectionalLight(0xffeeaa);
 
 	directionalLight.position.set(-1, 1, 0);
@@ -122,15 +122,17 @@ function setupScene(assets) {
 
 	// Moon.
 
+	//assets.moonColorMap.anisotropy = renderer.getMaxAnisotropy();
+
 	var material = new THREE.MeshPhongMaterial({
-		color: 0xbbbbbb,
+		color: 0xd4d4d4,
 		map: assets.moonColorMap,
 		normalMap: assets.moonNormalMap,
-		shininess: 4,
+		shininess: 10,
 		fog: true
 	});
 
-	var moon = new THREE.Mesh(new THREE.SphereBufferGeometry(100, 32, 32), material);
+	var moon = new THREE.Mesh(new THREE.SphereBufferGeometry(100, 64, 64), material);
 
 	scene.add(moon);
 
@@ -143,7 +145,7 @@ function setupScene(assets) {
 	pass = new POSTPROCESSING.ToneMappingPass({
 		adaptive: true,
 		resolution: 256,
-		distinction: 1.0
+		distinction: 2.0
 	});
 
 	pass.renderToScreen = true;
