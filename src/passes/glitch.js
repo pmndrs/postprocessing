@@ -10,7 +10,7 @@ import THREE from "three";
  * @extends Pass
  * @param {Object} [options] - The options.
  * @param {Texture} [options.perturbMap] - A perturbation map.
- * @param {Number} [options.dtSize=64] - The size of the generated noise map.
+ * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
  */
 
 export class GlitchPass extends Pass {

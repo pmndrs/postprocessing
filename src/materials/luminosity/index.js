@@ -17,7 +17,7 @@ import THREE from "three";
  * @class LuminosityMaterial
  * @constructor
  * @extends ShaderMaterial
- * @params {Boolean} [color=false] - Defines whether the shader should output colors scaled with their luminance value.
+ * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
  * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
  */
 

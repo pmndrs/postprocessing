@@ -3,7 +3,7 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * A film pass providing scan lines, greyscale and noise effects.
+ * A film pass providing various cinematic effects.
  *
  * @class FilmPass
  * @constructor

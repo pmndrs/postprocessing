@@ -8,12 +8,15 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * Depth of Field pass using a bokeh shader.
+ * Subpixel Morphological Antialiasing (SMAA) v2.8.
+ *
+ * Preset: SMAA 1x Medium (with color edge detection).
+ *  https://github.com/iryoku/smaa/releases/tag/v2.8
  *
  * @class SMAAPass
  * @constructor
  * @extends Pass
- * @param {Image} [Image] - window.Image.
+ * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!
  */
 
 export class SMAAPass extends Pass {

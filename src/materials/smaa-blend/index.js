@@ -2,10 +2,9 @@ import shader from "./inlined/shader";
 import THREE from "three";
 
 /**
- * Subpixel Morphological Antialiasing (SMAA) v2.8
+ * Subpixel Morphological Antialiasing.
  *
- * Preset: SMAA 1x Medium (with color edge detection).
- *  https://github.com/iryoku/smaa/releases/tag/v2.8
+ * This material is used to render the final antialiasing.
  *
  * @class SMAABlendMaterial
  * @constructor

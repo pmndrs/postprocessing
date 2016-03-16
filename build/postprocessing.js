@@ -549,7 +549,7 @@
 	 * @class LuminosityMaterial
 	 * @constructor
 	 * @extends ShaderMaterial
-	 * @params {Boolean} [color=false] - Defines whether the shader should output colors scaled with their luminance value.
+	 * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
 	 * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
 	 */
 
@@ -585,10 +585,9 @@
 	};
 
 	/**
-	 * Subpixel Morphological Antialiasing (SMAA) v2.8
+	 * Subpixel Morphological Antialiasing.
 	 *
-	 * Preset: SMAA 1x Medium (with color edge detection).
-	 *  https://github.com/iryoku/smaa/releases/tag/v2.8
+	 * This material is used to render the final antialiasing.
 	 *
 	 * @class SMAABlendMaterial
 	 * @constructor
@@ -625,10 +624,9 @@
 	};
 
 	/**
-	 * Subpixel Morphological Antialiasing (SMAA) v2.8
+	 * Subpixel Morphological Antialiasing.
 	 *
-	 * Preset: SMAA 1x Medium (with color edge detection).
-	 *  https://github.com/iryoku/smaa/releases/tag/v2.8
+	 * This material detects edges in a color texture.
 	 *
 	 * @class SMAAColorEdgesMaterial
 	 * @constructor
@@ -674,10 +672,9 @@
 	var searchImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII=";
 
 	/**
-	 * Subpixel Morphological Antialiasing (SMAA) v2.8
+	 * Subpixel Morphological Antialiasing.
 	 *
-	 * Preset: SMAA 1x Medium (with color edge detection).
-	 *  https://github.com/iryoku/smaa/releases/tag/v2.8
+	 * This material computes weights for detected edges.
 	 *
 	 * @class SMAAWeightsMaterial
 	 * @constructor
@@ -794,7 +791,7 @@
 	 * @constructor
 	 * @param {Scene} [scene] - The scene to render.
 	 * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
-	 * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.
+	 * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see RenderPass).
 	 */
 
 	class Pass {
@@ -1679,7 +1676,7 @@
 	}
 
 	/**
-	 * A film pass providing scan lines, greyscale and noise effects.
+	 * A film pass providing various cinematic effects.
 	 *
 	 * @class FilmPass
 	 * @constructor
@@ -1802,7 +1799,7 @@
 	 * @extends Pass
 	 * @param {Object} [options] - The options.
 	 * @param {Texture} [options.perturbMap] - A perturbation map.
-	 * @param {Number} [options.dtSize=64] - The size of the generated noise map.
+	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
 	 */
 
 	class GlitchPass extends Pass {
@@ -2502,13 +2499,16 @@
 	 * A pass that renders a given scene directly on screen
 	 * or into the read buffer for further processing.
 	 *
+	 * In addition to that, this pass can also render a depth 
+	 * texture which may be used by other passes.
+	 *
 	 * @class RenderPass
 	 * @constructor
 	 * @extends Pass
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - Additional options.
-	 * @param {Boolean} [options.depth=false] - Indicates whether this pass should render the scene depth into an additional texture.
+	 * @param {Boolean} [options.depth=false] - Indicates whether this pass should also render a scene depth texture.
 	 * @param {Boolean} [options.depthResolutionScale=0.5] - The resolution scale of the depth texture, relative to the main render size.
 	 * @param {Material} [options.overrideMaterial] - An override material for the scene.
 	 * @param {Color} [options.clearColor] - An override clear color.
@@ -2714,7 +2714,7 @@
 
 	/**
 	 * A save pass that renders the result from a previous 
-	 * pass (readBuffer) to an arbitrary render target.
+	 * pass (read buffer) to an arbitrary render target.
 	 *
 	 * @class SavePass
 	 * @constructor
@@ -2803,12 +2803,15 @@
 	}
 
 	/**
-	 * Depth of Field pass using a bokeh shader.
+	 * Subpixel Morphological Antialiasing (SMAA) v2.8.
+	 *
+	 * Preset: SMAA 1x Medium (with color edge detection).
+	 *  https://github.com/iryoku/smaa/releases/tag/v2.8
 	 *
 	 * @class SMAAPass
 	 * @constructor
 	 * @extends Pass
-	 * @param {Image} [Image] - window.Image.
+	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!
 	 */
 
 	class SMAAPass extends Pass {

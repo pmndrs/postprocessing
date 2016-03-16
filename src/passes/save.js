@@ -4,7 +4,7 @@ import THREE from "three";
 
 /**
  * A save pass that renders the result from a previous 
- * pass (readBuffer) to an arbitrary render target.
+ * pass (read buffer) to an arbitrary render target.
  *
  * @class SavePass
  * @constructor

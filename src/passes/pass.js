@@ -16,7 +16,7 @@ import THREE from "three";
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
- * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.
+ * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see RenderPass).
  */
 
 export class Pass {

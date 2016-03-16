@@ -687,7 +687,7 @@
             "params": [
                 {
                     "name": "color",
-                    "description": "- Defines whether the shader should output colors scaled with their luminance value.",
+                    "description": "- Defines whether the shader should output colours scaled with their luminance value.",
                     "type": "Boolean",
                     "optional": true,
                     "optdefault": "false"
@@ -711,7 +711,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\smaa-blend\\index.js",
             "line": 4,
-            "description": "Subpixel Morphological Antialiasing (SMAA) v2.8\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
+            "description": "Subpixel Morphological Antialiasing.\n\nThis material is used to render the final antialiasing.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
             "params": [
@@ -734,7 +734,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\smaa-color-edges\\index.js",
             "line": 4,
-            "description": "Subpixel Morphological Antialiasing (SMAA) v2.8\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
+            "description": "Subpixel Morphological Antialiasing.\n\nThis material detects edges in a color texture.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
             "params": [
@@ -757,7 +757,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\smaa-weights\\index.js",
             "line": 6,
-            "description": "Subpixel Morphological Antialiasing (SMAA) v2.8\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
+            "description": "Subpixel Morphological Antialiasing.\n\nThis material computes weights for detected edges.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
             "params": [
@@ -972,7 +972,7 @@
             "namespace": "",
             "file": "src\\passes\\film.js",
             "line": 5,
-            "description": "A film pass providing scan lines, greyscale and noise effects.",
+            "description": "A film pass providing various cinematic effects.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1107,7 +1107,7 @@
                         },
                         {
                             "name": "dtSize",
-                            "description": "- The size of the generated noise map.",
+                            "description": "- The size of the generated noise map. Will be ignored if a perturbation map is provided.",
                             "type": "Number",
                             "optional": true,
                             "optdefault": "64"
@@ -1277,7 +1277,7 @@
                 },
                 {
                     "name": "quad",
-                    "description": "- A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it.",
+                    "description": "- A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see RenderPass).",
                     "type": "Mesh",
                     "optional": true
                 }
@@ -1295,7 +1295,7 @@
             "namespace": "",
             "file": "src\\passes\\render.js",
             "line": 15,
-            "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.",
+            "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.\n\nIn addition to that, this pass can also render a depth \ntexture which may be used by other passes.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1317,7 +1317,7 @@
                     "props": [
                         {
                             "name": "depth",
-                            "description": "- Indicates whether this pass should render the scene depth into an additional texture.",
+                            "description": "- Indicates whether this pass should also render a scene depth texture.",
                             "type": "Boolean",
                             "optional": true,
                             "optdefault": "false"
@@ -1363,7 +1363,7 @@
             "namespace": "",
             "file": "src\\passes\\save.js",
             "line": 5,
-            "description": "A save pass that renders the result from a previous \npass (readBuffer) to an arbitrary render target.",
+            "description": "A save pass that renders the result from a previous \npass (read buffer) to an arbitrary render target.",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
@@ -1422,15 +1422,14 @@
             "namespace": "",
             "file": "src\\passes\\smaa.js",
             "line": 10,
-            "description": "Depth of Field pass using a bokeh shader.",
+            "description": "Subpixel Morphological Antialiasing (SMAA) v2.8.\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
             "is_constructor": 1,
             "extends": "Pass",
             "params": [
                 {
                     "name": "Image",
-                    "description": "- window.Image.",
-                    "type": "Image",
-                    "optional": true
+                    "description": "- This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!",
+                    "type": "Image"
                 }
             ]
         },
@@ -1575,7 +1574,7 @@
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 50,
+            "line": 49,
             "description": "The area pattern recognition image.",
             "itemtype": "property",
             "name": "areaImage",
@@ -1584,7 +1583,7 @@
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 59,
+            "line": 58,
             "description": "The search image.",
             "itemtype": "property",
             "name": "searchImage",
@@ -2626,7 +2625,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 40,
+            "line": 43,
             "description": "Depth render flag.",
             "itemtype": "property",
             "name": "depth",
@@ -2637,7 +2636,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 50,
+            "line": 53,
             "description": "The depth texture.",
             "itemtype": "property",
             "name": "depthTexture",
@@ -2647,7 +2646,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 63,
+            "line": 66,
             "description": "A depth shader material.",
             "itemtype": "property",
             "name": "MeshDepthMaterial",
@@ -2659,7 +2658,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 73,
+            "line": 76,
             "description": "The resolution scale of the depth texture, relative to the main \nrender size.\n\nYou need to call the setSize method of the EffectComposer after \nchanging this value.",
             "itemtype": "property",
             "name": "depthResolutionScale",
@@ -2670,7 +2669,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 87,
+            "line": 90,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
@@ -2680,7 +2679,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 96,
+            "line": 99,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
@@ -2690,7 +2689,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 105,
+            "line": 108,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
@@ -2700,7 +2699,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 114,
+            "line": 117,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
@@ -2711,7 +2710,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 126,
+            "line": 129,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2732,7 +2731,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 176,
+            "line": 179,
             "description": "Adjusts the format and size of the depth render target.",
             "itemtype": "method",
             "name": "initialise",
@@ -2753,7 +2752,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 203,
+            "line": 206,
             "description": "Updates the depth render target with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2893,7 +2892,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 25,
+            "line": 28,
             "description": "A render target for the color edge detection.",
             "itemtype": "property",
             "name": "renderTargetColorEdges",
@@ -2905,7 +2904,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 41,
+            "line": 44,
             "description": "A render target for the SMAA weights.",
             "itemtype": "property",
             "name": "renderTargetWeights",
@@ -2917,7 +2916,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 53,
+            "line": 56,
             "description": "SMAA color edge detection shader material.",
             "itemtype": "property",
             "name": "colorEdgesMaterial",
@@ -2929,7 +2928,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 63,
+            "line": 66,
             "description": "SMAA weights shader material.",
             "itemtype": "property",
             "name": "weightsMaterial",
@@ -2941,7 +2940,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 99,
+            "line": 102,
             "description": "SMAA blend shader material.",
             "itemtype": "property",
             "name": "blendMaterial",
@@ -2953,7 +2952,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 115,
+            "line": 118,
             "description": "Antialiases the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2979,7 +2978,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 151,
+            "line": 154,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -3000,7 +2999,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 166,
+            "line": 169,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",

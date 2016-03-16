@@ -129,13 +129,16 @@ const clearColor = new THREE.Color();
  * A pass that renders a given scene directly on screen
  * or into the read buffer for further processing.
  *
+ * In addition to that, this pass can also render a depth 
+ * texture which may be used by other passes.
+ *
  * @class RenderPass
  * @constructor
  * @extends Pass
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  * @param {Object} [options] - Additional options.
- * @param {Boolean} [options.depth=false] - Indicates whether this pass should render the scene depth into an additional texture.
+ * @param {Boolean} [options.depth=false] - Indicates whether this pass should also render a scene depth texture.
  * @param {Boolean} [options.depthResolutionScale=0.5] - The resolution scale of the depth texture, relative to the main render size.
  * @param {Material} [options.overrideMaterial] - An override material for the scene.
  * @param {Color} [options.clearColor] - An override clear color.
