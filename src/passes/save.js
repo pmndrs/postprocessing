@@ -9,7 +9,7 @@ import THREE from "three";
  * @class SavePass
  * @constructor
  * @extends Pass
- * @param {Scene} [renderTarget] - The render target to use for saving the read buffer.
+ * @param {Scene} renderTarget - The render target to use for saving the read buffer.
  * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
  */
 
@@ -39,19 +39,7 @@ export class SavePass extends Pass {
 		 * @private
 		 */
 
-		if(renderTarget === undefined) {
-
-			renderTarget = new THREE.WebGLRenderTarget(1, 1, {
-				minFilter: THREE.LinearFilter,
-				magFilter: THREE.LinearFilter,
-				format: THREE.RGBFormat,
-				stencilBuffer: false
-			});
-
-		}
-
-		this.renderTarget = renderTarget;
-		this.renderTarget.texture.generateMipmaps = false;
+		this.renderTarget = (renderTarget !== undefined) ? renderTarget : null;
 
 		/**
 		 * Indicates whether the render target should be resized when
@@ -91,7 +79,7 @@ export class SavePass extends Pass {
 
 	setSize(width, height) {
 
-		if(this.resize) {
+		if(this.resize && this.renderTarget !== null) {
 
 			if(width <= 0) { width = 1; }
 			if(height <= 0) { height = 1; }
