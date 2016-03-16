@@ -98,7 +98,8 @@ export class EffectComposer {
 		return new THREE.WebGLRenderTarget(size.width, size.height, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
-			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat
+			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat,
+			stencilBuffer: false
 		});
 
 	}
