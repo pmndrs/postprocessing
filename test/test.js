@@ -11,17 +11,17 @@ module.exports = {
 
 	"all passes can be created and destroyed": function(test) {
 
-		//var x = new lib.AdaptiveToneMappingPass();
-		//test.equals(typeof x, "object");
-		//x.dispose();
-
-		var x = new lib.BloomPass();
+		var x = new lib.ToneMappingPass();
 		test.equals(typeof x, "object");
 		x.dispose();
 
-		//x = new lib.BokehPass();
-		//test.equals(typeof x, "object");
-		//x.dispose();
+		x = new lib.BloomPass();
+		test.equals(typeof x, "object");
+		x.dispose();
+
+		x = new lib.BokehPass();
+		test.equals(typeof x, "object");
+		x.dispose();
 
 		x = new lib.ClearMaskPass();
 		test.equals(typeof x, "object");
@@ -52,6 +52,10 @@ module.exports = {
 		x.dispose();
 
 		x = new lib.SavePass();
+		test.equals(typeof x, "object");
+		x.dispose();
+
+		x = new lib.SMAAPass(function Image() {});
 		test.equals(typeof x, "object");
 		x.dispose();
 

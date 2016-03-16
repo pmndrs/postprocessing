@@ -16,4 +16,7 @@ export { FilmMaterial } from "./film";
 export { GlitchMaterial } from "./glitch";
 export { GodRaysMaterial } from "./god-rays";
 export { LuminosityMaterial } from "./luminosity";
+export { SMAABlendMaterial } from "./smaa-blend";
+export { SMAAColorEdgesMaterial } from "./smaa-color-edges";
+export { SMAAWeightsMaterial } from "./smaa-weights";
 export { ToneMappingMaterial } from "./tone-mapping";
