@@ -71,7 +71,6 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 
 		this.currentKernel = 0;
 
-		// Set the texel size if already provided.
 		if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
 
 	}
