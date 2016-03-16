@@ -13,7 +13,9 @@ This module uses modern ECMAScript features and requires one of the following br
  - Firefox ≥ 45
  - IE Edge ≥ 13
 
-[Semantic versioning](http://semver.org/) is used in this module to indicate whether an update introduces breaking changes. However, backwards-compatibility regarding ECMAScript versions is entirely neglected in favor of cleaner code and less build tasks.
+[Semantic versioning](http://semver.org/) is used in this module to indicate whether an update 
+introduces breaking changes. However, backwards-compatibility regarding ECMAScript versions is 
+entirely neglected in favor of cleaner code and development convenience.
 
 
 ## Installation
