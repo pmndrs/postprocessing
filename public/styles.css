@@ -99,6 +99,16 @@ canvas:active {
  cursor: grabbing;
 }
 
+#viewport p {
+ left: 0;
+ position: fixed;
+ right: 0;
+ text-align: center;
+ top: 50%;
+ -webkit-transform: translateY(-50%);
+         transform: translateY(-50%);
+}
+
 #info {
  text-align: right;
 }

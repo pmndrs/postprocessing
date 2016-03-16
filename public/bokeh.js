@@ -43,6 +43,9 @@ window.addEventListener("load", function loadAssets() {
 
 function setupScene(assets) {
 
+	var viewport = document.getElementById("viewport");
+	viewport.removeChild(viewport.children[0]);
+
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
@@ -50,7 +53,7 @@ function setupScene(assets) {
 	scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
+	viewport.appendChild(renderer.domElement);
 
 	// Camera.
 

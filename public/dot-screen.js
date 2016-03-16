@@ -43,6 +43,9 @@ window.addEventListener("load", function loadAssets() {
 
 function setupScene(assets) {
 
+	var viewport = document.getElementById("viewport");
+	viewport.removeChild(viewport.children[0]);
+
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
@@ -50,7 +53,7 @@ function setupScene(assets) {
 	scene.fog = new THREE.FogExp2(0x000000, 0.001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
+	viewport.appendChild(renderer.domElement);
 
 	// Camera.
 
@@ -58,6 +61,8 @@ function setupScene(assets) {
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 0, 0);
 	controls.damping = 0.2;
+	controls.enablePan = false;
+	controls.maxDistance = 1500;
 	camera.position.set(0, 200, 450);
 	camera.lookAt(controls.target);
 

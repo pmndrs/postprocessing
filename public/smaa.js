@@ -40,9 +40,19 @@ window.addEventListener("load", function loadAssets() {
 
 	});
 
+	textureLoader.load("textures/crate.jpg", function(texture) {
+
+		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+		assets.colorMap = texture;
+
+	});
+
 });
 
 function setupScene(assets) {
+
+	var viewport = document.getElementById("viewport");
+	viewport.removeChild(viewport.children[0]);
 
 	// Renderer and Scene.
 
@@ -51,7 +61,7 @@ function setupScene(assets) {
 	scene.fog = new THREE.FogExp2(0x000000, 0.0025);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
+	viewport.appendChild(renderer.domElement);
 
 	var rendererAA = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
 	rendererAA.setClearColor(0x000000);
@@ -64,7 +74,7 @@ function setupScene(assets) {
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 0, 0);
 	controls.damping = 0.2;
-	camera.position.set(-2, 0.5, -2);
+	camera.position.set(-3, 0, -3);
 	camera.lookAt(controls.target);
 
 	scene.add(camera);
@@ -114,16 +124,26 @@ function setupScene(assets) {
 	// Objects.
 
 	var geometry = new THREE.BoxGeometry(1, 1, 1);
+
 	var material = new THREE.MeshBasicMaterial({
 		//map: assets.colorMap,
 		color: 0x000000,
 		wireframe: true
 	});
 
-	var object = new THREE.Mesh(geometry, material);
-	object.rotation.set(0.9, 0.11, 0.43);
+	var object1 = new THREE.Mesh(geometry, material);
+	object1.position.set(0.75, 0, -0.75);
 
-	scene.add(object);
+	scene.add(object1);
+
+	material = new THREE.MeshLambertMaterial({
+		map: assets.colorMap
+	});
+
+	var object2 = new THREE.Mesh(geometry, material);
+	object2.position.set(-0.75, 0, 0.75);
+
+	scene.add(object2);
 
 	// Post-Processing.
 
@@ -139,8 +159,9 @@ function setupScene(assets) {
 	// Shader settings.
 
 	var params = {
+		"browser AA": false,
 		"SMAA": smaaPass.enabled,
-		"browser AA": false
+		"SMAA threshold": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD)
 	};
 
 	function toggleSMAA() {
@@ -154,15 +175,15 @@ function setupScene(assets) {
 
 		if(params["browser AA"]) {
 
-			document.body.removeChild(renderer.domElement);
-			document.body.appendChild(rendererAA.domElement);
+			viewport.removeChild(renderer.domElement);
+			viewport.appendChild(rendererAA.domElement);
 			composer.renderer = rendererAA;
 			controlsAA.enabled = true;
 
 		} else {
 
-			document.body.removeChild(rendererAA.domElement);
-			document.body.appendChild(renderer.domElement);
+			viewport.removeChild(rendererAA.domElement);
+			viewport.appendChild(renderer.domElement);
 			composer.renderer = renderer;
 			controls.enabled = true;
 
@@ -172,10 +193,13 @@ function setupScene(assets) {
 
 	}
 
-	gui.add(params, "SMAA").onChange(toggleSMAA);
 	gui.add(params, "browser AA").onChange(switchRenderers);
+	gui.add(params, "SMAA").onChange(toggleSMAA);
 
-	//gui.add(params, "").min(0.0).max(1.0).step(0.01).onChange(function() { pass. = params[""]; });
+	gui.add(params, "SMAA threshold").min(0.0).max(0.5).step(0.01).onChange(function() {
+		smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD = params["SMAA threshold"].toFixed(2);
+		smaaPass.colorEdgesMaterial.needsUpdate = true;
+	});
 
 	/**
 	 * Handles resizing.
@@ -207,14 +231,15 @@ function setupScene(assets) {
 
 		stats.begin();
 
-		object.rotation.x += 0.0005;
-		object.rotation.y += 0.001;
+		object1.rotation.x += 0.0005;
+		object1.rotation.y += 0.001;
+		object2.rotation.copy(object1.rotation);
 
 		composer.render(clock.getDelta());
 
 		// Prevent overflow.
-		if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-		if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+		if(object1.rotation.x >= TWO_PI) { object1.rotation.x -= TWO_PI; }
+		if(object1.rotation.y >= TWO_PI) { object1.rotation.y -= TWO_PI; }
 
 		stats.end();
 

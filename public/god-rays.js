@@ -1,7 +1,3 @@
-/**
- * Manual asset loading.
- */
-
 window.addEventListener("load", function loadAssets() {
 
 	window.removeEventListener("load", loadAssets);
@@ -68,15 +64,18 @@ window.addEventListener("load", function loadAssets() {
 
 	});
 
-	textureLoader.load("textures/sun.png", function(texture) {
+	/*textureLoader.load("textures/sun.png", function(texture) {
 
 		assets.sunTexture = texture;
 
-	});
+	});*/
 
 });
 
 function setupScene(assets) {
+
+	var viewport = document.getElementById("viewport");
+	viewport.removeChild(viewport.children[0]);
 
 	// Renderer and Scene.
 
@@ -85,7 +84,7 @@ function setupScene(assets) {
 	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	document.body.appendChild(renderer.domElement);
+	viewport.appendChild(renderer.domElement);
 
 	// Camera.
 
