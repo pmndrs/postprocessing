@@ -9,9 +9,10 @@ import THREE from "three";
  * @constructor
  * @extends Pass
  * @param {Object} [options] - The options.
- * @param {Number} [patternSize=1.0] - The pattern size.
- * @param {Number} [angle=1.57] - The angle of the pattern.
- * @param {Number} [scale=1.0] - The scale of the overall effect.
+ * @param {Number} [options.angle=1.57] - The angle of the pattern.
+ * @param {Number} [options.scale=1.0] - The scale of the overall effect.
+ * @param {Number} [options.intensity=1.0] - The intensity of the effect.
+ * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
  */
 
 export class DotScreenPass extends Pass {
@@ -32,10 +33,11 @@ export class DotScreenPass extends Pass {
 		 * @private
 		 */
 
-		this.material = new DotScreenMaterial();
+		this.material = new DotScreenMaterial(options.average);
 
 		if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
 		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
+		if(options.intensity !== undefined) { this.material.uniforms.intensity.value = options.intensity; }
 
 		this.quad.material = this.material;
 

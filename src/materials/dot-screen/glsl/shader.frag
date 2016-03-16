@@ -2,6 +2,7 @@ uniform sampler2D tDiffuse;
 
 uniform float angle;
 uniform float scale;
+uniform float intensity;
 
 varying vec2 vUv;
 varying vec2 vUvPattern;
@@ -19,9 +20,18 @@ float pattern() {
 
 void main() {
 
-	vec4 color = texture2D(tDiffuse, vUv);
-	float average = (color.r + color.g + color.b) / 3.0;
+	vec4 texel = texture2D(tDiffuse, vUv);
+	vec3 color = texel.rgb;
 
-	gl_FragColor = vec4(vec3(average * 10.0 - 5.0 + pattern()), color.a);
+	#ifdef AVERAGE
+
+		color = vec3((color.r + color.g + color.b) / 3.0);
+
+	#endif
+
+	color = vec3(color * 10.0 - 5.0 + pattern());
+	color = texel.rgb + (color - texel.rgb) * intensity;
+
+	gl_FragColor = vec4(color, texel.a);
 
 }
