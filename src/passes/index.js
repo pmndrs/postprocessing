@@ -17,4 +17,5 @@ export { MaskPass } from "./mask";
 export { Pass } from "./pass";
 export { RenderPass } from "./render";
 export { SavePass } from "./save";
+export { SMAAPass } from "./smaa";
 export { ShaderPass } from "./shader";
