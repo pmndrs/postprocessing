@@ -70,4 +70,6 @@ This library is licensed under the [Zlib license](https://github.com/vanruesc/po
 The original code that this library is based on, was written by [alteredq](http://alteredqualia.com), 
 [miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), 
 [felixturner](http://airtight.cc) and [huwb](http://huwbowles.com) 
-and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE). 
+and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).  
+The film effect incorporates code written by Georg Steinrohder and Pat Shearon which was released under the 
+[Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).  
