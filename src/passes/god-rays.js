@@ -59,10 +59,9 @@ export class GodRaysPass extends Pass {
 
 		this.renderTargetMask = new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter
+			magFilter: THREE.LinearFilter,
+			generateMipmaps: false
 		});
-
-		this.renderTargetMask.texture.generateMipmaps = false;
 
 		/**
 		 * A render target.
@@ -92,9 +91,9 @@ export class GodRaysPass extends Pass {
 		 * You need to call the setSize method of the EffectComposer 
 		 * after changing this value.
 		 *
-		 * @property renderTargetY
-		 * @type WebGLRenderTarget
-		 * @private
+		 * @property resolutionScale
+		 * @type Number
+		 * @default 0.5
 		 */
 
 		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
