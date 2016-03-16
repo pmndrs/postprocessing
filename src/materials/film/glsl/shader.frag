@@ -1,38 +1,94 @@
 uniform sampler2D tDiffuse;
 uniform float time;
-uniform bool grayscale;
-uniform float nIntensity;
-uniform float sIntensity;
-uniform float sCount;
 
 varying vec2 vUv;
 
+#ifdef NOISE
+
+	uniform float noiseIntensity;
+
+#endif
+
+#ifdef SCANLINES
+
+	uniform float scanlineIntensity;
+	uniform float scanlineCount;
+
+#endif
+
+#ifdef GREYSCALE
+
+	uniform float greyscaleIntensity;
+
+	const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
+
+#elif defined(SEPIA)
+
+	uniform float sepiaIntensity;
+
+#endif
+
+#ifdef VIGNETTE
+
+	uniform float vignetteOffset;
+	uniform float vignetteDarkness;
+
+	const vec2 CENTER = vec2(0.5);
+
+#endif
+
 void main() {
 
-	vec4 cTextureScreen = texture2D(tDiffuse, vUv);
+	vec4 texel = texture2D(tDiffuse, vUv);
+	vec3 color = texel.rgb;
 
-	// Noise.
+	#ifdef NOISE
 
-	float x = vUv.x * vUv.y * time * 1000.0;
-	x = mod(x, 13.0) * mod(x, 123.0);
-	float dx = mod(x, 0.01);
+		float x = vUv.x * vUv.y * time * 1000.0;
+		x = mod(x, 13.0) * mod(x, 123.0);
+		x = mod(x, 0.01);
 
-	vec3 cResult = cTextureScreen.rgb + cTextureScreen.rgb * clamp(0.1 + dx * 100.0, 0.0, 1.0);
+		color += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;
 
-	vec2 sc = vec2(sin(vUv.y * sCount), cos(vUv.y * sCount));
+	#endif
 
-	// Scanlines.
+	#ifdef SCANLINES
 
-	cResult += cTextureScreen.rgb * vec3(sc.x, sc.y, sc.x) * sIntensity;
+		vec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));
+		color += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;
 
-	cResult = cTextureScreen.rgb + clamp(nIntensity, 0.0, 1.0) * (cResult - cTextureScreen.rgb);
+	#endif
 
-	if(grayscale) {
+	#ifdef GREYSCALE
 
-		cResult = vec3(cResult.r * 0.3 + cResult.g * 0.59 + cResult.b * 0.11);
+		color = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);
 
-	}
+	#elif defined(SEPIA)
 
-	gl_FragColor =  vec4(cResult, cTextureScreen.a);
+		vec3 c = color.rgb;
+
+		color.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));
+		color.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));
+		color.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));
+
+	#endif
+
+	#ifdef VIGNETTE
+
+		#ifdef ESKIL
+
+			vec2 uv = (vUv - CENTER) * vec2(vignetteOffset);
+			color = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));
+
+		#else
+
+			float dist = distance(vUv, CENTER);
+			color *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));
+
+		#endif		
+
+	#endif
+
+	gl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);
 
 }
