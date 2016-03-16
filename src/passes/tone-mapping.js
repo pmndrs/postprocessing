@@ -140,7 +140,7 @@ export class ToneMappingPass extends Pass {
 		if(typeof x === "number" && x > 0) {
 
 			this.renderTargetLuminosity.setSize(x, x);
-			this.renderTargetPrevious.setSize(x, x);
+			this.renderTargetPrevious.setSize(x, x); // Hm..
 			this.renderTargetAdapted.setSize(x, x);
 
 			this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
@@ -210,6 +210,7 @@ export class ToneMappingPass extends Pass {
 
 		}
 
+		// Apply the adaptive tone mapping to the colours.
 		this.quad.material = this.toneMappingMaterial;
 		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
 
