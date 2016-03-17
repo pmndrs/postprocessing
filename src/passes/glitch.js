@@ -211,8 +211,8 @@ export class GlitchPass extends Pass {
  * @final
  */
 
-GlitchPass.Mode = Object.freeze({
+GlitchPass.Mode = {
 	SPORADIC: 0,
 	CONSTANT_MILD: 1,
 	CONSTANT_WILD: 2
-});
+};
