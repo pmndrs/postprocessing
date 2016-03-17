@@ -25,6 +25,8 @@ export class SMAAPass extends Pass {
 
 		super();
 
+		this.needsSwap = true;
+
 		/**
 		 * A render target for the color edge detection.
 		 *

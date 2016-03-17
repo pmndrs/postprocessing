@@ -19,9 +19,11 @@ export class BokehPass extends Pass {
 
 	constructor(depthTexture, options) {
 
-		if(options === undefined) { options = {}; }
-
 		super();
+
+		this.needsSwap = true;
+
+		if(options === undefined) { options = {}; }
 
 		/**
 		 * Bokeh shader material.
