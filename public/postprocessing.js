@@ -874,7 +874,7 @@
 			if(this.scene !== null) {
 
 				if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
-				if(this.quad !== null) { this.scene.add(this.quad);	}
+				if(this.quad !== null) { this.scene.add(this.quad); }
 
 			}
 
@@ -901,7 +901,7 @@
 		}
 
 		/**
-		 * Performs advanced initialisation tasks.
+		 * Performs initialisation tasks.
 		 *
 		 * By implementing this abstract method you gain access to the renderer.
 		 * You'll also be able to configure your custom render targets to use the 
@@ -909,6 +909,8 @@
 		 *
 		 * The provided renderer can be used to warm up special off-screen render 
 		 * targets by performing a preliminary render operation.
+		 *
+		 * The effect composer calls this method when this pass is first added.
 		 *
 		 * @method initialise
 		 * @param {WebGLRenderer} renderer - The renderer.
@@ -1468,9 +1470,11 @@
 
 		constructor(depthTexture, options) {
 
-			if(options === undefined) { options = {}; }
-
 			super();
+
+			this.needsSwap = true;
+
+			if(options === undefined) { options = {}; }
 
 			/**
 			 * Bokeh shader material.
@@ -2519,9 +2523,9 @@
 
 		constructor(scene, camera, options) {
 
-			if(options === undefined) { options = {}; }
-
 			super(scene, camera, null);
+
+			if(options === undefined) { options = {}; }
 
 			/**
 			 * Depth render flag.
@@ -2819,6 +2823,8 @@
 		constructor(Image) {
 
 			super();
+
+			this.needsSwap = true;
 
 			/**
 			 * A render target for the color edge detection.
