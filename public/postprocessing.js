@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.0.0 build Mar 16 2016
+ * postprocessing v1.0.1 build Mar 17 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -2000,11 +2000,11 @@
 	 * @final
 	 */
 
-	GlitchPass.Mode = Object.freeze({
+	GlitchPass.Mode = {
 		SPORADIC: 0,
 		CONSTANT_MILD: 1,
 		CONSTANT_WILD: 2
-	});
+	};
 
 	/**
 	 * Used for saving the original clear color during 
