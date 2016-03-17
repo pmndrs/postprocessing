@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.0.1",
+        "version": "1.0.2",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1749,7 +1749,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 26,
+            "line": 28,
             "description": "Bokeh shader material.",
             "itemtype": "property",
             "name": "bokehMaterial",
@@ -1761,7 +1761,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 42,
+            "line": 44,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -1787,7 +1787,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 67,
+            "line": 69,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -1808,7 +1808,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 82,
+            "line": 84,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2559,7 +2559,7 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 128,
-            "description": "Performs advanced initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the \nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render \ntargets by performing a preliminary render operation.",
+            "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the \nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render \ntargets by performing a preliminary render operation.\n\nThe effect composer calls this method when this pass is first added.",
             "itemtype": "method",
             "name": "initialise",
             "params": [
@@ -2579,7 +2579,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 145,
+            "line": 147,
             "description": "Updates this pass with the renderer's size.\n\nThis is an abstract method that may be overriden in case you want to be \ninformed about the main render size.\n\nThe effect composer calls this method when its own size is updated.",
             "itemtype": "method",
             "name": "setSize",
@@ -2603,7 +2603,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 162,
+            "line": 164,
             "description": "Performs a shallow search for properties that define a dispose method and \ndeletes them. The pass will be inoperative after this method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory \nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -2892,7 +2892,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 28,
+            "line": 30,
             "description": "A render target for the color edge detection.",
             "itemtype": "property",
             "name": "renderTargetColorEdges",
@@ -2904,7 +2904,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 44,
+            "line": 46,
             "description": "A render target for the SMAA weights.",
             "itemtype": "property",
             "name": "renderTargetWeights",
@@ -2916,7 +2916,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 56,
+            "line": 58,
             "description": "SMAA color edge detection shader material.",
             "itemtype": "property",
             "name": "colorEdgesMaterial",
@@ -2928,7 +2928,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 66,
+            "line": 68,
             "description": "SMAA weights shader material.",
             "itemtype": "property",
             "name": "weightsMaterial",
@@ -2940,7 +2940,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 102,
+            "line": 104,
             "description": "SMAA blend shader material.",
             "itemtype": "property",
             "name": "blendMaterial",
@@ -2952,7 +2952,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 118,
+            "line": 120,
             "description": "Antialiases the scene.",
             "itemtype": "method",
             "name": "render",
@@ -2978,7 +2978,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 154,
+            "line": 156,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2999,7 +2999,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 169,
+            "line": 171,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.1</em>
+            <em>API Docs for: 1.0.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -336,7 +336,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l162"><code>src\passes\pass.js:162</code></a>
+        <a href="../files/src_passes_pass.js.html#l164"><code>src\passes\pass.js:164</code></a>
         </p>
 
 
@@ -482,7 +482,7 @@ generates a simple noise map.</p>
     </div>
 
     <div class="description">
-        Performs advanced initialisation tasks.
+        Performs initialisation tasks.
 
 By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the 
@@ -490,6 +490,8 @@ appropriate format (RGB or RGBA).
 
 The provided renderer can be used to warm up special off-screen render 
 targets by performing a preliminary render operation.
+
+The effect composer calls this method when this pass is first added.
     </div>
 
         <div class="params">
@@ -643,7 +645,7 @@ targets by performing a preliminary render operation.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l145"><code>src\passes\pass.js:145</code></a>
+        <a href="../files/src_passes_pass.js.html#l147"><code>src\passes\pass.js:147</code></a>
         </p>
 
 

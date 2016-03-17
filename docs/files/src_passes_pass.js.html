@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.1</em>
+            <em>API Docs for: 1.0.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -212,7 +212,7 @@ export class Pass {
 		if(this.scene !== null) {
 
 			if(this.camera !== null &amp;&amp; this.camera.parent === null) { this.scene.add(this.camera); }
-			if(this.quad !== null) { this.scene.add(this.quad);	}
+			if(this.quad !== null) { this.scene.add(this.quad); }
 
 		}
 
@@ -239,7 +239,7 @@ export class Pass {
 	}
 
 	/**
-	 * Performs advanced initialisation tasks.
+	 * Performs initialisation tasks.
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
 	 * You&#x27;ll also be able to configure your custom render targets to use the 
@@ -247,6 +247,8 @@ export class Pass {
 	 *
 	 * The provided renderer can be used to warm up special off-screen render 
 	 * targets by performing a preliminary render operation.
+	 *
+	 * The effect composer calls this method when this pass is first added.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
