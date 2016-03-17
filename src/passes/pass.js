@@ -99,7 +99,7 @@ export class Pass {
 		if(this.scene !== null) {
 
 			if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
-			if(this.quad !== null) { this.scene.add(this.quad);	}
+			if(this.quad !== null) { this.scene.add(this.quad); }
 
 		}
 
@@ -126,7 +126,7 @@ export class Pass {
 	}
 
 	/**
-	 * Performs advanced initialisation tasks.
+	 * Performs initialisation tasks.
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
 	 * You'll also be able to configure your custom render targets to use the 
@@ -134,6 +134,8 @@ export class Pass {
 	 *
 	 * The provided renderer can be used to warm up special off-screen render 
 	 * targets by performing a preliminary render operation.
+	 *
+	 * The effect composer calls this method when this pass is first added.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.

@@ -36,9 +36,9 @@ export class RenderPass extends Pass {
 
 	constructor(scene, camera, options) {
 
-		if(options === undefined) { options = {}; }
-
 		super(scene, camera, null);
+
+		if(options === undefined) { options = {}; }
 
 		/**
 		 * Depth render flag.
