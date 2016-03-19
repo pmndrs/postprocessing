@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.0.2 build Mar 17 2016
+ * postprocessing v1.0.3 build Mar 19 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -894,7 +894,7 @@
 		 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 		 */
 
-		render(renderer, buffer, delta, maskActive) {
+		render(renderer, readBuffer, writeBuffer, delta, maskActive) {
 
 			throw new Error("Render method not implemented!");
 
@@ -910,7 +910,7 @@
 		 * The provided renderer can be used to warm up special off-screen render 
 		 * targets by performing a preliminary render operation.
 		 *
-		 * The effect composer calls this method when this pass is first added.
+		 * The effect composer calls this method when this pass is added to its queue.
 		 *
 		 * @method initialise
 		 * @param {WebGLRenderer} renderer - The renderer.
@@ -1176,7 +1176,7 @@
 
 			}
 
-			// Apply the adaptive tone mapping to the colours.
+			// Apply the tone mapping to the colours.
 			this.quad.material = this.toneMappingMaterial;
 			this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
 
@@ -2815,7 +2815,7 @@
 	 * @class SMAAPass
 	 * @constructor
 	 * @extends Pass
-	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!
+	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
 	 */
 
 	class SMAAPass extends Pass {
@@ -3074,13 +3074,12 @@
 	 *
 	 * @class EffectComposer
 	 * @constructor
-	 * @param {WebGLRenderer} [renderer] - A renderer that should be used for rendering the passes.
-	 * @param {WebGLRenderTarget} [renderTarget] - A pre-configured render target to use as a read/write buffer.
+	 * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
 	 */
 
 	class EffectComposer {
 
-		constructor(renderer, renderTarget) {
+		constructor(renderer) {
 
 			/**
 			 * The renderer.
@@ -3090,6 +3089,7 @@
 			 */
 
 			this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
+
 			this.renderer.autoClear = false;
 
 			/**
@@ -3103,9 +3103,7 @@
 			 * @private
 			 */
 
-			if(renderTarget === undefined) { renderTarget = this.createBuffer(); }
-
-			this.readBuffer = renderTarget;
+			this.readBuffer = this.createBuffer();
 
 			/**
 			 * The write buffer.
@@ -3115,7 +3113,7 @@
 			 * @private
 			 */
 
-			this.writeBuffer = renderTarget.clone();
+			this.writeBuffer = this.renderTarget.clone();
 
 			/**
 			 * A copy pass used to copy masked scenes.
@@ -3226,7 +3224,7 @@
 
 							ctx = this.renderer.context;
 							ctx.stencilFunc(ctx.NOTEQUAL, 1, 0xffffffff);
-							this.copyPass.render(this.renderer, readBuffer, writeBuffer, delta);
+							this.copyPass.render(this.renderer, readBuffer, writeBuffer);
 							ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
 
 						}
@@ -3254,13 +3252,13 @@
 		}
 
 		/**
-		 * Sets the size of the render targets and the output canvas.
+		 * Sets the size of the buffers and the renderer's output canvas.
 		 *
 		 * Every pass will be informed of the new size. It's up to each pass how that 
 		 * information is used.
 		 *
 		 * If no width or height is specified, the render targets and passes will be 
-		 * updated with the current size.
+		 * updated with the current size of the renderer.
 		 *
 		 * @method setSize
 		 * @param {Number} [width] - The width.
@@ -3270,9 +3268,15 @@
 		setSize(width, height) {
 
 			let i, l;
+			let size;
 
-			if(width === undefined) { width = this.readBuffer.width; }
-			if(height === undefined) { height = this.readBuffer.height; }
+			if(width === undefined || height === undefined) {
+
+				size = this.renderer.getSize();
+				width = size.width;
+				height = size.height;
+
+			}
 
 			this.renderer.setSize(width, height);
 			this.readBuffer.setSize(width, height);
@@ -3290,7 +3294,7 @@
 		 * Resets this composer by deleting all passes and creating new buffers.
 		 *
 		 * @method reset
-		 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffers will be used.
+		 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the renderer will be used.
 		 */
 
 		reset(renderTarget) {
