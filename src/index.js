@@ -7,7 +7,6 @@
 export { EffectComposer } from "./effect-composer";
 
 export {
-	ToneMappingPass,
 	BloomPass,
 	BokehPass,
 	ClearMaskPass,
@@ -20,7 +19,8 @@ export {
 	RenderPass,
 	SavePass,
 	SMAAPass,
-	ShaderPass
+	ShaderPass,
+	ToneMappingPass
 } from "./passes";
 
 export {
