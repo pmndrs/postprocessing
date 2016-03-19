@@ -119,7 +119,7 @@ export class Pass {
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
 
-	render(renderer, buffer, delta, maskActive) {
+	render(renderer, readBuffer, writeBuffer, delta, maskActive) {
 
 		throw new Error("Render method not implemented!");
 
@@ -135,7 +135,7 @@ export class Pass {
 	 * The provided renderer can be used to warm up special off-screen render 
 	 * targets by performing a preliminary render operation.
 	 *
-	 * The effect composer calls this method when this pass is first added.
+	 * The effect composer calls this method when this pass is added to its queue.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
