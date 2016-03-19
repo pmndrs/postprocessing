@@ -57,7 +57,7 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.writeBuffer = this.renderTarget.clone();
+		this.writeBuffer = this.readBuffer.clone();
 
 		/**
 		 * A copy pass used to copy masked scenes.
