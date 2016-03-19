@@ -133,7 +133,6 @@ function setupScene(assets) {
 
 	// Sky.
 
-	// Move the sky with the camera.
 	camera.add(assets.sky);
 
 	// Waggon model.
