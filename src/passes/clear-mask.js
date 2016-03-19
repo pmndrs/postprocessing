@@ -25,7 +25,7 @@ export class ClearMaskPass extends Pass {
 
 	render(renderer) {
 
-		renderer.context.disable(context.STENCIL_TEST);
+		renderer.context.disable(renderer.context.STENCIL_TEST);
 
 	}
 
