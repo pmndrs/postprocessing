@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.0.2",
+        "version": "1.0.3",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1428,7 +1428,7 @@
             "params": [
                 {
                     "name": "Image",
-                    "description": "- This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!",
+                    "description": "- This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.",
                     "type": "Image"
                 }
             ]
@@ -1497,14 +1497,8 @@
             "params": [
                 {
                     "name": "renderer",
-                    "description": "- A renderer that should be used for rendering the passes.",
+                    "description": "- The renderer that should be used in the passes.",
                     "type": "WebGLRenderer",
-                    "optional": true
-                },
-                {
-                    "name": "renderTarget",
-                    "description": "- A pre-configured render target to use as a read/write buffer.",
-                    "type": "WebGLRenderTarget",
                     "optional": true
                 }
             ]
@@ -2559,7 +2553,7 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 128,
-            "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the \nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render \ntargets by performing a preliminary render operation.\n\nThe effect composer calls this method when this pass is first added.",
+            "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the \nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render \ntargets by performing a preliminary render operation.\n\nThe effect composer calls this method when this pass is added to its queue.",
             "itemtype": "method",
             "name": "initialise",
             "params": [
@@ -3172,7 +3166,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 29,
+            "line": 28,
             "description": "The renderer.",
             "itemtype": "property",
             "name": "renderer",
@@ -3194,7 +3188,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 54,
+            "line": 52,
             "description": "The write buffer.",
             "itemtype": "property",
             "name": "writeBuffer",
@@ -3206,7 +3200,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 64,
+            "line": 62,
             "description": "A copy pass used to copy masked scenes.",
             "itemtype": "property",
             "name": "copyPass",
@@ -3218,7 +3212,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 74,
+            "line": 72,
             "description": "The render passes.",
             "itemtype": "property",
             "name": "passes",
@@ -3230,7 +3224,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 86,
+            "line": 84,
             "description": "Creates a new render target by replicating the renderer's canvas.",
             "itemtype": "method",
             "name": "createBuffer",
@@ -3243,7 +3237,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 107,
+            "line": 105,
             "description": "Adds a pass, optionally at a specific index.",
             "itemtype": "method",
             "name": "addPass",
@@ -3265,7 +3259,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 131,
+            "line": 129,
             "description": "Removes a pass.",
             "itemtype": "method",
             "name": "removePass",
@@ -3281,7 +3275,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 144,
+            "line": 142,
             "description": "Renders all enabled passes in the order in which they were added.",
             "itemtype": "method",
             "name": "render",
@@ -3297,8 +3291,8 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 200,
-            "description": "Sets the size of the render targets and the output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass how that \ninformation is used.\n\nIf no width or height is specified, the render targets and passes will be \nupdated with the current size.",
+            "line": 198,
+            "description": "Sets the size of the buffers and the renderer's output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass how that \ninformation is used.\n\nIf no width or height is specified, the render targets and passes will be \nupdated with the current size of the renderer.",
             "itemtype": "method",
             "name": "setSize",
             "params": [
@@ -3320,14 +3314,14 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 233,
+            "line": 237,
             "description": "Resets this composer by deleting all passes and creating new buffers.",
             "itemtype": "method",
             "name": "reset",
             "params": [
                 {
                     "name": "renderTarget",
-                    "description": "- A new render target to use. If none is provided, the settings of the old buffers will be used.",
+                    "description": "- A new render target to use. If none is provided, the settings of the renderer will be used.",
                     "type": "WebGLRenderTarget",
                     "optional": true
                 }
@@ -3337,7 +3331,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 246,
+            "line": 250,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created \nby the passes. It also deletes this composer's frame buffers.\n\nNote: the reset method uses the dispose method internally.",
             "itemtype": "method",
             "name": "dispose",

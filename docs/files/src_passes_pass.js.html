@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -232,7 +232,7 @@ export class Pass {
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
 
-	render(renderer, buffer, delta, maskActive) {
+	render(renderer, readBuffer, writeBuffer, delta, maskActive) {
 
 		throw new Error(&quot;Render method not implemented!&quot;);
 
@@ -248,7 +248,7 @@ export class Pass {
 	 * The provided renderer can be used to warm up special off-screen render 
 	 * targets by performing a preliminary render operation.
 	 *
-	 * The effect composer calls this method when this pass is first added.
+	 * The effect composer calls this method when this pass is added to its queue.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -323,7 +323,7 @@ export class ToneMappingPass extends Pass {
 
 		}
 
-		// Apply the adaptive tone mapping to the colours.
+		// Apply the tone mapping to the colours.
 		this.quad.material = this.toneMappingMaterial;
 		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
 

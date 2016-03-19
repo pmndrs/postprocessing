@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.2</em>
+            <em>API Docs for: 1.0.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -139,9 +139,6 @@ the screen and render the scene to a texture for further processing.</p>
                 <li class="arg">
                         <code class="optional">[renderer]</code>
                 </li>
-                <li class="arg">
-                        <code class="optional">[renderTarget]</code>
-                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -178,21 +175,7 @@ the screen and render the scene to a texture for further processing.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A renderer that should be used for rendering the passes.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[renderTarget]</code>
-                        <span class="type">WebGLRenderTarget</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>A pre-configured render target to use as a read/write buffer.</li>
+<li>The renderer that should be used in the passes.</li>
 </ul>
 
                     </div>
@@ -310,7 +293,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l107"><code>src\effect-composer.js:107</code></a>
+        <a href="../files/src_effect-composer.js.html#l105"><code>src\effect-composer.js:105</code></a>
         </p>
 
 
@@ -377,7 +360,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l86"><code>src\effect-composer.js:86</code></a>
+        <a href="../files/src_effect-composer.js.html#l84"><code>src\effect-composer.js:84</code></a>
         </p>
 
 
@@ -423,7 +406,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l246"><code>src\effect-composer.js:246</code></a>
+        <a href="../files/src_effect-composer.js.html#l250"><code>src\effect-composer.js:250</code></a>
         </p>
 
 
@@ -483,7 +466,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l131"><code>src\effect-composer.js:131</code></a>
+        <a href="../files/src_effect-composer.js.html#l129"><code>src\effect-composer.js:129</code></a>
         </p>
 
 
@@ -539,7 +522,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l144"><code>src\effect-composer.js:144</code></a>
+        <a href="../files/src_effect-composer.js.html#l142"><code>src\effect-composer.js:142</code></a>
         </p>
 
 
@@ -595,7 +578,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l233"><code>src\effect-composer.js:233</code></a>
+        <a href="../files/src_effect-composer.js.html#l237"><code>src\effect-composer.js:237</code></a>
         </p>
 
 
@@ -619,7 +602,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A new render target to use. If none is provided, the settings of the old buffers will be used.</li>
+<li>A new render target to use. If none is provided, the settings of the renderer will be used.</li>
 </ul>
 
                     </div>
@@ -655,7 +638,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l200"><code>src\effect-composer.js:200</code></a>
+        <a href="../files/src_effect-composer.js.html#l198"><code>src\effect-composer.js:198</code></a>
         </p>
 
 
@@ -663,11 +646,11 @@ by the passes. It also deletes this composer's frame buffers.</p>
     </div>
 
     <div class="description">
-        <p>Sets the size of the render targets and the output canvas.</p>
+        <p>Sets the size of the buffers and the renderer's output canvas.</p>
 <p>Every pass will be informed of the new size. It's up to each pass how that
 information is used.</p>
 <p>If no width or height is specified, the render targets and passes will be
-updated with the current size.</p>
+updated with the current size of the renderer.</p>
 
     </div>
 
@@ -726,7 +709,7 @@ updated with the current size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l64"><code>src\effect-composer.js:64</code></a>
+        <a href="../files/src_effect-composer.js.html#l62"><code>src\effect-composer.js:62</code></a>
         </p>
 
 
@@ -752,7 +735,7 @@ updated with the current size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l74"><code>src\effect-composer.js:74</code></a>
+        <a href="../files/src_effect-composer.js.html#l72"><code>src\effect-composer.js:72</code></a>
         </p>
 
 
@@ -805,7 +788,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l29"><code>src\effect-composer.js:29</code></a>
+        <a href="../files/src_effect-composer.js.html#l28"><code>src\effect-composer.js:28</code></a>
         </p>
 
 
@@ -831,7 +814,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l54"><code>src\effect-composer.js:54</code></a>
+        <a href="../files/src_effect-composer.js.html#l52"><code>src\effect-composer.js:52</code></a>
         </p>
 
 
