@@ -18,13 +18,12 @@ import THREE from "three";
  *
  * @class EffectComposer
  * @constructor
- * @param {WebGLRenderer} [renderer] - A renderer that should be used for rendering the passes.
- * @param {WebGLRenderTarget} [renderTarget] - A pre-configured render target to use as a read/write buffer.
+ * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
  */
 
 export class EffectComposer {
 
-	constructor(renderer, renderTarget) {
+	constructor(renderer) {
 
 		/**
 		 * The renderer.
@@ -34,6 +33,7 @@ export class EffectComposer {
 		 */
 
 		this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
+
 		this.renderer.autoClear = false;
 
 		/**
@@ -47,9 +47,7 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		if(renderTarget === undefined) { renderTarget = this.createBuffer(); }
-
-		this.readBuffer = renderTarget;
+		this.readBuffer = this.createBuffer();
 
 		/**
 		 * The write buffer.
@@ -170,7 +168,7 @@ export class EffectComposer {
 
 						ctx = this.renderer.context;
 						ctx.stencilFunc(ctx.NOTEQUAL, 1, 0xffffffff);
-						this.copyPass.render(this.renderer, readBuffer, writeBuffer, delta);
+						this.copyPass.render(this.renderer, readBuffer, writeBuffer);
 						ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
 
 					}
@@ -198,13 +196,13 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Sets the size of the render targets and the output canvas.
+	 * Sets the size of the buffers and the renderer's output canvas.
 	 *
 	 * Every pass will be informed of the new size. It's up to each pass how that 
 	 * information is used.
 	 *
 	 * If no width or height is specified, the render targets and passes will be 
-	 * updated with the current size.
+	 * updated with the current size of the renderer.
 	 *
 	 * @method setSize
 	 * @param {Number} [width] - The width.
@@ -214,9 +212,15 @@ export class EffectComposer {
 	setSize(width, height) {
 
 		let i, l;
+		let size;
 
-		if(width === undefined) { width = this.readBuffer.width; }
-		if(height === undefined) { height = this.readBuffer.height; }
+		if(width === undefined || height === undefined) {
+
+			size = this.renderer.getSize();
+			width = size.width;
+			height = size.height;
+
+		}
 
 		this.renderer.setSize(width, height);
 		this.readBuffer.setSize(width, height);
@@ -234,7 +238,7 @@ export class EffectComposer {
 	 * Resets this composer by deleting all passes and creating new buffers.
 	 *
 	 * @method reset
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the old buffers will be used.
+	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the renderer will be used.
 	 */
 
 	reset(renderTarget) {
