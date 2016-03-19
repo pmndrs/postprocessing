@@ -75,7 +75,10 @@ module.exports = function(grunt) {
 		},
 
 		nodeunit: {
-			src: ["test/**/*.js"]
+			src: ["test/**/*.js"],
+			options: {
+				reporter: "default"
+			}
 		},
 
 		yuidoc: {
