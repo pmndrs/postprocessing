@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.0.3 build Mar 19 2016
+ * postprocessing v1.0.4 build Mar 19 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -12,7 +12,7 @@
 
 	THREE = 'default' in THREE ? THREE['default'] : THREE;
 
-	var shader = {
+	let shader = {
 		fragment: "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor = vec4(adaptedLum, adaptedLum, adaptedLum, 1.0);\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -55,7 +55,7 @@
 
 	}
 
-	var shader$1 = {
+	let shader$1 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform float focus;\r\nuniform float aspect;\r\nuniform float aperture;\r\nuniform float maxBlur;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(1.0, aspect);\r\n\r\n\tfloat depth = texture2D(tDepth, vUv).r;\r\n\r\n\tfloat factor = depth - focus;\r\n\r\n\tvec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));\r\n\r\n\tvec2 dofblur9 = dofBlur * 0.9;\r\n\tvec2 dofblur7 = dofBlur * 0.7;\r\n\tvec2 dofblur4 = dofBlur * 0.4;\r\n\r\n\tvec4 color = vec4(0.0);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur7);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur4);\r\n\r\n\tgl_FragColor = color / 41.0;\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -105,7 +105,7 @@
 
 	}
 
-	var shader$2 = {
+	let shader$2 = {
 		fragment: "uniform sampler2D texture1;\r\nuniform sampler2D texture2;\r\n\r\nuniform float opacity1;\r\nuniform float opacity2;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel1 = texture2D(texture1, vUv);\r\n\tvec4 texel2 = texture2D(texture2, vUv);\r\n\r\n\t#ifdef INVERT_TEX1\r\n\r\n\t\ttexel1.rgb = vec3(1.0) - texel1.rgb;\r\n\r\n\t#endif\r\n\r\n\t#ifdef INVERT_TEX2\r\n\r\n\t\ttexel2.rgb = vec3(1.0) - texel2.rgb;\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = opacity1 * texel1 + opacity2 * texel2;\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -148,7 +148,7 @@
 
 	}
 
-	var shader$3 = {
+	let shader$3 = {
 		fragment: "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\t// Sample top left texel.\r\n\tvec4 sum = texture2D(tDiffuse, vUv0);\r\n\r\n\t// Sample top right texel.\r\n\tsum += texture2D(tDiffuse, vUv1);\r\n\r\n\t// Sample bottom right texel.\r\n\tsum += texture2D(tDiffuse, vUv2);\r\n\r\n\t// Sample bottom left texel.\r\n\tsum += texture2D(tDiffuse, vUv3);\r\n\r\n\t// Compute the average.\r\n\tgl_FragColor = sum * 0.25;\r\n\r\n}\r\n",
 		vertex: "uniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\nuniform float kernel;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 dUv = (texelSize * vec2(kernel)) + halfTexelSize;\r\n\r\n\tvUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);\r\n\tvUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);\r\n\tvUv2 = vec2(uv.x + dUv.x, uv.y - dUv.y);\r\n\tvUv3 = vec2(uv.x - dUv.x, uv.y - dUv.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -258,7 +258,7 @@
 
 	}
 
-	var shader$4 = {
+	let shader$4 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform float opacity;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = opacity * texel;\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -293,7 +293,7 @@
 
 	}
 
-	var shader$5 = {
+	let shader$5 = {
 		fragment: "uniform sampler2D tDiffuse;\r\n\r\nuniform float angle;\r\nuniform float scale;\r\nuniform float intensity;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nfloat pattern() {\r\n\r\n\tfloat s = sin(angle);\r\n\tfloat c = cos(angle);\r\n\r\n\tvec2 point = vec2(c * vUvPattern.x - s * vUvPattern.y, s * vUvPattern.x + c * vUvPattern.y) * scale;\r\n\r\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef AVERAGE\r\n\r\n\t\tcolor = vec3((color.r + color.g + color.b) / 3.0);\r\n\r\n\t#endif\r\n\r\n\tcolor = vec3(color * 10.0 - 5.0 + pattern());\r\n\tcolor = texel.rgb + (color - texel.rgb) * intensity;\r\n\r\n\tgl_FragColor = vec4(color, texel.a);\r\n\r\n}\r\n",
 		vertex: "uniform vec4 offsetRepeat;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvUvPattern = uv * offsetRepeat.zw + offsetRepeat.xy;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -336,7 +336,7 @@
 
 	}
 
-	var shader$6 = {
+	let shader$6 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n\tconst vec2 CENTER = vec2(0.5);\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tcolor += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tcolor += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - CENTER) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, CENTER);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -423,7 +423,7 @@
 
 	}
 
-	var shader$7 = {
+	let shader$7 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform sampler2D tPerturb;\r\n\r\nuniform bool active;\r\n\r\nuniform float amount;\r\nuniform float angle;\r\nuniform float seed;\r\nuniform float seedX;\r\nuniform float seedY;\r\nuniform float distortionX;\r\nuniform float distortionY;\r\nuniform float colS;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat rand(vec2 co) {\r\n\r\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\tfloat xs, ys;\r\n\tvec4 normal;\r\n\r\n\tvec2 offset;\r\n\tvec4 cr, cga, cb;\r\n\tvec4 snow, color;\r\n\r\n\tfloat sx, sy;\r\n\r\n\tif(active) {\r\n\r\n\t\txs = floor(gl_FragCoord.x / 0.5);\r\n\t\tys = floor(gl_FragCoord.y / 0.5);\r\n\r\n\t\tnormal = texture2D(tPerturb, coord * seed * seed);\r\n\r\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\r\n\r\n\t\t\tsx = clamp(ceil(seedX), 0.0, 1.0);\r\n\t\t\tcoord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;\r\n\r\n\t\t}\r\n\r\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\r\n\r\n\t\t\tsy = clamp(ceil(seedY), 0.0, 1.0);\r\n\t\t\tcoord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));\r\n\r\n\t\t}\r\n\r\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\r\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\r\n\r\n\t\toffset = amount * vec2(cos(angle), sin(angle));\r\n\r\n\t\tcr = texture2D(tDiffuse, coord + offset);\r\n\t\tcga = texture2D(tDiffuse, coord);\r\n\t\tcb = texture2D(tDiffuse, coord - offset);\r\n\r\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\r\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);\r\n\t\tcolor += snow;\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -470,7 +470,7 @@
 
 	}
 
-	var shader$8 = {
+	let shader$8 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform vec3 lightPosition;\r\n\r\nuniform float exposure;\r\nuniform float decay;\r\nuniform float density;\r\nuniform float weight;\r\nuniform float clampMax;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec2 texCoord = vUv;\r\n\r\n\t// Calculate vector from pixel to light source in screen space.\r\n\tvec2 deltaTexCoord = texCoord - lightPosition.st;\r\n\tdeltaTexCoord *= 1.0 / NUM_SAMPLES_FLOAT * density;\r\n\r\n\t// A decreasing illumination factor.\r\n\tfloat illuminationDecay = 1.0;\r\n\r\n\tvec4 sample;\r\n\tvec4 color = vec4(0.0);\r\n\r\n\t// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light source.\r\n\tfor(int i = 0; i < NUM_SAMPLES_INT; ++i) {\r\n\r\n\t\ttexCoord -= deltaTexCoord;\r\n\t\tsample = texture2D(tDiffuse, texCoord);\r\n\r\n\t\t// Apply sample attenuation scale/decay factors.\r\n\t\tsample *= illuminationDecay * weight;\r\n\r\n\t\tcolor += sample;\r\n\r\n\t\t// Update exponential decay factor.\r\n\t\tilluminationDecay *= decay;\r\n\r\n\t}\r\n\r\n\tgl_FragColor = clamp(color * exposure, 0.0, clampMax);\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -528,7 +528,7 @@
 
 	}
 
-	var shader$9 = {
+	let shader$9 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tfloat v = dot(texel, LUM_COEFF);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, v);\r\n\t\tfloat high = step(v, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tv *= low * high;\r\n\r\n\t#endif\r\n\r\n\tv = pow(v, distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * v, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(v, v, v, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -579,7 +579,7 @@
 
 	}
 
-	var shader$10 = {
+	let shader$10 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform sampler2D tWeights;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\t// Fetch the blending weights for current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(tWeights, vUv).xz;\r\n\ta.y = texture2D(tWeights, vOffset.zw).g;\r\n\ta.w = texture2D(tWeights, vOffset.xy).a;\r\n\r\n\tvec4 color;\r\n\r\n\t// Check if there is any blending weight with a value greater than 0.0.\r\n\tif(dot(a, vec4(1.0)) < 1e-5) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\r\n\t} else {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge). We favor\r\n\t\t * blending by choosing the line with the maximum weight for each direction.\r\n\t\t */\r\n\r\n\t\tvec2 offset;\r\n\t\toffset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.\r\n\t\toffset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).\r\n\r\n\t\t// Then we go in the direction that has the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\t\tvec2 coord = vUv + sign(offset) * texelSize;\r\n\t\tvec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n",
 		vertex: "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -618,7 +618,7 @@
 
 	}
 
-	var shader$11 = {
+	let shader$11 = {
 		fragment: "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nconst vec2 THRESHOLD = vec2(EDGE_THRESHOLD);\r\n\r\nvoid main() {\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(THRESHOLD, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n",
 		vertex: "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -662,7 +662,7 @@
 
 	}
 
-	var shader$12 = {
+	let shader$12 = {
 		fragment: "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tArea;\r\nuniform sampler2D tSearch;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvec2 round(vec2 x) {\r\n\r\n\treturn sign(x) * floor(abs(x) + 0.5);\r\n\r\n}\r\n\r\nfloat searchLength(vec2 e, float bias, float scale) {\r\n\r\n\t// Not required if tSearch accesses are set to point.\r\n\t// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);\r\n\t// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;\r\n\r\n\te.r = bias + e.r * scale;\r\n\r\n\treturn 255.0 * texture2D(tSearch, e, 0.0).r;\r\n\r\n}\r\n\r\nfloat searchXLeft(vec2 texCoord, float end) {\r\n\r\n\t/* @PSEUDO_GATHER4\r\n\t * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to\r\n\t * sample between edge, thus fetching four edges in a row.\r\n\t * Sampling with different offsets in each direction allows to disambiguate\r\n\t * which edges are active from the four fetched ones.\r\n\t */\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\t// Correct the previously applied offset (-0.25, -0.125).\r\n\ttexCoord.x += 0.25 * texelSize.x;\r\n\r\n\t// The searches are biased by 1, so adjust the coords accordingly.\r\n\ttexCoord.x += texelSize.x;\r\n\r\n\t// Disambiguate the length added by the last step.\r\n\ttexCoord.x += 2.0 * texelSize.x; // Undo last step.\r\n\ttexCoord.x -= texelSize.x * searchLength(e, 0.0, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchXRight(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.x -= 0.25 * texelSize.x;\r\n\ttexCoord.x -= texelSize.x;\r\n\ttexCoord.x -= 2.0 * texelSize.x;\r\n\ttexCoord.x += texelSize.x * searchLength(e, 0.5, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchYUp(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y -= 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y; // Changed sign.\r\n\ttexCoord.y -= 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y * searchLength(e.gr, 0.0, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nfloat searchYDown(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i ) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y += 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y; // Changed sign.\r\n\ttexCoord.y += 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y * searchLength(e.gr, 0.5, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nvec2 area(vec2 dist, float e1, float e2, float offset) {\r\n\r\n\t// Rounding prevents precision errors of bilinear filtering.\r\n\tvec2 texCoord = SMAA_AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;\r\n\r\n\t// Scale and bias for texel space translation.\r\n\ttexCoord = SMAA_AREATEX_PIXEL_SIZE * texCoord + (0.5 * SMAA_AREATEX_PIXEL_SIZE);\r\n\r\n\t// Move to proper place, according to the subpixel offset.\r\n\ttexCoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;\r\n\r\n\treturn texture2D(tArea, texCoord, 0.0).rg;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 weights = vec4(0.0);\r\n\tvec4 subsampleIndices = vec4(0.0);\r\n\tvec2 e = texture2D(tDiffuse, vUv).rg;\r\n\r\n\tif(e.g > 0.0) {\r\n\r\n\t\t// Edge at north.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the left.\r\n\t\tvec2 coords;\r\n\t\tcoords.x = searchXLeft(vOffset[0].xy, vOffset[2].x);\r\n\t\tcoords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)\r\n\t\td.x = coords.x;\r\n\r\n\t\t/* Now fetch the left crossing edges, two at a time using bilinear filtering.\r\n\t\t * Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has.\r\n\t\t */\r\n\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).r;\r\n\r\n\t\t// Find the distance to the right.\r\n\t\tcoords.x = searchXRight(vOffset[0].zw, vOffset[2].y);\r\n\t\td.y = coords.x;\r\n\r\n\t\t// Translate distances to pixel units for better interleave arithmetic and memory accesses.\r\n\t\td = d / texelSize.x - vPixCoord.x;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the right crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(1, 0)).r;\r\n\r\n\t\t// Pattern recognised, now get the actual area.\r\n\t\tweights.rg = area(sqrtD, e1, e2, subsampleIndices.y);\r\n\r\n\t}\r\n\r\n\tif(e.r > 0.0) {\r\n\r\n\t\t// Edge at west.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the top.\r\n\t\tvec2 coords;\r\n\r\n\t\tcoords.y = searchYUp(vOffset[1].xy, vOffset[2].z);\r\n\t\tcoords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;\r\n\t\td.x = coords.y;\r\n\r\n\t\t// Fetch the top crossing edges.\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).g;\r\n\r\n\t\t// Find the distance to the bottom.\r\n\t\tcoords.y = searchYDown(vOffset[1].zw, vOffset[2].w);\r\n\t\td.y = coords.y;\r\n\r\n\t\t// Distances in pixel units.\r\n\t\td = d / texelSize.y - vPixCoord.y;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the bottom crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(0, 1)).g;\r\n\r\n\t\t// Get the area for this direction.\r\n\t\tweights.ba = area(sqrtD, e1, e2, subsampleIndices.x);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = weights;\r\n\r\n}\r\n",
 		vertex: "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvPixCoord = uv / texelSize;\r\n\r\n\t// Offsets for the searches (see @PSEUDO_GATHER4).\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-0.25, 0.125, 1.25, 0.125); // Changed sign in Y and W components.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(-0.125, 0.25, -0.125, -1.25); //Changed sign in Y and W components.\r\n\r\n\t// This indicates the ends of the loops.\r\n\tvOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) + vec4(-2.0, 2.0, -2.0, 2.0) * texelSize.xxyy * SMAA_MAX_SEARCH_STEPS_FLOAT;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -736,7 +736,7 @@
 
 	}
 
-	var shader$13 = {
+	let shader$13 = {
 		fragment: "uniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\nconst vec2 CENTER = vec2(0.5, 0.5);\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, CENTER).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = dot(c, LUM_COEFF);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n}\r\n",
 		vertex: "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n"
 	};
@@ -969,241 +969,6 @@
 				}
 
 			}
-
-		}
-
-	}
-
-	/**
-	 * A tone mapping pass that supports adaptive luminosity.
-	 *
-	 * If adaptivity is enabled, this pass generates a texture that represents 
-	 * the luminosity of the current scene and adjusts it over time to simulate 
-	 * the optic nerve responding to the amount of light it is receiving.
-	 *
-	 * Reference:
-	 *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
-	 *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
-	 *
-	 * @class ToneMappingPass
-	 * @constructor
-	 * @extends Pass
-	 * @param {Object} [options] - The options.
-	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
-	 * @param {Number} [options.resolution=256] - The render texture resolution.
-	 * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
-	 */
-
-	class ToneMappingPass extends Pass {
-
-		constructor(options) {
-
-			super();
-
-			this.needsSwap = true;
-
-			if(options === undefined) { options = {}; }
-
-			/**
-			 * Render target for the current limonosity.
-			 *
-			 * @property renderTargetLuminosity
-			 * @type WebGLRenderTarget
-			 * @private
-			 */
-
-			this.renderTargetLuminosity = new THREE.WebGLRenderTarget(1, 1, {
-				minFilter: THREE.LinearMipMapLinearFilter,
-				magFilter: THREE.LinearFilter,
-				format: THREE.RGBFormat, // Change to RED format in WebGL 2.0! Don't need colours.
-				stencilBuffer: false,
-				depthBuffer: false
-			});
-
-			/**
-			 * Adapted luminance render target.
-			 *
-			 * @property renderTargetLuminosity
-			 * @type WebGLRenderTarget
-			 * @private
-			 */
-
-			this.renderTargetAdapted = this.renderTargetLuminosity.clone();
-
-			this.renderTargetAdapted.texture.generateMipmaps = false;
-			this.renderTargetAdapted.texture.minFilter = THREE.LinearFilter;
-
-			/**
-			 * Render target that holds a copy of the adapted limonosity.
-			 *
-			 * @property renderTargetX
-			 * @type WebGLRenderTarget
-			 * @private
-			 */
-
-			this.renderTargetPrevious = this.renderTargetAdapted.clone();
-
-			/**
-			 * Copy shader material used for saving the luminance map.
-			 *
-			 * @property copyMaterial
-			 * @type CopyMaterial
-			 * @private
-			 */
-
-			this.copyMaterial = new CopyMaterial();
-
-			/**
-			 * Luminosity shader material.
-			 *
-			 * @property luminosityMaterial
-			 * @type LuminosityMaterial
-			 * @private
-			 */
-
-			this.luminosityMaterial = new LuminosityMaterial();
-
-			this.luminosityMaterial.uniforms.distinction.value = (options.distinction === undefined) ? 1.0 : options.distinction;
-
-			/**
-			 * Adaptive luminance shader material.
-			 *
-			 * @property adaptiveLuminosityMaterial
-			 * @type AdaptiveLuminosityMaterial
-			 * @private
-			 */
-
-			this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
-
-			this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
-
-			/**
-			 * Tone mapping shader material.
-			 *
-			 * @property toneMappingMaterial
-			 * @type ToneMappingMaterial
-			 * @private
-			 */
-
-			this.toneMappingMaterial = new ToneMappingMaterial();
-
-			this.adaptive = (options.adaptive === undefined) ? true : options.adaptive;
-
-		}
-
-		/**
-		 * The resolution of the render targets. Must be a power of two for mipmapping.
-		 *
-		 * @property resolution
-		 * @type Number
-		 * @default 256
-		 */
-
-		get resolution() { return this.renderTargetLuminosity.width; }
-
-		set resolution(x) {
-
-			if(typeof x === "number" && x > 0) {
-
-				this.renderTargetLuminosity.setSize(x, x);
-				this.renderTargetPrevious.setSize(x, x); // Hm..
-				this.renderTargetAdapted.setSize(x, x);
-
-				this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
-				this.adaptiveLuminosityMaterial.needsUpdate = true;
-
-			}
-
-		}
-
-		/**
-		 * Whether this pass uses adaptive luminosity.
-		 *
-		 * @property adaptive
-		 * @type Boolean
-		 */
-
-		get adaptive() { return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined; }
-
-		set adaptive(x) {
-
-			if(x) {
-
-				this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
-				this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted;
-
-			} else {
-
-				delete this.toneMappingMaterial.defines.ADAPTED_LUMINANCE;
-				this.toneMappingMaterial.uniforms.luminanceMap.value = null;
-
-			}
-
-			this.toneMappingMaterial.needsUpdate = true;
-
-		}
-
-		/**
-		 * Renders the effect.
-		 *
-		 * @method render
-		 * @param {WebGLRenderer} renderer - The renderer to use.
-		 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-		 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-		 * @param {Number} delta - The render delta time.
-		 */
-
-		render(renderer, readBuffer, writeBuffer, delta) {
-
-			if(this.adaptive) {
-
-				// Render the luminance of the current scene into a render target with mipmapping enabled.
-				this.quad.material = this.luminosityMaterial;
-				this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
-				renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
-
-				// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
-				this.quad.material = this.adaptiveLuminosityMaterial;
-				this.adaptiveLuminosityMaterial.uniforms.delta.value = delta;
-				this.adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = this.renderTargetPrevious;
-				this.adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = this.renderTargetLuminosity;
-				renderer.render(this.scene, this.camera, this.renderTargetAdapted);
-
-				// Copy the new adapted luminance value so that it can be used by the next frame.
-				this.quad.material = this.copyMaterial;
-				this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetAdapted;
-				renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-
-			}
-
-			// Apply the tone mapping to the colours.
-			this.quad.material = this.toneMappingMaterial;
-			this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
-
-			if(this.renderToScreen) {
-
-				renderer.render(this.scene, this.camera);
-
-			} else {
-
-				renderer.render(this.scene, this.camera, writeBuffer, false);
-
-			}
-
-		}
-
-		/**
-		 * Renders something into the previous luminosity texture.
-		 *
-		 * @method initialise
-		 * @param {WebGLRenderer} renderer - The renderer.
-		 */
-
-		initialise(renderer) {
-
-			this.quad.material = new THREE.MeshBasicMaterial({color: 0x7fffff});
-			renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-			this.quad.material.dispose();
 
 		}
 
@@ -1573,7 +1338,7 @@
 
 		render(renderer) {
 
-			renderer.context.disable(context.STENCIL_TEST);
+			renderer.context.disable(renderer.context.STENCIL_TEST);
 
 		}
 
@@ -3064,6 +2829,241 @@
 	}
 
 	/**
+	 * A tone mapping pass that supports adaptive luminosity.
+	 *
+	 * If adaptivity is enabled, this pass generates a texture that represents 
+	 * the luminosity of the current scene and adjusts it over time to simulate 
+	 * the optic nerve responding to the amount of light it is receiving.
+	 *
+	 * Reference:
+	 *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
+	 *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+	 *
+	 * @class ToneMappingPass
+	 * @constructor
+	 * @extends Pass
+	 * @param {Object} [options] - The options.
+	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
+	 * @param {Number} [options.resolution=256] - The render texture resolution.
+	 * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
+	 */
+
+	class ToneMappingPass extends Pass {
+
+		constructor(options) {
+
+			super();
+
+			this.needsSwap = true;
+
+			if(options === undefined) { options = {}; }
+
+			/**
+			 * Render target for the current limonosity.
+			 *
+			 * @property renderTargetLuminosity
+			 * @type WebGLRenderTarget
+			 * @private
+			 */
+
+			this.renderTargetLuminosity = new THREE.WebGLRenderTarget(1, 1, {
+				minFilter: THREE.LinearMipMapLinearFilter,
+				magFilter: THREE.LinearFilter,
+				format: THREE.RGBFormat, // Change to RED format in WebGL 2.0! Don't need colours.
+				stencilBuffer: false,
+				depthBuffer: false
+			});
+
+			/**
+			 * Adapted luminance render target.
+			 *
+			 * @property renderTargetLuminosity
+			 * @type WebGLRenderTarget
+			 * @private
+			 */
+
+			this.renderTargetAdapted = this.renderTargetLuminosity.clone();
+
+			this.renderTargetAdapted.texture.generateMipmaps = false;
+			this.renderTargetAdapted.texture.minFilter = THREE.LinearFilter;
+
+			/**
+			 * Render target that holds a copy of the adapted limonosity.
+			 *
+			 * @property renderTargetX
+			 * @type WebGLRenderTarget
+			 * @private
+			 */
+
+			this.renderTargetPrevious = this.renderTargetAdapted.clone();
+
+			/**
+			 * Copy shader material used for saving the luminance map.
+			 *
+			 * @property copyMaterial
+			 * @type CopyMaterial
+			 * @private
+			 */
+
+			this.copyMaterial = new CopyMaterial();
+
+			/**
+			 * Luminosity shader material.
+			 *
+			 * @property luminosityMaterial
+			 * @type LuminosityMaterial
+			 * @private
+			 */
+
+			this.luminosityMaterial = new LuminosityMaterial();
+
+			this.luminosityMaterial.uniforms.distinction.value = (options.distinction === undefined) ? 1.0 : options.distinction;
+
+			/**
+			 * Adaptive luminance shader material.
+			 *
+			 * @property adaptiveLuminosityMaterial
+			 * @type AdaptiveLuminosityMaterial
+			 * @private
+			 */
+
+			this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
+
+			this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+
+			/**
+			 * Tone mapping shader material.
+			 *
+			 * @property toneMappingMaterial
+			 * @type ToneMappingMaterial
+			 * @private
+			 */
+
+			this.toneMappingMaterial = new ToneMappingMaterial();
+
+			this.adaptive = (options.adaptive === undefined) ? true : options.adaptive;
+
+		}
+
+		/**
+		 * The resolution of the render targets. Must be a power of two for mipmapping.
+		 *
+		 * @property resolution
+		 * @type Number
+		 * @default 256
+		 */
+
+		get resolution() { return this.renderTargetLuminosity.width; }
+
+		set resolution(x) {
+
+			if(typeof x === "number" && x > 0) {
+
+				this.renderTargetLuminosity.setSize(x, x);
+				this.renderTargetPrevious.setSize(x, x); // Hm..
+				this.renderTargetAdapted.setSize(x, x);
+
+				this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
+				this.adaptiveLuminosityMaterial.needsUpdate = true;
+
+			}
+
+		}
+
+		/**
+		 * Whether this pass uses adaptive luminosity.
+		 *
+		 * @property adaptive
+		 * @type Boolean
+		 */
+
+		get adaptive() { return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined; }
+
+		set adaptive(x) {
+
+			if(x) {
+
+				this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
+				this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted;
+
+			} else {
+
+				delete this.toneMappingMaterial.defines.ADAPTED_LUMINANCE;
+				this.toneMappingMaterial.uniforms.luminanceMap.value = null;
+
+			}
+
+			this.toneMappingMaterial.needsUpdate = true;
+
+		}
+
+		/**
+		 * Renders the effect.
+		 *
+		 * @method render
+		 * @param {WebGLRenderer} renderer - The renderer to use.
+		 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+		 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+		 * @param {Number} delta - The render delta time.
+		 */
+
+		render(renderer, readBuffer, writeBuffer, delta) {
+
+			if(this.adaptive) {
+
+				// Render the luminance of the current scene into a render target with mipmapping enabled.
+				this.quad.material = this.luminosityMaterial;
+				this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
+				renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
+
+				// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
+				this.quad.material = this.adaptiveLuminosityMaterial;
+				this.adaptiveLuminosityMaterial.uniforms.delta.value = delta;
+				this.adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = this.renderTargetPrevious;
+				this.adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = this.renderTargetLuminosity;
+				renderer.render(this.scene, this.camera, this.renderTargetAdapted);
+
+				// Copy the new adapted luminance value so that it can be used by the next frame.
+				this.quad.material = this.copyMaterial;
+				this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetAdapted;
+				renderer.render(this.scene, this.camera, this.renderTargetPrevious);
+
+			}
+
+			// Apply the tone mapping to the colours.
+			this.quad.material = this.toneMappingMaterial;
+			this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
+
+			if(this.renderToScreen) {
+
+				renderer.render(this.scene, this.camera);
+
+			} else {
+
+				renderer.render(this.scene, this.camera, writeBuffer, false);
+
+			}
+
+		}
+
+		/**
+		 * Renders something into the previous luminosity texture.
+		 *
+		 * @method initialise
+		 * @param {WebGLRenderer} renderer - The renderer.
+		 */
+
+		initialise(renderer) {
+
+			this.quad.material = new THREE.MeshBasicMaterial({color: 0x7fffff});
+			renderer.render(this.scene, this.camera, this.renderTargetPrevious);
+			this.quad.material.dispose();
+
+		}
+
+	}
+
+	/**
 	 * The EffectComposer may be used in place of a normal WebGLRenderer.
 	 *
 	 * It will disable the auto clear behaviour of the provided renderer to prevent 
@@ -3113,7 +3113,7 @@
 			 * @private
 			 */
 
-			this.writeBuffer = this.renderTarget.clone();
+			this.writeBuffer = this.readBuffer.clone();
 
 			/**
 			 * A copy pass used to copy masked scenes.
@@ -3345,7 +3345,6 @@
 	}
 
 	exports.EffectComposer = EffectComposer;
-	exports.ToneMappingPass = ToneMappingPass;
 	exports.BloomPass = BloomPass;
 	exports.BokehPass = BokehPass;
 	exports.ClearMaskPass = ClearMaskPass;
@@ -3359,6 +3358,7 @@
 	exports.SavePass = SavePass;
 	exports.SMAAPass = SMAAPass;
 	exports.ShaderPass = ShaderPass;
+	exports.ToneMappingPass = ToneMappingPass;
 	exports.AdaptiveLuminosityMaterial = AdaptiveLuminosityMaterial;
 	exports.BokehMaterial = BokehMaterial;
 	exports.CombineMaterial = CombineMaterial;
