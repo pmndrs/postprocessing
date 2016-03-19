@@ -210,7 +210,7 @@ export class ToneMappingPass extends Pass {
 
 		}
 
-		// Apply the adaptive tone mapping to the colours.
+		// Apply the tone mapping to the colours.
 		this.quad.material = this.toneMappingMaterial;
 		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
 

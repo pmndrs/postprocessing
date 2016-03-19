@@ -16,7 +16,7 @@ import THREE from "three";
  * @class SMAAPass
  * @constructor
  * @extends Pass
- * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment!
+ * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
  */
 
 export class SMAAPass extends Pass {
