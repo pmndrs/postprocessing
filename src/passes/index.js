@@ -5,7 +5,6 @@
  * @submodule passes
  */
 
-export { ToneMappingPass } from "./tone-mapping";
 export { BloomPass } from "./bloom";
 export { BokehPass } from "./bokeh";
 export { ClearMaskPass } from "./clear-mask";
@@ -19,3 +18,4 @@ export { RenderPass } from "./render";
 export { SavePass } from "./save";
 export { SMAAPass } from "./smaa";
 export { ShaderPass } from "./shader";
+export { ToneMappingPass } from "./tone-mapping";
