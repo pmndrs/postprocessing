@@ -8,7 +8,7 @@ import THREE from "three";
  * @class BokehPass
  * @constructor
  * @extends Pass
- * @param {WebGLRenderTarget} depthTexture - A render texture that contains the depth of the scene.
+ * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
  * @param {Object} [options] - Additional parameters.
  * @param {Number} [options.focus=1.0] - Focus distance.
  * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
@@ -52,7 +52,7 @@ export class BokehPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer) {
 
-		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
 		if(this.renderToScreen) {
 

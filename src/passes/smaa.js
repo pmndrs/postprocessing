@@ -97,7 +97,7 @@ export class SMAAPass extends Pass {
 		searchTexture.needsUpdate = true;
 		searchTexture.flipY = false;
 
-		this.weightsMaterial.uniforms.tDiffuse.value = this.renderTargetColorEdges;
+		this.weightsMaterial.uniforms.tDiffuse.value = this.renderTargetColorEdges.texture;
 		this.weightsMaterial.uniforms.tArea.value = areaTexture;
 		this.weightsMaterial.uniforms.tSearch.value = searchTexture;
 
@@ -111,7 +111,7 @@ export class SMAAPass extends Pass {
 
 		this.blendMaterial = new SMAABlendMaterial();
 
-		this.blendMaterial.uniforms.tWeights.value = this.renderTargetWeights;
+		this.blendMaterial.uniforms.tWeights.value = this.renderTargetWeights.texture;
 
 		this.quad.material = this.blendMaterial;
 
@@ -130,7 +130,7 @@ export class SMAAPass extends Pass {
 
 		// Detect color edges.
 		this.quad.material = this.colorEdgesMaterial;
-		this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);
 
 		// Compute edge weights.
@@ -139,7 +139,7 @@ export class SMAAPass extends Pass {
 
 		// Apply the antialiasing filter to the colors.
 		this.quad.material = this.blendMaterial;
-		this.blendMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
 		if(this.renderToScreen) {
 

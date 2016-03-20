@@ -314,43 +314,43 @@ export class GodRaysPass extends Pass {
 		this.quad.material = this.convolutionMaterial;
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetMask;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetMask.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// God rays pass.
 		this.quad.material = this.godRaysMaterial;
-		this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// Final pass - composite god rays onto colors.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
+			this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
 
 			renderer.render(this.scene, this.camera);
 
 		} else {
 
 			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 
 			renderer.render(this.scene, this.camera, readBuffer);
 

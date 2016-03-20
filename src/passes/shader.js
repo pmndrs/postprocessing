@@ -57,7 +57,7 @@ export class ShaderPass extends Pass {
 
 		if(this.material.uniforms[this.textureID] !== undefined) {
 
-			this.material.uniforms[this.textureID].value = readBuffer;
+			this.material.uniforms[this.textureID].value = readBuffer.texture;
 
 		}
 

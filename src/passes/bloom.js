@@ -159,37 +159,37 @@ export class BloomPass extends Pass {
 
 		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
-		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// Render the original scene with superimposed blur.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer;
+			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
 			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 			renderer.render(this.scene, this.camera);
@@ -197,7 +197,7 @@ export class BloomPass extends Pass {
 		} else {
 
 			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 
 			renderer.render(this.scene, this.camera, readBuffer, false);
 

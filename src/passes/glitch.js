@@ -108,7 +108,7 @@ export class GlitchPass extends Pass {
 
 		let uniforms = this.material.uniforms;
 
-		uniforms.tDiffuse.value = readBuffer;
+		uniforms.tDiffuse.value = readBuffer.texture;
 		uniforms.seed.value = Math.random();
 		uniforms.active.value = true;
 
