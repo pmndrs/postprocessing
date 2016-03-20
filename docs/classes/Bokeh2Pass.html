@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ShaderPass - postprocessing</title>
+    <title>Bokeh2Pass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -109,7 +109,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>ShaderPass Class</h1>
+<h1>Bokeh2Pass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_shader.js.html#l4"><code>src\passes\shader.js:4</code></a>
+            Defined in: <a href="../files/src_passes_bokeh2.js.html#l5"><code>src\passes\bokeh2.js:5</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -126,23 +126,26 @@
 
 
 <div class="box intro">
-    <p>A shader pass.</p>
-<p>Used to render any shader material as a 2D filter.</p>
+    <p>Depth of Field pass version 2.</p>
+<p>This pass yields more realistic results but is also more demanding.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_ShaderPass" class="method item">
-    <h3 class="name"><code>ShaderPass</code></h3>
+<div id="method_Bokeh2Pass" class="method item">
+    <h3 class="name"><code>Bokeh2Pass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>material</code>
+                        <code>depthTexture</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[textureID=&quot;tDiffuse&quot;]</code>
+                        <code>camera</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -157,7 +160,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_shader.js.html#l4"><code>src\passes\shader.js:4</code></a>
+        <a href="../files/src_passes_bokeh2.js.html#l5"><code>src\passes\bokeh2.js:5</code></a>
         </p>
 
 
@@ -173,31 +176,150 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">material</code>
-                        <span class="type">ShaderMaterial</span>
+                        <code class="param-name">depthTexture</code>
+                        <span class="type">Texture</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The shader material to use.</li>
+<li>A render texture that contains the depth of the scene.</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name optional">[textureID=&quot;tDiffuse&quot;]</code>
-                        <span class="type">String</span>
+                        <code class="param-name">camera</code>
+                        <span class="type">PerspectiveCamera</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The main camera. Used to adjust near and far plane and focal length settings.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The texture uniform identifier.</li>
+<li>Additional parameters.</li>
 </ul>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[rings=3]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The amount of blur rings.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[samples=4]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The amount of samples per ring.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[showFocus=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Whether the focus point should be highlighted.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[manualDoF=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enables manual depth of field blur.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[vignette=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enables a vignette effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[pentagon=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enable to use a pentagonal shape to scale gathered texels.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[shaderFocus=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Disable if you compute your own focalDepth (in metres!).</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[noise=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Disable if you don't want noise patterns for dithering.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -246,16 +368,16 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property_bokehMaterial">bokehMaterial</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_material">material</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -272,10 +394,6 @@
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_textureID">textureID</a>
 
                             </li>
                     </ul>
@@ -310,25 +428,24 @@
     </div>
 
     <div class="description">
-        <p>Performs a shallow search for properties that define a dispose method and
-deletes them. The pass will be inoperative after this method was called!</p>
-<p>Disposable objects:</p>
-<ul>
-<li>render targets</li>
-<li>materials</li>
-<li>textures</li>
-</ul>
-<p>The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory
-when you are certain that you don't need this pass anymore.</p>
+        Performs a shallow search for properties that define a dispose method and 
+deletes them. The pass will be inoperative after this method was called!
 
+Disposable objects:
+ - render targets
+ - materials
+ - textures
+
+The EffectComposer calls this method automatically when it is being
+destroyed. You may, however, use it independently to free memory 
+when you are certain that you don't need this pass anymore.
     </div>
 
 
 
 
 </div>
-<div id="method_initialise" class="method item inherited">
+<div id="method_initialise" class="method item">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
@@ -350,9 +467,12 @@ when you are certain that you don't need this pass anymore.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l128"><code>src\passes\pass.js:128</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_initialise">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh2.js.html#l75"><code>src\passes\bokeh2.js:75</code></a>
         </p>
 
 
@@ -360,13 +480,7 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Performs initialisation tasks.</p>
-<p>By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).</p>
-<p>The provided renderer can be used to warm up special off-screen render
-targets by performing a preliminary render operation.</p>
-<p>The effect composer calls this method when this pass is added to its queue.</p>
+        <p>Adjusts the format and size of the render targets.</p>
 
     </div>
 
@@ -415,7 +529,10 @@ targets by performing a preliminary render operation.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>buffer</code>
+                        <code>readBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -433,7 +550,7 @@ targets by performing a preliminary render operation.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_shader.js.html#l48"><code>src\passes\shader.js:48</code></a>
+        <a href="../files/src_passes_bokeh2.js.html#l50"><code>src\passes\bokeh2.js:50</code></a>
         </p>
 
 
@@ -463,13 +580,26 @@ targets by performing a preliminary render operation.</p>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">buffer</code>
+                        <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The read/write buffer.</li>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -481,7 +611,7 @@ targets by performing a preliminary render operation.</p>
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -503,9 +633,12 @@ targets by performing a preliminary render operation.</p>
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l147"><code>src\passes\pass.js:147</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_bokeh2.js.html#l90"><code>src\passes\bokeh2.js:90</code></a>
         </p>
 
 
@@ -514,9 +647,6 @@ targets by performing a preliminary render operation.</p>
 
     <div class="description">
         <p>Updates this pass with the renderer's size.</p>
-<p>This is an abstract method that may be overriden in case you want to be
-informed about the main render size.</p>
-<p>The effect composer calls this method when its own size is updated.</p>
 
     </div>
 
@@ -531,7 +661,7 @@ informed about the main render size.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
@@ -544,7 +674,7 @@ informed about the main render size.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
@@ -555,20 +685,38 @@ informed about the main render size.</p>
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <p>this.myRenderTarget.setSize(width, height);</p>
-
-            </div>
-        </div>
 </div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_bokehMaterial" class="property item private">
+    <h3 class="name"><code>bokehMaterial</code></h3>
+    <span class="type"><a href="../classes/BokehMaterial.html" class="crosslink">BokehMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bokeh2.js.html#l34"><code>src\passes\bokeh2.js:34</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Bokeh shader material.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -588,8 +736,7 @@ informed about the main render size.</p>
     </div>
 
     <div class="description">
-        <p>The camera to render with.</p>
-
+        The camera to render with.
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
@@ -614,36 +761,10 @@ informed about the main render size.</p>
     </div>
 
     <div class="description">
-        <p>Enabled flag.</p>
-
+        Enabled flag.
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_material" class="property item">
-    <h3 class="name"><code>material</code></h3>
-    <span class="type">ShaderMaterial</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_shader.js.html#l35"><code>src\passes\shader.js:35</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The shader material to use for rendering.</p>
-
-    </div>
-
 
 
 </div>
@@ -666,11 +787,11 @@ informed about the main render size.</p>
     </div>
 
     <div class="description">
-        <p>Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.</p>
-<p>Set this to true if this pass renders to the write buffer so that a
-following pass can find the result in the read buffer.</p>
+        Indicates whether the read and write buffers should be swapped after this 
+pass has finished rendering.
 
+Set this to true if this pass renders to the write buffer so that a 
+following pass can find the result in the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -696,9 +817,9 @@ following pass can find the result in the read buffer.</p>
     </div>
 
     <div class="description">
-        <p>The quad mesh to use for rendering.</p>
-<p>Assign your shader material to this mesh!</p>
+        The quad mesh to use for rendering.
 
+Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
@@ -731,8 +852,7 @@ following pass can find the result in the read buffer.</p>
     </div>
 
     <div class="description">
-        <p>Render to screen flag.</p>
-
+        Render to screen flag.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -758,38 +878,10 @@ following pass can find the result in the read buffer.</p>
     </div>
 
     <div class="description">
-        <p>The scene to render.</p>
-
+        The scene to render.
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
-
-
-</div>
-<div id="property_textureID" class="property item">
-    <h3 class="name"><code>textureID</code></h3>
-    <span class="type">String</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_shader.js.html#l24"><code>src\passes\shader.js:24</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The name of the color sampler uniform of the given material.
-The read buffer will be bound to this.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> &quot;tDiffuse&quot;</p>
 
 
 </div>

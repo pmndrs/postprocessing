@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SMAAWeightsMaterial - postprocessing</title>
+    <title>Bokeh2Material - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -109,7 +109,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>SMAAWeightsMaterial Class</h1>
+<h1>Bokeh2Material Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -117,7 +117,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_materials_smaa-weights_index.js.html#l6"><code>src\materials\smaa-weights\index.js:6</code></a>
+            Defined in: <a href="../files/src_materials_bokeh2_index.js.html#l4"><code>src\materials\bokeh2\index.js:4</code></a>
         </div>
 
             Module: <a href="../modules/postprocessing.html">postprocessing</a>
@@ -126,20 +126,24 @@
 
 
 <div class="box intro">
-    <p>Subpixel Morphological Antialiasing.</p>
-<p>This material computes weights for detected edges.</p>
+    <p>Depth of Field shader version 2.</p>
+<p>Original code by Martins Upitis:
+<a href="http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)">http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)</a></p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_SMAAWeightsMaterial" class="method item">
-    <h3 class="name"><code>SMAAWeightsMaterial</code></h3>
+<div id="method_Bokeh2Material" class="method item">
+    <h3 class="name"><code>Bokeh2Material</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code class="optional">[texelSize]</code>
+                        <code class="optional">[camera]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -154,7 +158,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l6"><code>src\materials\smaa-weights\index.js:6</code></a>
+        <a href="../files/src_materials_bokeh2_index.js.html#l4"><code>src\materials\bokeh2\index.js:4</code></a>
         </p>
 
 
@@ -170,18 +174,125 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[texelSize]</code>
-                        <span class="type">Vector2</span>
+                        <code class="param-name optional">[camera]</code>
+                        <span class="type">PerspectiveCamera</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The absolute screen texel size.</li>
+<li>The main camera.</li>
 </ul>
 
                     </div>
 
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Additional options.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[texelSize]</code>
+                                    <span class="type">Vector2</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The absolute screen texel size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[showFocus=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Whether the focus point should be highlighted.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[manualDoF=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enables manual depth of field blur.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[vignette=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enables a vignette effect.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[pentagon=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Enable to use a pentagonal shape to scale gathered texels.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[shaderFocus=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Disable if you compute your own focalDepth (in metres!).</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[noise=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Disable if you don't want noise patterns for dithering.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -195,39 +306,48 @@
     <ul class="api-class-tabs">
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
     </ul>
 
     <div>
         <div id="index" class="api-class-tabpanel index">
             <h2 class="off-left">Item Index</h2>
 
+                <div class="index-section methods">
+                    <h3>Methods</h3>
 
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                            <li class="index-item property">
-                                <a href="#property_areaImage">areaImage</a>
+                    <ul class="index-list methods extends">
+                            <li class="index-item method">
+                                <a href="#method_adoptCameraSettings">adoptCameraSettings</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_searchImage">searchImage</a>
+                            <li class="index-item method">
+                                <a href="#method_setTexelSize">setTexelSize</a>
 
                             </li>
                     </ul>
                 </div>
 
 
+
+        </div>
+
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+<div id="method_adoptCameraSettings" class="method item">
+    <h3 class="name"><code>adoptCameraSettings</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>camera</code>
+                </li>
+            </ul><span class="paren">)</span>
         </div>
 
 
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
 
-<div id="property_areaImage" class="property item">
-    <h3 class="name"><code>areaImage</code></h3>
-    <span class="type">String</span>
 
 
 
@@ -236,23 +356,57 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l49"><code>src\materials\smaa-weights\index.js:49</code></a>
+        <a href="../files/src_materials_bokeh2_index.js.html#l108"><code>src\materials\bokeh2\index.js:108</code></a>
         </p>
+
 
 
     </div>
 
     <div class="description">
-        <p>The area pattern recognition image.</p>
+        <p>Sets the near and far plane and the focal length.</p>
 
     </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">camera</code>
+                        <span class="type">PerspectiveCamera</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The main camera.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
 </div>
-<div id="property_searchImage" class="property item">
-    <h3 class="name"><code>searchImage</code></h3>
-    <span class="type">String</span>
+<div id="method_setTexelSize" class="method item">
+    <h3 class="name"><code>setTexelSize</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>x</code>
+                </li>
+                <li class="arg">
+                        <code>y</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+
+
 
 
 
@@ -261,21 +415,56 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l58"><code>src\materials\smaa-weights\index.js:58</code></a>
+        <a href="../files/src_materials_bokeh2_index.js.html#l93"><code>src\materials\bokeh2\index.js:93</code></a>
         </p>
+
 
 
     </div>
 
     <div class="description">
-        <p>The search image.</p>
+        <p>Sets the texel size.</p>
 
     </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">x</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The texel width.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">y</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The texel height.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
 
 
 </div>
             </div>
+
 
 
     </div>

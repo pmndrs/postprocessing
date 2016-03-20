@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.4</em>
+            <em>API Docs for: 1.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,8 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
+                                <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -164,17 +166,27 @@ export class RenderPass extends Pass {
 		this.depth = (options.depth !== undefined) ? options.depth : false;
 
 		/**
-		 * The depth texture.
+		 * The depth render target.
 		 *
-		 * @property depthTexture
+		 * @property renderTargetDepth
 		 * @type WebGLRenderTarget
+		 * @private
 		 */
 
-		this.depthTexture = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
+		this.renderTargetDepth = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			generateMipmaps: false
 		});
+
+		/**
+		 * The depth texture.
+		 *
+		 * @property depthTexture
+		 * @type Texture
+		 */
+
+		this.depthTexture = !this.depth ? null : this.renderTargetDepth.texture;
 
 		/**
 		 * A depth shader material.
@@ -254,7 +266,7 @@ export class RenderPass extends Pass {
 		if(this.depth) {
 
 			this.scene.overrideMaterial = this.depthMaterial;
-			renderer.render(this.scene, this.camera, this.depthTexture, true);
+			renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
 			this.scene.overrideMaterial = null;
 
 		}
@@ -308,7 +320,7 @@ export class RenderPass extends Pass {
 
 			if(!alpha) {
 
-				this.depthTexture.texture.format = THREE.RGBFormat;
+				this.renderTargetDepth.texture.format = THREE.RGBFormat;
 
 			}
 
@@ -334,7 +346,7 @@ export class RenderPass extends Pass {
 			if(width &lt;= 0) { width = 1; }
 			if(height &lt;= 0) { height = 1; }
 
-			this.depthTexture.setSize(width, height);
+			this.renderTargetDepth.setSize(width, height);
 
 		}
 

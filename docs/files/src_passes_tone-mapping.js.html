@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.4</em>
+            <em>API Docs for: 1.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,8 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
+                                <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -306,26 +308,26 @@ export class ToneMappingPass extends Pass {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
 			this.quad.material = this.luminosityMaterial;
-			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
+			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 			renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 			this.quad.material = this.adaptiveLuminosityMaterial;
 			this.adaptiveLuminosityMaterial.uniforms.delta.value = delta;
-			this.adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = this.renderTargetPrevious;
-			this.adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = this.renderTargetLuminosity;
+			this.adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = this.renderTargetPrevious.texture;
+			this.adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = this.renderTargetLuminosity.texture;
 			renderer.render(this.scene, this.camera, this.renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
 			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetAdapted;
+			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetAdapted.texture;
 			renderer.render(this.scene, this.camera, this.renderTargetPrevious);
 
 		}
 
 		// Apply the tone mapping to the colours.
 		this.quad.material = this.toneMappingMaterial;
-		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
 		if(this.renderToScreen) {
 

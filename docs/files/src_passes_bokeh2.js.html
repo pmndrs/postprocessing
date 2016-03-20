@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>SMAAWeightsMaterial - postprocessing</title>
+    <title>src\passes\bokeh2.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -109,176 +109,116 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>SMAAWeightsMaterial Class</h1>
-<div class="box meta">
+<h1 class="file-heading">File: src\passes\bokeh2.js</h1>
 
-        <div class="extends">
-            Extends ShaderMaterial
-        </div>
+<div class="file">
+    <pre class="code prettyprint linenums">
+import { Bokeh2Material } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass&quot;;
+import THREE from &quot;three&quot;;
 
-        <div class="foundat">
-            Defined in: <a href="../files/src_materials_smaa-weights_index.js.html#l6"><code>src\materials\smaa-weights\index.js:6</code></a>
-        </div>
+/**
+ * Depth of Field pass version 2.
+ *
+ * This pass yields more realistic results but is also more demanding.
+ *
+ * @class Bokeh2Pass
+ * @constructor
+ * @extends Pass
+ * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
+ * @param {PerspectiveCamera} camera - The main camera. Used to adjust near and far plane and focal length settings.
+ * @param {Object} [options] - Additional parameters.
+ * @param {Number} [options.rings=3] - The amount of blur rings.
+ * @param {Number} [options.samples=4] - The amount of samples per ring.
+ * @param {Boolean} [options.showFocus=false] - Whether the focus point should be highlighted.
+ * @param {Boolean} [options.manualDoF=false] - Enables manual depth of field blur.
+ * @param {Boolean} [options.vignette=false] - Enables a vignette effect.
+ * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.
+ * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).
+ * @param {Boolean} [options.noise=true] - Disable if you don&#x27;t want noise patterns for dithering.
+ */
 
-            Module: <a href="../modules/postprocessing.html">postprocessing</a>
+export class Bokeh2Pass extends Pass {
 
-</div>
+	constructor(depthTexture, camera, options) {
 
+		super();
 
-<div class="box intro">
-    <p>Subpixel Morphological Antialiasing.</p>
-<p>This material computes weights for detected edges.</p>
+		if(options === undefined) { options = {}; }
 
-</div>
+		/**
+		 * Bokeh shader material.
+		 *
+		 * @property bokehMaterial
+		 * @type BokehMaterial
+		 * @private
+		 */
 
-    <div class="constructor">
-        <h2>Constructor</h2>
-<div id="method_SMAAWeightsMaterial" class="method item">
-    <h3 class="name"><code>SMAAWeightsMaterial</code></h3>
+		this.bokehMaterial = new Bokeh2Material(camera, options);
 
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-                <li class="arg">
-                        <code class="optional">[texelSize]</code>
-                </li>
-            </ul><span class="paren">)</span>
-        </div>
+		this.bokehMaterial.uniforms.tDepth.value = (depthTexture !== undefined) ? depthTexture : null;
 
+		this.quad.material = this.bokehMaterial;
 
+	}
 
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 */
 
+	render(renderer, readBuffer, writeBuffer) {
 
+		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
+		if(this.renderToScreen) {
 
+			renderer.render(this.scene, this.camera);
 
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l6"><code>src\materials\smaa-weights\index.js:6</code></a>
-        </p>
+		} else {
 
+			renderer.render(this.scene, this.camera, writeBuffer, false);
 
+		}
 
-    </div>
+	}
 
-    <div class="description">
-        
-    </div>
+	/**
+	 * Adjusts the format and size of the render targets.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
 
-        <div class="params">
-            <h4>Parameters:</h4>
+	initialise(renderer, alpha) {
 
-            <ul class="params-list">
-                <li class="param">
-                        <code class="param-name optional">[texelSize]</code>
-                        <span class="type">Vector2</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+		let size = renderer.getSize();
+		this.setSize(size.width, size.height);
 
+	}
 
-                    <div class="param-description">
-                        <ul>
-<li>The absolute screen texel size.</li>
-</ul>
+	/**
+	 * Updates this pass with the renderer&#x27;s size.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
 
-                    </div>
+	setSize(width, height) {
 
-                </li>
-            </ul>
-        </div>
+		this.bokehMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
+	}
 
+}
 
-</div>
-    </div>
-
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
-
-            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
-    </ul>
-
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
-
-                <div class="index-section properties">
-                    <h3>Properties</h3>
-
-                    <ul class="index-list properties extends">
-                            <li class="index-item property">
-                                <a href="#property_areaImage">areaImage</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_searchImage">searchImage</a>
-
-                            </li>
-                    </ul>
-                </div>
-
-
-        </div>
-
-
-            <div id="properties" class="api-class-tabpanel">
-                <h2 class="off-left">Properties</h2>
-
-<div id="property_areaImage" class="property item">
-    <h3 class="name"><code>areaImage</code></h3>
-    <span class="type">String</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l49"><code>src\materials\smaa-weights\index.js:49</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The area pattern recognition image.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_searchImage" class="property item">
-    <h3 class="name"><code>searchImage</code></h3>
-    <span class="type">String</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_materials_smaa-weights_index.js.html#l58"><code>src\materials\smaa-weights\index.js:58</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The search image.</p>
-
-    </div>
-
-
-
-</div>
-            </div>
-
-
-    </div>
+    </pre>
 </div>
                     </div>
                 </div>

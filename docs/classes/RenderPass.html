@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.4</em>
+            <em>API Docs for: 1.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,8 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
+                                <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -382,6 +384,10 @@ texture which may be used by other passes.</p>
                                 <a href="#property_quad">quad</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_renderTargetDepth">renderTargetDepth</a>
+
+                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
 
@@ -467,7 +473,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l179"><code>src\passes\render.js:179</code></a>
+        <a href="../files/src_passes_render.js.html#l189"><code>src\passes\render.js:189</code></a>
         </p>
 
 
@@ -542,7 +548,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l129"><code>src\passes\render.js:129</code></a>
+        <a href="../files/src_passes_render.js.html#l139"><code>src\passes\render.js:139</code></a>
         </p>
 
 
@@ -617,7 +623,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l206"><code>src\passes\render.js:206</code></a>
+        <a href="../files/src_passes_render.js.html#l216"><code>src\passes\render.js:216</code></a>
         </p>
 
 
@@ -708,7 +714,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l117"><code>src\passes\render.js:117</code></a>
+        <a href="../files/src_passes_render.js.html#l127"><code>src\passes\render.js:127</code></a>
         </p>
 
 
@@ -734,7 +740,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l108"><code>src\passes\render.js:108</code></a>
+        <a href="../files/src_passes_render.js.html#l118"><code>src\passes\render.js:118</code></a>
         </p>
 
 
@@ -786,7 +792,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l99"><code>src\passes\render.js:99</code></a>
+        <a href="../files/src_passes_render.js.html#l109"><code>src\passes\render.js:109</code></a>
         </p>
 
 
@@ -837,7 +843,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l76"><code>src\passes\render.js:76</code></a>
+        <a href="../files/src_passes_render.js.html#l86"><code>src\passes\render.js:86</code></a>
         </p>
 
 
@@ -857,7 +863,7 @@ changing this value.</p>
 </div>
 <div id="property_depthTexture" class="property item">
     <h3 class="name"><code>depthTexture</code></h3>
-    <span class="type">WebGLRenderTarget</span>
+    <span class="type">Texture</span>
 
 
 
@@ -866,7 +872,7 @@ changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l53"><code>src\passes\render.js:53</code></a>
+        <a href="../files/src_passes_render.js.html#l67"><code>src\passes\render.js:67</code></a>
         </p>
 
 
@@ -918,7 +924,7 @@ changing this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l66"><code>src\passes\render.js:66</code></a>
+        <a href="../files/src_passes_render.js.html#l76"><code>src\passes\render.js:76</code></a>
         </p>
 
 
@@ -973,7 +979,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l90"><code>src\passes\render.js:90</code></a>
+        <a href="../files/src_passes_render.js.html#l100"><code>src\passes\render.js:100</code></a>
         </p>
 
 
@@ -1021,6 +1027,32 @@ following pass can find the result in the read buffer.</p>
 
             </div>
         </div>
+
+</div>
+<div id="property_renderTargetDepth" class="property item private">
+    <h3 class="name"><code>renderTargetDepth</code></h3>
+    <span class="type">WebGLRenderTarget</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l53"><code>src\passes\render.js:53</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The depth render target.</p>
+
+    </div>
+
+
 
 </div>
 <div id="property_renderToScreen" class="property item inherited">

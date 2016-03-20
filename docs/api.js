@@ -3,6 +3,8 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "AdaptiveLuminosityMaterial",
         "BloomPass",
+        "Bokeh2Material",
+        "Bokeh2Pass",
         "BokehMaterial",
         "BokehPass",
         "ClearMaskPass",

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.4</em>
+            <em>API Docs for: 1.0.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,8 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
+                                <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
@@ -272,37 +274,37 @@ export class BloomPass extends Pass {
 
 		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
-		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer;
+		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetX);
 
 		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX;
+		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
 		renderer.render(this.scene, this.camera, this.renderTargetY);
 
 		// Render the original scene with superimposed blur.
 		if(this.renderToScreen) {
 
 			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer;
+			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
 			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
 
 			renderer.render(this.scene, this.camera);
@@ -310,7 +312,7 @@ export class BloomPass extends Pass {
 		} else {
 
 			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY;
+			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
 
 			renderer.render(this.scene, this.camera, readBuffer, false);
 
