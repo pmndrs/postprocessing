@@ -25,6 +25,61 @@ module.exports = {
 
 	},
 
+	"Materials": {
+
+		"can be created": function(test) {
+
+			let material = new LIBRARY.AdaptiveLuminosityMaterial();
+			test.ok(material, "adaptive luminosity");
+
+			material = new LIBRARY.BokehMaterial();
+			test.ok(material, "bokeh");
+
+			material = new LIBRARY.Bokeh2Material();
+			test.ok(material, "bokeh 2");
+
+			material = new LIBRARY.CombineMaterial();
+			test.ok(material, "combine");
+
+			material = new LIBRARY.ConvolutionMaterial();
+			test.ok(material, "convolution");
+
+			material = new LIBRARY.CopyMaterial();
+			test.ok(material, "copy");
+
+			material = new LIBRARY.DotScreenMaterial();
+			test.ok(material, "dot screen");
+
+			material = new LIBRARY.FilmMaterial();
+			test.ok(material, "film");
+
+			material = new LIBRARY.GlitchMaterial();
+			test.ok(material, "glitch");
+
+			material = new LIBRARY.GodRaysMaterial();
+			test.ok(material, "god rays");
+
+			material = new LIBRARY.LuminosityMaterial();
+			test.ok(material, "luminosity");
+
+			material = new LIBRARY.SMAABlendMaterial();
+			test.ok(material, "smaa blend");
+
+			material = new LIBRARY.SMAAColorEdgesMaterial();
+			test.ok(material, "smaa color edges");
+
+			material = new LIBRARY.SMAAWeightsMaterial();
+			test.ok(material, "smaa weights");
+
+			material = new LIBRARY.ToneMappingMaterial();
+			test.ok(material, "tone mapping");
+
+			test.done();
+
+		}
+
+	},
+
 	"Passes": {
 
 		"define a dispose method": function(test) {
@@ -42,6 +97,10 @@ module.exports = {
 
 			pass = new LIBRARY.BokehPass();
 			test.ok(pass, "bokeh");
+			pass.dispose();
+
+			pass = new LIBRARY.Bokeh2Pass();
+			test.ok(pass, "bokeh 2");
 			pass.dispose();
 
 			pass = new LIBRARY.ClearMaskPass();
@@ -109,58 +168,6 @@ module.exports = {
 			}
 
 			test.equal(c, 2, "the glitch pass should destroy 2 of its properties");
-
-			test.done();
-
-		}
-
-	},
-
-	"Materials": {
-
-		"can be created": function(test) {
-
-			let material = new LIBRARY.AdaptiveLuminosityMaterial();
-			test.ok(material, "adaptive luminosity");
-
-			material = new LIBRARY.BokehMaterial();
-			test.ok(material, "bokeh");
-
-			material = new LIBRARY.CombineMaterial();
-			test.ok(material, "combine");
-
-			material = new LIBRARY.ConvolutionMaterial();
-			test.ok(material, "convolution");
-
-			material = new LIBRARY.CopyMaterial();
-			test.ok(material, "copy");
-
-			material = new LIBRARY.DotScreenMaterial();
-			test.ok(material, "dot screen");
-
-			material = new LIBRARY.FilmMaterial();
-			test.ok(material, "film");
-
-			material = new LIBRARY.GlitchMaterial();
-			test.ok(material, "glitch");
-
-			material = new LIBRARY.GodRaysMaterial();
-			test.ok(material, "god rays");
-
-			material = new LIBRARY.LuminosityMaterial();
-			test.ok(material, "luminosity");
-
-			material = new LIBRARY.SMAABlendMaterial();
-			test.ok(material, "smaa blend");
-
-			material = new LIBRARY.SMAAColorEdgesMaterial();
-			test.ok(material, "smaa color edges");
-
-			material = new LIBRARY.SMAAWeightsMaterial();
-			test.ok(material, "smaa weights");
-
-			material = new LIBRARY.ToneMappingMaterial();
-			test.ok(material, "tone mapping");
 
 			test.done();
 
