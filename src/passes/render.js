@@ -51,17 +51,27 @@ export class RenderPass extends Pass {
 		this.depth = (options.depth !== undefined) ? options.depth : false;
 
 		/**
-		 * The depth texture.
+		 * The depth render target.
 		 *
-		 * @property depthTexture
+		 * @property renderTargetDepth
 		 * @type WebGLRenderTarget
+		 * @private
 		 */
 
-		this.depthTexture = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
+		this.renderTargetDepth = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			generateMipmaps: false
 		});
+
+		/**
+		 * The depth texture.
+		 *
+		 * @property depthTexture
+		 * @type Texture
+		 */
+
+		this.depthTexture = !this.depth ? null : this.renderTargetDepth.texture;
 
 		/**
 		 * A depth shader material.
@@ -141,7 +151,7 @@ export class RenderPass extends Pass {
 		if(this.depth) {
 
 			this.scene.overrideMaterial = this.depthMaterial;
-			renderer.render(this.scene, this.camera, this.depthTexture, true);
+			renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
 			this.scene.overrideMaterial = null;
 
 		}
@@ -195,7 +205,7 @@ export class RenderPass extends Pass {
 
 			if(!alpha) {
 
-				this.depthTexture.texture.format = THREE.RGBFormat;
+				this.renderTargetDepth.texture.format = THREE.RGBFormat;
 
 			}
 
@@ -221,7 +231,7 @@ export class RenderPass extends Pass {
 			if(width <= 0) { width = 1; }
 			if(height <= 0) { height = 1; }
 
-			this.depthTexture.setSize(width, height);
+			this.renderTargetDepth.setSize(width, height);
 
 		}
 
