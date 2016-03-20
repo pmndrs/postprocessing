@@ -138,13 +138,16 @@ function setupScene(assets) {
 		"depth resolution": renderPass.depthResolutionScale,
 		"focus": pass.bokehMaterial.uniforms.focus.value,
 		"aperture": pass.bokehMaterial.uniforms.aperture.value,
-		"max blur": pass.bokehMaterial.uniforms.maxBlur.value
+		"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
+		"realistic version": function() { window.location.href = "bokeh2.html"; }
 	};
 
 	gui.add(params, "depth resolution").min(0.0).max(1.0).step(0.01).onChange(function() { renderPass.depthResolutionScale = params["depth resolution"]; composer.setSize(); });
 	gui.add(params, "focus").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
 	gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params["aperture"]; });
 	gui.add(params, "max blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
+
+	gui.add(params, "realistic version");
 
 	/**
 	 * Handles resizing.
