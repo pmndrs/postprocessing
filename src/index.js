@@ -9,6 +9,7 @@ export { EffectComposer } from "./effect-composer";
 export {
 	BloomPass,
 	BokehPass,
+	Bokeh2Pass,
 	ClearMaskPass,
 	DotScreenPass,
 	FilmPass,
@@ -26,6 +27,7 @@ export {
 export {
 	AdaptiveLuminosityMaterial,
 	BokehMaterial,
+	Bokeh2Material,
 	CombineMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,

@@ -7,6 +7,7 @@
 
 export { BloomPass } from "./bloom";
 export { BokehPass } from "./bokeh";
+export { Bokeh2Pass } from "./bokeh2";
 export { ClearMaskPass } from "./clear-mask";
 export { DotScreenPass } from "./dot-screen";
 export { FilmPass } from "./film";

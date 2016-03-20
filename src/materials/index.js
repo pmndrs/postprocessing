@@ -8,6 +8,7 @@
 
 export { AdaptiveLuminosityMaterial } from "./adaptive-luminosity";
 export { BokehMaterial } from "./bokeh";
+export { Bokeh2Material } from "./bokeh2";
 export { CombineMaterial } from "./combine";
 export { ConvolutionMaterial } from "./convolution";
 export { CopyMaterial } from "./copy";
