@@ -3,6 +3,7 @@ window.addEventListener("load", function loadAssets() {
 	window.removeEventListener("load", loadAssets);
 
 	var loadingManager = new THREE.LoadingManager();
+	var textureLoader = new THREE.TextureLoader();
 	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
 	var assets = {};
@@ -36,6 +37,13 @@ window.addEventListener("load", function loadAssets() {
 		});
 
 		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(20000, 20000, 20000), skyBoxMaterial);
+
+	});
+
+	textureLoader.load("textures/perturb.jpg", function(texture) {
+
+		texture.magFilter = texture.minFilter = THREE.NearestFilter;
+		assets.perturbMap = texture;
 
 	});
 
@@ -135,29 +143,21 @@ function setupScene(assets) {
 	var pass = new POSTPROCESSING.RenderPass(scene, camera);
 	composer.addPass(pass);
 
-	var textureLoader = new THREE.TextureLoader();
-
-	textureLoader.load("textures/perturb.jpg", function(texture) {
-
-		texture.magFilter = texture.minFilter = THREE.NearestFilter;
-
-		pass = new POSTPROCESSING.GlitchPass({
-			perturbMap: texture
-		});
-
-		pass.renderToScreen = true;
-		composer.addPass(pass);
-
-		// Shader settings.
-
-		var params = {
-			"mode": pass.mode
-		};
-
-		gui.add(params, "mode").min(POSTPROCESSING.GlitchPass.Mode.SPORADIC).max(POSTPROCESSING.GlitchPass.Mode.CONSTANT_WILD)
-			.step(1).onChange(function() { pass.mode = params["mode"]; });
-
+	pass = new POSTPROCESSING.GlitchPass({
+		perturbMap: assets.perturbMap
 	});
+
+	pass.renderToScreen = true;
+	composer.addPass(pass);
+
+	// Shader settings.
+
+	var params = {
+		"mode": pass.mode
+	};
+
+	gui.add(params, "mode").min(POSTPROCESSING.GlitchPass.Mode.SPORADIC).max(POSTPROCESSING.GlitchPass.Mode.CONSTANT_WILD)
+		.step(1).onChange(function() { pass.mode = params["mode"]; });
 
 	/**
 	 * Handles resizing.

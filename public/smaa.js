@@ -126,13 +126,12 @@ function setupScene(assets) {
 	var geometry = new THREE.BoxGeometry(1, 1, 1);
 
 	var material = new THREE.MeshBasicMaterial({
-		//map: assets.colorMap,
 		color: 0x000000,
 		wireframe: true
 	});
 
 	var object1 = new THREE.Mesh(geometry, material);
-	object1.position.set(0.75, 0, -0.75);
+	object1.position.set(1.25, 0, -1.25);
 
 	scene.add(object1);
 
@@ -141,9 +140,46 @@ function setupScene(assets) {
 	});
 
 	var object2 = new THREE.Mesh(geometry, material);
-	object2.position.set(-0.75, 0, 0.75);
+	object2.position.set(-1.25, 0, 1.25);
 
 	scene.add(object2);
+
+	// Cage.
+
+	var geometry = new THREE.BoxGeometry(0.25, 8.25, 0.25);
+	var material = new THREE.MeshLambertMaterial({color: 0x0d0d0d});
+	var mesh = new THREE.Mesh(geometry, material);
+
+	var o = new THREE.Object3D();
+	var o0, o1, o2;
+
+	o0 = o.clone();
+
+	var clone = mesh.clone();
+	clone.position.set(-4, 0, 4);
+	o0.add(clone);
+	clone = mesh.clone();
+	clone.position.set(4, 0, 4);
+	o0.add(clone);
+	clone = mesh.clone();
+	clone.position.set(-4, 0, -4);
+	o0.add(clone);
+	clone = mesh.clone();
+	clone.position.set(4, 0, -4);
+	o0.add(clone);
+
+	o1 = o0.clone();
+	o1.rotation.set(Math.PI / 2, 0, 0);
+	o2 = o0.clone();
+	o2.rotation.set(0, 0, Math.PI / 2);
+
+	o.add(o0);
+	o.add(o1);
+	o.add(o2);
+
+	o.scale.set(0.1, 0.1, 0.1);
+
+	scene.add(o);
 
 	// Post-Processing.
 
@@ -234,6 +270,7 @@ function setupScene(assets) {
 		object1.rotation.x += 0.0005;
 		object1.rotation.y += 0.001;
 		object2.rotation.copy(object1.rotation);
+		o.rotation.copy(object1.rotation);
 
 		composer.render(clock.getDelta());
 

@@ -182,6 +182,7 @@ function setupScene(assets) {
 		else { delete pass.bokehMaterial.defines.MANUAL_DOF; }
 		pass.bokehMaterial.needsUpdate = true;
 	});
+	f.add(params, "focal stop").min(0.0).max(3.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.fStop.value = params["focal stop"]; });
 	f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function() { pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"]; });
 	/*f.add(params, "focal length").min(10.0).max(35.0).step(0.01).onChange(function() {
 		pass.bokehMaterial.uniforms.focalLength.value = params["focal length"];
@@ -213,18 +214,16 @@ function setupScene(assets) {
 		pass.bokehMaterial.needsUpdate = true;
 	});
 	f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.ditherStrength.value = params["dithering"]; });
-	f.open();
-
-	f = gui.addFolder("Extra");
-	f.add(params, "vignette").onChange(function() {
-		if(params["vignette"]) { pass.bokehMaterial.defines.VIGNETTE = "1"; }
-		else { delete pass.bokehMaterial.defines.VIGNETTE; }
-		pass.bokehMaterial.needsUpdate = true;
-	});
-	f.add(params, "focal stop").min(0.0).max(3.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.fStop.value = params["focal stop"]; });
 	f.add(params, "pentagon").onChange(function() {
 		if(params["pentagon"]) { pass.bokehMaterial.defines.PENTAGON = "1"; }
 		else { delete pass.bokehMaterial.defines.PENTAGON; }
+		pass.bokehMaterial.needsUpdate = true;
+	});
+	f.open();
+
+	gui.add(params, "vignette").onChange(function() {
+		if(params["vignette"]) { pass.bokehMaterial.defines.VIGNETTE = "1"; }
+		else { delete pass.bokehMaterial.defines.VIGNETTE; }
 		pass.bokehMaterial.needsUpdate = true;
 	});
 
