@@ -156,6 +156,7 @@ export class GlitchPass extends Pass {
 	 * Creates a random break point for the glitch effect.
 	 *
 	 * @method generateTrigger
+	 * @private
 	 */
 
 	generateTrigger() {
