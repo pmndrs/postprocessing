@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.0.5",
+        "version": "1.0.6",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -401,7 +401,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\adaptive-luminosity\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "An adaptive luminosity shader material.",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
@@ -416,7 +416,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\bokeh\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "Depth of Field shader (Bokeh).\n\nOriginal code by Martins Upitis:\n http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -469,7 +469,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\bokeh2\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "Depth of Field shader version 2.\n\nOriginal code by Martins Upitis:\n http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -548,7 +548,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\combine\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A material for combining two textures.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -579,7 +579,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\convolution\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -602,7 +602,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\copy\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A simple copy shader material.",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
@@ -617,7 +617,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\dot-screen\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A dot screen shader material.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -640,7 +640,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\film\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A cinematic shader that provides the following effects:\n - Film Grain\n - Scanlines\n - Vignette\n - Greyscale\n - Sepia\n\nOriginal scanlines algorithm by Pat \"Hawthorne\" Shearon.\nhttp://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nOptimized scanlines + noise version with intensity scaling by Georg \"Leviathan\" Steinrohder.\nThis version is provided under a Creative Commons Attribution 3.0 License\nhttp://creativecommons.org/licenses/by/3.0/\n\nThe sepia effect is based on:\n https://github.com/evanw/glfx.js\n\nThe vignette code is based on PaintEffect postprocess from ro.me:\n http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -749,7 +749,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\glitch\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A glitch shader material.\nBased on https://github.com/staffantan/unityglitch",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
@@ -764,7 +764,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\god-rays\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nThibaut Despoulain, 2012:\n (WebGL) Volumetric Light Approximation in Three.js\n http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html\n\nNvidia, GPU Gems 3, 2008:\n Chapter 13. Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
@@ -779,7 +779,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\luminosity\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "A luminance shader material.\n\nThis shader produces a greyscale luminance map. \nIt can also be configured to output colors that are scaled with their \nrespective luminance value. Additionally, a range may be provided to \nmask out undesired texels.\n\nThe alpha channel will remain unaffected in all cases.\n\nLuminance range reference:\n https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -809,7 +809,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\smaa-blend\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material is used to render the final antialiasing.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -832,7 +832,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\smaa-color-edges\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material detects edges in a color texture.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -855,7 +855,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 6,
+            "line": 9,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material computes weights for detected edges.",
             "is_constructor": 1,
             "extends": "ShaderMaterial",
@@ -878,7 +878,7 @@
             "extension_for": [],
             "module": "postprocessing",
             "file": "src\\materials\\tone-mapping\\index.js",
-            "line": 4,
+            "line": 6,
             "description": "Full-screen tone-mapping shader material.\nhttp://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
             "is_constructor": 1,
             "extends": "ShaderMaterial"
@@ -1699,7 +1699,7 @@
     "classitems": [
         {
             "file": "src\\materials\\bokeh2\\index.js",
-            "line": 93,
+            "line": 95,
             "description": "Sets the texel size.",
             "itemtype": "method",
             "name": "setTexelSize",
@@ -1719,7 +1719,7 @@
         },
         {
             "file": "src\\materials\\bokeh2\\index.js",
-            "line": 108,
+            "line": 110,
             "description": "Sets the near and far plane and the focal length.",
             "itemtype": "method",
             "name": "adoptCameraSettings",
@@ -1734,7 +1734,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 43,
+            "line": 45,
             "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
             "itemtype": "property",
             "name": "kernels",
@@ -1745,7 +1745,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 54,
+            "line": 56,
             "description": "Scales the kernels.",
             "itemtype": "property",
             "name": "scale",
@@ -1755,7 +1755,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 64,
+            "line": 66,
             "description": "The current kernel.",
             "itemtype": "property",
             "name": "currentKernel",
@@ -1766,7 +1766,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 78,
+            "line": 80,
             "description": "Sets the texel size.",
             "itemtype": "method",
             "name": "setTexelSize",
@@ -1786,7 +1786,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 93,
+            "line": 95,
             "description": "Adjusts the kernel for the next blur pass.\nCall this method before each render iteration.",
             "itemtype": "method",
             "name": "adjustKernel",
@@ -1794,7 +1794,7 @@
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 49,
+            "line": 52,
             "description": "The area pattern recognition image.",
             "itemtype": "property",
             "name": "areaImage",
@@ -1803,7 +1803,7 @@
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 58,
+            "line": 61,
             "description": "The search image.",
             "itemtype": "property",
             "name": "searchImage",
@@ -2398,12 +2398,14 @@
             "description": "Creates a random break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
+            "access": "private",
+            "tagname": "",
             "class": "GlitchPass",
             "module": "postprocessing"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 167,
+            "line": 168,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -2421,7 +2423,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 203,
+            "line": 204,
             "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
             "itemtype": "property",
             "name": "GlitchPass.Mode",
@@ -3600,7 +3602,7 @@
             "params": [
                 {
                     "name": "delta",
-                    "description": "- The time between the last frame and the current one.",
+                    "description": "- The time between the last frame and the current one in seconds.",
                     "type": "Number"
                 }
             ],
@@ -3668,11 +3670,11 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: params with param",
-            "line": " src\\materials\\luminosity\\index.js:4"
+            "line": " src\\materials\\luminosity\\index.js:6"
         },
         {
             "message": "replacing incorrect tag: params with param",
-            "line": " src\\materials\\luminosity\\index.js:4"
+            "line": " src\\materials\\luminosity\\index.js:6"
         }
     ]
 }
