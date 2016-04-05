@@ -55,6 +55,7 @@ In order to create your own passes, you simply need to extend the
 
 ```javascript
 import { Pass } from "postprocessing";
+import { MyMaterial } from "./materials";
 
 export class MyPass extends Pass {
 
@@ -89,6 +90,7 @@ export class MyPass extends Pass {
 }
 
 ```
+Passes don't have to use the buffers that are provided in the render method. 
 Writing self-contained render-to-texture passes is also a feasable option.
 
 
