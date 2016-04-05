@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -23,7 +23,7 @@
 
 	"author": {
 		"name": "Raoul van Rüschen",
-		"email": "vanruesc@fh-brandenburg.de"
+		"email": "vanruesc@outlook.de"
 	},
 
 	"repository": {
@@ -37,8 +37,8 @@
 
 	"scripts": {
 		"test": "node grunt-cli.js",
-		"prepublish": "node grunt-cli.js fsinline",
-		"postpublish": "node grunt-cli.js clean"
+		"prepublish": "node grunt-cli.js prepublish",
+		"postpublish": "node grunt-cli.js postpublish"
 	},
 
 	"engines": {
@@ -56,11 +56,11 @@
 		"grunt-contrib-uglify": "x.x.x",
 		"grunt-contrib-yuidoc": "x.x.x",
 		"grunt-contrib-clean": "x.x.x",
-		"grunt-contrib-watch": "x.x.x",
 		"grunt-contrib-copy": "x.x.x",
-		"grunt-fs-inline": "x.x.x",
+		"grunt-lemon": "x.x.x",
 		"grunt-rollup": "x.x.x",
-		"rollup-plugin-node-resolve": "x.x.x"
+		"rollup-plugin-node-resolve": "x.x.x",
+		"rollup-plugin-string": "x.x.x"
 	},
 
 	"peerDependencies": {
