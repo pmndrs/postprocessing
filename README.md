@@ -32,20 +32,64 @@ $ npm install postprocessing
 import { WebGLRenderer, Scene, PerspectiveCamera } from "three";
 import { EffectComposer, RenderPass, GlitchPass } from "postprocessing";
 
-var composer = new EffectComposer(new WebGLRenderer());
+let composer = new EffectComposer(new WebGLRenderer());
 composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
 
-var glitchPass = new GlitchPass();
+let glitchPass = new GlitchPass();
 glitchPass.renderToScreen = true;
 composer.addPass(glitchPass);
+
+let lastTime = performance.now();
 
 (function render(now) {
 
 	requestAnimationFrame(render);
-	composer.render();
+	composer.render((now - lastTime) / 1000);
+	lastTime = now;
 
 }());
 ```
+
+In order to create your own passes, you simply need to extend the 
+[Pass](http://vanruesc.github.io/postprocessing/docs/files/src_passes_pass.js.html) class:
+
+```javascript
+import { Pass } from "postprocessing";
+
+export class MyPass extends Pass {
+
+	constructor() {
+
+		super();
+
+		this.needsSwap = true;
+
+		this.material = new MyMaterial();
+
+		this.quad.material = this.material;
+
+	}
+
+	render(renderer, readBuffer, writeBuffer) {
+
+		this.material.uniforms.tDiffuse.value = readBuffer.texture;
+
+		if(this.renderToScreen) {
+
+			renderer.render(this.scene, this.camera);
+
+		} else {
+
+			renderer.render(this.scene, this.camera, writeBuffer, false);
+
+		}
+
+	}
+
+}
+
+```
+Writing self-contained render-to-texture passes is also a feasable option.
 
 
 ## Included Filters
