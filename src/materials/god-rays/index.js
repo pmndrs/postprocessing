@@ -1,5 +1,7 @@
-import shader from "./inlined/shader";
 import THREE from "three";
+
+import fragment from "./glsl/shader.frag";
+import vertex from "./glsl/shader.vert";
 
 /**
  * A crepuscular rays shader material.
@@ -45,8 +47,8 @@ export class GodRaysMaterial extends THREE.ShaderMaterial {
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex
+			fragmentShader: fragment,
+			vertexShader: vertex
 
 		});
 

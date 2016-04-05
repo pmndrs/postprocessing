@@ -1,5 +1,7 @@
-import shader from "./inlined/shader";
 import THREE from "three";
+
+import fragment from "./glsl/shader.frag";
+import vertex from "./glsl/shader.vert";
 
 /**
  * A cinematic shader that provides the following effects:
@@ -65,8 +67,8 @@ export class FilmMaterial extends THREE.ShaderMaterial {
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex
+			fragmentShader: fragment,
+			vertexShader: vertex
 
 		});
 

@@ -1,5 +1,7 @@
-import shader from "./inlined/shader";
 import THREE from "three";
+
+import fragment from "./glsl/shader.frag";
+import vertex from "./glsl/shader.vert";
 
 /**
  * A luminance shader material.
@@ -35,8 +37,8 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 
 			},
 
-			fragmentShader: shader.fragment,
-			vertexShader: shader.vertex
+			fragmentShader: fragment,
+			vertexShader: vertex
 
 		});
 
