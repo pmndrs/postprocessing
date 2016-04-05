@@ -78,7 +78,7 @@
 
 		constructor(options) {
 
-			if(options === undefined) {	options = {}; }
+			if(options === undefined) { options = {}; }
 
 			super({
 
