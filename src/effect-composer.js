@@ -143,7 +143,7 @@ export class EffectComposer {
 	 * Renders all enabled passes in the order in which they were added.
 	 *
 	 * @method render
-	 * @param {Number} delta - The time between the last frame and the current one.
+	 * @param {Number} delta - The time between the last frame and the current one in seconds.
 	 */
 
 	render(delta) {
