@@ -120,11 +120,11 @@ function setupScene(assets) {
 
 	// Post-Processing.
 
-	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	var renderPass = new POSTPROCESSING.RenderPass(scene, camera, {depth: true});
+	var composer = new POSTPROCESSING.EffectComposer(renderer, true);
+	var renderPass = new POSTPROCESSING.RenderPass(scene, camera);
 	composer.addPass(renderPass);
 
-	pass = new POSTPROCESSING.Bokeh2Pass(renderPass.depthTexture, camera, {
+	pass = new POSTPROCESSING.Bokeh2Pass(camera, {
 		rings: 3,
 		samples: 2,
 		showFocus: false,
@@ -141,7 +141,6 @@ function setupScene(assets) {
 	// Shader settings.
 
 	var params = {
-		"depth resolution": renderPass.depthResolutionScale,
 		"rings": Number.parseInt(pass.bokehMaterial.defines.RINGS_INT),
 		"samples": Number.parseInt(pass.bokehMaterial.defines.SAMPLES_INT),
 		"focal stop": pass.bokehMaterial.uniforms.fStop.value,
@@ -164,9 +163,7 @@ function setupScene(assets) {
 		"simple version": function() { window.location.href = "bokeh.html"; }
 	};
 
-	gui.add(params, "depth resolution").min(0.0).max(1.0).step(0.01).onChange(function() { renderPass.depthResolutionScale = params["depth resolution"]; composer.setSize(); });
-
-	var f = gui.addFolder("Manual focus");
+	var f = gui.addFolder("Focus");
 	f.add(params, "show focus").onChange(function() {
 		if(params["show focus"]) { pass.bokehMaterial.defines.SHOW_FOCUS = "1"; }
 		else { delete pass.bokehMaterial.defines.SHOW_FOCUS; }
@@ -184,15 +181,12 @@ function setupScene(assets) {
 	});
 	f.add(params, "focal stop").min(0.0).max(3.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.fStop.value = params["focal stop"]; });
 	f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function() { pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"]; });
-	/*f.add(params, "focal length").min(10.0).max(35.0).step(0.01).onChange(function() {
-		pass.bokehMaterial.uniforms.focalLength.value = params["focal length"];
-		camera.setLens(params["focal length"], 10);
-	});*/
+	//f.add(params, "focal length").min(10.0).max(35.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focalLength.value = params["focal length"]; });
 	f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"]; });
 	f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"]; });
 	f.open();
 
-	f = gui.addFolder("Blur");
+	f = gui.addFolder("Sampling");
 	f.add(params, "rings").min(0).max(6).step(1).onChange(function() {
 		pass.bokehMaterial.defines.RINGS_INT = params["rings"].toFixed(0);
 		pass.bokehMaterial.defines.RINGS_FLOAT = params["rings"].toFixed(1);
@@ -203,10 +197,10 @@ function setupScene(assets) {
 		pass.bokehMaterial.defines.SAMPLES_FLOAT = params["samples"].toFixed(1);
 		pass.bokehMaterial.needsUpdate = true;
 	});
+
+	f = gui.addFolder("Blur");
 	f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
 	f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.bias.value = params["bias"]; });
-	f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"]; });
-	f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"]; });
 	f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function() { pass.bokehMaterial.uniforms.fringe.value = params["fringe"]; });
 	f.add(params, "noise").onChange(function() {
 		if(params["noise"]) { pass.bokehMaterial.defines.NOISE = "1"; }
@@ -220,6 +214,10 @@ function setupScene(assets) {
 		pass.bokehMaterial.needsUpdate = true;
 	});
 	f.open();
+
+	f = gui.addFolder("Luminosity");
+	f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"]; });
+	f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"]; });
 
 	gui.add(params, "vignette").onChange(function() {
 		if(params["vignette"]) { pass.bokehMaterial.defines.VIGNETTE = "1"; }

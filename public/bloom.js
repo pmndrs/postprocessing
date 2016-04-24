@@ -48,7 +48,7 @@ function setupScene(assets) {
 
 	// Renderer and Scene.
 
-	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+	var renderer = new THREE.WebGLRenderer({antialias: false, logarithmicDepthBuffer: true});
 	var scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 	renderer.setClearColor(0x000000);
@@ -168,6 +168,10 @@ function setupScene(assets) {
 	var composer = new POSTPROCESSING.EffectComposer(renderer);
 	composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
+	var smaaPass = new POSTPROCESSING.SMAAPass(Image);
+	smaaPass.enabled = false;
+	composer.addPass(smaaPass);
+
 	var pass = new POSTPROCESSING.BloomPass({
 		resolutionScale: 0.5,
 		blurriness: 1.0,
@@ -185,7 +189,8 @@ function setupScene(assets) {
 		"blurriness": pass.blurriness,
 		"strength": pass.combineMaterial.uniforms.opacity2.value,
 		"distinction": pass.luminosityMaterial.uniforms.distinction.value,
-		"blend": true
+		"blend": true,
+		"SMAA": false
 	};
 
 	gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params["resolution"]; composer.setSize(); });
@@ -199,6 +204,12 @@ function setupScene(assets) {
 	gui.add(params, "blend").onChange(function() {
 
 		pass.combineMaterial.uniforms.opacity1.value = params["blend"] ? 1.0 : 0.0;
+
+	});
+
+	gui.add(params, "SMAA").onChange(function() {
+
+		smaaPass.enabled = params["SMAA"];
 
 	});
 

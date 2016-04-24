@@ -49,18 +49,18 @@ function setupScene(assets) {
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	viewport.appendChild(renderer.domElement);
+
+	var scene = new THREE.Scene();
+	scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
 
 	// Camera.
 
 	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 	var controls = new THREE.OrbitControls(camera, renderer.domElement);
 	controls.target.set(0, 0, 0);
-	controls.damping = 0.2;
 	controls.enablePan = false;
 	controls.minDistance = 2.5;
 	camera.position.set(3, 1, 3);
@@ -119,12 +119,12 @@ function setupScene(assets) {
 
 	// Post-Processing.
 
-	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	var renderPass = new POSTPROCESSING.RenderPass(scene, camera, {depth: true});
+	var composer = new POSTPROCESSING.EffectComposer(renderer, true);
+	var renderPass = new POSTPROCESSING.RenderPass(scene, camera);
 	composer.addPass(renderPass);
 
-	var pass = new POSTPROCESSING.BokehPass(renderPass.depthTexture, {
-		focus: 1.0,
+	var pass = new POSTPROCESSING.BokehPass(camera, {
+		focus: 0.0,
 		aperture: 0.007,
 		maxBlur: 0.025
 	});
@@ -135,18 +135,15 @@ function setupScene(assets) {
 	// Shader settings.
 
 	var params = {
-		"depth resolution": renderPass.depthResolutionScale,
 		"focus": pass.bokehMaterial.uniforms.focus.value,
 		"aperture": pass.bokehMaterial.uniforms.aperture.value,
 		"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
 		"realistic version": function() { window.location.href = "bokeh2.html"; }
 	};
 
-	gui.add(params, "depth resolution").min(0.0).max(1.0).step(0.01).onChange(function() { renderPass.depthResolutionScale = params["depth resolution"]; composer.setSize(); });
-	gui.add(params, "focus").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
+	gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
 	gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params["aperture"]; });
 	gui.add(params, "max blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
-
 	gui.add(params, "realistic version");
 
 	/**
