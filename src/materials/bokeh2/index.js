@@ -10,8 +10,9 @@ import vertex from "./glsl/shader.vert";
  *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
  *
  * @class Bokeh2Material
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {PerspectiveCamera} [camera] - The main camera.
  * @param {Object} [options] - Additional options.
  * @param {Vector2} [options.texelSize] - The absolute screen texel size.
@@ -29,7 +30,7 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 
 		if(options === undefined) { options = {}; }
 		if(options.rings === undefined) { options.rings = 3; }
-		if(options.samples === undefined) { options.samples = 4; }
+		if(options.samples === undefined) { options.samples = 2; }
 		if(options.showFocus === undefined) { options.showFocus = false; }
 		if(options.showFocus === undefined) { options.showFocus = false; }
 		if(options.manualDoF === undefined) { options.manualDoF = false; }
@@ -39,6 +40,8 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 		if(options.noise === undefined) { options.noise = true; }
 
 		super({
+
+			type: "Bokeh2Material",
 
 			defines: {
 
@@ -57,8 +60,8 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 				texelSize: {type: "v2", value: new THREE.Vector2()},
 				halfTexelSize: {type: "v2", value: new THREE.Vector2()},
 
-				zNear: {type: "f", value: 0.1},
-				zFar: {type: "f", value: 2000},
+				cameraNear: {type: "f", value: 0.1},
+				cameraFar: {type: "f", value: 2000},
 
 				focalLength: {type: "f", value: 24.0},
 				fStop: {type: "f", value: 0.9},
@@ -108,7 +111,7 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 	}
 
 	/**
-	 * Sets the near and far plane and the focal length.
+	 * Adopts the near and far plane and the focal length of the given camera.
 	 *
 	 * @method adoptCameraSettings
 	 * @param {PerspectiveCamera} camera - The main camera.
@@ -116,9 +119,9 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 
 	adoptCameraSettings(camera) {
 
-		this.uniforms.zNear.value = camera.near;
-		this.uniforms.zFar.value = camera.far;
-		this.uniforms.focalLength.value = camera.focalLength; // unit: mm.
+		this.uniforms.cameraNear.value = camera.near;
+		this.uniforms.cameraFar.value = camera.far;
+		this.uniforms.focalLength.value = camera.getFocalLength(); // unit: mm.
 
 	}
 

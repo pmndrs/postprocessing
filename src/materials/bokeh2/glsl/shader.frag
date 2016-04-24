@@ -1,11 +1,13 @@
+#include <packing>
+
 uniform sampler2D tDiffuse;
 uniform sampler2D tDepth;
 
 uniform vec2 texelSize;
 uniform vec2 halfTexelSize;
 
-uniform float zNear;
-uniform float zFar;
+uniform float cameraNear;
+uniform float cameraFar;
 
 uniform float focalLength;
 uniform float fStop;
@@ -29,34 +31,21 @@ uniform float ditherStrength;
 
 varying vec2 vUv;
 
-const float TWO_PI = 6.28318531;
-const int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;
-const float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.
-
-#ifdef MANUAL_DOF
-
-	const float nDoFStart = 1.0; 
-	const float nDoFDist = 2.0;
-	const float fDoFStart = 1.0;
-	const float fDoFDist = 3.0;
-
-#endif
-
 #ifdef PENTAGON
 
-	const vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);
-	const vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);
-	const vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);
-	const vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);
-	const vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);
-	const vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);
-
-	const vec4 ONE = vec4(1.0);
-
-	const float P_FEATHER = 0.4;
-	const float N_FEATHER = -P_FEATHER;
-
 	float penta(vec2 coords) {
+
+		const vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);
+		const vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);
+		const vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);
+		const vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);
+		const vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);
+		const vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);
+
+		const vec4 ONE = vec4(1.0);
+
+		const float P_FEATHER = 0.4;
+		const float N_FEATHER = -P_FEATHER;
 
 		float inOrOut = -4.0;
 
@@ -104,13 +93,13 @@ const float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.
 
 #ifdef VIGNETTE
 
-	const vec2 CENTER = vec2(0.5);
-
-	const float VIGNETTE_OUT = 1.3;
-	const float VIGNETTE_IN = 0.0;
-	const float VIGNETTE_FADE = 22.0; 
-
 	float vignette() {
+
+		const vec2 CENTER = vec2(0.5);
+
+		const float VIGNETTE_OUT = 1.3;
+		const float VIGNETTE_IN = 0.0;
+		const float VIGNETTE_FADE = 22.0; 
 
 		float d = distance(vUv, CENTER);
 		d = smoothstep(VIGNETTE_OUT + (fStop / VIGNETTE_FADE), VIGNETTE_IN + (fStop / VIGNETTE_FADE), d);
@@ -127,8 +116,12 @@ vec2 rand(vec2 coord) {
 
 	#ifdef NOISE
 
-		noise.x = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233))) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;
-		noise.y = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233) * 2.0)) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;
+		const float a = 12.9898;
+		const float b = 78.233;
+		const float c = 43758.5453;
+
+		noise.x = clamp(fract(sin(mod(dot(coord, vec2(a, b)), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;
+		noise.y = clamp(fract(sin(mod(dot(coord, vec2(a, b) * 2.0), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;
 
 	#else
 
@@ -141,9 +134,9 @@ vec2 rand(vec2 coord) {
 
 }
 
-const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
-
 vec3 processTexel(vec2 coords, float blur) {
+
+	const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
 
 	vec3 c;
 	c.r = texture2D(tDiffuse, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r;
@@ -158,13 +151,24 @@ vec3 processTexel(vec2 coords, float blur) {
 
 }
 
+float readDepth(sampler2D depthSampler, vec2 coord) {
+
+	float fragCoordZ = texture2D(depthSampler, coord).x;
+	float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+
+	return viewZToOrthoDepth(viewZ, cameraNear, cameraFar);
+
+}
+
 float linearize(float depth) {
 
-	return -zFar * zNear / (depth * (zFar - zNear) - zFar);
+	return -cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar);
 
 }
 
 float gather(float i, float j, float ringSamples, inout vec3 color, float w, float h, float blur) {
+
+	const float TWO_PI = 6.28318531;
 
 	float step = TWO_PI / ringSamples;
 	float pw = cos(j * step) * i;
@@ -188,11 +192,11 @@ float gather(float i, float j, float ringSamples, inout vec3 color, float w, flo
 
 void main() {
 
-	float depth = linearize(texture2D(tDepth, vUv).r);
+	float depth = linearize(readDepth(tDepth, vUv));
 
 	#ifdef SHADER_FOCUS
 
-		float fDepth = linearize(texture2D(tDepth, focusCoords).r);
+		float fDepth = linearize(readDepth(tDepth, focusCoords));
 
 	#else
 
@@ -202,6 +206,11 @@ void main() {
 
 	#ifdef MANUAL_DOF
 
+		const float nDoFStart = 1.0; 
+		const float nDoFDist = 2.0;
+		const float fDoFStart = 1.0;
+		const float fDoFDist = 3.0;
+
 		float focalPlane = depth - fDepth;
 		float farDoF = (focalPlane - fDoFStart) / fDoFDist;
 		float nearDoF = (-focalPlane - nDoFStart) / nDoFDist;
@@ -209,6 +218,8 @@ void main() {
 		float blur = (focalPlane > 0.0) ? farDoF : nearDoF;
 
 	#else
+
+		const float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.
 
 		float focalPlaneMM = fDepth * 1000.0;
 		float depthMM = depth * 1000.0;
@@ -228,6 +239,8 @@ void main() {
 
 	float blurFactorX = texelSize.x * blur * maxBlur + noise.x;
 	float blurFactorY = texelSize.y * blur * maxBlur + noise.y;
+
+	const int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;
 
 	// Calculation of final color.
 	vec4 color;
