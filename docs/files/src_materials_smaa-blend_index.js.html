@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.7</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -124,8 +124,9 @@ import vertex from &quot;./glsl/shader.vert&quot;;
  * This material is used to render the final antialiasing.
  *
  * @class SMAABlendMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
@@ -134,6 +135,8 @@ export class SMAABlendMaterial extends THREE.ShaderMaterial {
 	constructor(texelSize) {
 
 		super({
+
+			type: &quot;SMAABlendMaterial&quot;,
 
 			uniforms: {
 

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.7</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -135,13 +135,12 @@ const clearColor = new THREE.Color();
  * texture which may be used by other passes.
  *
  * @class RenderPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  * @param {Object} [options] - Additional options.
- * @param {Boolean} [options.depth=false] - Indicates whether this pass should also render a scene depth texture.
- * @param {Boolean} [options.depthResolutionScale=0.5] - The resolution scale of the depth texture, relative to the main render size.
  * @param {Material} [options.overrideMaterial] - An override material for the scene.
  * @param {Color} [options.clearColor] - An override clear color.
  * @param {Number} [options.clearAlpha] - An override clear alpha.
@@ -154,63 +153,6 @@ export class RenderPass extends Pass {
 		super(scene, camera, null);
 
 		if(options === undefined) { options = {}; }
-
-		/**
-		 * Depth render flag.
-		 *
-		 * @property depth
-		 * @type Boolean
-		 * @default false
-		 */
-
-		this.depth = (options.depth !== undefined) ? options.depth : false;
-
-		/**
-		 * The depth render target.
-		 *
-		 * @property renderTargetDepth
-		 * @type WebGLRenderTarget
-		 * @private
-		 */
-
-		this.renderTargetDepth = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			generateMipmaps: false
-		});
-
-		/**
-		 * The depth texture.
-		 *
-		 * @property depthTexture
-		 * @type Texture
-		 */
-
-		this.depthTexture = !this.depth ? null : this.renderTargetDepth.texture;
-
-		/**
-		 * A depth shader material.
-		 *
-		 * @property MeshDepthMaterial
-		 * @type Material
-		 * @private
-		 */
-
-		this.depthMaterial = !this.depth ? null : new THREE.MeshDepthMaterial();
-
-		/**
-		 * The resolution scale of the depth texture, relative to the main 
-		 * render size.
-		 *
-		 * You need to call the setSize method of the EffectComposer after 
-		 * changing this value.
-		 *
-		 * @property depthResolutionScale
-		 * @type Number
-		 * @default 0.5
-		 */
-
-		this.depthResolutionScale = (options.depthResolutionScale === undefined) ? 0.5 : options.depthResolutionScale;
 
 		/**
 		 * Override material.
@@ -262,14 +204,9 @@ export class RenderPass extends Pass {
 	render(renderer, readBuffer) {
 
 		let clearAlpha;
+		let ctx = renderer.context;
 
-		if(this.depth) {
-
-			this.scene.overrideMaterial = this.depthMaterial;
-			renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
-			this.scene.overrideMaterial = null;
-
-		}
+		ctx.depthMask(true);
 
 		this.scene.overrideMaterial = this.overrideMaterial;
 
@@ -299,56 +236,7 @@ export class RenderPass extends Pass {
 
 		this.scene.overrideMaterial = null;
 
-	}
-
-	/**
-	 * Adjusts the format and size of the depth render target.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialise(renderer, alpha) {
-
-		let size;
-
-		if(this.depth) {
-
-			size = renderer.getSize();
-			this.setSize(size.width, size.height);
-
-			if(!alpha) {
-
-				this.renderTargetDepth.texture.format = THREE.RGBFormat;
-
-			}
-
-		}
-
-	}
-
-	/**
-	 * Updates the depth render target with the renderer&#x27;s size.
-	 *
-	 * @method setSize
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 */
-
-	setSize(width, height) {
-
-		if(this.depth) {
-
-			width = Math.floor(width * this.depthResolutionScale);
-			height = Math.floor(height * this.depthResolutionScale);
-
-			if(width &lt;= 0) { width = 1; }
-			if(height &lt;= 0) { height = 1; }
-
-			this.renderTargetDepth.setSize(width, height);
-
-		}
+		ctx.depthMask(false);
 
 	}
 

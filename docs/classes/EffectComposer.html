@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.7</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -125,9 +125,11 @@
 <div class="box intro">
     <p>The EffectComposer may be used in place of a normal WebGLRenderer.</p>
 <p>It will disable the auto clear behaviour of the provided renderer to prevent
-unnecessary clear operations.</p>
-<p>You may want to use a RenderPass as your first pass to automatically clear
-the screen and render the scene to a texture for further processing.</p>
+unnecessary clear operations. The depth buffer will also be disabled for
+writing. Passes that rely on the depth test must explicitly enable it.</p>
+<p>You may want to use a <a href="../classes/RenderPass.html" class="crosslink">RenderPass</a> as your first
+pass to automatically clear the screen and render the scene to a texture for
+further processing.</p>
 
 </div>
 
@@ -140,6 +142,12 @@ the screen and render the scene to a texture for further processing.</p>
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
                         <code class="optional">[renderer]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[depthTexture=false]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[stencilBuffer=false]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -178,6 +186,34 @@ the screen and render the scene to a texture for further processing.</p>
                     <div class="param-description">
                         <ul>
 <li>The renderer that should be used in the passes.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[depthTexture=false]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Set to true, if one of your passes relies on the depth of the main scene.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[stencilBuffer=false]</code>
+                        <span class="type">Boolean</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the main render targets should have a stencil buffer.</li>
 </ul>
 
                     </div>
@@ -295,7 +331,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l105"><code>src\effect-composer.js:105</code></a>
+        <a href="../files/src_effect-composer.js.html#l123"><code>src\effect-composer.js:123</code></a>
         </p>
 
 
@@ -347,7 +383,13 @@ the screen and render the scene to a texture for further processing.</p>
 <div id="method_createBuffer" class="method item">
     <h3 class="name"><code>createBuffer</code></h3>
 
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>stencilBuffer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
         <span class="returns-inline">
             <span class="type">WebGLRenderTarget</span>
@@ -362,7 +404,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l84"><code>src\effect-composer.js:84</code></a>
+        <a href="../files/src_effect-composer.js.html#l101"><code>src\effect-composer.js:101</code></a>
         </p>
 
 
@@ -374,6 +416,25 @@ the screen and render the scene to a texture for further processing.</p>
 
     </div>
 
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">stencilBuffer</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the render target should have a stencil buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
 
         <div class="returns">
             <h4>Returns:</h4>
@@ -408,7 +469,7 @@ the screen and render the scene to a texture for further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l250"><code>src\effect-composer.js:250</code></a>
+        <a href="../files/src_effect-composer.js.html#l268"><code>src\effect-composer.js:268</code></a>
         </p>
 
 
@@ -468,7 +529,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l129"><code>src\effect-composer.js:129</code></a>
+        <a href="../files/src_effect-composer.js.html#l147"><code>src\effect-composer.js:147</code></a>
         </p>
 
 
@@ -524,7 +585,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l142"><code>src\effect-composer.js:142</code></a>
+        <a href="../files/src_effect-composer.js.html#l160"><code>src\effect-composer.js:160</code></a>
         </p>
 
 
@@ -580,7 +641,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l237"><code>src\effect-composer.js:237</code></a>
+        <a href="../files/src_effect-composer.js.html#l255"><code>src\effect-composer.js:255</code></a>
         </p>
 
 
@@ -640,7 +701,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l198"><code>src\effect-composer.js:198</code></a>
+        <a href="../files/src_effect-composer.js.html#l216"><code>src\effect-composer.js:216</code></a>
         </p>
 
 
@@ -711,14 +772,14 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l62"><code>src\effect-composer.js:62</code></a>
+        <a href="../files/src_effect-composer.js.html#l79"><code>src\effect-composer.js:79</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A copy pass used to copy masked scenes.</p>
+        <p>A copy pass used for copying masked scenes.</p>
 
     </div>
 
@@ -737,7 +798,7 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l72"><code>src\effect-composer.js:72</code></a>
+        <a href="../files/src_effect-composer.js.html#l89"><code>src\effect-composer.js:89</code></a>
         </p>
 
 
@@ -763,7 +824,7 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l39"><code>src\effect-composer.js:39</code></a>
+        <a href="../files/src_effect-composer.js.html#l48"><code>src\effect-composer.js:48</code></a>
         </p>
 
 
@@ -790,7 +851,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l28"><code>src\effect-composer.js:28</code></a>
+        <a href="../files/src_effect-composer.js.html#l36"><code>src\effect-composer.js:36</code></a>
         </p>
 
 
@@ -816,7 +877,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l52"><code>src\effect-composer.js:52</code></a>
+        <a href="../files/src_effect-composer.js.html#l63"><code>src\effect-composer.js:63</code></a>
         </p>
 
 

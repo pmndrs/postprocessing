@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.0.7",
+        "version": "1.1.0",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -314,6 +314,35 @@
         }
     },
     "modules": {
+        "materials": {
+            "name": "materials",
+            "submodules": {},
+            "elements": {},
+            "classes": {
+                "AdaptiveLuminosityMaterial": 1,
+                "BokehMaterial": 1,
+                "Bokeh2Material": 1,
+                "CombineMaterial": 1,
+                "ConvolutionMaterial": 1,
+                "CopyMaterial": 1,
+                "DotScreenMaterial": 1,
+                "FilmMaterial": 1,
+                "GlitchMaterial": 1,
+                "GodRaysMaterial": 1,
+                "LuminosityMaterial": 1,
+                "SMAABlendMaterial": 1,
+                "SMAAColorEdgesMaterial": 1,
+                "SMAAWeightsMaterial": 1,
+                "ToneMappingMaterial": 1
+            },
+            "fors": {},
+            "is_submodule": 1,
+            "namespaces": {},
+            "module": "postprocessing",
+            "file": "src\\materials\\tone-mapping\\index.js",
+            "line": 6,
+            "description": "A compilation of the shader materials that are used \nin the post processing passes."
+        },
         "postprocessing": {
             "name": "postprocessing",
             "submodules": {
@@ -356,37 +385,40 @@
             },
             "fors": {},
             "namespaces": {},
-            "tag": "module",
+            "tag": "main",
             "file": "src\\effect-composer.js",
             "line": 10,
-            "description": "Exposure of the library components."
-        },
-        "materials": {
-            "name": "materials",
-            "submodules": {},
-            "elements": {},
-            "classes": {},
-            "fors": {},
-            "is_submodule": 1,
-            "namespaces": {},
-            "module": "postprocessing",
-            "namespace": "",
-            "file": "src\\materials\\index.js",
-            "line": 1,
-            "description": "A compilation of the shader materials that are used \nin the post processing passes."
+            "description": "Exposure of the library components.",
+            "itemtype": "main"
         },
         "passes": {
             "name": "passes",
             "submodules": {},
             "elements": {},
-            "classes": {},
+            "classes": {
+                "BloomPass": 1,
+                "BokehPass": 1,
+                "Bokeh2Pass": 1,
+                "ClearMaskPass": 1,
+                "DotScreenPass": 1,
+                "FilmPass": 1,
+                "GlitchPass": 1,
+                "GodRaysPass": 1,
+                "MaskPass": 1,
+                "Pass": 1,
+                "RenderPass": 1,
+                "SavePass": 1,
+                "ShaderPass": 1,
+                "SMAAPass": 1,
+                "ToneMappingPass": 1
+            },
             "fors": {},
             "is_submodule": 1,
             "namespaces": {},
             "module": "postprocessing",
             "namespace": "",
-            "file": "src\\passes\\index.js",
-            "line": 1,
+            "file": "src\\passes\\tone-mapping.js",
+            "line": 11,
             "description": "A compilation of the post processing passes."
         }
     },
@@ -403,8 +435,9 @@
             "file": "src\\materials\\adaptive-luminosity\\index.js",
             "line": 6,
             "description": "An adaptive luminosity shader material.",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "submodule": "materials",
+            "extends": "ShaderMaterial",
+            "is_constructor": 1
         },
         "BokehMaterial": {
             "name": "BokehMaterial",
@@ -418,9 +451,16 @@
             "file": "src\\materials\\bokeh\\index.js",
             "line": 6,
             "description": "Depth of Field shader (Bokeh).\n\nOriginal code by Martins Upitis:\n http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
+                {
+                    "name": "camera",
+                    "description": "- The main camera.",
+                    "type": "PerspectiveCamera",
+                    "optional": true
+                },
                 {
                     "name": "options",
                     "description": "- The options.",
@@ -471,8 +511,9 @@
             "file": "src\\materials\\bokeh2\\index.js",
             "line": 6,
             "description": "Depth of Field shader version 2.\n\nOriginal code by Martins Upitis:\n http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "camera",
@@ -550,8 +591,9 @@
             "file": "src\\materials\\combine\\index.js",
             "line": 6,
             "description": "A material for combining two textures.",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "invertTexture1",
@@ -581,8 +623,9 @@
             "file": "src\\materials\\convolution\\index.js",
             "line": 6,
             "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "texelSize",
@@ -604,8 +647,9 @@
             "file": "src\\materials\\copy\\index.js",
             "line": 6,
             "description": "A simple copy shader material.",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "submodule": "materials",
+            "extends": "ShaderMaterial",
+            "is_constructor": 1
         },
         "DotScreenMaterial": {
             "name": "DotScreenMaterial",
@@ -619,8 +663,9 @@
             "file": "src\\materials\\dot-screen\\index.js",
             "line": 6,
             "description": "A dot screen shader material.",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "average",
@@ -642,8 +687,9 @@
             "file": "src\\materials\\film\\index.js",
             "line": 6,
             "description": "A cinematic shader that provides the following effects:\n - Film Grain\n - Scanlines\n - Vignette\n - Greyscale\n - Sepia\n\nOriginal scanlines algorithm by Pat \"Hawthorne\" Shearon.\nhttp://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nOptimized scanlines + noise version with intensity scaling by Georg \"Leviathan\" Steinrohder.\nThis version is provided under a Creative Commons Attribution 3.0 License\nhttp://creativecommons.org/licenses/by/3.0/\n\nThe sepia effect is based on:\n https://github.com/evanw/glfx.js\n\nThe vignette code is based on PaintEffect postprocess from ro.me:\n http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -751,8 +797,9 @@
             "file": "src\\materials\\glitch\\index.js",
             "line": 6,
             "description": "A glitch shader material.\nBased on https://github.com/staffantan/unityglitch",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "submodule": "materials",
+            "extends": "ShaderMaterial",
+            "is_constructor": 1
         },
         "GodRaysMaterial": {
             "name": "GodRaysMaterial",
@@ -766,8 +813,9 @@
             "file": "src\\materials\\god-rays\\index.js",
             "line": 6,
             "description": "A crepuscular rays shader material.\n\nReferences:\n\nThibaut Despoulain, 2012:\n (WebGL) Volumetric Light Approximation in Three.js\n http://bkcore.com/blog/3d/webgl-three-js-volumetric-light-godrays.html\n\nNvidia, GPU Gems 3, 2008:\n Chapter 13. Volumetric Light Scattering as a Post-Process\n http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "submodule": "materials",
+            "extends": "ShaderMaterial",
+            "is_constructor": 1
         },
         "LuminosityMaterial": {
             "name": "LuminosityMaterial",
@@ -781,8 +829,9 @@
             "file": "src\\materials\\luminosity\\index.js",
             "line": 6,
             "description": "A luminance shader material.\n\nThis shader produces a greyscale luminance map. \nIt can also be configured to output colors that are scaled with their \nrespective luminance value. Additionally, a range may be provided to \nmask out undesired texels.\n\nThe alpha channel will remain unaffected in all cases.\n\nLuminance range reference:\n https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "color",
@@ -811,8 +860,9 @@
             "file": "src\\materials\\smaa-blend\\index.js",
             "line": 6,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material is used to render the final antialiasing.",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "texelSize",
@@ -834,8 +884,9 @@
             "file": "src\\materials\\smaa-color-edges\\index.js",
             "line": 6,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material detects edges in a color texture.",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "texelSize",
@@ -857,8 +908,9 @@
             "file": "src\\materials\\smaa-weights\\index.js",
             "line": 9,
             "description": "Subpixel Morphological Antialiasing.\n\nThis material computes weights for detected edges.",
-            "is_constructor": 1,
+            "submodule": "materials",
             "extends": "ShaderMaterial",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "texelSize",
@@ -880,8 +932,9 @@
             "file": "src\\materials\\tone-mapping\\index.js",
             "line": 6,
             "description": "Full-screen tone-mapping shader material.\nhttp://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
-            "is_constructor": 1,
-            "extends": "ShaderMaterial"
+            "submodule": "materials",
+            "extends": "ShaderMaterial",
+            "is_constructor": 1
         },
         "BloomPass": {
             "name": "BloomPass",
@@ -896,8 +949,9 @@
             "file": "src\\passes\\bloom.js",
             "line": 11,
             "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising the fast Kawase convolution approach.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -950,13 +1004,14 @@
             "file": "src\\passes\\bokeh.js",
             "line": 5,
             "description": "Depth of Field pass using a bokeh shader.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
-                    "name": "depthTexture",
-                    "description": "- A render texture that contains the depth of the scene.",
-                    "type": "Texture"
+                    "name": "camera",
+                    "description": "- The main camera. Used to adjust the near and far plane settings.",
+                    "type": "PerspectiveCamera"
                 },
                 {
                     "name": "options",
@@ -1002,14 +1057,10 @@
             "file": "src\\passes\\bokeh2.js",
             "line": 5,
             "description": "Depth of Field pass version 2.\n\nThis pass yields more realistic results but is also more demanding.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
-                {
-                    "name": "depthTexture",
-                    "description": "- A render texture that contains the depth of the scene.",
-                    "type": "Texture"
-                },
                 {
                     "name": "camera",
                     "description": "- The main camera. Used to adjust near and far plane and focal length settings.",
@@ -1094,8 +1145,9 @@
             "file": "src\\passes\\clear-mask.js",
             "line": 3,
             "description": "A clear mask pass.",
-            "is_constructor": 1,
-            "extends": "Pass"
+            "submodule": "passes",
+            "extends": "Pass",
+            "is_constructor": 1
         },
         "DotScreenPass": {
             "name": "DotScreenPass",
@@ -1110,8 +1162,9 @@
             "file": "src\\passes\\dot-screen.js",
             "line": 5,
             "description": "A render pass.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -1164,8 +1217,9 @@
             "file": "src\\passes\\film.js",
             "line": 5,
             "description": "A film pass providing various cinematic effects.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -1281,8 +1335,9 @@
             "file": "src\\passes\\glitch.js",
             "line": 5,
             "description": "A glitch pass.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -1320,8 +1375,9 @@
             "file": "src\\passes\\god-rays.js",
             "line": 23,
             "description": "A crepuscular rays pass.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "scene",
@@ -1424,8 +1480,9 @@
             "file": "src\\passes\\mask.js",
             "line": 3,
             "description": "A mask pass.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "scene",
@@ -1452,6 +1509,7 @@
             "file": "src\\passes\\pass.js",
             "line": 3,
             "description": "An abstract pass.\n\nThis class implements a dispose method that frees memory on demand.\nThe EffectComposer calls this method when it is being destroyed.\n\nFor this mechanism to work properly, please assign your render targets, \nmaterials or textures directly to your pass!\n\nYou can prevent your disposable objects from being deleted by keeping them \ninside deeper structures such as arrays or objects.",
+            "submodule": "passes",
             "is_constructor": 1,
             "params": [
                 {
@@ -1487,8 +1545,9 @@
             "file": "src\\passes\\render.js",
             "line": 15,
             "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.\n\nIn addition to that, this pass can also render a depth \ntexture which may be used by other passes.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "scene",
@@ -1506,20 +1565,6 @@
                     "type": "Object",
                     "optional": true,
                     "props": [
-                        {
-                            "name": "depth",
-                            "description": "- Indicates whether this pass should also render a scene depth texture.",
-                            "type": "Boolean",
-                            "optional": true,
-                            "optdefault": "false"
-                        },
-                        {
-                            "name": "depthResolutionScale",
-                            "description": "- The resolution scale of the depth texture, relative to the main render size.",
-                            "type": "Boolean",
-                            "optional": true,
-                            "optdefault": "0.5"
-                        },
                         {
                             "name": "overrideMaterial",
                             "description": "- An override material for the scene.",
@@ -1555,8 +1600,9 @@
             "file": "src\\passes\\save.js",
             "line": 5,
             "description": "A save pass that renders the result from a previous \npass (read buffer) to an arbitrary render target.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "renderTarget",
@@ -1584,8 +1630,9 @@
             "file": "src\\passes\\shader.js",
             "line": 4,
             "description": "A shader pass.\n\nUsed to render any shader material as a 2D filter.",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "material",
@@ -1614,8 +1661,9 @@
             "file": "src\\passes\\smaa.js",
             "line": 10,
             "description": "Subpixel Morphological Antialiasing (SMAA) v2.8.\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "Image",
@@ -1637,8 +1685,9 @@
             "file": "src\\passes\\tone-mapping.js",
             "line": 11,
             "description": "A tone mapping pass that supports adaptive luminosity.\n\nIf adaptivity is enabled, this pass generates a texture that represents \nthe luminosity of the current scene and adjusts it over time to simulate \nthe optic nerve responding to the amount of light it is receiving.\n\nReference:\n GDC2007 - Wolfgang Engel, Post-Processing Pipeline\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
-            "is_constructor": 1,
+            "submodule": "passes",
             "extends": "Pass",
+            "is_constructor": 1,
             "params": [
                 {
                     "name": "options",
@@ -1683,7 +1732,7 @@
             "namespace": "",
             "file": "src\\effect-composer.js",
             "line": 10,
-            "description": "The EffectComposer may be used in place of a normal WebGLRenderer.\n\nIt will disable the auto clear behaviour of the provided renderer to prevent \nunnecessary clear operations.\n\nYou may want to use a RenderPass as your first pass to automatically clear \nthe screen and render the scene to a texture for further processing.",
+            "description": "The EffectComposer may be used in place of a normal WebGLRenderer.\n\nIt will disable the auto clear behaviour of the provided renderer to prevent \nunnecessary clear operations. The depth buffer will also be disabled for \nwriting. Passes that rely on the depth test must explicitly enable it.\n\nYou may want to use a {{#crossLink \"RenderPass\"}}{{/crossLink}} as your first \npass to automatically clear the screen and render the scene to a texture for \nfurther processing.",
             "is_constructor": 1,
             "params": [
                 {
@@ -1691,6 +1740,20 @@
                     "description": "- The renderer that should be used in the passes.",
                     "type": "WebGLRenderer",
                     "optional": true
+                },
+                {
+                    "name": "depthTexture",
+                    "description": "- Set to true, if one of your passes relies on the depth of the main scene.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                },
+                {
+                    "name": "stencilBuffer",
+                    "description": "- Whether the main render targets should have a stencil buffer.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
                 }
             ]
         }
@@ -1698,29 +1761,9 @@
     "elements": {},
     "classitems": [
         {
-            "file": "src\\materials\\bokeh2\\index.js",
-            "line": 95,
-            "description": "Sets the texel size.",
-            "itemtype": "method",
-            "name": "setTexelSize",
-            "params": [
-                {
-                    "name": "x",
-                    "description": "- The texel width.",
-                    "type": "Number"
-                },
-                {
-                    "name": "y",
-                    "description": "- The texel height.",
-                    "type": "Number"
-                }
-            ],
-            "class": "Bokeh2Material"
-        },
-        {
-            "file": "src\\materials\\bokeh2\\index.js",
-            "line": 110,
-            "description": "Sets the near and far plane and the focal length.",
+            "file": "src\\materials\\bokeh\\index.js",
+            "line": 58,
+            "description": "Adopts the near and far plane settings of the given camera.",
             "itemtype": "method",
             "name": "adoptCameraSettings",
             "params": [
@@ -1730,43 +1773,12 @@
                     "type": "PerspectiveCamera"
                 }
             ],
-            "class": "Bokeh2Material"
+            "class": "BokehMaterial",
+            "submodule": "materials"
         },
         {
-            "file": "src\\materials\\convolution\\index.js",
-            "line": 45,
-            "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
-            "itemtype": "property",
-            "name": "kernels",
-            "type": "Number",
-            "access": "private",
-            "tagname": "",
-            "class": "ConvolutionMaterial"
-        },
-        {
-            "file": "src\\materials\\convolution\\index.js",
-            "line": 56,
-            "description": "Scales the kernels.",
-            "itemtype": "property",
-            "name": "scale",
-            "type": "Number",
-            "default": "1.0",
-            "class": "ConvolutionMaterial"
-        },
-        {
-            "file": "src\\materials\\convolution\\index.js",
-            "line": 66,
-            "description": "The current kernel.",
-            "itemtype": "property",
-            "name": "currentKernel",
-            "type": "Number",
-            "access": "private",
-            "tagname": "",
-            "class": "ConvolutionMaterial"
-        },
-        {
-            "file": "src\\materials\\convolution\\index.js",
-            "line": 80,
+            "file": "src\\materials\\bokeh2\\index.js",
+            "line": 98,
             "description": "Sets the texel size.",
             "itemtype": "method",
             "name": "setTexelSize",
@@ -1782,37 +1794,113 @@
                     "type": "Number"
                 }
             ],
-            "class": "ConvolutionMaterial"
+            "class": "Bokeh2Material",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\bokeh2\\index.js",
+            "line": 113,
+            "description": "Adopts the near and far plane and the focal length of the given camera.",
+            "itemtype": "method",
+            "name": "adoptCameraSettings",
+            "params": [
+                {
+                    "name": "camera",
+                    "description": "- The main camera.",
+                    "type": "PerspectiveCamera"
+                }
+            ],
+            "class": "Bokeh2Material",
+            "submodule": "materials"
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 95,
+            "line": 48,
+            "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
+            "itemtype": "property",
+            "name": "kernels",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "ConvolutionMaterial",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 59,
+            "description": "Scales the kernels.",
+            "itemtype": "property",
+            "name": "scale",
+            "type": "Number",
+            "default": "1.0",
+            "class": "ConvolutionMaterial",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 69,
+            "description": "The current kernel.",
+            "itemtype": "property",
+            "name": "currentKernel",
+            "type": "Number",
+            "access": "private",
+            "tagname": "",
+            "class": "ConvolutionMaterial",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 83,
+            "description": "Sets the texel size.",
+            "itemtype": "method",
+            "name": "setTexelSize",
+            "params": [
+                {
+                    "name": "x",
+                    "description": "- The texel width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "y",
+                    "description": "- The texel height.",
+                    "type": "Number"
+                }
+            ],
+            "class": "ConvolutionMaterial",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\convolution\\index.js",
+            "line": 98,
             "description": "Adjusts the kernel for the next blur pass.\nCall this method before each render iteration.",
             "itemtype": "method",
             "name": "adjustKernel",
-            "class": "ConvolutionMaterial"
+            "class": "ConvolutionMaterial",
+            "submodule": "materials"
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 52,
+            "line": 55,
             "description": "The area pattern recognition image.",
             "itemtype": "property",
             "name": "areaImage",
             "type": "String",
-            "class": "SMAAWeightsMaterial"
+            "class": "SMAAWeightsMaterial",
+            "submodule": "materials"
         },
         {
             "file": "src\\materials\\smaa-weights\\index.js",
-            "line": 61,
+            "line": 64,
             "description": "The search image.",
             "itemtype": "property",
             "name": "searchImage",
             "type": "String",
-            "class": "SMAAWeightsMaterial"
+            "class": "SMAAWeightsMaterial",
+            "submodule": "materials"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 35,
+            "line": 36,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1820,11 +1908,12 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 51,
+            "line": 52,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1832,22 +1921,24 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 61,
+            "line": 62,
             "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after \nchanging this value.",
             "itemtype": "property",
             "name": "resolutionScale",
             "type": "Number",
             "default": "0.5",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 74,
+            "line": 75,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1855,11 +1946,12 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 86,
+            "line": 87,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1867,11 +1959,12 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 100,
+            "line": 101,
             "description": "Luminance shader material.",
             "itemtype": "property",
             "name": "luminosityMaterial",
@@ -1879,11 +1972,12 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 112,
+            "line": 113,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1891,22 +1985,24 @@
             "access": "private",
             "tagname": "",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 126,
+            "line": 127,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
             "type": "Number",
             "default": "1.0",
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 146,
+            "line": 147,
             "description": "Renders the effect.\n\nApplies a luminance filter and convolution blur to the read buffer and \nrenders the result into a seperate render target. The result is additively \nblended with the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -1923,11 +2019,12 @@
                 }
             ],
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 208,
+            "line": 213,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -1944,11 +2041,12 @@
                 }
             ],
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 230,
+            "line": 235,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -1965,11 +2063,12 @@
                 }
             ],
             "class": "BloomPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 28,
+            "line": 29,
             "description": "Bokeh shader material.",
             "itemtype": "property",
             "name": "bokehMaterial",
@@ -1977,11 +2076,12 @@
             "access": "private",
             "tagname": "",
             "class": "BokehPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 44,
+            "line": 43,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2003,7 +2103,8 @@
                 }
             ],
             "class": "BokehPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -2024,7 +2125,8 @@
                 }
             ],
             "class": "BokehPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh.js",
@@ -2045,7 +2147,8 @@
                 }
             ],
             "class": "BokehPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh2.js",
@@ -2057,11 +2160,12 @@
             "access": "private",
             "tagname": "",
             "class": "Bokeh2Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 50,
+            "line": 48,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2083,11 +2187,12 @@
                 }
             ],
             "class": "Bokeh2Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 75,
+            "line": 74,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2104,11 +2209,12 @@
                 }
             ],
             "class": "Bokeh2Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 90,
+            "line": 89,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2125,11 +2231,12 @@
                 }
             ],
             "class": "Bokeh2Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\clear-mask.js",
-            "line": 19,
+            "line": 20,
             "description": "This pass disables the stencil test.",
             "itemtype": "method",
             "name": "render",
@@ -2141,11 +2248,12 @@
                 }
             ],
             "class": "ClearMaskPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 28,
+            "line": 29,
             "description": "Dot screen shader material description.",
             "itemtype": "property",
             "name": "material",
@@ -2153,11 +2261,12 @@
             "access": "private",
             "tagname": "",
             "class": "DotScreenPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 46,
+            "line": 47,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2179,11 +2288,12 @@
                 }
             ],
             "class": "DotScreenPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 71,
+            "line": 72,
             "description": "Adjusts the size of the effect.",
             "itemtype": "method",
             "name": "initialise",
@@ -2195,11 +2305,12 @@
                 }
             ],
             "class": "DotScreenPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 85,
+            "line": 86,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2216,11 +2327,12 @@
                 }
             ],
             "class": "DotScreenPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 37,
+            "line": 38,
             "description": "Film shader material.",
             "itemtype": "property",
             "name": "material",
@@ -2228,22 +2340,24 @@
             "access": "private",
             "tagname": "",
             "class": "FilmPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 49,
+            "line": 50,
             "description": "The amount of scanlines in percent, relative to the screen height.\n\nYou need to call the setSize method of the EffectComposer after \nchanging this value.",
             "itemtype": "property",
             "name": "scanlineDensity",
             "type": "Number",
             "default": "1.25",
             "class": "FilmPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 64,
+            "line": 65,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2270,11 +2384,12 @@
                 }
             ],
             "class": "FilmPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 91,
+            "line": 92,
             "description": "Adjusts the scanline count using the renderer's height.",
             "itemtype": "method",
             "name": "initialise",
@@ -2286,11 +2401,12 @@
                 }
             ],
             "class": "FilmPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 105,
+            "line": 106,
             "description": "Adjusts the scanline count using the renderer's height.",
             "itemtype": "method",
             "name": "setSize",
@@ -2307,11 +2423,12 @@
                 }
             ],
             "class": "FilmPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 27,
+            "line": 28,
             "description": "Glitch shader material.",
             "itemtype": "property",
             "name": "material",
@@ -2319,32 +2436,35 @@
             "access": "private",
             "tagname": "",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 39,
+            "line": 40,
             "description": "A perturbation map.\n\nIf none is provided, a noise texture will be created.\nThe texture will automatically be destroyed when the \nEffectComposer is deleted.",
             "itemtype": "property",
             "name": "perturbMap",
             "type": "Texture",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 63,
+            "line": 64,
             "description": "The effect mode.\n\nCheck the Mode enumeration for available modes.",
             "itemtype": "property",
             "name": "mode",
             "type": "GlitchPass.Mode",
             "default": "GlitchPass.Mode.SPORADIC",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 75,
+            "line": 76,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "counter",
@@ -2352,11 +2472,12 @@
             "access": "private",
             "tagname": "",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 85,
+            "line": 86,
             "description": "A random break point for the sporadic glitch activation.",
             "itemtype": "property",
             "name": "breakPoint",
@@ -2364,11 +2485,12 @@
             "access": "private",
             "tagname": "",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 98,
+            "line": 99,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2390,22 +2512,24 @@
                 }
             ],
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 155,
+            "line": 156,
             "description": "Creates a random break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
             "access": "private",
             "tagname": "",
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 168,
+            "line": 169,
             "description": "Destroys the currently set texture, if any, and \ngenerates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -2419,11 +2543,12 @@
                 }
             ],
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 204,
+            "line": 205,
             "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
             "itemtype": "property",
             "name": "GlitchPass.Mode",
@@ -2431,7 +2556,8 @@
             "static": 1,
             "final": 1,
             "class": "GlitchPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
@@ -2448,7 +2574,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 52,
+            "line": 53,
             "description": "A render target for rendering the masked scene.",
             "itemtype": "property",
             "name": "renderTargetMask",
@@ -2456,11 +2582,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 66,
+            "line": 67,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -2468,11 +2595,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 78,
+            "line": 79,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -2480,32 +2608,35 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 88,
+            "line": 89,
             "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer \nafter changing this value.",
             "itemtype": "property",
             "name": "resolutionScale",
             "type": "Number",
             "default": "0.5",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 101,
+            "line": 102,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
             "type": "Object3D",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 110,
+            "line": 111,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenPosition",
@@ -2513,11 +2644,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 120,
+            "line": 121,
             "description": "A convolution blur shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -2525,11 +2657,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 132,
+            "line": 133,
             "description": "A combine shader material used for rendering to screen.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -2537,11 +2670,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 142,
+            "line": 143,
             "description": "A copy shader material used for rendering to texture.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -2549,11 +2683,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 154,
+            "line": 155,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2561,11 +2696,12 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 164,
+            "line": 165,
             "description": "God rays shader material.",
             "itemtype": "property",
             "name": "godRaysMaterial",
@@ -2573,65 +2709,71 @@
             "access": "private",
             "tagname": "",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 184,
+            "line": 185,
             "description": "The main scene.",
             "itemtype": "property",
             "name": "mainScene",
             "type": "Scene",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 193,
+            "line": 194,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
             "type": "Camera",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 204,
+            "line": 205,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
             "type": "Number",
             "default": "0.1",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 224,
+            "line": 225,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
             "type": "Number",
             "default": "1.0",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 245,
+            "line": 246,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!",
             "itemtype": "property",
             "name": "samples",
             "type": "Number",
             "default": "60",
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 272,
-            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPrelminiary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
+            "line": 273,
+            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPreliminary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
             "params": [
@@ -2647,11 +2789,12 @@
                 }
             ],
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 361,
+            "line": 365,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2668,11 +2811,12 @@
                 }
             ],
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 384,
+            "line": 388,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2689,33 +2833,36 @@
                 }
             ],
             "class": "GodRaysPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\mask.js",
-            "line": 19,
+            "line": 20,
             "description": "Inverse flag.",
             "itemtype": "property",
             "name": "inverse",
             "type": "Boolean",
             "default": "false",
             "class": "MaskPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\mask.js",
-            "line": 29,
+            "line": 30,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
             "type": "Boolean",
             "default": "true",
             "class": "MaskPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\mask.js",
-            "line": 41,
+            "line": 42,
             "description": "Renders the scene as a mask by only setting the stencil bits.\nThe buffers will both be cleared first.",
             "itemtype": "method",
             "name": "render",
@@ -2737,11 +2884,12 @@
                 }
             ],
             "class": "MaskPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 26,
+            "line": 27,
             "description": "The scene to render.",
             "itemtype": "property",
             "name": "scene",
@@ -2750,11 +2898,12 @@
             "tagname": "",
             "default": "Scene()",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 37,
+            "line": 38,
             "description": "The camera to render with.",
             "itemtype": "property",
             "name": "camera",
@@ -2763,11 +2912,12 @@
             "tagname": "",
             "default": "OrthographicCamera(-1, 1, 1, -1, 0, 1)",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 48,
+            "line": 49,
             "description": "The quad mesh to use for rendering.\n\nAssign your shader material to this mesh!",
             "itemtype": "property",
             "name": "quad",
@@ -2779,11 +2929,12 @@
                 "\n this.quad.material = this.myMaterial;"
             ],
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 63,
+            "line": 64,
             "description": "Indicates whether the read and write buffers should be swapped after this \npass has finished rendering.\n\nSet this to true if this pass renders to the write buffer so that a \nfollowing pass can find the result in the read buffer.",
             "itemtype": "property",
             "name": "needsSwap",
@@ -2792,33 +2943,36 @@
             "tagname": "",
             "default": "false",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 78,
+            "line": 79,
             "description": "Enabled flag.",
             "itemtype": "property",
             "name": "enabled",
             "type": "Boolean",
             "default": "true",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 88,
+            "line": 89,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
             "type": "Boolean",
             "default": "false",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 108,
+            "line": 109,
             "description": "Renders the effect.\n\nThis is an abstract method that must be overridden.",
             "itemtype": "method",
             "name": "render",
@@ -2856,11 +3010,12 @@
                 }
             ],
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 128,
+            "line": 129,
             "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the \nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render \ntargets by performing a preliminary render operation.\n\nThe effect composer calls this method when this pass is added to its queue.",
             "itemtype": "method",
             "name": "initialise",
@@ -2877,11 +3032,12 @@
                 }
             ],
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 147,
+            "line": 148,
             "description": "Updates this pass with the renderer's size.\n\nThis is an abstract method that may be overriden in case you want to be \ninformed about the main render size.\n\nThe effect composer calls this method when its own size is updated.",
             "itemtype": "method",
             "name": "setSize",
@@ -2901,16 +3057,18 @@
                 "\n this.myRenderTarget.setSize(width, height);"
             ],
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 164,
+            "line": 165,
             "description": "Performs a shallow search for properties that define a dispose method and \ndeletes them. The pass will be inoperative after this method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory \nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
             "class": "Pass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\render.js",
@@ -2927,104 +3085,52 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 43,
-            "description": "Depth render flag.",
-            "itemtype": "property",
-            "name": "depth",
-            "type": "Boolean",
-            "default": "false",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 53,
-            "description": "The depth render target.",
-            "itemtype": "property",
-            "name": "renderTargetDepth",
-            "type": "WebGLRenderTarget",
-            "access": "private",
-            "tagname": "",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 67,
-            "description": "The depth texture.",
-            "itemtype": "property",
-            "name": "depthTexture",
-            "type": "Texture",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 76,
-            "description": "A depth shader material.",
-            "itemtype": "property",
-            "name": "MeshDepthMaterial",
-            "type": "Material",
-            "access": "private",
-            "tagname": "",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 86,
-            "description": "The resolution scale of the depth texture, relative to the main \nrender size.\n\nYou need to call the setSize method of the EffectComposer after \nchanging this value.",
-            "itemtype": "property",
-            "name": "depthResolutionScale",
-            "type": "Number",
-            "default": "0.5",
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 100,
+            "line": 42,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
             "type": "Material",
             "class": "RenderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 109,
+            "line": 51,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
             "type": "Color",
             "class": "RenderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 118,
+            "line": 60,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
             "type": "Number",
             "class": "RenderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 127,
+            "line": 69,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
             "type": "Boolean",
             "default": "true",
             "class": "RenderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 139,
+            "line": 81,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -3041,53 +3147,12 @@
                 }
             ],
             "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 189,
-            "description": "Adjusts the format and size of the depth render target.",
-            "itemtype": "method",
-            "name": "initialise",
-            "params": [
-                {
-                    "name": "renderer",
-                    "description": "- The renderer.",
-                    "type": "WebGLRenderer"
-                },
-                {
-                    "name": "alpha",
-                    "description": "- Whether the renderer uses the alpha channel or not.",
-                    "type": "Boolean"
-                }
-            ],
-            "class": "RenderPass",
-            "module": "postprocessing"
-        },
-        {
-            "file": "src\\passes\\render.js",
-            "line": 216,
-            "description": "Updates the depth render target with the renderer's size.",
-            "itemtype": "method",
-            "name": "setSize",
-            "params": [
-                {
-                    "name": "width",
-                    "description": "- The width.",
-                    "type": "Number"
-                },
-                {
-                    "name": "height",
-                    "description": "- The height.",
-                    "type": "Number"
-                }
-            ],
-            "class": "RenderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 22,
+            "line": 23,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "material",
@@ -3095,11 +3160,12 @@
             "access": "private",
             "tagname": "",
             "class": "SavePass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 34,
+            "line": 35,
             "description": "The render target.",
             "itemtype": "property",
             "name": "renderTarget",
@@ -3107,22 +3173,24 @@
             "access": "private",
             "tagname": "",
             "class": "SavePass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 44,
+            "line": 45,
             "description": "Indicates whether the render target should be resized when\nthe size of the composer's read/write buffer changes.",
             "itemtype": "property",
             "name": "resize",
             "type": "Boolean",
             "default": "true",
             "class": "SavePass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 57,
+            "line": 58,
             "description": "Saves the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -3139,11 +3207,12 @@
                 }
             ],
             "class": "SavePass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\save.js",
-            "line": 72,
+            "line": 73,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -3160,32 +3229,35 @@
                 }
             ],
             "class": "SavePass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 24,
+            "line": 25,
             "description": "The name of the color sampler uniform of the given material.\nThe read buffer will be bound to this.",
             "itemtype": "property",
             "name": "textureID",
             "type": "String",
             "default": "\"tDiffuse\"",
             "class": "ShaderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 35,
+            "line": 36,
             "description": "The shader material to use for rendering.",
             "itemtype": "property",
             "name": "material",
             "type": "ShaderMaterial",
             "class": "ShaderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 48,
+            "line": 49,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -3202,11 +3274,12 @@
                 }
             ],
             "class": "ShaderPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 30,
+            "line": 31,
             "description": "A render target for the color edge detection.",
             "itemtype": "property",
             "name": "renderTargetColorEdges",
@@ -3214,11 +3287,12 @@
             "access": "private",
             "tagname": "",
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 46,
+            "line": 47,
             "description": "A render target for the SMAA weights.",
             "itemtype": "property",
             "name": "renderTargetWeights",
@@ -3226,11 +3300,12 @@
             "access": "private",
             "tagname": "",
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 58,
+            "line": 59,
             "description": "SMAA color edge detection shader material.",
             "itemtype": "property",
             "name": "colorEdgesMaterial",
@@ -3238,11 +3313,12 @@
             "access": "private",
             "tagname": "",
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 68,
+            "line": 69,
             "description": "SMAA weights shader material.",
             "itemtype": "property",
             "name": "weightsMaterial",
@@ -3250,11 +3326,12 @@
             "access": "private",
             "tagname": "",
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 104,
+            "line": 105,
             "description": "SMAA blend shader material.",
             "itemtype": "property",
             "name": "blendMaterial",
@@ -3262,11 +3339,12 @@
             "access": "private",
             "tagname": "",
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 120,
+            "line": 121,
             "description": "Antialiases the scene.",
             "itemtype": "method",
             "name": "render",
@@ -3288,11 +3366,12 @@
                 }
             ],
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 156,
+            "line": 157,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -3309,11 +3388,12 @@
                 }
             ],
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 171,
+            "line": 172,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -3330,11 +3410,12 @@
                 }
             ],
             "class": "SMAAPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 41,
+            "line": 42,
             "description": "Render target for the current limonosity.",
             "itemtype": "property",
             "name": "renderTargetLuminosity",
@@ -3342,11 +3423,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 57,
+            "line": 58,
             "description": "Adapted luminance render target.",
             "itemtype": "property",
             "name": "renderTargetLuminosity",
@@ -3354,11 +3436,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 70,
+            "line": 71,
             "description": "Render target that holds a copy of the adapted limonosity.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -3366,11 +3449,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 80,
+            "line": 81,
             "description": "Copy shader material used for saving the luminance map.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -3378,11 +3462,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 90,
+            "line": 91,
             "description": "Luminosity shader material.",
             "itemtype": "property",
             "name": "luminosityMaterial",
@@ -3390,11 +3475,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 102,
+            "line": 103,
             "description": "Adaptive luminance shader material.",
             "itemtype": "property",
             "name": "adaptiveLuminosityMaterial",
@@ -3402,11 +3488,12 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 114,
+            "line": 115,
             "description": "Tone mapping shader material.",
             "itemtype": "property",
             "name": "toneMappingMaterial",
@@ -3414,32 +3501,35 @@
             "access": "private",
             "tagname": "",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 128,
+            "line": 129,
             "description": "The resolution of the render targets. Must be a power of two for mipmapping.",
             "itemtype": "property",
             "name": "resolution",
             "type": "Number",
             "default": "256",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 153,
+            "line": 154,
             "description": "Whether this pass uses adaptive luminosity.",
             "itemtype": "property",
             "name": "adaptive",
             "type": "Boolean",
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 180,
+            "line": 181,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -3466,11 +3556,12 @@
                 }
             ],
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 229,
+            "line": 234,
             "description": "Renders something into the previous luminosity texture.",
             "itemtype": "method",
             "name": "initialise",
@@ -3482,11 +3573,12 @@
                 }
             ],
             "class": "ToneMappingPass",
-            "module": "postprocessing"
+            "module": "postprocessing",
+            "submodule": "passes"
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 28,
+            "line": 36,
             "description": "The renderer.",
             "itemtype": "property",
             "name": "renderer",
@@ -3496,7 +3588,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 39,
+            "line": 48,
             "description": "The read buffer.\n\nReading from and writing to the same render target should be avoided. \nTherefore, two seperate, yet identical buffers are used.",
             "itemtype": "property",
             "name": "readBuffer",
@@ -3508,7 +3600,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 52,
+            "line": 63,
             "description": "The write buffer.",
             "itemtype": "property",
             "name": "writeBuffer",
@@ -3520,8 +3612,8 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 62,
-            "description": "A copy pass used to copy masked scenes.",
+            "line": 79,
+            "description": "A copy pass used for copying masked scenes.",
             "itemtype": "property",
             "name": "copyPass",
             "type": "ShaderPass",
@@ -3532,7 +3624,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 72,
+            "line": 89,
             "description": "The render passes.",
             "itemtype": "property",
             "name": "passes",
@@ -3544,10 +3636,17 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 84,
+            "line": 101,
             "description": "Creates a new render target by replicating the renderer's canvas.",
             "itemtype": "method",
             "name": "createBuffer",
+            "params": [
+                {
+                    "name": "stencilBuffer",
+                    "description": "- Whether the render target should have a stencil buffer.",
+                    "type": "Boolean"
+                }
+            ],
             "return": {
                 "description": "A fresh render target that equals the renderer's canvas.",
                 "type": "WebGLRenderTarget"
@@ -3557,7 +3656,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 105,
+            "line": 123,
             "description": "Adds a pass, optionally at a specific index.",
             "itemtype": "method",
             "name": "addPass",
@@ -3579,7 +3678,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 129,
+            "line": 147,
             "description": "Removes a pass.",
             "itemtype": "method",
             "name": "removePass",
@@ -3595,7 +3694,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 142,
+            "line": 160,
             "description": "Renders all enabled passes in the order in which they were added.",
             "itemtype": "method",
             "name": "render",
@@ -3611,7 +3710,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 198,
+            "line": 216,
             "description": "Sets the size of the buffers and the renderer's output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass how that \ninformation is used.\n\nIf no width or height is specified, the render targets and passes will be \nupdated with the current size of the renderer.",
             "itemtype": "method",
             "name": "setSize",
@@ -3634,7 +3733,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 237,
+            "line": 255,
             "description": "Resets this composer by deleting all passes and creating new buffers.",
             "itemtype": "method",
             "name": "reset",
@@ -3651,7 +3750,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 250,
+            "line": 268,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created \nby the passes. It also deletes this composer's frame buffers.\n\nNote: the reset method uses the dispose method internally.",
             "itemtype": "method",
             "name": "dispose",

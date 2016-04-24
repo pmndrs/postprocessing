@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.7</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -122,8 +122,9 @@ import vertex from &quot;./glsl/shader.vert&quot;;
  * A material for combining two textures.
  *
  * @class CombineMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Boolean} [invertTexture1=false] - Invert the first texture&#x27;s rgb values.
  * @param {Boolean} [invertTexture2=false] - Invert the second texture&#x27;s rgb values.
  */
@@ -133,6 +134,8 @@ export class CombineMaterial extends THREE.ShaderMaterial {
 	constructor(invertTexture1, invertTexture2) {
 
 		super({
+
+			type: &quot;CombineMaterial&quot;,
 
 			uniforms: {
 

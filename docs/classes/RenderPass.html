@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.0.7</em>
+            <em>API Docs for: 1.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -120,7 +120,8 @@
             Defined in: <a href="../files/src_passes_render.js.html#l15"><code>src\passes\render.js:15</code></a>
         </div>
 
-            Module: <a href="../modules/postprocessing.html">postprocessing</a>
+            Module: <a href="../modules/passes.html">passes</a><br>
+            Parent Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
 </div>
 
@@ -217,32 +218,6 @@ texture which may be used by other passes.</p>
                     </div>
 
                         <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name optional">[depth=false]</code>
-                                    <span class="type">Boolean</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>Indicates whether this pass should also render a scene depth texture.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[depthResolutionScale=0.5]</code>
-                                    <span class="type">Boolean</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The resolution scale of the depth texture, relative to the main render size.</li>
-</ul>
-
-                                </div>
-
-                            </li>
                             <li class="param">
                                     <code class="param-name optional">[overrideMaterial]</code>
                                     <span class="type">Material</span>
@@ -352,24 +327,8 @@ texture which may be used by other passes.</p>
                                 <a href="#property_clearColor">clearColor</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_depth">depth</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_depthResolutionScale">depthResolutionScale</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_depthTexture">depthTexture</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_MeshDepthMaterial">MeshDepthMaterial</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -382,10 +341,6 @@ texture which may be used by other passes.</p>
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetDepth">renderTargetDepth</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -420,7 +375,7 @@ texture which may be used by other passes.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l164"><code>src\passes\pass.js:164</code></a>
+        <a href="../files/src_passes_pass.js.html#l165"><code>src\passes\pass.js:165</code></a>
         </p>
 
 
@@ -446,7 +401,7 @@ when you are certain that you don't need this pass anymore.</p>
 
 
 </div>
-<div id="method_initialise" class="method item">
+<div id="method_initialise" class="method item inherited">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
@@ -468,12 +423,9 @@ when you are certain that you don't need this pass anymore.</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_initialise">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_render.js.html#l189"><code>src\passes\render.js:189</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l129"><code>src\passes\pass.js:129</code></a>
         </p>
 
 
@@ -481,7 +433,13 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Adjusts the format and size of the depth render target.</p>
+        <p>Performs initialisation tasks.</p>
+<p>By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the
+appropriate format (RGB or RGBA).</p>
+<p>The provided renderer can be used to warm up special off-screen render
+targets by performing a preliminary render operation.</p>
+<p>The effect composer calls this method when this pass is added to its queue.</p>
 
     </div>
 
@@ -548,7 +506,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l139"><code>src\passes\render.js:139</code></a>
+        <a href="../files/src_passes_render.js.html#l81"><code>src\passes\render.js:81</code></a>
         </p>
 
 
@@ -596,7 +554,7 @@ when you are certain that you don't need this pass anymore.</p>
 
 
 </div>
-<div id="method_setSize" class="method item">
+<div id="method_setSize" class="method item inherited">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -618,12 +576,9 @@ when you are certain that you don't need this pass anymore.</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_setSize">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_render.js.html#l216"><code>src\passes\render.js:216</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_setSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l148"><code>src\passes\pass.js:148</code></a>
         </p>
 
 
@@ -631,7 +586,10 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Updates the depth render target with the renderer's size.</p>
+        <p>Updates this pass with the renderer's size.</p>
+<p>This is an abstract method that may be overriden in case you want to be
+informed about the main render size.</p>
+<p>The effect composer calls this method when its own size is updated.</p>
 
     </div>
 
@@ -646,7 +604,7 @@ when you are certain that you don't need this pass anymore.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The width.</li>
+<li>The renderer's width.</li>
 </ul>
 
                     </div>
@@ -659,7 +617,7 @@ when you are certain that you don't need this pass anymore.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The height.</li>
+<li>The renderer's height.</li>
 </ul>
 
                     </div>
@@ -670,6 +628,14 @@ when you are certain that you don't need this pass anymore.</p>
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <p>this.myRenderTarget.setSize(width, height);</p>
+
+            </div>
+        </div>
 </div>
             </div>
 
@@ -688,7 +654,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
+        <a href="../files/src_passes_pass.js.html#l38"><code>src\passes\pass.js:38</code></a>
         </p>
 
 
@@ -714,7 +680,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l127"><code>src\passes\render.js:127</code></a>
+        <a href="../files/src_passes_render.js.html#l69"><code>src\passes\render.js:69</code></a>
         </p>
 
 
@@ -740,7 +706,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l118"><code>src\passes\render.js:118</code></a>
+        <a href="../files/src_passes_render.js.html#l60"><code>src\passes\render.js:60</code></a>
         </p>
 
 
@@ -765,6 +731,7 @@ when you are certain that you don't need this pass anymore.</p>
         <span class="flag static">static</span>
 
     <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
                 <p>
                 Defined in
         <a href="../files/src_passes_render.js.html#l4"><code>src\passes\render.js:4</code></a>
@@ -792,7 +759,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l109"><code>src\passes\render.js:109</code></a>
+        <a href="../files/src_passes_render.js.html#l51"><code>src\passes\render.js:51</code></a>
         </p>
 
 
@@ -800,86 +767,6 @@ when you are certain that you don't need this pass anymore.</p>
 
     <div class="description">
         <p>Clear color.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_depth" class="property item">
-    <h3 class="name"><code>depth</code></h3>
-    <span class="type">Boolean</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l43"><code>src\passes\render.js:43</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Depth render flag.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> false</p>
-
-
-</div>
-<div id="property_depthResolutionScale" class="property item">
-    <h3 class="name"><code>depthResolutionScale</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l86"><code>src\passes\render.js:86</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale of the depth texture, relative to the main
-render size.</p>
-<p>You need to call the setSize method of the EffectComposer after
-changing this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 0.5</p>
-
-
-</div>
-<div id="property_depthTexture" class="property item">
-    <h3 class="name"><code>depthTexture</code></h3>
-    <span class="type">Texture</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l67"><code>src\passes\render.js:67</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The depth texture.</p>
 
     </div>
 
@@ -897,7 +784,7 @@ changing this value.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l78"><code>src\passes\pass.js:78</code></a>
+        <a href="../files/src_passes_pass.js.html#l79"><code>src\passes\pass.js:79</code></a>
         </p>
 
 
@@ -909,32 +796,6 @@ changing this value.</p>
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_MeshDepthMaterial" class="property item private">
-    <h3 class="name"><code>MeshDepthMaterial</code></h3>
-    <span class="type">Material</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l76"><code>src\passes\render.js:76</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A depth shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -950,7 +811,7 @@ changing this value.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l63"><code>src\passes\pass.js:63</code></a>
+        <a href="../files/src_passes_pass.js.html#l64"><code>src\passes\pass.js:64</code></a>
         </p>
 
 
@@ -979,7 +840,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l100"><code>src\passes\render.js:100</code></a>
+        <a href="../files/src_passes_render.js.html#l42"><code>src\passes\render.js:42</code></a>
         </p>
 
 
@@ -1005,7 +866,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
+        <a href="../files/src_passes_pass.js.html#l49"><code>src\passes\pass.js:49</code></a>
         </p>
 
 
@@ -1029,32 +890,6 @@ following pass can find the result in the read buffer.</p>
         </div>
 
 </div>
-<div id="property_renderTargetDepth" class="property item private">
-    <h3 class="name"><code>renderTargetDepth</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l53"><code>src\passes\render.js:53</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The depth render target.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_renderToScreen" class="property item inherited">
     <h3 class="name"><code>renderToScreen</code></h3>
     <span class="type">Boolean</span>
@@ -1066,7 +901,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l88"><code>src\passes\pass.js:88</code></a>
+        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
         </p>
 
 
@@ -1093,7 +928,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l26"><code>src\passes\pass.js:26</code></a>
+        <a href="../files/src_passes_pass.js.html#l27"><code>src\passes\pass.js:27</code></a>
         </p>
 
 
