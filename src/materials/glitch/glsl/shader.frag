@@ -14,9 +14,16 @@ uniform float colS;
 
 varying vec2 vUv;
 
-float rand(vec2 co) {
+float rand(vec2 tc) {
 
-	return fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);
+	const float a = 12.9898;
+	const float b = 78.233;
+	const float c = 43758.5453;
+
+	float dt = dot(tc, vec2(a, b));
+	float sn = mod(dt, 3.14);
+
+	return fract(sin(sn) * c);
 
 }
 

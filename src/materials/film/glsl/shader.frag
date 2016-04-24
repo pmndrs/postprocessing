@@ -33,8 +33,6 @@ varying vec2 vUv;
 	uniform float vignetteOffset;
 	uniform float vignetteDarkness;
 
-	const vec2 CENTER = vec2(0.5);
-
 #endif
 
 void main() {
@@ -74,6 +72,8 @@ void main() {
 	#endif
 
 	#ifdef VIGNETTE
+
+	const vec2 CENTER = vec2(0.5);
 
 		#ifdef ESKIL
 

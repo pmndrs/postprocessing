@@ -4,9 +4,9 @@ uniform vec2 range;
 
 varying vec2 vUv;
 
-const vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);
-
 void main() {
+
+	const vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);
 
 	vec4 texel = texture2D(tDiffuse, vUv);
 	float v = dot(texel, LUM_COEFF);
@@ -21,7 +21,7 @@ void main() {
 
 	#endif
 
-	v = pow(v, distinction);
+	v = pow(abs(v), distinction);
 
 	#ifdef COLOR
 
