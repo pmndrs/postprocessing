@@ -11,19 +11,27 @@ import THREE from "three";
  * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
  * It will disable the auto clear behaviour of the provided renderer to prevent 
- * unnecessary clear operations.
+ * unnecessary clear operations. The depth buffer will also be disabled for 
+ * writing. Passes that rely on the depth test must explicitly enable it.
  *
- * You may want to use a RenderPass as your first pass to automatically clear 
- * the screen and render the scene to a texture for further processing. 
+ * You may want to use a {{#crossLink "RenderPass"}}{{/crossLink}} as your first 
+ * pass to automatically clear the screen and render the scene to a texture for 
+ * further processing.
  *
  * @class EffectComposer
  * @constructor
+ * @module postprocessing
  * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
+ * @param {Boolean} [depthTexture=false] - Set to true, if one of your passes relies on the depth of the main scene.
+ * @param {Boolean} [stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
  */
 
 export class EffectComposer {
 
-	constructor(renderer) {
+	constructor(renderer, depthTexture, stencilBuffer) {
+
+		if(depthTexture === undefined) { depthTexture = false; }
+		if(stencilBuffer === undefined) { stencilBuffer = false; }
 
 		/**
 		 * The renderer.
@@ -35,6 +43,7 @@ export class EffectComposer {
 		this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 
 		this.renderer.autoClear = false;
+		this.renderer.context.depthMask(false);
 
 		/**
 		 * The read buffer.
@@ -47,7 +56,9 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.readBuffer = this.createBuffer();
+		this.readBuffer = this.createBuffer(stencilBuffer);
+
+		this.readBuffer.texture.generateMipmaps = false;
 
 		/**
 		 * The write buffer.
@@ -59,8 +70,14 @@ export class EffectComposer {
 
 		this.writeBuffer = this.readBuffer.clone();
 
+		if(depthTexture) {
+
+			this.readBuffer.depthTexture = this.writeBuffer.depthTexture = new THREE.DepthTexture();
+
+		}
+
 		/**
-		 * A copy pass used to copy masked scenes.
+		 * A copy pass used for copying masked scenes.
 		 *
 		 * @property copyPass
 		 * @type ShaderPass
@@ -85,10 +102,11 @@ export class EffectComposer {
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * @method createBuffer
+	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @return {WebGLRenderTarget} A fresh render target that equals the renderer's canvas.
 	 */
 
-	createBuffer() {
+	createBuffer(stencilBuffer) {
 
 		let size = this.renderer.getSize();
 		let alpha = this.renderer.context.getContextAttributes().alpha;
@@ -97,7 +115,7 @@ export class EffectComposer {
 			minFilter: THREE.LinearFilter,
 			magFilter: THREE.LinearFilter,
 			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat,
-			stencilBuffer: false
+			stencilBuffer: stencilBuffer
 		});
 
 	}

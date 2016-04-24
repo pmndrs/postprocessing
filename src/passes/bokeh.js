@@ -6,9 +6,10 @@ import THREE from "three";
  * Depth of Field pass using a bokeh shader.
  *
  * @class BokehPass
- * @constructor
+ * @submodule passes
  * @extends Pass
- * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
+ * @constructor
+ * @param {PerspectiveCamera} camera - The main camera. Used to adjust the near and far plane settings.
  * @param {Object} [options] - Additional parameters.
  * @param {Number} [options.focus=1.0] - Focus distance.
  * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
@@ -17,7 +18,7 @@ import THREE from "three";
 
 export class BokehPass extends Pass {
 
-	constructor(depthTexture, options) {
+	constructor(camera, options) {
 
 		super();
 
@@ -33,9 +34,7 @@ export class BokehPass extends Pass {
 		 * @private
 		 */
 
-		this.bokehMaterial = new BokehMaterial(options);
-
-		this.bokehMaterial.uniforms.tDepth.value = (depthTexture !== undefined) ? depthTexture : null;
+		this.bokehMaterial = new BokehMaterial(camera, options);
 
 		this.quad.material = this.bokehMaterial;
 
@@ -53,6 +52,7 @@ export class BokehPass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
 		if(this.renderToScreen) {
 

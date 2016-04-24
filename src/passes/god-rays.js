@@ -24,8 +24,9 @@ const clearColor = new THREE.Color();
  * A crepuscular rays pass.
  *
  * @class GodRaysPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Scene} scene - The main scene.
  * @param {Camera} camera - The main camera.
  * @param {Vector3} lightSource - The main light source.
@@ -278,7 +279,7 @@ export class GodRaysPass extends Pass {
 	 * Mask Phase:
 	 *  The scene is rendered using a mask material.
 	 *
-	 * Prelminiary Blur Phase:
+	 * Preliminary Blur Phase:
 	 *  The masked scene is blurred five consecutive times.
 	 *
 	 * God Rays Phase:
@@ -295,6 +296,7 @@ export class GodRaysPass extends Pass {
 	render(renderer, readBuffer) {
 
 		let clearAlpha;
+		let ctx = renderer.context;
 
 		// Compute the screen light position and translate the coordinates to [0, 1].
 		this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
@@ -306,7 +308,9 @@ export class GodRaysPass extends Pass {
 		clearColor.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
 		renderer.setClearColor(0x000000, 1);
+		ctx.depthMask(true);
 		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
+		ctx.depthMask(false);
 		renderer.setClearColor(clearColor, clearAlpha);
 		this.mainScene.overrideMaterial = null;
 

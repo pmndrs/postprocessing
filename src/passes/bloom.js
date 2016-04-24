@@ -15,8 +15,9 @@ import THREE from "three";
  * by utilising the fast Kawase convolution approach.
  *
  * @class BloomPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
  * @param {Number} [options.blurriness=1.0] - The scale of the blur.
@@ -157,10 +158,14 @@ export class BloomPass extends Pass {
 
 	render(renderer, readBuffer) {
 
+		let ctx = renderer.context;
+
 		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
 		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		ctx.depthMask(true);
 		renderer.render(this.scene, this.camera, this.renderTargetX);
+		ctx.depthMask(false);
 
 		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;

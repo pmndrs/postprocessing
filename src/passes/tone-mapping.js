@@ -20,8 +20,9 @@ import THREE from "three";
  *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
  *
  * @class ToneMappingPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
  * @param {Number} [options.resolution=256] - The render texture resolution.
@@ -189,12 +190,16 @@ export class ToneMappingPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer, delta) {
 
+		let ctx = renderer.context;
+
 		if(this.adaptive) {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
 			this.quad.material = this.luminosityMaterial;
 			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			ctx.depthMask(true);
 			renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
+			ctx.depthMask(false);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 			this.quad.material = this.adaptiveLuminosityMaterial;

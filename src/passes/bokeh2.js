@@ -8,9 +8,9 @@ import THREE from "three";
  * This pass yields more realistic results but is also more demanding.
  *
  * @class Bokeh2Pass
- * @constructor
+ * @submodule passes
  * @extends Pass
- * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
+ * @constructor
  * @param {PerspectiveCamera} camera - The main camera. Used to adjust near and far plane and focal length settings.
  * @param {Object} [options] - Additional parameters.
  * @param {Number} [options.rings=3] - The amount of blur rings.
@@ -25,7 +25,7 @@ import THREE from "three";
 
 export class Bokeh2Pass extends Pass {
 
-	constructor(depthTexture, camera, options) {
+	constructor(camera, options) {
 
 		super();
 
@@ -40,8 +40,6 @@ export class Bokeh2Pass extends Pass {
 		 */
 
 		this.bokehMaterial = new Bokeh2Material(camera, options);
-
-		this.bokehMaterial.uniforms.tDepth.value = (depthTexture !== undefined) ? depthTexture : null;
 
 		this.quad.material = this.bokehMaterial;
 
@@ -59,6 +57,7 @@ export class Bokeh2Pass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
 		if(this.renderToScreen) {
 
