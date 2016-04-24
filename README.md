@@ -35,9 +35,9 @@ import { EffectComposer, RenderPass, GlitchPass } from "postprocessing";
 let composer = new EffectComposer(new WebGLRenderer());
 composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
 
-let glitchPass = new GlitchPass();
-glitchPass.renderToScreen = true;
-composer.addPass(glitchPass);
+let pass = new GlitchPass();
+pass.renderToScreen = true;
+composer.addPass(pass);
 
 let lastTime = performance.now();
 
