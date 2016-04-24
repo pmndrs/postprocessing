@@ -11,7 +11,11 @@ module.exports = {
 			function WebGLRendererMockup() {
 
 				this.getSize = function() { return {width: 1, height: 1}; };
-				this.context = {getContextAttributes: function() { return {alpha: 0}; }};
+
+				this.context = {
+					getContextAttributes: function() { return {alpha: 0}; },
+					depthMask: function() {}
+				};
 
 			}
 
