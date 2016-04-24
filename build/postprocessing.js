@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.0.7 build Apr 05 2016
+ * postprocessing v1.1.0 build Apr 25 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -20,8 +20,9 @@
 	 * An adaptive luminosity shader material.
 	 *
 	 * @class AdaptiveLuminosityMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 */
 
 	class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
@@ -29,6 +30,8 @@
 		constructor() {
 
 			super({
+
+				type: "AdaptiveLuminosityMaterial",
 
 				defines: {
 
@@ -54,7 +57,7 @@
 
 	}
 
-	var fragment$1 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform float focus;\r\nuniform float aspect;\r\nuniform float aperture;\r\nuniform float maxBlur;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(1.0, aspect);\r\n\r\n\tfloat depth = texture2D(tDepth, vUv).r;\r\n\r\n\tfloat factor = depth - focus;\r\n\r\n\tvec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));\r\n\r\n\tvec2 dofblur9 = dofBlur * 0.9;\r\n\tvec2 dofblur7 = dofBlur * 0.7;\r\n\tvec2 dofblur4 = dofBlur * 0.4;\r\n\r\n\tvec4 color = vec4(0.0);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur7);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur4);\r\n\r\n\tgl_FragColor = color / 41.0;\r\n\r\n}\r\n";
+	var fragment$1 = "#include <packing>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nuniform float focus;\r\nuniform float aspect;\r\nuniform float aperture;\r\nuniform float maxBlur;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat readDepth(sampler2D depthSampler, vec2 coord) {\r\n\r\n\tfloat fragCoordZ = texture2D(depthSampler, coord).x;\r\n\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\treturn viewZToOrthoDepth(viewZ, cameraNear, cameraFar);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(1.0, aspect);\r\n\r\n\tfloat depth = readDepth(tDepth, vUv);\r\n\r\n\tfloat factor = depth - focus;\r\n\r\n\tvec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));\r\n\r\n\tvec2 dofblur9 = dofBlur * 0.9;\r\n\tvec2 dofblur7 = dofBlur * 0.7;\r\n\tvec2 dofblur4 = dofBlur * 0.4;\r\n\r\n\tvec4 color = vec4(0.0);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur7);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur4);\r\n\r\n\tgl_FragColor = color / 41.0;\r\n\r\n}\r\n";
 
 	var vertex$1 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -65,8 +68,10 @@
 	 *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
 	 *
 	 * @class BokehMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
+	 * @param {PerspectiveCamera} [camera] - The main camera.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.focus=1.0] - Focus distance.
 	 * @param {Number} [options.aspect=1.0] - Camera aspect factor.
@@ -76,16 +81,21 @@
 
 	class BokehMaterial extends THREE.ShaderMaterial {
 
-		constructor(options) {
+		constructor(camera, options) {
 
 			if(options === undefined) { options = {}; }
 
 			super({
 
+				type: "BokehMaterial",
+
 				uniforms: {
 
 					tDiffuse: {type: "t", value: null},
 					tDepth: {type: "t", value: null},
+
+					cameraNear: {type: "f", value: 0.1},
+					cameraFar: {type: "f", value: 2000},
 
 					focus: {type: "f", value: (options.focus !== undefined) ? options.focus : 1.0},
 					aspect: {type: "f", value: (options.aspect !== undefined) ? options.aspect : 1.0},
@@ -99,11 +109,27 @@
 
 			});
 
+			if(camera !== undefined) { this.adoptCameraSettings(camera); }
+
+		}
+
+		/**
+		 * Adopts the near and far plane settings of the given camera.
+		 *
+		 * @method adoptCameraSettings
+		 * @param {PerspectiveCamera} camera - The main camera.
+		 */
+
+		adoptCameraSettings(camera) {
+
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
+
 		}
 
 	}
 
-	var fragment$2 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\n\r\nuniform float zNear;\r\nuniform float zFar;\r\n\r\nuniform float focalLength;\r\nuniform float fStop;\r\n\r\nuniform float maxBlur;\r\nuniform float luminanceThreshold;\r\nuniform float luminanceGain;\r\nuniform float bias;\r\nuniform float fringe;\r\nuniform float ditherStrength;\r\n\r\n#ifdef SHADER_FOCUS\r\n\r\n\tuniform vec2 focusCoords;\r\n\r\n#else\r\n\r\n\tuniform float focalDepth;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst float TWO_PI = 6.28318531;\r\nconst int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;\r\nconst float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.\r\n\r\n#ifdef MANUAL_DOF\r\n\r\n\tconst float nDoFStart = 1.0; \r\n\tconst float nDoFDist = 2.0;\r\n\tconst float fDoFStart = 1.0;\r\n\tconst float fDoFDist = 3.0;\r\n\r\n#endif\r\n\r\n#ifdef PENTAGON\r\n\r\n\tconst vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);\r\n\tconst vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);\r\n\tconst vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);\r\n\tconst vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);\r\n\tconst vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);\r\n\tconst vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);\r\n\r\n\tconst vec4 ONE = vec4(1.0);\r\n\r\n\tconst float P_FEATHER = 0.4;\r\n\tconst float N_FEATHER = -P_FEATHER;\r\n\r\n\tfloat penta(vec2 coords) {\r\n\r\n\t\tfloat inOrOut = -4.0;\r\n\r\n\t\tvec4 P = vec4(coords, vec2(RINGS_FLOAT - 1.3));\r\n\r\n\t\tvec4 dist = vec4(\r\n\t\t\tdot(P, HS0),\r\n\t\t\tdot(P, HS1),\r\n\t\t\tdot(P, HS2),\r\n\t\t\tdot(P, HS3)\r\n\t\t);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\r\n\t\tinOrOut += dot(dist, ONE);\r\n\r\n\t\tdist.x = dot(P, HS4);\r\n\t\tdist.y = HS5.w - abs(P.z);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\t\tinOrOut += dist.x;\r\n\r\n\t\treturn clamp(inOrOut, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef SHOW_FOCUS\r\n\r\n\tvec3 debugFocus(vec3 c, float blur, float depth) {\r\n\r\n\t\tfloat edge = 0.002 * depth;\r\n\t\tfloat m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);\r\n\t\tfloat e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);\r\n\r\n\t\tc = mix(c, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);\r\n\t\tc = mix(c, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);\r\n\r\n\t\treturn c;\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\tconst float VIGNETTE_OUT = 1.3;\r\n\tconst float VIGNETTE_IN = 0.0;\r\n\tconst float VIGNETTE_FADE = 22.0; \r\n\r\n\tfloat vignette() {\r\n\r\n\t\tfloat d = distance(vUv, CENTER);\r\n\t\td = smoothstep(VIGNETTE_OUT + (fStop / VIGNETTE_FADE), VIGNETTE_IN + (fStop / VIGNETTE_FADE), d);\r\n\r\n\t\treturn clamp(d, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\nvec2 rand(vec2 coord) {\r\n\r\n\tvec2 noise;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tnoise.x = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233))) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;\r\n\t\tnoise.y = clamp(fract(sin(dot(coord, vec2(12.9898, 78.233) * 2.0)) * 43758.5453), 0.0, 1.0) * 2.0 - 1.0;\r\n\r\n\t#else\r\n\r\n\t\tnoise.x = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.25) + (fract(coord.t * halfTexelSize.y) * 0.75)) * 2.0 - 1.0;\r\n\t\tnoise.y = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.75) + (fract(coord.t * halfTexelSize.y) * 0.25)) * 2.0 - 1.0;\r\n\r\n\t#endif\r\n\r\n\treturn noise;\r\n\r\n}\r\n\r\nconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\nvec3 processTexel(vec2 coords, float blur) {\r\n\r\n\tvec3 c;\r\n\tc.r = texture2D(tDiffuse, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r;\r\n\tc.g = texture2D(tDiffuse, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g;\r\n\tc.b = texture2D(tDiffuse, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b;\r\n\r\n\t// Calculate the luminance of the constructed colour.\r\n\tfloat luminance = dot(c.rgb, LUM_COEFF);\r\n\tfloat threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);\r\n\r\n\treturn c + mix(vec3(0.0), c, threshold * blur);\r\n\r\n}\r\n\r\nfloat linearize(float depth) {\r\n\r\n\treturn -zFar * zNear / (depth * (zFar - zNear) - zFar);\r\n\r\n}\r\n\r\nfloat gather(float i, float j, float ringSamples, inout vec3 color, float w, float h, float blur) {\r\n\r\n\tfloat step = TWO_PI / ringSamples;\r\n\tfloat pw = cos(j * step) * i;\r\n\tfloat ph = sin(j * step) * i;\r\n\r\n\t#ifdef PENTAGON\r\n\r\n\t\tfloat p = penta(vec2(pw, ph));\r\n\r\n\t#else\r\n\r\n\t\tfloat p = 1.0;\r\n\r\n\t#endif\r\n\r\n\tcolor += processTexel(vUv + vec2(pw * w, ph * h), blur) * mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n\treturn mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tfloat depth = linearize(texture2D(tDepth, vUv).r);\r\n\r\n\t#ifdef SHADER_FOCUS\r\n\r\n\t\tfloat fDepth = linearize(texture2D(tDepth, focusCoords).r);\r\n\r\n\t#else\r\n\r\n\t\tfloat fDepth = focalDepth;\r\n\r\n\t#endif\r\n\r\n\t#ifdef MANUAL_DOF\r\n\r\n\t\tfloat focalPlane = depth - fDepth;\r\n\t\tfloat farDoF = (focalPlane - fDoFStart) / fDoFDist;\r\n\t\tfloat nearDoF = (-focalPlane - nDoFStart) / nDoFDist;\r\n\r\n\t\tfloat blur = (focalPlane > 0.0) ? farDoF : nearDoF;\r\n\r\n\t#else\r\n\r\n\t\tfloat focalPlaneMM = fDepth * 1000.0;\r\n\t\tfloat depthMM = depth * 1000.0;\r\n\r\n\t\tfloat focalPlane = (depthMM * focalLength) / (depthMM - focalLength);\r\n\t\tfloat farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);\r\n\t\tfloat nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * fStop * CIRCLE_OF_CONFUSION);\r\n\r\n\t\tfloat blur = abs(focalPlane - farDoF) * nearDoF;\r\n\r\n\t#endif\r\n\r\n\tblur = clamp(blur, 0.0, 1.0);\r\n\r\n\t// Dithering.\r\n\tvec2 noise = rand(vUv) * ditherStrength * blur;\r\n\r\n\tfloat blurFactorX = texelSize.x * blur * maxBlur + noise.x;\r\n\tfloat blurFactorY = texelSize.y * blur * maxBlur + noise.y;\r\n\r\n\t// Calculation of final color.\r\n\tvec4 color;\r\n\r\n\tif(blur < 0.05) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t\tfloat s = 1.0;\r\n\t\tint ringSamples;\r\n\r\n\t\tfor(int i = 1; i <= RINGS_INT; ++i) {\r\n\r\n\t\t\tringSamples = i * SAMPLES_INT;\r\n\r\n\t\t\t// Constant loop.\r\n\t\t\tfor(int j = 0; j < MAX_RING_SAMPLES; ++j) {\r\n\r\n\t\t\t\t// Break earlier.\r\n\t\t\t\tif(j >= ringSamples) { break; }\r\n\r\n\t\t\t\ts += gather(float(i), float(j), float(ringSamples), color.rgb, blurFactorX, blurFactorY, blur);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tcolor.rgb /= s; // Divide by sample count.\r\n\r\n\t}\r\n\r\n\t#ifdef SHOW_FOCUS\r\n\r\n\t\tcolor.rgb = debugFocus(color.rgb, blur, depth);\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tcolor.rgb *= vignette();\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+	var fragment$2 = "#include <packing>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nuniform float focalLength;\r\nuniform float fStop;\r\n\r\nuniform float maxBlur;\r\nuniform float luminanceThreshold;\r\nuniform float luminanceGain;\r\nuniform float bias;\r\nuniform float fringe;\r\nuniform float ditherStrength;\r\n\r\n#ifdef SHADER_FOCUS\r\n\r\n\tuniform vec2 focusCoords;\r\n\r\n#else\r\n\r\n\tuniform float focalDepth;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef PENTAGON\r\n\r\n\tfloat penta(vec2 coords) {\r\n\r\n\t\tconst vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);\r\n\t\tconst vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);\r\n\r\n\t\tconst vec4 ONE = vec4(1.0);\r\n\r\n\t\tconst float P_FEATHER = 0.4;\r\n\t\tconst float N_FEATHER = -P_FEATHER;\r\n\r\n\t\tfloat inOrOut = -4.0;\r\n\r\n\t\tvec4 P = vec4(coords, vec2(RINGS_FLOAT - 1.3));\r\n\r\n\t\tvec4 dist = vec4(\r\n\t\t\tdot(P, HS0),\r\n\t\t\tdot(P, HS1),\r\n\t\t\tdot(P, HS2),\r\n\t\t\tdot(P, HS3)\r\n\t\t);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\r\n\t\tinOrOut += dot(dist, ONE);\r\n\r\n\t\tdist.x = dot(P, HS4);\r\n\t\tdist.y = HS5.w - abs(P.z);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\t\tinOrOut += dist.x;\r\n\r\n\t\treturn clamp(inOrOut, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef SHOW_FOCUS\r\n\r\n\tvec3 debugFocus(vec3 c, float blur, float depth) {\r\n\r\n\t\tfloat edge = 0.002 * depth;\r\n\t\tfloat m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);\r\n\t\tfloat e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);\r\n\r\n\t\tc = mix(c, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);\r\n\t\tc = mix(c, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);\r\n\r\n\t\treturn c;\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tfloat vignette() {\r\n\r\n\t\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\t\tconst float VIGNETTE_OUT = 1.3;\r\n\t\tconst float VIGNETTE_IN = 0.0;\r\n\t\tconst float VIGNETTE_FADE = 22.0; \r\n\r\n\t\tfloat d = distance(vUv, CENTER);\r\n\t\td = smoothstep(VIGNETTE_OUT + (fStop / VIGNETTE_FADE), VIGNETTE_IN + (fStop / VIGNETTE_FADE), d);\r\n\r\n\t\treturn clamp(d, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\nvec2 rand(vec2 coord) {\r\n\r\n\tvec2 noise;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tconst float a = 12.9898;\r\n\t\tconst float b = 78.233;\r\n\t\tconst float c = 43758.5453;\r\n\r\n\t\tnoise.x = clamp(fract(sin(mod(dot(coord, vec2(a, b)), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;\r\n\t\tnoise.y = clamp(fract(sin(mod(dot(coord, vec2(a, b) * 2.0), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;\r\n\r\n\t#else\r\n\r\n\t\tnoise.x = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.25) + (fract(coord.t * halfTexelSize.y) * 0.75)) * 2.0 - 1.0;\r\n\t\tnoise.y = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.75) + (fract(coord.t * halfTexelSize.y) * 0.25)) * 2.0 - 1.0;\r\n\r\n\t#endif\r\n\r\n\treturn noise;\r\n\r\n}\r\n\r\nvec3 processTexel(vec2 coords, float blur) {\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n\tvec3 c;\r\n\tc.r = texture2D(tDiffuse, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r;\r\n\tc.g = texture2D(tDiffuse, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g;\r\n\tc.b = texture2D(tDiffuse, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b;\r\n\r\n\t// Calculate the luminance of the constructed colour.\r\n\tfloat luminance = dot(c.rgb, LUM_COEFF);\r\n\tfloat threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);\r\n\r\n\treturn c + mix(vec3(0.0), c, threshold * blur);\r\n\r\n}\r\n\r\nfloat readDepth(sampler2D depthSampler, vec2 coord) {\r\n\r\n\tfloat fragCoordZ = texture2D(depthSampler, coord).x;\r\n\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\treturn viewZToOrthoDepth(viewZ, cameraNear, cameraFar);\r\n\r\n}\r\n\r\nfloat linearize(float depth) {\r\n\r\n\treturn -cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar);\r\n\r\n}\r\n\r\nfloat gather(float i, float j, float ringSamples, inout vec3 color, float w, float h, float blur) {\r\n\r\n\tconst float TWO_PI = 6.28318531;\r\n\r\n\tfloat step = TWO_PI / ringSamples;\r\n\tfloat pw = cos(j * step) * i;\r\n\tfloat ph = sin(j * step) * i;\r\n\r\n\t#ifdef PENTAGON\r\n\r\n\t\tfloat p = penta(vec2(pw, ph));\r\n\r\n\t#else\r\n\r\n\t\tfloat p = 1.0;\r\n\r\n\t#endif\r\n\r\n\tcolor += processTexel(vUv + vec2(pw * w, ph * h), blur) * mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n\treturn mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tfloat depth = linearize(readDepth(tDepth, vUv));\r\n\r\n\t#ifdef SHADER_FOCUS\r\n\r\n\t\tfloat fDepth = linearize(readDepth(tDepth, focusCoords));\r\n\r\n\t#else\r\n\r\n\t\tfloat fDepth = focalDepth;\r\n\r\n\t#endif\r\n\r\n\t#ifdef MANUAL_DOF\r\n\r\n\t\tconst float nDoFStart = 1.0; \r\n\t\tconst float nDoFDist = 2.0;\r\n\t\tconst float fDoFStart = 1.0;\r\n\t\tconst float fDoFDist = 3.0;\r\n\r\n\t\tfloat focalPlane = depth - fDepth;\r\n\t\tfloat farDoF = (focalPlane - fDoFStart) / fDoFDist;\r\n\t\tfloat nearDoF = (-focalPlane - nDoFStart) / nDoFDist;\r\n\r\n\t\tfloat blur = (focalPlane > 0.0) ? farDoF : nearDoF;\r\n\r\n\t#else\r\n\r\n\t\tconst float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.\r\n\r\n\t\tfloat focalPlaneMM = fDepth * 1000.0;\r\n\t\tfloat depthMM = depth * 1000.0;\r\n\r\n\t\tfloat focalPlane = (depthMM * focalLength) / (depthMM - focalLength);\r\n\t\tfloat farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);\r\n\t\tfloat nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * fStop * CIRCLE_OF_CONFUSION);\r\n\r\n\t\tfloat blur = abs(focalPlane - farDoF) * nearDoF;\r\n\r\n\t#endif\r\n\r\n\tblur = clamp(blur, 0.0, 1.0);\r\n\r\n\t// Dithering.\r\n\tvec2 noise = rand(vUv) * ditherStrength * blur;\r\n\r\n\tfloat blurFactorX = texelSize.x * blur * maxBlur + noise.x;\r\n\tfloat blurFactorY = texelSize.y * blur * maxBlur + noise.y;\r\n\r\n\tconst int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;\r\n\r\n\t// Calculation of final color.\r\n\tvec4 color;\r\n\r\n\tif(blur < 0.05) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t\tfloat s = 1.0;\r\n\t\tint ringSamples;\r\n\r\n\t\tfor(int i = 1; i <= RINGS_INT; ++i) {\r\n\r\n\t\t\tringSamples = i * SAMPLES_INT;\r\n\r\n\t\t\t// Constant loop.\r\n\t\t\tfor(int j = 0; j < MAX_RING_SAMPLES; ++j) {\r\n\r\n\t\t\t\t// Break earlier.\r\n\t\t\t\tif(j >= ringSamples) { break; }\r\n\r\n\t\t\t\ts += gather(float(i), float(j), float(ringSamples), color.rgb, blurFactorX, blurFactorY, blur);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tcolor.rgb /= s; // Divide by sample count.\r\n\r\n\t}\r\n\r\n\t#ifdef SHOW_FOCUS\r\n\r\n\t\tcolor.rgb = debugFocus(color.rgb, blur, depth);\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tcolor.rgb *= vignette();\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
 
 	var vertex$2 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -114,8 +140,9 @@
 	 *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
 	 *
 	 * @class Bokeh2Material
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {PerspectiveCamera} [camera] - The main camera.
 	 * @param {Object} [options] - Additional options.
 	 * @param {Vector2} [options.texelSize] - The absolute screen texel size.
@@ -133,7 +160,7 @@
 
 			if(options === undefined) { options = {}; }
 			if(options.rings === undefined) { options.rings = 3; }
-			if(options.samples === undefined) { options.samples = 4; }
+			if(options.samples === undefined) { options.samples = 2; }
 			if(options.showFocus === undefined) { options.showFocus = false; }
 			if(options.showFocus === undefined) { options.showFocus = false; }
 			if(options.manualDoF === undefined) { options.manualDoF = false; }
@@ -143,6 +170,8 @@
 			if(options.noise === undefined) { options.noise = true; }
 
 			super({
+
+				type: "Bokeh2Material",
 
 				defines: {
 
@@ -161,8 +190,8 @@
 					texelSize: {type: "v2", value: new THREE.Vector2()},
 					halfTexelSize: {type: "v2", value: new THREE.Vector2()},
 
-					zNear: {type: "f", value: 0.1},
-					zFar: {type: "f", value: 2000},
+					cameraNear: {type: "f", value: 0.1},
+					cameraFar: {type: "f", value: 2000},
 
 					focalLength: {type: "f", value: 24.0},
 					fStop: {type: "f", value: 0.9},
@@ -212,7 +241,7 @@
 		}
 
 		/**
-		 * Sets the near and far plane and the focal length.
+		 * Adopts the near and far plane and the focal length of the given camera.
 		 *
 		 * @method adoptCameraSettings
 		 * @param {PerspectiveCamera} camera - The main camera.
@@ -220,9 +249,9 @@
 
 		adoptCameraSettings(camera) {
 
-			this.uniforms.zNear.value = camera.near;
-			this.uniforms.zFar.value = camera.far;
-			this.uniforms.focalLength.value = camera.focalLength; // unit: mm.
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.focalLength.value = camera.getFocalLength(); // unit: mm.
 
 		}
 
@@ -236,8 +265,9 @@
 	 * A material for combining two textures.
 	 *
 	 * @class CombineMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Boolean} [invertTexture1=false] - Invert the first texture's rgb values.
 	 * @param {Boolean} [invertTexture2=false] - Invert the second texture's rgb values.
 	 */
@@ -247,6 +277,8 @@
 		constructor(invertTexture1, invertTexture2) {
 
 			super({
+
+				type: "CombineMaterial",
 
 				uniforms: {
 
@@ -288,8 +320,9 @@
 	 *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
 	 *
 	 * @class ConvolutionMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
 
@@ -298,6 +331,8 @@
 		constructor(texelSize) {
 
 			super({
+
+				type: "ConvolutionMaterial",
 
 				uniforms: {
 
@@ -387,8 +422,9 @@
 	 * A simple copy shader material.
 	 *
 	 * @class CopyMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 */
 
 	class CopyMaterial extends THREE.ShaderMaterial {
@@ -396,6 +432,8 @@
 		constructor() {
 
 			super({
+
+				type: "CopyMaterial",
 
 				uniforms: {
 
@@ -421,8 +459,9 @@
 	 * A dot screen shader material.
 	 *
 	 * @class DotScreenMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Boolean} [average] - Whether the shader should output the colour average (black and white).
 	 */
 
@@ -431,6 +470,8 @@
 		constructor(average) {
 
 			super({
+
+				type: "DotScreenMaterial",
 
 				uniforms: {
 
@@ -455,7 +496,7 @@
 
 	}
 
-	var fragment$7 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n\tconst vec2 CENTER = vec2(0.5);\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tcolor += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tcolor += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - CENTER) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, CENTER);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
+	var fragment$7 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tcolor += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tcolor += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - CENTER) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, CENTER);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
 
 	var vertex$7 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -481,8 +522,9 @@
 	 *  http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js
 	 *
 	 * @class FilmMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.
 	 * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
@@ -505,6 +547,8 @@
 			if(options === undefined) { options = {}; }
 
 			super({
+
+				type: "FilmMaterial",
 
 				uniforms: {
 
@@ -541,7 +585,7 @@
 
 	}
 
-	var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tPerturb;\r\n\r\nuniform bool active;\r\n\r\nuniform float amount;\r\nuniform float angle;\r\nuniform float seed;\r\nuniform float seedX;\r\nuniform float seedY;\r\nuniform float distortionX;\r\nuniform float distortionY;\r\nuniform float colS;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat rand(vec2 co) {\r\n\r\n\treturn fract(sin(dot(co.xy, vec2(12.9898, 78.233))) * 43758.5453);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\tfloat xs, ys;\r\n\tvec4 normal;\r\n\r\n\tvec2 offset;\r\n\tvec4 cr, cga, cb;\r\n\tvec4 snow, color;\r\n\r\n\tfloat sx, sy;\r\n\r\n\tif(active) {\r\n\r\n\t\txs = floor(gl_FragCoord.x / 0.5);\r\n\t\tys = floor(gl_FragCoord.y / 0.5);\r\n\r\n\t\tnormal = texture2D(tPerturb, coord * seed * seed);\r\n\r\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\r\n\r\n\t\t\tsx = clamp(ceil(seedX), 0.0, 1.0);\r\n\t\t\tcoord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;\r\n\r\n\t\t}\r\n\r\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\r\n\r\n\t\t\tsy = clamp(ceil(seedY), 0.0, 1.0);\r\n\t\t\tcoord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));\r\n\r\n\t\t}\r\n\r\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\r\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\r\n\r\n\t\toffset = amount * vec2(cos(angle), sin(angle));\r\n\r\n\t\tcr = texture2D(tDiffuse, coord + offset);\r\n\t\tcga = texture2D(tDiffuse, coord);\r\n\t\tcb = texture2D(tDiffuse, coord - offset);\r\n\r\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\r\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);\r\n\t\tcolor += snow;\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+	var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tPerturb;\r\n\r\nuniform bool active;\r\n\r\nuniform float amount;\r\nuniform float angle;\r\nuniform float seed;\r\nuniform float seedX;\r\nuniform float seedY;\r\nuniform float distortionX;\r\nuniform float distortionY;\r\nuniform float colS;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat rand(vec2 tc) {\r\n\r\n\tconst float a = 12.9898;\r\n\tconst float b = 78.233;\r\n\tconst float c = 43758.5453;\r\n\r\n\tfloat dt = dot(tc, vec2(a, b));\r\n\tfloat sn = mod(dt, 3.14);\r\n\r\n\treturn fract(sin(sn) * c);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\tfloat xs, ys;\r\n\tvec4 normal;\r\n\r\n\tvec2 offset;\r\n\tvec4 cr, cga, cb;\r\n\tvec4 snow, color;\r\n\r\n\tfloat sx, sy;\r\n\r\n\tif(active) {\r\n\r\n\t\txs = floor(gl_FragCoord.x / 0.5);\r\n\t\tys = floor(gl_FragCoord.y / 0.5);\r\n\r\n\t\tnormal = texture2D(tPerturb, coord * seed * seed);\r\n\r\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\r\n\r\n\t\t\tsx = clamp(ceil(seedX), 0.0, 1.0);\r\n\t\t\tcoord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;\r\n\r\n\t\t}\r\n\r\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\r\n\r\n\t\t\tsy = clamp(ceil(seedY), 0.0, 1.0);\r\n\t\t\tcoord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));\r\n\r\n\t\t}\r\n\r\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\r\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\r\n\r\n\t\toffset = amount * vec2(cos(angle), sin(angle));\r\n\r\n\t\tcr = texture2D(tDiffuse, coord + offset);\r\n\t\tcga = texture2D(tDiffuse, coord);\r\n\t\tcb = texture2D(tDiffuse, coord - offset);\r\n\r\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\r\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);\r\n\t\tcolor += snow;\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
 
 	var vertex$8 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -550,8 +594,9 @@
 	 * Based on https://github.com/staffantan/unityglitch
 	 *
 	 * @class GlitchMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 */
 
 	class GlitchMaterial extends THREE.ShaderMaterial {
@@ -559,6 +604,8 @@
 		constructor() {
 
 			super({
+
+				type: "GlitchMaterial",
 
 				uniforms: {
 
@@ -605,8 +652,9 @@
 	 *  http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html
 	 *
 	 * @class GodRaysMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 */
 
 	class GodRaysMaterial extends THREE.ShaderMaterial {
@@ -614,6 +662,8 @@
 		constructor() {
 
 			super({
+
+				type: "GodRaysMaterial",
 
 				defines: {
 
@@ -644,7 +694,7 @@
 
 	}
 
-	var fragment$10 = "uniform sampler2D tDiffuse;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tfloat v = dot(texel, LUM_COEFF);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, v);\r\n\t\tfloat high = step(v, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tv *= low * high;\r\n\r\n\t#endif\r\n\r\n\tv = pow(v, distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * v, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(v, v, v, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n";
+	var fragment$10 = "uniform sampler2D tDiffuse;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tconst vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tfloat v = dot(texel, LUM_COEFF);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, v);\r\n\t\tfloat high = step(v, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tv *= low * high;\r\n\r\n\t#endif\r\n\r\n\tv = pow(abs(v), distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * v, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(v, v, v, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n";
 
 	var vertex$10 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -662,8 +712,9 @@
 	 *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
 	 *
 	 * @class LuminosityMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
 	 * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
 	 */
@@ -673,6 +724,8 @@
 		constructor(color, range) {
 
 			super({
+
+				type: "LuminosityMaterial",
 
 				uniforms: {
 
@@ -704,8 +757,9 @@
 	 * This material is used to render the final antialiasing.
 	 *
 	 * @class SMAABlendMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
 
@@ -714,6 +768,8 @@
 		constructor(texelSize) {
 
 			super({
+
+				type: "SMAABlendMaterial",
 
 				uniforms: {
 
@@ -742,8 +798,9 @@
 	 * This material detects edges in a color texture.
 	 *
 	 * @class SMAAColorEdgesMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
 
@@ -752,6 +809,8 @@
 		constructor(texelSize) {
 
 			super({
+
+				type: "SMAAColorEdgesMaterial",
 
 				defines: {
 
@@ -789,8 +848,9 @@
 	 * This material computes weights for detected edges.
 	 *
 	 * @class SMAAWeightsMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
 
@@ -799,6 +859,8 @@
 		constructor(texelSize) {
 
 			super({
+
+				type: "SMAAWeightsMaterial",
 
 				defines: {
 
@@ -857,8 +919,9 @@
 	 * http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
 	 *
 	 * @class ToneMappingMaterial
-	 * @constructor
+	 * @submodule materials
 	 * @extends ShaderMaterial
+	 * @constructor
 	 */
 
 	class ToneMappingMaterial extends THREE.ShaderMaterial {
@@ -866,6 +929,8 @@
 		constructor() {
 
 			super({
+
+				type: "ToneMappingMaterial",
 
 				uniforms: {
 
@@ -899,6 +964,7 @@
 	 * inside deeper structures such as arrays or objects.
 	 *
 	 * @class Pass
+	 * @submodule passes
 	 * @constructor
 	 * @param {Scene} [scene] - The scene to render.
 	 * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
@@ -1092,8 +1158,9 @@
 	 * by utilising the fast Kawase convolution approach.
 	 *
 	 * @class BloomPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
 	 * @param {Number} [options.blurriness=1.0] - The scale of the blur.
@@ -1234,10 +1301,14 @@
 
 		render(renderer, readBuffer) {
 
+			let ctx = renderer.context;
+
 			// Luminance filter.
 			this.quad.material = this.luminosityMaterial;
 			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			ctx.depthMask(true);
 			renderer.render(this.scene, this.camera, this.renderTargetX);
+			ctx.depthMask(false);
 
 			// Convolution phase.
 			this.quad.material = this.convolutionMaterial;
@@ -1333,9 +1404,10 @@
 	 * Depth of Field pass using a bokeh shader.
 	 *
 	 * @class BokehPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
-	 * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
+	 * @constructor
+	 * @param {PerspectiveCamera} camera - The main camera. Used to adjust the near and far plane settings.
 	 * @param {Object} [options] - Additional parameters.
 	 * @param {Number} [options.focus=1.0] - Focus distance.
 	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
@@ -1344,7 +1416,7 @@
 
 	class BokehPass extends Pass {
 
-		constructor(depthTexture, options) {
+		constructor(camera, options) {
 
 			super();
 
@@ -1360,9 +1432,7 @@
 			 * @private
 			 */
 
-			this.bokehMaterial = new BokehMaterial(options);
-
-			this.bokehMaterial.uniforms.tDepth.value = (depthTexture !== undefined) ? depthTexture : null;
+			this.bokehMaterial = new BokehMaterial(camera, options);
 
 			this.quad.material = this.bokehMaterial;
 
@@ -1380,6 +1450,7 @@
 		render(renderer, readBuffer, writeBuffer) {
 
 			this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
 			if(this.renderToScreen) {
 
@@ -1430,9 +1501,9 @@
 	 * This pass yields more realistic results but is also more demanding.
 	 *
 	 * @class Bokeh2Pass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
-	 * @param {Texture} depthTexture - A render texture that contains the depth of the scene.
+	 * @constructor
 	 * @param {PerspectiveCamera} camera - The main camera. Used to adjust near and far plane and focal length settings.
 	 * @param {Object} [options] - Additional parameters.
 	 * @param {Number} [options.rings=3] - The amount of blur rings.
@@ -1447,7 +1518,7 @@
 
 	class Bokeh2Pass extends Pass {
 
-		constructor(depthTexture, camera, options) {
+		constructor(camera, options) {
 
 			super();
 
@@ -1462,8 +1533,6 @@
 			 */
 
 			this.bokehMaterial = new Bokeh2Material(camera, options);
-
-			this.bokehMaterial.uniforms.tDepth.value = (depthTexture !== undefined) ? depthTexture : null;
 
 			this.quad.material = this.bokehMaterial;
 
@@ -1481,6 +1550,7 @@
 		render(renderer, readBuffer, writeBuffer) {
 
 			this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
 			if(this.renderToScreen) {
 
@@ -1529,8 +1599,9 @@
 	 * A clear mask pass.
 	 *
 	 * @class ClearMaskPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 */
 
 	class ClearMaskPass extends Pass {
@@ -1560,8 +1631,9 @@
 	 * A render pass.
 	 *
 	 * @class DotScreenPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.angle=1.57] - The angle of the pattern.
 	 * @param {Number} [options.scale=1.0] - The scale of the overall effect.
@@ -1660,8 +1732,9 @@
 	 * A film pass providing various cinematic effects.
 	 *
 	 * @class FilmPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.
 	 * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
@@ -1776,8 +1849,9 @@
 	 * A glitch pass.
 	 *
 	 * @class GlitchPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Texture} [options.perturbMap] - A perturbation map.
 	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
@@ -2004,8 +2078,9 @@
 	 * A crepuscular rays pass.
 	 *
 	 * @class GodRaysPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Vector3} lightSource - The main light source.
@@ -2258,7 +2333,7 @@
 		 * Mask Phase:
 		 *  The scene is rendered using a mask material.
 		 *
-		 * Prelminiary Blur Phase:
+		 * Preliminary Blur Phase:
 		 *  The masked scene is blurred five consecutive times.
 		 *
 		 * God Rays Phase:
@@ -2275,6 +2350,7 @@
 		render(renderer, readBuffer) {
 
 			let clearAlpha;
+			let ctx = renderer.context;
 
 			// Compute the screen light position and translate the coordinates to [0, 1].
 			this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
@@ -2286,7 +2362,9 @@
 			clearColor.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
 			renderer.setClearColor(0x000000, 1);
+			ctx.depthMask(true);
 			renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
+			ctx.depthMask(false);
 			renderer.setClearColor(clearColor, clearAlpha);
 			this.mainScene.overrideMaterial = null;
 
@@ -2391,8 +2469,9 @@
 	 * A mask pass.
 	 *
 	 * @class MaskPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 */
@@ -2485,13 +2564,12 @@
 	 * texture which may be used by other passes.
 	 *
 	 * @class RenderPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - Additional options.
-	 * @param {Boolean} [options.depth=false] - Indicates whether this pass should also render a scene depth texture.
-	 * @param {Boolean} [options.depthResolutionScale=0.5] - The resolution scale of the depth texture, relative to the main render size.
 	 * @param {Material} [options.overrideMaterial] - An override material for the scene.
 	 * @param {Color} [options.clearColor] - An override clear color.
 	 * @param {Number} [options.clearAlpha] - An override clear alpha.
@@ -2504,63 +2582,6 @@
 			super(scene, camera, null);
 
 			if(options === undefined) { options = {}; }
-
-			/**
-			 * Depth render flag.
-			 *
-			 * @property depth
-			 * @type Boolean
-			 * @default false
-			 */
-
-			this.depth = (options.depth !== undefined) ? options.depth : false;
-
-			/**
-			 * The depth render target.
-			 *
-			 * @property renderTargetDepth
-			 * @type WebGLRenderTarget
-			 * @private
-			 */
-
-			this.renderTargetDepth = !this.depth ? null : new THREE.WebGLRenderTarget(1, 1, {
-				minFilter: THREE.LinearFilter,
-				magFilter: THREE.LinearFilter,
-				generateMipmaps: false
-			});
-
-			/**
-			 * The depth texture.
-			 *
-			 * @property depthTexture
-			 * @type Texture
-			 */
-
-			this.depthTexture = !this.depth ? null : this.renderTargetDepth.texture;
-
-			/**
-			 * A depth shader material.
-			 *
-			 * @property MeshDepthMaterial
-			 * @type Material
-			 * @private
-			 */
-
-			this.depthMaterial = !this.depth ? null : new THREE.MeshDepthMaterial();
-
-			/**
-			 * The resolution scale of the depth texture, relative to the main 
-			 * render size.
-			 *
-			 * You need to call the setSize method of the EffectComposer after 
-			 * changing this value.
-			 *
-			 * @property depthResolutionScale
-			 * @type Number
-			 * @default 0.5
-			 */
-
-			this.depthResolutionScale = (options.depthResolutionScale === undefined) ? 0.5 : options.depthResolutionScale;
 
 			/**
 			 * Override material.
@@ -2612,14 +2633,9 @@
 		render(renderer, readBuffer) {
 
 			let clearAlpha;
+			let ctx = renderer.context;
 
-			if(this.depth) {
-
-				this.scene.overrideMaterial = this.depthMaterial;
-				renderer.render(this.scene, this.camera, this.renderTargetDepth, true);
-				this.scene.overrideMaterial = null;
-
-			}
+			ctx.depthMask(true);
 
 			this.scene.overrideMaterial = this.overrideMaterial;
 
@@ -2649,56 +2665,7 @@
 
 			this.scene.overrideMaterial = null;
 
-		}
-
-		/**
-		 * Adjusts the format and size of the depth render target.
-		 *
-		 * @method initialise
-		 * @param {WebGLRenderer} renderer - The renderer.
-		 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-		 */
-
-		initialise(renderer, alpha) {
-
-			let size;
-
-			if(this.depth) {
-
-				size = renderer.getSize();
-				this.setSize(size.width, size.height);
-
-				if(!alpha) {
-
-					this.renderTargetDepth.texture.format = THREE.RGBFormat;
-
-				}
-
-			}
-
-		}
-
-		/**
-		 * Updates the depth render target with the renderer's size.
-		 *
-		 * @method setSize
-		 * @param {Number} width - The width.
-		 * @param {Number} height - The height.
-		 */
-
-		setSize(width, height) {
-
-			if(this.depth) {
-
-				width = Math.floor(width * this.depthResolutionScale);
-				height = Math.floor(height * this.depthResolutionScale);
-
-				if(width <= 0) { width = 1; }
-				if(height <= 0) { height = 1; }
-
-				this.renderTargetDepth.setSize(width, height);
-
-			}
+			ctx.depthMask(false);
 
 		}
 
@@ -2709,8 +2676,9 @@
 	 * pass (read buffer) to an arbitrary render target.
 	 *
 	 * @class SavePass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Scene} renderTarget - The render target to use for saving the read buffer.
 	 * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
 	 */
@@ -2801,8 +2769,9 @@
 	 *  https://github.com/iryoku/smaa/releases/tag/v2.8
 	 *
 	 * @class SMAAPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
 	 */
 
@@ -2983,8 +2952,9 @@
 	 * Used to render any shader material as a 2D filter.
 	 *
 	 * @class ShaderPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {ShaderMaterial} material - The shader material to use.
 	 * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
 	 */
@@ -3063,8 +3033,9 @@
 	 *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
 	 *
 	 * @class ToneMappingPass
-	 * @constructor
+	 * @submodule passes
 	 * @extends Pass
+	 * @constructor
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
 	 * @param {Number} [options.resolution=256] - The render texture resolution.
@@ -3232,12 +3203,16 @@
 
 		render(renderer, readBuffer, writeBuffer, delta) {
 
+			let ctx = renderer.context;
+
 			if(this.adaptive) {
 
 				// Render the luminance of the current scene into a render target with mipmapping enabled.
 				this.quad.material = this.luminosityMaterial;
 				this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+				ctx.depthMask(true);
 				renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
+				ctx.depthMask(false);
 
 				// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 				this.quad.material = this.adaptiveLuminosityMaterial;
@@ -3290,19 +3265,27 @@
 	 * The EffectComposer may be used in place of a normal WebGLRenderer.
 	 *
 	 * It will disable the auto clear behaviour of the provided renderer to prevent 
-	 * unnecessary clear operations.
+	 * unnecessary clear operations. The depth buffer will also be disabled for 
+	 * writing. Passes that rely on the depth test must explicitly enable it.
 	 *
-	 * You may want to use a RenderPass as your first pass to automatically clear 
-	 * the screen and render the scene to a texture for further processing. 
+	 * You may want to use a {{#crossLink "RenderPass"}}{{/crossLink}} as your first 
+	 * pass to automatically clear the screen and render the scene to a texture for 
+	 * further processing.
 	 *
 	 * @class EffectComposer
 	 * @constructor
+	 * @module postprocessing
 	 * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
+	 * @param {Boolean} [depthTexture=false] - Set to true, if one of your passes relies on the depth of the main scene.
+	 * @param {Boolean} [stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
 	 */
 
 	class EffectComposer {
 
-		constructor(renderer) {
+		constructor(renderer, depthTexture, stencilBuffer) {
+
+			if(depthTexture === undefined) { depthTexture = false; }
+			if(stencilBuffer === undefined) { stencilBuffer = false; }
 
 			/**
 			 * The renderer.
@@ -3314,6 +3297,7 @@
 			this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 
 			this.renderer.autoClear = false;
+			this.renderer.context.depthMask(false);
 
 			/**
 			 * The read buffer.
@@ -3326,7 +3310,9 @@
 			 * @private
 			 */
 
-			this.readBuffer = this.createBuffer();
+			this.readBuffer = this.createBuffer(stencilBuffer);
+
+			this.readBuffer.texture.generateMipmaps = false;
 
 			/**
 			 * The write buffer.
@@ -3338,8 +3324,14 @@
 
 			this.writeBuffer = this.readBuffer.clone();
 
+			if(depthTexture) {
+
+				this.readBuffer.depthTexture = this.writeBuffer.depthTexture = new THREE.DepthTexture();
+
+			}
+
 			/**
-			 * A copy pass used to copy masked scenes.
+			 * A copy pass used for copying masked scenes.
 			 *
 			 * @property copyPass
 			 * @type ShaderPass
@@ -3364,10 +3356,11 @@
 		 * Creates a new render target by replicating the renderer's canvas.
 		 *
 		 * @method createBuffer
+		 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 		 * @return {WebGLRenderTarget} A fresh render target that equals the renderer's canvas.
 		 */
 
-		createBuffer() {
+		createBuffer(stencilBuffer) {
 
 			let size = this.renderer.getSize();
 			let alpha = this.renderer.context.getContextAttributes().alpha;
@@ -3376,7 +3369,7 @@
 				minFilter: THREE.LinearFilter,
 				magFilter: THREE.LinearFilter,
 				format: alpha ? THREE.RGBAFormat : THREE.RGBFormat,
-				stencilBuffer: false
+				stencilBuffer: stencilBuffer
 			});
 
 		}
