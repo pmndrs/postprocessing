@@ -17,8 +17,9 @@ import vertex from "./glsl/shader.vert";
  *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
  *
  * @class ConvolutionMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
@@ -27,6 +28,8 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 	constructor(texelSize) {
 
 		super({
+
+			type: "ConvolutionMaterial",
 
 			uniforms: {
 

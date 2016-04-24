@@ -7,8 +7,9 @@ import THREE from "three";
  * pass (read buffer) to an arbitrary render target.
  *
  * @class SavePass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Scene} renderTarget - The render target to use for saving the read buffer.
  * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
  */

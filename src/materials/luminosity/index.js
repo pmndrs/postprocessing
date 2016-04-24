@@ -17,8 +17,9 @@ import vertex from "./glsl/shader.vert";
  *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
  *
  * @class LuminosityMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
  * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
  */
@@ -28,6 +29,8 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 	constructor(color, range) {
 
 		super({
+
+			type: "LuminosityMaterial",
 
 			uniforms: {
 

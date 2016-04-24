@@ -4,8 +4,9 @@ import { Pass } from "./pass";
  * A clear mask pass.
  *
  * @class ClearMaskPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  */
 
 export class ClearMaskPass extends Pass {

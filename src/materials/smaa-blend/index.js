@@ -9,8 +9,9 @@ import vertex from "./glsl/shader.vert";
  * This material is used to render the final antialiasing.
  *
  * @class SMAABlendMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
@@ -19,6 +20,8 @@ export class SMAABlendMaterial extends THREE.ShaderMaterial {
 	constructor(texelSize) {
 
 		super({
+
+			type: "SMAABlendMaterial",
 
 			uniforms: {
 

@@ -6,8 +6,9 @@ import THREE from "three";
  * A render pass.
  *
  * @class DotScreenPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.angle=1.57] - The angle of the pattern.
  * @param {Number} [options.scale=1.0] - The scale of the overall effect.

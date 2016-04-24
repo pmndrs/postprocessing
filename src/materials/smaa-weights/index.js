@@ -12,8 +12,9 @@ import vertex from "./glsl/shader.vert";
  * This material computes weights for detected edges.
  *
  * @class SMAAWeightsMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
@@ -22,6 +23,8 @@ export class SMAAWeightsMaterial extends THREE.ShaderMaterial {
 	constructor(texelSize) {
 
 		super({
+
+			type: "SMAAWeightsMaterial",
 
 			defines: {
 

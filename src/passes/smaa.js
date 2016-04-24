@@ -14,8 +14,9 @@ import THREE from "three";
  *  https://github.com/iryoku/smaa/releases/tag/v2.8
  *
  * @class SMAAPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
  */
 

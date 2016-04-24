@@ -8,8 +8,9 @@ import vertex from "./glsl/shader.vert";
  * Based on https://github.com/staffantan/unityglitch
  *
  * @class GlitchMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  */
 
 export class GlitchMaterial extends THREE.ShaderMaterial {
@@ -17,6 +18,8 @@ export class GlitchMaterial extends THREE.ShaderMaterial {
 	constructor() {
 
 		super({
+
+			type: "GlitchMaterial",
 
 			uniforms: {
 

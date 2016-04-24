@@ -7,8 +7,9 @@ import vertex from "./glsl/shader.vert";
  * A dot screen shader material.
  *
  * @class DotScreenMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Boolean} [average] - Whether the shader should output the colour average (black and white).
  */
 
@@ -17,6 +18,8 @@ export class DotScreenMaterial extends THREE.ShaderMaterial {
 	constructor(average) {
 
 		super({
+
+			type: "DotScreenMaterial",
 
 			uniforms: {
 

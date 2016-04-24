@@ -9,8 +9,9 @@ import vertex from "./glsl/shader.vert";
  * This material detects edges in a color texture.
  *
  * @class SMAAColorEdgesMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
@@ -19,6 +20,8 @@ export class SMAAColorEdgesMaterial extends THREE.ShaderMaterial {
 	constructor(texelSize) {
 
 		super({
+
+			type: "SMAAColorEdgesMaterial",
 
 			defines: {
 

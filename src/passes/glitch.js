@@ -6,8 +6,9 @@ import THREE from "three";
  * A glitch pass.
  *
  * @class GlitchPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Texture} [options.perturbMap] - A perturbation map.
  * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.

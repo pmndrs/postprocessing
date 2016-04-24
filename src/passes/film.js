@@ -6,8 +6,9 @@ import THREE from "three";
  * A film pass providing various cinematic effects.
  *
  * @class FilmPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.
  * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.

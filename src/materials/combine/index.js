@@ -7,8 +7,9 @@ import vertex from "./glsl/shader.vert";
  * A material for combining two textures.
  *
  * @class CombineMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Boolean} [invertTexture1=false] - Invert the first texture's rgb values.
  * @param {Boolean} [invertTexture2=false] - Invert the second texture's rgb values.
  */
@@ -18,6 +19,8 @@ export class CombineMaterial extends THREE.ShaderMaterial {
 	constructor(invertTexture1, invertTexture2) {
 
 		super({
+
+			type: "CombineMaterial",
 
 			uniforms: {
 

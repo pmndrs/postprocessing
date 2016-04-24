@@ -13,6 +13,7 @@ import THREE from "three";
  * inside deeper structures such as arrays or objects.
  *
  * @class Pass
+ * @submodule passes
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.

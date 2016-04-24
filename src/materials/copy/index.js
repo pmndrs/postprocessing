@@ -7,8 +7,9 @@ import vertex from "./glsl/shader.vert";
  * A simple copy shader material.
  *
  * @class CopyMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  */
 
 export class CopyMaterial extends THREE.ShaderMaterial {
@@ -16,6 +17,8 @@ export class CopyMaterial extends THREE.ShaderMaterial {
 	constructor() {
 
 		super({
+
+			type: "CopyMaterial",
 
 			uniforms: {
 

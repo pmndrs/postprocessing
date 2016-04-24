@@ -4,8 +4,9 @@ import { Pass } from "./pass";
  * A mask pass.
  *
  * @class MaskPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  */

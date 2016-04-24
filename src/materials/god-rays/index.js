@@ -17,8 +17,9 @@ import vertex from "./glsl/shader.vert";
  *  http://http.developer.nvidia.com/GPUGems3/gpugems3_ch13.html
  *
  * @class GodRaysMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  */
 
 export class GodRaysMaterial extends THREE.ShaderMaterial {
@@ -26,6 +27,8 @@ export class GodRaysMaterial extends THREE.ShaderMaterial {
 	constructor() {
 
 		super({
+
+			type: "GodRaysMaterial",
 
 			defines: {
 

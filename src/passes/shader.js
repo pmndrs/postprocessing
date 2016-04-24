@@ -7,8 +7,9 @@ import THREE from "three";
  * Used to render any shader material as a 2D filter.
  *
  * @class ShaderPass
- * @constructor
+ * @submodule passes
  * @extends Pass
+ * @constructor
  * @param {ShaderMaterial} material - The shader material to use.
  * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
  */

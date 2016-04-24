@@ -8,8 +8,9 @@ import vertex from "./glsl/shader.vert";
  * http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
  *
  * @class ToneMappingMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  */
 
 export class ToneMappingMaterial extends THREE.ShaderMaterial {
@@ -17,6 +18,8 @@ export class ToneMappingMaterial extends THREE.ShaderMaterial {
 	constructor() {
 
 		super({
+
+			type: "ToneMappingMaterial",
 
 			uniforms: {
 

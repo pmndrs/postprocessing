@@ -7,8 +7,9 @@ import vertex from "./glsl/shader.vert";
  * An adaptive luminosity shader material.
  *
  * @class AdaptiveLuminosityMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  */
 
 export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
@@ -16,6 +17,8 @@ export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
 	constructor() {
 
 		super({
+
+			type: "AdaptiveLuminosityMaterial",
 
 			defines: {
 

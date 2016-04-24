@@ -25,8 +25,9 @@ import vertex from "./glsl/shader.vert";
  *  http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js
  *
  * @class FilmMaterial
- * @constructor
+ * @submodule materials
  * @extends ShaderMaterial
+ * @constructor
  * @param {Object} [options] - The options.
  * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.
  * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
@@ -49,6 +50,8 @@ export class FilmMaterial extends THREE.ShaderMaterial {
 		if(options === undefined) { options = {}; }
 
 		super({
+
+			type: "FilmMaterial",
 
 			uniforms: {
 
