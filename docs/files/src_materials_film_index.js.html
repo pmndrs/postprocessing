@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -170,18 +170,18 @@ export class FilmMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: &quot;t&quot;, value: null},
-				time: {type: &quot;f&quot;, value: 0.0},
+				tDiffuse: {value: null},
+				time: {value: 0.0},
 
-				noiseIntensity: {type: &quot;f&quot;, value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
-				scanlineIntensity: {type: &quot;f&quot;, value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
-				scanlineCount: {type: &quot;f&quot;, value: 0.0},
+				noiseIntensity: {value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
+				scanlineIntensity: {value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
+				scanlineCount: {value: 0.0},
 
-				greyscaleIntensity: {type: &quot;f&quot;, value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
-				sepiaIntensity: {type: &quot;f&quot;, value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
+				greyscaleIntensity: {value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
+				sepiaIntensity: {value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
 
-				vignetteOffset: {type: &quot;f&quot;, value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
-				vignetteDarkness: {type: &quot;f&quot;, value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
+				vignetteOffset: {value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
+				vignetteDarkness: {value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
 
 			},
 

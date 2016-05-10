@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -167,29 +167,31 @@ export class MaskPass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		let ctx = renderer.context;
+		let state = renderer.state;
+
 		let writeValue = this.inverse ? 0 : 1;
 		let clearValue = 1 - writeValue;
 
 		// Don&#x27;t update color or depth.
-		ctx.colorMask(false, false, false, false);
-		ctx.depthMask(false);
+		state.setColorWrite(false);
+		state.setDepthWrite(false);
 
-		ctx.enable(ctx.STENCIL_TEST);
-		ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
-		ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
-		ctx.clearStencil(clearValue);
+		state.setStencilTest(true);
+		state.setStencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
+		state.setStencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
+		state.clearStencil(clearValue);
 
 		// Draw the mask into both buffers.
 		renderer.render(this.scene, this.camera, readBuffer, this.clear);
 		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 		// Re-enable update of color and depth.
-		ctx.colorMask(true, true, true, true);
-		ctx.depthMask(true);
+		state.setColorWrite(true);
+		state.setDepthWrite(true);
 
 		// Only render where stencil is set to 1.
-		ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
-		ctx.stencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
+		state.setStencilFunc(ctx.EQUAL, 1, 0xffffffff); // draw if == 1
+		state.setStencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
 
 	}
 

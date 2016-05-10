@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -138,19 +138,19 @@ export class GlitchMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: &quot;t&quot;, value: null},
-				tPerturb: {type: &quot;t&quot;, value: null},
+				tDiffuse: {value: null},
+				tPerturb: {value: null},
 
-				active: {type: &quot;i&quot;, value: 1},
+				active: {value: 1},
 
-				amount: {type: &quot;f&quot;, value: 0.8},
-				angle: {type: &quot;f&quot;, value: 0.02},
-				seed: {type: &quot;f&quot;, value: 0.02},
-				seedX: {type: &quot;f&quot;, value: 0.02},
-				seedY: {type: &quot;f&quot;, value: 0.02},
-				distortionX: {type: &quot;f&quot;, value: 0.5},
-				distortionY: {type: &quot;f&quot;, value: 0.6},
-				colS: {type: &quot;f&quot;, value: 0.05}
+				amount: {value: 0.8},
+				angle: {value: 0.02},
+				seed: {value: 0.02},
+				seedX: {value: 0.02},
+				seedY: {value: 0.02},
+				distortionX: {value: 0.5},
+				distortionY: {value: 0.6},
+				colS: {value: 0.05}
 
 			},
 

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -169,27 +169,27 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: &quot;t&quot;, value: null},
-				tDepth: {type: &quot;t&quot;, value: null},
+				tDiffuse: {value: null},
+				tDepth: {value: null},
 
-				texelSize: {type: &quot;v2&quot;, value: new THREE.Vector2()},
-				halfTexelSize: {type: &quot;v2&quot;, value: new THREE.Vector2()},
+				texelSize: {value: new THREE.Vector2()},
+				halfTexelSize: {value: new THREE.Vector2()},
 
-				cameraNear: {type: &quot;f&quot;, value: 0.1},
-				cameraFar: {type: &quot;f&quot;, value: 2000},
+				cameraNear: {value: 0.1},
+				cameraFar: {value: 2000},
 
-				focalLength: {type: &quot;f&quot;, value: 24.0},
-				fStop: {type: &quot;f&quot;, value: 0.9},
+				focalLength: {value: 24.0},
+				fStop: {value: 0.9},
 
-				maxBlur: {type: &quot;f&quot;, value: 1.0},
-				luminanceThreshold: {type: &quot;f&quot;, value: 0.5},
-				luminanceGain: {type: &quot;f&quot;, value: 2.0},
-				bias: {type: &quot;f&quot;, value: 0.5},
-				fringe: {type: &quot;f&quot;, value: 0.7},
-				ditherStrength: {type: &quot;f&quot;, value: 0.0001},
+				maxBlur: {value: 1.0},
+				luminanceThreshold: {value: 0.5},
+				luminanceGain: {value: 2.0},
+				bias: {value: 0.5},
+				fringe: {value: 0.7},
+				ditherStrength: {value: 0.0001},
 
-				focusCoords: {type: &quot;v2&quot;, value: new THREE.Vector2(0.5, 0.5)},
-				focalDepth: {type: &quot;f&quot;, value: 1.0}
+				focusCoords: {value: new THREE.Vector2(0.5, 0.5)},
+				focalDepth: {value: 1.0}
 
 			},
 

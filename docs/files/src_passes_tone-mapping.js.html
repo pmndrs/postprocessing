@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -280,7 +280,7 @@ export class ToneMappingPass extends Pass {
 		if(x) {
 
 			this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = &quot;1&quot;;
-			this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted;
+			this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;
 
 		} else {
 
@@ -305,16 +305,16 @@ export class ToneMappingPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer, delta) {
 
-		let ctx = renderer.context;
+		let state = renderer.state;
 
 		if(this.adaptive) {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
 			this.quad.material = this.luminosityMaterial;
 			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-			ctx.depthMask(true);
+			state.setDepthWrite(true);
 			renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
-			ctx.depthMask(false);
+			state.setDepthWrite(false);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 			this.quad.material = this.adaptiveLuminosityMaterial;

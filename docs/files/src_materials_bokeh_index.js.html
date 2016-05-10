@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -148,16 +148,16 @@ export class BokehMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: &quot;t&quot;, value: null},
-				tDepth: {type: &quot;t&quot;, value: null},
+				tDiffuse: {value: null},
+				tDepth: {value: null},
 
-				cameraNear: {type: &quot;f&quot;, value: 0.1},
-				cameraFar: {type: &quot;f&quot;, value: 2000},
+				cameraNear: {value: 0.1},
+				cameraFar: {value: 2000},
 
-				focus: {type: &quot;f&quot;, value: (options.focus !== undefined) ? options.focus : 1.0},
-				aspect: {type: &quot;f&quot;, value: (options.aspect !== undefined) ? options.aspect : 1.0},
-				aperture: {type: &quot;f&quot;, value: (options.aperture !== undefined) ? options.aperture : 0.025},
-				maxBlur: {type: &quot;f&quot;, value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
+				focus: {value: (options.focus !== undefined) ? options.focus : 1.0},
+				aspect: {value: (options.aspect !== undefined) ? options.aspect : 1.0},
+				aperture: {value: (options.aperture !== undefined) ? options.aperture : 0.025},
+				maxBlur: {value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
 
 			},
 

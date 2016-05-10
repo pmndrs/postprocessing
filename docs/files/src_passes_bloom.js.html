@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -273,14 +273,14 @@ export class BloomPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		let ctx = renderer.context;
+		let state = renderer.state;
 
 		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
 		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		ctx.depthMask(true);
+		state.setDepthWrite(true);
 		renderer.render(this.scene, this.camera, this.renderTargetX);
-		ctx.depthMask(false);
+		state.setDepthWrite(false);
 
 		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;
@@ -310,7 +310,7 @@ export class BloomPass extends Pass {
 
 			this.quad.material = this.combineMaterial;
 			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+			this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
 
 			renderer.render(this.scene, this.camera);
 

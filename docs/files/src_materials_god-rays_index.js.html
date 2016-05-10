@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.0</em>
+            <em>API Docs for: 1.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -154,14 +154,14 @@ export class GodRaysMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: &quot;t&quot;, value: null},
-				lightPosition: {type: &quot;v3&quot;, value: null},
+				tDiffuse: {value: null},
+				lightPosition: {value: null},
 
-				exposure: {type: &quot;f&quot;, value: 0.6},
-				decay: {type: &quot;f&quot;, value: 0.93},
-				density: {type: &quot;f&quot;, value: 0.96},
-				weight: {type: &quot;f&quot;, value: 0.4},
-				clampMax: {type: &quot;f&quot;, value: 1.0}
+				exposure: {value: 0.6},
+				decay: {value: 0.93},
+				density: {value: 0.96},
+				weight: {value: 0.4},
+				clampMax: {value: 1.0}
 
 			},
 
