@@ -296,7 +296,7 @@ export class GodRaysPass extends Pass {
 	render(renderer, readBuffer) {
 
 		let clearAlpha;
-		let ctx = renderer.context;
+		let state = renderer.state;
 
 		// Compute the screen light position and translate the coordinates to [0, 1].
 		this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
@@ -308,9 +308,9 @@ export class GodRaysPass extends Pass {
 		clearColor.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
 		renderer.setClearColor(0x000000, 1);
-		ctx.depthMask(true);
+		state.setDepthWrite(true);
 		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
-		ctx.depthMask(false);
+		state.setDepthWrite(false);
 		renderer.setClearColor(clearColor, clearAlpha);
 		this.mainScene.overrideMaterial = null;
 

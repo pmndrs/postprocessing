@@ -158,14 +158,14 @@ export class BloomPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		let ctx = renderer.context;
+		let state = renderer.state;
 
 		// Luminance filter.
 		this.quad.material = this.luminosityMaterial;
 		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		ctx.depthMask(true);
+		state.setDepthWrite(true);
 		renderer.render(this.scene, this.camera, this.renderTargetX);
-		ctx.depthMask(false);
+		state.setDepthWrite(false);
 
 		// Convolution phase.
 		this.quad.material = this.convolutionMaterial;

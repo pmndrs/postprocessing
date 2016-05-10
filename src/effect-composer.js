@@ -43,7 +43,7 @@ export class EffectComposer {
 		this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 
 		this.renderer.autoClear = false;
-		this.renderer.context.depthMask(false);
+		this.renderer.state.setDepthWrite(false);
 
 		/**
 		 * The read buffer.
