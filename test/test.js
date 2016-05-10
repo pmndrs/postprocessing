@@ -13,8 +13,11 @@ module.exports = {
 				this.getSize = function() { return {width: 1, height: 1}; };
 
 				this.context = {
-					getContextAttributes: function() { return {alpha: 0}; },
-					depthMask: function() {}
+					getContextAttributes: function() { return {alpha: 0}; }
+				};
+
+				this.state = {
+					setDepthWrite: function() {}
 				};
 
 			}
