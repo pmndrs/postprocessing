@@ -3,9 +3,9 @@ uniform sampler2D tDiffuse;
 varying vec2 vUv;
 varying vec4 vOffset[3];
 
-const vec2 THRESHOLD = vec2(EDGE_THRESHOLD);
-
 void main() {
+
+	const vec2 THRESHOLD = vec2(EDGE_THRESHOLD);
 
 	// Calculate color deltas.
 	vec4 delta;
