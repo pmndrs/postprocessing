@@ -165,7 +165,7 @@ export class ToneMappingPass extends Pass {
 		if(x) {
 
 			this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
-			this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted;
+			this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;
 
 		} else {
 
