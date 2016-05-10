@@ -124,7 +124,12 @@ canvas:active {
 }
 
 #stats {
+ opacity: 0.9;
  position: fixed;
  left: 5px;
  top: 5px;
+}
+
+#stats canvas {
+ cursor: pointer;
 }

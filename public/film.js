@@ -49,11 +49,12 @@ function setupScene(assets) {
 	// Renderer and Scene.
 
 	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.001);
 	renderer.setClearColor(0x000000);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	viewport.appendChild(renderer.domElement);
+
+	var scene = new THREE.Scene();
+	scene.fog = new THREE.FogExp2(0x000000, 0.001);
 
 	// Camera.
 
@@ -72,9 +73,10 @@ function setupScene(assets) {
 
 	var stats = new Stats();
 	stats.setMode(0);
+	stats.dom.id = "stats";
 	var aside = document.getElementById("aside");
 	aside.style.visibility = "visible";
-	aside.appendChild(stats.domElement);
+	aside.appendChild(stats.dom);
 
 	var gui = new dat.GUI();
 	aside.appendChild(gui.domElement.parentNode);

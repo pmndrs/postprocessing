@@ -72,9 +72,10 @@ function setupScene(assets) {
 
 	var stats = new Stats();
 	stats.setMode(0);
+	stats.dom.id = "stats";
 	var aside = document.getElementById("aside");
 	aside.style.visibility = "visible";
-	aside.appendChild(stats.domElement);
+	aside.appendChild(stats.dom);
 
 	var gui = new dat.GUI();
 	aside.appendChild(gui.domElement.parentNode);
