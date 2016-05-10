@@ -39,14 +39,14 @@ export class GodRaysMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				lightPosition: {type: "v3", value: null},
+				tDiffuse: {value: null},
+				lightPosition: {value: null},
 
-				exposure: {type: "f", value: 0.6},
-				decay: {type: "f", value: 0.93},
-				density: {type: "f", value: 0.96},
-				weight: {type: "f", value: 0.4},
-				clampMax: {type: "f", value: 1.0}
+				exposure: {value: 0.6},
+				decay: {value: 0.93},
+				density: {value: 0.96},
+				weight: {value: 0.4},
+				clampMax: {value: 1.0}
 
 			},
 

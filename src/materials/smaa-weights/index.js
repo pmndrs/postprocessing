@@ -40,10 +40,10 @@ export class SMAAWeightsMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				tArea: {type: "t", value: null},
-				tSearch: {type: "t", value: null},
-				texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+				tDiffuse: {value: null},
+				tArea: {value: null},
+				tSearch: {value: null},
+				texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 			},
 

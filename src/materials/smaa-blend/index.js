@@ -25,9 +25,9 @@ export class SMAABlendMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				tWeights: {type: "t", value: null},
-				texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+				tDiffuse: {value: null},
+				tWeights: {value: null},
+				texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 			},
 

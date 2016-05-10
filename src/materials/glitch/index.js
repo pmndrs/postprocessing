@@ -23,19 +23,19 @@ export class GlitchMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				tPerturb: {type: "t", value: null},
+				tDiffuse: {value: null},
+				tPerturb: {value: null},
 
-				active: {type: "i", value: 1},
+				active: {value: 1},
 
-				amount: {type: "f", value: 0.8},
-				angle: {type: "f", value: 0.02},
-				seed: {type: "f", value: 0.02},
-				seedX: {type: "f", value: 0.02},
-				seedY: {type: "f", value: 0.02},
-				distortionX: {type: "f", value: 0.5},
-				distortionY: {type: "f", value: 0.6},
-				colS: {type: "f", value: 0.05}
+				amount: {value: 0.8},
+				angle: {value: 0.02},
+				seed: {value: 0.02},
+				seedX: {value: 0.02},
+				seedY: {value: 0.02},
+				distortionX: {value: 0.5},
+				distortionY: {value: 0.6},
+				colS: {value: 0.05}
 
 			},
 

@@ -33,10 +33,10 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				texelSize: {type: "v2", value: new THREE.Vector2()},
-				halfTexelSize: {type: "v2", value: new THREE.Vector2()},
-				kernel: {type: "f", value: 0.0}
+				tDiffuse: {value: null},
+				texelSize: {value: new THREE.Vector2()},
+				halfTexelSize: {value: new THREE.Vector2()},
+				kernel: {value: 0.0}
 
 			},
 

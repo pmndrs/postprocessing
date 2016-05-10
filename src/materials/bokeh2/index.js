@@ -54,27 +54,27 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				tDepth: {type: "t", value: null},
+				tDiffuse: {value: null},
+				tDepth: {value: null},
 
-				texelSize: {type: "v2", value: new THREE.Vector2()},
-				halfTexelSize: {type: "v2", value: new THREE.Vector2()},
+				texelSize: {value: new THREE.Vector2()},
+				halfTexelSize: {value: new THREE.Vector2()},
 
-				cameraNear: {type: "f", value: 0.1},
-				cameraFar: {type: "f", value: 2000},
+				cameraNear: {value: 0.1},
+				cameraFar: {value: 2000},
 
-				focalLength: {type: "f", value: 24.0},
-				fStop: {type: "f", value: 0.9},
+				focalLength: {value: 24.0},
+				fStop: {value: 0.9},
 
-				maxBlur: {type: "f", value: 1.0},
-				luminanceThreshold: {type: "f", value: 0.5},
-				luminanceGain: {type: "f", value: 2.0},
-				bias: {type: "f", value: 0.5},
-				fringe: {type: "f", value: 0.7},
-				ditherStrength: {type: "f", value: 0.0001},
+				maxBlur: {value: 1.0},
+				luminanceThreshold: {value: 0.5},
+				luminanceGain: {value: 2.0},
+				bias: {value: 0.5},
+				fringe: {value: 0.7},
+				ditherStrength: {value: 0.0001},
 
-				focusCoords: {type: "v2", value: new THREE.Vector2(0.5, 0.5)},
-				focalDepth: {type: "f", value: 1.0}
+				focusCoords: {value: new THREE.Vector2(0.5, 0.5)},
+				focalDepth: {value: 1.0}
 
 			},
 

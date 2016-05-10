@@ -31,8 +31,8 @@ export class SMAAColorEdgesMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+				tDiffuse: {value: null},
+				texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 			},
 

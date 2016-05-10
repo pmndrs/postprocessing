@@ -23,13 +23,13 @@ export class DotScreenMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
+				tDiffuse: {value: null},
 
-				angle: {type: "f", value: 1.57},
-				scale: {type: "f", value: 1.0},
-				intensity: {type: "f", value: 1.0},
+				angle: {value: 1.57},
+				scale: {value: 1.0},
+				intensity: {value: 1.0},
 
-				offsetRepeat: {type: "v4", value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
+				offsetRepeat: {value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
 
 			},
 

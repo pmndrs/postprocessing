@@ -34,9 +34,9 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				distinction: {type: "f", value: 1.0},
-				range: {type: "v2", value: (range !== undefined) ? range : new THREE.Vector2()}
+				tDiffuse: {value: null},
+				distinction: {value: 1.0},
+				range: {value: (range !== undefined) ? range : new THREE.Vector2()}
 
 			},
 

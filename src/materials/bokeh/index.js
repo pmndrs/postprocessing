@@ -33,16 +33,16 @@ export class BokehMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				tDepth: {type: "t", value: null},
+				tDiffuse: {value: null},
+				tDepth: {value: null},
 
-				cameraNear: {type: "f", value: 0.1},
-				cameraFar: {type: "f", value: 2000},
+				cameraNear: {value: 0.1},
+				cameraFar: {value: 2000},
 
-				focus: {type: "f", value: (options.focus !== undefined) ? options.focus : 1.0},
-				aspect: {type: "f", value: (options.aspect !== undefined) ? options.aspect : 1.0},
-				aperture: {type: "f", value: (options.aperture !== undefined) ? options.aperture : 0.025},
-				maxBlur: {type: "f", value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
+				focus: {value: (options.focus !== undefined) ? options.focus : 1.0},
+				aspect: {value: (options.aspect !== undefined) ? options.aspect : 1.0},
+				aperture: {value: (options.aperture !== undefined) ? options.aperture : 0.025},
+				maxBlur: {value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
 
 			},
 

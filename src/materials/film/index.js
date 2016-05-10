@@ -55,18 +55,18 @@ export class FilmMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {type: "t", value: null},
-				time: {type: "f", value: 0.0},
+				tDiffuse: {value: null},
+				time: {value: 0.0},
 
-				noiseIntensity: {type: "f", value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
-				scanlineIntensity: {type: "f", value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
-				scanlineCount: {type: "f", value: 0.0},
+				noiseIntensity: {value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
+				scanlineIntensity: {value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
+				scanlineCount: {value: 0.0},
 
-				greyscaleIntensity: {type: "f", value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
-				sepiaIntensity: {type: "f", value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
+				greyscaleIntensity: {value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
+				sepiaIntensity: {value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
 
-				vignetteOffset: {type: "f", value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
-				vignetteDarkness: {type: "f", value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
+				vignetteOffset: {value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
+				vignetteDarkness: {value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
 
 			},
 
