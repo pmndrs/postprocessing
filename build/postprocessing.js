@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.1.0 build Apr 25 2016
+ * postprocessing v1.1.1 build May 10 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -41,10 +41,10 @@
 
 				uniforms: {
 
-					tPreviousLum: {type: "t", value: null},
-					tCurrentLum: {type: "t", value: null},
-					delta: {type: "f", value: 0.0},
-					tau: {type: "f", value: 1.0}
+					tPreviousLum: {value: null},
+					tCurrentLum: {value: null},
+					delta: {value: 0.0},
+					tau: {value: 1.0}
 
 				},
 
@@ -91,16 +91,16 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					tDepth: {type: "t", value: null},
+					tDiffuse: {value: null},
+					tDepth: {value: null},
 
-					cameraNear: {type: "f", value: 0.1},
-					cameraFar: {type: "f", value: 2000},
+					cameraNear: {value: 0.1},
+					cameraFar: {value: 2000},
 
-					focus: {type: "f", value: (options.focus !== undefined) ? options.focus : 1.0},
-					aspect: {type: "f", value: (options.aspect !== undefined) ? options.aspect : 1.0},
-					aperture: {type: "f", value: (options.aperture !== undefined) ? options.aperture : 0.025},
-					maxBlur: {type: "f", value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
+					focus: {value: (options.focus !== undefined) ? options.focus : 1.0},
+					aspect: {value: (options.aspect !== undefined) ? options.aspect : 1.0},
+					aperture: {value: (options.aperture !== undefined) ? options.aperture : 0.025},
+					maxBlur: {value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0}
 
 				},
 
@@ -184,27 +184,27 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					tDepth: {type: "t", value: null},
+					tDiffuse: {value: null},
+					tDepth: {value: null},
 
-					texelSize: {type: "v2", value: new THREE.Vector2()},
-					halfTexelSize: {type: "v2", value: new THREE.Vector2()},
+					texelSize: {value: new THREE.Vector2()},
+					halfTexelSize: {value: new THREE.Vector2()},
 
-					cameraNear: {type: "f", value: 0.1},
-					cameraFar: {type: "f", value: 2000},
+					cameraNear: {value: 0.1},
+					cameraFar: {value: 2000},
 
-					focalLength: {type: "f", value: 24.0},
-					fStop: {type: "f", value: 0.9},
+					focalLength: {value: 24.0},
+					fStop: {value: 0.9},
 
-					maxBlur: {type: "f", value: 1.0},
-					luminanceThreshold: {type: "f", value: 0.5},
-					luminanceGain: {type: "f", value: 2.0},
-					bias: {type: "f", value: 0.5},
-					fringe: {type: "f", value: 0.7},
-					ditherStrength: {type: "f", value: 0.0001},
+					maxBlur: {value: 1.0},
+					luminanceThreshold: {value: 0.5},
+					luminanceGain: {value: 2.0},
+					bias: {value: 0.5},
+					fringe: {value: 0.7},
+					ditherStrength: {value: 0.0001},
 
-					focusCoords: {type: "v2", value: new THREE.Vector2(0.5, 0.5)},
-					focalDepth: {type: "f", value: 1.0}
+					focusCoords: {value: new THREE.Vector2(0.5, 0.5)},
+					focalDepth: {value: 1.0}
 
 				},
 
@@ -282,11 +282,11 @@
 
 				uniforms: {
 
-					texture1: {type: "t", value: null},
-					texture2: {type: "t", value: null},
+					texture1: {value: null},
+					texture2: {value: null},
 
-					opacity1: {type: "f", value: 1.0},
-					opacity2: {type: "f", value: 1.0}
+					opacity1: {value: 1.0},
+					opacity2: {value: 1.0}
 
 				},
 
@@ -336,10 +336,10 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					texelSize: {type: "v2", value: new THREE.Vector2()},
-					halfTexelSize: {type: "v2", value: new THREE.Vector2()},
-					kernel: {type: "f", value: 0.0}
+					tDiffuse: {value: null},
+					texelSize: {value: new THREE.Vector2()},
+					halfTexelSize: {value: new THREE.Vector2()},
+					kernel: {value: 0.0}
 
 				},
 
@@ -437,8 +437,8 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					opacity: {type: "f", value: 1.0}
+					tDiffuse: {value: null},
+					opacity: {value: 1.0}
 
 				},
 
@@ -475,13 +475,13 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
+					tDiffuse: {value: null},
 
-					angle: {type: "f", value: 1.57},
-					scale: {type: "f", value: 1.0},
-					intensity: {type: "f", value: 1.0},
+					angle: {value: 1.57},
+					scale: {value: 1.0},
+					intensity: {value: 1.0},
 
-					offsetRepeat: {type: "v4", value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
+					offsetRepeat: {value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
 
 				},
 
@@ -552,18 +552,18 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					time: {type: "f", value: 0.0},
+					tDiffuse: {value: null},
+					time: {value: 0.0},
 
-					noiseIntensity: {type: "f", value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
-					scanlineIntensity: {type: "f", value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
-					scanlineCount: {type: "f", value: 0.0},
+					noiseIntensity: {value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
+					scanlineIntensity: {value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
+					scanlineCount: {value: 0.0},
 
-					greyscaleIntensity: {type: "f", value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
-					sepiaIntensity: {type: "f", value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
+					greyscaleIntensity: {value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
+					sepiaIntensity: {value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
 
-					vignetteOffset: {type: "f", value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
-					vignetteDarkness: {type: "f", value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
+					vignetteOffset: {value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
+					vignetteDarkness: {value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
 
 				},
 
@@ -609,19 +609,19 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					tPerturb: {type: "t", value: null},
+					tDiffuse: {value: null},
+					tPerturb: {value: null},
 
-					active: {type: "i", value: 1},
+					active: {value: 1},
 
-					amount: {type: "f", value: 0.8},
-					angle: {type: "f", value: 0.02},
-					seed: {type: "f", value: 0.02},
-					seedX: {type: "f", value: 0.02},
-					seedY: {type: "f", value: 0.02},
-					distortionX: {type: "f", value: 0.5},
-					distortionY: {type: "f", value: 0.6},
-					colS: {type: "f", value: 0.05}
+					amount: {value: 0.8},
+					angle: {value: 0.02},
+					seed: {value: 0.02},
+					seedX: {value: 0.02},
+					seedY: {value: 0.02},
+					distortionX: {value: 0.5},
+					distortionY: {value: 0.6},
+					colS: {value: 0.05}
 
 				},
 
@@ -674,14 +674,14 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					lightPosition: {type: "v3", value: null},
+					tDiffuse: {value: null},
+					lightPosition: {value: null},
 
-					exposure: {type: "f", value: 0.6},
-					decay: {type: "f", value: 0.93},
-					density: {type: "f", value: 0.96},
-					weight: {type: "f", value: 0.4},
-					clampMax: {type: "f", value: 1.0}
+					exposure: {value: 0.6},
+					decay: {value: 0.93},
+					density: {value: 0.96},
+					weight: {value: 0.4},
+					clampMax: {value: 1.0}
 
 				},
 
@@ -729,9 +729,9 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					distinction: {type: "f", value: 1.0},
-					range: {type: "v2", value: (range !== undefined) ? range : new THREE.Vector2()}
+					tDiffuse: {value: null},
+					distinction: {value: 1.0},
+					range: {value: (range !== undefined) ? range : new THREE.Vector2()}
 
 				},
 
@@ -773,9 +773,9 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					tWeights: {type: "t", value: null},
-					texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+					tDiffuse: {value: null},
+					tWeights: {value: null},
+					texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 				},
 
@@ -788,7 +788,7 @@
 
 	}
 
-	var fragment$12 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nconst vec2 THRESHOLD = vec2(EDGE_THRESHOLD);\r\n\r\nvoid main() {\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(THRESHOLD, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
+	var fragment$12 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tconst vec2 THRESHOLD = vec2(EDGE_THRESHOLD);\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(THRESHOLD, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
 
 	var vertex$12 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -820,8 +820,8 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+					tDiffuse: {value: null},
+					texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 				},
 
@@ -876,10 +876,10 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					tArea: {type: "t", value: null},
-					tSearch: {type: "t", value: null},
-					texelSize: {type: "v2", value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
+					tDiffuse: {value: null},
+					tArea: {value: null},
+					tSearch: {value: null},
+					texelSize: {value: (texelSize !== undefined) ? texelSize : new THREE.Vector2()}
 
 				},
 
@@ -934,11 +934,11 @@
 
 				uniforms: {
 
-					tDiffuse: {type: "t", value: null},
-					luminanceMap: {type: "t", value: null},
-					averageLuminance: {type: "f", value: 1.0},
-					maxLuminance: {type: "f", value: 16.0},
-					middleGrey: {type: "f", value: 0.6}
+					tDiffuse: {value: null},
+					luminanceMap: {value: null},
+					averageLuminance: {value: 1.0},
+					maxLuminance: {value: 16.0},
+					middleGrey: {value: 0.6}
 
 				},
 
@@ -1301,14 +1301,14 @@
 
 		render(renderer, readBuffer) {
 
-			let ctx = renderer.context;
+			let state = renderer.state;
 
 			// Luminance filter.
 			this.quad.material = this.luminosityMaterial;
 			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-			ctx.depthMask(true);
+			state.setDepthWrite(true);
 			renderer.render(this.scene, this.camera, this.renderTargetX);
-			ctx.depthMask(false);
+			state.setDepthWrite(false);
 
 			// Convolution phase.
 			this.quad.material = this.convolutionMaterial;
@@ -1338,7 +1338,7 @@
 
 				this.quad.material = this.combineMaterial;
 				this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
-				this.combineMaterial.uniforms.texture2.value = this.renderTargetY;
+				this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
 
 				renderer.render(this.scene, this.camera);
 
@@ -2350,7 +2350,7 @@
 		render(renderer, readBuffer) {
 
 			let clearAlpha;
-			let ctx = renderer.context;
+			let state = renderer.state;
 
 			// Compute the screen light position and translate the coordinates to [0, 1].
 			this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
@@ -2362,9 +2362,9 @@
 			clearColor.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
 			renderer.setClearColor(0x000000, 1);
-			ctx.depthMask(true);
+			state.setDepthWrite(true);
 			renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
-			ctx.depthMask(false);
+			state.setDepthWrite(false);
 			renderer.setClearColor(clearColor, clearAlpha);
 			this.mainScene.overrideMaterial = null;
 
@@ -2517,29 +2517,31 @@
 		render(renderer, readBuffer, writeBuffer) {
 
 			let ctx = renderer.context;
+			let state = renderer.state;
+
 			let writeValue = this.inverse ? 0 : 1;
 			let clearValue = 1 - writeValue;
 
 			// Don't update color or depth.
-			ctx.colorMask(false, false, false, false);
-			ctx.depthMask(false);
+			state.setColorWrite(false);
+			state.setDepthWrite(false);
 
-			ctx.enable(ctx.STENCIL_TEST);
-			ctx.stencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
-			ctx.stencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
-			ctx.clearStencil(clearValue);
+			state.setStencilTest(true);
+			state.setStencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
+			state.setStencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
+			state.clearStencil(clearValue);
 
 			// Draw the mask into both buffers.
 			renderer.render(this.scene, this.camera, readBuffer, this.clear);
 			renderer.render(this.scene, this.camera, writeBuffer, this.clear);
 
 			// Re-enable update of color and depth.
-			ctx.colorMask(true, true, true, true);
-			ctx.depthMask(true);
+			state.setColorWrite(true);
+			state.setDepthWrite(true);
 
 			// Only render where stencil is set to 1.
-			ctx.stencilFunc(ctx.EQUAL, 1, 0xffffffff);
-			ctx.stencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
+			state.setStencilFunc(ctx.EQUAL, 1, 0xffffffff); // draw if == 1
+			state.setStencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
 
 		}
 
@@ -2633,9 +2635,9 @@
 		render(renderer, readBuffer) {
 
 			let clearAlpha;
-			let ctx = renderer.context;
+			let state = renderer.state;
 
-			ctx.depthMask(true);
+			state.setDepthWrite(true);
 
 			this.scene.overrideMaterial = this.overrideMaterial;
 
@@ -2665,7 +2667,7 @@
 
 			this.scene.overrideMaterial = null;
 
-			ctx.depthMask(false);
+			state.setDepthWrite(false);
 
 		}
 
@@ -3178,7 +3180,7 @@
 			if(x) {
 
 				this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
-				this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted;
+				this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;
 
 			} else {
 
@@ -3203,16 +3205,16 @@
 
 		render(renderer, readBuffer, writeBuffer, delta) {
 
-			let ctx = renderer.context;
+			let state = renderer.state;
 
 			if(this.adaptive) {
 
 				// Render the luminance of the current scene into a render target with mipmapping enabled.
 				this.quad.material = this.luminosityMaterial;
 				this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-				ctx.depthMask(true);
+				state.setDepthWrite(true);
 				renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
-				ctx.depthMask(false);
+				state.setDepthWrite(false);
 
 				// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 				this.quad.material = this.adaptiveLuminosityMaterial;
@@ -3297,7 +3299,7 @@
 			this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
 
 			this.renderer.autoClear = false;
-			this.renderer.context.depthMask(false);
+			this.renderer.state.setDepthWrite(false);
 
 			/**
 			 * The read buffer.
