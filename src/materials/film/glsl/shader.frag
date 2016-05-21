@@ -73,7 +73,7 @@ void main() {
 
 	#ifdef VIGNETTE
 
-	const vec2 CENTER = vec2(0.5);
+		const vec2 CENTER = vec2(0.5);
 
 		#ifdef ESKIL
 
