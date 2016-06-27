@@ -1,287 +1,299 @@
-window.addEventListener("load", function loadAssets() {
+(function() { "use strict";
 
-	window.removeEventListener("load", loadAssets);
+	/**
+	 * Loads assets.
+	 *
+	 * @method loadAssets
+	 */
 
-	var loadingManager = new THREE.LoadingManager();
-	var textureLoader = new THREE.TextureLoader(loadingManager);
-	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+	window.addEventListener("load", function loadAssets() {
 
-	var assets = {};
+		window.removeEventListener("load", loadAssets);
 
-	loadingManager.onProgress = function(item, loaded, total) {
+		const loadingManager = new THREE.LoadingManager();
+		const textureLoader = new THREE.TextureLoader(loadingManager);
+		const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
-		if(loaded === total) { setupScene(assets); }
+		const assets = {};
 
-	};
+		loadingManager.onProgress = function(item, loaded, total) {
 
-	var path = "textures/skies/sunset/";
-	var format = ".png";
-	var urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
+			if(loaded === total) { setupScene(assets); }
 
-	cubeTextureLoader.load(urls, function(textureCube) {
+		};
 
-		var shader = THREE.ShaderLib.cube;
-		shader.uniforms.tCube.value = textureCube;
+		const path = "textures/skies/sunset/";
+		const format = ".png";
+		const urls = [
+			path + "px" + format, path + "nx" + format,
+			path + "py" + format, path + "ny" + format,
+			path + "pz" + format, path + "nz" + format
+		];
 
-		var skyBoxMaterial = new THREE.ShaderMaterial( {
-			fragmentShader: shader.fragmentShader,
-			vertexShader: shader.vertexShader,
-			uniforms: shader.uniforms,
-			depthWrite: false,
-			side: THREE.BackSide,
-			fog: false
+		cubeTextureLoader.load(urls, function(textureCube) {
+
+			assets.sky = textureCube;
+
 		});
 
-		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(100000, 100000, 100000), skyBoxMaterial);
+		textureLoader.load("textures/crate.jpg", function(texture) {
+
+			texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+			assets.colorMap = texture;
+
+		});
 
 	});
 
-	textureLoader.load("textures/crate.jpg", function(texture) {
+	/**
+	 * Creates the scene and initiates the render loop.
+	 *
+	 * @method setupScene
+	 * @param {Object} assets - Preloaded assets.
+	 */
 
-		texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-		assets.colorMap = texture;
+	function setupScene(assets) {
 
-	});
+		const viewport = document.getElementById("viewport");
+		viewport.removeChild(viewport.children[0]);
 
-});
+		// Renderer and Scene.
 
-function setupScene(assets) {
+		const renderer = new THREE.WebGLRenderer({antialias: false, logarithmicDepthBuffer: true});
+		renderer.setClearColor(0x000000);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		viewport.appendChild(renderer.domElement);
 
-	var viewport = document.getElementById("viewport");
-	viewport.removeChild(viewport.children[0]);
+		const rendererAA = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+		rendererAA.setClearColor(0x000000);
+		rendererAA.autoClear = false;
+		rendererAA.setSize(window.innerWidth, window.innerHeight);
 
-	// Renderer and Scene.
+		const scene = new THREE.Scene();
+		scene.fog = new THREE.FogExp2(0x000000, 0.0025);
 
-	var renderer = new THREE.WebGLRenderer({antialias: false, logarithmicDepthBuffer: true});
-	renderer.setClearColor(0x000000);
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	viewport.appendChild(renderer.domElement);
+		// Sky.
 
-	var rendererAA = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
-	rendererAA.setClearColor(0x000000);
-	rendererAA.autoClear = false;
-	rendererAA.setSize(window.innerWidth, window.innerHeight);
+		scene.background = assets.sky;
 
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.0025);
+		// Camera.
 
-	// Camera.
+		const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.target.set(0, 0, 0);
+		controls.damping = 0.2;
+		camera.position.set(-3, 0, -3);
+		camera.lookAt(controls.target);
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100000);
-	var controls = new THREE.OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, 0, 0);
-	controls.damping = 0.2;
-	camera.position.set(-3, 0, -3);
-	camera.lookAt(controls.target);
+		scene.add(camera);
 
-	scene.add(camera);
+		const controlsAA = new THREE.OrbitControls(camera, rendererAA.domElement);
+		controlsAA.target.set(0, 0, 0);
+		controlsAA.damping = 0.2;
 
-	var controlsAA = new THREE.OrbitControls(camera, rendererAA.domElement);
-	controlsAA.target.set(0, 0, 0);
-	controlsAA.damping = 0.2;
+		// Overlays.
 
-	// Overlays.
+		const stats = new Stats();
+		stats.setMode(0);
+		stats.dom.id = "stats";
+		const aside = document.getElementById("aside");
+		aside.style.visibility = "visible";
+		aside.appendChild(stats.dom);
 
-	var stats = new Stats();
-	stats.setMode(0);
-	stats.dom.id = "stats";
-	var aside = document.getElementById("aside");
-	aside.style.visibility = "visible";
-	aside.appendChild(stats.dom);
+		const gui = new dat.GUI();
+		aside.appendChild(gui.domElement.parentNode);
 
-	var gui = new dat.GUI();
-	aside.appendChild(gui.domElement.parentNode);
+		// Hide interface on alt key press.
+		document.addEventListener("keydown", function(event) {
 
-	// Hide interface on alt key press.
-	document.addEventListener("keydown", function(event) {
+			if(event.altKey) {
 
-		if(event.altKey) {
+				event.preventDefault();
+				aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
 
-			event.preventDefault();
-			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+			}
+
+		});
+
+		// Lights.
+
+		const ambientLight = new THREE.AmbientLight(0x888888);
+		const directionalLight = new THREE.DirectionalLight(0xffbbaa);
+
+		directionalLight.position.set(1440, 200, 2000);
+		directionalLight.target.position.copy(scene.position);
+
+		scene.add(ambientLight);
+		scene.add(directionalLight);
+
+		// Objects.
+
+		let geometry = new THREE.BoxGeometry(1, 1, 1);
+
+		let material = new THREE.MeshBasicMaterial({
+			color: 0x000000,
+			wireframe: true
+		});
+
+		const object1 = new THREE.Mesh(geometry, material);
+		object1.position.set(1.25, 0, -1.25);
+
+		scene.add(object1);
+
+		material = new THREE.MeshLambertMaterial({
+			map: assets.colorMap
+		});
+
+		const object2 = new THREE.Mesh(geometry, material);
+		object2.position.set(-1.25, 0, 1.25);
+
+		scene.add(object2);
+
+		// Cage.
+
+		geometry = new THREE.BoxGeometry(0.25, 8.25, 0.25);
+		material = new THREE.MeshLambertMaterial({color: 0x0d0d0d});
+
+		const mesh = new THREE.Mesh(geometry, material);
+
+		const o = new THREE.Object3D();
+
+		let o0, o1, o2;
+
+		o0 = o.clone();
+
+		let clone = mesh.clone();
+		clone.position.set(-4, 0, 4);
+		o0.add(clone);
+		clone = mesh.clone();
+		clone.position.set(4, 0, 4);
+		o0.add(clone);
+		clone = mesh.clone();
+		clone.position.set(-4, 0, -4);
+		o0.add(clone);
+		clone = mesh.clone();
+		clone.position.set(4, 0, -4);
+		o0.add(clone);
+
+		o1 = o0.clone();
+		o1.rotation.set(Math.PI / 2, 0, 0);
+		o2 = o0.clone();
+		o2.rotation.set(0, 0, Math.PI / 2);
+
+		o.add(o0);
+		o.add(o1);
+		o.add(o2);
+
+		o.scale.set(0.1, 0.1, 0.1);
+
+		scene.add(o);
+
+		// Post-Processing.
+
+		const composer = new POSTPROCESSING.EffectComposer(renderer);
+		const renderPass = new POSTPROCESSING.RenderPass(scene, camera);
+		composer.addPass(renderPass);
+
+		const smaaPass = new POSTPROCESSING.SMAAPass(Image);
+
+		smaaPass.renderToScreen = true;
+		composer.addPass(smaaPass);
+
+		// Shader settings.
+
+		const params = {
+			"browser AA": false,
+			"SMAA": smaaPass.enabled,
+			"SMAA threshold": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD)
+		};
+
+		function toggleSMAA() {
+
+			renderPass.renderToScreen = !params["SMAA"];
+			smaaPass.enabled = params["SMAA"];
 
 		}
 
-	});
+		function switchRenderers() {
 
-	// Lights.
+			if(params["browser AA"]) {
 
-	var ambientLight = new THREE.AmbientLight(0x888888);
-	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
+				viewport.removeChild(renderer.domElement);
+				viewport.appendChild(rendererAA.domElement);
+				composer.renderer = rendererAA;
+				controlsAA.enabled = true;
 
-	directionalLight.position.set(1440, 200, 2000);
-	directionalLight.target.position.copy(scene.position);
+			} else {
 
-	scene.add(ambientLight);
-	scene.add(directionalLight);
+				viewport.removeChild(rendererAA.domElement);
+				viewport.appendChild(renderer.domElement);
+				composer.renderer = renderer;
+				controls.enabled = true;
 
-	// Sky.
+			}
 
-	camera.add(assets.sky);
+			resize();
 
-	// Objects.
+		}
 
-	var geometry = new THREE.BoxGeometry(1, 1, 1);
+		gui.add(params, "browser AA").onChange(switchRenderers);
+		gui.add(params, "SMAA").onChange(toggleSMAA);
 
-	var material = new THREE.MeshBasicMaterial({
-		color: 0x000000,
-		wireframe: true
-	});
+		gui.add(params, "SMAA threshold").min(0.0).max(0.5).step(0.01).onChange(function() {
+			smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD = params["SMAA threshold"].toFixed(2);
+			smaaPass.colorEdgesMaterial.needsUpdate = true;
+		});
 
-	var object1 = new THREE.Mesh(geometry, material);
-	object1.position.set(1.25, 0, -1.25);
+		/**
+		 * Handles resizing.
+		 *
+		 * @method resize
+		 */
 
-	scene.add(object1);
+		function resize() {
 
-	material = new THREE.MeshLambertMaterial({
-		map: assets.colorMap
-	});
+			const width = window.innerWidth;
+			const height = window.innerHeight;
 
-	var object2 = new THREE.Mesh(geometry, material);
-	object2.position.set(-1.25, 0, 1.25);
+			composer.setSize(width, height);
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
 
-	scene.add(object2);
+		}
 
-	// Cage.
+		window.addEventListener("resize", resize);
 
-	var geometry = new THREE.BoxGeometry(0.25, 8.25, 0.25);
-	var material = new THREE.MeshLambertMaterial({color: 0x0d0d0d});
-	var mesh = new THREE.Mesh(geometry, material);
+		/**
+		 * The main render loop.
+		 *
+		 * @method render
+		 * @param {DOMHighResTimeStamp} now - The time when requestAnimationFrame fired.
+		 */
 
-	var o = new THREE.Object3D();
-	var o0, o1, o2;
+		const TWO_PI = 2.0 * Math.PI;
+		const clock = new THREE.Clock(true);
 
-	o0 = o.clone();
+		(function render(now) {
 
-	var clone = mesh.clone();
-	clone.position.set(-4, 0, 4);
-	o0.add(clone);
-	clone = mesh.clone();
-	clone.position.set(4, 0, 4);
-	o0.add(clone);
-	clone = mesh.clone();
-	clone.position.set(-4, 0, -4);
-	o0.add(clone);
-	clone = mesh.clone();
-	clone.position.set(4, 0, -4);
-	o0.add(clone);
+			requestAnimationFrame(render);
 
-	o1 = o0.clone();
-	o1.rotation.set(Math.PI / 2, 0, 0);
-	o2 = o0.clone();
-	o2.rotation.set(0, 0, Math.PI / 2);
+			stats.begin();
 
-	o.add(o0);
-	o.add(o1);
-	o.add(o2);
+			object1.rotation.x += 0.0005;
+			object1.rotation.y += 0.001;
+			object2.rotation.copy(object1.rotation);
+			o.rotation.copy(object1.rotation);
 
-	o.scale.set(0.1, 0.1, 0.1);
+			composer.render(clock.getDelta());
 
-	scene.add(o);
+			// Prevent overflow.
+			if(object1.rotation.x >= TWO_PI) { object1.rotation.x -= TWO_PI; }
+			if(object1.rotation.y >= TWO_PI) { object1.rotation.y -= TWO_PI; }
 
-	// Post-Processing.
+			stats.end();
 
-	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	var renderPass = new POSTPROCESSING.RenderPass(scene, camera);
-	composer.addPass(renderPass);
+		}());
 
-	var smaaPass = new POSTPROCESSING.SMAAPass(Image);
-
-	smaaPass.renderToScreen = true;
-	composer.addPass(smaaPass);
-
-	// Shader settings.
-
-	var params = {
-		"browser AA": false,
-		"SMAA": smaaPass.enabled,
-		"SMAA threshold": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD)
 	};
 
-	function toggleSMAA() {
-
-		renderPass.renderToScreen = !params["SMAA"];
-		smaaPass.enabled = params["SMAA"];
-
-	}
-
-	function switchRenderers() {
-
-		if(params["browser AA"]) {
-
-			viewport.removeChild(renderer.domElement);
-			viewport.appendChild(rendererAA.domElement);
-			composer.renderer = rendererAA;
-			controlsAA.enabled = true;
-
-		} else {
-
-			viewport.removeChild(rendererAA.domElement);
-			viewport.appendChild(renderer.domElement);
-			composer.renderer = renderer;
-			controls.enabled = true;
-
-		}
-
-		resize();
-
-	}
-
-	gui.add(params, "browser AA").onChange(switchRenderers);
-	gui.add(params, "SMAA").onChange(toggleSMAA);
-
-	gui.add(params, "SMAA threshold").min(0.0).max(0.5).step(0.01).onChange(function() {
-		smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD = params["SMAA threshold"].toFixed(2);
-		smaaPass.colorEdgesMaterial.needsUpdate = true;
-	});
-
-	/**
-	 * Handles resizing.
-	 */
-
-	function resize() {
-
-		var width = window.innerWidth;
-		var height = window.innerHeight;
-
-		composer.setSize(width, height);
-		camera.aspect = width / height;
-		camera.updateProjectionMatrix();
-
-	}
-
-	window.addEventListener("resize", resize);
-
-	/**
-	 * Animation loop.
-	 */
-
-	var TWO_PI = 2.0 * Math.PI;
-	var clock = new THREE.Clock(true);
-
-	(function render(now) {
-
-		requestAnimationFrame(render);
-
-		stats.begin();
-
-		object1.rotation.x += 0.0005;
-		object1.rotation.y += 0.001;
-		object2.rotation.copy(object1.rotation);
-		o.rotation.copy(object1.rotation);
-
-		composer.render(clock.getDelta());
-
-		// Prevent overflow.
-		if(object1.rotation.x >= TWO_PI) { object1.rotation.x -= TWO_PI; }
-		if(object1.rotation.y >= TWO_PI) { object1.rotation.y -= TWO_PI; }
-
-		stats.end();
-
-	}());
-
-};
+}());

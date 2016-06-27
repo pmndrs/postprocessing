@@ -1,227 +1,236 @@
-window.addEventListener("load", function loadAssets() {
+(function() { "use strict";
 
-	window.removeEventListener("load", loadAssets);
+	/**
+	 * Loads assets.
+	 *
+	 * @method loadAssets
+	 */
 
-	var loadingManager = new THREE.LoadingManager();
-	var textureLoader = new THREE.TextureLoader(loadingManager);
-	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+	window.addEventListener("load", function loadAssets() {
 
-	var assets = {};
+		window.removeEventListener("load", loadAssets);
 
-	loadingManager.onProgress = function(item, loaded, total) {
+		const loadingManager = new THREE.LoadingManager();
+		const textureLoader = new THREE.TextureLoader(loadingManager);
+		const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
-		if(loaded === total) { setupScene(assets); }
+		const assets = {};
 
-	};
+		loadingManager.onProgress = function(item, loaded, total) {
 
-	var path = "textures/skies/space5/";
-	var format = ".jpg";
-	var urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
+			if(loaded === total) { setupScene(assets); }
 
-	cubeTextureLoader.load(urls, function(textureCube) {
+		};
 
-		var shader = THREE.ShaderLib.cube;
-		shader.uniforms.tCube.value = textureCube;
+		const path = "textures/skies/space5/";
+		const format = ".jpg";
+		const urls = [
+			path + "px" + format, path + "nx" + format,
+			path + "py" + format, path + "ny" + format,
+			path + "pz" + format, path + "nz" + format
+		];
 
-		var skyBoxMaterial = new THREE.ShaderMaterial( {
-			fragmentShader: shader.fragmentShader,
-			vertexShader: shader.vertexShader,
-			uniforms: shader.uniforms,
-			depthWrite: false,
-			side: THREE.BackSide,
-			fog: false
+		cubeTextureLoader.load(urls, function(textureCube) {
+
+			assets.sky = textureCube;
+
 		});
 
-		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(100000, 100000, 100000), skyBoxMaterial);
+		textureLoader.load("textures/moon.jpg", function(texture) {
+
+			assets.moonColorMap = texture;
+
+		});
+
+		textureLoader.load("textures/moonnormals.jpg", function(texture) {
+
+			assets.moonNormalMap = texture;
+
+		});
 
 	});
 
-	textureLoader.load("textures/moon.jpg", function(texture) {
+	/**
+	 * Creates the scene and initiates the render loop.
+	 *
+	 * @method setupScene
+	 * @param {Object} assets - Preloaded assets.
+	 */
 
-		assets.moonColorMap = texture;
+	function setupScene(assets) {
 
-	});
+		const viewport = document.getElementById("viewport");
+		viewport.removeChild(viewport.children[0]);
 
-	textureLoader.load("textures/moonnormals.jpg", function(texture) {
+		// Renderer and Scene.
 
-		assets.moonNormalMap = texture;
+		const renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+		renderer.setClearColor(0x000000);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		viewport.appendChild(renderer.domElement);
 
-	});
+		const scene = new THREE.Scene();
+		scene.fog = new THREE.FogExp2(0x000000, 0.0001);
 
-});
+		// Sky.
 
-function setupScene(assets) {
+		scene.background = assets.sky;
 
-	var viewport = document.getElementById("viewport");
-	viewport.removeChild(viewport.children[0]);
+		// Camera.
 
-	// Renderer and Scene.
+		const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100000);
+		const controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.target.set(0, 0, 0);
+		controls.damping = 0.2;
+		controls.enablePan = false;
+		controls.minDistance = 200;
+		camera.position.set(-275, 0, -275);
+		camera.lookAt(controls.target);
 
-	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
-	renderer.setClearColor(0x000000);
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	viewport.appendChild(renderer.domElement);
+		scene.add(camera);
 
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x000000, 0.0001);
+		// Overlays.
 
-	// Camera.
+		const stats = new Stats();
+		stats.setMode(0);
+		stats.dom.id = "stats";
+		const aside = document.getElementById("aside");
+		aside.style.visibility = "visible";
+		aside.appendChild(stats.dom);
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100000);
-	var controls = new THREE.OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, 0, 0);
-	controls.damping = 0.2;
-	controls.enablePan = false;
-	controls.minDistance = 200;
-	camera.position.set(-275, 0, -275);
-	camera.lookAt(controls.target);
+		const gui = new dat.GUI();
+		aside.appendChild(gui.domElement.parentNode);
 
-	scene.add(camera);
+		// Hide interface on alt key press.
+		document.addEventListener("keydown", function(event) {
 
-	// Overlays.
+			if(event.altKey) {
 
-	var stats = new Stats();
-	stats.setMode(0);
-	stats.dom.id = "stats";
-	var aside = document.getElementById("aside");
-	aside.style.visibility = "visible";
-	aside.appendChild(stats.dom);
+				event.preventDefault();
+				aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
 
-	var gui = new dat.GUI();
-	aside.appendChild(gui.domElement.parentNode);
+			}
 
-	// Hide interface on alt key press.
-	document.addEventListener("keydown", function(event) {
+		});
 
-		if(event.altKey) {
+		// Lights.
 
-			event.preventDefault();
-			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+		const ambientLight = new THREE.AmbientLight(0x2d200f);
+		const directionalLight = new THREE.DirectionalLight(0xffeeaa);
 
-		}
+		directionalLight.position.set(-1, 1, 0);
+		directionalLight.target.position.copy(scene.position);
 
-	});
+		scene.add(ambientLight);
+		scene.add(directionalLight);
 
-	// Lights.
+		// Moon.
 
-	var ambientLight = new THREE.AmbientLight(0x2d200f);
-	var directionalLight = new THREE.DirectionalLight(0xffeeaa);
+		assets.moonColorMap.anisotropy = renderer.getMaxAnisotropy();
 
-	directionalLight.position.set(-1, 1, 0);
-	directionalLight.target.position.copy(scene.position);
+		const material = new THREE.MeshPhongMaterial({
+			color: 0xd4d4d4,
+			map: assets.moonColorMap,
+			normalMap: assets.moonNormalMap,
+			shininess: 10,
+			fog: true
+		});
 
-	scene.add(ambientLight);
-	scene.add(directionalLight);
+		const moon = new THREE.Mesh(new THREE.SphereBufferGeometry(100, 64, 64), material);
 
-	// Sky.
+		scene.add(moon);
 
-	camera.add(assets.sky);
+		// Post-Processing.
 
-	// Moon.
+		const composer = new POSTPROCESSING.EffectComposer(renderer);
+		composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
-	//assets.moonColorMap.anisotropy = renderer.getMaxAnisotropy();
+		const pass = new POSTPROCESSING.ToneMappingPass({
+			adaptive: true,
+			resolution: 256,
+			distinction: 2.0
+		});
 
-	var material = new THREE.MeshPhongMaterial({
-		color: 0xd4d4d4,
-		map: assets.moonColorMap,
-		normalMap: assets.moonNormalMap,
-		shininess: 10,
-		fog: true
-	});
+		pass.renderToScreen = true;
+		composer.addPass(pass);
 
-	var moon = new THREE.Mesh(new THREE.SphereBufferGeometry(100, 64, 64), material);
+		// Shader settings.
 
-	scene.add(moon);
+		const params = {
+			"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+			"adaptive": pass.adaptive,
+			"distinction": pass.luminosityMaterial.uniforms.distinction.value,
+			"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
+			"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
+			"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
+			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value,
+			"moon color": moon.material.color.getHex(),
+			"directional light": directionalLight.color.getHex(),
+			"ambient light": ambientLight.color.getHex()
+		};
 
-	// Post-Processing.
+		gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
+		gui.add(params, "adaptive").onChange(function() { pass.adaptive = params["adaptive"]; });
 
-	var composer = new POSTPROCESSING.EffectComposer(renderer);
-	var pass = new POSTPROCESSING.RenderPass(scene, camera);
-	composer.addPass(pass);
+		let f = gui.addFolder("Luminance");
+		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params["distinction"]; });
+		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.1).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"]; });
+		f.add(params, "average lum").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
+		f.add(params, "max lum").min(0.0).max(32.0).step(1.0).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"]; });
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
+		f.open();
 
-	pass = new POSTPROCESSING.ToneMappingPass({
-		adaptive: true,
-		resolution: 256,
-		distinction: 2.0
-	});
+		f = gui.addFolder("Colors");
+		f.addColor(params, "moon color").onChange(function() { moon.material.color.setHex(params["moon color"]); });
+		f.addColor(params, "ambient light").onChange(function() { ambientLight.color.setHex(params["ambient light"]); });
+		f.addColor(params, "directional light").onChange(function() { directionalLight.color.setHex(params["directional light"]); });
 
-	pass.renderToScreen = true;
-	composer.addPass(pass);
+		/**
+		 * Handles resizing.
+		 *
+		 * @method resize
+		 */
 
-	// Shader settings.
+		window.addEventListener("resize", function resize() {
 
-	var params = {
-		"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
-		"adaptive": pass.adaptive,
-		"distinction": pass.luminosityMaterial.uniforms.distinction.value,
-		"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
-		"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
-		"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
-		"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value,
-		"moon color": moon.material.color.getHex(),
-		"directional light": directionalLight.color.getHex(),
-		"ambient light": ambientLight.color.getHex()
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+
+			composer.setSize(width, height);
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+
+		});
+
+		/**
+		 * The main render loop.
+		 *
+		 * @method render
+		 * @param {DOMHighResTimeStamp} now - The time when requestAnimationFrame fired.
+		 */
+
+		const TWO_PI = 2.0 * Math.PI;
+		const clock = new THREE.Clock(true);
+
+		(function render(now) {
+
+			requestAnimationFrame(render);
+
+			stats.begin();
+
+			moon.rotation.x += 0.0001;
+			moon.rotation.y += 0.0001;
+
+			composer.render(clock.getDelta() * 10.0);
+
+			// Prevent overflow.
+			if(moon.rotation.x >= TWO_PI) { moon.rotation.x -= TWO_PI; }
+			if(moon.rotation.y >= TWO_PI) { moon.rotation.y -= TWO_PI; }
+
+			stats.end();
+
+		}());
+
 	};
 
-	gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params["resolution"]); });
-	gui.add(params, "adaptive").onChange(function() { pass.adaptive = params["adaptive"]; });
-
-	var f = gui.addFolder("Luminance");
-	f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params["distinction"]; });
-	f.add(params, "adaption rate").min(0.0).max(2.0).step(0.1).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"]; });
-	f.add(params, "average lum").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
-	f.add(params, "max lum").min(0.0).max(32.0).step(1.0).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"]; });
-	f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
-	f.open();
-
-	f = gui.addFolder("Colors");
-	f.addColor(params, "moon color").onChange(function() { moon.material.color.setHex(params["moon color"]); });
-	f.addColor(params, "ambient light").onChange(function() { ambientLight.color.setHex(params["ambient light"]); });
-	f.addColor(params, "directional light").onChange(function() { directionalLight.color.setHex(params["directional light"]); });
-
-	/**
-	 * Handles resizing.
-	 */
-
-	window.addEventListener("resize", function resize() {
-
-		var width = window.innerWidth;
-		var height = window.innerHeight;
-
-		composer.setSize(width, height);
-		camera.aspect = width / height;
-		camera.updateProjectionMatrix();
-
-	});
-
-	/**
-	 * Animation loop.
-	 */
-
-	var TWO_PI = 2.0 * Math.PI;
-	var clock = new THREE.Clock(true);
-
-	(function render(now) {
-
-		requestAnimationFrame(render);
-
-		stats.begin();
-
-		moon.rotation.x += 0.0001;
-		moon.rotation.y += 0.0001;
-
-		composer.render(clock.getDelta() * 10.0);
-
-		// Prevent overflow.
-		if(moon.rotation.x >= TWO_PI) { moon.rotation.x -= TWO_PI; }
-		if(moon.rotation.y >= TWO_PI) { moon.rotation.y -= TWO_PI; }
-
-		stats.end();
-
-	}());
-
-};
+}());

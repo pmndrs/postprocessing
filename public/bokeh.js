@@ -1,184 +1,193 @@
-window.addEventListener("load", function loadAssets() {
+(function() { "use strict";
 
-	window.removeEventListener("load", loadAssets);
+	/**
+	 * Loads assets.
+	 *
+	 * @method loadAssets
+	 */
 
-	var loadingManager = new THREE.LoadingManager();
-	var cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+	window.addEventListener("load", function loadAssets() {
 
-	var assets = {};
+		window.removeEventListener("load", loadAssets);
 
-	loadingManager.onProgress = function(item, loaded, total) {
+		const loadingManager = new THREE.LoadingManager();
+		const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager);
 
-		if(loaded === total) { setupScene(assets); }
+		const assets = {};
 
-	};
+		loadingManager.onProgress = function(item, loaded, total) {
 
-	var path = "textures/skies/space3/";
-	var format = ".jpg";
-	var urls = [
-		path + "px" + format, path + "nx" + format,
-		path + "py" + format, path + "ny" + format,
-		path + "pz" + format, path + "nz" + format
-	];
+			if(loaded === total) { setupScene(assets); }
 
-	cubeTextureLoader.load(urls, function(textureCube) {
+		};
 
-		var shader = THREE.ShaderLib.cube;
-		shader.uniforms.tCube.value = textureCube;
+		const path = "textures/skies/space3/";
+		const format = ".jpg";
+		const urls = [
+			path + "px" + format, path + "nx" + format,
+			path + "py" + format, path + "ny" + format,
+			path + "pz" + format, path + "nz" + format
+		];
 
-		var skyBoxMaterial = new THREE.ShaderMaterial( {
-			fragmentShader: shader.fragmentShader,
-			vertexShader: shader.vertexShader,
-			uniforms: shader.uniforms,
-			depthWrite: false,
-			side: THREE.BackSide,
-			fog: false
+		cubeTextureLoader.load(urls, function(textureCube) {
+
+			assets.sky = textureCube;
+
 		});
 
-		assets.sky = new THREE.Mesh(new THREE.BoxGeometry(2000, 2000, 2000), skyBoxMaterial);
-
 	});
 
-});
+	/**
+	 * Creates the scene and initiates the render loop.
+	 *
+	 * @method setupScene
+	 * @param {Object} assets - Preloaded assets.
+	 */
 
-function setupScene(assets) {
+	function setupScene(assets) {
 
-	var viewport = document.getElementById("viewport");
-	viewport.removeChild(viewport.children[0]);
+		const viewport = document.getElementById("viewport");
+		viewport.removeChild(viewport.children[0]);
 
-	// Renderer and Scene.
+		// Renderer and Scene.
 
-	var renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
-	renderer.setClearColor(0x000000);
-	renderer.setSize(window.innerWidth, window.innerHeight);
-	viewport.appendChild(renderer.domElement);
+		const renderer = new THREE.WebGLRenderer({antialias: true, logarithmicDepthBuffer: true});
+		renderer.setClearColor(0x000000);
+		renderer.setSize(window.innerWidth, window.innerHeight);
+		viewport.appendChild(renderer.domElement);
 
-	var scene = new THREE.Scene();
-	scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
+		const scene = new THREE.Scene();
+		scene.fog = new THREE.FogExp2(0x2d200f, 0.0025);
 
-	// Camera.
+		// Sky.
 
-	var camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-	var controls = new THREE.OrbitControls(camera, renderer.domElement);
-	controls.target.set(0, 0, 0);
-	controls.enablePan = false;
-	controls.minDistance = 2.5;
-	camera.position.set(3, 1, 3);
-	camera.lookAt(controls.target);
+		scene.background = assets.sky;
 
-	scene.add(camera);
+		// Camera.
 
-	// Overlays.
+		const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const controls = new THREE.OrbitControls(camera, renderer.domElement);
+		controls.target.set(0, 0, 0);
+		controls.enablePan = false;
+		controls.minDistance = 2.5;
+		camera.position.set(3, 1, 3);
+		camera.lookAt(controls.target);
 
-	var stats = new Stats();
-	stats.setMode(0);
-	stats.dom.id = "stats";
-	var aside = document.getElementById("aside");
-	aside.style.visibility = "visible";
-	aside.appendChild(stats.dom);
+		scene.add(camera);
 
-	var gui = new dat.GUI();
-	aside.appendChild(gui.domElement.parentNode);
+		// Overlays.
 
-	// Hide interface on alt key press.
-	document.addEventListener("keydown", function(event) {
+		const stats = new Stats();
+		stats.setMode(0);
+		stats.dom.id = "stats";
+		const aside = document.getElementById("aside");
+		aside.style.visibility = "visible";
+		aside.appendChild(stats.dom);
 
-		if(event.altKey) {
+		const gui = new dat.GUI();
+		aside.appendChild(gui.domElement.parentNode);
 
-			event.preventDefault();
-			aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+		// Hide interface on alt key press.
+		document.addEventListener("keydown", function(event) {
 
-		}
+			if(event.altKey) {
 
-	});
+				event.preventDefault();
+				aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
 
-	// Lights.
+			}
 
-	var ambientLight = new THREE.AmbientLight(0x888888);
-	var directionalLight = new THREE.DirectionalLight(0xffbbaa);
+		});
 
-	directionalLight.position.set(1440, 200, 2000);
-	directionalLight.target.position.copy(scene.position);
+		// Lights.
 
-	scene.add(ambientLight);
-	scene.add(directionalLight);
+		const ambientLight = new THREE.AmbientLight(0x888888);
+		const directionalLight = new THREE.DirectionalLight(0xffbbaa);
 
-	// Sky.
+		directionalLight.position.set(1440, 200, 2000);
+		directionalLight.target.position.copy(scene.position);
 
-	camera.add(assets.sky);
+		scene.add(ambientLight);
+		scene.add(directionalLight);
 
-	// Objects.
+		// Objects.
 
-	var geometry = new THREE.SphereBufferGeometry(1, 64, 64);
-	var material = new THREE.MeshBasicMaterial({
-		color: 0xffff00,
-		envMap: assets.sky.material.uniforms.tCube.value
-	});
+		const geometry = new THREE.SphereBufferGeometry(1, 64, 64);
+		const material = new THREE.MeshBasicMaterial({
+			color: 0xffff00,
+			envMap: assets.sky
+		});
 
-	mesh = new THREE.Mesh(geometry, material);
-	scene.add(mesh);
+		const mesh = new THREE.Mesh(geometry, material);
+		scene.add(mesh);
 
-	// Post-Processing.
+		// Post-Processing.
 
-	var composer = new POSTPROCESSING.EffectComposer(renderer, true);
-	var renderPass = new POSTPROCESSING.RenderPass(scene, camera);
-	composer.addPass(renderPass);
+		const composer = new POSTPROCESSING.EffectComposer(renderer, true);
+		composer.addPass(new POSTPROCESSING.RenderPass(scene, camera));
 
-	var pass = new POSTPROCESSING.BokehPass(camera, {
-		focus: 0.0,
-		aperture: 0.007,
-		maxBlur: 0.025
-	});
+		const pass = new POSTPROCESSING.BokehPass(camera, {
+			focus: 0.0,
+			aperture: 0.007,
+			maxBlur: 0.025
+		});
 
-	pass.renderToScreen = true;
-	composer.addPass(pass);
+		pass.renderToScreen = true;
+		composer.addPass(pass);
 
-	// Shader settings.
+		// Shader settings.
 
-	var params = {
-		"focus": pass.bokehMaterial.uniforms.focus.value,
-		"aperture": pass.bokehMaterial.uniforms.aperture.value,
-		"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
-		"realistic version": function() { window.location.href = "bokeh2.html"; }
+		const params = {
+			"focus": pass.bokehMaterial.uniforms.focus.value,
+			"aperture": pass.bokehMaterial.uniforms.aperture.value,
+			"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
+			"realistic version": function() { window.location.href = "bokeh2.html"; }
+		};
+
+		gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
+		gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params["aperture"]; });
+		gui.add(params, "max blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
+		gui.add(params, "realistic version");
+
+		/**
+		 * Handles resizing.
+		 *
+		 * @method resize
+		 */
+
+		window.addEventListener("resize", function resize() {
+
+			const width = window.innerWidth;
+			const height = window.innerHeight;
+
+			composer.setSize(width, height);
+			camera.aspect = width / height;
+			camera.updateProjectionMatrix();
+
+		});
+
+		/**
+		 * The main render loop.
+		 *
+		 * @method render
+		 * @param {DOMHighResTimeStamp} now - The time when requestAnimationFrame fired.
+		 */
+
+		const TWO_PI = 2.0 * Math.PI;
+		const clock = new THREE.Clock(true);
+
+		(function render(now) {
+
+			requestAnimationFrame(render);
+
+			stats.begin();
+
+			composer.render(clock.getDelta());
+
+			stats.end();
+
+		}());
+
 	};
 
-	gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params["focus"]; });
-	gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params["aperture"]; });
-	gui.add(params, "max blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
-	gui.add(params, "realistic version");
-
-	/**
-	 * Handles resizing.
-	 */
-
-	window.addEventListener("resize", function resize() {
-
-		var width = window.innerWidth;
-		var height = window.innerHeight;
-
-		composer.setSize(width, height);
-		camera.aspect = width / height;
-		camera.updateProjectionMatrix();
-
-	});
-
-	/**
-	 * Animation loop.
-	 */
-
-	var TWO_PI = 2.0 * Math.PI;
-	var clock = new THREE.Clock(true);
-
-	(function render(now) {
-
-		requestAnimationFrame(render);
-
-		stats.begin();
-
-		composer.render(clock.getDelta());
-
-		stats.end();
-
-	}());
-
-};
+}());
