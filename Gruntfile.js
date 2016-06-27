@@ -31,6 +31,11 @@ module.exports = function(grunt) {
 							"**/*.frag",
 							"**/*.vert"
 						]
+					}),
+					require("rollup-plugin-babel")({
+						exclude: [
+							"node_modules/**"
+						]
 					})
 				]
 			},
