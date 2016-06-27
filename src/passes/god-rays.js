@@ -296,7 +296,7 @@ export class GodRaysPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		let clearAlpha;
+		let clearAlpha, background;
 		let state = renderer.state;
 
 		// Compute the screen light position and translate the coordinates to [0, 1].
@@ -305,15 +305,23 @@ export class GodRaysPass extends Pass {
 		this.screenPosition.y = THREE.Math.clamp((this.screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
 		// Render the masked scene.
-		this.mainScene.overrideMaterial = this.maskMaterial;
+		state.setDepthWrite(true);
+
+		background = this.mainScene.background;
 		CLEAR_COLOR.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
+
 		renderer.setClearColor(0x000000, 1);
-		state.setDepthWrite(true);
+		this.mainScene.overrideMaterial = this.maskMaterial;
+		this.mainScene.background = null;
+
 		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
-		state.setDepthWrite(false);
-		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
+
+		this.mainScene.background = background;
 		this.mainScene.overrideMaterial = null;
+		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
+
+		state.setDepthWrite(false);
 
 		// Convolution phase (5 passes).
 		this.quad.material = this.convolutionMaterial;
