@@ -6,11 +6,10 @@ import vertex from "./glsl/shader.vert";
 /**
  * A convolution blur shader material.
  *
- * Use this shader five times in a row while adjusting the kernel 
- * before each render call in order to get the same result as with 
- * a 35x35 Gauss filter.
+ * Use this shader five times in a row while adjusting the kernel before each 
+ * render call in order to get a result similar to a 35x35 Gauss filter.
  *
- * Implementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
+ * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
  * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
  *
  * Further modified according to:

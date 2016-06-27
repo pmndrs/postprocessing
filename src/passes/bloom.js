@@ -11,8 +11,8 @@ import THREE from "three";
 /**
  * A bloom pass.
  *
- * This pass renders a scene with superimposed blur 
- * by utilising the fast Kawase convolution approach.
+ * This pass renders a scene with superimposed blur by utilising the fast Kawase 
+ * convolution approach.
  *
  * @class BloomPass
  * @submodule passes

@@ -11,9 +11,9 @@ import THREE from "three";
 /**
  * A tone mapping pass that supports adaptive luminosity.
  *
- * If adaptivity is enabled, this pass generates a texture that represents 
- * the luminosity of the current scene and adjusts it over time to simulate 
- * the optic nerve responding to the amount of light it is receiving.
+ * If adaptivity is enabled, this pass generates a texture that represents the 
+ * luminosity of the current scene and adjusts it over time to simulate the 
+ * optic nerve responding to the amount of light it is receiving.
  *
  * Reference:
  *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline

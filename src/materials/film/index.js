@@ -12,11 +12,11 @@ import vertex from "./glsl/shader.vert";
  *  - Sepia
  *
  * Original scanlines algorithm by Pat "Hawthorne" Shearon.
- * http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
+ *  http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  *
- * Optimized scanlines + noise version with intensity scaling by Georg "Leviathan" Steinrohder.
- * This version is provided under a Creative Commons Attribution 3.0 License
- * http://creativecommons.org/licenses/by/3.0/
+ * Optimized scanlines and noise with intensity scaling by Georg "Leviathan" 
+ * Steinrohder. (This version is provided under a Creative Commons Attribution 
+ * 3.0 License: http://creativecommons.org/licenses/by/3.0)
  *
  * The sepia effect is based on:
  *  https://github.com/evanw/glfx.js

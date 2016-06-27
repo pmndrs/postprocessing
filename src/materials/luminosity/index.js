@@ -6,10 +6,9 @@ import vertex from "./glsl/shader.vert";
 /**
  * A luminance shader material.
  *
- * This shader produces a greyscale luminance map. 
- * It can also be configured to output colors that are scaled with their 
- * respective luminance value. Additionally, a range may be provided to 
- * mask out undesired texels.
+ * This shader produces a greyscale luminance map. It can also be configured to 
+ * output colors that are scaled with their respective luminance value. 
+ * Additionally, a range may be provided to mask out undesired texels.
  *
  * The alpha channel will remain unaffected in all cases.
  *

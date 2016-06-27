@@ -9,16 +9,16 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * Used for saving the original clear color during 
- * the rendering process of the masked scene.
+ * Used for saving the original clear color during the rendering process of the 
+ * masked scene.
  *
- * @property clearColor
+ * @property CLEAR_COLOR
  * @type Color
  * @private
  * @static
  */
 
-const clearColor = new THREE.Color();
+const CLEAR_COLOR = new THREE.Color();
 
 /**
  * A crepuscular rays pass.
@@ -89,8 +89,8 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call the setSize method of the EffectComposer 
-		 * after changing this value.
+		 * You need to call the setSize method of the EffectComposer after changing 
+		 * this value.
 		 *
 		 * @property resolutionScale
 		 * @type Number
@@ -246,8 +246,8 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The number of samples per pixel.
 	 *
-	 * This value must be carefully chosen. A higher value increases the 
-	 * GPU load directly and doesn't necessarily yield better results!
+	 * This value must be carefully chosen. A higher value increases the GPU load 
+	 * directly and doesn't necessarily yield better results!
 	 *
 	 * @property samples
 	 * @type Number
@@ -283,7 +283,8 @@ export class GodRaysPass extends Pass {
 	 *  The masked scene is blurred five consecutive times.
 	 *
 	 * God Rays Phase:
-	 *  The blurred scene is blurred again, but this time along radial lines towards the light source.
+	 *  The blurred scene is blurred again, but this time along radial lines 
+	 *  towards the light source.
 	 *
 	 * Composite Phase:
 	 *  The final result is added to the normal scene.
@@ -305,13 +306,13 @@ export class GodRaysPass extends Pass {
 
 		// Render the masked scene.
 		this.mainScene.overrideMaterial = this.maskMaterial;
-		clearColor.copy(renderer.getClearColor());
+		CLEAR_COLOR.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
 		renderer.setClearColor(0x000000, 1);
 		state.setDepthWrite(true);
 		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
 		state.setDepthWrite(false);
-		renderer.setClearColor(clearColor, clearAlpha);
+		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 		this.mainScene.overrideMaterial = null;
 
 		// Convolution phase (5 passes).

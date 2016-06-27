@@ -50,8 +50,9 @@ export class ShaderPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} buffer - The read/write buffer.
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
 	render(renderer, readBuffer, writeBuffer) {

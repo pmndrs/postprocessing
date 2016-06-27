@@ -45,8 +45,8 @@ export class MaskPass extends Pass {
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer containing the result of the previous pass.
-	 * @param {WebGLRenderTarget} readBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
 	render(renderer, readBuffer, writeBuffer) {

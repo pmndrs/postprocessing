@@ -19,8 +19,8 @@ import THREE from "three";
  * further processing.
  *
  * @class EffectComposer
- * @constructor
  * @module postprocessing
+ * @constructor
  * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
  * @param {Boolean} [depthTexture=false] - Set to true, if one of your passes relies on the depth of the main scene.
  * @param {Boolean} [stencilBuffer=false] - Whether the main render targets should have a stencil buffer.

@@ -5,7 +5,9 @@ import vertex from "./glsl/shader.vert";
 
 /**
  * A glitch shader material.
- * Based on https://github.com/staffantan/unityglitch
+ *
+ * Reference:
+ *  https://github.com/staffantan/unityglitch
  *
  * @class GlitchMaterial
  * @submodule materials

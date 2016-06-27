@@ -4,20 +4,17 @@ import THREE from "three";
 /**
  * Used for saving the original clear color during rendering.
  *
- * @property clearColor
+ * @property CLEAR_COLOR
  * @type Color
  * @private
  * @static
  */
 
-const clearColor = new THREE.Color();
+const CLEAR_COLOR = new THREE.Color();
 
 /**
- * A pass that renders a given scene directly on screen
- * or into the read buffer for further processing.
- *
- * In addition to that, this pass can also render a depth 
- * texture which may be used by other passes.
+ * A pass that renders a given scene directly on screen or into the read buffer 
+ * for further processing.
  *
  * @class RenderPass
  * @submodule passes
@@ -97,7 +94,7 @@ export class RenderPass extends Pass {
 
 		if(this.clearColor !== null) {
 
-			clearColor.copy(renderer.getClearColor());
+			CLEAR_COLOR.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
 			renderer.setClearColor(this.clearColor, this.clearAlpha);
 
@@ -115,7 +112,7 @@ export class RenderPass extends Pass {
 
 		if(this.clearColor !== null) {
 
-			renderer.setClearColor(clearColor, clearAlpha);
+			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
 		}
 
