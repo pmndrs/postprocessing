@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.1</em>
+            <em>API Docs for: 1.1.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -416,7 +416,10 @@ targets by performing a preliminary render operation.</p>
                         <code>renderer</code>
                 </li>
                 <li class="arg">
-                        <code>buffer</code>
+                        <code>readBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -457,20 +460,33 @@ targets by performing a preliminary render operation.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer to use.</li>
+<li>The renderer.</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name">buffer</code>
+                        <code class="param-name">readBuffer</code>
                         <span class="type">WebGLRenderTarget</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The read/write buffer.</li>
+<li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
 </ul>
 
                     </div>

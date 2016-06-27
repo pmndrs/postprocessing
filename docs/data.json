@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.1.1",
+        "version": "1.1.2",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -622,7 +622,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\convolution\\index.js",
             "line": 6,
-            "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel \nbefore each render call in order to get the same result as with \na 35x35 Gauss filter.\n\nImplementation based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15",
+            "description": "A convolution blur shader material.\n\nUse this shader five times in a row while adjusting the kernel before each \nrender call in order to get a result similar to a 35x35 Gauss filter.\n\nBased on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:\nFrame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)\n\nFurther modified according to:\n https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1,
@@ -686,7 +686,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\film\\index.js",
             "line": 6,
-            "description": "A cinematic shader that provides the following effects:\n - Film Grain\n - Scanlines\n - Vignette\n - Greyscale\n - Sepia\n\nOriginal scanlines algorithm by Pat \"Hawthorne\" Shearon.\nhttp://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nOptimized scanlines + noise version with intensity scaling by Georg \"Leviathan\" Steinrohder.\nThis version is provided under a Creative Commons Attribution 3.0 License\nhttp://creativecommons.org/licenses/by/3.0/\n\nThe sepia effect is based on:\n https://github.com/evanw/glfx.js\n\nThe vignette code is based on PaintEffect postprocess from ro.me:\n http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js",
+            "description": "A cinematic shader that provides the following effects:\n - Film Grain\n - Scanlines\n - Vignette\n - Greyscale\n - Sepia\n\nOriginal scanlines algorithm by Pat \"Hawthorne\" Shearon.\n http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html\n\nOptimized scanlines and noise with intensity scaling by Georg \"Leviathan\" \nSteinrohder. (This version is provided under a Creative Commons Attribution \n3.0 License: http://creativecommons.org/licenses/by/3.0)\n\nThe sepia effect is based on:\n https://github.com/evanw/glfx.js\n\nThe vignette code is based on PaintEffect postprocess from ro.me:\n http://code.google.com/p/3-dreams-of-black/source/browse/deploy/js/effects/PaintEffect.js",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1,
@@ -796,7 +796,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\glitch\\index.js",
             "line": 6,
-            "description": "A glitch shader material.\nBased on https://github.com/staffantan/unityglitch",
+            "description": "A glitch shader material.\n\nReference:\n https://github.com/staffantan/unityglitch",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1
@@ -828,7 +828,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\luminosity\\index.js",
             "line": 6,
-            "description": "A luminance shader material.\n\nThis shader produces a greyscale luminance map. \nIt can also be configured to output colors that are scaled with their \nrespective luminance value. Additionally, a range may be provided to \nmask out undesired texels.\n\nThe alpha channel will remain unaffected in all cases.\n\nLuminance range reference:\n https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z",
+            "description": "A luminance shader material.\n\nThis shader produces a greyscale luminance map. It can also be configured to \noutput colors that are scaled with their respective luminance value. \nAdditionally, a range may be provided to mask out undesired texels.\n\nThe alpha channel will remain unaffected in all cases.\n\nLuminance range reference:\n https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1,
@@ -931,7 +931,7 @@
             "module": "postprocessing",
             "file": "src\\materials\\tone-mapping\\index.js",
             "line": 6,
-            "description": "Full-screen tone-mapping shader material.\nhttp://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
+            "description": "Full-screen tone-mapping shader material.\n\nReference:\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1
@@ -948,7 +948,7 @@
             "namespace": "",
             "file": "src\\passes\\bloom.js",
             "line": 11,
-            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur \nby utilising the fast Kawase convolution approach.",
+            "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur by utilising the fast Kawase \nconvolution approach.",
             "submodule": "passes",
             "extends": "Pass",
             "is_constructor": 1,
@@ -1544,7 +1544,7 @@
             "namespace": "",
             "file": "src\\passes\\render.js",
             "line": 15,
-            "description": "A pass that renders a given scene directly on screen\nor into the read buffer for further processing.\n\nIn addition to that, this pass can also render a depth \ntexture which may be used by other passes.",
+            "description": "A pass that renders a given scene directly on screen or into the read buffer \nfor further processing.",
             "submodule": "passes",
             "extends": "Pass",
             "is_constructor": 1,
@@ -1684,7 +1684,7 @@
             "namespace": "",
             "file": "src\\passes\\tone-mapping.js",
             "line": 11,
-            "description": "A tone mapping pass that supports adaptive luminosity.\n\nIf adaptivity is enabled, this pass generates a texture that represents \nthe luminosity of the current scene and adjusts it over time to simulate \nthe optic nerve responding to the amount of light it is receiving.\n\nReference:\n GDC2007 - Wolfgang Engel, Post-Processing Pipeline\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
+            "description": "A tone mapping pass that supports adaptive luminosity.\n\nIf adaptivity is enabled, this pass generates a texture that represents the \nluminosity of the current scene and adjusts it over time to simulate the \noptic nerve responding to the amount of light it is receiving.\n\nReference:\n GDC2007 - Wolfgang Engel, Post-Processing Pipeline\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
             "submodule": "passes",
             "extends": "Pass",
             "is_constructor": 1,
@@ -1815,7 +1815,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 48,
+            "line": 47,
             "description": "The Kawase blur kernels for five consecutive convolution passes.\nThe result matches the 35x35 Gauss filter.",
             "itemtype": "property",
             "name": "kernels",
@@ -1827,7 +1827,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 59,
+            "line": 58,
             "description": "Scales the kernels.",
             "itemtype": "property",
             "name": "scale",
@@ -1838,7 +1838,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 69,
+            "line": 68,
             "description": "The current kernel.",
             "itemtype": "property",
             "name": "currentKernel",
@@ -1850,7 +1850,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 83,
+            "line": 82,
             "description": "Sets the texel size.",
             "itemtype": "method",
             "name": "setTexelSize",
@@ -1871,7 +1871,7 @@
         },
         {
             "file": "src\\materials\\convolution\\index.js",
-            "line": 98,
+            "line": 97,
             "description": "Adjusts the kernel for the next blur pass.\nCall this method before each render iteration.",
             "itemtype": "method",
             "name": "adjustKernel",
@@ -2562,9 +2562,9 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 11,
-            "description": "Used for saving the original clear color during \nthe rendering process of the masked scene.",
+            "description": "Used for saving the original clear color during the rendering process of the \nmasked scene.",
             "itemtype": "property",
-            "name": "clearColor",
+            "name": "CLEAR_COLOR",
             "type": "Color",
             "access": "private",
             "tagname": "",
@@ -2614,7 +2614,7 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 89,
-            "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer \nafter changing this value.",
+            "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing \nthis value.",
             "itemtype": "property",
             "name": "resolutionScale",
             "type": "Number",
@@ -2761,7 +2761,7 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 246,
-            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the \nGPU load directly and doesn't necessarily yield better results!",
+            "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the GPU load \ndirectly and doesn't necessarily yield better results!",
             "itemtype": "property",
             "name": "samples",
             "type": "Number",
@@ -2773,7 +2773,7 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 273,
-            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPreliminary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
+            "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPreliminary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines \n towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
             "params": [
@@ -2794,7 +2794,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 365,
+            "line": 374,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2816,7 +2816,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 388,
+            "line": 397,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2874,11 +2874,11 @@
                 },
                 {
                     "name": "readBuffer",
-                    "description": "- The read buffer containing the result of the previous pass.",
+                    "description": "- The read buffer.",
                     "type": "WebGLRenderTarget"
                 },
                 {
-                    "name": "readBuffer",
+                    "name": "writeBuffer",
                     "description": "- The write buffer.",
                     "type": "WebGLRenderTarget"
                 }
@@ -3075,7 +3075,7 @@
             "line": 4,
             "description": "Used for saving the original clear color during rendering.",
             "itemtype": "property",
-            "name": "clearColor",
+            "name": "CLEAR_COLOR",
             "type": "Color",
             "access": "private",
             "tagname": "",
@@ -3085,7 +3085,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 42,
+            "line": 39,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
@@ -3096,7 +3096,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 51,
+            "line": 48,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
@@ -3107,7 +3107,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 60,
+            "line": 57,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
@@ -3118,7 +3118,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 69,
+            "line": 66,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
@@ -3130,7 +3130,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 81,
+            "line": 78,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -3197,7 +3197,7 @@
             "params": [
                 {
                     "name": "renderer",
-                    "description": "- The renderer to use.",
+                    "description": "- The renderer.",
                     "type": "WebGLRenderer"
                 },
                 {
@@ -3264,12 +3264,17 @@
             "params": [
                 {
                     "name": "renderer",
-                    "description": "- The renderer to use.",
+                    "description": "- The renderer.",
                     "type": "WebGLRenderer"
                 },
                 {
-                    "name": "buffer",
-                    "description": "- The read/write buffer.",
+                    "name": "readBuffer",
+                    "description": "- The read buffer.",
+                    "type": "WebGLRenderTarget"
+                },
+                {
+                    "name": "writeBuffer",
+                    "description": "- The write buffer.",
                     "type": "WebGLRenderTarget"
                 }
             ],
@@ -3710,7 +3715,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 216,
+            "line": 218,
             "description": "Sets the size of the buffers and the renderer's output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass how that \ninformation is used.\n\nIf no width or height is specified, the render targets and passes will be \nupdated with the current size of the renderer.",
             "itemtype": "method",
             "name": "setSize",
@@ -3733,7 +3738,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 255,
+            "line": 257,
             "description": "Resets this composer by deleting all passes and creating new buffers.",
             "itemtype": "method",
             "name": "reset",
@@ -3750,7 +3755,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 268,
+            "line": 270,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created \nby the passes. It also deletes this composer's frame buffers.\n\nNote: the reset method uses the dispose method internally.",
             "itemtype": "method",
             "name": "dispose",

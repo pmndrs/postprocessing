@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.1</em>
+            <em>API Docs for: 1.1.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -127,10 +127,8 @@
 
 
 <div class="box intro">
-    <p>A pass that renders a given scene directly on screen
-or into the read buffer for further processing.</p>
-<p>In addition to that, this pass can also render a depth
-texture which may be used by other passes.</p>
+    <p>A pass that renders a given scene directly on screen or into the read buffer
+for further processing.</p>
 
 </div>
 
@@ -314,14 +312,14 @@ texture which may be used by other passes.</p>
                                 <a href="#property_clear">clear</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
                             <li class="index-item property">
                                 <a href="#property_clearAlpha">clearAlpha</a>
 
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_clearColor">clearColor</a>
-
-                                    <span class="flag static">static</span>
                             </li>
                             <li class="index-item property">
                                 <a href="#property_clearColor">clearColor</a>
@@ -506,7 +504,7 @@ targets by performing a preliminary render operation.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_render.js.html#l81"><code>src\passes\render.js:81</code></a>
+        <a href="../files/src_passes_render.js.html#l78"><code>src\passes\render.js:78</code></a>
         </p>
 
 
@@ -680,7 +678,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l69"><code>src\passes\render.js:69</code></a>
+        <a href="../files/src_passes_render.js.html#l66"><code>src\passes\render.js:66</code></a>
         </p>
 
 
@@ -695,33 +693,8 @@ informed about the main render size.</p>
 
 
 </div>
-<div id="property_clearAlpha" class="property item">
-    <h3 class="name"><code>clearAlpha</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_render.js.html#l60"><code>src\passes\render.js:60</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Clear alpha.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_clearColor" class="property item private">
-    <h3 class="name"><code>clearColor</code></h3>
+<div id="property_CLEAR_COLOR" class="property item private">
+    <h3 class="name"><code>CLEAR_COLOR</code></h3>
     <span class="type">Color</span>
 
 
@@ -748,6 +721,31 @@ informed about the main render size.</p>
 
 
 </div>
+<div id="property_clearAlpha" class="property item">
+    <h3 class="name"><code>clearAlpha</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_render.js.html#l57"><code>src\passes\render.js:57</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Clear alpha.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_clearColor" class="property item">
     <h3 class="name"><code>clearColor</code></h3>
     <span class="type">Color</span>
@@ -759,7 +757,7 @@ informed about the main render size.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l51"><code>src\passes\render.js:51</code></a>
+        <a href="../files/src_passes_render.js.html#l48"><code>src\passes\render.js:48</code></a>
         </p>
 
 
@@ -840,7 +838,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_render.js.html#l42"><code>src\passes\render.js:42</code></a>
+        <a href="../files/src_passes_render.js.html#l39"><code>src\passes\render.js:39</code></a>
         </p>
 
 

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.1</em>
+            <em>API Docs for: 1.1.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -406,7 +406,7 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_clearColor">clearColor</a>
+                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
 
                                     <span class="flag static">static</span>
                             </li>
@@ -566,7 +566,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l365"><code>src\passes\god-rays.js:365</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l374"><code>src\passes\god-rays.js:374</code></a>
         </p>
 
 
@@ -657,7 +657,8 @@ The scene is rendered using a mask material.</p>
 <p>Preliminary Blur Phase:
 The masked scene is blurred five consecutive times.</p>
 <p>God Rays Phase:
-The blurred scene is blurred again, but this time along radial lines towards the light source.</p>
+The blurred scene is blurred again, but this time along radial lines
+towards the light source.</p>
 <p>Composite Phase:
 The final result is added to the normal scene.</p>
 
@@ -726,7 +727,7 @@ The final result is added to the normal scene.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l388"><code>src\passes\god-rays.js:388</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l397"><code>src\passes\god-rays.js:397</code></a>
         </p>
 
 
@@ -831,8 +832,8 @@ The final result is added to the normal scene.</p>
 
 
 </div>
-<div id="property_clearColor" class="property item private">
-    <h3 class="name"><code>clearColor</code></h3>
+<div id="property_CLEAR_COLOR" class="property item private">
+    <h3 class="name"><code>CLEAR_COLOR</code></h3>
     <span class="type">Color</span>
 
 
@@ -852,8 +853,8 @@ The final result is added to the normal scene.</p>
     </div>
 
     <div class="description">
-        <p>Used for saving the original clear color during
-the rendering process of the masked scene.</p>
+        <p>Used for saving the original clear color during the rendering process of the
+masked scene.</p>
 
     </div>
 
@@ -1304,8 +1305,8 @@ Assign your shader material to this mesh!
 
     <div class="description">
         <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer
-after changing this value.</p>
+<p>You need to call the setSize method of the EffectComposer after changing
+this value.</p>
 
     </div>
 
@@ -1332,8 +1333,8 @@ after changing this value.</p>
 
     <div class="description">
         <p>The number of samples per pixel.</p>
-<p>This value must be carefully chosen. A higher value increases the
-GPU load directly and doesn't necessarily yield better results!</p>
+<p>This value must be carefully chosen. A higher value increases the GPU load
+directly and doesn't necessarily yield better results!</p>
 
     </div>
 
