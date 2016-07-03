@@ -136,7 +136,7 @@ export class EffectComposer {
 
 			this.passes.splice(index, 0, pass);
 
-		}	else {
+		} else {
 
 			this.passes.push(pass);
 
