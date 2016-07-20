@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.2</em>
+            <em>API Docs for: 1.1.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -121,8 +121,8 @@ import vertex from &quot;./glsl/shader.vert&quot;;
 /**
  * A luminance shader material.
  *
- * This shader produces a greyscale luminance map. It can also be configured to 
- * output colors that are scaled with their respective luminance value. 
+ * This shader produces a greyscale luminance map. It can also be configured to
+ * output colors that are scaled with their respective luminance value.
  * Additionally, a range may be provided to mask out undesired texels.
  *
  * The alpha channel will remain unaffected in all cases.
@@ -148,9 +148,9 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				distinction: {value: 1.0},
-				range: {value: (range !== undefined) ? range : new THREE.Vector2()}
+				tDiffuse: { value: null },
+				distinction: { value: 1.0 },
+				range: { value: (range !== undefined) ? range : new THREE.Vector2() }
 
 			},
 

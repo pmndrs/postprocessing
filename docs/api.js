@@ -42,7 +42,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "materials",
             "name": "materials",
-            "description": "A compilation of the shader materials that are used \nin the post processing passes."
+            "description": "A collection of shader materials that are used in the post processing passes."
         },
         {
             "displayName": "passes",

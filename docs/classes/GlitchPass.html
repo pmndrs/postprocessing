@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.2</em>
+            <em>API Docs for: 1.1.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -347,7 +347,7 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose method and 
+        Performs a shallow search for properties that define a dispose method and
 deletes them. The pass will be inoperative after this method was called!
 
 Disposable objects:
@@ -356,7 +356,7 @@ Disposable objects:
  - textures
 
 The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory 
+destroyed. You may, however, use it independently to free memory
 when you are certain that you don't need this pass anymore.
     </div>
 
@@ -394,8 +394,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Destroys the currently set texture, if any, and
-generates a simple noise map.</p>
+        <p>Destroys the currently set texture and generates a simple noise map.</p>
 
     </div>
 
@@ -489,10 +488,10 @@ generates a simple noise map.</p>
         Performs initialisation tasks.
 
 By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the 
+You'll also be able to configure your custom render targets to use the
 appropriate format (RGB or RGBA).
 
-The provided renderer can be used to warm up special off-screen render 
+The provided renderer can be used to warm up special off-screen render
 targets by performing a preliminary render operation.
 
 The effect composer calls this method when this pass is added to its queue.
@@ -659,7 +658,7 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="description">
         Updates this pass with the renderer's size.
 
-This is an abstract method that may be overriden in case you want to be 
+This is an abstract method that may be overriden in case you want to be
 informed about the main render size.
 
 The effect composer calls this method when its own size is updated.
@@ -830,7 +829,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l205"><code>src\passes\glitch.js:205</code></a>
+        <a href="../files/src_passes_glitch.js.html#l204"><code>src\passes\glitch.js:204</code></a>
         </p>
 
 
@@ -917,10 +916,10 @@ The effect composer calls this method when its own size is updated.
     </div>
 
     <div class="description">
-        Indicates whether the read and write buffers should be swapped after this 
+        Indicates whether the read and write buffers should be swapped after this
 pass has finished rendering.
 
-Set this to true if this pass renders to the write buffer so that a 
+Set this to true if this pass renders to the write buffer so that a
 following pass can find the result in the read buffer.
     </div>
 
@@ -948,8 +947,8 @@ following pass can find the result in the read buffer.
     <div class="description">
         <p>A perturbation map.</p>
 <p>If none is provided, a noise texture will be created.
-The texture will automatically be destroyed when the
-EffectComposer is deleted.</p>
+This texture will automatically be destroyed when the EffectComposer is
+deleted.</p>
 
     </div>
 

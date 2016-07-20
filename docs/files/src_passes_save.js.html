@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.2</em>
+            <em>API Docs for: 1.1.3</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -115,11 +115,9 @@
     <pre class="code prettyprint linenums">
 import { CopyMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass&quot;;
-import THREE from &quot;three&quot;;
 
 /**
- * A save pass that renders the result from a previous 
- * pass (read buffer) to an arbitrary render target.
+ * A pass that renders the result from a previous pass to another render target.
  *
  * @class SavePass
  * @submodule passes
@@ -158,8 +156,8 @@ export class SavePass extends Pass {
 		this.renderTarget = (renderTarget !== undefined) ? renderTarget : null;
 
 		/**
-		 * Indicates whether the render target should be resized when
-		 * the size of the composer&#x27;s read/write buffer changes.
+		 * Indicates whether the render target should be resized when the size of
+		 * the composer&#x27;s read/write buffer changes.
 		 *
 		 * @property resize
 		 * @type Boolean
