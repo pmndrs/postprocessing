@@ -11,11 +11,8 @@ module.exports = function(grunt) {
 			" * Copyright <%= date.slice(-4) %> <%= pkg.author.name %>, <%= pkg.license %>\n" + 
 			" */\n",
 
-		jshint: {
-			options: {
-				jshintrc: true
-			},
-			files: ["Gruntfile.js", "src/**/*.js", "test/**/*.js"]
+		eslint: {
+			target: ["Gruntfile.js", "src/**/*.js", "test/**/*.js"]
 		},
 
 		rollup: {
