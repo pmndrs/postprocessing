@@ -96,6 +96,12 @@ module.exports = function(grunt) {
 				src: ["build/<%= pkg.name %>.js"],
 				dest: "public/<%= pkg.name %>.js",
 				filter: "isFile"
+			},
+			min: {
+				expand: false,
+				src: ["build/<%= pkg.name %>.min.js"],
+				dest: "public/<%= pkg.name %>.min.js",
+				filter: "isFile"
 			}
 		},
 
@@ -127,9 +133,10 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-rollup");
 	grunt.loadNpmTasks("grunt-lemon");
 
-	grunt.registerTask("default", ["build", "nodeunit"]);
-	grunt.registerTask("build", ["jshint", "rollup", "copy:bundle"]);
-	grunt.registerTask("test", ["jshint", "nodeunit"]);
+	grunt.registerTask("default", ["build", "nodeunit", "minify"]);
+	grunt.registerTask("build", ["eslint", "rollup", "copy:bundle"]);
+	grunt.registerTask("test", ["eslint", "nodeunit"]);
+	grunt.registerTask("minify", ["uglify", "copy:min"]);
 
 	grunt.registerTask("backup", ["restore", "copy:backup"]);
 	grunt.registerTask("restore", ["copy:restore", "clean:backup"]);
