@@ -1,10 +1,8 @@
 import { CopyMaterial } from "../materials";
 import { Pass } from "./pass";
-import THREE from "three";
 
 /**
- * A save pass that renders the result from a previous 
- * pass (read buffer) to an arbitrary render target.
+ * A pass that renders the result from a previous pass to another render target.
  *
  * @class SavePass
  * @submodule passes
@@ -43,8 +41,8 @@ export class SavePass extends Pass {
 		this.renderTarget = (renderTarget !== undefined) ? renderTarget : null;
 
 		/**
-		 * Indicates whether the render target should be resized when
-		 * the size of the composer's read/write buffer changes.
+		 * Indicates whether the render target should be resized when the size of
+		 * the composer's read/write buffer changes.
 		 *
 		 * @property resize
 		 * @type Boolean

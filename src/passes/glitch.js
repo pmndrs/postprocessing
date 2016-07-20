@@ -41,8 +41,8 @@ export class GlitchPass extends Pass {
 		 * A perturbation map.
 		 *
 		 * If none is provided, a noise texture will be created.
-		 * The texture will automatically be destroyed when the 
-		 * EffectComposer is deleted.
+		 * This texture will automatically be destroyed when the EffectComposer is
+		 * deleted.
 		 *
 		 * @property perturbMap
 		 * @type Texture
@@ -167,8 +167,7 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * Destroys the currently set texture, if any, and 
-	 * generates a simple noise map.
+	 * Destroys the currently set texture and generates a simple noise map.
 	 *
 	 * @method generatePerturbMap
 	 * @private

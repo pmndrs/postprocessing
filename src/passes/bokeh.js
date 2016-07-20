@@ -1,6 +1,5 @@
 import { BokehMaterial } from "../materials";
 import { Pass } from "./pass";
-import THREE from "three";
 
 /**
  * Depth of Field pass using a bokeh shader.
@@ -71,10 +70,9 @@ export class BokehPass extends Pass {
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialise(renderer, alpha) {
+	initialise(renderer) {
 
 		let size = renderer.getSize();
 		this.setSize(size.width, size.height);

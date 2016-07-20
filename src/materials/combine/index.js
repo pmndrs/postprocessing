@@ -24,11 +24,11 @@ export class CombineMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				texture1: {value: null},
-				texture2: {value: null},
+				texture1: { value: null },
+				texture2: { value: null },
 
-				opacity1: {value: 1.0},
-				opacity2: {value: 1.0}
+				opacity1: { value: 1.0 },
+				opacity2: { value: 1.0 }
 
 			},
 

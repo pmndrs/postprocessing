@@ -28,10 +28,10 @@ export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tPreviousLum: {value: null},
-				tCurrentLum: {value: null},
-				delta: {value: 0.0},
-				tau: {value: 1.0}
+				tPreviousLum: { value: null },
+				tCurrentLum: { value: null },
+				delta: { value: 0.0 },
+				tau: { value: 1.0 }
 
 			},
 

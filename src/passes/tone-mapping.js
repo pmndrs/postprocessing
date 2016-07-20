@@ -11,8 +11,8 @@ import THREE from "three";
 /**
  * A tone mapping pass that supports adaptive luminosity.
  *
- * If adaptivity is enabled, this pass generates a texture that represents the 
- * luminosity of the current scene and adjusts it over time to simulate the 
+ * If adaptivity is enabled, this pass generates a texture that represents the
+ * luminosity of the current scene and adjusts it over time to simulate the
  * optic nerve responding to the amount of light it is receiving.
  *
  * Reference:
@@ -240,7 +240,7 @@ export class ToneMappingPass extends Pass {
 
 	initialise(renderer) {
 
-		this.quad.material = new THREE.MeshBasicMaterial({color: 0x7fffff});
+		this.quad.material = new THREE.MeshBasicMaterial({ color: 0x7fffff });
 		renderer.render(this.scene, this.camera, this.renderTargetPrevious);
 		this.quad.material.dispose();
 

@@ -1,6 +1,5 @@
 import { DotScreenMaterial } from "../materials";
 import { Pass } from "./pass";
-import THREE from "three";
 
 /**
  * A render pass.

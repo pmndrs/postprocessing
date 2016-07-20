@@ -9,8 +9,7 @@ import { Pass } from "./pass";
 import THREE from "three";
 
 /**
- * Used for saving the original clear color during the rendering process of the 
- * masked scene.
+ * Used for saving the renderer's clear color.
  *
  * @property CLEAR_COLOR
  * @type Color
@@ -89,7 +88,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call the setSize method of the EffectComposer after changing 
+		 * You need to call the setSize method of the EffectComposer after changing
 		 * this value.
 		 *
 		 * @property resolutionScale
@@ -160,7 +159,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.maskMaterial = new THREE.MeshBasicMaterial({color: 0x000000});
+		this.maskMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
 
 		/**
 		 * God rays shader material.
@@ -246,7 +245,7 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The number of samples per pixel.
 	 *
-	 * This value must be carefully chosen. A higher value increases the GPU load 
+	 * This value must be carefully chosen. A higher value increases the GPU load
 	 * directly and doesn't necessarily yield better results!
 	 *
 	 * @property samples
@@ -283,7 +282,7 @@ export class GodRaysPass extends Pass {
 	 *  The masked scene is blurred five consecutive times.
 	 *
 	 * God Rays Phase:
-	 *  The blurred scene is blurred again, but this time along radial lines 
+	 *  The blurred scene is blurred again, but this time along radial lines
 	 *  towards the light source.
 	 *
 	 * Composite Phase:

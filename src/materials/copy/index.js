@@ -22,8 +22,8 @@ export class CopyMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				opacity: {value: 1.0}
+				tDiffuse: { value: null },
+				opacity: { value: 1.0 }
 
 			},
 

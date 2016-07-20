@@ -14,8 +14,8 @@ import vertex from "./glsl/shader.vert";
  * Original scanlines algorithm by Pat "Hawthorne" Shearon.
  *  http://www.truevision3d.com/forums/showcase/staticnoise_colorblackwhite_scanline_shaders-t18698.0.html
  *
- * Optimized scanlines and noise with intensity scaling by Georg "Leviathan" 
- * Steinrohder. (This version is provided under a Creative Commons Attribution 
+ * Optimized scanlines and noise with intensity scaling by Georg "Leviathan"
+ * Steinrohder. (This version is provided under a Creative Commons Attribution
  * 3.0 License: http://creativecommons.org/licenses/by/3.0)
  *
  * The sepia effect is based on:
@@ -55,18 +55,18 @@ export class FilmMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				time: {value: 0.0},
+				tDiffuse: { value: null },
+				time: { value: 0.0 },
 
-				noiseIntensity: {value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5},
-				scanlineIntensity: {value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05},
-				scanlineCount: {value: 0.0},
+				noiseIntensity: { value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5 },
+				scanlineIntensity: { value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05 },
+				scanlineCount: { value: 0.0 },
 
-				greyscaleIntensity: {value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0},
-				sepiaIntensity: {value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0},
+				greyscaleIntensity: { value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0 },
+				sepiaIntensity: { value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0 },
 
-				vignetteOffset: {value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0},
-				vignetteDarkness: {value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0}
+				vignetteOffset: { value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0 },
+				vignetteDarkness: { value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0 }
 
 			},
 

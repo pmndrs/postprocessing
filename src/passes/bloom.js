@@ -11,7 +11,7 @@ import THREE from "three";
 /**
  * A bloom pass.
  *
- * This pass renders a scene with superimposed blur by utilising the fast Kawase 
+ * This pass renders a scene with superimposed blur by utilising the fast Kawase
  * convolution approach.
  *
  * @class BloomPass
@@ -62,8 +62,8 @@ export class BloomPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call the setSize method of the EffectComposer after 
-		 * changing this value.
+		 * You need to call the setSize method of the EffectComposer after changing
+		 * this value.
 		 *
 		 * @property resolutionScale
 		 * @type Number
@@ -147,8 +147,8 @@ export class BloomPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * Applies a luminance filter and convolution blur to the read buffer and 
-	 * renders the result into a seperate render target. The result is additively 
+	 * Applies a luminance filter and convolution blur to the read buffer and
+	 * renders the result into a seperate render target. The result is additively
 	 * blended with the read buffer.
 	 *
 	 * @method render

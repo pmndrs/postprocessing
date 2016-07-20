@@ -10,12 +10,12 @@ import THREE from "three";
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
- * It will disable the auto clear behaviour of the provided renderer to prevent 
- * unnecessary clear operations. The depth buffer will also be disabled for 
+ * It will disable the auto clear behaviour of the provided renderer to prevent
+ * unnecessary clear operations. The depth buffer will also be disabled for
  * writing. Passes that rely on the depth test must explicitly enable it.
  *
- * You may want to use a {{#crossLink "RenderPass"}}{{/crossLink}} as your first 
- * pass to automatically clear the screen and render the scene to a texture for 
+ * You may want to use a {{#crossLink "RenderPass"}}{{/crossLink}} as your first
+ * pass to automatically clear the screen and render the scene to a texture for
  * further processing.
  *
  * @class EffectComposer
@@ -48,7 +48,7 @@ export class EffectComposer {
 		/**
 		 * The read buffer.
 		 *
-		 * Reading from and writing to the same render target should be avoided. 
+		 * Reading from and writing to the same render target should be avoided.
 		 * Therefore, two seperate, yet identical buffers are used.
 		 *
 		 * @property readBuffer
@@ -218,10 +218,10 @@ export class EffectComposer {
 	/**
 	 * Sets the size of the buffers and the renderer's output canvas.
 	 *
-	 * Every pass will be informed of the new size. It's up to each pass how that 
+	 * Every pass will be informed of the new size. It's up to each pass how that
 	 * information is used.
 	 *
-	 * If no width or height is specified, the render targets and passes will be 
+	 * If no width or height is specified, the render targets and passes will be
 	 * updated with the current size of the renderer.
 	 *
 	 * @method setSize
@@ -270,7 +270,7 @@ export class EffectComposer {
 	/**
 	 * Destroys all passes and render targets.
 	 *
-	 * This method deallocates all render targets, textures and materials created 
+	 * This method deallocates all render targets, textures and materials created
 	 * by the passes. It also deletes this composer's frame buffers.
 	 *
 	 * Note: the reset method uses the dispose method internally.

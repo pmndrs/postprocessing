@@ -159,10 +159,9 @@ export class SMAAPass extends Pass {
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialise(renderer, alpha) {
+	initialise(renderer) {
 
 		let size = renderer.getSize();
 		this.setSize(size.width, size.height);

@@ -13,7 +13,7 @@ import THREE from "three";
 const CLEAR_COLOR = new THREE.Color();
 
 /**
- * A pass that renders a given scene directly on screen or into the read buffer 
+ * A pass that renders a given scene directly on screen or into the read buffer
  * for further processing.
  *
  * @class RenderPass

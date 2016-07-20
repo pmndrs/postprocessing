@@ -6,7 +6,7 @@ import vertex from "./glsl/shader.vert";
 /**
  * A convolution blur shader material.
  *
- * Use this shader five times in a row while adjusting the kernel before each 
+ * Use this shader five times in a row while adjusting the kernel before each
  * render call in order to get a result similar to a 35x35 Gauss filter.
  *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
@@ -32,10 +32,10 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				texelSize: {value: new THREE.Vector2()},
-				halfTexelSize: {value: new THREE.Vector2()},
-				kernel: {value: 0.0}
+				tDiffuse: { value: null },
+				texelSize: { value: new THREE.Vector2() },
+				halfTexelSize: { value: new THREE.Vector2() },
+				kernel: { value: 0.0 }
 
 			},
 

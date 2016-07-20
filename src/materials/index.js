@@ -1,6 +1,5 @@
 /**
- * A compilation of the shader materials that are used 
- * in the post processing passes.
+ * A collection of shader materials that are used in the post processing passes.
  *
  * @module postprocessing
  * @submodule materials

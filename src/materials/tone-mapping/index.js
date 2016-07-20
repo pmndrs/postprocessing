@@ -25,11 +25,11 @@ export class ToneMappingMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				luminanceMap: {value: null},
-				averageLuminance: {value: 1.0},
-				maxLuminance: {value: 16.0},
-				middleGrey: {value: 0.6}
+				tDiffuse: { value: null },
+				luminanceMap: { value: null },
+				averageLuminance: { value: 1.0 },
+				maxLuminance: { value: 16.0 },
+				middleGrey: { value: 0.6 }
 
 			},
 

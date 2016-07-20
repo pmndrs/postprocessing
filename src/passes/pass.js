@@ -6,10 +6,10 @@ import THREE from "three";
  * This class implements a dispose method that frees memory on demand.
  * The EffectComposer calls this method when it is being destroyed.
  *
- * For this mechanism to work properly, please assign your render targets, 
+ * For this mechanism to work properly, please assign your render targets,
  * materials or textures directly to your pass!
  *
- * You can prevent your disposable objects from being deleted by keeping them 
+ * You can prevent your disposable objects from being deleted by keeping them
  * inside deeper structures such as arrays or objects.
  *
  * @class Pass
@@ -62,10 +62,10 @@ export class Pass {
 		this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
 
 		/**
-		 * Indicates whether the read and write buffers should be swapped after this 
+		 * Indicates whether the read and write buffers should be swapped after this
 		 * pass has finished rendering.
 		 *
-		 * Set this to true if this pass renders to the write buffer so that a 
+		 * Set this to true if this pass renders to the write buffer so that a
 		 * following pass can find the result in the read buffer.
 		 *
 		 * @property needsSwap
@@ -130,10 +130,10 @@ export class Pass {
 	 * Performs initialisation tasks.
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
-	 * You'll also be able to configure your custom render targets to use the 
+	 * You'll also be able to configure your custom render targets to use the
 	 * appropriate format (RGB or RGBA).
 	 *
-	 * The provided renderer can be used to warm up special off-screen render 
+	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
 	 *
 	 * The effect composer calls this method when this pass is added to its queue.
@@ -148,7 +148,7 @@ export class Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * This is an abstract method that may be overriden in case you want to be 
+	 * This is an abstract method that may be overriden in case you want to be
 	 * informed about the main render size.
 	 *
 	 * The effect composer calls this method when its own size is updated.
@@ -163,7 +163,7 @@ export class Pass {
 	setSize(width, height) {}
 
 	/**
-	 * Performs a shallow search for properties that define a dispose method and 
+	 * Performs a shallow search for properties that define a dispose method and
 	 * deletes them. The pass will be inoperative after this method was called!
 	 *
 	 * Disposable objects:
@@ -172,7 +172,7 @@ export class Pass {
 	 *  - textures
 	 *
 	 * The EffectComposer calls this method automatically when it is being
-	 * destroyed. You may, however, use it independently to free memory 
+	 * destroyed. You may, however, use it independently to free memory
 	 * when you are certain that you don't need this pass anymore.
 	 *
 	 * @method dispose

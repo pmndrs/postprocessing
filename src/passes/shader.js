@@ -1,5 +1,4 @@
 import { Pass } from "./pass";
-import THREE from "three";
 
 /**
  * A shader pass.
@@ -24,7 +23,6 @@ export class ShaderPass extends Pass {
 
 		/**
 		 * The name of the color sampler uniform of the given material.
-	   * The read buffer will be bound to this.
 		 *
 		 * @property textureID
 		 * @type String

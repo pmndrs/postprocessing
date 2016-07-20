@@ -1,6 +1,5 @@
 import { FilmMaterial } from "../materials";
 import { Pass } from "./pass";
-import THREE from "three";
 
 /**
  * A film pass providing various cinematic effects.
@@ -50,8 +49,8 @@ export class FilmPass extends Pass {
 		/**
 		 * The amount of scanlines in percent, relative to the screen height.
 		 *
-		 * You need to call the setSize method of the EffectComposer after 
-		 * changing this value.
+		 * You need to call the setSize method of the EffectComposer after changing
+		 * this value.
 		 *
 		 * @property scanlineDensity
 		 * @type Number

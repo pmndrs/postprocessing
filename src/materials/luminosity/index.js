@@ -6,8 +6,8 @@ import vertex from "./glsl/shader.vert";
 /**
  * A luminance shader material.
  *
- * This shader produces a greyscale luminance map. It can also be configured to 
- * output colors that are scaled with their respective luminance value. 
+ * This shader produces a greyscale luminance map. It can also be configured to
+ * output colors that are scaled with their respective luminance value.
  * Additionally, a range may be provided to mask out undesired texels.
  *
  * The alpha channel will remain unaffected in all cases.
@@ -33,9 +33,9 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
-				distinction: {value: 1.0},
-				range: {value: (range !== undefined) ? range : new THREE.Vector2()}
+				tDiffuse: { value: null },
+				distinction: { value: 1.0 },
+				range: { value: (range !== undefined) ? range : new THREE.Vector2() }
 
 			},
 

@@ -23,13 +23,13 @@ export class DotScreenMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: {value: null},
+				tDiffuse: { value: null },
 
-				angle: {value: 1.57},
-				scale: {value: 1.0},
-				intensity: {value: 1.0},
+				angle: { value: 1.57 },
+				scale: { value: 1.0 },
+				intensity: { value: 1.0 },
 
-				offsetRepeat: {value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0)}
+				offsetRepeat: { value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0) }
 
 			},
 
@@ -38,8 +38,8 @@ export class DotScreenMaterial extends THREE.ShaderMaterial {
 
 		});
 
-	}
+		if(average) { this.defines.AVERAGE = "1"; }
 
-	if(average) { this.defines.AVERAGE = "1"; }
+	}
 
 }
