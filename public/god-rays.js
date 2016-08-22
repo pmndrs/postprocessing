@@ -60,11 +60,11 @@
 
 		});
 
-		/*textureLoader.load("textures/sun.png", function(texture) {
+		textureLoader.load("textures/sun.png", function(texture) {
 
 			assets.sunTexture = texture;
 
-		});*/
+		});
 
 	});
 
@@ -155,15 +155,10 @@
 
 		// Sun.
 
-		const sun = new THREE.Mesh(
-			new THREE.SphereBufferGeometry(600, 32, 32),
-			new THREE.MeshBasicMaterial({color: 0xffddaa, fog: false})
-		);
-
-		/*const sunMaterial = new THREE.PointsMaterial({
+		const sunMaterial = new THREE.PointsMaterial({
 			map: assets.sunTexture,
-			size: 600,
-			sizeAttenuation: false,
+			size: 1600,
+			sizeAttenuation: true,
 			color: 0xffddaa,
 			alphaTest: 0.0,
 			transparent: true,
@@ -172,8 +167,9 @@
 
 		const sunGeometry = new THREE.Geometry();
 		sunGeometry.vertices.push(new THREE.Vector3());
-		const sun = new THREE.Points(sunGeometry, sunMaterial);*/
+		const sun = new THREE.Points(sunGeometry, sunMaterial);
 
+		sun.frustumCulled = false;
 		sun.ignoreOverrideMaterial = true; // Hack.
 		sun.position.copy(directionalLight.position);
 		scene.add(sun);
