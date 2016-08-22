@@ -29,7 +29,9 @@ module.exports = function(grunt) {
 							"**/*.vert"
 						]
 					}),
-					require("rollup-plugin-buble")()
+					require("rollup-plugin-babel")({
+						exclude: "node_modules/**"
+					})
 				]
 			},
 			dist: {
