@@ -6,6 +6,8 @@
 
 A post processing library that provides the means to implement 2D filter effects for three.js.
 
+*[API Reference](http://vanruesc.github.io/postprocessing/docs)*
+
 
 ## Installation
 
@@ -91,11 +93,6 @@ Writing self-contained render-to-texture passes is also a feasible option.
  - [Bokeh](http://vanruesc.github.io/postprocessing/public/bokeh.html)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/smaa.html)
  - [Film](http://vanruesc.github.io/postprocessing/public/film.html)
-
-
-## Documentation
-
-[API](http://vanruesc.github.io/postprocessing/docs)
 
 
 ## Contributing
