@@ -1,5 +1,5 @@
 /**
- * postprocessing v1.1.4 build Aug 23 2016
+ * postprocessing v1.1.5 build Sep 16 2016
  * https://github.com/vanruesc/postprocessing
  * Copyright 2016 Raoul van Rüschen, Zlib
  */
@@ -40,6 +40,14 @@
     };
   }();
 
+
+
+
+
+
+
+
+
   var inherits = function (subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -56,12 +64,46 @@
     if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
   };
 
+
+
+
+
+
+
+
+
+
+
   var possibleConstructorReturn = function (self, call) {
     if (!self) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
 
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  };
+
+
+
+  var set$1 = function set$1(object, property, value, receiver) {
+    var desc = Object.getOwnPropertyDescriptor(object, property);
+
+    if (desc === undefined) {
+      var parent = Object.getPrototypeOf(object);
+
+      if (parent !== null) {
+        set$1(parent, property, value, receiver);
+      }
+    } else if ("value" in desc && desc.writable) {
+      desc.value = value;
+    } else {
+      var setter = desc.set;
+
+      if (setter !== undefined) {
+        setter.call(receiver, value);
+      }
+    }
+
+    return value;
   };
 
   /**
@@ -1117,6 +1159,13 @@
   }(THREE.ShaderMaterial);
 
   /**
+   * A collection of shader materials that are used in the post processing passes.
+   *
+   * @module postprocessing
+   * @submodule materials
+   */
+
+  /**
    * An abstract pass.
    *
    * This class implements a dispose method that frees memory on demand.
@@ -1137,7 +1186,10 @@
    */
 
   var Pass = function () {
-  		function Pass(scene, camera, quad) {
+  		function Pass() {
+  				var scene = arguments.length <= 0 || arguments[0] === undefined ? new THREE.Scene() : arguments[0];
+  				var camera = arguments.length <= 1 || arguments[1] === undefined ? new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1) : arguments[1];
+  				var quad = arguments.length <= 2 || arguments[2] === undefined ? new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null) : arguments[2];
   				classCallCheck(this, Pass);
 
 
@@ -1150,7 +1202,7 @@
        * @default Scene()
        */
 
-  				this.scene = scene !== undefined ? scene : new THREE.Scene();
+  				this.scene = scene;
 
   				/**
        * The camera to render with.
@@ -1161,7 +1213,7 @@
        * @default OrthographicCamera(-1, 1, 1, -1, 0, 1)
        */
 
-  				this.camera = camera !== undefined ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  				this.camera = camera;
 
   				/**
        * The quad mesh to use for rendering.
@@ -1176,7 +1228,7 @@
        *  this.quad.material = this.myMaterial;
        */
 
-  				this.quad = quad !== undefined ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+  				this.quad = quad;
 
   				/**
        * Indicates whether the read and write buffers should be swapped after this
@@ -1213,7 +1265,7 @@
 
   				this.renderToScreen = false;
 
-  				// Finally, add the camera and the quad to the scene.
+  				// Add the camera and the quad to the scene.
   				if (this.scene !== null) {
 
   						if (this.camera !== null && this.camera.parent === null) {
@@ -1345,14 +1397,9 @@
   var BloomPass = function (_Pass) {
   		inherits(BloomPass, _Pass);
 
-  		function BloomPass(options) {
+  		function BloomPass() {
+  				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   				classCallCheck(this, BloomPass);
-
-  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(BloomPass).call(this));
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * A render target.
@@ -1361,6 +1408,8 @@
        * @type WebGLRenderTarget
        * @private
        */
+
+  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(BloomPass).call(this));
 
   				_this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
   						minFilter: THREE.LinearFilter,
@@ -1609,16 +1658,13 @@
   var BokehPass = function (_Pass) {
   	inherits(BokehPass, _Pass);
 
-  	function BokehPass(camera, options) {
+  	function BokehPass(camera) {
+  		var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   		classCallCheck(this, BokehPass);
 
   		var _this = possibleConstructorReturn(this, Object.getPrototypeOf(BokehPass).call(this));
 
   		_this.needsSwap = true;
-
-  		if (options === undefined) {
-  			options = {};
-  		}
 
   		/**
      * Bokeh shader material.
@@ -1717,14 +1763,9 @@
   var Bokeh2Pass = function (_Pass) {
   	inherits(Bokeh2Pass, _Pass);
 
-  	function Bokeh2Pass(camera, options) {
+  	function Bokeh2Pass(camera) {
+  		var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
   		classCallCheck(this, Bokeh2Pass);
-
-  		var _this = possibleConstructorReturn(this, Object.getPrototypeOf(Bokeh2Pass).call(this));
-
-  		if (options === undefined) {
-  			options = {};
-  		}
 
   		/**
      * Bokeh shader material.
@@ -1733,6 +1774,8 @@
      * @type BokehMaterial
      * @private
      */
+
+  		var _this = possibleConstructorReturn(this, Object.getPrototypeOf(Bokeh2Pass).call(this));
 
   		_this.bokehMaterial = new Bokeh2Material(camera, options);
 
@@ -1850,16 +1893,13 @@
   var DotScreenPass = function (_Pass) {
   		inherits(DotScreenPass, _Pass);
 
-  		function DotScreenPass(options) {
+  		function DotScreenPass() {
+  				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   				classCallCheck(this, DotScreenPass);
 
   				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(DotScreenPass).call(this));
 
   				_this.needsSwap = true;
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * Dot screen shader material description.
@@ -1977,16 +2017,13 @@
   var FilmPass = function (_Pass) {
   		inherits(FilmPass, _Pass);
 
-  		function FilmPass(options) {
+  		function FilmPass() {
+  				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   				classCallCheck(this, FilmPass);
 
   				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(FilmPass).call(this));
 
   				_this.needsSwap = true;
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * Film shader material.
@@ -2090,19 +2127,13 @@
   var GlitchPass = function (_Pass) {
   		inherits(GlitchPass, _Pass);
 
-  		function GlitchPass(options) {
+  		function GlitchPass() {
+  				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   				classCallCheck(this, GlitchPass);
 
   				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(GlitchPass).call(this));
 
   				_this.needsSwap = true;
-
-  				if (options === undefined) {
-  						options = {};
-  				}
-  				if (options.dtSize === undefined) {
-  						options.dtSize = 64;
-  				}
 
   				/**
        * Glitch shader material.
@@ -2135,7 +2166,7 @@
   				} else {
 
   						_this.perturbMap = null;
-  						_this.generatePerturbMap(options.dtSize);
+  						_this.generatePerturbMap(options.dtSize !== undefined ? options.dtSize : 64);
   				}
 
   				/**
@@ -2333,14 +2364,9 @@
   var GodRaysPass = function (_Pass) {
   		inherits(GodRaysPass, _Pass);
 
-  		function GodRaysPass(scene, camera, lightSource, options) {
+  		function GodRaysPass(scene, camera, lightSource) {
+  				var options = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
   				classCallCheck(this, GodRaysPass);
-
-  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(GodRaysPass).call(this));
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * A render target for rendering the masked scene.
@@ -2349,6 +2375,8 @@
        * @type WebGLRenderTarget
        * @private
        */
+
+  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(GodRaysPass).call(this));
 
   				_this.renderTargetMask = new THREE.WebGLRenderTarget(1, 1, {
   						minFilter: THREE.LinearFilter,
@@ -2398,7 +2426,7 @@
        * @type Object3D
        */
 
-  				_this.lightSource = lightSource !== undefined ? lightSource : new THREE.Object3D();
+  				_this.lightSource = lightSource;
 
   				/**
        * The light position in screen space.
@@ -2491,7 +2519,7 @@
        * @type Scene
        */
 
-  				_this.mainScene = scene !== undefined ? scene : new THREE.Scene();
+  				_this.mainScene = scene;
 
   				/**
        * The main camera.
@@ -2500,7 +2528,7 @@
        * @type Camera
        */
 
-  				_this.mainCamera = camera !== undefined ? camera : new THREE.PerspectiveCamera();
+  				_this.mainCamera = camera;
 
   				return _this;
   		}
@@ -2850,14 +2878,9 @@
   var RenderPass = function (_Pass) {
   		inherits(RenderPass, _Pass);
 
-  		function RenderPass(scene, camera, options) {
+  		function RenderPass(scene, camera) {
+  				var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
   				classCallCheck(this, RenderPass);
-
-  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(RenderPass).call(this, scene, camera, null));
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * Override material.
@@ -2865,6 +2888,8 @@
        * @property overrideMaterial
        * @type Material
        */
+
+  				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(RenderPass).call(this, scene, camera, null));
 
   				_this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
 
@@ -2960,7 +2985,8 @@
   var SavePass = function (_Pass) {
   		inherits(SavePass, _Pass);
 
-  		function SavePass(renderTarget, resize) {
+  		function SavePass(renderTarget) {
+  				var resize = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
   				classCallCheck(this, SavePass);
 
   				/**
@@ -2985,7 +3011,7 @@
        * @private
        */
 
-  				_this.renderTarget = renderTarget !== undefined ? renderTarget : null;
+  				_this.renderTarget = renderTarget;
 
   				/**
        * Indicates whether the render target should be resized when the size of
@@ -2996,7 +3022,7 @@
        * @default true
        */
 
-  				_this.resize = resize !== undefined ? resize : true;
+  				_this.resize = resize;
 
   				return _this;
   		}
@@ -3246,12 +3272,24 @@
   var ShaderPass = function (_Pass) {
   		inherits(ShaderPass, _Pass);
 
-  		function ShaderPass(material, textureID) {
+  		function ShaderPass(material) {
+  				var textureID = arguments.length <= 1 || arguments[1] === undefined ? "tDiffuse" : arguments[1];
   				classCallCheck(this, ShaderPass);
 
   				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(ShaderPass).call(this));
 
   				_this.needsSwap = true;
+
+  				/**
+       * The shader material to use for rendering.
+       *
+       * @property material
+       * @type ShaderMaterial
+       */
+
+  				_this.material = material;
+
+  				_this.quad.material = _this.material;
 
   				/**
        * The name of the color sampler uniform of the given material.
@@ -3261,18 +3299,7 @@
        * @default "tDiffuse"
        */
 
-  				_this.textureID = textureID !== undefined ? textureID : "tDiffuse";
-
-  				/**
-       * The shader material to use for rendering.
-       *
-       * @property material
-       * @type ShaderMaterial
-       */
-
-  				_this.material = material !== undefined ? material : null;
-
-  				_this.quad.material = _this.material;
+  				_this.textureID = textureID;
 
   				return _this;
   		}
@@ -3331,16 +3358,13 @@
   var ToneMappingPass = function (_Pass) {
   		inherits(ToneMappingPass, _Pass);
 
-  		function ToneMappingPass(options) {
+  		function ToneMappingPass() {
+  				var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
   				classCallCheck(this, ToneMappingPass);
 
   				var _this = possibleConstructorReturn(this, Object.getPrototypeOf(ToneMappingPass).call(this));
 
   				_this.needsSwap = true;
-
-  				if (options === undefined) {
-  						options = {};
-  				}
 
   				/**
        * Render target for the current limonosity.
@@ -3555,6 +3579,13 @@
   }(Pass);
 
   /**
+   * A compilation of the post processing passes.
+   *
+   * @module postprocessing
+   * @submodule passes
+   */
+
+  /**
    * The EffectComposer may be used in place of a normal WebGLRenderer.
    *
    * It will disable the auto clear behaviour of the provided renderer to prevent
@@ -3574,16 +3605,11 @@
    */
 
   var EffectComposer = function () {
-  		function EffectComposer(renderer, depthTexture, stencilBuffer) {
+  		function EffectComposer(renderer) {
+  				var depthTexture = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
+  				var stencilBuffer = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
   				classCallCheck(this, EffectComposer);
 
-
-  				if (depthTexture === undefined) {
-  						depthTexture = false;
-  				}
-  				if (stencilBuffer === undefined) {
-  						stencilBuffer = false;
-  				}
 
   				/**
        * The renderer.
@@ -3857,6 +3883,13 @@
   		}]);
   		return EffectComposer;
   }();
+
+  /**
+   * Exposure of the library components.
+   *
+   * @module postprocessing
+   * @main postprocessing
+   */
 
   exports.EffectComposer = EffectComposer;
   exports.BloomPass = BloomPass;
