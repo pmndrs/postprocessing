@@ -8,17 +8,21 @@ module.exports = {
 
 		"can be instantiated": function(test) {
 
-			function WebGLRendererMockup() {
+			class WebGLRendererMockup {
 
-				this.getSize = function() { return { width: 1, height: 1 }; };
+				constructor() {
 
-				this.context = {
-					getContextAttributes: function() { return { alpha: 0 }; }
-				};
+					this.getSize = function() { return { width: 1, height: 1 }; };
 
-				this.state = {
-					setDepthWrite: function() {}
-				};
+					this.context = {
+						getContextAttributes() { return { alpha: 0 }; }
+					};
+
+					this.state = {
+						setDepthWrite() {}
+					};
+
+				}
 
 			}
 
@@ -126,7 +130,7 @@ module.exports = {
 			test.ok(pass, "glitch");
 			pass.dispose();
 
-			pass = new LIBRARY.GodRaysPass();
+			pass = new LIBRARY.GodRaysPass(null, null, null);
 			test.ok(pass, "god rays");
 			pass.dispose();
 
@@ -138,7 +142,7 @@ module.exports = {
 			test.ok(pass, "render");
 			pass.dispose();
 
-			pass = new LIBRARY.SavePass();
+			pass = new LIBRARY.SavePass(null);
 			test.ok(pass, "save ");
 			pass.dispose();
 
@@ -146,7 +150,7 @@ module.exports = {
 			test.ok(pass, "smaa");
 			pass.dispose();
 
-			pass = new LIBRARY.ShaderPass();
+			pass = new LIBRARY.ShaderPass(null);
 			test.ok(pass, "shader");
 			pass.dispose();
 
