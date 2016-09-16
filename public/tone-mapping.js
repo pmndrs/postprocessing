@@ -115,8 +115,8 @@
 
 		// Lights.
 
-		const ambientLight = new THREE.AmbientLight(0x2d200f);
-		const directionalLight = new THREE.DirectionalLight(0xffeeaa);
+		const ambientLight = new THREE.AmbientLight(0x000000);
+		const directionalLight = new THREE.DirectionalLight(0xffffff);
 
 		directionalLight.position.set(-1, 1, 0);
 		directionalLight.target.position.copy(scene.position);
@@ -128,11 +128,12 @@
 
 		assets.moonColorMap.anisotropy = renderer.getMaxAnisotropy();
 
-		const material = new THREE.MeshPhongMaterial({
+		const material = new THREE.MeshStandardMaterial({
 			color: 0xd4d4d4,
 			map: assets.moonColorMap,
 			normalMap: assets.moonNormalMap,
-			shininess: 10,
+			roughness: 0.75,
+			metalness: 0.0,
 			fog: true
 		});
 
