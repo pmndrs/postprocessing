@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -114,7 +114,7 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 import { CopyMaterial } from &quot;../materials&quot;;
-import { Pass } from &quot;./pass&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * A pass that renders the result from a previous pass to another render target.
@@ -129,7 +129,7 @@ import { Pass } from &quot;./pass&quot;;
 
 export class SavePass extends Pass {
 
-	constructor(renderTarget, resize) {
+	constructor(renderTarget, resize = true) {
 
 		super();
 
@@ -153,7 +153,7 @@ export class SavePass extends Pass {
 		 * @private
 		 */
 
-		this.renderTarget = (renderTarget !== undefined) ? renderTarget : null;
+		this.renderTarget = renderTarget;
 
 		/**
 		 * Indicates whether the render target should be resized when the size of
@@ -164,7 +164,7 @@ export class SavePass extends Pass {
 		 * @default true
 		 */
 
-		this.resize = (resize !== undefined) ? resize : true;
+		this.resize = resize;
 
 	}
 

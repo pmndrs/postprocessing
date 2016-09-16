@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -113,15 +113,9 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import {
-	CopyMaterial,
-	CombineMaterial,
-	LuminosityMaterial,
-	ConvolutionMaterial
-} from &quot;../materials&quot;;
-
-import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
+import { CopyMaterial, CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * A bloom pass.
@@ -142,11 +136,9 @@ import THREE from &quot;three&quot;;
 
 export class BloomPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * A render target.

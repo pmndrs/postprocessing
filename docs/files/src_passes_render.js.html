@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -113,8 +113,8 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * Used for saving the original clear color during rendering.
@@ -145,11 +145,9 @@ const CLEAR_COLOR = new THREE.Color();
 
 export class RenderPass extends Pass {
 
-	constructor(scene, camera, options) {
+	constructor(scene, camera, options = {}) {
 
 		super(scene, camera, null);
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Override material.

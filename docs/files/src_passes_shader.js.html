@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -113,7 +113,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { Pass } from &quot;./pass&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * A shader pass.
@@ -130,11 +130,22 @@ import { Pass } from &quot;./pass&quot;;
 
 export class ShaderPass extends Pass {
 
-	constructor(material, textureID) {
+	constructor(material, textureID = &quot;tDiffuse&quot;) {
 
 		super();
 
 		this.needsSwap = true;
+
+		/**
+		 * The shader material to use for rendering.
+		 *
+		 * @property material
+		 * @type ShaderMaterial
+		 */
+
+		this.material = material;
+
+		this.quad.material = this.material;
 
 		/**
 		 * The name of the color sampler uniform of the given material.
@@ -144,18 +155,7 @@ export class ShaderPass extends Pass {
 		 * @default &quot;tDiffuse&quot;
 		 */
 
-		this.textureID = (textureID !== undefined) ? textureID : &quot;tDiffuse&quot;;
-
-		/**
-		 * The shader material to use for rendering.
-		 *
-		 * @property material
-		 * @type ShaderMaterial
-		 */
-
-		this.material = (material !== undefined) ? material : null;
-
-		this.quad.material = this.material;
+		this.textureID = textureID;
 
 	}
 

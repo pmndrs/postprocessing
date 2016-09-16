@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -113,14 +113,9 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import {
-	ClearMaskPass,
-	MaskPass,
-	ShaderPass
-} from &quot;./passes&quot;;
-
-import { CopyMaterial } from &quot;./materials&quot;;
 import THREE from &quot;three&quot;;
+import { ClearMaskPass, MaskPass, ShaderPass } from &quot;./passes&quot;;
+import { CopyMaterial } from &quot;./materials&quot;;
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -143,10 +138,7 @@ import THREE from &quot;three&quot;;
 
 export class EffectComposer {
 
-	constructor(renderer, depthTexture, stencilBuffer) {
-
-		if(depthTexture === undefined) { depthTexture = false; }
-		if(stencilBuffer === undefined) { stencilBuffer = false; }
+	constructor(renderer, depthTexture = false, stencilBuffer = false) {
 
 		/**
 		 * The renderer.

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -114,7 +114,7 @@
 <div class="file">
     <pre class="code prettyprint linenums">
 import { BokehMaterial } from &quot;../materials&quot;;
-import { Pass } from &quot;./pass&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * Depth of Field pass using a bokeh shader.
@@ -132,13 +132,11 @@ import { Pass } from &quot;./pass&quot;;
 
 export class BokehPass extends Pass {
 
-	constructor(camera, options) {
+	constructor(camera, options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Bokeh shader material.

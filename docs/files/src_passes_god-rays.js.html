@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.4</em>
+            <em>API Docs for: 1.1.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -113,15 +113,9 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import {
-	ConvolutionMaterial,
-	CombineMaterial,
-	CopyMaterial,
-	GodRaysMaterial
-} from &quot;../materials&quot;;
-
-import { Pass } from &quot;./pass&quot;;
 import THREE from &quot;three&quot;;
+import { ConvolutionMaterial, CombineMaterial, CopyMaterial, GodRaysMaterial } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
  * Used for saving the renderer&#x27;s clear color.
@@ -158,11 +152,9 @@ const CLEAR_COLOR = new THREE.Color();
 
 export class GodRaysPass extends Pass {
 
-	constructor(scene, camera, lightSource, options) {
+	constructor(scene, camera, lightSource, options = {}) {
 
 		super();
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * A render target for rendering the masked scene.
@@ -220,7 +212,7 @@ export class GodRaysPass extends Pass {
 		 * @type Object3D
 		 */
 
-		this.lightSource = (lightSource !== undefined) ? lightSource : new THREE.Object3D();
+		this.lightSource = lightSource;
 
 		/**
 		 * The light position in screen space.
@@ -303,7 +295,7 @@ export class GodRaysPass extends Pass {
 		 * @type Scene
 		 */
 
-		this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
+		this.mainScene = scene;
 
 		/**
 		 * The main camera.
@@ -312,7 +304,7 @@ export class GodRaysPass extends Pass {
 		 * @type Camera
 		 */
 
-		this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
+		this.mainCamera = camera;
 
 	}
 

@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "1.1.4",
+        "version": "1.1.5",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -387,7 +387,7 @@
             "namespaces": {},
             "tag": "main",
             "file": "src\\effect-composer.js",
-            "line": 10,
+            "line": 5,
             "description": "Exposure of the library components.",
             "itemtype": "main"
         },
@@ -418,7 +418,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\tone-mapping.js",
-            "line": 11,
+            "line": 5,
             "description": "A compilation of the post processing passes."
         }
     },
@@ -947,7 +947,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\bloom.js",
-            "line": 11,
+            "line": 5,
             "description": "A bloom pass.\n\nThis pass renders a scene with superimposed blur by utilising the fast Kawase\nconvolution approach.",
             "submodule": "passes",
             "extends": "Pass",
@@ -1373,7 +1373,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\god-rays.js",
-            "line": 22,
+            "line": 16,
             "description": "A crepuscular rays pass.",
             "submodule": "passes",
             "extends": "Pass",
@@ -1659,7 +1659,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\smaa.js",
-            "line": 10,
+            "line": 5,
             "description": "Subpixel Morphological Antialiasing (SMAA) v2.8.\n\nPreset: SMAA 1x Medium (with color edge detection).\n https://github.com/iryoku/smaa/releases/tag/v2.8",
             "submodule": "passes",
             "extends": "Pass",
@@ -1683,7 +1683,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\passes\\tone-mapping.js",
-            "line": 11,
+            "line": 5,
             "description": "A tone mapping pass that supports adaptive luminosity.\n\nIf adaptivity is enabled, this pass generates a texture that represents the\nluminosity of the current scene and adjusts it over time to simulate the\noptic nerve responding to the amount of light it is receiving.\n\nReference:\n GDC2007 - Wolfgang Engel, Post-Processing Pipeline\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
             "submodule": "passes",
             "extends": "Pass",
@@ -1731,7 +1731,7 @@
             "module": "postprocessing",
             "namespace": "",
             "file": "src\\effect-composer.js",
-            "line": 10,
+            "line": 5,
             "description": "The EffectComposer may be used in place of a normal WebGLRenderer.\n\nIt will disable the auto clear behaviour of the provided renderer to prevent\nunnecessary clear operations. The depth buffer will also be disabled for\nwriting. Passes that rely on the depth test must explicitly enable it.\n\nYou may want to use a {{#crossLink \"RenderPass\"}}{{/crossLink}} as your first\npass to automatically clear the screen and render the scene to a texture for\nfurther processing.",
             "is_constructor": 1,
             "params": [
@@ -1900,7 +1900,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 36,
+            "line": 28,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -1913,7 +1913,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 52,
+            "line": 44,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -1926,7 +1926,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 62,
+            "line": 54,
             "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
             "itemtype": "property",
             "name": "resolutionScale",
@@ -1938,7 +1938,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 75,
+            "line": 67,
             "description": "Combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -1951,7 +1951,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 87,
+            "line": 79,
             "description": "Copy shader material.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -1964,7 +1964,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 101,
+            "line": 93,
             "description": "Luminance shader material.",
             "itemtype": "property",
             "name": "luminosityMaterial",
@@ -1977,7 +1977,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 113,
+            "line": 105,
             "description": "Convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -1990,7 +1990,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 127,
+            "line": 119,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -2002,7 +2002,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 147,
+            "line": 139,
             "description": "Renders the effect.\n\nApplies a luminance filter and convolution blur to the read buffer and\nrenders the result into a seperate render target. The result is additively\nblended with the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -2024,7 +2024,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 213,
+            "line": 205,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2046,7 +2046,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 235,
+            "line": 227,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2068,7 +2068,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 28,
+            "line": 26,
             "description": "Bokeh shader material.",
             "itemtype": "property",
             "name": "bokehMaterial",
@@ -2081,7 +2081,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 42,
+            "line": 40,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2108,7 +2108,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 68,
+            "line": 66,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2125,7 +2125,7 @@
         },
         {
             "file": "src\\passes\\bokeh.js",
-            "line": 82,
+            "line": 80,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2147,7 +2147,7 @@
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 33,
+            "line": 31,
             "description": "Bokeh shader material.",
             "itemtype": "property",
             "name": "bokehMaterial",
@@ -2160,7 +2160,7 @@
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 47,
+            "line": 45,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2187,7 +2187,7 @@
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 73,
+            "line": 71,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2204,7 +2204,7 @@
         },
         {
             "file": "src\\passes\\bokeh2.js",
-            "line": 87,
+            "line": 85,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2243,7 +2243,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 28,
+            "line": 26,
             "description": "Dot screen shader material description.",
             "itemtype": "property",
             "name": "material",
@@ -2256,7 +2256,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 46,
+            "line": 44,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2283,7 +2283,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 71,
+            "line": 69,
             "description": "Adjusts the size of the effect.",
             "itemtype": "method",
             "name": "initialise",
@@ -2300,7 +2300,7 @@
         },
         {
             "file": "src\\passes\\dot-screen.js",
-            "line": 85,
+            "line": 83,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2322,7 +2322,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 37,
+            "line": 35,
             "description": "Film shader material.",
             "itemtype": "property",
             "name": "material",
@@ -2335,7 +2335,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 49,
+            "line": 47,
             "description": "The amount of scanlines in percent, relative to the screen height.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
             "itemtype": "property",
             "name": "scanlineDensity",
@@ -2347,7 +2347,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 64,
+            "line": 62,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2379,7 +2379,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 91,
+            "line": 89,
             "description": "Adjusts the scanline count using the renderer's height.",
             "itemtype": "method",
             "name": "initialise",
@@ -2396,7 +2396,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 105,
+            "line": 103,
             "description": "Adjusts the scanline count using the renderer's height.",
             "itemtype": "method",
             "name": "setSize",
@@ -2418,7 +2418,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 28,
+            "line": 25,
             "description": "Glitch shader material.",
             "itemtype": "property",
             "name": "material",
@@ -2431,7 +2431,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 40,
+            "line": 37,
             "description": "A perturbation map.\n\nIf none is provided, a noise texture will be created.\nThis texture will automatically be destroyed when the EffectComposer is\ndeleted.",
             "itemtype": "property",
             "name": "perturbMap",
@@ -2442,7 +2442,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 64,
+            "line": 61,
             "description": "The effect mode.\n\nCheck the Mode enumeration for available modes.",
             "itemtype": "property",
             "name": "mode",
@@ -2454,7 +2454,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 76,
+            "line": 73,
             "description": "Counter for glitch activation/deactivation.",
             "itemtype": "property",
             "name": "counter",
@@ -2467,7 +2467,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 86,
+            "line": 83,
             "description": "A random break point for the sporadic glitch activation.",
             "itemtype": "property",
             "name": "breakPoint",
@@ -2480,7 +2480,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 99,
+            "line": 96,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -2507,7 +2507,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 156,
+            "line": 153,
             "description": "Creates a random break point for the glitch effect.",
             "itemtype": "method",
             "name": "generateTrigger",
@@ -2519,7 +2519,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 169,
+            "line": 166,
             "description": "Destroys the currently set texture and generates a simple noise map.",
             "itemtype": "method",
             "name": "generatePerturbMap",
@@ -2538,7 +2538,7 @@
         },
         {
             "file": "src\\passes\\glitch.js",
-            "line": 204,
+            "line": 201,
             "description": "A glitch mode enumeration.\n\nSPORADIC is the default mode (randomly timed glitches).",
             "itemtype": "property",
             "name": "GlitchPass.Mode",
@@ -2551,7 +2551,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 11,
+            "line": 5,
             "description": "Used for saving the renderer's clear color.",
             "itemtype": "property",
             "name": "CLEAR_COLOR",
@@ -2564,7 +2564,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 52,
+            "line": 44,
             "description": "A render target for rendering the masked scene.",
             "itemtype": "property",
             "name": "renderTargetMask",
@@ -2577,7 +2577,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 66,
+            "line": 58,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -2590,7 +2590,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 78,
+            "line": 70,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -2603,7 +2603,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 88,
+            "line": 80,
             "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
             "itemtype": "property",
             "name": "resolutionScale",
@@ -2615,7 +2615,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 101,
+            "line": 93,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -2626,7 +2626,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 110,
+            "line": 102,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenPosition",
@@ -2639,7 +2639,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 120,
+            "line": 112,
             "description": "A convolution blur shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -2652,7 +2652,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 132,
+            "line": 124,
             "description": "A combine shader material used for rendering to screen.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -2665,7 +2665,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 142,
+            "line": 134,
             "description": "A copy shader material used for rendering to texture.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -2678,7 +2678,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 154,
+            "line": 146,
             "description": "A material used for masking the scene objects.",
             "itemtype": "property",
             "name": "maskMaterial",
@@ -2691,7 +2691,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 164,
+            "line": 156,
             "description": "God rays shader material.",
             "itemtype": "property",
             "name": "godRaysMaterial",
@@ -2704,7 +2704,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 184,
+            "line": 176,
             "description": "The main scene.",
             "itemtype": "property",
             "name": "mainScene",
@@ -2715,7 +2715,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 193,
+            "line": 185,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
@@ -2726,7 +2726,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 204,
+            "line": 196,
             "description": "The strength of the preliminary blur phase.",
             "itemtype": "property",
             "name": "blurriness",
@@ -2738,7 +2738,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 224,
+            "line": 216,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2750,7 +2750,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 245,
+            "line": 237,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the GPU load\ndirectly and doesn't necessarily yield better results!",
             "itemtype": "property",
             "name": "samples",
@@ -2762,7 +2762,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 272,
+            "line": 264,
             "description": "Renders the scene.\n\nThe read buffer is assumed to contain the normally rendered scene.\nThe god rays pass has four phases with a total of 8 render steps.\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPreliminary Blur Phase:\n The masked scene is blurred five consecutive times.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines\n towards the light source.\n\nComposite Phase:\n The final result is added to the normal scene.",
             "itemtype": "method",
             "name": "render",
@@ -2784,7 +2784,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 373,
+            "line": 365,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2806,7 +2806,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 396,
+            "line": 388,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2879,7 +2879,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 27,
+            "line": 31,
             "description": "The scene to render.",
             "itemtype": "property",
             "name": "scene",
@@ -2893,7 +2893,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 38,
+            "line": 42,
             "description": "The camera to render with.",
             "itemtype": "property",
             "name": "camera",
@@ -2907,7 +2907,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 49,
+            "line": 53,
             "description": "The quad mesh to use for rendering.\n\nAssign your shader material to this mesh!",
             "itemtype": "property",
             "name": "quad",
@@ -2924,7 +2924,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 64,
+            "line": 68,
             "description": "Indicates whether the read and write buffers should be swapped after this\npass has finished rendering.\n\nSet this to true if this pass renders to the write buffer so that a\nfollowing pass can find the result in the read buffer.",
             "itemtype": "property",
             "name": "needsSwap",
@@ -2938,7 +2938,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 79,
+            "line": 83,
             "description": "Enabled flag.",
             "itemtype": "property",
             "name": "enabled",
@@ -2950,7 +2950,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 89,
+            "line": 93,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -2962,7 +2962,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 109,
+            "line": 113,
             "description": "Renders the effect.\n\nThis is an abstract method that must be overridden.",
             "itemtype": "method",
             "name": "render",
@@ -3005,7 +3005,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 129,
+            "line": 133,
             "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the\nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render\ntargets by performing a preliminary render operation.\n\nThe effect composer calls this method when this pass is added to its queue.",
             "itemtype": "method",
             "name": "initialise",
@@ -3027,7 +3027,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 148,
+            "line": 152,
             "description": "Updates this pass with the renderer's size.\n\nThis is an abstract method that may be overriden in case you want to be\ninformed about the main render size.\n\nThe effect composer calls this method when its own size is updated.",
             "itemtype": "method",
             "name": "setSize",
@@ -3052,7 +3052,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 165,
+            "line": 169,
             "description": "Performs a shallow search for properties that define a dispose method and\ndeletes them. The pass will be inoperative after this method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe EffectComposer calls this method automatically when it is being\ndestroyed. You may, however, use it independently to free memory\nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -3075,7 +3075,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 39,
+            "line": 37,
             "description": "Override material.",
             "itemtype": "property",
             "name": "overrideMaterial",
@@ -3086,7 +3086,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 48,
+            "line": 46,
             "description": "Clear color.",
             "itemtype": "property",
             "name": "clearColor",
@@ -3097,7 +3097,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 57,
+            "line": 55,
             "description": "Clear alpha.",
             "itemtype": "property",
             "name": "clearAlpha",
@@ -3108,7 +3108,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 66,
+            "line": 64,
             "description": "Clear flag.",
             "itemtype": "property",
             "name": "clear",
@@ -3120,7 +3120,7 @@
         },
         {
             "file": "src\\passes\\render.js",
-            "line": 78,
+            "line": 76,
             "description": "Renders the scene.",
             "itemtype": "method",
             "name": "render",
@@ -3225,22 +3225,22 @@
         {
             "file": "src\\passes\\shader.js",
             "line": 24,
-            "description": "The name of the color sampler uniform of the given material.",
+            "description": "The shader material to use for rendering.",
             "itemtype": "property",
-            "name": "textureID",
-            "type": "String",
-            "default": "\"tDiffuse\"",
+            "name": "material",
+            "type": "ShaderMaterial",
             "class": "ShaderPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\shader.js",
-            "line": 34,
-            "description": "The shader material to use for rendering.",
+            "line": 35,
+            "description": "The name of the color sampler uniform of the given material.",
             "itemtype": "property",
-            "name": "material",
-            "type": "ShaderMaterial",
+            "name": "textureID",
+            "type": "String",
+            "default": "\"tDiffuse\"",
             "class": "ShaderPass",
             "module": "postprocessing",
             "submodule": "passes"
@@ -3274,7 +3274,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 31,
+            "line": 26,
             "description": "A render target for the color edge detection.",
             "itemtype": "property",
             "name": "renderTargetColorEdges",
@@ -3287,7 +3287,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 47,
+            "line": 42,
             "description": "A render target for the SMAA weights.",
             "itemtype": "property",
             "name": "renderTargetWeights",
@@ -3300,7 +3300,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 59,
+            "line": 54,
             "description": "SMAA color edge detection shader material.",
             "itemtype": "property",
             "name": "colorEdgesMaterial",
@@ -3313,7 +3313,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 69,
+            "line": 64,
             "description": "SMAA weights shader material.",
             "itemtype": "property",
             "name": "weightsMaterial",
@@ -3326,7 +3326,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 105,
+            "line": 100,
             "description": "SMAA blend shader material.",
             "itemtype": "property",
             "name": "blendMaterial",
@@ -3339,7 +3339,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 121,
+            "line": 116,
             "description": "Antialiases the scene.",
             "itemtype": "method",
             "name": "render",
@@ -3366,7 +3366,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 157,
+            "line": 152,
             "description": "Adjusts the format and size of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -3383,7 +3383,7 @@
         },
         {
             "file": "src\\passes\\smaa.js",
-            "line": 171,
+            "line": 166,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -3405,7 +3405,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 42,
+            "line": 34,
             "description": "Render target for the current limonosity.",
             "itemtype": "property",
             "name": "renderTargetLuminosity",
@@ -3418,7 +3418,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 58,
+            "line": 50,
             "description": "Adapted luminance render target.",
             "itemtype": "property",
             "name": "renderTargetLuminosity",
@@ -3431,7 +3431,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 71,
+            "line": 63,
             "description": "Render target that holds a copy of the adapted limonosity.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -3444,7 +3444,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 81,
+            "line": 73,
             "description": "Copy shader material used for saving the luminance map.",
             "itemtype": "property",
             "name": "copyMaterial",
@@ -3457,7 +3457,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 91,
+            "line": 83,
             "description": "Luminosity shader material.",
             "itemtype": "property",
             "name": "luminosityMaterial",
@@ -3470,7 +3470,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 103,
+            "line": 95,
             "description": "Adaptive luminance shader material.",
             "itemtype": "property",
             "name": "adaptiveLuminosityMaterial",
@@ -3483,7 +3483,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 115,
+            "line": 107,
             "description": "Tone mapping shader material.",
             "itemtype": "property",
             "name": "toneMappingMaterial",
@@ -3496,7 +3496,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 129,
+            "line": 121,
             "description": "The resolution of the render targets. Must be a power of two for mipmapping.",
             "itemtype": "property",
             "name": "resolution",
@@ -3508,7 +3508,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 154,
+            "line": 146,
             "description": "Whether this pass uses adaptive luminosity.",
             "itemtype": "property",
             "name": "adaptive",
@@ -3519,7 +3519,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 181,
+            "line": 173,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -3551,7 +3551,7 @@
         },
         {
             "file": "src\\passes\\tone-mapping.js",
-            "line": 234,
+            "line": 226,
             "description": "Renders something into the previous luminosity texture.",
             "itemtype": "method",
             "name": "initialise",
@@ -3568,7 +3568,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 36,
+            "line": 28,
             "description": "The renderer.",
             "itemtype": "property",
             "name": "renderer",
@@ -3578,7 +3578,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 48,
+            "line": 40,
             "description": "The read buffer.\n\nReading from and writing to the same render target should be avoided.\nTherefore, two seperate, yet identical buffers are used.",
             "itemtype": "property",
             "name": "readBuffer",
@@ -3590,7 +3590,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 63,
+            "line": 55,
             "description": "The write buffer.",
             "itemtype": "property",
             "name": "writeBuffer",
@@ -3602,7 +3602,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 79,
+            "line": 71,
             "description": "A copy pass used for copying masked scenes.",
             "itemtype": "property",
             "name": "copyPass",
@@ -3614,7 +3614,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 89,
+            "line": 81,
             "description": "The render passes.",
             "itemtype": "property",
             "name": "passes",
@@ -3626,7 +3626,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 101,
+            "line": 93,
             "description": "Creates a new render target by replicating the renderer's canvas.",
             "itemtype": "method",
             "name": "createBuffer",
@@ -3646,7 +3646,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 123,
+            "line": 115,
             "description": "Adds a pass, optionally at a specific index.",
             "itemtype": "method",
             "name": "addPass",
@@ -3668,7 +3668,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 147,
+            "line": 139,
             "description": "Removes a pass.",
             "itemtype": "method",
             "name": "removePass",
@@ -3684,7 +3684,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 160,
+            "line": 152,
             "description": "Renders all enabled passes in the order in which they were added.",
             "itemtype": "method",
             "name": "render",
@@ -3700,7 +3700,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 218,
+            "line": 210,
             "description": "Sets the size of the buffers and the renderer's output canvas.\n\nEvery pass will be informed of the new size. It's up to each pass how that\ninformation is used.\n\nIf no width or height is specified, the render targets and passes will be\nupdated with the current size of the renderer.",
             "itemtype": "method",
             "name": "setSize",
@@ -3723,7 +3723,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 257,
+            "line": 249,
             "description": "Resets this composer by deleting all passes and creating new buffers.",
             "itemtype": "method",
             "name": "reset",
@@ -3740,7 +3740,7 @@
         },
         {
             "file": "src\\effect-composer.js",
-            "line": 270,
+            "line": 262,
             "description": "Destroys all passes and render targets.\n\nThis method deallocates all render targets, textures and materials created\nby the passes. It also deletes this composer's frame buffers.\n\nNote: the reset method uses the dispose method internally.",
             "itemtype": "method",
             "name": "dispose",
