@@ -1,5 +1,5 @@
-import { Pass } from "./pass";
 import THREE from "three";
+import { Pass } from "./pass.js";
 
 /**
  * Used for saving the original clear color during rendering.
@@ -30,11 +30,9 @@ const CLEAR_COLOR = new THREE.Color();
 
 export class RenderPass extends Pass {
 
-	constructor(scene, camera, options) {
+	constructor(scene, camera, options = {}) {
 
 		super(scene, camera, null);
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Override material.

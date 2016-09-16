@@ -1,5 +1,5 @@
 import { CopyMaterial } from "../materials";
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * A pass that renders the result from a previous pass to another render target.
@@ -14,7 +14,7 @@ import { Pass } from "./pass";
 
 export class SavePass extends Pass {
 
-	constructor(renderTarget, resize) {
+	constructor(renderTarget, resize = true) {
 
 		super();
 
@@ -38,7 +38,7 @@ export class SavePass extends Pass {
 		 * @private
 		 */
 
-		this.renderTarget = (renderTarget !== undefined) ? renderTarget : null;
+		this.renderTarget = renderTarget;
 
 		/**
 		 * Indicates whether the render target should be resized when the size of
@@ -49,7 +49,7 @@ export class SavePass extends Pass {
 		 * @default true
 		 */
 
-		this.resize = (resize !== undefined) ? resize : true;
+		this.resize = resize;
 
 	}
 

@@ -1,5 +1,5 @@
 import { FilmMaterial } from "../materials";
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * A film pass providing various cinematic effects.
@@ -26,13 +26,11 @@ import { Pass } from "./pass";
 
 export class FilmPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Film shader material.

@@ -22,7 +22,11 @@ import THREE from "three";
 
 export class Pass {
 
-	constructor(scene, camera, quad) {
+	constructor(
+		scene = new THREE.Scene(),
+		camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
+		quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null)
+	) {
 
 		/**
 		 * The scene to render.
@@ -33,7 +37,7 @@ export class Pass {
 		 * @default Scene()
 		 */
 
-		this.scene = (scene !== undefined) ? scene : new THREE.Scene();
+		this.scene = scene;
 
 		/**
 		 * The camera to render with.
@@ -44,7 +48,7 @@ export class Pass {
 		 * @default OrthographicCamera(-1, 1, 1, -1, 0, 1)
 		 */
 
-		this.camera = (camera !== undefined) ? camera : new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+		this.camera = camera;
 
 		/**
 		 * The quad mesh to use for rendering.
@@ -59,7 +63,7 @@ export class Pass {
 		 *  this.quad.material = this.myMaterial;
 		 */
 
-		this.quad = (quad !== undefined) ? quad : new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+		this.quad = quad;
 
 		/**
 		 * Indicates whether the read and write buffers should be swapped after this
@@ -96,7 +100,7 @@ export class Pass {
 
 		this.renderToScreen = false;
 
-		// Finally, add the camera and the quad to the scene.
+		// Add the camera and the quad to the scene.
 		if(this.scene !== null) {
 
 			if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }

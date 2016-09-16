@@ -1,12 +1,6 @@
-import {
-	ConvolutionMaterial,
-	CombineMaterial,
-	CopyMaterial,
-	GodRaysMaterial
-} from "../materials";
-
-import { Pass } from "./pass";
 import THREE from "three";
+import { ConvolutionMaterial, CombineMaterial, CopyMaterial, GodRaysMaterial } from "../materials";
+import { Pass } from "./pass.js";
 
 /**
  * Used for saving the renderer's clear color.
@@ -43,11 +37,9 @@ const CLEAR_COLOR = new THREE.Color();
 
 export class GodRaysPass extends Pass {
 
-	constructor(scene, camera, lightSource, options) {
+	constructor(scene, camera, lightSource, options = {}) {
 
 		super();
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * A render target for rendering the masked scene.
@@ -105,7 +97,7 @@ export class GodRaysPass extends Pass {
 		 * @type Object3D
 		 */
 
-		this.lightSource = (lightSource !== undefined) ? lightSource : new THREE.Object3D();
+		this.lightSource = lightSource;
 
 		/**
 		 * The light position in screen space.
@@ -188,7 +180,7 @@ export class GodRaysPass extends Pass {
 		 * @type Scene
 		 */
 
-		this.mainScene = (scene !== undefined) ? scene : new THREE.Scene();
+		this.mainScene = scene;
 
 		/**
 		 * The main camera.
@@ -197,7 +189,7 @@ export class GodRaysPass extends Pass {
 		 * @type Camera
 		 */
 
-		this.mainCamera = (camera !== undefined) ? camera : new THREE.PerspectiveCamera();
+		this.mainCamera = camera;
 
 	}
 

@@ -1,4 +1,4 @@
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * A shader pass.
@@ -15,11 +15,22 @@ import { Pass } from "./pass";
 
 export class ShaderPass extends Pass {
 
-	constructor(material, textureID) {
+	constructor(material, textureID = "tDiffuse") {
 
 		super();
 
 		this.needsSwap = true;
+
+		/**
+		 * The shader material to use for rendering.
+		 *
+		 * @property material
+		 * @type ShaderMaterial
+		 */
+
+		this.material = material;
+
+		this.quad.material = this.material;
 
 		/**
 		 * The name of the color sampler uniform of the given material.
@@ -29,18 +40,7 @@ export class ShaderPass extends Pass {
 		 * @default "tDiffuse"
 		 */
 
-		this.textureID = (textureID !== undefined) ? textureID : "tDiffuse";
-
-		/**
-		 * The shader material to use for rendering.
-		 *
-		 * @property material
-		 * @type ShaderMaterial
-		 */
-
-		this.material = (material !== undefined) ? material : null;
-
-		this.quad.material = this.material;
+		this.textureID = textureID;
 
 	}
 

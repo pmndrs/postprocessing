@@ -1,11 +1,6 @@
-import {
-	ClearMaskPass,
-	MaskPass,
-	ShaderPass
-} from "./passes";
-
-import { CopyMaterial } from "./materials";
 import THREE from "three";
+import { ClearMaskPass, MaskPass, ShaderPass } from "./passes";
+import { CopyMaterial } from "./materials";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -28,10 +23,7 @@ import THREE from "three";
 
 export class EffectComposer {
 
-	constructor(renderer, depthTexture, stencilBuffer) {
-
-		if(depthTexture === undefined) { depthTexture = false; }
-		if(stencilBuffer === undefined) { stencilBuffer = false; }
+	constructor(renderer, depthTexture = false, stencilBuffer = false) {
 
 		/**
 		 * The renderer.

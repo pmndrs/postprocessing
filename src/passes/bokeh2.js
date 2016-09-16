@@ -1,5 +1,5 @@
 import { Bokeh2Material } from "../materials";
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * Depth of Field pass version 2.
@@ -24,11 +24,9 @@ import { Pass } from "./pass";
 
 export class Bokeh2Pass extends Pass {
 
-	constructor(camera, options) {
+	constructor(camera, options = {}) {
 
 		super();
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Bokeh shader material.

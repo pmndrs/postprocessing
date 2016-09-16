@@ -1,6 +1,6 @@
-import { GlitchMaterial } from "../materials";
-import { Pass } from "./pass";
 import THREE from "three";
+import { GlitchMaterial } from "../materials";
+import { Pass } from "./pass.js";
 
 /**
  * A glitch pass.
@@ -16,14 +16,11 @@ import THREE from "three";
 
 export class GlitchPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
-		if(options.dtSize === undefined) { options.dtSize = 64; }
 
 		/**
 		 * Glitch shader material.
@@ -57,7 +54,7 @@ export class GlitchPass extends Pass {
 		} else {
 
 			this.perturbMap = null;
-			this.generatePerturbMap(options.dtSize);
+			this.generatePerturbMap((options.dtSize !== undefined) ? options.dtSize : 64);
 
 		}
 

@@ -1,5 +1,5 @@
 import { BokehMaterial } from "../materials";
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * Depth of Field pass using a bokeh shader.
@@ -17,13 +17,11 @@ import { Pass } from "./pass";
 
 export class BokehPass extends Pass {
 
-	constructor(camera, options) {
+	constructor(camera, options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Bokeh shader material.

@@ -1,11 +1,6 @@
-import {
-	SMAABlendMaterial,
-	SMAAColorEdgesMaterial,
-	SMAAWeightsMaterial
-} from "../materials";
-
-import { Pass } from "./pass";
 import THREE from "three";
+import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
+import { Pass } from "./pass.js";
 
 /**
  * Subpixel Morphological Antialiasing (SMAA) v2.8.

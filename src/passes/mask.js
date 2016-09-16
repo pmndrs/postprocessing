@@ -1,4 +1,4 @@
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * A mask pass.

@@ -1,12 +1,6 @@
-import {
-	CopyMaterial,
-	CombineMaterial,
-	LuminosityMaterial,
-	ConvolutionMaterial
-} from "../materials";
-
-import { Pass } from "./pass";
 import THREE from "three";
+import { CopyMaterial, CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from "../materials";
+import { Pass } from "./pass.js";
 
 /**
  * A bloom pass.
@@ -27,11 +21,9 @@ import THREE from "three";
 
 export class BloomPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * A render target.

@@ -1,5 +1,5 @@
 import { DotScreenMaterial } from "../materials";
-import { Pass } from "./pass";
+import { Pass } from "./pass.js";
 
 /**
  * A render pass.
@@ -17,13 +17,11 @@ import { Pass } from "./pass";
 
 export class DotScreenPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Dot screen shader material description.

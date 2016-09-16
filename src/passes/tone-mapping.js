@@ -1,12 +1,6 @@
-import {
-	AdaptiveLuminosityMaterial,
-	CopyMaterial,
-	LuminosityMaterial,
-	ToneMappingMaterial
-} from "../materials";
-
-import { Pass } from "./pass";
 import THREE from "three";
+import { AdaptiveLuminosityMaterial, CopyMaterial, LuminosityMaterial, ToneMappingMaterial } from "../materials";
+import { Pass } from "./pass.js";
 
 /**
  * A tone mapping pass that supports adaptive luminosity.
@@ -31,13 +25,11 @@ import THREE from "three";
 
 export class ToneMappingPass extends Pass {
 
-	constructor(options) {
+	constructor(options = {}) {
 
 		super();
 
 		this.needsSwap = true;
-
-		if(options === undefined) { options = {}; }
 
 		/**
 		 * Render target for the current limonosity.

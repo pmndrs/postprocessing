@@ -5,7 +5,7 @@
  * @main postprocessing
  */
 
-export { EffectComposer } from "./effect-composer";
+export { EffectComposer } from "./effect-composer.js";
 
 export {
 	BloomPass,
