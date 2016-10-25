@@ -153,7 +153,7 @@
 			greyscaleIntensity: 1.0,
 			sepiaIntensity: 1.0,
 			vignetteOffset: 0.0,
-			vignetteDarkness: 0.5,
+			vignetteDarkness: 0.5
 		});
 
 		pass.renderToScreen = true;
