@@ -39,13 +39,14 @@
 	],
 
 	"scripts": {
-		"test": "node grunt-cli.js",
-		"prepublish": "node grunt-cli.js prepublish",
-		"postpublish": "node grunt-cli.js postpublish"
+		"test": "grunt --production",
+		"prepublishOnly": "grunt prepublish",
+		"postpublish": "grunt postpublish"
 	},
 
 	"engines": {
-		"node": ">= 4.0.0"
+		"node": ">=4.0.0",
+		"npm": ">=4.0.0"
 	},
 
 	"dependencies": {
