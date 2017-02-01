@@ -50,11 +50,13 @@
 	},
 
 	"dependencies": {
-		"three": "0.82.x"
+		"three": "0.84.x"
 	},
 
 	"devDependencies": {
-		"grunt": ">= 0.4.0",
+		"babel-preset-es2015-rollup": "3.0.x",
+		"grunt": "1.x.x",
+		"grunt-cli": "1.2.x",
 		"grunt-contrib-nodeunit": "1.0.x",
 		"grunt-contrib-uglify": "2.0.x",
 		"grunt-contrib-yuidoc": "1.0.x",
@@ -62,11 +64,13 @@
 		"grunt-contrib-copy": "1.0.x",
 		"grunt-eslint": "19.0.x",
 		"grunt-lemon": "0.1.x",
-		"grunt-rollup": "0.8.x",
-		"babel-preset-es2015-rollup": "1.2.x",
+		"grunt-rollup": "1.0.x",
+		"jit-grunt": "0.10.x",
+		"load-grunt-config": "0.19.x",
+		"rollup-plugin-babel": "2.7.x",
 		"rollup-plugin-node-resolve": "2.0.x",
-		"rollup-plugin-babel": "2.6.x",
-		"rollup-plugin-string": "2.0.x"
+		"rollup-plugin-string": "2.0.x",
+		"time-grunt": "1.4.x"
 	},
 
 	"peerDependencies": {
