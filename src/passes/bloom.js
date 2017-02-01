@@ -1,4 +1,4 @@
-import THREE from "three";
+import { AdditiveBlending, LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
 import { CopyMaterial, CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
@@ -33,9 +33,9 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
+		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
 			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
@@ -85,7 +85,7 @@ export class BloomPass extends Pass {
 		 */
 
 		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = THREE.AdditiveBlending;
+		this.copyMaterial.blending = AdditiveBlending;
 		this.copyMaterial.transparent = true;
 
 		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
@@ -128,11 +128,7 @@ export class BloomPass extends Pass {
 
 	set blurriness(x) {
 
-		if(typeof x === "number") {
-
-			this.convolutionMaterial.scale = x;
-
-		}
+		this.convolutionMaterial.scale = x;
 
 	}
 
@@ -150,53 +146,65 @@ export class BloomPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		let state = renderer.state;
+		const state = renderer.state;
+
+		const quad = this.quad;
+		const scene = this.scene;
+		const camera = this.camera;
+
+		const luminosityMaterial = this.luminosityMaterial;
+		const convolutionMaterial = this.convolutionMaterial;
+		const combineMaterial = this.combineMaterial;
+		const copyMaterial = this.copyMaterial;
+
+		const renderTargetX = this.renderTargetX;
+		const renderTargetY = this.renderTargetY;
 
 		// Luminance filter.
-		this.quad.material = this.luminosityMaterial;
-		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		quad.material = luminosityMaterial;
+		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		state.setDepthWrite(true);
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		renderer.render(scene, camera, renderTargetX);
 		state.setDepthWrite(false);
 
 		// Convolution phase.
-		this.quad.material = this.convolutionMaterial;
+		quad.material = convolutionMaterial;
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
+		renderer.render(scene, camera, renderTargetX);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
+		renderer.render(scene, camera, renderTargetX);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
 		// Render the original scene with superimposed blur.
 		if(this.renderToScreen) {
 
-			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
+			quad.material = combineMaterial;
+			combineMaterial.uniforms.texture1.value = readBuffer.texture;
+			combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-			renderer.render(this.scene, this.camera);
+			renderer.render(scene, camera);
 
 		} else {
 
-			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
+			quad.material = copyMaterial;
+			copyMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
 
-			renderer.render(this.scene, this.camera, readBuffer, false);
+			renderer.render(scene, camera, readBuffer, false);
 
 		}
 
@@ -212,13 +220,14 @@ export class BloomPass extends Pass {
 
 	initialise(renderer, alpha) {
 
-		let size = renderer.getSize();
+		const size = renderer.getSize();
+
 		this.setSize(size.width, size.height);
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = THREE.RGBFormat;
-			this.renderTargetY.texture.format = THREE.RGBFormat;
+			this.renderTargetX.texture.format = RGBFormat;
+			this.renderTargetY.texture.format = RGBFormat;
 
 		}
 
@@ -234,11 +243,8 @@ export class BloomPass extends Pass {
 
 	setSize(width, height) {
 
-		width = Math.floor(width * this.resolutionScale);
-		height = Math.floor(height * this.resolutionScale);
-
-		if(width <= 0) { width = 1; }
-		if(height <= 0) { height = 1; }
+		width = Math.max(1, Math.floor(width * this.resolutionScale));
+		height = Math.max(1, Math.floor(height * this.resolutionScale));
 
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);

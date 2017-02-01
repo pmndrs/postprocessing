@@ -1,6 +1,24 @@
-import THREE from "three";
+import { AdditiveBlending, Color, LinearFilter, MeshBasicMaterial, RGBFormat, Vector3, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, CombineMaterial, CopyMaterial, GodRaysMaterial } from "../materials";
 import { Pass } from "./pass.js";
+
+/**
+ * Clamps a given value.
+ *
+ * @method clamp
+ * @private
+ * @static
+ * @param {Number} value - The value to clamp.
+ * @param {Number} min - The lowest possible value.
+ * @param {Number} max - The highest possible value.
+ * @return {Number} The clamped value.
+ */
+
+function clamp(value, min, max) {
+
+	return Math.max(min, Math.min(max, value));
+
+}
 
 /**
  * Used for saving the renderer's clear color.
@@ -11,7 +29,7 @@ import { Pass } from "./pass.js";
  * @static
  */
 
-const CLEAR_COLOR = new THREE.Color();
+const CLEAR_COLOR = new Color();
 
 /**
  * A crepuscular rays pass.
@@ -49,9 +67,9 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetMask = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
+		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
 			generateMipmaps: false
 		});
 
@@ -107,7 +125,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.screenPosition = new THREE.Vector3();
+		this.screenPosition = new Vector3();
 
 		/**
 		 * A convolution blur shader material.
@@ -140,7 +158,7 @@ export class GodRaysPass extends Pass {
 		 */
 
 		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = THREE.AdditiveBlending;
+		this.copyMaterial.blending = AdditiveBlending;
 		this.copyMaterial.transparent = true;
 
 		/**
@@ -151,7 +169,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.maskMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+		this.maskMaterial = new MeshBasicMaterial({ color: 0x000000 });
 
 		/**
 		 * God rays shader material.
@@ -205,11 +223,7 @@ export class GodRaysPass extends Pass {
 
 	set blurriness(x) {
 
-		if(typeof x === "number") {
-
-			this.convolutionMaterial.scale = x;
-
-		}
+		this.convolutionMaterial.scale = x;
 
 	}
 
@@ -225,12 +239,8 @@ export class GodRaysPass extends Pass {
 
 	set intensity(x) {
 
-		if(typeof x === "number") {
-
-			this.combineMaterial.uniforms.opacity2.value = x;
-			this.copyMaterial.uniforms.opacity.value = x;
-
-		}
+		this.combineMaterial.uniforms.opacity2.value = x;
+		this.copyMaterial.uniforms.opacity.value = x;
 
 	}
 
@@ -249,15 +259,11 @@ export class GodRaysPass extends Pass {
 
 	set samples(x) {
 
-		if(typeof x === "number" && x > 0) {
+		x = Math.floor(x);
 
-			x = Math.floor(x);
-
-			this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-			this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
-			this.godRaysMaterial.needsUpdate = true;
-
-		}
+		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+		this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+		this.godRaysMaterial.needsUpdate = true;
 
 	}
 
@@ -287,76 +293,93 @@ export class GodRaysPass extends Pass {
 
 	render(renderer, readBuffer) {
 
+		const state = renderer.state;
+
+		const quad = this.quad;
+		const scene = this.scene;
+		const camera = this.camera;
+		const mainScene = this.mainScene;
+		const mainCamera = this.mainCamera;
+		const screenPosition = this.screenPosition;
+
+		const convolutionMaterial = this.convolutionMaterial;
+		const godRaysMaterial = this.godRaysMaterial;
+		const combineMaterial = this.combineMaterial;
+		const copyMaterial = this.copyMaterial;
+
+		const renderTargetMask = this.renderTargetMask;
+		const renderTargetX = this.renderTargetX;
+		const renderTargetY = this.renderTargetY;
+
 		let clearAlpha, background;
-		let state = renderer.state;
 
 		// Compute the screen light position and translate the coordinates to [0, 1].
-		this.screenPosition.copy(this.lightSource.position).project(this.mainCamera);
-		this.screenPosition.x = THREE.Math.clamp((this.screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
-		this.screenPosition.y = THREE.Math.clamp((this.screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
+		screenPosition.copy(this.lightSource.position).project(mainCamera);
+		screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
+		screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
 		// Render the masked scene.
 		state.setDepthWrite(true);
 
-		background = this.mainScene.background;
+		background = mainScene.background;
 		CLEAR_COLOR.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
 
 		renderer.setClearColor(0x000000, 1);
-		this.mainScene.overrideMaterial = this.maskMaterial;
-		this.mainScene.background = null;
+		mainScene.overrideMaterial = this.maskMaterial;
+		mainScene.background = null;
 
-		renderer.render(this.mainScene, this.mainCamera, this.renderTargetMask, true);
+		renderer.render(mainScene, mainCamera, renderTargetMask, true);
 
-		this.mainScene.background = background;
-		this.mainScene.overrideMaterial = null;
+		mainScene.background = background;
+		mainScene.overrideMaterial = null;
 		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
 		state.setDepthWrite(false);
 
 		// Convolution phase (5 passes).
-		this.quad.material = this.convolutionMaterial;
+		quad.material = convolutionMaterial;
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetMask.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetMask.texture;
+		renderer.render(scene, camera, renderTargetX);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
+		renderer.render(scene, camera, renderTargetX);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
+		convolutionMaterial.adjustKernel();
+		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
+		renderer.render(scene, camera, renderTargetX);
 
 		// God rays pass.
-		this.quad.material = this.godRaysMaterial;
-		this.godRaysMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		quad.material = godRaysMaterial;
+		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		renderer.render(scene, camera, renderTargetY);
 
 		// Final pass - composite god rays onto colors.
 		if(this.renderToScreen) {
 
-			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
+			quad.material = combineMaterial;
+			combineMaterial.uniforms.texture1.value = readBuffer.texture;
+			combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-			renderer.render(this.scene, this.camera);
+			renderer.render(scene, camera);
 
 		} else {
 
-			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
+			quad.material = copyMaterial;
+			copyMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
 
-			renderer.render(this.scene, this.camera, readBuffer);
+			renderer.render(scene, camera, readBuffer);
 
 		}
 
@@ -372,14 +395,15 @@ export class GodRaysPass extends Pass {
 
 	initialise(renderer, alpha) {
 
-		let size = renderer.getSize();
+		const size = renderer.getSize();
+
 		this.setSize(size.width, size.height);
 
 		if(!alpha) {
 
-			this.renderTargetMask.texture.format = THREE.RGBFormat;
-			this.renderTargetX.texture.format = THREE.RGBFormat;
-			this.renderTargetY.texture.format = THREE.RGBFormat;
+			this.renderTargetMask.texture.format = RGBFormat;
+			this.renderTargetX.texture.format = RGBFormat;
+			this.renderTargetY.texture.format = RGBFormat;
 
 		}
 
@@ -395,11 +419,8 @@ export class GodRaysPass extends Pass {
 
 	setSize(width, height) {
 
-		width = Math.floor(width * this.resolutionScale);
-		height = Math.floor(height * this.resolutionScale);
-
-		if(width <= 0) { width = 1; }
-		if(height <= 0) { height = 1; }
+		width = Math.max(1, Math.floor(width * this.resolutionScale));
+		height = Math.max(1, Math.floor(height * this.resolutionScale));
 
 		this.renderTargetMask.setSize(width, height);
 		this.renderTargetX.setSize(width, height);

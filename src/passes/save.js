@@ -80,8 +80,8 @@ export class SavePass extends Pass {
 
 		if(this.resize && this.renderTarget !== null) {
 
-			if(width <= 0) { width = 1; }
-			if(height <= 0) { height = 1; }
+			width = Math.max(1, width);
+			height = Math.max(1, height);
 
 			this.renderTarget.setSize(width, height);
 

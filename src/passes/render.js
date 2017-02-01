@@ -1,4 +1,4 @@
-import THREE from "three";
+import { Color } from "three";
 import { Pass } from "./pass.js";
 
 /**
@@ -10,7 +10,7 @@ import { Pass } from "./pass.js";
  * @static
  */
 
-const CLEAR_COLOR = new THREE.Color();
+const CLEAR_COLOR = new Color();
 
 /**
  * A pass that renders a given scene directly on screen or into the read buffer
@@ -57,9 +57,10 @@ export class RenderPass extends Pass {
 		 *
 		 * @property clearAlpha
 		 * @type Number
+		 * @default 1.0
 		 */
 
-		this.clearAlpha = (options.clearAlpha === undefined) ? 1.0 : THREE.Math.clamp(options.clearAlpha, 0.0, 1.0);
+		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 1.0;
 
 		/**
 		 * Clear flag.
@@ -83,38 +84,41 @@ export class RenderPass extends Pass {
 
 	render(renderer, readBuffer) {
 
+		const state = renderer.state;
+		const scene = this.scene;
+		const clearColor = clearColor;
+
 		let clearAlpha;
-		let state = renderer.state;
 
 		state.setDepthWrite(true);
 
-		this.scene.overrideMaterial = this.overrideMaterial;
+		scene.overrideMaterial = this.overrideMaterial;
 
-		if(this.clearColor !== null) {
+		if(clearColor !== null) {
 
 			CLEAR_COLOR.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(this.clearColor, this.clearAlpha);
+			renderer.setClearColor(clearColor, this.clearAlpha);
 
 		}
 
 		if(this.renderToScreen) {
 
-			renderer.render(this.scene, this.camera, null, this.clear);
+			renderer.render(scene, this.camera, null, this.clear);
 
 		} else {
 
-			renderer.render(this.scene, this.camera, readBuffer, this.clear);
+			renderer.render(scene, this.camera, readBuffer, this.clear);
 
 		}
 
-		if(this.clearColor !== null) {
+		if(clearColor !== null) {
 
 			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
 		}
 
-		this.scene.overrideMaterial = null;
+		scene.overrideMaterial = null;
 
 		state.setDepthWrite(false);
 

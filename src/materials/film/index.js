@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -43,7 +43,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect.
  */
 
-export class FilmMaterial extends THREE.ShaderMaterial {
+export class FilmMaterial extends ShaderMaterial {
 
 	constructor(options) {
 

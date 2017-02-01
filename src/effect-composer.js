@@ -1,6 +1,6 @@
-import THREE from "three";
-import { ClearMaskPass, MaskPass, ShaderPass } from "./passes";
-import { CopyMaterial } from "./materials";
+import { DepthTexture, LinearFilter, RGBAFormat, RGBFormat, WebGLRenderer, WebGLRenderTarget } from "three";
+import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
+import { CopyMaterial } from "../materials";
 
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
@@ -32,7 +32,7 @@ export class EffectComposer {
 		 * @type WebGLRenderer
 		 */
 
-		this.renderer = (renderer !== undefined) ? renderer : new THREE.WebGLRenderer();
+		this.renderer = (renderer !== undefined) ? renderer : new WebGLRenderer();
 
 		this.renderer.autoClear = false;
 		this.renderer.state.setDepthWrite(false);
@@ -64,7 +64,7 @@ export class EffectComposer {
 
 		if(depthTexture) {
 
-			this.readBuffer.depthTexture = this.writeBuffer.depthTexture = new THREE.DepthTexture();
+			this.readBuffer.depthTexture = this.writeBuffer.depthTexture = new DepthTexture();
 
 		}
 
@@ -100,13 +100,13 @@ export class EffectComposer {
 
 	createBuffer(stencilBuffer) {
 
-		let size = this.renderer.getSize();
-		let alpha = this.renderer.context.getContextAttributes().alpha;
+		const size = this.renderer.getSize();
+		const alpha = this.renderer.context.getContextAttributes().alpha;
 
 		return new THREE.WebGLRenderTarget(size.width, size.height, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			format: alpha ? THREE.RGBAFormat : THREE.RGBFormat,
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			format: alpha ? RGBAFormat : RGBFormat,
 			stencilBuffer: stencilBuffer
 		});
 
@@ -158,30 +158,34 @@ export class EffectComposer {
 
 	render(delta) {
 
+		const passes = this.passes;
+		const renderer = this.renderer;
+		const copyPass = this.copyPass;
+
 		let readBuffer = this.readBuffer;
 		let writeBuffer = this.writeBuffer;
 
 		let maskActive = false;
 		let i, l, pass, buffer;
-		let ctx, state;
+		let context, state;
 
-		for(i = 0, l = this.passes.length; i < l; ++i) {
+		for(i = 0, l = passes.length; i < l; ++i) {
 
-			pass = this.passes[i];
+			pass = passes[i];
 
 			if(pass.enabled) {
 
-				pass.render(this.renderer, readBuffer, writeBuffer, delta, maskActive);
+				pass.render(renderer, readBuffer, writeBuffer, delta, maskActive);
 
 				if(pass.needsSwap) {
 
 					if(maskActive) {
 
-						ctx = this.renderer.context;
-						state = this.renderer.state;
-						state.setStencilFunc(ctx.NOTEQUAL, 1, 0xffffffff);
-						this.copyPass.render(this.renderer, readBuffer, writeBuffer);
-						state.setStencilFunc(ctx.EQUAL, 1, 0xffffffff);
+						context = renderer.context;
+						state = renderer.state;
+						state.setStencilFunc(context.NOTEQUAL, 1, 0xffffffff);
+						copyPass.render(renderer, readBuffer, writeBuffer);
+						state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
 
@@ -223,12 +227,13 @@ export class EffectComposer {
 
 	setSize(width, height) {
 
+		const passes = this.passes;
+		const size = this.renderer.getSize();
+
 		let i, l;
-		let size;
 
 		if(width === undefined || height === undefined) {
 
-			size = this.renderer.getSize();
 			width = size.width;
 			height = size.height;
 
@@ -238,9 +243,9 @@ export class EffectComposer {
 		this.readBuffer.setSize(width, height);
 		this.writeBuffer.setSize(width, height);
 
-		for(i = 0, l = this.passes.length; i < l; ++i) {
+		for(i = 0, l = passes.length; i < l; ++i) {
 
-			this.passes[i].setSize(width, height);
+			passes[i].setSize(width, height);
 
 		}
 
@@ -273,14 +278,16 @@ export class EffectComposer {
 
 	dispose(renderTarget) {
 
+		const passes = this.passes;
+
 		this.readBuffer.dispose();
 		this.writeBuffer.dispose();
 
 		this.readBuffer = this.writeBuffer = null;
 
-		while(this.passes.length > 0) {
+		while(passes.length > 0) {
 
-			this.passes.pop().dispose();
+			passes.pop().dispose();
 
 		}
 

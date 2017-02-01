@@ -1,4 +1,4 @@
-import THREE from "three";
+import { LinearFilter, NearestFilter, RGBAFormat, RGBFormat, Texture, WebGLRenderTarget } from "three";
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
@@ -31,9 +31,9 @@ export class SMAAPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetColorEdges = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			format: THREE.RGBFormat,
+		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			format: RGBFormat,
 			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
@@ -49,7 +49,7 @@ export class SMAAPass extends Pass {
 
 		this.renderTargetWeights = this.renderTargetColorEdges.clone();
 
-		this.renderTargetWeights.texture.format = THREE.RGBAFormat;
+		this.renderTargetWeights.texture.format = RGBAFormat;
 
 		/**
 		 * SMAA color edge detection shader material.
@@ -71,24 +71,24 @@ export class SMAAPass extends Pass {
 
 		this.weightsMaterial = new SMAAWeightsMaterial();
 
-		let areaImage = new Image();
+		const areaImage = new Image();
 		areaImage.src = this.weightsMaterial.areaImage;
 
-		let areaTexture = new THREE.Texture();
+		const areaTexture = new Texture();
 		areaTexture.image = areaImage;
-		areaTexture.minFilter = THREE.LinearFilter;
-		areaTexture.format = THREE.RGBFormat;
+		areaTexture.minFilter = LinearFilter;
+		areaTexture.format = RGBFormat;
 		areaTexture.generateMipmaps = false;
 		areaTexture.needsUpdate = true;
 		areaTexture.flipY = false;
 
-		let searchImage = new Image();
+		const searchImage = new Image();
 		searchImage.src = this.weightsMaterial.searchImage;
 
-		let searchTexture = new THREE.Texture();
+		const searchTexture = new Texture();
 		searchTexture.image = searchImage;
-		searchTexture.magFilter = THREE.NearestFilter;
-		searchTexture.minFilter = THREE.NearestFilter;
+		searchTexture.magFilter = NearestFilter;
+		searchTexture.minFilter = NearestFilter;
 		searchTexture.generateMipmaps = false;
 		searchTexture.needsUpdate = true;
 		searchTexture.flipY = false;
@@ -158,7 +158,7 @@ export class SMAAPass extends Pass {
 
 	initialise(renderer) {
 
-		let size = renderer.getSize();
+		const size = renderer.getSize();
 		this.setSize(size.width, size.height);
 
 	}

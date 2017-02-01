@@ -75,7 +75,7 @@ export class DotScreenPass extends Pass {
 
 	initialise(renderer) {
 
-		let size = renderer.getSize();
+		const size = renderer.getSize();
 		this.setSize(size.width, size.height);
 
 	}
@@ -90,8 +90,8 @@ export class DotScreenPass extends Pass {
 
 	setSize(width, height) {
 
-		if(width <= 0) { width = 1; }
-		if(height <= 0) { height = 1; }
+		width = Math.max(1, width);
+		height = Math.max(1, height);
 
 		this.material.uniforms.offsetRepeat.value.z = width;
 		this.material.uniforms.offsetRepeat.value.w = height;

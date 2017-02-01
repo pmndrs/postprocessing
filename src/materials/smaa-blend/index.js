@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -15,7 +15,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class SMAABlendMaterial extends THREE.ShaderMaterial {
+export class SMAABlendMaterial extends ShaderMaterial {
 
 	constructor(texelSize) {
 
@@ -27,7 +27,7 @@ export class SMAABlendMaterial extends THREE.ShaderMaterial {
 
 				tDiffuse: { value: null },
 				tWeights: { value: null },
-				texelSize: { value: (texelSize !== undefined) ? texelSize : new THREE.Vector2() }
+				texelSize: { value: (texelSize !== undefined) ? texelSize : new Vector2() }
 
 			},
 

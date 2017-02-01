@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -12,7 +12,7 @@ import vertex from "./glsl/shader.vert";
  * @constructor
  */
 
-export class AdaptiveLuminosityMaterial extends THREE.ShaderMaterial {
+export class AdaptiveLuminosityMaterial extends ShaderMaterial {
 
 	constructor() {
 

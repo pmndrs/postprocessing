@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -22,7 +22,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class ConvolutionMaterial extends THREE.ShaderMaterial {
+export class ConvolutionMaterial extends ShaderMaterial {
 
 	constructor(texelSize) {
 
@@ -33,8 +33,8 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 			uniforms: {
 
 				tDiffuse: { value: null },
-				texelSize: { value: new THREE.Vector2() },
-				halfTexelSize: { value: new THREE.Vector2() },
+				texelSize: { value: new Vector2() },
+				halfTexelSize: { value: new Vector2() },
 				kernel: { value: 0.0 }
 
 			},

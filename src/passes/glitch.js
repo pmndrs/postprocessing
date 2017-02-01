@@ -1,6 +1,40 @@
-import THREE from "three";
+import { DataTexture, RGBFormat, FloatType } from "three";
 import { GlitchMaterial } from "../materials";
 import { Pass } from "./pass.js";
+
+/**
+ * Returns a random integer in the specified range.
+ *
+ * @method randomInt
+ * @private
+ * @static
+ * @param {Number} low - The lowest possible value.
+ * @param {Number} high - The highest possible value.
+ * @return {Number} The random value.
+ */
+
+function randomInt(low, high) {
+
+	return low + Math.floor(Math.random() * (high - low + 1));
+
+}
+
+/**
+ * Returns a random float in the specified range.
+ *
+ * @method randomFloat
+ * @private
+ * @static
+ * @param {Number} low - The lowest possible value.
+ * @param {Number} high - The highest possible value.
+ * @return {Number} The random value.
+ */
+
+function randomFloat(low, high) {
+
+	return low + Math.random() * (high - low);
+
+}
 
 /**
  * A glitch pass.
@@ -88,8 +122,7 @@ export class GlitchPass extends Pass {
 		 * @private
 		 */
 
-		this.breakPoint = 0;
-		this.generateTrigger();
+		this.breakPoint = randomInt(120, 240);
 
 	}
 
@@ -104,39 +137,47 @@ export class GlitchPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer) {
 
-		let uniforms = this.material.uniforms;
+		const mode = this.mode;
+		const counter = this.counter;
+		const breakPoint = this.breakPoint;
+		const uniforms = this.material.uniforms;
 
 		uniforms.tDiffuse.value = readBuffer.texture;
 		uniforms.seed.value = Math.random();
 		uniforms.active.value = true;
 
-		if(this.counter % this.breakPoint === 0 || this.mode === GlitchPass.Mode.CONSTANT_WILD) {
+		if(counter % breakPoint === 0 || mode === GlitchPass.Mode.CONSTANT_WILD) {
 
 			uniforms.amount.value = Math.random() / 30.0;
-			uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
-			uniforms.seedX.value = THREE.Math.randFloat(-1.0, 1.0);
-			uniforms.seedY.value = THREE.Math.randFloat(-1.0, 1.0);
-			uniforms.distortionX.value = THREE.Math.randFloat(0.0, 1.0);
-			uniforms.distortionY.value = THREE.Math.randFloat(0.0, 1.0);
+			uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
+			uniforms.seedX.value = randomFloat(-1.0, 1.0);
+			uniforms.seedY.value = randomFloat(-1.0, 1.0);
+			uniforms.distortionX.value = randomFloat(0.0, 1.0);
+			uniforms.distortionY.value = randomFloat(0.0, 1.0);
+
+			this.breakPoint = randomInt(120, 240);
 			this.counter = 0;
-			this.generateTrigger();
 
-		} else if(this.counter % this.breakPoint < this.breakPoint / 5 || this.mode === GlitchPass.Mode.CONSTANT_MILD) {
+		} else {
 
-			uniforms.amount.value = Math.random() / 90.0;
-			uniforms.angle.value = THREE.Math.randFloat(-Math.PI, Math.PI);
-			uniforms.distortionX.value = THREE.Math.randFloat(0.0, 1.0);
-			uniforms.distortionY.value = THREE.Math.randFloat(0.0, 1.0);
-			uniforms.seedX.value = THREE.Math.randFloat(-0.3, 0.3);
-			uniforms.seedY.value = THREE.Math.randFloat(-0.3, 0.3);
+			if(counter % breakPoint < breakPoint / 5 || mode === GlitchPass.Mode.CONSTANT_MILD) {
 
-		} else if(this.mode === GlitchPass.Mode.SPORADIC) {
+				uniforms.amount.value = Math.random() / 90.0;
+				uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
+				uniforms.distortionX.value = randomFloat(0.0, 1.0);
+				uniforms.distortionY.value = randomFloat(0.0, 1.0);
+				uniforms.seedX.value = randomFloat(-0.3, 0.3);
+				uniforms.seedY.value = randomFloat(-0.3, 0.3);
 
-			uniforms.active.value = false;
+			} else if(mode === GlitchPass.Mode.SPORADIC) {
+
+				uniforms.active.value = false;
+
+			}
+
+			++this.counter;
 
 		}
-
-		++this.counter;
 
 		if(this.renderToScreen) {
 
@@ -151,19 +192,6 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * Creates a random break point for the glitch effect.
-	 *
-	 * @method generateTrigger
-	 * @private
-	 */
-
-	generateTrigger() {
-
-		this.breakPoint = THREE.Math.randInt(120, 240);
-
-	}
-
-	/**
 	 * Destroys the currently set texture and generates a simple noise map.
 	 *
 	 * @method generatePerturbMap
@@ -173,13 +201,14 @@ export class GlitchPass extends Pass {
 
 	generatePerturbMap(size) {
 
+		const pixels = size * size;
+		const data = new Float32Array(pixels * 3);
+
 		let i, x;
-		let l = size * size;
-		let data = new Float32Array(l * 3);
 
-		for(i = 0; i < l; ++i) {
+		for(i = 0; i < pixels; ++i) {
 
-			x = THREE.Math.randFloat(0, 1);
+			x = Math.random();
 
 			data[i * 3] = x;
 			data[i * 3 + 1] = x;
@@ -187,9 +216,13 @@ export class GlitchPass extends Pass {
 
 		}
 
-		if(this.perturbMap !== null) { this.perturbMap.dispose(); }
+		if(this.perturbMap !== null) {
 
-		this.perturbMap = new THREE.DataTexture(data, size, size, THREE.RGBFormat, THREE.FloatType);
+			this.perturbMap.dispose();
+
+		}
+
+		this.perturbMap = new DataTexture(data, size, size, RGBFormat, FloatType);
 		this.perturbMap.needsUpdate = true;
 
 		this.material.uniforms.tPerturb.value = this.perturbMap;

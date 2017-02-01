@@ -1,4 +1,4 @@
-import THREE from "three";
+import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
 
 /**
  * An abstract pass.
@@ -23,9 +23,9 @@ import THREE from "three";
 export class Pass {
 
 	constructor(
-		scene = new THREE.Scene(),
-		camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
-		quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null)
+		scene = new Scene(),
+		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),
+		quad = new Mesh(new PlaneBufferGeometry(2, 2), null)
 	) {
 
 		/**
@@ -60,7 +60,7 @@ export class Pass {
 		 * @private
 		 * @default Mesh(PlaneBufferGeometry(2, 2), null)
 		 * @example
-		 *  this.quad.material = this.myMaterial;
+		 *     this.quad.material = this.myMaterial;
 		 */
 
 		this.quad = quad;
@@ -161,7 +161,7 @@ export class Pass {
 	 * @param {Number} width - The renderer's width.
 	 * @param {Number} height - The renderer's height.
 	 * @example
-	 *  this.myRenderTarget.setSize(width, height);
+	 *     this.myRenderTarget.setSize(width, height);
 	 */
 
 	setSize(width, height) {}
@@ -184,17 +184,16 @@ export class Pass {
 
 	dispose() {
 
-		let i, p;
-		let keys = Object.keys(this);
+		const keys = Object.keys(this);
 
-		for(i = keys.length - 1; i >= 0; --i) {
+		let key;
 
-			p = this[keys[i]];
+		for(key of keys) {
 
-			if(p !== null && typeof p.dispose === "function") {
+			if(this[key] !== null && typeof this[key].dispose === "function") {
 
-				p.dispose();
-				this[keys[i]] = null;
+				this[key].dispose();
+				this[key] = null;
 
 			}
 

@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -23,7 +23,7 @@ import vertex from "./glsl/shader.vert";
  * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
  */
 
-export class LuminosityMaterial extends THREE.ShaderMaterial {
+export class LuminosityMaterial extends ShaderMaterial {
 
 	constructor(color, range) {
 
@@ -35,7 +35,7 @@ export class LuminosityMaterial extends THREE.ShaderMaterial {
 
 				tDiffuse: { value: null },
 				distinction: { value: 1.0 },
-				range: { value: (range !== undefined) ? range : new THREE.Vector2() }
+				range: { value: (range !== undefined) ? range : new Vector2() }
 
 			},
 

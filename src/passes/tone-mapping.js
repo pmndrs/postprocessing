@@ -1,4 +1,4 @@
-import THREE from "three";
+import { LinearFilter, LinearMipMapLinearFilter, MeshBasicMaterial, RGBFormat, WebGLRenderTarget } from "three";
 import { AdaptiveLuminosityMaterial, CopyMaterial, LuminosityMaterial, ToneMappingMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
@@ -39,10 +39,10 @@ export class ToneMappingPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetLuminosity = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearMipMapLinearFilter,
-			magFilter: THREE.LinearFilter,
-			format: THREE.RGBFormat, // Change to RED format in WebGL 2.0! Don't need colours.
+		this.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearMipMapLinearFilter,
+			magFilter: LinearFilter,
+			format: RGBFormat, // @todo: change to RED format in WebGL 2.0! Don't need colours.
 			stencilBuffer: false,
 			depthBuffer: false
 		});
@@ -58,7 +58,7 @@ export class ToneMappingPass extends Pass {
 		this.renderTargetAdapted = this.renderTargetLuminosity.clone();
 
 		this.renderTargetAdapted.texture.generateMipmaps = false;
-		this.renderTargetAdapted.texture.minFilter = THREE.LinearFilter;
+		this.renderTargetAdapted.texture.minFilter = LinearFilter;
 
 		/**
 		 * Render target that holds a copy of the adapted limonosity.
@@ -182,42 +182,54 @@ export class ToneMappingPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer, delta) {
 
-		let state = renderer.state;
+		const state = renderer.state;
+
+		const quad = this.quad;
+		const scene = this.scene;
+		const camera = this.camera;
+
+		const adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;
+		const luminosityMaterial = this.luminosityMaterial;
+		const toneMappingMaterial = this.toneMappingMaterial;
+
+		const renderTargetPrevious = this.renderTargetPrevious;
+		const renderTargetLuminosity = this.renderTargetLuminosity;
+		const renderTargetAdapted = this.renderTargetAdapted;
 
 		if(this.adaptive) {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
-			this.quad.material = this.luminosityMaterial;
-			this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			quad.material = luminosityMaterial;
+			luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 			state.setDepthWrite(true);
-			renderer.render(this.scene, this.camera, this.renderTargetLuminosity);
+			renderer.render(scene, camera, renderTargetLuminosity);
 			state.setDepthWrite(false);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
-			this.quad.material = this.adaptiveLuminosityMaterial;
-			this.adaptiveLuminosityMaterial.uniforms.delta.value = delta;
-			this.adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = this.renderTargetPrevious.texture;
-			this.adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = this.renderTargetLuminosity.texture;
-			renderer.render(this.scene, this.camera, this.renderTargetAdapted);
+			quad.material = adaptiveLuminosityMaterial;
+			adaptiveLuminosityMaterial.uniforms.delta.value = delta;
+			adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;
+			adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;
+			renderer.render(scene, camera, renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
-			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetAdapted.texture;
-			renderer.render(this.scene, this.camera, this.renderTargetPrevious);
+			quad.material = this.copyMaterial;
+			this.copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
+			renderer.render(scene, camera, renderTargetPrevious);
 
 		}
 
 		// Apply the tone mapping to the colours.
-		this.quad.material = this.toneMappingMaterial;
-		this.toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		quad.material = toneMappingMaterial;
+		toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
 		if(this.renderToScreen) {
 
-			renderer.render(this.scene, this.camera);
+			renderer.render(scene, camera);
 
 		} else {
 
-			renderer.render(this.scene, this.camera, writeBuffer, false);
+			renderer.render(scene, camera, writeBuffer, false);
 
 		}
 
@@ -232,7 +244,7 @@ export class ToneMappingPass extends Pass {
 
 	initialise(renderer) {
 
-		this.quad.material = new THREE.MeshBasicMaterial({ color: 0x7fffff });
+		this.quad.material = new MeshBasicMaterial({ color: 0x7fffff });
 		renderer.render(this.scene, this.camera, this.renderTargetPrevious);
 		this.quad.material.dispose();
 

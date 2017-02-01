@@ -1,7 +1,7 @@
-import THREE from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
-import areaImage from "./area-image";
-import searchImage from "./search-image";
+import areaImage from "./area-image.js";
+import searchImage from "./search-image.js";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -18,7 +18,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class SMAAWeightsMaterial extends THREE.ShaderMaterial {
+export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	constructor(texelSize) {
 
@@ -43,7 +43,7 @@ export class SMAAWeightsMaterial extends THREE.ShaderMaterial {
 				tDiffuse: { value: null },
 				tArea: { value: null },
 				tSearch: { value: null },
-				texelSize: { value: (texelSize !== undefined) ? texelSize : new THREE.Vector2() }
+				texelSize: { value: (texelSize !== undefined) ? texelSize : new Vector2() }
 
 			},
 

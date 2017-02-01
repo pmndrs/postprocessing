@@ -72,7 +72,7 @@ export class BokehPass extends Pass {
 
 	initialise(renderer) {
 
-		let size = renderer.getSize();
+		const size = renderer.getSize();
 		this.setSize(size.width, size.height);
 
 	}

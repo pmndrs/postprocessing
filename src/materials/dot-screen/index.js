@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial, Vector4 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -13,7 +13,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Boolean} [average] - Whether the shader should output the colour average (black and white).
  */
 
-export class DotScreenMaterial extends THREE.ShaderMaterial {
+export class DotScreenMaterial extends ShaderMaterial {
 
 	constructor(average) {
 
@@ -29,7 +29,7 @@ export class DotScreenMaterial extends THREE.ShaderMaterial {
 				scale: { value: 1.0 },
 				intensity: { value: 1.0 },
 
-				offsetRepeat: { value: new THREE.Vector4(0.5, 0.5, 1.0, 1.0) }
+				offsetRepeat: { value: new Vector4(0.5, 0.5, 1.0, 1.0) }
 
 			},
 

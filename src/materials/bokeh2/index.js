@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -24,7 +24,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.
  */
 
-export class Bokeh2Material extends THREE.ShaderMaterial {
+export class Bokeh2Material extends ShaderMaterial {
 
 	constructor(camera, options) {
 
@@ -57,8 +57,8 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 				tDiffuse: { value: null },
 				tDepth: { value: null },
 
-				texelSize: { value: new THREE.Vector2() },
-				halfTexelSize: { value: new THREE.Vector2() },
+				texelSize: { value: new Vector2() },
+				halfTexelSize: { value: new Vector2() },
 
 				cameraNear: { value: 0.1 },
 				cameraFar: { value: 2000 },
@@ -73,7 +73,7 @@ export class Bokeh2Material extends THREE.ShaderMaterial {
 				fringe: { value: 0.7 },
 				ditherStrength: { value: 0.0001 },
 
-				focusCoords: { value: new THREE.Vector2(0.5, 0.5) },
+				focusCoords: { value: new Vector2(0.5, 0.5) },
 				focalDepth: { value: 1.0 }
 
 			},

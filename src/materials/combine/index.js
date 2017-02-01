@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -14,7 +14,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Boolean} [invertTexture2=false] - Invert the second texture's rgb values.
  */
 
-export class CombineMaterial extends THREE.ShaderMaterial {
+export class CombineMaterial extends ShaderMaterial {
 
 	constructor(invertTexture1, invertTexture2) {
 

@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -15,7 +15,7 @@ import vertex from "./glsl/shader.vert";
  * @constructor
  */
 
-export class GlitchMaterial extends THREE.ShaderMaterial {
+export class GlitchMaterial extends ShaderMaterial {
 
 	constructor() {
 

@@ -51,32 +51,36 @@ export class MaskPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer) {
 
-		let ctx = renderer.context;
-		let state = renderer.state;
+		const context = renderer.context;
+		const state = renderer.state;
 
-		let writeValue = this.inverse ? 0 : 1;
-		let clearValue = 1 - writeValue;
+		const writeValue = this.inverse ? 0 : 1;
+		const clearValue = 1 - writeValue;
+
+		const scene = this.scene;
+		const camera = this.camera;
+		const clear = this.clear;
 
 		// Don't update color or depth.
 		state.setColorWrite(false);
 		state.setDepthWrite(false);
 
 		state.setStencilTest(true);
-		state.setStencilOp(ctx.REPLACE, ctx.REPLACE, ctx.REPLACE);
-		state.setStencilFunc(ctx.ALWAYS, writeValue, 0xffffffff);
+		state.setStencilOp(context.REPLACE, context.REPLACE, context.REPLACE);
+		state.setStencilFunc(context.ALWAYS, writeValue, 0xffffffff);
 		state.clearStencil(clearValue);
 
 		// Draw the mask into both buffers.
-		renderer.render(this.scene, this.camera, readBuffer, this.clear);
-		renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+		renderer.render(scene, camera, readBuffer, clear);
+		renderer.render(scene, camera, writeBuffer, clear);
 
 		// Re-enable update of color and depth.
 		state.setColorWrite(true);
 		state.setDepthWrite(true);
 
 		// Only render where stencil is set to 1.
-		state.setStencilFunc(ctx.EQUAL, 1, 0xffffffff); // draw if == 1
-		state.setStencilOp(ctx.KEEP, ctx.KEEP, ctx.KEEP);
+		state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
+		state.setStencilOp(context.KEEP, context.KEEP, context.KEEP);
 
 	}
 

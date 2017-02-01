@@ -1,4 +1,4 @@
-import THREE from "three";
+import { ShaderMaterial } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -21,7 +21,7 @@ import vertex from "./glsl/shader.vert";
  * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
  */
 
-export class BokehMaterial extends THREE.ShaderMaterial {
+export class BokehMaterial extends ShaderMaterial {
 
 	constructor(camera, options) {
 
