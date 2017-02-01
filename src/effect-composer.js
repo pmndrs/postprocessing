@@ -101,9 +101,10 @@ export class EffectComposer {
 	createBuffer(stencilBuffer) {
 
 		const size = this.renderer.getSize();
+		const pixelRatio = this.renderer.getPixelRatio();
 		const alpha = this.renderer.context.getContextAttributes().alpha;
 
-		return new THREE.WebGLRenderTarget(size.width, size.height, {
+		return new WebGLRenderTarget(size.width * pixelRatio, size.height * pixelRatio, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			format: alpha ? RGBAFormat : RGBFormat,
