@@ -21,6 +21,11 @@ $RECYCLE.BIN/
 # Operating System Files
 # =========================
 
+# Linux
+# =========================
+
+*.swp
+
 # OSX
 # =========================
 
@@ -48,5 +53,13 @@ node_modules
 # Logs
 *.log
 
+# IDE settings
+.project
+.idea
+.vscore
+
 # Backup
 backup
+
+# Temporary files
+*.tmp
