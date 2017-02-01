@@ -33,6 +33,11 @@
 		"url": "https://github.com/vanruesc/postprocessing/issues"
 	},
 
+	"files": [
+		"src",
+		"build"
+	],
+
 	"scripts": {
 		"test": "node grunt-cli.js",
 		"prepublish": "node grunt-cli.js prepublish",
