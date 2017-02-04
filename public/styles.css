@@ -1,135 +1,109 @@
 html {
- margin: 0;
- width: 100%;
- height: 100%;
+	margin: 0;
+	width: 100%;
+	height: 100%;
 }
 
 body {
- background-color: black;
- color: rgb(175, 170, 160);
- font-family: sans-serif;
- font-weight: 100;
- font-size: 100%;
- line-height: 150%;
- margin: 0;
- width: 100%;
- height: 100%;
+	background-color: black;
+	color: rgb(175, 170, 160);
+	font-family: sans-serif;
+	font-weight: 100;
+	font-size: 100%;
+	line-height: 150%;
+	margin: 0;
+	width: 100%;
+	height: 100%;
 }
 
 a {
- color: grey;
- font-size: 80%;
- transition: color 0.2s;
+	color: grey;
+	transition: color 0.2s;
 }
 
 a:hover,
 a:active,
 .active {
- color: white;
-}
-
-ul#options {
- margin: 0;
- padding: 0;
-}
-
-ul#options li {
- display: inline-block;
- list-stlye: none;
- padding: 0 10px;
+	color: white;
 }
 
 h1, h2, h3, h4 {
- font-size: 150%;
- font-weight: normal;
- padding: 0;
- margin: 20px 0 10px 0px;
+	font-size: 150%;
+	font-weight: normal;
+	padding: 0;
+	margin: 20px 0 10px 0px;
 }
 
 h2 {
- font-size: 100%;
- margin: 0 0 20px 0px;
+	font-size: 100%;
+	margin: 0 0 20px 0px;
 }
 
 p {
- margin: 0;
+	margin: 0;
+}
+
+p ul {
+	padding: 0;
+}
+
+p ul li {
+	color: rgb(255, 100, 80);
+	padding: 0 5px;
 }
 
 div[role="complementary"] {
- background-color: rgba(0, 0, 0, 0.6);
- border-top: 1px solid rgba(60, 15, 60, 0.6);
- display: -webkit-flex;
- display: flex;
- -webkit-justify-content: space-between;
-         justify-content: space-between;
- -webkit-align-items: center;
-         align-items: center;
- padding: 5px 20px;
- position: fixed;
- bottom: 0;
- left: 0;
- right: 0;
- visibility: hidden;
+	background-color: transparent;
+	display: flex;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+	-webkit-align-items: center;
+	align-items: center;
+	padding: 0 5px;
+	position: fixed;
+	right: 0;
+	top: 0;
+	visibility: hidden;
 }
 
 div[role="complementary"] h3 {
- font-size: 90%;
- margin: 0;
+	font-size: 90%;
+	margin: 0;
 }
 
 div[role="complementary"] p,
 div[role="complementary"] h4 {
- font-size: 75%;
- margin: 0;
+	font-size: 75%;
+	margin: 0;
 }
 
 div[role="complementary"] p {
- color: rgb(80, 85, 80);
-}
-
-canvas {
- cursor: -webkit-grab;
- cursor: -moz-grab;
- cursor: grab;
-}
-
-canvas:active {
- cursor: -webkit-grabbing;
- cursor: -moz-grabbing;
- cursor: grabbing;
+	color: rgb(90, 95, 90);
 }
 
 #viewport p {
- left: 0;
- position: fixed;
- right: 0;
- text-align: center;
- top: 50%;
- -webkit-transform: translateY(-50%);
-         transform: translateY(-50%);
-}
-
-#info {
- text-align: right;
-}
-
-#copyright {
- position: fixed;
- left: 100px;
- top: 5px;
-}
-
-#copyright span {
- font-size: 80%;
+	left: 0;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
 }
 
 #stats {
- opacity: 0.9;
- position: fixed;
- left: 5px;
- top: 5px;
+	opacity: 0.9;
+	position: fixed;
+	left: 5px;
+	top: 5px;
 }
 
 #stats canvas {
- cursor: pointer;
+	cursor: pointer;
+}
+
+#info {
+	position: fixed;
+	left: 100px;
+	top: 5px;
 }
