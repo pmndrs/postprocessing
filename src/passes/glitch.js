@@ -234,7 +234,7 @@ export class GlitchPass extends Pass {
 /**
  * A glitch mode enumeration.
  *
- * SPORADIC is the default mode (randomly timed glitches).
+ * SPORADIC is the default mode which results in randomly timed glitches.
  *
  * @property GlitchPass.Mode
  * @type Object
