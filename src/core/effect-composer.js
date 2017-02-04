@@ -1,4 +1,4 @@
-import { DepthTexture, LinearFilter, RGBAFormat, RGBFormat, WebGLRenderer, WebGLRenderTarget } from "three";
+import { DepthTexture, LinearFilter, RGBAFormat, RGBFormat, WebGLRenderTarget } from "three";
 import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
 import { CopyMaterial } from "../materials";
 
@@ -23,7 +23,7 @@ import { CopyMaterial } from "../materials";
 
 export class EffectComposer {
 
-	constructor(renderer, depthTexture = false, stencilBuffer = false) {
+	constructor(renderer = null, depthTexture = false, stencilBuffer = false) {
 
 		/**
 		 * The renderer.
@@ -32,10 +32,7 @@ export class EffectComposer {
 		 * @type WebGLRenderer
 		 */
 
-		this.renderer = (renderer !== undefined) ? renderer : new WebGLRenderer();
-
-		this.renderer.autoClear = false;
-		this.renderer.state.setDepthWrite(false);
+		this.renderer = renderer;
 
 		/**
 		 * The read buffer.
@@ -48,9 +45,7 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.readBuffer = this.createBuffer(stencilBuffer);
-
-		this.readBuffer.texture.generateMipmaps = false;
+		this.readBuffer = null;
 
 		/**
 		 * The write buffer.
@@ -60,11 +55,24 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.writeBuffer = this.readBuffer.clone();
+		this.writeBuffer = null;
 
-		if(depthTexture) {
+		if(this.renderer !== null) {
 
-			this.readBuffer.depthTexture = this.writeBuffer.depthTexture = new DepthTexture();
+			this.renderer.autoClear = false;
+			this.renderer.state.setDepthWrite(false);
+
+			this.readBuffer = this.createBuffer(stencilBuffer);
+			this.readBuffer.texture.generateMipmaps = false;
+
+			this.writeBuffer = this.readBuffer.clone();
+
+			if(depthTexture) {
+
+				this.readBuffer.depthTexture = new DepthTexture();
+				this.writeBuffer.depthTexture = this.readBuffer.depthTexture;
+
+			}
 
 		}
 
@@ -281,10 +289,15 @@ export class EffectComposer {
 
 		const passes = this.passes;
 
-		this.readBuffer.dispose();
-		this.writeBuffer.dispose();
+		if(this.readBuffer !== null && this.writeBuffer !== null) {
 
-		this.readBuffer = this.writeBuffer = null;
+			this.readBuffer.dispose();
+			this.writeBuffer.dispose();
+
+			this.readBuffer = null;
+			this.writeBuffer = null;
+
+		}
 
 		while(passes.length > 0) {
 
