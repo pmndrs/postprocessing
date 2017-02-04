@@ -89,20 +89,6 @@ export class FilmPass extends Pass {
 	/**
 	 * Adjusts the scanline count using the renderer's height.
 	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		const size = renderer.getSize();
-		this.setSize(size.width, size.height);
-
-	}
-
-	/**
-	 * Adjusts the scanline count using the renderer's height.
-	 *
 	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.

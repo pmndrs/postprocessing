@@ -17,7 +17,7 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
- * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see RenderPass).
+ * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
  */
 
 export class Pass {
@@ -145,6 +145,8 @@ export class Pass {
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @example
+	 *     if(!alpha) this.myRenderTarget.texture.format = RGBFormat;
 	 */
 
 	initialise(renderer, alpha) {}
@@ -155,7 +157,8 @@ export class Pass {
 	 * This is an abstract method that may be overriden in case you want to be
 	 * informed about the main render size.
 	 *
-	 * The effect composer calls this method when its own size is updated.
+	 * The effect composer calls this method before this pass is initialised and
+	 * every time its own size is updated.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The renderer's width.

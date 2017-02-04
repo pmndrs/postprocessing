@@ -131,7 +131,12 @@ export class EffectComposer {
 
 	addPass(pass, index) {
 
-		pass.initialise(this.renderer, this.renderer.context.getContextAttributes().alpha);
+		const renderer = this.renderer;
+		const size = renderer.getSize();
+		const pixelRatio = renderer.getPixelRatio();
+
+		pass.setSize(size.width * pixelRatio, size.height * pixelRatio);
+		pass.initialise(renderer, renderer.context.getContextAttributes().alpha);
 
 		if(index !== undefined) {
 
@@ -238,6 +243,7 @@ export class EffectComposer {
 
 		const passes = this.passes;
 		const size = this.renderer.getSize();
+		const pixelRatio = this.renderer.getPixelRatio();
 
 		let i, l;
 
@@ -249,6 +255,10 @@ export class EffectComposer {
 		}
 
 		this.renderer.setSize(width, height);
+
+		width *= pixelRatio;
+		height *= pixelRatio;
+
 		this.readBuffer.setSize(width, height);
 		this.writeBuffer.setSize(width, height);
 

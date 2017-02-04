@@ -64,20 +64,6 @@ export class BokehPass extends Pass {
 	}
 
 	/**
-	 * Adjusts the format and size of the render targets.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		const size = renderer.getSize();
-		this.setSize(size.width, size.height);
-
-	}
-
-	/**
 	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize

@@ -67,20 +67,6 @@ export class DotScreenPass extends Pass {
 	}
 
 	/**
-	 * Adjusts the size of the effect.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		const size = renderer.getSize();
-		this.setSize(size.width, size.height);
-
-	}
-
-	/**
 	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize

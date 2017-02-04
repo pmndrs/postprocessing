@@ -386,7 +386,7 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
-	 * Adjusts the format and size of the render targets.
+	 * Adjusts the format of the render targets.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -394,10 +394,6 @@ export class GodRaysPass extends Pass {
 	 */
 
 	initialise(renderer, alpha) {
-
-		const size = renderer.getSize();
-
-		this.setSize(size.width, size.height);
 
 		if(!alpha) {
 

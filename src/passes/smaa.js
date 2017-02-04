@@ -150,20 +150,6 @@ export class SMAAPass extends Pass {
 	}
 
 	/**
-	 * Adjusts the format and size of the render targets.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		const size = renderer.getSize();
-		this.setSize(size.width, size.height);
-
-	}
-
-	/**
 	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
@@ -178,8 +164,9 @@ export class SMAAPass extends Pass {
 
 		this.colorEdgesMaterial.uniforms.texelSize.value.copy(
 			this.weightsMaterial.uniforms.texelSize.value.copy(
-				this.blendMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height)
-		));
+				this.blendMaterial.uniforms.texelSize.value.set(
+					1.0 / width, 1.0 / height
+		)));
 
 	}
 
