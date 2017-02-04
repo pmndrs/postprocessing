@@ -1,4 +1,4 @@
-import { AdditiveBlending, Color, LinearFilter, MeshBasicMaterial, RGBFormat, Vector3, WebGLRenderTarget } from "three";
+import { AdditiveBlending, Color, LinearFilter, MeshBasicMaterial, RGBFormat, Scene, Vector3, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, CombineMaterial, CopyMaterial, GodRaysMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
@@ -21,7 +21,7 @@ function clamp(value, min, max) {
 }
 
 /**
- * Used for saving the renderer's clear color.
+ * A clear color.
  *
  * @property CLEAR_COLOR
  * @type Color
@@ -40,7 +40,7 @@ const CLEAR_COLOR = new Color();
  * @constructor
  * @param {Scene} scene - The main scene.
  * @param {Camera} camera - The main camera.
- * @param {Vector3} lightSource - The main light source.
+ * @param {Object3D} lightSource - The main light source.
  * @param {Object} [options] - The options.
  * @param {Number} [options.density=0.96] - The density of the light rays.
  * @param {Number} [options.decay=0.93] - An illumination decay factor.
@@ -192,6 +192,15 @@ export class GodRaysPass extends Pass {
 		this.intensity = options.intensity;
 
 		/**
+		 * A scene that only contains the light source.
+		 *
+		 * @property lightScene
+		 * @type Scene
+		 */
+
+		this.lightScene = new Scene();
+
+		/**
 		 * The main scene.
 		 *
 		 * @property mainScene
@@ -299,7 +308,9 @@ export class GodRaysPass extends Pass {
 		const scene = this.scene;
 		const camera = this.camera;
 		const mainScene = this.mainScene;
+		const lightScene = this.lightScene;
 		const mainCamera = this.mainCamera;
+		const lightSource = this.lightSource;
 		const screenPosition = this.screenPosition;
 
 		const convolutionMaterial = this.convolutionMaterial;
@@ -311,16 +322,17 @@ export class GodRaysPass extends Pass {
 		const renderTargetX = this.renderTargetX;
 		const renderTargetY = this.renderTargetY;
 
-		let clearAlpha, background;
+		let clearAlpha, background, parent;
 
 		// Compute the screen light position and translate the coordinates to [0, 1].
-		screenPosition.copy(this.lightSource.position).project(mainCamera);
+		screenPosition.copy(lightSource.position).project(mainCamera);
 		screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
 		screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
 		// Render the masked scene.
 		state.setDepthWrite(true);
 
+		parent = lightSource.parent;
 		background = mainScene.background;
 		CLEAR_COLOR.copy(renderer.getClearColor());
 		clearAlpha = renderer.getClearAlpha();
@@ -328,8 +340,16 @@ export class GodRaysPass extends Pass {
 		renderer.setClearColor(0x000000, 1);
 		mainScene.overrideMaterial = this.maskMaterial;
 		mainScene.background = null;
+		lightScene.add(lightSource);
 
-		renderer.render(mainScene, mainCamera, renderTargetMask, true);
+		renderer.render(lightScene, mainCamera, renderTargetMask, true);
+		renderer.render(mainScene, mainCamera, renderTargetMask);
+
+		if(parent !== null) {
+
+			parent.add(lightSource);
+
+		}
 
 		mainScene.background = background;
 		mainScene.overrideMaterial = null;
