@@ -86,7 +86,7 @@ export class RenderPass extends Pass {
 
 		const state = renderer.state;
 		const scene = this.scene;
-		const clearColor = clearColor;
+		const clearColor = this.clearColor;
 
 		let clearAlpha;
 
