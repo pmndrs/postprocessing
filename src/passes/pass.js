@@ -65,6 +65,12 @@ export class Pass {
 
 		this.quad = quad;
 
+		if(this.quad !== null) {
+
+			this.quad.frustumCulled = false;
+
+		}
+
 		/**
 		 * Indicates whether the read and write buffers should be swapped after this
 		 * pass has finished rendering.
@@ -103,8 +109,17 @@ export class Pass {
 		// Add the camera and the quad to the scene.
 		if(this.scene !== null) {
 
-			if(this.camera !== null && this.camera.parent === null) { this.scene.add(this.camera); }
-			if(this.quad !== null) { this.scene.add(this.quad); }
+			if(this.camera !== null && this.camera.parent === null) {
+
+				this.scene.add(this.camera);
+
+			}
+
+			if(this.quad !== null) {
+
+				this.scene.add(this.quad);
+
+			}
 
 		}
 
