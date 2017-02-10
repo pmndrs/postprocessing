@@ -22,9 +22,7 @@ import vertex from "./glsl/shader.vert";
 
 export class BokehMaterial extends ShaderMaterial {
 
-	constructor(camera, options) {
-
-		if(options === undefined) { options = {}; }
+	constructor(camera = null, options = {}) {
 
 		super({
 
@@ -32,14 +30,14 @@ export class BokehMaterial extends ShaderMaterial {
 
 			uniforms: {
 
+				cameraNear: { value: 0.1 },
+				cameraFar: { value: 2000 },
+				aspect: { value: 1.0 },
+
 				tDiffuse: { value: null },
 				tDepth: { value: null },
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
-
 				focus: { value: (options.focus !== undefined) ? options.focus : 1.0 },
-				aspect: { value: (options.aspect !== undefined) ? options.aspect : 1.0 },
 				aperture: { value: (options.aperture !== undefined) ? options.aperture : 0.025 },
 				maxBlur: { value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0 }
 
@@ -53,21 +51,22 @@ export class BokehMaterial extends ShaderMaterial {
 
 		});
 
-		if(camera !== undefined) { this.adoptCameraSettings(camera); }
+		if(camera !== null) { this.adoptCameraSettings(camera); }
 
 	}
 
 	/**
-	 * Adopts the near and far plane settings of the given camera.
+	 * Adopts the settings of the given camera.
 	 *
 	 * @method adoptCameraSettings
-	 * @param {PerspectiveCamera} camera - The main camera.
+	 * @param {PerspectiveCamera} camera - A camera.
 	 */
 
 	adoptCameraSettings(camera) {
 
 		this.uniforms.cameraNear.value = camera.near;
 		this.uniforms.cameraFar.value = camera.far;
+		this.uniforms.aspect.value = camera.aspect;
 
 	}
 

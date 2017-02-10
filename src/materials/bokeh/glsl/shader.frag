@@ -1,10 +1,5 @@
-#include <packing>
-
 uniform sampler2D tDiffuse;
 uniform sampler2D tDepth;
-
-uniform float cameraNear;
-uniform float cameraFar;
 
 uniform float focus;
 uniform float aspect;
@@ -13,20 +8,37 @@ uniform float maxBlur;
 
 varying vec2 vUv;
 
-float readDepth(sampler2D depthSampler, vec2 coord) {
+#ifndef USE_LOGDEPTH
 
-	float fragCoordZ = texture2D(depthSampler, coord).x;
-	float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+	#include <packing>
 
-	return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+	uniform float cameraNear;
+	uniform float cameraFar;
 
-}
+	float readDepth(sampler2D depthSampler, vec2 coord) {
+
+		float fragCoordZ = texture2D(depthSampler, coord).x;
+		float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+
+		return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+	}
+
+#endif
 
 void main() {
 
 	vec2 aspectCorrection = vec2(1.0, aspect);
 
-	float depth = readDepth(tDepth, vUv);
+	#ifdef USE_LOGDEPTH
+
+		float depth = texture2D(tDepth, vUv).x;
+
+	#else
+
+		float depth = readDepth(tDepth, vUv);
+
+	#endif
 
 	float factor = depth - focus;
 

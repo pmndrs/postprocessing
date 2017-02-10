@@ -1,5 +1,3 @@
-#include <packing>
-
 uniform sampler2D tDiffuse;
 uniform sampler2D tDepth;
 
@@ -10,7 +8,7 @@ uniform float cameraNear;
 uniform float cameraFar;
 
 uniform float focalLength;
-uniform float fStop;
+uniform float focalStop;
 
 uniform float maxBlur;
 uniform float luminanceThreshold;
@@ -30,6 +28,21 @@ uniform float ditherStrength;
 #endif
 
 varying vec2 vUv;
+
+#ifndef USE_LOGDEPTH
+
+	#include <packing>
+
+	float readDepth(sampler2D depthSampler, vec2 coord) {
+
+		float fragCoordZ = texture2D(depthSampler, coord).x;
+		float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+
+		return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+	}
+
+#endif
 
 #ifdef PENTAGON
 
@@ -102,7 +115,7 @@ varying vec2 vUv;
 		const float VIGNETTE_FADE = 22.0; 
 
 		float d = distance(vUv, CENTER);
-		d = smoothstep(VIGNETTE_OUT + (fStop / VIGNETTE_FADE), VIGNETTE_IN + (fStop / VIGNETTE_FADE), d);
+		d = smoothstep(VIGNETTE_OUT + (focalStop / VIGNETTE_FADE), VIGNETTE_IN + (focalStop / VIGNETTE_FADE), d);
 
 		return clamp(d, 0.0, 1.0);
 
@@ -151,15 +164,6 @@ vec3 processTexel(vec2 coords, float blur) {
 
 }
 
-float readDepth(sampler2D depthSampler, vec2 coord) {
-
-	float fragCoordZ = texture2D(depthSampler, coord).x;
-	float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
-
-	return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
-
-}
-
 float linearize(float depth) {
 
 	return -cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar);
@@ -192,11 +196,27 @@ float gather(float i, float j, float ringSamples, inout vec3 color, float w, flo
 
 void main() {
 
-	float depth = linearize(readDepth(tDepth, vUv));
+	#ifdef USE_LOGDEPTH
+
+		float depth = linearize(texture2D(tDepth, vUv).x);
+
+	#else
+
+		float depth = linearize(readDepth(tDepth, vUv));
+
+	#endif
 
 	#ifdef SHADER_FOCUS
 
-		float fDepth = linearize(readDepth(tDepth, focusCoords));
+		#ifdef USE_LOGDEPTH
+
+			float fDepth = linearize(texture2D(tDepth, focusCoords).x);
+
+		#else
+
+			float fDepth = linearize(readDepth(tDepth, focusCoords));
+
+		#endif
 
 	#else
 
@@ -226,7 +246,7 @@ void main() {
 
 		float focalPlane = (depthMM * focalLength) / (depthMM - focalLength);
 		float farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);
-		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * fStop * CIRCLE_OF_CONFUSION);
+		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focalStop * CIRCLE_OF_CONFUSION);
 
 		float blur = abs(focalPlane - farDoF) * nearDoF;
 

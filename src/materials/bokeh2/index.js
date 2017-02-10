@@ -26,9 +26,8 @@ import vertex from "./glsl/shader.vert";
 
 export class Bokeh2Material extends ShaderMaterial {
 
-	constructor(camera, options) {
+	constructor(camera = null, options = {}) {
 
-		if(options === undefined) { options = {}; }
 		if(options.rings === undefined) { options.rings = 3; }
 		if(options.samples === undefined) { options.samples = 2; }
 		if(options.showFocus === undefined) { options.showFocus = false; }
@@ -64,7 +63,7 @@ export class Bokeh2Material extends ShaderMaterial {
 				cameraFar: { value: 2000 },
 
 				focalLength: { value: 24.0 },
-				fStop: { value: 0.9 },
+				focalStop: { value: 0.9 },
 
 				maxBlur: { value: 1.0 },
 				luminanceThreshold: { value: 0.5 },
@@ -94,7 +93,7 @@ export class Bokeh2Material extends ShaderMaterial {
 		if(options.noise) { this.defines.NOISE = "1"; }
 
 		if(options.texelSize !== undefined) { this.setTexelSize(options.texelSize.x, options.texelSize.y); }
-		if(camera !== undefined) { this.adoptCameraSettings(camera); }
+		if(camera !== null) { this.adoptCameraSettings(camera); }
 
 	}
 
