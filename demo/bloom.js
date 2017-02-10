@@ -276,27 +276,44 @@ export class BloomDemo extends Demo {
 	configure(gui) {
 
 		const composer = this.composer;
-		const bloomPass = this.bloomPass;
+		const pass = this.bloomPass;
 
 		const params = {
-			"resolution": bloomPass.resolutionScale,
-			"blurriness": bloomPass.blurriness,
-			"strength": bloomPass.combineMaterial.uniforms.opacity2.value,
-			"distinction": bloomPass.luminosityMaterial.uniforms.distinction.value,
-			"blend": true
+			"resolution": pass.resolutionScale,
+			"blurriness": pass.blurriness,
+			"intensity": pass.intensity,
+			"distinction": pass.distinction,
+			"blend": true,
+			"blend mode": "screen"
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { bloomPass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "blurriness").min(0.0).max(3.0).step(0.1).onChange(function() { bloomPass.blurriness = params.blurriness; });
-		gui.add(params, "strength").min(0.0).max(3.0).step(0.01).onChange(function() { bloomPass.combineMaterial.uniforms.opacity2.value = params.strength; });
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
+		gui.add(params, "blurriness").min(0.0).max(3.0).step(0.1).onChange(function() { pass.blurriness = params.blurriness; });
+		gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function() { pass.intensity = params.intensity; });
 
 		const folder = gui.addFolder("Luminance");
-		folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { bloomPass.luminosityMaterial.uniforms.distinction.value = params.distinction; });
+		folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.distinction = params.distinction; });
 		folder.open();
 
 		gui.add(params, "blend").onChange(function() {
 
-			bloomPass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+			pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+
+		});
+
+		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+
+			if(params["blend mode"] === "add") {
+
+				delete pass.combineMaterial.defines.SCREEN_MODE;
+
+			} else {
+
+				pass.combineMaterial.defines.SCREEN_MODE = "1";
+
+			}
+
+			pass.combineMaterial.needsUpdate = true;
 
 		});
 

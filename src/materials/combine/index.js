@@ -6,17 +6,22 @@ import vertex from "./glsl/shader.vert";
 /**
  * A material for combining two textures.
  *
+ * This material supports the two blend modes Add and Screen.
+ *
+ * In Screen mode, the two textures are effectively projected on a white screen
+ * simultaneously. In Add mode, the textures are simply added together which
+ * often produces washed out results.
+ *
  * @class CombineMaterial
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @param {Boolean} [invertTexture1=false] - Invert the first texture's rgb values.
- * @param {Boolean} [invertTexture2=false] - Invert the second texture's rgb values.
+ * @param {Boolean} [screenMode=false] - Whether the screen blend mode should be used.
  */
 
 export class CombineMaterial extends ShaderMaterial {
 
-	constructor(invertTexture1, invertTexture2) {
+	constructor(screenMode = true) {
 
 		super({
 
@@ -40,8 +45,7 @@ export class CombineMaterial extends ShaderMaterial {
 
 		});
 
-		if(invertTexture1) { this.defines.INVERT_TEX1 = "1"; }
-		if(invertTexture2) { this.defines.INVERT_TEX2 = "1"; }
+		if(screenMode) { this.defines.SCREEN_MODE = "1"; }
 
 	}
 

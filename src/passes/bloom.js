@@ -1,5 +1,5 @@
-import { AdditiveBlending, LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
-import { CopyMaterial, CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from "../materials";
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
+import { CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
@@ -17,6 +17,7 @@ import { Pass } from "./pass.js";
  * @param {Number} [options.blurriness=1.0] - The scale of the blur.
  * @param {Number} [options.strength=1.0] - The bloom strength.
  * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
+ * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
  */
 
 export class BloomPass extends Pass {
@@ -72,23 +73,8 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.combineMaterial = new CombineMaterial();
+		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
 
-		if(options.strength !== undefined) { this.combineMaterial.uniforms.opacity2.value = options.strength; }
-
-		/**
-		 * Copy shader material.
-		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
-		 * @private
-		 */
-
-		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = AdditiveBlending;
-		this.copyMaterial.transparent = true;
-
-		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
 
 		/**
 		 * Luminance shader material.
@@ -142,9 +128,10 @@ export class BloomPass extends Pass {
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, readBuffer, writeBuffer) {
 
 		const quad = this.quad;
 		const scene = this.scene;
@@ -153,7 +140,6 @@ export class BloomPass extends Pass {
 		const luminosityMaterial = this.luminosityMaterial;
 		const convolutionMaterial = this.convolutionMaterial;
 		const combineMaterial = this.combineMaterial;
-		const copyMaterial = this.copyMaterial;
 
 		const renderTargetX = this.renderTargetX;
 		const renderTargetY = this.renderTargetY;
@@ -187,22 +173,11 @@ export class BloomPass extends Pass {
 		renderer.render(scene, camera, renderTargetY);
 
 		// Render the original scene with superimposed blur.
-		if(this.renderToScreen) {
+		quad.material = combineMaterial;
+		combineMaterial.uniforms.texture1.value = readBuffer.texture;
+		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-			quad.material = combineMaterial;
-			combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			combineMaterial.uniforms.texture2.value = renderTargetY.texture;
-
-			renderer.render(scene, camera);
-
-		} else {
-
-			quad.material = copyMaterial;
-			copyMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-
-			renderer.render(scene, camera, readBuffer, false);
-
-		}
+		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 

@@ -1,5 +1,5 @@
-import { AdditiveBlending, Color, LinearFilter, MeshBasicMaterial, RGBFormat, Scene, Vector3, WebGLRenderTarget } from "three";
-import { ConvolutionMaterial, CombineMaterial, CopyMaterial, GodRaysMaterial } from "../materials";
+import { Color, LinearFilter, MeshBasicMaterial, RGBFormat, Scene, Vector3, WebGLRenderTarget } from "three";
+import { ConvolutionMaterial, CombineMaterial, GodRaysMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
@@ -51,6 +51,7 @@ const CLEAR_COLOR = new Color();
  * @param {Number} [options.blurriness=0.1] - The strength of the preliminary blur phase.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
  * @param {Number} [options.samples=60] - The number of samples per pixel.
+ * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.
  */
 
 export class GodRaysPass extends Pass {
@@ -147,19 +148,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.combineMaterial = new CombineMaterial();
-
-		/**
-		 * A copy shader material used for rendering to texture.
-		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
-		 * @private
-		 */
-
-		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = AdditiveBlending;
-		this.copyMaterial.transparent = true;
+		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
 
 		/**
 		 * A material used for masking the scene objects.
@@ -298,9 +287,10 @@ export class GodRaysPass extends Pass {
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, readBuffer, writeBuffer) {
 
 		const state = renderer.state;
 
@@ -316,7 +306,6 @@ export class GodRaysPass extends Pass {
 		const convolutionMaterial = this.convolutionMaterial;
 		const godRaysMaterial = this.godRaysMaterial;
 		const combineMaterial = this.combineMaterial;
-		const copyMaterial = this.copyMaterial;
 
 		const renderTargetMask = this.renderTargetMask;
 		const renderTargetX = this.renderTargetX;
@@ -386,22 +375,11 @@ export class GodRaysPass extends Pass {
 		renderer.render(scene, camera, renderTargetY);
 
 		// Final pass - composite god rays onto colors.
-		if(this.renderToScreen) {
+		quad.material = combineMaterial;
+		combineMaterial.uniforms.texture1.value = readBuffer.texture;
+		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-			quad.material = combineMaterial;
-			combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			combineMaterial.uniforms.texture2.value = renderTargetY.texture;
-
-			renderer.render(scene, camera);
-
-		} else {
-
-			quad.material = copyMaterial;
-			copyMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-
-			renderer.render(scene, camera, readBuffer);
-
-		}
+		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 

@@ -269,7 +269,8 @@ export class GodRaysDemo extends Demo {
 			"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
 			"samples": pass.samples,
 			"blurriness": pass.blurriness,
-			"color": sun.material.color.getHex()
+			"color": sun.material.color.getHex(),
+			"blend mode": "screen"
 		};
 
 		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
@@ -282,6 +283,22 @@ export class GodRaysDemo extends Demo {
 		gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax; });
 		gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params.samples; });
 		gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params.color); directionalLight.color.setHex(params.color); });
+
+		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+
+			if(params["blend mode"] === "add") {
+
+				delete pass.combineMaterial.defines.SCREEN_MODE;
+
+			} else {
+
+				pass.combineMaterial.defines.SCREEN_MODE = "1";
+
+			}
+
+			pass.combineMaterial.needsUpdate = true;
+
+		});
 
 	}
 
