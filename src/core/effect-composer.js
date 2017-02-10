@@ -165,22 +165,35 @@ export class EffectComposer {
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * @method createBuffer
+	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
-	 * @return {WebGLRenderTarget} A fresh render target that equals the renderer's canvas.
+	 * @param {Boolean} depthTexture - Whether the render target should have a depth texture.
+	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(stencilBuffer) {
+	createBuffer(depthBuffer, stencilBuffer, depthTexture) {
 
 		const size = this.renderer.getSize();
 		const pixelRatio = this.renderer.getPixelRatio();
 		const alpha = this.renderer.context.getContextAttributes().alpha;
 
-		return new WebGLRenderTarget(size.width * pixelRatio, size.height * pixelRatio, {
+		const renderTarget = new WebGLRenderTarget(size.width * pixelRatio, size.height * pixelRatio, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			format: alpha ? RGBAFormat : RGBFormat,
+			depthBuffer: depthBuffer,
 			stencilBuffer: stencilBuffer
 		});
+
+		renderTarget.texture.generateMipmaps = false;
+
+		if(depthTexture) {
+
+			renderTarget.depthTexture = new DepthTexture();
+
+		}
+
+		return renderTarget;
 
 	}
 
