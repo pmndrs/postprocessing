@@ -2,7 +2,7 @@ import { DotScreenMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
- * A render pass.
+ * A dot screen pass.
  *
  * @class DotScreenPass
  * @submodule passes
@@ -24,7 +24,7 @@ export class DotScreenPass extends Pass {
 		this.needsSwap = true;
 
 		/**
-		 * Dot screen shader material description.
+		 * A dot screen shader material.
 		 *
 		 * @property material
 		 * @type DotScreenMaterial

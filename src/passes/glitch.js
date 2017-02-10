@@ -44,7 +44,7 @@ function randomFloat(low, high) {
  * @extends Pass
  * @constructor
  * @param {Object} [options] - The options.
- * @param {Texture} [options.perturbMap] - A perturbation map.
+ * @param {Texture} [options.perturbMap] - A perturbation map. If none is provided, a noise texture will be created.
  * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
  */
 

@@ -13,10 +13,9 @@ import vertex from "./glsl/shader.vert";
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @param {PerspectiveCamera} [camera] - The main camera.
+ * @param {PerspectiveCamera} [camera] - A camera.
  * @param {Object} [options] - The options.
  * @param {Number} [options.focus=1.0] - Focus distance.
- * @param {Number} [options.aspect=1.0] - Camera aspect factor.
  * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
  * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
  */

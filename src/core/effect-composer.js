@@ -5,11 +5,10 @@ import { CopyMaterial } from "../materials";
 /**
  * The EffectComposer may be used in place of a normal WebGLRenderer.
  *
- * It will disable the auto clear behaviour of the provided renderer to prevent
- * unnecessary clear operations. The depth buffer will also be disabled for
- * writing. Passes that rely on the depth test must explicitly enable it.
+ * The auto clear behaviour of the provided renderer will be disabled to prevent
+ * unnecessary clear operations.
  *
- * You may want to use a {{#crossLink "RenderPass"}}{{/crossLink}} as your first
+ * It is common to use a {{#crossLink "RenderPass"}}{{/crossLink}} as the first
  * pass to automatically clear the screen and render the scene to a texture for
  * further processing.
  *
@@ -30,6 +29,10 @@ export class EffectComposer {
 		/**
 		 * The renderer.
 		 *
+		 * You may replace the renderer at any time by using the
+		 * {{#crossLink "EffectComposer/replaceRenderer:method"}}{{/crossLink}}
+		 * method.
+		 *
 		 * @property renderer
 		 * @type WebGLRenderer
 		 */
@@ -40,7 +43,7 @@ export class EffectComposer {
 		 * The read buffer.
 		 *
 		 * Reading from and writing to the same render target should be avoided.
-		 * Therefore, two seperate, yet identical buffers are used.
+		 * Therefore, two seperate yet identical buffers are used.
 		 *
 		 * @property readBuffer
 		 * @type WebGLRenderTarget
@@ -84,7 +87,7 @@ export class EffectComposer {
 		this.copyPass = new ShaderPass(new CopyMaterial());
 
 		/**
-		 * The render passes.
+		 * The passes.
 		 *
 		 * @property passes
 		 * @type Array
@@ -163,6 +166,10 @@ export class EffectComposer {
 
 	/**
 	 * Creates a new render target by replicating the renderer's canvas.
+	 *
+	 * The created render target uses a linear filter for texel minification and
+	 * magnification. Its render texture format depends on whether the renderer
+	 * uses the alpha channel. Mipmaps are disabled.
 	 *
 	 * @method createBuffer
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
@@ -350,7 +357,7 @@ export class EffectComposer {
 	 * Resets this composer by deleting all passes and creating new buffers.
 	 *
 	 * @method reset
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target to use. If none is provided, the settings of the renderer will be used.
+	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the settings of the renderer will be used.
 	 */
 
 	reset(renderTarget) {
@@ -371,8 +378,6 @@ export class EffectComposer {
 	 *
 	 * This method deallocates all render targets, textures and materials created
 	 * by the passes. It also deletes this composer's frame buffers.
-	 *
-	 * Note: the reset method uses the dispose method internally.
 	 *
 	 * @method dispose
 	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.

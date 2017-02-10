@@ -3,21 +3,21 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
 /**
  * An abstract pass.
  *
- * This class implements a dispose method that frees memory on demand.
- * The EffectComposer calls this method when it is being destroyed.
+ * Passes that do not rely on the depth buffer should explicitly disable the
+ * depth test and depth write in their respective shader materials.
  *
- * For this mechanism to work properly, please assign your render targets,
- * materials or textures directly to your pass!
- *
- * You can prevent your disposable objects from being deleted by keeping them
- * inside deeper structures such as arrays or objects.
+ * This class implements a dispose method that frees memory on demand. The
+ * EffectComposer calls this method when it is being destroyed. For this
+ * mechanism to work properly, please assign your render targets, materials and
+ * textures directly to your pass. You can prevent your disposable objects from
+ * being deleted by keeping them inside deeper structures.
  *
  * @class Pass
  * @submodule passes
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
- * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
+ * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
  */
 
 export class Pass {
@@ -134,7 +134,7 @@ export class Pass {
 	 * @throws {Error} An error is thrown if the method is not overridden.
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
-	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target.
+	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
 	 * @param {Number} [delta] - The delta time.
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
@@ -150,7 +150,7 @@ export class Pass {
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
 	 * You'll also be able to configure your custom render targets to use the
-	 * appropriate format (RGB or RGBA).
+	 * appropriate format (RGB or RGBA) if appropriate.
 	 *
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
@@ -161,7 +161,7 @@ export class Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 * @example
-	 *     if(!alpha) this.myRenderTarget.texture.format = RGBFormat;
+	 *     if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialise(renderer, alpha) {}

@@ -11,7 +11,7 @@ import { Pass } from "./pass.js";
  *
  * Reference:
  *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+ *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
  *
  * @class ToneMappingPass
  * @submodule passes
@@ -37,12 +37,13 @@ export class ToneMappingPass extends Pass {
 		 * @property renderTargetLuminosity
 		 * @type WebGLRenderTarget
 		 * @private
+		 * @todo: use RED format in WebGL 2.0.
 		 */
 
 		this.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
-			format: RGBFormat, // @todo: change to RED format in WebGL 2.0! Don't need colours.
+			format: RGBFormat,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
@@ -133,7 +134,7 @@ export class ToneMappingPass extends Pass {
 		if(typeof x === "number" && x > 0) {
 
 			this.renderTargetLuminosity.setSize(x, x);
-			this.renderTargetPrevious.setSize(x, x); // Hm..
+			this.renderTargetPrevious.setSize(x, x);
 			this.renderTargetAdapted.setSize(x, x);
 
 			this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);

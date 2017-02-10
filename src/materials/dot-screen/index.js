@@ -10,7 +10,7 @@ import vertex from "./glsl/shader.vert";
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @param {Boolean} [average] - Whether the shader should output the colour average (black and white).
+ * @param {Boolean} [average=false] - Whether the shader should output the colour average (black and white).
  */
 
 export class DotScreenMaterial extends ShaderMaterial {
