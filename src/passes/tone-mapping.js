@@ -182,8 +182,6 @@ export class ToneMappingPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer, delta) {
 
-		const state = renderer.state;
-
 		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
@@ -201,9 +199,7 @@ export class ToneMappingPass extends Pass {
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
 			quad.material = luminosityMaterial;
 			luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-			state.setDepthWrite(true);
 			renderer.render(scene, camera, renderTargetLuminosity);
-			state.setDepthWrite(false);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
 			quad.material = adaptiveLuminosityMaterial;

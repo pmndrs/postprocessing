@@ -79,7 +79,10 @@ export class Bokeh2Material extends ShaderMaterial {
 			},
 
 			fragmentShader: fragment,
-			vertexShader: vertex
+			vertexShader: vertex,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 

@@ -51,7 +51,10 @@ export class GodRaysMaterial extends ShaderMaterial {
 			},
 
 			fragmentShader: fragment,
-			vertexShader: vertex
+			vertexShader: vertex,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 

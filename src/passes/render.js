@@ -84,13 +84,10 @@ export class RenderPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		const state = renderer.state;
 		const scene = this.scene;
 		const clearColor = this.clearColor;
 
 		let clearAlpha;
-
-		state.setDepthWrite(true);
 
 		scene.overrideMaterial = this.overrideMaterial;
 
@@ -119,8 +116,6 @@ export class RenderPass extends Pass {
 		}
 
 		scene.overrideMaterial = null;
-
-		state.setDepthWrite(false);
 
 	}
 

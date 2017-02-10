@@ -146,8 +146,6 @@ export class BloomPass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		const state = renderer.state;
-
 		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
@@ -163,9 +161,7 @@ export class BloomPass extends Pass {
 		// Luminance filter.
 		quad.material = luminosityMaterial;
 		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		state.setDepthWrite(true);
 		renderer.render(scene, camera, renderTargetX);
-		state.setDepthWrite(false);
 
 		// Convolution phase.
 		quad.material = convolutionMaterial;

@@ -62,7 +62,6 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.renderer.state.setDepthWrite(false);
 
 			this.readBuffer = this.createBuffer(
 				(options.depthBuffer !== undefined) ? options.depthBuffer : true,
