@@ -19,4 +19,5 @@ export { RenderPass } from "./render.js";
 export { SavePass } from "./save.js";
 export { SMAAPass } from "./smaa.js";
 export { ShaderPass } from "./shader.js";
+export { TexturePass } from "./texture.js";
 export { ToneMappingPass } from "./tone-mapping.js";

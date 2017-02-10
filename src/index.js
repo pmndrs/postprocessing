@@ -22,6 +22,7 @@ export {
 	SavePass,
 	SMAAPass,
 	ShaderPass,
+	TexturePass,
 	ToneMappingPass
 } from "./passes";
 
