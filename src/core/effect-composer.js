@@ -113,6 +113,55 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Replaces the current renderer with the given one. The dom element of the
+	 * current renderer will automatically be removed from its parent node and the
+	 * dom element of the new renderer will take its place.
+	 *
+	 * The auto clear mechanism of the provided renderer will be disabled.
+	 *
+	 * Switching between renderers allows you to dynamically enable or disable
+	 * antialiasing.
+	 *
+	 * @method replaceRenderer
+	 * @param {WebGLRenderer} renderer - The new renderer.
+	 * @return {WebGLRenderer} The old renderer.
+	 */
+
+	replaceRenderer(renderer) {
+
+		const oldRenderer = this.renderer;
+
+		let parent, oldSize, newSize;
+
+		if(oldRenderer !== null && oldRenderer !== renderer) {
+
+			this.renderer = renderer;
+			this.renderer.autoClear = false;
+
+			parent = oldRenderer.domElement.parentNode;
+			oldSize = oldRenderer.getSize();
+			newSize = renderer.getSize();
+
+			if(parent !== null) {
+
+				parent.removeChild(oldRenderer.domElement);
+				parent.appendChild(renderer.domElement);
+
+			}
+
+			if(oldSize.width !== newSize.width || oldSize.height !== newSize.height) {
+
+				this.setSize();
+
+			}
+
+		}
+
+		return oldRenderer;
+
+	}
+
+	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * @method createBuffer
