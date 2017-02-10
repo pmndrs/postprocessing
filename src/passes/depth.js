@@ -6,6 +6,9 @@ import { Pass } from "./pass.js";
  *
  * Reads the depth from a depth texture and renders it.
  *
+ * This pass requires a depth texture. See
+ * {{#crossLink "EffectComposer/depthTexture:attribute"}}{{/crossLink}}.
+ *
  * @class DepthPass
  * @submodule passes
  * @extends Pass

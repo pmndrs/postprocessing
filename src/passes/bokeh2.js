@@ -2,9 +2,12 @@ import { Bokeh2Material } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
- * Depth of Field pass version 2.
+ * An advanced Depth of Field (DoF) pass.
  *
- * This pass yields more realistic results but is also more demanding.
+ * Yields more realistic results but is also more demanding.
+ *
+ * This pass requires a depth texture. See
+ * {{#crossLink "EffectComposer/depthTexture:attribute"}}{{/crossLink}}.
  *
  * @class Bokeh2Pass
  * @submodule passes

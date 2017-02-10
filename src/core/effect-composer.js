@@ -101,6 +101,14 @@ export class EffectComposer {
 	/**
 	 * The depth texture of the read and write buffers.
 	 *
+	 * The read and write buffers share a single depth texture. Depth will be
+	 * written to this texture when something is rendered into one of the buffers
+	 * and the involved materials have depth write enabled.
+	 *
+	 * You may enable this mechanism during the instantiation of the composer or
+	 * by assigning a DepthTexture instance later on. You may also disable it by
+	 * assigning null.
+	 *
 	 * @property depthTexture
 	 * @type DepthTexture
 	 * @default null
