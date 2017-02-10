@@ -68,27 +68,14 @@ export class GlitchPass extends Pass {
 
 		this.quad.material = this.material;
 
-		/**
-		 * A perturbation map.
-		 *
-		 * If none is provided, a noise texture will be created.
-		 * This texture will automatically be destroyed when the EffectComposer is
-		 * deleted.
-		 *
-		 * @property perturbMap
-		 * @type Texture
-		 */
-
 		if(options.perturbMap !== undefined) {
 
 			this.perturbMap = options.perturbMap;
 			this.perturbMap.generateMipmaps = false;
-			this.material.uniforms.tPerturb.value = this.perturbMap;
 
 		} else {
 
-			this.perturbMap = null;
-			this.generatePerturbMap((options.dtSize !== undefined) ? options.dtSize : 64);
+			this.perturbMap = this.generatePerturbMap(options.dtSize);
 
 		}
 
@@ -123,6 +110,53 @@ export class GlitchPass extends Pass {
 		 */
 
 		this.breakPoint = randomInt(120, 240);
+
+	}
+
+	/**
+	 * A perturbation map.
+	 *
+	 * @property perturbMap
+	 * @type Texture
+	 */
+
+	get perturbMap() { return this.material.uniforms.tPerturb.value; }
+
+	set perturbMap(x) {
+
+		this.material.uniforms.tPerturb.value = x;
+
+	}
+
+	/**
+	 * Generates a new perturbation map.
+	 *
+	 * @method generatePerturbMap
+	 * @param {Number} [size=64] - The texture size.
+	 * @return {DataTexture} The perturbation texture.
+	 */
+
+	generatePerturbMap(size = 64) {
+
+		const pixels = size * size;
+		const data = new Float32Array(pixels * 3);
+
+		let i, x, dt;
+
+		for(i = 0; i < pixels; ++i) {
+
+			x = Math.random();
+
+			data[i * 3] = x;
+			data[i * 3 + 1] = x;
+			data[i * 3 + 2] = x;
+
+		}
+
+		dt = new DataTexture(data, size, size, RGBFormat, FloatType);
+		dt.needsUpdate = true;
+
+		return dt;
 
 	}
 
@@ -169,63 +203,18 @@ export class GlitchPass extends Pass {
 				uniforms.seedX.value = randomFloat(-0.3, 0.3);
 				uniforms.seedY.value = randomFloat(-0.3, 0.3);
 
-			} else if(mode === GlitchPass.Mode.SPORADIC) {
+			} else {
 
+				// Sporadic.
 				uniforms.active.value = false;
 
 			}
 
-			++this.counter;
-
 		}
 
-		if(this.renderToScreen) {
+		++this.counter;
 
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
-
-	}
-
-	/**
-	 * Destroys the currently set texture and generates a simple noise map.
-	 *
-	 * @method generatePerturbMap
-	 * @private
-	 * @param {Number} size - The texture size.
-	 */
-
-	generatePerturbMap(size) {
-
-		const pixels = size * size;
-		const data = new Float32Array(pixels * 3);
-
-		let i, x;
-
-		for(i = 0; i < pixels; ++i) {
-
-			x = Math.random();
-
-			data[i * 3] = x;
-			data[i * 3 + 1] = x;
-			data[i * 3 + 2] = x;
-
-		}
-
-		if(this.perturbMap !== null) {
-
-			this.perturbMap.dispose();
-
-		}
-
-		this.perturbMap = new DataTexture(data, size, size, RGBFormat, FloatType);
-		this.perturbMap.needsUpdate = true;
-
-		this.material.uniforms.tPerturb.value = this.perturbMap;
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 
