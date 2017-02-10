@@ -11,6 +11,7 @@ export { Bokeh2Material } from "./bokeh2";
 export { CombineMaterial } from "./combine";
 export { ConvolutionMaterial } from "./convolution";
 export { CopyMaterial } from "./copy";
+export { DepthMaterial } from "./depth";
 export { DotScreenMaterial } from "./dot-screen";
 export { FilmMaterial } from "./film";
 export { GlitchMaterial } from "./glitch";
