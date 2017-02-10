@@ -16,14 +16,16 @@ import { CopyMaterial } from "../materials";
  * @class EffectComposer
  * @module postprocessing
  * @constructor
- * @param {WebGLRenderer} [renderer] - The renderer that should be used in the passes.
- * @param {Boolean} [depthTexture=false] - Set to true, if one of your passes relies on the depth of the main scene.
- * @param {Boolean} [stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+ * @param {WebGLRenderer} [renderer] - The renderer that should be used.
+ * @param {Object} [options] - The options.
+ * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
+ * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+ * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on the depth of the main scene.
  */
 
 export class EffectComposer {
 
-	constructor(renderer = null, depthTexture = false, stencilBuffer = false) {
+	constructor(renderer = null, options = {}) {
 
 		/**
 		 * The renderer.
@@ -62,17 +64,13 @@ export class EffectComposer {
 			this.renderer.autoClear = false;
 			this.renderer.state.setDepthWrite(false);
 
-			this.readBuffer = this.createBuffer(stencilBuffer);
-			this.readBuffer.texture.generateMipmaps = false;
+			this.readBuffer = this.createBuffer(
+				(options.depthBuffer !== undefined) ? options.depthBuffer : true,
+				(options.stencilBuffer !== undefined) ? options.stencilBuffer : false,
+				(options.depthTexture !== undefined) ? options.depthTexture : false
+			);
 
 			this.writeBuffer = this.readBuffer.clone();
-
-			if(depthTexture) {
-
-				this.readBuffer.depthTexture = new DepthTexture();
-				this.writeBuffer.depthTexture = this.readBuffer.depthTexture;
-
-			}
 
 		}
 
