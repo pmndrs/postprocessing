@@ -277,7 +277,14 @@ export class EffectComposer {
 
 	reset(renderTarget) {
 
-		this.dispose((renderTarget === undefined) ? this.createBuffer() : renderTarget);
+		const depthBuffer = this.readBuffer.depthBuffer;
+		const stencilBuffer = this.readBuffer.stencilBuffer;
+		const depthTexture = (this.readBuffer.depthTexture !== null);
+
+		this.dispose((renderTarget === undefined) ?
+			this.createBuffer(depthBuffer, stencilBuffer, depthTexture) :
+			renderTarget
+		);
 
 	}
 
