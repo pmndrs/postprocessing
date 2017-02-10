@@ -15,7 +15,7 @@ import { Pass } from "./pass.js";
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
  * @param {Number} [options.blurriness=1.0] - The scale of the blur.
- * @param {Number} [options.strength=1.0] - The bloom strength.
+ * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
  * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
  * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
  */
@@ -63,7 +63,7 @@ export class BloomPass extends Pass {
 		 * @default 0.5
 		 */
 
-		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
+		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
 
 		/**
 		 * Combine shader material.
@@ -75,6 +75,7 @@ export class BloomPass extends Pass {
 
 		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
 
+		this.intensity = options.intensity;
 
 		/**
 		 * Luminance shader material.
@@ -86,7 +87,7 @@ export class BloomPass extends Pass {
 
 		this.luminosityMaterial = new LuminosityMaterial(true);
 
-		if(options.distinction !== undefined) { this.luminosityMaterial.uniforms.distinction.value = options.distinction; }
+		this.distinction = options.distinction;
 
 		/**
 		 * Convolution shader material.
@@ -114,7 +115,51 @@ export class BloomPass extends Pass {
 
 	set blurriness(x) {
 
-		this.convolutionMaterial.scale = x;
+		if(typeof x === "number") {
+
+			this.convolutionMaterial.scale = x;
+
+		}
+
+	}
+
+	/**
+	 * The overall intensity of the effect.
+	 *
+	 * @property intensity
+	 * @type Number
+	 * @default 1.0
+	 */
+
+	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
+
+	set intensity(x) {
+
+		if(typeof x === "number") {
+
+			this.combineMaterial.uniforms.opacity2.value = x;
+
+		}
+
+	}
+
+	/**
+	 * The luminance distinction factor.
+	 *
+	 * @property distinction
+	 * @type Number
+	 * @default 1.0
+	 */
+
+	get distinction() { return this.luminosityMaterial.uniforms.distinction.value; }
+
+	set distinction(x) {
+
+		if(typeof x === "number") {
+
+			this.luminosityMaterial.uniforms.distinction.value = x;
+
+		}
 
 	}
 
