@@ -8,7 +8,7 @@ uniform float maxBlur;
 
 varying vec2 vUv;
 
-#ifndef USE_LOGDEPTH
+#ifndef USE_LOGDEPTHBUF
 
 	#include <packing>
 
@@ -30,7 +30,7 @@ void main() {
 
 	vec2 aspectCorrection = vec2(1.0, aspect);
 
-	#ifdef USE_LOGDEPTH
+	#ifdef USE_LOGDEPTHBUF
 
 		float depth = texture2D(tDepth, vUv).x;
 

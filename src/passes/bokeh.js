@@ -72,21 +72,4 @@ export class BokehPass extends Pass {
 
 	}
 
-	/**
-	 * Checks if the renderer uses logarithmic depth.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		if(renderer.capabilities.logarithmicDepthBuffer) {
-
-			this.bokehMaterial.defines.USE_LOGDEPTH = "1";
-
-		}
-
-	}
-
 }

@@ -2,7 +2,7 @@ uniform sampler2D tDepth;
 
 varying vec2 vUv;
 
-#ifndef USE_LOGDEPTH
+#ifndef USE_LOGDEPTHBUF
 
 	#include <packing>
 
@@ -22,7 +22,7 @@ varying vec2 vUv;
 
 void main() {
 
-	#ifdef USE_LOGDEPTH
+	#ifdef USE_LOGDEPTHBUF
 
 		float depth = texture2D(tDepth, vUv).x;
 

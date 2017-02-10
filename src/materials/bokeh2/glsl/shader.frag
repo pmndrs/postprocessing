@@ -29,7 +29,7 @@ uniform float ditherStrength;
 
 varying vec2 vUv;
 
-#ifndef USE_LOGDEPTH
+#ifndef USE_LOGDEPTHBUF
 
 	#include <packing>
 
@@ -196,7 +196,7 @@ float gather(float i, float j, float ringSamples, inout vec3 color, float w, flo
 
 void main() {
 
-	#ifdef USE_LOGDEPTH
+	#ifdef USE_LOGDEPTHBUF
 
 		float depth = linearize(texture2D(tDepth, vUv).x);
 
@@ -208,7 +208,7 @@ void main() {
 
 	#ifdef SHADER_FOCUS
 
-		#ifdef USE_LOGDEPTH
+		#ifdef USE_LOGDEPTHBUF
 
 			float fDepth = linearize(texture2D(tDepth, focusCoords).x);
 
