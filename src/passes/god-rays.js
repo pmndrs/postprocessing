@@ -221,7 +221,11 @@ export class GodRaysPass extends Pass {
 
 	set blurriness(x) {
 
-		this.convolutionMaterial.scale = x;
+		if(typeof x === "number") {
+
+			this.convolutionMaterial.scale = x;
+
+		}
 
 	}
 
@@ -237,8 +241,11 @@ export class GodRaysPass extends Pass {
 
 	set intensity(x) {
 
-		this.combineMaterial.uniforms.opacity2.value = x;
-		this.copyMaterial.uniforms.opacity.value = x;
+		if(typeof x === "number") {
+
+			this.combineMaterial.uniforms.opacity2.value = x;
+
+		}
 
 	}
 
@@ -257,11 +264,15 @@ export class GodRaysPass extends Pass {
 
 	set samples(x) {
 
-		x = Math.floor(x);
+		if(typeof x === "number") {
 
-		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-		this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
-		this.godRaysMaterial.needsUpdate = true;
+			x = Math.floor(x);
+
+			this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+			this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+			this.godRaysMaterial.needsUpdate = true;
+
+		}
 
 	}
 
