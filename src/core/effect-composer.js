@@ -96,6 +96,23 @@ export class EffectComposer {
 	}
 
 	/**
+	 * The depth texture of the read and write buffers.
+	 *
+	 * @property depthTexture
+	 * @type DepthTexture
+	 * @default null
+	 */
+
+	get depthTexture() { return this.readBuffer.depthTexture; }
+
+	set depthTexture(x) {
+
+		this.readBuffer.depthTexture = x;
+		this.writeBuffer.depthTexture = x;
+
+	}
+
+	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * @method createBuffer
