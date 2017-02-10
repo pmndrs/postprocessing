@@ -8,7 +8,7 @@ import { Pass } from "./pass.js";
  * @submodule passes
  * @extends Pass
  * @constructor
- * @param {PerspectiveCamera} camera - The main camera. Used to adjust the near and far plane settings.
+ * @param {PerspectiveCamera} camera - The main camera. Used to obtain the aspect ratio and the near and far plane settings.
  * @param {Object} [options] - Additional parameters.
  * @param {Number} [options.focus=1.0] - Focus distance.
  * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
@@ -51,15 +51,7 @@ export class BokehPass extends Pass {
 		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-		if(this.renderToScreen) {
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 

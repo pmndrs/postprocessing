@@ -10,7 +10,7 @@ import { Pass } from "./pass.js";
  * @submodule passes
  * @extends Pass
  * @constructor
- * @param {PerspectiveCamera} camera - The main camera. Used to adjust near and far plane and focal length settings.
+ * @param {PerspectiveCamera} camera - The main camera. Used to obtain the focal length and the near and far plane settings.
  * @param {Object} [options] - Additional parameters.
  * @param {Number} [options.rings=3] - The amount of blur rings.
  * @param {Number} [options.samples=4] - The amount of samples per ring.
@@ -56,15 +56,7 @@ export class Bokeh2Pass extends Pass {
 		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-		if(this.renderToScreen) {
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 
