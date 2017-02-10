@@ -54,15 +54,7 @@ export class DotScreenPass extends Pass {
 
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
 
-		if(this.renderToScreen) {
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 

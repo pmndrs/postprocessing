@@ -25,7 +25,7 @@ import vertex from "./glsl/shader.vert";
 
 export class LuminosityMaterial extends ShaderMaterial {
 
-	constructor(color, range) {
+	constructor(color = false, range = null) {
 
 		super({
 
@@ -35,7 +35,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 				tDiffuse: { value: null },
 				distinction: { value: 1.0 },
-				range: { value: (range !== undefined) ? range : new Vector2() }
+				range: { value: (range !== null) ? range : new Vector2() }
 
 			},
 
@@ -44,8 +44,8 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 		});
 
-		if(color !== undefined) { this.defines.COLOR = "1"; }
-		if(range !== undefined) { this.defines.RANGE = "1"; }
+		if(color) { this.defines.COLOR = "1"; }
+		if(range !== null) { this.defines.RANGE = "1"; }
 
 	}
 

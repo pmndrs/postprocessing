@@ -15,7 +15,7 @@ import vertex from "./glsl/shader.vert";
 
 export class DotScreenMaterial extends ShaderMaterial {
 
-	constructor(average) {
+	constructor(average = false) {
 
 		super({
 

@@ -17,7 +17,7 @@ import vertex from "./glsl/shader.vert";
 
 export class SMAABlendMaterial extends ShaderMaterial {
 
-	constructor(texelSize) {
+	constructor(texelSize = new Vector2()) {
 
 		super({
 
@@ -27,7 +27,7 @@ export class SMAABlendMaterial extends ShaderMaterial {
 
 				tDiffuse: { value: null },
 				tWeights: { value: null },
-				texelSize: { value: (texelSize !== undefined) ? texelSize : new Vector2() }
+				texelSize: { value: texelSize }
 
 			},
 

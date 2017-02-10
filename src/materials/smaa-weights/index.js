@@ -20,7 +20,7 @@ import vertex from "./glsl/shader.vert";
 
 export class SMAAWeightsMaterial extends ShaderMaterial {
 
-	constructor(texelSize) {
+	constructor(texelSize = new Vector2()) {
 
 		super({
 
@@ -43,7 +43,7 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				tDiffuse: { value: null },
 				tArea: { value: null },
 				tSearch: { value: null },
-				texelSize: { value: (texelSize !== undefined) ? texelSize : new Vector2() }
+				texelSize: { value: texelSize }
 
 			},
 

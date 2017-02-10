@@ -24,7 +24,7 @@ import vertex from "./glsl/shader.vert";
 
 export class ConvolutionMaterial extends ShaderMaterial {
 
-	constructor(texelSize) {
+	constructor(texelSize = new Vector2()) {
 
 		super({
 
@@ -34,7 +34,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 				tDiffuse: { value: null },
 				texelSize: { value: new Vector2() },
-				halfTexelSize: { value: new Vector2() },
+				halfTexelSize: { value: texelSize },
 				kernel: { value: 0.0 }
 
 			},
@@ -78,7 +78,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 		this.currentKernel = 0;
 
-		if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
+		this.setTexelSize(texelSize.x, texelSize.y);
 
 	}
 
@@ -106,8 +106,13 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 	adjustKernel() {
 
-		this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
-		if(++this.currentKernel >= this.kernels.length) { this.currentKernel = 0; }
+		this.uniforms.kernel.value = this.kernels[this.currentKernel++] * this.scale;
+
+		if(this.currentKernel >= this.kernels.length) {
+
+			this.currentKernel = 0;
+
+		}
 
 	}
 

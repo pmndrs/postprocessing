@@ -3,6 +3,18 @@ import { AdaptiveLuminosityMaterial, CopyMaterial, LuminosityMaterial, ToneMappi
 import { Pass } from "./pass.js";
 
 /**
+ * Rounds the given number up to the next power of two.
+ *
+ * @method ceil2
+ * @private
+ * @static
+ * @param {Number} n - A number.
+ * @return {Number} The next power of two.
+ */
+
+function ceil2(n) { return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n)))); }
+
+/**
  * A tone mapping pass that supports adaptive luminosity.
  *
  * If adaptivity is enabled, this pass generates a texture that represents the
@@ -91,7 +103,7 @@ export class ToneMappingPass extends Pass {
 
 		this.luminosityMaterial = new LuminosityMaterial();
 
-		this.luminosityMaterial.uniforms.distinction.value = (options.distinction === undefined) ? 1.0 : options.distinction;
+		this.luminosityMaterial.uniforms.distinction.value = (options.distinction !== undefined) ? options.distinction : 1.0;
 
 		/**
 		 * Adaptive luminance shader material.
@@ -103,7 +115,7 @@ export class ToneMappingPass extends Pass {
 
 		this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
 
-		this.resolution = (options.resolution === undefined) ? 256 : options.resolution;
+		this.resolution = (options.resolution !== undefined) ? options.resolution : 256;
 
 		/**
 		 * Tone mapping shader material.
@@ -115,7 +127,7 @@ export class ToneMappingPass extends Pass {
 
 		this.toneMappingMaterial = new ToneMappingMaterial();
 
-		this.adaptive = (options.adaptive === undefined) ? true : options.adaptive;
+		this.adaptive = (options.adaptive !== undefined) ? options.adaptive : true;
 
 	}
 
@@ -131,16 +143,14 @@ export class ToneMappingPass extends Pass {
 
 	set resolution(x) {
 
-		if(typeof x === "number" && x > 0) {
+		x = ceil2(x);
 
-			this.renderTargetLuminosity.setSize(x, x);
-			this.renderTargetPrevious.setSize(x, x);
-			this.renderTargetAdapted.setSize(x, x);
+		this.renderTargetLuminosity.setSize(x, x);
+		this.renderTargetPrevious.setSize(x, x);
+		this.renderTargetAdapted.setSize(x, x);
 
-			this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
-			this.adaptiveLuminosityMaterial.needsUpdate = true;
-
-		}
+		this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
+		this.adaptiveLuminosityMaterial.needsUpdate = true;
 
 	}
 
@@ -220,15 +230,7 @@ export class ToneMappingPass extends Pass {
 		quad.material = toneMappingMaterial;
 		toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		if(this.renderToScreen) {
-
-			renderer.render(scene, camera);
-
-		} else {
-
-			renderer.render(scene, camera, writeBuffer, false);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 

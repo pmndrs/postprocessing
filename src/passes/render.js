@@ -99,15 +99,7 @@ export class RenderPass extends Pass {
 
 		}
 
-		if(this.renderToScreen) {
-
-			renderer.render(scene, this.camera, null, this.clear);
-
-		} else {
-
-			renderer.render(scene, this.camera, readBuffer, this.clear);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
 
 		if(clearColor !== null) {
 

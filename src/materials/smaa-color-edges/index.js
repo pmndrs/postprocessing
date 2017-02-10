@@ -17,7 +17,7 @@ import vertex from "./glsl/shader.vert";
 
 export class SMAAColorEdgesMaterial extends ShaderMaterial {
 
-	constructor(texelSize) {
+	constructor(texelSize = new Vector2()) {
 
 		super({
 
@@ -32,7 +32,7 @@ export class SMAAColorEdgesMaterial extends ShaderMaterial {
 			uniforms: {
 
 				tDiffuse: { value: null },
-				texelSize: { value: (texelSize !== undefined) ? texelSize : new Vector2() }
+				texelSize: { value: texelSize }
 
 			},
 

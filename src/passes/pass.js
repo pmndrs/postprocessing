@@ -146,6 +146,24 @@ export class Pass {
 	}
 
 	/**
+	 * Updates this pass with the renderer's size.
+	 *
+	 * This is an abstract method that may be overriden in case you want to be
+	 * informed about the main render size.
+	 *
+	 * The effect composer calls this method before this pass is initialised and
+	 * every time its own size is updated.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The renderer's width.
+	 * @param {Number} height - The renderer's height.
+	 * @example
+	 *     this.myRenderTarget.setSize(width, height);
+	 */
+
+	setSize(width, height) {}
+
+	/**
 	 * Performs initialisation tasks.
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
@@ -165,24 +183,6 @@ export class Pass {
 	 */
 
 	initialise(renderer, alpha) {}
-
-	/**
-	 * Updates this pass with the renderer's size.
-	 *
-	 * This is an abstract method that may be overriden in case you want to be
-	 * informed about the main render size.
-	 *
-	 * The effect composer calls this method before this pass is initialised and
-	 * every time its own size is updated.
-	 *
-	 * @method setSize
-	 * @param {Number} width - The renderer's width.
-	 * @param {Number} height - The renderer's height.
-	 * @example
-	 *     this.myRenderTarget.setSize(width, height);
-	 */
-
-	setSize(width, height) {}
 
 	/**
 	 * Performs a shallow search for properties that define a dispose method and

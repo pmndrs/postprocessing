@@ -45,9 +45,12 @@ import vertex from "./glsl/shader.vert";
 
 export class FilmMaterial extends ShaderMaterial {
 
-	constructor(options) {
+	constructor(options = {}) {
 
-		if(options === undefined) { options = {}; }
+		if(options.greyscale === undefined) { options.greyscale = false; }
+		if(options.sepia === undefined) { options.sepia = false; }
+		if(options.vignette === undefined) { options.vignette = false; }
+		if(options.eskil === undefined) { options.eskil = false; }
 
 		super({
 
