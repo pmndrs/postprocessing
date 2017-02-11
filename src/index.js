@@ -9,6 +9,7 @@ export { EffectComposer } from "./core";
 
 export {
 	BloomPass,
+	BlurPass,
 	BokehPass,
 	Bokeh2Pass,
 	ClearMaskPass,
@@ -40,6 +41,7 @@ export {
 	FilmMaterial,
 	GlitchMaterial,
 	GodRaysMaterial,
+	KernelSize,
 	LuminosityMaterial,
 	SMAABlendMaterial,
 	SMAAColorEdgesMaterial,

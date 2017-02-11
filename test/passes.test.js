@@ -28,6 +28,19 @@ module.exports = {
 
 	},
 
+	"Blur": {
+
+		"can be created and destroyed": function(test) {
+
+			const pass = new lib.BlurPass();
+			test.ok(pass);
+			pass.dispose();
+			test.done();
+
+		}
+
+	},
+
 	"Bokeh": {
 
 		"can be created and destroyed": function(test) {

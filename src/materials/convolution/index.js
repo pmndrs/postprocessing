@@ -4,13 +4,12 @@ import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
 
 /**
- * A convolution blur shader material.
- *
- * Use this shader five times in a row while adjusting the kernel before each
- * render call in order to get a result similar to a 35x35 Gauss filter.
+ * An optimised convolution blur shader material.
  *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
- * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ *  Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ * and an article by Filip Strugar, Intel:
+ *  An investigation of fast real-time GPU-based image blur algorithms
  *
  * Further modified according to:
  *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
@@ -34,7 +33,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 				tDiffuse: { value: null },
 				texelSize: { value: new Vector2() },
-				halfTexelSize: { value: texelSize },
+				halfTexelSize: { value: new Vector2() },
 				kernel: { value: 0.0 }
 
 			},
@@ -47,40 +46,28 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 		});
 
-		/**
-		 * The Kawase blur kernels for five consecutive convolution passes.
-		 * The result matches the 35x35 Gauss filter.
-		 *
-		 * @property kernels
-		 * @type Number
-		 * @private
-		 */
-
-		this.kernels = new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]);
-
-		/**
-		 * Scales the kernels.
-		 *
-		 * @property scale
-		 * @type Number
-		 * @default 1.0
-		 */
-
-		this.scale = 1.0;
-
-		/**
-		 * The current kernel.
-		 *
-		 * @property currentKernel
-		 * @type Number
-		 * @private
-		 */
-
-		this.currentKernel = 0;
-
 		this.setTexelSize(texelSize.x, texelSize.y);
 
+		/**
+		 * The current kernel size.
+		 *
+		 * @property kernelSize
+		 * @type KernelSize
+		 * @default KernelSize.LARGE
+		 */
+
+		this.kernelSize = KernelSize.LARGE;
+
 	}
+
+	/**
+	 * The kernel.
+	 *
+	 * @property kernel
+	 * @type Float32Array
+	 */
+
+	get kernel() { return kernelPresets[this.kernelSize]; }
 
 	/**
 	 * Sets the texel size.
@@ -97,23 +84,94 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 	}
 
+}
+
+/**
+ * The Kawase blur kernel presets.
+ *
+ * @property kernelPresets
+ * @type Number
+ * @private
+ * @static
+ */
+
+const kernelPresets = [
+	new Float32Array([0.0, 0.0]),
+	new Float32Array([0.0, 1.0, 1.0]),
+	new Float32Array([0.0, 1.0, 1.0, 2.0]),
+	new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
+];
+
+/**
+ * A kernel size enumeration.
+ *
+ * @class KernelSize
+ * @submodule materials
+ * @static
+ */
+
+export const KernelSize = {
+
 	/**
-	 * Adjusts the kernel for the next blur pass.
-	 * Call this method before each render iteration.
+	 * A very small kernel that matches a 7x7 Gauss blur kernel.
 	 *
-	 * @method adjustKernel
+	 * @property VERY_SMALL
+	 * @type Number
+	 * @static
 	 */
 
-	adjustKernel() {
+	VERY_SMALL: 0,
 
-		this.uniforms.kernel.value = this.kernels[this.currentKernel++] * this.scale;
+	/**
+	 * A small kernel that matches a 15x15 Gauss blur kernel.
+	 *
+	 * @property SMALL
+	 * @type Number
+	 * @static
+	 */
 
-		if(this.currentKernel >= this.kernels.length) {
+	SMALL: 1,
 
-			this.currentKernel = 0;
+	/**
+	 * A medium sized kernel that matches a 23x23 Gauss blur kernel.
+	 *
+	 * @property MEDIUM
+	 * @type Number
+	 * @static
+	 */
 
-		}
+	MEDIUM: 2,
 
-	}
+	/**
+	 * A large kernel that matches a 35x35 Gauss blur kernel.
+	 *
+	 * @property LARGE
+	 * @type Number
+	 * @static
+	 */
 
-}
+	LARGE: 3,
+
+	/**
+	 * A very large kernel that matches a 63x63 Gauss blur kernel.
+	 *
+	 * @property VERY_LARGE
+	 * @type Number
+	 * @static
+	 */
+
+	VERY_LARGE: 4,
+
+	/**
+	 * A huge kernel that matches a 127x127 Gauss blur kernel.
+	 *
+	 * @property HUGE
+	 * @type Number
+	 * @static
+	 */
+
+	HUGE: 5
+
+};

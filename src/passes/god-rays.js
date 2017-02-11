@@ -1,5 +1,6 @@
 import { Color, LinearFilter, MeshBasicMaterial, RGBFormat, Scene, Vector3, WebGLRenderTarget } from "three";
-import { ConvolutionMaterial, CombineMaterial, GodRaysMaterial } from "../materials";
+import { CombineMaterial, GodRaysMaterial } from "../materials";
+import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
 
 /**
@@ -48,8 +49,8 @@ const CLEAR_COLOR = new Color();
  * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
  * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
  * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.blurriness=0.1] - The strength of the preliminary blur phase.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+ * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
  * @param {Number} [options.samples=60] - The number of samples per pixel.
  * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.
  */
@@ -59,6 +60,36 @@ export class GodRaysPass extends Pass {
 	constructor(scene, camera, lightSource, options = {}) {
 
 		super();
+
+		/**
+		 * A blur pass.
+		 *
+		 * @property blurPass
+		 * @type BlurPass
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
+
+		/**
+		 * A render target.
+		 *
+		 * @property renderTargetX
+		 * @type WebGLRenderTarget
+		 * @private
+		 */
+
+		this.renderTargetX = this.blurPass.renderTargetX.clone();
+
+		/**
+		 * A second render target.
+		 *
+		 * @property renderTargetY
+		 * @type WebGLRenderTarget
+		 * @private
+		 */
+
+		this.renderTargetY = this.blurPass.renderTargetY.clone();
 
 		/**
 		 * A render target for rendering the masked scene.
@@ -73,41 +104,6 @@ export class GodRaysPass extends Pass {
 			magFilter: LinearFilter,
 			generateMipmaps: false
 		});
-
-		/**
-		 * A render target.
-		 *
-		 * @property renderTargetX
-		 * @type WebGLRenderTarget
-		 * @private
-		 */
-
-		this.renderTargetX = this.renderTargetMask.clone();
-		this.renderTargetX.stencilBuffer = false;
-		this.renderTargetX.depthBuffer = false;
-
-		/**
-		 * A second render target.
-		 *
-		 * @property renderTargetY
-		 * @type WebGLRenderTarget
-		 * @private
-		 */
-
-		this.renderTargetY = this.renderTargetX.clone();
-
-		/**
-		 * The resolution scale.
-		 *
-		 * You need to call the setSize method of the EffectComposer after changing
-		 * this value.
-		 *
-		 * @property resolutionScale
-		 * @type Number
-		 * @default 0.5
-		 */
-
-		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
 
 		/**
 		 * The light source.
@@ -127,18 +123,6 @@ export class GodRaysPass extends Pass {
 		 */
 
 		this.screenPosition = new Vector3();
-
-		/**
-		 * A convolution blur shader material.
-		 *
-		 * @property convolutionMaterial
-		 * @type ConvolutionMaterial
-		 * @private
-		 */
-
-		this.convolutionMaterial = new ConvolutionMaterial();
-
-		this.blurriness = (options.blurriness !== undefined) ? options.blurriness : 0.1;
 
 		/**
 		 * A combine shader material used for rendering to screen.
@@ -210,22 +194,37 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
-	 * The strength of the preliminary blur phase.
+	 * The resolution scale.
 	 *
-	 * @property blurriness
-	 * @type Number
-	 * @default 0.1
+	 * You need to call the setSize method of the EffectComposer after changing
+	 * this value.
+	 *
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
 	 */
 
-	get blurriness() { return this.convolutionMaterial.scale; }
+	get resolutionScale() { return this.blurPass.resolutionScale; }
 
-	set blurriness(x) {
+	set resolutionScale(x) {
 
-		if(typeof x === "number") {
+		this.blurPass.resolutionScale = x;
 
-			this.convolutionMaterial.scale = x;
+	}
 
-		}
+	/**
+	 * The blur kernel size.
+	 *
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 */
+
+	get kernelSize() { return this.blurPass.kernelSize; }
+
+	set kernelSize(x) {
+
+		this.blurPass.kernelSize = x;
 
 	}
 
@@ -252,8 +251,7 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The number of samples per pixel.
 	 *
-	 * This value must be carefully chosen. A higher value increases the GPU load
-	 * directly and doesn't necessarily yield better results!
+	 * This value must be carefully chosen. A higher value increases the GPU load.
 	 *
 	 * @property samples
 	 * @type Number
@@ -279,21 +277,20 @@ export class GodRaysPass extends Pass {
 	/**
 	 * Renders the scene.
 	 *
-	 * The read buffer is assumed to contain the normally rendered scene.
-	 * The god rays pass has four phases with a total of 8 render steps.
+	 * The god rays pass has four phases:
 	 *
 	 * Mask Phase:
 	 *  The scene is rendered using a mask material.
 	 *
 	 * Preliminary Blur Phase:
-	 *  The masked scene is blurred five consecutive times.
+	 *  The masked scene is blurred.
 	 *
 	 * God Rays Phase:
 	 *  The blurred scene is blurred again, but this time along radial lines
 	 *  towards the light source.
 	 *
 	 * Composite Phase:
-	 *  The final result is added to the normal scene.
+	 *  The final result is combined with the read buffer.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
@@ -303,18 +300,18 @@ export class GodRaysPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer) {
 
-		const state = renderer.state;
-
 		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
+		const blurPass = this.blurPass;
+
 		const mainScene = this.mainScene;
-		const lightScene = this.lightScene;
 		const mainCamera = this.mainCamera;
+		const lightScene = this.lightScene;
+
 		const lightSource = this.lightSource;
 		const screenPosition = this.screenPosition;
 
-		const convolutionMaterial = this.convolutionMaterial;
 		const godRaysMaterial = this.godRaysMaterial;
 		const combineMaterial = this.combineMaterial;
 
@@ -330,8 +327,6 @@ export class GodRaysPass extends Pass {
 		screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
 		// Render the masked scene.
-		state.setDepthWrite(true);
-
 		parent = lightSource.parent;
 		background = mainScene.background;
 		CLEAR_COLOR.copy(renderer.getClearColor());
@@ -355,32 +350,10 @@ export class GodRaysPass extends Pass {
 		mainScene.overrideMaterial = null;
 		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
-		state.setDepthWrite(false);
+		// Convolution phase.
+		blurPass.render(renderer, renderTargetMask, renderTargetX);
 
-		// Convolution phase (5 passes).
-		quad.material = convolutionMaterial;
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetMask.texture;
-		renderer.render(scene, camera, renderTargetX);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-		renderer.render(scene, camera, renderTargetY);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-		renderer.render(scene, camera, renderTargetX);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-		renderer.render(scene, camera, renderTargetY);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-		renderer.render(scene, camera, renderTargetX);
-
-		// God rays pass.
+		// Radial blur pass.
 		quad.material = godRaysMaterial;
 		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
 		renderer.render(scene, camera, renderTargetY);
@@ -404,6 +377,8 @@ export class GodRaysPass extends Pass {
 
 	initialise(renderer, alpha) {
 
+		this.blurPass.initialise(renderer, alpha);
+
 		if(!alpha) {
 
 			this.renderTargetMask.texture.format = RGBFormat;
@@ -424,14 +399,14 @@ export class GodRaysPass extends Pass {
 
 	setSize(width, height) {
 
-		width = Math.max(1, Math.floor(width * this.resolutionScale));
-		height = Math.max(1, Math.floor(height * this.resolutionScale));
+		this.blurPass.setSize(width, height);
+
+		width = this.blurPass.renderTargetX.width;
+		height = this.blurPass.renderTargetX.height;
 
 		this.renderTargetMask.setSize(width, height);
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
-
-		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

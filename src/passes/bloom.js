@@ -1,5 +1,6 @@
-import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
-import { CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from "../materials";
+import { RGBFormat } from "three";
+import { CombineMaterial, LuminosityMaterial } from "../materials";
+import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
 
 /**
@@ -14,7 +15,7 @@ import { Pass } from "./pass.js";
  * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.blurriness=1.0] - The scale of the blur.
+ * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
  * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
  * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
  * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
@@ -27,6 +28,16 @@ export class BloomPass extends Pass {
 		super();
 
 		/**
+		 * A blur pass.
+		 *
+		 * @property blurPass
+		 * @type BlurPass
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
+
+		/**
 		 * A render target.
 		 *
 		 * @property renderTargetX
@@ -34,13 +45,7 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			generateMipmaps: false,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
+		this.renderTargetX = this.blurPass.renderTargetX.clone();
 
 		/**
 		 * A second render target.
@@ -50,20 +55,7 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-
-		/**
-		 * The resolution scale.
-		 *
-		 * You need to call the setSize method of the EffectComposer after changing
-		 * this value.
-		 *
-		 * @property resolutionScale
-		 * @type Number
-		 * @default 0.5
-		 */
-
-		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
+		this.renderTargetY = this.blurPass.renderTargetY.clone();
 
 		/**
 		 * Combine shader material.
@@ -89,37 +81,40 @@ export class BloomPass extends Pass {
 
 		this.distinction = options.distinction;
 
-		/**
-		 * Convolution shader material.
-		 *
-		 * @property convolutionMaterial
-		 * @type ConvolutionMaterial
-		 * @private
-		 */
+	}
 
-		this.convolutionMaterial = new ConvolutionMaterial();
+	/**
+	 * The resolution scale.
+	 *
+	 * You need to call the setSize method of the EffectComposer after changing
+	 * this value.
+	 *
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 */
 
-		this.blurriness = options.blurriness;
+	get resolutionScale() { return this.blurPass.resolutionScale; }
+
+	set resolutionScale(x) {
+
+		this.blurPass.resolutionScale = x;
 
 	}
 
 	/**
-	 * The strength of the preliminary blur phase.
+	 * The blur kernel size.
 	 *
-	 * @property blurriness
-	 * @type Number
-	 * @default 1.0
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
 	 */
 
-	get blurriness() { return this.convolutionMaterial.scale; }
+	get kernelSize() { return this.blurPass.kernelSize; }
 
-	set blurriness(x) {
+	set kernelSize(x) {
 
-		if(typeof x === "number") {
-
-			this.convolutionMaterial.scale = x;
-
-		}
+		this.blurPass.kernelSize = x;
 
 	}
 
@@ -166,9 +161,8 @@ export class BloomPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * Applies a luminance filter and convolution blur to the read buffer and
-	 * renders the result into a seperate render target. The result is additively
-	 * blended with the read buffer.
+	 * Extracts a luminance map from the read buffer, blurs it and combines it
+	 * with the read buffer.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
@@ -181,9 +175,9 @@ export class BloomPass extends Pass {
 		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
+		const blurPass = this.blurPass;
 
 		const luminosityMaterial = this.luminosityMaterial;
-		const convolutionMaterial = this.convolutionMaterial;
 		const combineMaterial = this.combineMaterial;
 
 		const renderTargetX = this.renderTargetX;
@@ -195,27 +189,7 @@ export class BloomPass extends Pass {
 		renderer.render(scene, camera, renderTargetX);
 
 		// Convolution phase.
-		quad.material = convolutionMaterial;
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-		renderer.render(scene, camera, renderTargetY);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-		renderer.render(scene, camera, renderTargetX);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-		renderer.render(scene, camera, renderTargetY);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetY.texture;
-		renderer.render(scene, camera, renderTargetX);
-
-		convolutionMaterial.adjustKernel();
-		convolutionMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-		renderer.render(scene, camera, renderTargetY);
+		blurPass.render(renderer, renderTargetX, renderTargetY);
 
 		// Render the original scene with superimposed blur.
 		quad.material = combineMaterial;
@@ -236,6 +210,8 @@ export class BloomPass extends Pass {
 
 	initialise(renderer, alpha) {
 
+		this.blurPass.initialise(renderer, alpha);
+
 		if(!alpha) {
 
 			this.renderTargetX.texture.format = RGBFormat;
@@ -255,13 +231,13 @@ export class BloomPass extends Pass {
 
 	setSize(width, height) {
 
-		width = Math.max(1, Math.floor(width * this.resolutionScale));
-		height = Math.max(1, Math.floor(height * this.resolutionScale));
+		this.blurPass.setSize(width, height);
+
+		width = this.blurPass.renderTargetX.width;
+		height = this.blurPass.renderTargetX.height;
 
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
-
-		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 
