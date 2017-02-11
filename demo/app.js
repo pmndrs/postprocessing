@@ -4,6 +4,7 @@ import Stats from "stats.js";
 
 import { EffectComposer } from "../src";
 import { RenderDemo } from "./render.js";
+import { BlurDemo } from "./blur.js";
 import { DepthDemo } from "./depth.js";
 import { DotScreenDemo } from "./dot-screen.js";
 import { FilmDemo } from "./film.js";
@@ -93,6 +94,7 @@ export class App {
 
 			demos.set("render", new RenderDemo(composer));
 			demos.set("bloom", new BloomDemo(composer));
+			demos.set("blur", new BlurDemo(composer));
 			demos.set("bokeh", new BokehDemo(composer));
 			demos.set("bokeh2", new Bokeh2Demo(composer));
 			demos.set("depth", new DepthDemo(composer));

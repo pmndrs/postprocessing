@@ -13,7 +13,7 @@ import {
 	TextureLoader
 } from "three";
 
-import { GodRaysPass, RenderPass } from "../src";
+import { GodRaysPass, KernelSize, RenderPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
@@ -229,7 +229,7 @@ export class GodRaysDemo extends Demo {
 
 		const pass = new GodRaysPass(scene, camera, sun, {
 			resolutionScale: 0.6,
-			blurriness: 0.1,
+			kernelSize: KernelSize.SMALL,
 			intensity: 1.0,
 			density: 0.96,
 			decay: 0.93,
@@ -261,6 +261,7 @@ export class GodRaysDemo extends Demo {
 
 		const params = {
 			"resolution": pass.resolutionScale,
+			"blurriness": pass.kernelSize,
 			"intensity": pass.intensity,
 			"density": pass.godRaysMaterial.uniforms.density.value,
 			"decay": pass.godRaysMaterial.uniforms.decay.value,
@@ -268,13 +269,12 @@ export class GodRaysDemo extends Demo {
 			"exposure": pass.godRaysMaterial.uniforms.exposure.value,
 			"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
 			"samples": pass.samples,
-			"blurriness": pass.blurriness,
 			"color": sun.material.color.getHex(),
 			"blend mode": "screen"
 		};
 
 		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "blurriness").min(0.0).max(2.0).step(0.01).onChange(function() { pass.blurriness = params.blurriness; });
+		gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { pass.kernelSize = params.blurriness; });
 		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.intensity = params.intensity; });
 		gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.density.value = params.density; });
 		gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.decay.value = params.decay; });

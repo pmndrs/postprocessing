@@ -1,18 +1,16 @@
 import {
 	AmbientLight,
-	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
 	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
-	MeshLambertMaterial,
 	Object3D,
 	OrbitControls,
 	SphereBufferGeometry
 } from "three";
 
-import { BloomPass, KernelSize, RenderPass } from "../src";
+import { BlurPass, KernelSize, RenderPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
@@ -28,28 +26,38 @@ import { Demo } from "./demo.js";
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A bloom demo setup.
+ * A blur demo setup.
  *
- * @class BloomDemo
+ * @class BlurDemo
  * @constructor
  * @param {EffectComposer} composer - An effect composer.
  */
 
-export class BloomDemo extends Demo {
+export class BlurDemo extends Demo {
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
-		 * A bloom pass.
+		 * A render pass.
 		 *
-		 * @property bloomPass
-		 * @type BloomPass
+		 * @property renderPass
+		 * @type RenderPass
 		 * @private
 		 */
 
-		this.bloomPass = null;
+		this.renderPass = null;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @property blurPass
+		 * @type BlurPass
+		 * @private
+		 */
+
+		this.blurPass = null;
 
 		/**
 		 * An object.
@@ -76,8 +84,8 @@ export class BloomDemo extends Demo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space2/";
-		const format = ".jpg";
+		const path = "textures/skies/sunset/";
+		const format = ".png";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
 			path + "py" + format, path + "ny" + format,
@@ -132,7 +140,7 @@ export class BloomDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(-10, 6, 15);
+		camera.position.set(-15, 0, -15);
 		camera.lookAt(this.controls.target);
 		scene.add(camera);
 
@@ -145,7 +153,7 @@ export class BloomDemo extends Demo {
 		const ambientLight = new AmbientLight(0x666666);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
-		directionalLight.position.set(-1, 1, 1);
+		directionalLight.position.set(1440, 200, 2000);
 		directionalLight.target.position.copy(scene.position);
 
 		scene.add(directionalLight);
@@ -168,9 +176,9 @@ export class BloomDemo extends Demo {
 
 			mesh = new Mesh(geometry, material);
 			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 4);
+			mesh.position.multiplyScalar(Math.random() * 10);
 			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random() * 0.5);
+			mesh.scale.multiplyScalar(Math.random());
 			object.add(mesh);
 
 		}
@@ -179,56 +187,17 @@ export class BloomDemo extends Demo {
 
 		scene.add(object);
 
-		// Cage object.
-
-		mesh = new Mesh(
-			new BoxBufferGeometry(0.25, 8.25, 0.25),
-			new MeshLambertMaterial({
-				color: 0x0b0b0b
-			})
-		);
-
-		object = new Object3D();
-		let o0, o1, o2;
-
-		o0 = object.clone();
-
-		let clone = mesh.clone();
-		clone.position.set(-4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(-4, 0, -4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, -4);
-		o0.add(clone);
-
-		o1 = o0.clone();
-		o1.rotation.set(Math.PI / 2, 0, 0);
-		o2 = o0.clone();
-		o2.rotation.set(0, 0, Math.PI / 2);
-
-		object.add(o0);
-		object.add(o1);
-		object.add(o2);
-
-		scene.add(object);
-
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
+		let pass = new RenderPass(scene, camera);
 
-		const pass = new BloomPass({
-			resolutionScale: 0.5,
-			strength: 1.0,
-			distinction: 4.0
-		});
+		this.renderPass = pass;
+		composer.addPass(pass);
+
+		pass = new BlurPass();
 
 		pass.renderToScreen = true;
-		this.bloomPass = pass;
+		this.blurPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -266,44 +235,22 @@ export class BloomDemo extends Demo {
 	configure(gui) {
 
 		const composer = this.composer;
-		const pass = this.bloomPass;
+		const renderPass = this.renderPass;
+		const blurPass = this.blurPass;
 
 		const params = {
-			"resolution": pass.resolutionScale,
-			"kernel size": pass.kernelSize,
-			"intensity": pass.intensity,
-			"distinction": pass.distinction,
-			"blend": true,
-			"blend mode": "screen"
+			"enabled": blurPass.enabled,
+			"resolution": blurPass.resolutionScale,
+			"kernel size": blurPass.kernelSize
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { pass.kernelSize = params["kernel size"]; });
-		gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function() { pass.intensity = params.intensity; });
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
+		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
 
-		const folder = gui.addFolder("Luminance");
-		folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.distinction = params.distinction; });
-		folder.open();
+		gui.add(params, "enabled").onChange(function() {
 
-		gui.add(params, "blend").onChange(function() {
-
-			pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
-
-		});
-
-		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
-
-			if(params["blend mode"] === "add") {
-
-				delete pass.combineMaterial.defines.SCREEN_MODE;
-
-			} else {
-
-				pass.combineMaterial.defines.SCREEN_MODE = "1";
-
-			}
-
-			pass.combineMaterial.needsUpdate = true;
+			renderPass.renderToScreen = !params.enabled;
+			blurPass.enabled = params.enabled;
 
 		});
 
