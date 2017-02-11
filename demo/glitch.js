@@ -12,7 +12,7 @@ import {
 	TextureLoader
 } from "three";
 
-import { GlitchPass, RenderPass } from "../src";
+import { GlitchMode, GlitchPass, RenderPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
@@ -240,7 +240,7 @@ export class GlitchDemo extends Demo {
 			"custom noise": true
 		};
 
-		gui.add(params, "mode").min(GlitchPass.Mode.SPORADIC).max(GlitchPass.Mode.CONSTANT_WILD).step(1).onChange(function() {
+		gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function() {
 			pass.mode = params.mode;
 		});
 

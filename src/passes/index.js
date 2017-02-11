@@ -12,7 +12,7 @@ export { ClearMaskPass } from "./clear-mask.js";
 export { DotScreenPass } from "./dot-screen.js";
 export { DepthPass } from "./depth.js";
 export { FilmPass } from "./film.js";
-export { GlitchPass } from "./glitch.js";
+export { GlitchMode, GlitchPass } from "./glitch.js";
 export { GodRaysPass } from "./god-rays.js";
 export { MaskPass } from "./mask.js";
 export { Pass } from "./pass.js";

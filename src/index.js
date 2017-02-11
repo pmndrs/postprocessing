@@ -15,6 +15,7 @@ export {
 	DepthPass,
 	DotScreenPass,
 	FilmPass,
+	GlitchMode,
 	GlitchPass,
 	GodRaysPass,
 	MaskPass,

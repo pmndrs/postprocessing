@@ -92,14 +92,12 @@ export class GlitchPass extends Pass {
 		/**
 		 * The effect mode.
 		 *
-		 * Check the Mode enumeration for available modes.
-		 *
 		 * @property mode
-		 * @type GlitchPass.Mode
-		 * @default GlitchPass.Mode.SPORADIC
+		 * @type GlitchMode
+		 * @default GlitchMode.SPORADIC
 		 */
 
-		this.mode = GlitchPass.Mode.SPORADIC;
+		this.mode = GlitchMode.SPORADIC;
 
 		/**
 		 * Counter for glitch activation/deactivation.
@@ -191,7 +189,7 @@ export class GlitchPass extends Pass {
 		uniforms.seed.value = Math.random();
 		uniforms.active.value = true;
 
-		if(counter % breakPoint === 0 || mode === GlitchPass.Mode.CONSTANT_WILD) {
+		if(counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {
 
 			uniforms.amount.value = Math.random() / 30.0;
 			uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
@@ -205,7 +203,7 @@ export class GlitchPass extends Pass {
 
 		} else {
 
-			if(counter % breakPoint < breakPoint / 5 || mode === GlitchPass.Mode.CONSTANT_MILD) {
+			if(counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {
 
 				uniforms.amount.value = Math.random() / 90.0;
 				uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
@@ -234,16 +232,41 @@ export class GlitchPass extends Pass {
 /**
  * A glitch mode enumeration.
  *
- * SPORADIC is the default mode which results in randomly timed glitches.
- *
- * @property GlitchPass.Mode
- * @type Object
+ * @class GlitchPass.Mode
+ * @submodule passes
  * @static
- * @final
  */
 
-GlitchPass.Mode = {
+export const GlitchMode = {
+
+	/**
+	 * Sporadic glitches.
+	 *
+	 * @property SPORADIC
+	 * @type Number
+	 * @static
+	 */
+
 	SPORADIC: 0,
+
+	/**
+	 * Constant mild glitches.
+	 *
+	 * @property CONSTANT_MILD
+	 * @type Number
+	 * @static
+	 */
+
 	CONSTANT_MILD: 1,
+
+	/**
+	 * Constant wild glitches.
+	 *
+	 * @property CONSTANT_WILD
+	 * @type Number
+	 * @static
+	 */
+
 	CONSTANT_WILD: 2
+
 };
