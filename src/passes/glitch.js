@@ -68,6 +68,16 @@ export class GlitchPass extends Pass {
 
 		this.quad.material = this.material;
 
+		/**
+		 * A perturbation map.
+		 *
+		 * @property texture
+		 * @type Texture
+		 * @private
+		 */
+
+		this.texture = null;
+
 		if(options.perturbMap !== undefined) {
 
 			this.perturbMap = options.perturbMap;
@@ -120,10 +130,11 @@ export class GlitchPass extends Pass {
 	 * @type Texture
 	 */
 
-	get perturbMap() { return this.material.uniforms.tPerturb.value; }
+	get perturbMap() { return this.texture; }
 
 	set perturbMap(x) {
 
+		this.texture = x;
 		this.material.uniforms.tPerturb.value = x;
 
 	}
