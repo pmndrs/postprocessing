@@ -6,22 +6,27 @@
 
 A post processing library that provides the means to implement 2D filter effects for three.js.
 
-*[API Reference](http://vanruesc.github.io/postprocessing/docs)*
+*[Extensive Demo](http://vanruesc.github.io/postprocessing/public) &there4;
+[API Reference](http://vanruesc.github.io/postprocessing/docs)*
 
 
 ## Installation
 
 ```sh
-$ npm install postprocessing
+npm install postprocessing
 ``` 
 
 
 ## Usage
 
+Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information
+about how to setup the renderer, scene and camera.
+
+##### Basics
+
 ```javascript
-// Attention: Three is not yet an ES6 module!
-import { WebGLRenderer, Scene, PerspectiveCamera } from "three";
-import { EffectComposer, RenderPass, GlitchPass } from "postprocessing";
+import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { EffectComposer, GlitchPass, RenderPass } from "postprocessing";
 
 const composer = new EffectComposer(new WebGLRenderer());
 composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
@@ -30,23 +35,21 @@ const pass = new GlitchPass();
 pass.renderToScreen = true;
 composer.addPass(pass);
 
-let lastTime = performance.now();
+const clock = new Clock();
 
-(function render(now) {
+(function render() {
 
 	requestAnimationFrame(render);
-	composer.render((now - lastTime) / 1000);
-	lastTime = now;
+	composer.render(clock.getDelta());
 
 }());
 ```
 
-In order to create your own pass, simply extend the
-[Pass](http://vanruesc.github.io/postprocessing/docs/files/src_passes_pass.js.html) class:
+##### Custom Passes
 
 ```javascript
 import { Pass } from "postprocessing";
-import { MyMaterial } from "./materials";
+import { MyMaterial } from "./my-material.js";
 
 export class MyPass extends Pass {
 
@@ -63,36 +66,32 @@ export class MyPass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
-
-		if(this.renderToScreen) {
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 
 }
 
 ```
+
 Passes don't have to use the buffers that are provided in the render method.
 Writing self-contained render-to-texture passes is also a feasible option.
 
 
 ## Included Filters
 
- - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/tone-mapping.html)
- - [Crepuscular Rays](http://vanruesc.github.io/postprocessing/public/god-rays.html)
- - [Dot Screen](http://vanruesc.github.io/postprocessing/public/dot-screen.html)
- - [Glitch](http://vanruesc.github.io/postprocessing/public/glitch.html)
- - [Bloom](http://vanruesc.github.io/postprocessing/public/bloom.html)
- - [Bokeh](http://vanruesc.github.io/postprocessing/public/bokeh.html)
- - [SMAA](http://vanruesc.github.io/postprocessing/public/smaa.html)
- - [Film](http://vanruesc.github.io/postprocessing/public/film.html)
+ - [Bloom](http://vanruesc.github.io/postprocessing/public/#bloom)
+ - [Blur](http://vanruesc.github.io/postprocessing/public/#blur)
+ - [Bokeh](http://vanruesc.github.io/postprocessing/public/#bokeh)
+ - [Bokeh v2](http://vanruesc.github.io/postprocessing/public/#bokeh2)
+ - [Depth](http://vanruesc.github.io/postprocessing/public/#depth)
+ - [Dot Screen](http://vanruesc.github.io/postprocessing/public/#dot-screen)
+ - [Film](http://vanruesc.github.io/postprocessing/public/#film)
+ - [Glitch](http://vanruesc.github.io/postprocessing/public/#glitch)
+ - [God Rays](http://vanruesc.github.io/postprocessing/public/#god-rays)
+ - [Render](http://vanruesc.github.io/postprocessing/public/#render)
+ - [SMAA](http://vanruesc.github.io/postprocessing/public/#smaa)
+ - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/#tone-mapping)
 
 
 ## Contributing
