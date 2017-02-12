@@ -1,6 +1,7 @@
 import {
 	AmbientLight,
 	BoxBufferGeometry,
+	CubeTextureLoader,
 	DirectionalLight,
 	Mesh,
 	MeshPhongMaterial,
@@ -62,6 +63,15 @@ export class RenderDemo extends Demo {
 		const assets = new Map();
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
+		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+
+		const path = "textures/skies/sunset/";
+		const format = ".png";
+		const urls = [
+			path + "px" + format, path + "nx" + format,
+			path + "py" + format, path + "ny" + format,
+			path + "pz" + format, path + "nz" + format
+		];
 
 		if(this.assets === null) {
 
@@ -76,6 +86,12 @@ export class RenderDemo extends Demo {
 				}
 
 			};
+
+			cubeTextureLoader.load(urls, function(textureCube) {
+
+				assets.set("sky", textureCube);
+
+			});
 
 			textureLoader.load("textures/crate.jpg", function(texture) {
 
@@ -112,16 +128,20 @@ export class RenderDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(2, 1, 2);
+		camera.position.set(-3, 0, -3);
 		camera.lookAt(this.controls.target);
 		scene.add(camera);
+
+		// Sky.
+
+		scene.background = assets.get("sky");
 
 		// Lights.
 
 		const ambientLight = new AmbientLight(0x666666);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
-		directionalLight.position.set(-1, 1, 1);
+		directionalLight.position.set(1440, 200, 2000);
 		directionalLight.target.position.copy(scene.position);
 
 		scene.add(directionalLight);
@@ -161,8 +181,8 @@ export class RenderDemo extends Demo {
 
 		if(object !== null) {
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+			object.rotation.x += 0.0005;
+			object.rotation.y += 0.001;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }

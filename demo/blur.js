@@ -10,7 +10,15 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { BlurPass, KernelSize, RenderPass } from "../src";
+import {
+	BlurPass,
+	CombineMaterial,
+	KernelSize,
+	RenderPass,
+	SavePass,
+	ShaderPass
+} from "../src";
+
 import { Demo } from "./demo.js";
 
 /**
@@ -50,6 +58,16 @@ export class BlurDemo extends Demo {
 		this.renderPass = null;
 
 		/**
+		 * A save pass.
+		 *
+		 * @property savePass
+		 * @type SavePass
+		 * @private
+		 */
+
+		this.savePass = null;
+
+		/**
 		 * A blur pass.
 		 *
 		 * @property blurPass
@@ -58,6 +76,16 @@ export class BlurDemo extends Demo {
 		 */
 
 		this.blurPass = null;
+
+		/**
+		 * A combine pass.
+		 *
+		 * @property combinePass
+		 * @type ShaderPass
+		 * @private
+		 */
+
+		this.combinePass = null;
 
 		/**
 		 * An object.
@@ -190,14 +218,23 @@ export class BlurDemo extends Demo {
 		// Passes.
 
 		let pass = new RenderPass(scene, camera);
-
 		this.renderPass = pass;
 		composer.addPass(pass);
 
-		pass = new BlurPass();
+		pass = new SavePass();
+		this.savePass = pass;
+		composer.addPass(pass);
 
-		pass.renderToScreen = true;
+		pass = new BlurPass();
 		this.blurPass = pass;
+		composer.addPass(pass);
+
+		pass = new ShaderPass(new CombineMaterial(), "texture1");
+		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
+		pass.material.uniforms.opacity1.value = 1.0;
+		pass.material.uniforms.opacity2.value = 0.0;
+		pass.renderToScreen = true;
+		this.combinePass = pass;
 		composer.addPass(pass);
 
 	}
@@ -237,15 +274,24 @@ export class BlurDemo extends Demo {
 		const composer = this.composer;
 		const renderPass = this.renderPass;
 		const blurPass = this.blurPass;
+		const combinePass = this.combinePass;
 
 		const params = {
 			"enabled": blurPass.enabled,
 			"resolution": blurPass.resolutionScale,
-			"kernel size": blurPass.kernelSize
+			"kernel size": blurPass.kernelSize,
+			"strength": combinePass.material.uniforms.opacity1.value
 		};
 
 		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
 		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
+
+		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			combinePass.material.uniforms.opacity1.value = params.strength;
+			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
+
+		});
 
 		gui.add(params, "enabled").onChange(function() {
 

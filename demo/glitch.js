@@ -140,7 +140,7 @@ export class GlitchDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(10, 1, 10);
+		camera.position.set(6, 1, 6);
 		camera.lookAt(this.controls.target);
 		scene.add(camera);
 
