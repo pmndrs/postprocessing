@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\tone-mapping\index.js - postprocessing</title>
+    <title>GlitchMode - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,58 +116,149 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\tone-mapping\index.js</h1>
+<h1>GlitchMode Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-import { ShaderMaterial } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+        <div class="foundat">
+            Defined in: <a href="../files/src_passes_glitch.js.html#l241"><code>src\passes\glitch.js:241</code></a>
+        </div>
 
-/**
- * Full-screen tone-mapping shader material.
- *
- * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
- *
- * @class ToneMappingMaterial
- * @submodule materials
- * @extends ShaderMaterial
- * @constructor
- */
+            Module: <a href="../modules/passes.html">passes</a><br>
+            Parent Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
-export class ToneMappingMaterial extends ShaderMaterial {
+</div>
 
-	constructor() {
 
-		super({
+<div class="box intro">
+    <p>A glitch mode enumeration.</p>
 
-			type: &quot;ToneMappingMaterial&quot;,
+</div>
 
-			uniforms: {
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-			},
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
 
-			depthWrite: false,
-			depthTest: false
 
-		});
+                <div class="index-section properties">
+                    <h3>Properties</h3>
 
-	}
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_CONSTANT_MILD">CONSTANT_MILD</a>
 
-}
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_CONSTANT_WILD">CONSTANT_WILD</a>
 
-    </pre>
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_SPORADIC">SPORADIC</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_CONSTANT_MILD" class="property item">
+    <h3 class="name"><code>CONSTANT_MILD</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l261"><code>src\passes\glitch.js:261</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Constant mild glitches.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_CONSTANT_WILD" class="property item">
+    <h3 class="name"><code>CONSTANT_WILD</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l271"><code>src\passes\glitch.js:271</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Constant wild glitches.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_SPORADIC" class="property item">
+    <h3 class="name"><code>SPORADIC</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l251"><code>src\passes\glitch.js:251</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Sporadic glitches.</p>
+
+    </div>
+
+
+
+</div>
+            </div>
+
+
+    </div>
 </div>
                     </div>
                 </div>

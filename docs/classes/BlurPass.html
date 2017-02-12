@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BloomPass - postprocessing</title>
+    <title>BlurPass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,7 +116,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>BloomPass Class</h1>
+<h1>BlurPass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -124,7 +124,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_bloom.js.html#l6"><code>src\passes\bloom.js:6</code></a>
+            Defined in: <a href="../files/src_passes_blur.js.html#l5"><code>src\passes\blur.js:5</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -134,16 +134,14 @@
 
 
 <div class="box intro">
-    <p>A bloom pass.</p>
-<p>This pass renders a scene with superimposed blur by utilising the fast Kawase
-convolution approach.</p>
+    <p>A blur pass.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_BloomPass" class="method item">
-    <h3 class="name"><code>BloomPass</code></h3>
+<div id="method_BlurPass" class="method item">
+    <h3 class="name"><code>BlurPass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
@@ -163,7 +161,7 @@ convolution approach.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l6"><code>src\passes\bloom.js:6</code></a>
+        <a href="../files/src_passes_blur.js.html#l5"><code>src\passes\blur.js:5</code></a>
         </p>
 
 
@@ -218,45 +216,6 @@ convolution approach.</p>
                                 </div>
 
                             </li>
-                            <li class="param">
-                                    <code class="param-name optional">[intensity=1.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The strength of the bloom effect.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[distinction=1.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[screenMode=true]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>Whether the screen blend mode should be used for combining the bloom texture with the scene colors.</li>
-</ul>
-
-                                </div>
-
-                            </li>
                         </ul>
                 </li>
             </ul>
@@ -306,20 +265,12 @@ convolution approach.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property private">
-                                <a href="#property_blurPass">blurPass</a>
-
-                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_combineMaterial">combineMaterial</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_distinction">distinction</a>
+                                <a href="#property_convolutionMaterial">convolutionMaterial</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -327,19 +278,7 @@ convolution approach.</p>
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_intensity">intensity</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_luminosityMaterial">luminosityMaterial</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -360,6 +299,10 @@ convolution approach.</p>
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -442,7 +385,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l203"><code>src\passes\bloom.js:203</code></a>
+        <a href="../files/src_passes_blur.js.html#l145"><code>src\passes\blur.js:145</code></a>
         </p>
 
 
@@ -520,7 +463,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l161"><code>src\passes\bloom.js:161</code></a>
+        <a href="../files/src_passes_blur.js.html#l100"><code>src\passes\blur.js:100</code></a>
         </p>
 
 
@@ -528,9 +471,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Renders the effect.</p>
-<p>Extracts a luminance map from the read buffer, blurs it and combines it
-with the read buffer.</p>
+        <p>Blurs the read buffer.</p>
 
     </div>
 
@@ -610,7 +551,7 @@ with the read buffer.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l224"><code>src\passes\bloom.js:224</code></a>
+        <a href="../files/src_passes_blur.js.html#l164"><code>src\passes\blur.js:164</code></a>
         </p>
 
 
@@ -663,32 +604,6 @@ with the read buffer.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_blurPass" class="property item private">
-    <h3 class="name"><code>blurPass</code></h3>
-    <span class="type"><a href="../classes/BlurPass.html" class="crosslink">BlurPass</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l30"><code>src\passes\bloom.js:30</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A blur pass.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -715,9 +630,9 @@ with the read buffer.</p>
 
 
 </div>
-<div id="property_combineMaterial" class="property item private">
-    <h3 class="name"><code>combineMaterial</code></h3>
-    <span class="type"><a href="../classes/CombineMaterial.html" class="crosslink">CombineMaterial</a></span>
+<div id="property_convolutionMaterial" class="property item private">
+    <h3 class="name"><code>convolutionMaterial</code></h3>
+    <span class="type"><a href="../classes/ConvolutionMaterial.html" class="crosslink">ConvolutionMaterial</a></span>
 
 
         <span class="flag private">private</span>
@@ -727,43 +642,17 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
+        <a href="../files/src_passes_blur.js.html#l64"><code>src\passes\blur.js:64</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Combine shader material.</p>
+        <p>A convolution shader material.</p>
 
     </div>
 
-
-
-</div>
-<div id="property_distinction" class="property item">
-    <h3 class="name"><code>distinction</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l141"><code>src\passes\bloom.js:141</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The luminance distinction factor.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.0</p>
 
 
 </div>
@@ -792,32 +681,6 @@ with the read buffer.</p>
 
 
 </div>
-<div id="property_intensity" class="property item">
-    <h3 class="name"><code>intensity</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l121"><code>src\passes\bloom.js:121</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The overall intensity of the effect.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.0</p>
-
-
-</div>
 <div id="property_kernelSize" class="property item">
     <h3 class="name"><code>kernelSize</code></h3>
     <span class="type">ConvolutionMaterial.KernelSize</span>
@@ -829,72 +692,18 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l105"><code>src\passes\bloom.js:105</code></a>
+        <a href="../files/src_passes_blur.js.html#l80"><code>src\passes\blur.js:80</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The blur kernel size.</p>
+        <p>The kernel size.</p>
 
     </div>
 
         <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_kernelSize" class="property item">
-    <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">ConvolutionMaterial.KernelSize</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l86"><code>src\passes\bloom.js:86</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer after changing
-this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_luminosityMaterial" class="property item private">
-    <h3 class="name"><code>luminosityMaterial</code></h3>
-    <span class="type"><a href="../classes/LuminosityMaterial.html" class="crosslink">LuminosityMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l72"><code>src\passes\bloom.js:72</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Luminance shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -976,7 +785,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l40"><code>src\passes\bloom.js:40</code></a>
+        <a href="../files/src_passes_blur.js.html#l25"><code>src\passes\blur.js:25</code></a>
         </p>
 
 
@@ -1002,7 +811,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l50"><code>src\passes\bloom.js:50</code></a>
+        <a href="../files/src_passes_blur.js.html#l41"><code>src\passes\blur.js:41</code></a>
         </p>
 
 
@@ -1038,6 +847,34 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolutionScale" class="property item">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_blur.js.html#l51"><code>src\passes\blur.js:51</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call the setSize method of the EffectComposer after changing
+this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>

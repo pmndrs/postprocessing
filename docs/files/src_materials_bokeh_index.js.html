@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,7 +120,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import THREE from &quot;three&quot;;
+import { ShaderMaterial } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
@@ -128,19 +135,16 @@ import vertex from &quot;./glsl/shader.vert&quot;;
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @param {PerspectiveCamera} [camera] - The main camera.
+ * @param {PerspectiveCamera} [camera] - A camera.
  * @param {Object} [options] - The options.
  * @param {Number} [options.focus=1.0] - Focus distance.
- * @param {Number} [options.aspect=1.0] - Camera aspect factor.
  * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
  * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
  */
 
-export class BokehMaterial extends THREE.ShaderMaterial {
+export class BokehMaterial extends ShaderMaterial {
 
-	constructor(camera, options) {
-
-		if(options === undefined) { options = {}; }
+	constructor(camera = null, options = {}) {
 
 		super({
 
@@ -148,39 +152,43 @@ export class BokehMaterial extends THREE.ShaderMaterial {
 
 			uniforms: {
 
+				cameraNear: { value: 0.1 },
+				cameraFar: { value: 2000 },
+				aspect: { value: 1.0 },
+
 				tDiffuse: { value: null },
 				tDepth: { value: null },
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
-
 				focus: { value: (options.focus !== undefined) ? options.focus : 1.0 },
-				aspect: { value: (options.aspect !== undefined) ? options.aspect : 1.0 },
 				aperture: { value: (options.aperture !== undefined) ? options.aperture : 0.025 },
 				maxBlur: { value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0 }
 
 			},
 
 			fragmentShader: fragment,
-			vertexShader: vertex
+			vertexShader: vertex,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 
-		if(camera !== undefined) { this.adoptCameraSettings(camera); }
+		if(camera !== null) { this.adoptCameraSettings(camera); }
 
 	}
 
 	/**
-	 * Adopts the near and far plane settings of the given camera.
+	 * Adopts the settings of the given camera.
 	 *
 	 * @method adoptCameraSettings
-	 * @param {PerspectiveCamera} camera - The main camera.
+	 * @param {PerspectiveCamera} camera - A camera.
 	 */
 
 	adoptCameraSettings(camera) {
 
 		this.uniforms.cameraNear.value = camera.near;
 		this.uniforms.cameraFar.value = camera.far;
+		this.uniforms.aspect.value = camera.aspect;
 
 	}
 

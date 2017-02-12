@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,7 +120,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import THREE from &quot;three&quot;;
+import { LinearFilter, NearestFilter, RGBAFormat, RGBFormat, Texture, WebGLRenderTarget } from &quot;three&quot;;
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
@@ -146,9 +153,9 @@ export class SMAAPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetColorEdges = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			format: THREE.RGBFormat,
+		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			format: RGBFormat,
 			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
@@ -164,7 +171,7 @@ export class SMAAPass extends Pass {
 
 		this.renderTargetWeights = this.renderTargetColorEdges.clone();
 
-		this.renderTargetWeights.texture.format = THREE.RGBAFormat;
+		this.renderTargetWeights.texture.format = RGBAFormat;
 
 		/**
 		 * SMAA color edge detection shader material.
@@ -186,24 +193,24 @@ export class SMAAPass extends Pass {
 
 		this.weightsMaterial = new SMAAWeightsMaterial();
 
-		let areaImage = new Image();
+		const areaImage = new Image();
 		areaImage.src = this.weightsMaterial.areaImage;
 
-		let areaTexture = new THREE.Texture();
+		const areaTexture = new Texture();
 		areaTexture.image = areaImage;
-		areaTexture.minFilter = THREE.LinearFilter;
-		areaTexture.format = THREE.RGBFormat;
+		areaTexture.minFilter = LinearFilter;
+		areaTexture.format = RGBFormat;
 		areaTexture.generateMipmaps = false;
 		areaTexture.needsUpdate = true;
 		areaTexture.flipY = false;
 
-		let searchImage = new Image();
+		const searchImage = new Image();
 		searchImage.src = this.weightsMaterial.searchImage;
 
-		let searchTexture = new THREE.Texture();
+		const searchTexture = new Texture();
 		searchTexture.image = searchImage;
-		searchTexture.magFilter = THREE.NearestFilter;
-		searchTexture.minFilter = THREE.NearestFilter;
+		searchTexture.magFilter = NearestFilter;
+		searchTexture.minFilter = NearestFilter;
 		searchTexture.generateMipmaps = false;
 		searchTexture.needsUpdate = true;
 		searchTexture.flipY = false;
@@ -252,29 +259,7 @@ export class SMAAPass extends Pass {
 		this.quad.material = this.blendMaterial;
 		this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		if(this.renderToScreen) {
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			renderer.render(this.scene, this.camera, writeBuffer, false);
-
-		}
-
-	}
-
-	/**
-	 * Adjusts the format and size of the render targets.
-	 *
-	 * @method initialise
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 */
-
-	initialise(renderer) {
-
-		let size = renderer.getSize();
-		this.setSize(size.width, size.height);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 
@@ -293,8 +278,9 @@ export class SMAAPass extends Pass {
 
 		this.colorEdgesMaterial.uniforms.texelSize.value.copy(
 			this.weightsMaterial.uniforms.texelSize.value.copy(
-				this.blendMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height)
-		));
+				this.blendMaterial.uniforms.texelSize.value.set(
+					1.0 / width, 1.0 / height
+		)));
 
 	}
 

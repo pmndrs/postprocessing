@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -117,7 +124,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_god-rays.js.html#l16"><code>src\passes\god-rays.js:16</code></a>
+            Defined in: <a href="../files/src_passes_god-rays.js.html#l35"><code>src\passes\god-rays.js:35</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -163,7 +170,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l16"><code>src\passes\god-rays.js:16</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l35"><code>src\passes\god-rays.js:35</code></a>
         </p>
 
 
@@ -206,7 +213,7 @@
                 </li>
                 <li class="param">
                         <code class="param-name">lightSource</code>
-                        <span class="type">Vector3</span>
+                        <span class="type">Object3D</span>
 
 
                     <div class="param-description">
@@ -310,19 +317,6 @@
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[blurriness=0.1]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The strength of the preliminary blur phase.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
                                     <code class="param-name optional">[resolutionScale=0.5]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
@@ -336,6 +330,19 @@
 
                             </li>
                             <li class="param">
+                                    <code class="param-name optional">[kernelSize=ConvolutionMaterial.KernelSize.LARGE]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The blur kernel size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
                                     <code class="param-name optional">[samples=60]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
@@ -343,6 +350,19 @@
                                 <div class="param-description">
                                     <ul>
 <li>The number of samples per pixel.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[screenMode=true]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Whether the screen blend mode should be used for combining the god rays texture with the scene colors.</li>
 </ul>
 
                                 </div>
@@ -374,6 +394,11 @@
                     <h3>Methods</h3>
 
                     <ul class="index-list methods extends">
+                            <li class="index-item method private">
+                                <a href="#method_clamp">clamp</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_dispose">dispose</a>
 
@@ -397,8 +422,8 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property">
-                                <a href="#property_blurriness">blurriness</a>
+                            <li class="index-item property private">
+                                <a href="#property_blurPass">blurPass</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -414,14 +439,6 @@
                                 <a href="#property_combineMaterial">combineMaterial</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_convolutionMaterial">convolutionMaterial</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_copyMaterial">copyMaterial</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
@@ -432,6 +449,18 @@
                             </li>
                             <li class="index-item property">
                                 <a href="#property_intensity">intensity</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_kernelSize">kernelSize</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_kernelSize">kernelSize</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_lightScene">lightScene</a>
 
                             </li>
                             <li class="index-item property">
@@ -475,10 +504,6 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_resolutionScale">resolutionScale</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_samples">samples</a>
 
                             </li>
@@ -499,6 +524,109 @@
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
 
+<div id="method_clamp" class="method item private">
+    <h3 class="name"><code>clamp</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>value</code>
+                </li>
+                <li class="arg">
+                        <code>min</code>
+                </li>
+                <li class="arg">
+                        <code>max</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l6"><code>src\passes\god-rays.js:6</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Clamps a given value.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">value</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The value to clamp.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">min</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The lowest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">max</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The highest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Number</span>:
+                    <p>The clamped value.</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_dispose" class="method item inherited">
     <h3 class="name"><code>dispose</code></h3>
 
@@ -514,7 +642,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l169"><code>src\passes\pass.js:169</code></a>
+        <a href="../files/src_passes_pass.js.html#l187"><code>src\passes\pass.js:187</code></a>
         </p>
 
 
@@ -566,7 +694,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l365"><code>src\passes\god-rays.js:365</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l370"><code>src\passes\god-rays.js:370</code></a>
         </p>
 
 
@@ -574,7 +702,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Adjusts the format and size of the render targets.</p>
+        <p>Adjusts the format of the render targets.</p>
 
     </div>
 
@@ -625,6 +753,9 @@ when you are certain that you don't need this pass anymore.
                 <li class="arg">
                         <code>readBuffer</code>
                 </li>
+                <li class="arg">
+                        <code>writeBuffer</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -641,7 +772,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l264"><code>src\passes\god-rays.js:264</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l277"><code>src\passes\god-rays.js:277</code></a>
         </p>
 
 
@@ -650,17 +781,16 @@ when you are certain that you don't need this pass anymore.
 
     <div class="description">
         <p>Renders the scene.</p>
-<p>The read buffer is assumed to contain the normally rendered scene.
-The god rays pass has four phases with a total of 8 render steps.</p>
+<p>The god rays pass has four phases:</p>
 <p>Mask Phase:
 The scene is rendered using a mask material.</p>
 <p>Preliminary Blur Phase:
-The masked scene is blurred five consecutive times.</p>
+The masked scene is blurred.</p>
 <p>God Rays Phase:
 The blurred scene is blurred again, but this time along radial lines
 towards the light source.</p>
 <p>Composite Phase:
-The final result is added to the normal scene.</p>
+The final result is combined with the read buffer.</p>
 
     </div>
 
@@ -689,6 +819,19 @@ The final result is added to the normal scene.</p>
                     <div class="param-description">
                         <ul>
 <li>The read buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">writeBuffer</code>
+                        <span class="type">WebGLRenderTarget</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -727,7 +870,7 @@ The final result is added to the normal scene.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_god-rays.js.html#l388"><code>src\passes\god-rays.js:388</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l392"><code>src\passes\god-rays.js:392</code></a>
         </p>
 
 
@@ -780,29 +923,29 @@ The final result is added to the normal scene.</p>
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_blurriness" class="property item">
-    <h3 class="name"><code>blurriness</code></h3>
-    <span class="type">Number</span>
+<div id="property_blurPass" class="property item private">
+    <h3 class="name"><code>blurPass</code></h3>
+    <span class="type"><a href="../classes/BlurPass.html" class="crosslink">BlurPass</a></span>
 
 
+        <span class="flag private">private</span>
 
 
 
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l196"><code>src\passes\god-rays.js:196</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l64"><code>src\passes\god-rays.js:64</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The strength of the preliminary blur phase.</p>
+        <p>A blur pass.</p>
 
     </div>
 
-        <p><strong>Default:</strong> 0.1</p>
 
 
 </div>
@@ -846,14 +989,14 @@ The final result is added to the normal scene.</p>
                     <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l5"><code>src\passes\god-rays.js:5</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l24"><code>src\passes\god-rays.js:24</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Used for saving the renderer's clear color.</p>
+        <p>A clear color.</p>
 
     </div>
 
@@ -872,7 +1015,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l124"><code>src\passes\god-rays.js:124</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l127"><code>src\passes\god-rays.js:127</code></a>
         </p>
 
 
@@ -880,58 +1023,6 @@ The final result is added to the normal scene.</p>
 
     <div class="description">
         <p>A combine shader material used for rendering to screen.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_convolutionMaterial" class="property item private">
-    <h3 class="name"><code>convolutionMaterial</code></h3>
-    <span class="type"><a href="../classes/ConvolutionMaterial.html" class="crosslink">ConvolutionMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l112"><code>src\passes\god-rays.js:112</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A convolution blur shader material.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_copyMaterial" class="property item private">
-    <h3 class="name"><code>copyMaterial</code></h3>
-    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l134"><code>src\passes\god-rays.js:134</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A copy shader material used for rendering to texture.</p>
 
     </div>
 
@@ -949,7 +1040,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l83"><code>src\passes\pass.js:83</code></a>
+        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
         </p>
 
 
@@ -975,7 +1066,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l156"><code>src\passes\god-rays.js:156</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l147"><code>src\passes\god-rays.js:147</code></a>
         </p>
 
 
@@ -1000,7 +1091,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l216"><code>src\passes\god-rays.js:216</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l231"><code>src\passes\god-rays.js:231</code></a>
         </p>
 
 
@@ -1015,6 +1106,85 @@ The final result is added to the normal scene.</p>
 
 
 </div>
+<div id="property_kernelSize" class="property item">
+    <h3 class="name"><code>kernelSize</code></h3>
+    <span class="type">ConvolutionMaterial.KernelSize</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l215"><code>src\passes\god-rays.js:215</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The blur kernel size.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
+
+
+</div>
+<div id="property_kernelSize" class="property item">
+    <h3 class="name"><code>kernelSize</code></h3>
+    <span class="type">ConvolutionMaterial.KernelSize</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l196"><code>src\passes\god-rays.js:196</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call the setSize method of the EffectComposer after changing
+this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
+
+
+</div>
+<div id="property_lightScene" class="property item">
+    <h3 class="name"><code>lightScene</code></h3>
+    <span class="type">Scene</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l167"><code>src\passes\god-rays.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A scene that only contains the light source.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_lightSource" class="property item">
     <h3 class="name"><code>lightSource</code></h3>
     <span class="type">Object3D</span>
@@ -1026,7 +1196,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l93"><code>src\passes\god-rays.js:93</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l108"><code>src\passes\god-rays.js:108</code></a>
         </p>
 
 
@@ -1102,7 +1272,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l146"><code>src\passes\god-rays.js:146</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l137"><code>src\passes\god-rays.js:137</code></a>
         </p>
 
 
@@ -1128,7 +1298,7 @@ The final result is added to the normal scene.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l68"><code>src\passes\pass.js:68</code></a>
+        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
         </p>
 
 
@@ -1176,7 +1346,7 @@ Assign your shader material to this mesh!
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.quad.material = this.myMaterial;</p>
+                <pre class="code prettyprint"><code>this.quad.material = this.myMaterial;</code></pre>
 
             </div>
         </div>
@@ -1194,7 +1364,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l44"><code>src\passes\god-rays.js:44</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l94"><code>src\passes\god-rays.js:94</code></a>
         </p>
 
 
@@ -1220,7 +1390,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l58"><code>src\passes\god-rays.js:58</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l74"><code>src\passes\god-rays.js:74</code></a>
         </p>
 
 
@@ -1246,7 +1416,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l70"><code>src\passes\god-rays.js:70</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l84"><code>src\passes\god-rays.js:84</code></a>
         </p>
 
 
@@ -1271,7 +1441,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l93"><code>src\passes\pass.js:93</code></a>
+        <a href="../files/src_passes_pass.js.html#l99"><code>src\passes\pass.js:99</code></a>
         </p>
 
 
@@ -1282,34 +1452,6 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> false</p>
-
-
-</div>
-<div id="property_resolutionScale" class="property item">
-    <h3 class="name"><code>resolutionScale</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l80"><code>src\passes\god-rays.js:80</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer after changing
-this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>
@@ -1324,7 +1466,7 @@ this value.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l237"><code>src\passes\god-rays.js:237</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l251"><code>src\passes\god-rays.js:251</code></a>
         </p>
 
 
@@ -1332,8 +1474,7 @@ this value.</p>
 
     <div class="description">
         <p>The number of samples per pixel.</p>
-<p>This value must be carefully chosen. A higher value increases the GPU load
-directly and doesn't necessarily yield better results!</p>
+<p>This value must be carefully chosen. A higher value increases the GPU load.</p>
 
     </div>
 
@@ -1379,7 +1520,7 @@ directly and doesn't necessarily yield better results!</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_god-rays.js.html#l102"><code>src\passes\god-rays.js:102</code></a>
+        <a href="../files/src_passes_god-rays.js.html#l117"><code>src\passes\god-rays.js:117</code></a>
         </p>
 
 

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,19 +120,18 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import THREE from &quot;three&quot;;
+import { ShaderMaterial, Vector2 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
 
 /**
- * A convolution blur shader material.
- *
- * Use this shader five times in a row while adjusting the kernel before each
- * render call in order to get a result similar to a 35x35 Gauss filter.
+ * An optimised convolution shader material.
  *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
- * Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ *  Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
+ * and an article by Filip Strugar, Intel:
+ *  An investigation of fast real-time GPU-based image blur algorithms
  *
  * Further modified according to:
  *  https://developer.apple.com/library/ios/documentation/3DDrawing/Conceptual/OpenGLES_ProgrammingGuide/BestPracticesforShaders/BestPracticesforShaders.html#//apple_ref/doc/uid/TP40008793-CH7-SW15
@@ -137,9 +143,9 @@ import vertex from &quot;./glsl/shader.vert&quot;;
  * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class ConvolutionMaterial extends THREE.ShaderMaterial {
+export class ConvolutionMaterial extends ShaderMaterial {
 
-	constructor(texelSize) {
+	constructor(texelSize = new Vector2()) {
 
 		super({
 
@@ -148,51 +154,42 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 			uniforms: {
 
 				tDiffuse: { value: null },
-				texelSize: { value: new THREE.Vector2() },
-				halfTexelSize: { value: new THREE.Vector2() },
+				texelSize: { value: new Vector2() },
+				halfTexelSize: { value: new Vector2() },
 				kernel: { value: 0.0 }
 
 			},
 
 			fragmentShader: fragment,
-			vertexShader: vertex
+			vertexShader: vertex,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 
-		/**
-		 * The Kawase blur kernels for five consecutive convolution passes.
-		 * The result matches the 35x35 Gauss filter.
-		 *
-		 * @property kernels
-		 * @type Number
-		 * @private
-		 */
-
-		this.kernels = new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]);
+		this.setTexelSize(texelSize.x, texelSize.y);
 
 		/**
-		 * Scales the kernels.
+		 * The current kernel size.
 		 *
-		 * @property scale
-		 * @type Number
-		 * @default 1.0
+		 * @property kernelSize
+		 * @type KernelSize
+		 * @default KernelSize.LARGE
 		 */
 
-		this.scale = 1.0;
-
-		/**
-		 * The current kernel.
-		 *
-		 * @property currentKernel
-		 * @type Number
-		 * @private
-		 */
-
-		this.currentKernel = 0;
-
-		if(texelSize !== undefined) { this.setTexelSize(texelSize.x, texelSize.y); }
+		this.kernelSize = KernelSize.LARGE;
 
 	}
+
+	/**
+	 * Returns the kernel.
+	 *
+	 * @method getKernel
+	 * @return {Float32Array} The kernel.
+	 */
+
+	getKernel() { return kernelPresets[this.kernelSize]; }
 
 	/**
 	 * Sets the texel size.
@@ -209,21 +206,97 @@ export class ConvolutionMaterial extends THREE.ShaderMaterial {
 
 	}
 
+}
+
+/**
+ * The Kawase blur kernel presets.
+ *
+ * @property kernelPresets
+ * @type Number
+ * @private
+ * @static
+ */
+
+const kernelPresets = [
+	new Float32Array([0.0, 0.0]),
+	new Float32Array([0.0, 1.0, 1.0]),
+	new Float32Array([0.0, 1.0, 1.0, 2.0]),
+	new Float32Array([0.0, 1.0, 2.0, 2.0, 3.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 4.0, 5.0]),
+	new Float32Array([0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 7.0, 8.0, 9.0, 10.0])
+];
+
+/**
+ * A kernel size enumeration.
+ *
+ * @class KernelSize
+ * @submodule materials
+ * @static
+ */
+
+export const KernelSize = {
+
 	/**
-	 * Adjusts the kernel for the next blur pass.
-	 * Call this method before each render iteration.
+	 * A very small kernel that matches a 7x7 Gauss blur kernel.
 	 *
-	 * @method adjustKernel
+	 * @property VERY_SMALL
+	 * @type Number
+	 * @static
 	 */
 
-	adjustKernel() {
+	VERY_SMALL: 0,
 
-		this.uniforms.kernel.value = this.kernels[this.currentKernel] * this.scale;
-		if(++this.currentKernel &gt;= this.kernels.length) { this.currentKernel = 0; }
+	/**
+	 * A small kernel that matches a 15x15 Gauss blur kernel.
+	 *
+	 * @property SMALL
+	 * @type Number
+	 * @static
+	 */
 
-	}
+	SMALL: 1,
 
-}
+	/**
+	 * A medium sized kernel that matches a 23x23 Gauss blur kernel.
+	 *
+	 * @property MEDIUM
+	 * @type Number
+	 * @static
+	 */
+
+	MEDIUM: 2,
+
+	/**
+	 * A large kernel that matches a 35x35 Gauss blur kernel.
+	 *
+	 * @property LARGE
+	 * @type Number
+	 * @static
+	 */
+
+	LARGE: 3,
+
+	/**
+	 * A very large kernel that matches a 63x63 Gauss blur kernel.
+	 *
+	 * @property VERY_LARGE
+	 * @type Number
+	 * @static
+	 */
+
+	VERY_LARGE: 4,
+
+	/**
+	 * A huge kernel that matches a 127x127 Gauss blur kernel.
+	 *
+	 * @property HUGE
+	 * @type Number
+	 * @static
+	 */
+
+	HUGE: 5
+
+};
 
     </pre>
 </div>

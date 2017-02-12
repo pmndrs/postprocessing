@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,8 +120,9 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import THREE from &quot;three&quot;;
-import { CopyMaterial, CombineMaterial, LuminosityMaterial, ConvolutionMaterial } from &quot;../materials&quot;;
+import { RGBFormat } from &quot;three&quot;;
+import { CombineMaterial, LuminosityMaterial } from &quot;../materials&quot;;
+import { BlurPass } from &quot;./blur.js&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
 /**
@@ -129,9 +137,10 @@ import { Pass } from &quot;./pass.js&quot;;
  * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.blurriness=1.0] - The scale of the blur.
- * @param {Number} [options.strength=1.0] - The bloom strength.
+ * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
+ * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
  * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
+ * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
  */
 
 export class BloomPass extends Pass {
@@ -141,6 +150,16 @@ export class BloomPass extends Pass {
 		super();
 
 		/**
+		 * A blur pass.
+		 *
+		 * @property blurPass
+		 * @type BlurPass
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
+
+		/**
 		 * A render target.
 		 *
 		 * @property renderTargetX
@@ -148,13 +167,7 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = new THREE.WebGLRenderTarget(1, 1, {
-			minFilter: THREE.LinearFilter,
-			magFilter: THREE.LinearFilter,
-			generateMipmaps: false,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
+		this.renderTargetX = this.blurPass.renderTargetX.clone();
 
 		/**
 		 * A second render target.
@@ -164,20 +177,7 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-
-		/**
-		 * The resolution scale.
-		 *
-		 * You need to call the setSize method of the EffectComposer after changing
-		 * this value.
-		 *
-		 * @property resolutionScale
-		 * @type Number
-		 * @default 0.5
-		 */
-
-		this.resolutionScale = (options.resolutionScale === undefined) ? 0.5 : options.resolutionScale;
+		this.renderTargetY = this.blurPass.renderTargetY.clone();
 
 		/**
 		 * Combine shader material.
@@ -187,23 +187,9 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.combineMaterial = new CombineMaterial();
+		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
 
-		if(options.strength !== undefined) { this.combineMaterial.uniforms.opacity2.value = options.strength; }
-
-		/**
-		 * Copy shader material.
-		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
-		 * @private
-		 */
-
-		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = THREE.AdditiveBlending;
-		this.copyMaterial.transparent = true;
-
-		if(options.strength !== undefined) { this.copyMaterial.uniforms.opacity.value = options.strength; }
+		this.intensity = options.intensity;
 
 		/**
 		 * Luminance shader material.
@@ -215,37 +201,80 @@ export class BloomPass extends Pass {
 
 		this.luminosityMaterial = new LuminosityMaterial(true);
 
-		if(options.distinction !== undefined) { this.luminosityMaterial.uniforms.distinction.value = options.distinction; }
-
-		/**
-		 * Convolution shader material.
-		 *
-		 * @property convolutionMaterial
-		 * @type ConvolutionMaterial
-		 * @private
-		 */
-
-		this.convolutionMaterial = new ConvolutionMaterial();
-
-		this.blurriness = options.blurriness;
+		this.distinction = options.distinction;
 
 	}
 
 	/**
-	 * The strength of the preliminary blur phase.
+	 * The resolution scale.
 	 *
-	 * @property blurriness
+	 * You need to call the setSize method of the EffectComposer after changing
+	 * this value.
+	 *
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 */
+
+	get resolutionScale() { return this.blurPass.resolutionScale; }
+
+	set resolutionScale(x) {
+
+		this.blurPass.resolutionScale = x;
+
+	}
+
+	/**
+	 * The blur kernel size.
+	 *
+	 * @property kernelSize
+	 * @type ConvolutionMaterial.KernelSize
+	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 */
+
+	get kernelSize() { return this.blurPass.kernelSize; }
+
+	set kernelSize(x) {
+
+		this.blurPass.kernelSize = x;
+
+	}
+
+	/**
+	 * The overall intensity of the effect.
+	 *
+	 * @property intensity
 	 * @type Number
 	 * @default 1.0
 	 */
 
-	get blurriness() { return this.convolutionMaterial.scale; }
+	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
 
-	set blurriness(x) {
+	set intensity(x) {
 
 		if(typeof x === &quot;number&quot;) {
 
-			this.convolutionMaterial.scale = x;
+			this.combineMaterial.uniforms.opacity2.value = x;
+
+		}
+
+	}
+
+	/**
+	 * The luminance distinction factor.
+	 *
+	 * @property distinction
+	 * @type Number
+	 * @default 1.0
+	 */
+
+	get distinction() { return this.luminosityMaterial.uniforms.distinction.value; }
+
+	set distinction(x) {
+
+		if(typeof x === &quot;number&quot;) {
+
+			this.luminosityMaterial.uniforms.distinction.value = x;
 
 		}
 
@@ -254,71 +283,47 @@ export class BloomPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * Applies a luminance filter and convolution blur to the read buffer and
-	 * renders the result into a seperate render target. The result is additively
-	 * blended with the read buffer.
+	 * Extracts a luminance map from the read buffer, blurs it and combines it
+	 * with the read buffer.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, readBuffer, writeBuffer) {
 
-		let state = renderer.state;
+		const quad = this.quad;
+		const scene = this.scene;
+		const camera = this.camera;
+		const blurPass = this.blurPass;
+
+		const luminosityMaterial = this.luminosityMaterial;
+		const combineMaterial = this.combineMaterial;
+
+		const renderTargetX = this.renderTargetX;
+		const renderTargetY = this.renderTargetY;
 
 		// Luminance filter.
-		this.quad.material = this.luminosityMaterial;
-		this.luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		state.setDepthWrite(true);
-		renderer.render(this.scene, this.camera, this.renderTargetX);
-		state.setDepthWrite(false);
+		quad.material = luminosityMaterial;
+		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		renderer.render(scene, camera, renderTargetX);
 
 		// Convolution phase.
-		this.quad.material = this.convolutionMaterial;
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetX);
-
-		this.convolutionMaterial.adjustKernel();
-		this.convolutionMaterial.uniforms.tDiffuse.value = this.renderTargetX.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetY);
+		blurPass.render(renderer, renderTargetX, renderTargetY);
 
 		// Render the original scene with superimposed blur.
-		if(this.renderToScreen) {
+		quad.material = combineMaterial;
+		combineMaterial.uniforms.texture1.value = readBuffer.texture;
+		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-			this.quad.material = this.combineMaterial;
-			this.combineMaterial.uniforms.texture1.value = readBuffer.texture;
-			this.combineMaterial.uniforms.texture2.value = this.renderTargetY.texture;
-
-			renderer.render(this.scene, this.camera);
-
-		} else {
-
-			this.quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = this.renderTargetY.texture;
-
-			renderer.render(this.scene, this.camera, readBuffer, false);
-
-		}
+		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
 
 	}
 
 	/**
-	 * Adjusts the format and size of the render targets.
+	 * Adjusts the format of the render targets.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -327,13 +332,12 @@ export class BloomPass extends Pass {
 
 	initialise(renderer, alpha) {
 
-		let size = renderer.getSize();
-		this.setSize(size.width, size.height);
+		this.blurPass.initialise(renderer, alpha);
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = THREE.RGBFormat;
-			this.renderTargetY.texture.format = THREE.RGBFormat;
+			this.renderTargetX.texture.format = RGBFormat;
+			this.renderTargetY.texture.format = RGBFormat;
 
 		}
 
@@ -349,16 +353,13 @@ export class BloomPass extends Pass {
 
 	setSize(width, height) {
 
-		width = Math.floor(width * this.resolutionScale);
-		height = Math.floor(height * this.resolutionScale);
+		this.blurPass.setSize(width, height);
 
-		if(width &lt;= 0) { width = 1; }
-		if(height &lt;= 0) { height = 1; }
+		width = this.blurPass.renderTargetX.width;
+		height = this.blurPass.renderTargetX.height;
 
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
-
-		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

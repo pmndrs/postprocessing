@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,34 +120,34 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import THREE from &quot;three&quot;;
+import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from &quot;three&quot;;
 
 /**
  * An abstract pass.
  *
- * This class implements a dispose method that frees memory on demand.
- * The EffectComposer calls this method when it is being destroyed.
+ * Passes that do not rely on the depth buffer should explicitly disable the
+ * depth test and depth write in their respective shader materials.
  *
- * For this mechanism to work properly, please assign your render targets,
- * materials or textures directly to your pass!
- *
- * You can prevent your disposable objects from being deleted by keeping them
- * inside deeper structures such as arrays or objects.
+ * This class implements a dispose method that frees memory on demand. The
+ * EffectComposer calls this method when it is being destroyed. For this
+ * mechanism to work properly, please assign your render targets, materials and
+ * textures directly to your pass. You can prevent your disposable objects from
+ * being deleted by keeping them inside deeper structures.
  *
  * @class Pass
  * @submodule passes
  * @constructor
  * @param {Scene} [scene] - The scene to render.
  * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
- * @param {Mesh} [quad] - A quad that fills the screen. Used for rendering a pure 2D effect. Set this to null, if you don&#x27;t need it (see RenderPass).
+ * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don&#x27;t need it (see {{#crossLink &quot;RenderPass&quot;}}{{/crossLink}}).
  */
 
 export class Pass {
 
 	constructor(
-		scene = new THREE.Scene(),
-		camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1),
-		quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null)
+		scene = new Scene(),
+		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),
+		quad = new Mesh(new PlaneBufferGeometry(2, 2), null)
 	) {
 
 		/**
@@ -175,10 +182,16 @@ export class Pass {
 		 * @private
 		 * @default Mesh(PlaneBufferGeometry(2, 2), null)
 		 * @example
-		 *  this.quad.material = this.myMaterial;
+		 *     this.quad.material = this.myMaterial;
 		 */
 
 		this.quad = quad;
+
+		if(this.quad !== null) {
+
+			this.quad.frustumCulled = false;
+
+		}
 
 		/**
 		 * Indicates whether the read and write buffers should be swapped after this
@@ -218,8 +231,17 @@ export class Pass {
 		// Add the camera and the quad to the scene.
 		if(this.scene !== null) {
 
-			if(this.camera !== null &amp;&amp; this.camera.parent === null) { this.scene.add(this.camera); }
-			if(this.quad !== null) { this.scene.add(this.quad); }
+			if(this.camera !== null &amp;&amp; this.camera.parent === null) {
+
+				this.scene.add(this.camera);
+
+			}
+
+			if(this.quad !== null) {
+
+				this.scene.add(this.quad);
+
+			}
 
 		}
 
@@ -234,7 +256,7 @@ export class Pass {
 	 * @throws {Error} An error is thrown if the method is not overridden.
 	 * @param {WebGLRenderer} renderer - The renderer to use.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
-	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target.
+	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
 	 * @param {Number} [delta] - The delta time.
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
@@ -246,11 +268,29 @@ export class Pass {
 	}
 
 	/**
+	 * Updates this pass with the renderer&#x27;s size.
+	 *
+	 * This is an abstract method that may be overriden in case you want to be
+	 * informed about the main render size.
+	 *
+	 * The effect composer calls this method before this pass is initialised and
+	 * every time its own size is updated.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The renderer&#x27;s width.
+	 * @param {Number} height - The renderer&#x27;s height.
+	 * @example
+	 *     this.myRenderTarget.setSize(width, height);
+	 */
+
+	setSize(width, height) {}
+
+	/**
 	 * Performs initialisation tasks.
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
 	 * You&#x27;ll also be able to configure your custom render targets to use the
-	 * appropriate format (RGB or RGBA).
+	 * appropriate format (RGB or RGBA) if appropriate.
 	 *
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
@@ -260,26 +300,11 @@ export class Pass {
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @example
+	 *     if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialise(renderer, alpha) {}
-
-	/**
-	 * Updates this pass with the renderer&#x27;s size.
-	 *
-	 * This is an abstract method that may be overriden in case you want to be
-	 * informed about the main render size.
-	 *
-	 * The effect composer calls this method when its own size is updated.
-	 *
-	 * @method setSize
-	 * @param {Number} width - The renderer&#x27;s width.
-	 * @param {Number} height - The renderer&#x27;s height.
-	 * @example
-	 *  this.myRenderTarget.setSize(width, height);
-	 */
-
-	setSize(width, height) {}
 
 	/**
 	 * Performs a shallow search for properties that define a dispose method and
@@ -299,17 +324,16 @@ export class Pass {
 
 	dispose() {
 
-		let i, p;
-		let keys = Object.keys(this);
+		const keys = Object.keys(this);
 
-		for(i = keys.length - 1; i &gt;= 0; --i) {
+		let key;
 
-			p = this[keys[i]];
+		for(key of keys) {
 
-			if(p !== null &amp;&amp; typeof p.dispose === &quot;function&quot;) {
+			if(this[key] !== null &amp;&amp; typeof this[key].dispose === &quot;function&quot;) {
 
-				p.dispose();
-				this[keys[i]] = null;
+				this[key].dispose();
+				this[key] = null;
 
 			}
 

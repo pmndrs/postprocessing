@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\tone-mapping\index.js - postprocessing</title>
+    <title>src\passes\depth.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,52 +116,61 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\tone-mapping\index.js</h1>
+<h1 class="file-heading">File: src\passes\depth.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial } from &quot;three&quot;;
-
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+import { DepthMaterial } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
- * Full-screen tone-mapping shader material.
+ * A depth pass.
  *
- * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+ * Reads the depth from a depth texture and renders it.
  *
- * @class ToneMappingMaterial
- * @submodule materials
- * @extends ShaderMaterial
+ * This pass requires a
+ * {{#crossLink &quot;EffectComposer/depthTexture:property&quot;}}{{/crossLink}}.
+ *
+ * @class DepthPass
+ * @submodule passes
+ * @extends Pass
  * @constructor
+ * @param {PerspectiveCamera} camera - The main camera. Used to obtain the near and far plane settings.
  */
 
-export class ToneMappingMaterial extends ShaderMaterial {
+export class DepthPass extends Pass {
 
-	constructor() {
+	constructor(camera) {
 
-		super({
+		super();
 
-			type: &quot;ToneMappingMaterial&quot;,
+		/**
+		 * A depth shader material.
+		 *
+		 * @property depthMaterial
+		 * @type DepthMaterial
+		 * @private
+		 */
 
-			uniforms: {
+		this.depthMaterial = new DepthMaterial(camera);
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+		this.quad.material = this.depthMaterial;
 
-			},
+	}
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 */
 
-			depthWrite: false,
-			depthTest: false
+	render(renderer, readBuffer) {
 
-		});
+		this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
+
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
 
 	}
 

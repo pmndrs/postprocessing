@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -113,6 +120,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
 import { CopyMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
@@ -123,8 +131,8 @@ import { Pass } from &quot;./pass.js&quot;;
  * @submodule passes
  * @extends Pass
  * @constructor
- * @param {Scene} renderTarget - The render target to use for saving the read buffer.
- * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
+ * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.
+ * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.
  */
 
 export class SavePass extends Pass {
@@ -150,10 +158,15 @@ export class SavePass extends Pass {
 		 *
 		 * @property renderTarget
 		 * @type WebGLRenderTarget
-		 * @private
 		 */
 
-		this.renderTarget = renderTarget;
+		this.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			generateMipmaps: false,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
 		/**
 		 * Indicates whether the render target should be resized when the size of
@@ -179,7 +192,26 @@ export class SavePass extends Pass {
 	render(renderer, readBuffer) {
 
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
+
 		renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
+
+	}
+
+	/**
+	 * Adjusts the format of the render target.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialise(renderer, alpha) {
+
+		if(!alpha) {
+
+			this.renderTarget.texture.format = RGBFormat;
+
+		}
 
 	}
 
@@ -193,10 +225,10 @@ export class SavePass extends Pass {
 
 	setSize(width, height) {
 
-		if(this.resize &amp;&amp; this.renderTarget !== null) {
+		if(this.resize) {
 
-			if(width &lt;= 0) { width = 1; }
-			if(height &lt;= 0) { height = 1; }
+			width = Math.max(1, width);
+			height = Math.max(1, height);
 
 			this.renderTarget.setSize(width, height);
 

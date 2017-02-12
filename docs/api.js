@@ -3,6 +3,7 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "AdaptiveLuminosityMaterial",
         "BloomPass",
+        "BlurPass",
         "Bokeh2Material",
         "Bokeh2Pass",
         "BokehMaterial",
@@ -11,15 +12,19 @@ YUI.add("yuidoc-meta", function(Y) {
         "CombineMaterial",
         "ConvolutionMaterial",
         "CopyMaterial",
+        "DepthMaterial",
+        "DepthPass",
         "DotScreenMaterial",
         "DotScreenPass",
         "EffectComposer",
         "FilmMaterial",
         "FilmPass",
         "GlitchMaterial",
+        "GlitchMode",
         "GlitchPass",
         "GodRaysMaterial",
         "GodRaysPass",
+        "KernelSize",
         "LuminosityMaterial",
         "MaskPass",
         "Pass",
@@ -30,15 +35,22 @@ YUI.add("yuidoc-meta", function(Y) {
         "SMAAWeightsMaterial",
         "SavePass",
         "ShaderPass",
+        "TexturePass",
         "ToneMappingMaterial",
         "ToneMappingPass"
     ],
     "modules": [
+        "core",
         "materials",
         "passes",
         "postprocessing"
     ],
     "allModules": [
+        {
+            "displayName": "core",
+            "name": "core",
+            "description": "Core components."
+        },
         {
             "displayName": "materials",
             "name": "materials",

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -114,22 +121,22 @@
 
 
         <div class="foundat">
-            Defined in: <a href="../files/src_effect-composer.js.html#l5"><code>src\effect-composer.js:5</code></a>
+            Defined in: <a href="../files/src_core_effect-composer.js.html#l5"><code>src\core\effect-composer.js:5</code></a>
         </div>
 
-            Module: <a href="../modules/postprocessing.html">postprocessing</a>
+            Module: <a href="../modules/core.html">core</a><br>
+            Parent Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
 </div>
 
 
 <div class="box intro">
     <p>The EffectComposer may be used in place of a normal WebGLRenderer.</p>
-<p>It will disable the auto clear behaviour of the provided renderer to prevent
-unnecessary clear operations. The depth buffer will also be disabled for
-writing. Passes that rely on the depth test must explicitly enable it.</p>
-<p>You may want to use a <a href="../classes/RenderPass.html" class="crosslink">RenderPass</a> as your first
-pass to automatically clear the screen and render the scene to a texture for
-further processing.</p>
+<p>The auto clear behaviour of the provided renderer will be disabled to prevent
+unnecessary clear operations.</p>
+<p>It is common practice to use a <a href="../classes/RenderPass.html" class="crosslink">RenderPass</a> as
+the first pass to automatically clear the screen and render the scene to a
+texture for further processing.</p>
 
 </div>
 
@@ -144,10 +151,7 @@ further processing.</p>
                         <code class="optional">[renderer]</code>
                 </li>
                 <li class="arg">
-                        <code class="optional">[depthTexture=false]</code>
-                </li>
-                <li class="arg">
-                        <code class="optional">[stencilBuffer=false]</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -162,7 +166,7 @@ further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l5"><code>src\effect-composer.js:5</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l5"><code>src\core\effect-composer.js:5</code></a>
         </p>
 
 
@@ -185,39 +189,66 @@ further processing.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer that should be used in the passes.</li>
+<li>The renderer that should be used.</li>
 </ul>
 
                     </div>
 
                 </li>
                 <li class="param">
-                        <code class="param-name optional">[depthTexture=false]</code>
-                        <span class="type">Boolean</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>Set to true, if one of your passes relies on the depth of the main scene.</li>
+<li>The options.</li>
 </ul>
 
                     </div>
 
-                </li>
-                <li class="param">
-                        <code class="param-name optional">[stencilBuffer=false]</code>
-                        <span class="type">Boolean</span>
-                        <span class="flag optional" title="This parameter is optional.">optional</span>
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[depthBuffer=true]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
 
+                                <div class="param-description">
+                                    <ul>
+<li>Whether the main render targets should have a depth buffer.</li>
+</ul>
 
-                    <div class="param-description">
-                        <ul>
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[stencilBuffer=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
 <li>Whether the main render targets should have a stencil buffer.</li>
 </ul>
 
-                    </div>
+                                </div>
 
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[depthTexture=false]</code>
+                                    <span class="type">Boolean</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>Set to true if one of your passes relies on a depth texture.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -264,6 +295,10 @@ further processing.</p>
 
                             </li>
                             <li class="index-item method">
+                                <a href="#method_replaceRenderer">replaceRenderer</a>
+
+                            </li>
+                            <li class="index-item method">
                                 <a href="#method_reset">reset</a>
 
                             </li>
@@ -280,6 +315,10 @@ further processing.</p>
                     <ul class="index-list properties">
                             <li class="index-item property private">
                                 <a href="#property_copyPass">copyPass</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_depthTexture">depthTexture</a>
 
                             </li>
                             <li class="index-item property private">
@@ -331,7 +370,7 @@ further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l115"><code>src\effect-composer.js:115</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l215"><code>src\core\effect-composer.js:215</code></a>
         </p>
 
 
@@ -386,7 +425,13 @@ further processing.</p>
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
+                        <code>depthBuffer</code>
+                </li>
+                <li class="arg">
                         <code>stencilBuffer</code>
+                </li>
+                <li class="arg">
+                        <code>depthTexture</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -404,7 +449,7 @@ further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l93"><code>src\effect-composer.js:93</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l175"><code>src\core\effect-composer.js:175</code></a>
         </p>
 
 
@@ -413,6 +458,9 @@ further processing.</p>
 
     <div class="description">
         <p>Creates a new render target by replicating the renderer's canvas.</p>
+<p>The created render target uses a linear filter for texel minification and
+magnification. Its render texture format depends on whether the renderer
+uses the alpha channel. Mipmaps are disabled.</p>
 
     </div>
 
@@ -420,6 +468,19 @@ further processing.</p>
             <h4>Parameters:</h4>
 
             <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">depthBuffer</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the render target should have a depth buffer.</li>
+</ul>
+
+                    </div>
+
+                </li>
                 <li class="param">
                         <code class="param-name">stencilBuffer</code>
                         <span class="type">Boolean</span>
@@ -433,6 +494,19 @@ further processing.</p>
                     </div>
 
                 </li>
+                <li class="param">
+                        <code class="param-name">depthTexture</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the render target should have a depth texture.</li>
+</ul>
+
+                    </div>
+
+                </li>
             </ul>
         </div>
 
@@ -441,7 +515,7 @@ further processing.</p>
 
             <div class="returns-description">
                         <span class="type">WebGLRenderTarget</span>:
-                    <p>A fresh render target that equals the renderer's canvas.</p>
+                    <p>A new render target that equals the renderer's canvas.</p>
 
             </div>
         </div>
@@ -469,7 +543,7 @@ further processing.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l262"><code>src\effect-composer.js:262</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l384"><code>src\core\effect-composer.js:384</code></a>
         </p>
 
 
@@ -480,7 +554,6 @@ further processing.</p>
         <p>Destroys all passes and render targets.</p>
 <p>This method deallocates all render targets, textures and materials created
 by the passes. It also deletes this composer's frame buffers.</p>
-<p>Note: the reset method uses the dispose method internally.</p>
 
     </div>
 
@@ -529,7 +602,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l139"><code>src\effect-composer.js:139</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l244"><code>src\core\effect-composer.js:244</code></a>
         </p>
 
 
@@ -585,7 +658,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l152"><code>src\effect-composer.js:152</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l257"><code>src\core\effect-composer.js:257</code></a>
         </p>
 
 
@@ -620,6 +693,79 @@ by the passes. It also deletes this composer's frame buffers.</p>
 
 
 </div>
+<div id="method_replaceRenderer" class="method item">
+    <h3 class="name"><code>replaceRenderer</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>renderer</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">WebGLRenderer</span>
+        </span>
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_core_effect-composer.js.html#l126"><code>src\core\effect-composer.js:126</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Replaces the current renderer with the given one. The DOM element of the
+current renderer will automatically be removed from its parent node and the
+DOM element of the new renderer will take its place.</p>
+<p>The auto clear mechanism of the provided renderer will be disabled.</p>
+<p>Switching between renderers allows you to dynamically enable or disable
+antialiasing.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">renderer</code>
+                        <span class="type">WebGLRenderer</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The new renderer.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">WebGLRenderer</span>:
+                    <p>The old renderer.</p>
+
+            </div>
+        </div>
+
+
+</div>
 <div id="method_reset" class="method item">
     <h3 class="name"><code>reset</code></h3>
 
@@ -641,7 +787,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l249"><code>src\effect-composer.js:249</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l364"><code>src\core\effect-composer.js:364</code></a>
         </p>
 
 
@@ -665,7 +811,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
 
                     <div class="param-description">
                         <ul>
-<li>A new render target to use. If none is provided, the settings of the renderer will be used.</li>
+<li>A new render target. If none is provided, the settings of the renderer will be used.</li>
 </ul>
 
                     </div>
@@ -701,7 +847,7 @@ by the passes. It also deletes this composer's frame buffers.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l210"><code>src\effect-composer.js:210</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l319"><code>src\core\effect-composer.js:319</code></a>
         </p>
 
 
@@ -772,7 +918,7 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l71"><code>src\effect-composer.js:71</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l79"><code>src\core\effect-composer.js:79</code></a>
         </p>
 
 
@@ -783,6 +929,38 @@ updated with the current size of the renderer.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_depthTexture" class="property item">
+    <h3 class="name"><code>depthTexture</code></h3>
+    <span class="type">DepthTexture</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_core_effect-composer.js.html#l101"><code>src\core\effect-composer.js:101</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The depth texture of the read and write buffers.</p>
+<p>The read and write buffers share a single depth texture. Depth will be
+written to this texture when something is rendered into one of the buffers
+and the involved materials have depth write enabled.</p>
+<p>You may enable this mechanism during the instantiation of the composer or
+by assigning a DepthTexture instance later on. You may also disable it by
+assigning null.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> null</p>
 
 
 </div>
@@ -798,14 +976,14 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l81"><code>src\effect-composer.js:81</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l89"><code>src\core\effect-composer.js:89</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The render passes.</p>
+        <p>The passes.</p>
 
     </div>
 
@@ -824,7 +1002,7 @@ updated with the current size of the renderer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l40"><code>src\effect-composer.js:40</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l42"><code>src\core\effect-composer.js:42</code></a>
         </p>
 
 
@@ -833,7 +1011,7 @@ updated with the current size of the renderer.</p>
     <div class="description">
         <p>The read buffer.</p>
 <p>Reading from and writing to the same render target should be avoided.
-Therefore, two seperate, yet identical buffers are used.</p>
+Therefore, two seperate yet identical buffers are used.</p>
 
     </div>
 
@@ -851,7 +1029,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l28"><code>src\effect-composer.js:28</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l29"><code>src\core\effect-composer.js:29</code></a>
         </p>
 
 
@@ -859,6 +1037,9 @@ Therefore, two seperate, yet identical buffers are used.</p>
 
     <div class="description">
         <p>The renderer.</p>
+<p>You may replace the renderer at any time by using the
+<a href="../classes/EffectComposer.html#method_replaceRenderer" class="crosslink">replaceRenderer</a>
+method.</p>
 
     </div>
 
@@ -877,7 +1058,7 @@ Therefore, two seperate, yet identical buffers are used.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_effect-composer.js.html#l55"><code>src\effect-composer.js:55</code></a>
+        <a href="../files/src_core_effect-composer.js.html#l55"><code>src\core\effect-composer.js:55</code></a>
         </p>
 
 

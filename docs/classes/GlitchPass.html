@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -117,7 +124,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+            Defined in: <a href="../files/src_passes_glitch.js.html#l39"><code>src\passes\glitch.js:39</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -154,7 +161,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+        <a href="../files/src_passes_glitch.js.html#l39"><code>src\passes\glitch.js:39</code></a>
         </p>
 
 
@@ -190,7 +197,7 @@
 
                                 <div class="param-description">
                                     <ul>
-<li>A perturbation map.</li>
+<li>A perturbation map. If none is provided, a noise texture will be created.</li>
 </ul>
 
                                 </div>
@@ -239,17 +246,23 @@
                                 <a href="#method_dispose">dispose</a>
 
                             </li>
-                            <li class="index-item method private">
+                            <li class="index-item method">
                                 <a href="#method_generatePerturbMap">generatePerturbMap</a>
-
-                            </li>
-                            <li class="index-item method private">
-                                <a href="#method_generateTrigger">generateTrigger</a>
 
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_initialise">initialise</a>
 
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_randomFloat">randomFloat</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item method private">
+                                <a href="#method_randomInt">randomInt</a>
+
+                                    <span class="flag static">static</span>
                             </li>
                             <li class="index-item method inherited">
                                 <a href="#method_render">render</a>
@@ -282,11 +295,6 @@
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_GlitchPass.Mode">GlitchPass.Mode</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
                             <li class="index-item property private">
                                 <a href="#property_material">material</a>
 
@@ -315,6 +323,10 @@
                                 <a href="#property_scene">scene</a>
 
                             </li>
+                            <li class="index-item property private">
+                                <a href="#property_texture">texture</a>
+
+                            </li>
                     </ul>
                 </div>
 
@@ -339,7 +351,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l169"><code>src\passes\pass.js:169</code></a>
+        <a href="../files/src_passes_pass.js.html#l187"><code>src\passes\pass.js:187</code></a>
         </p>
 
 
@@ -364,20 +376,22 @@ when you are certain that you don't need this pass anymore.
 
 
 </div>
-<div id="method_generatePerturbMap" class="method item private">
+<div id="method_generatePerturbMap" class="method item">
     <h3 class="name"><code>generatePerturbMap</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>size</code>
+                        <code class="optional">[size=64]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
 
+        <span class="returns-inline">
+            <span class="type">DataTexture</span>
+        </span>
 
 
-        <span class="flag private">private</span>
 
 
 
@@ -386,7 +400,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l166"><code>src\passes\glitch.js:166</code></a>
+        <a href="../files/src_passes_glitch.js.html#l140"><code>src\passes\glitch.js:140</code></a>
         </p>
 
 
@@ -394,7 +408,7 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Destroys the currently set texture and generates a simple noise map.</p>
+        <p>Deletes the current perturbation map and creates a new one.</p>
 
     </div>
 
@@ -403,8 +417,9 @@ when you are certain that you don't need this pass anymore.
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">size</code>
+                        <code class="param-name optional">[size=64]</code>
                         <span class="type">Number</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
@@ -418,38 +433,15 @@ when you are certain that you don't need this pass anymore.
             </ul>
         </div>
 
+        <div class="returns">
+            <h4>Returns:</h4>
 
+            <div class="returns-description">
+                        <span class="type">DataTexture</span>:
+                    <p>The perturbation texture.</p>
 
-</div>
-<div id="method_generateTrigger" class="method item private">
-    <h3 class="name"><code>generateTrigger</code></h3>
-
-        <span class="paren">()</span>
-
-
-
-        <span class="flag private">private</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_glitch.js.html#l153"><code>src\passes\glitch.js:153</code></a>
-        </p>
-
-
-
-    </div>
-
-    <div class="description">
-        <p>Creates a random break point for the glitch effect.</p>
-
-    </div>
-
-
+            </div>
+        </div>
 
 
 </div>
@@ -477,7 +469,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l133"><code>src\passes\pass.js:133</code></a>
+        <a href="../files/src_passes_pass.js.html#l166"><code>src\passes\pass.js:166</code></a>
         </p>
 
 
@@ -489,7 +481,7 @@ when you are certain that you don't need this pass anymore.
 
 By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).
+appropriate format (RGB or RGBA) if appropriate.
 
 The provided renderer can be used to warm up special off-screen render
 targets by performing a preliminary render operation.
@@ -532,6 +524,188 @@ The effect composer calls this method when this pass is added to its queue.
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }</code></pre>
+
+            </div>
+        </div>
+</div>
+<div id="method_randomFloat" class="method item private">
+    <h3 class="name"><code>randomFloat</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>low</code>
+                </li>
+                <li class="arg">
+                        <code>high</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l22"><code>src\passes\glitch.js:22</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a random float in the specified range.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">low</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The lowest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">high</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The highest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Number</span>:
+                    <p>The random value.</p>
+
+            </div>
+        </div>
+
+
+</div>
+<div id="method_randomInt" class="method item private">
+    <h3 class="name"><code>randomInt</code></h3>
+
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code>low</code>
+                </li>
+                <li class="arg">
+                        <code>high</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
+
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l5"><code>src\passes\glitch.js:5</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Returns a random integer in the specified range.</p>
+
+    </div>
+
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name">low</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The lowest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name">high</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The highest possible value.</li>
+</ul>
+
+                    </div>
+
+                </li>
+            </ul>
+        </div>
+
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                        <span class="type">Number</span>:
+                    <p>The random value.</p>
+
+            </div>
+        </div>
+
+
 </div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
@@ -563,7 +737,7 @@ The effect composer calls this method when this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_glitch.js.html#l96"><code>src\passes\glitch.js:96</code></a>
+        <a href="../files/src_passes_glitch.js.html#l181"><code>src\passes\glitch.js:181</code></a>
         </p>
 
 
@@ -648,7 +822,7 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l152"><code>src\passes\pass.js:152</code></a>
+        <a href="../files/src_passes_pass.js.html#l148"><code>src\passes\pass.js:148</code></a>
         </p>
 
 
@@ -661,7 +835,8 @@ The effect composer calls this method when this pass is added to its queue.
 This is an abstract method that may be overriden in case you want to be
 informed about the main render size.
 
-The effect composer calls this method when its own size is updated.
+The effect composer calls this method before this pass is initialised and
+every time its own size is updated.
     </div>
 
         <div class="params">
@@ -703,7 +878,7 @@ The effect composer calls this method when its own size is updated.
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.myRenderTarget.setSize(width, height);</p>
+                <pre class="code prettyprint"><code>this.myRenderTarget.setSize(width, height);</code></pre>
 
             </div>
         </div>
@@ -725,7 +900,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l83"><code>src\passes\glitch.js:83</code></a>
+        <a href="../files/src_passes_glitch.js.html#l112"><code>src\passes\glitch.js:112</code></a>
         </p>
 
 
@@ -777,14 +952,14 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l73"><code>src\passes\glitch.js:73</code></a>
+        <a href="../files/src_passes_glitch.js.html#l102"><code>src\passes\glitch.js:102</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Counter for glitch activation/deactivation.</p>
+        <p>Counter for glitch activation and deactivation.</p>
 
     </div>
 
@@ -802,7 +977,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l83"><code>src\passes\pass.js:83</code></a>
+        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
         </p>
 
 
@@ -813,34 +988,6 @@ The effect composer calls this method when its own size is updated.
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_GlitchPass.Mode" class="property item">
-    <h3 class="name"><code>GlitchPass.Mode</code></h3>
-    <span class="type">Object</span>
-
-
-
-        <span class="flag final">final</span>
-
-        <span class="flag static">static</span>
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_glitch.js.html#l201"><code>src\passes\glitch.js:201</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A glitch mode enumeration.</p>
-<p>SPORADIC is the default mode (randomly timed glitches).</p>
-
-    </div>
-
 
 
 </div>
@@ -856,7 +1003,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l25"><code>src\passes\glitch.js:25</code></a>
+        <a href="../files/src_passes_glitch.js.html#l59"><code>src\passes\glitch.js:59</code></a>
         </p>
 
 
@@ -872,7 +1019,7 @@ The effect composer calls this method when its own size is updated.
 </div>
 <div id="property_mode" class="property item">
     <h3 class="name"><code>mode</code></h3>
-    <span class="type">GlitchPass.Mode</span>
+    <span class="type"><a href="../classes/GlitchMode.html" class="crosslink">GlitchMode</a></span>
 
 
 
@@ -881,7 +1028,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l61"><code>src\passes\glitch.js:61</code></a>
+        <a href="../files/src_passes_glitch.js.html#l92"><code>src\passes\glitch.js:92</code></a>
         </p>
 
 
@@ -889,11 +1036,10 @@ The effect composer calls this method when its own size is updated.
 
     <div class="description">
         <p>The effect mode.</p>
-<p>Check the Mode enumeration for available modes.</p>
 
     </div>
 
-        <p><strong>Default:</strong> GlitchPass.Mode.SPORADIC</p>
+        <p><strong>Default:</strong> GlitchMode.SPORADIC</p>
 
 
 </div>
@@ -909,7 +1055,7 @@ The effect composer calls this method when its own size is updated.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l68"><code>src\passes\pass.js:68</code></a>
+        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
         </p>
 
 
@@ -938,7 +1084,7 @@ following pass can find the result in the read buffer.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_glitch.js.html#l37"><code>src\passes\glitch.js:37</code></a>
+        <a href="../files/src_passes_glitch.js.html#l124"><code>src\passes\glitch.js:124</code></a>
         </p>
 
 
@@ -946,9 +1092,6 @@ following pass can find the result in the read buffer.
 
     <div class="description">
         <p>A perturbation map.</p>
-<p>If none is provided, a noise texture will be created.
-This texture will automatically be destroyed when the EffectComposer is
-deleted.</p>
 
     </div>
 
@@ -985,7 +1128,7 @@ Assign your shader material to this mesh!
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.quad.material = this.myMaterial;</p>
+                <pre class="code prettyprint"><code>this.quad.material = this.myMaterial;</code></pre>
 
             </div>
         </div>
@@ -1002,7 +1145,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l93"><code>src\passes\pass.js:93</code></a>
+        <a href="../files/src_passes_pass.js.html#l99"><code>src\passes\pass.js:99</code></a>
         </p>
 
 
@@ -1039,6 +1182,32 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_texture" class="property item private">
+    <h3 class="name"><code>texture</code></h3>
+    <span class="type">Texture</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_glitch.js.html#l71"><code>src\passes\glitch.js:71</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A perturbation map.</p>
+
+    </div>
+
 
 
 </div>

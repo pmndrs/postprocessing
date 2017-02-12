@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\tone-mapping\index.js - postprocessing</title>
+    <title>KernelSize - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,58 +116,242 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\tone-mapping\index.js</h1>
+<h1>KernelSize Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-import { ShaderMaterial } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+        <div class="foundat">
+            Defined in: <a href="../files/src_materials_convolution_index.js.html#l107"><code>src\materials\convolution\index.js:107</code></a>
+        </div>
 
-/**
- * Full-screen tone-mapping shader material.
- *
- * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
- *
- * @class ToneMappingMaterial
- * @submodule materials
- * @extends ShaderMaterial
- * @constructor
- */
+            Module: <a href="../modules/materials.html">materials</a><br>
+            Parent Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
-export class ToneMappingMaterial extends ShaderMaterial {
+</div>
 
-	constructor() {
 
-		super({
+<div class="box intro">
+    <p>A kernel size enumeration.</p>
 
-			type: &quot;ToneMappingMaterial&quot;,
+</div>
 
-			uniforms: {
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
 
-			},
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+    </ul>
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
 
-			depthWrite: false,
-			depthTest: false
 
-		});
+                <div class="index-section properties">
+                    <h3>Properties</h3>
 
-	}
+                    <ul class="index-list properties">
+                            <li class="index-item property">
+                                <a href="#property_HUGE">HUGE</a>
 
-}
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_LARGE">LARGE</a>
 
-    </pre>
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_MEDIUM">MEDIUM</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_SMALL">SMALL</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_VERY_LARGE">VERY_LARGE</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_VERY_SMALL">VERY_SMALL</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                    </ul>
+                </div>
+
+
+        </div>
+
+
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+<div id="property_HUGE" class="property item">
+    <h3 class="name"><code>HUGE</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l167"><code>src\materials\convolution\index.js:167</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A huge kernel that matches a 127x127 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_LARGE" class="property item">
+    <h3 class="name"><code>LARGE</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l147"><code>src\materials\convolution\index.js:147</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A large kernel that matches a 35x35 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_MEDIUM" class="property item">
+    <h3 class="name"><code>MEDIUM</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l137"><code>src\materials\convolution\index.js:137</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A medium sized kernel that matches a 23x23 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_SMALL" class="property item">
+    <h3 class="name"><code>SMALL</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l127"><code>src\materials\convolution\index.js:127</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A small kernel that matches a 15x15 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_VERY_LARGE" class="property item">
+    <h3 class="name"><code>VERY_LARGE</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l157"><code>src\materials\convolution\index.js:157</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A very large kernel that matches a 63x63 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_VERY_SMALL" class="property item">
+    <h3 class="name"><code>VERY_SMALL</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_convolution_index.js.html#l117"><code>src\materials\convolution\index.js:117</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A very small kernel that matches a 7x7 Gauss blur kernel.</p>
+
+    </div>
+
+
+
+</div>
+            </div>
+
+
+    </div>
 </div>
                     </div>
                 </div>

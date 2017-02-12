@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\tone-mapping\index.js - postprocessing</title>
+    <title>src\materials\depth\index.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,7 +116,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\tone-mapping\index.js</h1>
+<h1 class="file-heading">File: src\materials\depth\index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -126,32 +126,29 @@ import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
 
 /**
- * Full-screen tone-mapping shader material.
+ * A depth shader material.
  *
- * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
- *
- * @class ToneMappingMaterial
+ * @class DepthMaterial
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
+ * @param {PerspectiveCamera} [camera] - A camera.
  */
 
-export class ToneMappingMaterial extends ShaderMaterial {
+export class DepthMaterial extends ShaderMaterial {
 
-	constructor() {
+	constructor(camera = null) {
 
 		super({
 
-			type: &quot;ToneMappingMaterial&quot;,
+			type: &quot;DepthMaterial&quot;,
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+				cameraNear: { value: 0.1 },
+				cameraFar: { value: 2000 },
+
+				tDepth: { value: null }
 
 			},
 
@@ -162,6 +159,22 @@ export class ToneMappingMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
+
+		if(camera !== null) { this.adoptCameraSettings(camera); }
+
+	}
+
+	/**
+	 * Adopts the settings of the given camera.
+	 *
+	 * @method adoptCameraSettings
+	 * @param {PerspectiveCamera} camera - A camera.
+	 */
+
+	adoptCameraSettings(camera) {
+
+		this.uniforms.cameraNear.value = camera.near;
+		this.uniforms.cameraFar.value = camera.far;
 
 	}
 

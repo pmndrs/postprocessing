@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.1.6</em>
+            <em>API Docs for: 2.0.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -40,6 +40,7 @@
                             <ul id="api-classes" class="apis classes">
                                 <li><a href="../classes/AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></li>
                                 <li><a href="../classes/BloomPass.html">BloomPass</a></li>
+                                <li><a href="../classes/BlurPass.html">BlurPass</a></li>
                                 <li><a href="../classes/Bokeh2Material.html">Bokeh2Material</a></li>
                                 <li><a href="../classes/Bokeh2Pass.html">Bokeh2Pass</a></li>
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
@@ -48,15 +49,19 @@
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
+                                <li><a href="../classes/DepthMaterial.html">DepthMaterial</a></li>
+                                <li><a href="../classes/DepthPass.html">DepthPass</a></li>
                                 <li><a href="../classes/DotScreenMaterial.html">DotScreenMaterial</a></li>
                                 <li><a href="../classes/DotScreenPass.html">DotScreenPass</a></li>
                                 <li><a href="../classes/EffectComposer.html">EffectComposer</a></li>
                                 <li><a href="../classes/FilmMaterial.html">FilmMaterial</a></li>
                                 <li><a href="../classes/FilmPass.html">FilmPass</a></li>
                                 <li><a href="../classes/GlitchMaterial.html">GlitchMaterial</a></li>
+                                <li><a href="../classes/GlitchMode.html">GlitchMode</a></li>
                                 <li><a href="../classes/GlitchPass.html">GlitchPass</a></li>
                                 <li><a href="../classes/GodRaysMaterial.html">GodRaysMaterial</a></li>
                                 <li><a href="../classes/GodRaysPass.html">GodRaysPass</a></li>
+                                <li><a href="../classes/KernelSize.html">KernelSize</a></li>
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
@@ -67,12 +72,14 @@
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
                                 <li><a href="../classes/SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></li>
+                                <li><a href="../classes/TexturePass.html">TexturePass</a></li>
                                 <li><a href="../classes/ToneMappingMaterial.html">ToneMappingMaterial</a></li>
                                 <li><a href="../classes/ToneMappingPass.html">ToneMappingPass</a></li>
                             </ul>
                 
                 
                             <ul id="api-modules" class="apis modules">
+                                <li><a href="../modules/core.html">core</a></li>
                                 <li><a href="../modules/materials.html">materials</a></li>
                                 <li><a href="../modules/passes.html">passes</a></li>
                                 <li><a href="../modules/postprocessing.html">postprocessing</a></li>
@@ -299,7 +306,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l169"><code>src\passes\pass.js:169</code></a>
+        <a href="../files/src_passes_pass.js.html#l187"><code>src\passes\pass.js:187</code></a>
         </p>
 
 
@@ -325,13 +332,16 @@ when you are certain that you don't need this pass anymore.</p>
 
 
 </div>
-<div id="method_initialise" class="method item">
+<div id="method_initialise" class="method item inherited">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
                         <code>renderer</code>
+                </li>
+                <li class="arg">
+                        <code>alpha</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -344,12 +354,9 @@ when you are certain that you don't need this pass anymore.</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_initialise">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_smaa.js.html#l152"><code>src\passes\smaa.js:152</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l166"><code>src\passes\pass.js:166</code></a>
         </p>
 
 
@@ -357,7 +364,13 @@ when you are certain that you don't need this pass anymore.</p>
     </div>
 
     <div class="description">
-        <p>Adjusts the format and size of the render targets.</p>
+        <p>Performs initialisation tasks.</p>
+<p>By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the
+appropriate format (RGB or RGBA) if appropriate.</p>
+<p>The provided renderer can be used to warm up special off-screen render
+targets by performing a preliminary render operation.</p>
+<p>The effect composer calls this method when this pass is added to its queue.</p>
 
     </div>
 
@@ -378,11 +391,32 @@ when you are certain that you don't need this pass anymore.</p>
                     </div>
 
                 </li>
+                <li class="param">
+                        <code class="param-name">alpha</code>
+                        <span class="type">Boolean</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>Whether the renderer uses the alpha channel or not.</li>
+</ul>
+
+                    </div>
+
+                </li>
             </ul>
         </div>
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }</code></pre>
+
+            </div>
+        </div>
 </div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
@@ -502,7 +536,7 @@ when you are certain that you don't need this pass anymore.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_smaa.js.html#l166"><code>src\passes\smaa.js:166</code></a>
+        <a href="../files/src_passes_smaa.js.html#l144"><code>src\passes\smaa.js:144</code></a>
         </p>
 
 
@@ -645,7 +679,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l83"><code>src\passes\pass.js:83</code></a>
+        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
         </p>
 
 
@@ -672,7 +706,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l68"><code>src\passes\pass.js:68</code></a>
+        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
         </p>
 
 
@@ -720,7 +754,7 @@ following pass can find the result in the read buffer.</p>
             <h4>Example:</h4>
 
             <div class="example-content">
-                <p>this.quad.material = this.myMaterial;</p>
+                <pre class="code prettyprint"><code>this.quad.material = this.myMaterial;</code></pre>
 
             </div>
         </div>
@@ -789,7 +823,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l93"><code>src\passes\pass.js:93</code></a>
+        <a href="../files/src_passes_pass.js.html#l99"><code>src\passes\pass.js:99</code></a>
         </p>
 
 

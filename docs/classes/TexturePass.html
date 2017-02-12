@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>BloomPass - postprocessing</title>
+    <title>TexturePass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,7 +116,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>BloomPass Class</h1>
+<h1>TexturePass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -124,7 +124,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_bloom.js.html#l6"><code>src\passes\bloom.js:6</code></a>
+            Defined in: <a href="../files/src_passes_texture.js.html#l5"><code>src\passes\texture.js:5</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -134,21 +134,23 @@
 
 
 <div class="box intro">
-    <p>A bloom pass.</p>
-<p>This pass renders a scene with superimposed blur by utilising the fast Kawase
-convolution approach.</p>
+    <p>A texture pass.</p>
+<p>Renders a given texture.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_BloomPass" class="method item">
-    <h3 class="name"><code>BloomPass</code></h3>
+<div id="method_TexturePass" class="method item">
+    <h3 class="name"><code>TexturePass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code class="optional">[options]</code>
+                        <code>texture</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[opacity=1.0]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -163,7 +165,7 @@ convolution approach.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l6"><code>src\passes\bloom.js:6</code></a>
+        <a href="../files/src_passes_texture.js.html#l5"><code>src\passes\texture.js:5</code></a>
         </p>
 
 
@@ -179,85 +181,31 @@ convolution approach.</p>
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name optional">[options]</code>
-                        <span class="type">Object</span>
+                        <code class="param-name">texture</code>
+                        <span class="type">Texture</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The texture.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[opacity=1.0]</code>
+                        <span class="type">Number</span>
                         <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The options.</li>
+<li>The texture opacity.</li>
 </ul>
 
                     </div>
 
-                        <ul class="params-list">
-                            <li class="param">
-                                    <code class="param-name optional">[resolutionScale=0.5]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The render texture resolution scale, relative to the screen render size.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[kernelSize=ConvolutionMaterial.KernelSize.LARGE]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The blur kernel size.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[intensity=1.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The strength of the bloom effect.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[distinction=1.0]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                            <li class="param">
-                                    <code class="param-name optional">[screenMode=true]</code>
-                                    <span class="type">Number</span>
-                                    <span class="flag optional" title="This parameter is optional.">optional</span>
-
-                                <div class="param-description">
-                                    <ul>
-<li>Whether the screen blend mode should be used for combining the bloom texture with the scene colors.</li>
-</ul>
-
-                                </div>
-
-                            </li>
-                        </ul>
                 </li>
             </ul>
         </div>
@@ -306,56 +254,28 @@ convolution approach.</p>
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
-                            <li class="index-item property private">
-                                <a href="#property_blurPass">blurPass</a>
-
-                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_combineMaterial">combineMaterial</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_distinction">distinction</a>
+                                <a href="#property_copyMaterial">copyMaterial</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_intensity">intensity</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
-                            <li class="index-item property">
-                                <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_luminosityMaterial">luminosityMaterial</a>
-
-                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
+                            <li class="index-item property">
+                                <a href="#property_opacity">opacity</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_quad">quad</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetX">renderTargetX</a>
-
-                            </li>
-                            <li class="index-item property private">
-                                <a href="#property_renderTargetY">renderTargetY</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -364,6 +284,10 @@ convolution approach.</p>
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_texture">texture</a>
 
                             </li>
                     </ul>
@@ -398,24 +322,25 @@ convolution approach.</p>
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose method and
-deletes them. The pass will be inoperative after this method was called!
-
-Disposable objects:
- - render targets
- - materials
- - textures
-
-The EffectComposer calls this method automatically when it is being
+        <p>Performs a shallow search for properties that define a dispose method and
+deletes them. The pass will be inoperative after this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The EffectComposer calls this method automatically when it is being
 destroyed. You may, however, use it independently to free memory
-when you are certain that you don't need this pass anymore.
+when you are certain that you don't need this pass anymore.</p>
+
     </div>
 
 
 
 
 </div>
-<div id="method_initialise" class="method item">
+<div id="method_initialise" class="method item inherited">
     <h3 class="name"><code>initialise</code></h3>
 
         <div class="args">
@@ -437,12 +362,9 @@ when you are certain that you don't need this pass anymore.
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_initialise">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l203"><code>src\passes\bloom.js:203</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_initialise">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l166"><code>src\passes\pass.js:166</code></a>
         </p>
 
 
@@ -450,7 +372,13 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        <p>Adjusts the format of the render targets.</p>
+        <p>Performs initialisation tasks.</p>
+<p>By implementing this abstract method you gain access to the renderer.
+You'll also be able to configure your custom render targets to use the
+appropriate format (RGB or RGBA) if appropriate.</p>
+<p>The provided renderer can be used to warm up special off-screen render
+targets by performing a preliminary render operation.</p>
+<p>The effect composer calls this method when this pass is added to its queue.</p>
 
     </div>
 
@@ -489,6 +417,14 @@ when you are certain that you don't need this pass anymore.
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }</code></pre>
+
+            </div>
+        </div>
 </div>
 <div id="method_render" class="method item">
     <h3 class="name"><code>render</code></h3>
@@ -500,9 +436,6 @@ when you are certain that you don't need this pass anymore.
                 </li>
                 <li class="arg">
                         <code>readBuffer</code>
-                </li>
-                <li class="arg">
-                        <code>writeBuffer</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -520,7 +453,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l161"><code>src\passes\bloom.js:161</code></a>
+        <a href="../files/src_passes_texture.js.html#l74"><code>src\passes\texture.js:74</code></a>
         </p>
 
 
@@ -529,8 +462,6 @@ when you are certain that you don't need this pass anymore.
 
     <div class="description">
         <p>Renders the effect.</p>
-<p>Extracts a luminance map from the read buffer, blurs it and combines it
-with the read buffer.</p>
 
     </div>
 
@@ -545,7 +476,7 @@ with the read buffer.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The renderer to use.</li>
+<li>The renderer.</li>
 </ul>
 
                     </div>
@@ -564,26 +495,13 @@ with the read buffer.</p>
                     </div>
 
                 </li>
-                <li class="param">
-                        <code class="param-name">writeBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The write buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
             </ul>
         </div>
 
 
 
 </div>
-<div id="method_setSize" class="method item">
+<div id="method_setSize" class="method item inherited">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -605,12 +523,9 @@ with the read buffer.</p>
 
 
     <div class="meta">
-            <p>Inherited from
-            <a href="../classes/Pass.html#method_setSize">
-                Pass
-            </a>
-            but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l224"><code>src\passes\bloom.js:224</code></a>
+                <p>Inherited from
+                <a href="../classes/Pass.html#method_setSize">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l148"><code>src\passes\pass.js:148</code></a>
         </p>
 
 
@@ -619,6 +534,10 @@ with the read buffer.</p>
 
     <div class="description">
         <p>Updates this pass with the renderer's size.</p>
+<p>This is an abstract method that may be overriden in case you want to be
+informed about the main render size.</p>
+<p>The effect composer calls this method before this pass is initialised and
+every time its own size is updated.</p>
 
     </div>
 
@@ -633,7 +552,7 @@ with the read buffer.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The width.</li>
+<li>The renderer's width.</li>
 </ul>
 
                     </div>
@@ -646,7 +565,7 @@ with the read buffer.</p>
 
                     <div class="param-description">
                         <ul>
-<li>The height.</li>
+<li>The renderer's height.</li>
 </ul>
 
                     </div>
@@ -657,38 +576,20 @@ with the read buffer.</p>
 
 
 
+        <div class="example">
+            <h4>Example:</h4>
+
+            <div class="example-content">
+                <pre class="code prettyprint"><code>this.myRenderTarget.setSize(width, height);</code></pre>
+
+            </div>
+        </div>
 </div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
-<div id="property_blurPass" class="property item private">
-    <h3 class="name"><code>blurPass</code></h3>
-    <span class="type"><a href="../classes/BlurPass.html" class="crosslink">BlurPass</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l30"><code>src\passes\bloom.js:30</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A blur pass.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -708,16 +609,17 @@ with the read buffer.</p>
     </div>
 
     <div class="description">
-        The camera to render with.
+        <p>The camera to render with.</p>
+
     </div>
 
         <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
 
 
 </div>
-<div id="property_combineMaterial" class="property item private">
-    <h3 class="name"><code>combineMaterial</code></h3>
-    <span class="type"><a href="../classes/CombineMaterial.html" class="crosslink">CombineMaterial</a></span>
+<div id="property_copyMaterial" class="property item private">
+    <h3 class="name"><code>copyMaterial</code></h3>
+    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
 
 
         <span class="flag private">private</span>
@@ -727,43 +629,17 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l60"><code>src\passes\bloom.js:60</code></a>
+        <a href="../files/src_passes_texture.js.html#l24"><code>src\passes\texture.js:24</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Combine shader material.</p>
+        <p>A copy shader material used for rendering to texture.</p>
 
     </div>
 
-
-
-</div>
-<div id="property_distinction" class="property item">
-    <h3 class="name"><code>distinction</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l141"><code>src\passes\bloom.js:141</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The luminance distinction factor.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.0</p>
 
 
 </div>
@@ -785,116 +661,11 @@ with the read buffer.</p>
     </div>
 
     <div class="description">
-        Enabled flag.
+        <p>Enabled flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> true</p>
-
-
-</div>
-<div id="property_intensity" class="property item">
-    <h3 class="name"><code>intensity</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l121"><code>src\passes\bloom.js:121</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The overall intensity of the effect.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 1.0</p>
-
-
-</div>
-<div id="property_kernelSize" class="property item">
-    <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">ConvolutionMaterial.KernelSize</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l105"><code>src\passes\bloom.js:105</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The blur kernel size.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_kernelSize" class="property item">
-    <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">ConvolutionMaterial.KernelSize</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l86"><code>src\passes\bloom.js:86</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer after changing
-this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_luminosityMaterial" class="property item private">
-    <h3 class="name"><code>luminosityMaterial</code></h3>
-    <span class="type"><a href="../classes/LuminosityMaterial.html" class="crosslink">LuminosityMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l72"><code>src\passes\bloom.js:72</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Luminance shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -917,14 +688,40 @@ this value.</p>
     </div>
 
     <div class="description">
-        Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.
+        <p>Indicates whether the read and write buffers should be swapped after this
+pass has finished rendering.</p>
+<p>Set this to true if this pass renders to the write buffer so that a
+following pass can find the result in the read buffer.</p>
 
-Set this to true if this pass renders to the write buffer so that a
-following pass can find the result in the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_opacity" class="property item">
+    <h3 class="name"><code>opacity</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_texture.js.html#l58"><code>src\passes\texture.js:58</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The opacity.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 1.0</p>
 
 
 </div>
@@ -947,9 +744,9 @@ following pass can find the result in the read buffer.
     </div>
 
     <div class="description">
-        The quad mesh to use for rendering.
+        <p>The quad mesh to use for rendering.</p>
+<p>Assign your shader material to this mesh!</p>
 
-Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
@@ -962,58 +759,6 @@ Assign your shader material to this mesh!
 
             </div>
         </div>
-
-</div>
-<div id="property_renderTargetX" class="property item private">
-    <h3 class="name"><code>renderTargetX</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l40"><code>src\passes\bloom.js:40</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A render target.</p>
-
-    </div>
-
-
-
-</div>
-<div id="property_renderTargetY" class="property item private">
-    <h3 class="name"><code>renderTargetY</code></h3>
-    <span class="type">WebGLRenderTarget</span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l50"><code>src\passes\bloom.js:50</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A second render target.</p>
-
-    </div>
-
-
 
 </div>
 <div id="property_renderToScreen" class="property item inherited">
@@ -1034,7 +779,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        Render to screen flag.
+        <p>Render to screen flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -1060,10 +806,36 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        The scene to render.
+        <p>The scene to render.</p>
+
     </div>
 
         <p><strong>Default:</strong> Scene()</p>
+
+
+</div>
+<div id="property_texture" class="property item">
+    <h3 class="name"><code>texture</code></h3>
+    <span class="type">Texture</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_texture.js.html#l43"><code>src\passes\texture.js:43</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The texture.</p>
+
+    </div>
+
 
 
 </div>

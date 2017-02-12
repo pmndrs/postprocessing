@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\tone-mapping\index.js - postprocessing</title>
+    <title>src\passes\texture.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -116,52 +116,94 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\tone-mapping\index.js</h1>
+<h1 class="file-heading">File: src\passes\texture.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial } from &quot;three&quot;;
-
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+import { AdditiveBlending } from &quot;three&quot;;
+import { CopyMaterial } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
- * Full-screen tone-mapping shader material.
+ * A texture pass.
  *
- * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+ * Renders a given texture.
  *
- * @class ToneMappingMaterial
- * @submodule materials
- * @extends ShaderMaterial
+ * @class TexturePass
+ * @submodule passes
+ * @extends Pass
  * @constructor
+ * @param {Texture} texture - The texture.
+ * @param {Number} [opacity=1.0] - The texture opacity.
  */
 
-export class ToneMappingMaterial extends ShaderMaterial {
+export class TexturePass extends Pass {
 
-	constructor() {
+	constructor(texture, opacity = 1.0) {
 
-		super({
+		super();
 
-			type: &quot;ToneMappingMaterial&quot;,
+		/**
+		 * A copy shader material used for rendering to texture.
+		 *
+		 * @property copyMaterial
+		 * @type CopyMaterial
+		 * @private
+		 */
 
-			uniforms: {
+		this.copyMaterial = new CopyMaterial();
+		this.copyMaterial.blending = AdditiveBlending;
+		this.copyMaterial.transparent = true;
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+		this.texture = texture;
+		this.opacity = opacity;
 
-			},
+		this.quad.material = this.copyMaterial;
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+	}
 
-			depthWrite: false,
-			depthTest: false
+	/**
+	 * The texture.
+	 *
+	 * @property texture
+	 * @type Texture
+	 */
 
-		});
+	get texture() { return this.copyMaterial.uniforms.tDiffuse.value; }
+
+	set texture(x) {
+
+		this.copyMaterial.uniforms.tDiffuse.value = x;
+
+	}
+
+	/**
+	 * The opacity.
+	 *
+	 * @property opacity
+	 * @type Number
+	 * @default 1.0
+	 */
+
+	get opacity() { return this.copyMaterial.uniforms.opacity.value; }
+
+	set opacity(x) {
+
+		this.copyMaterial.uniforms.opacity.value = x;
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 */
+
+	render(renderer, readBuffer) {
+
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
 
 	}
 
