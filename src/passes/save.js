@@ -1,3 +1,4 @@
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
@@ -8,8 +9,8 @@ import { Pass } from "./pass.js";
  * @submodule passes
  * @extends Pass
  * @constructor
- * @param {Scene} renderTarget - The render target to use for saving the read buffer.
- * @param {Boolean} [resize] - Whether the render target should adjust to the size of the read/write buffer.
+ * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.
+ * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.
  */
 
 export class SavePass extends Pass {
@@ -35,10 +36,15 @@ export class SavePass extends Pass {
 		 *
 		 * @property renderTarget
 		 * @type WebGLRenderTarget
-		 * @private
 		 */
 
-		this.renderTarget = renderTarget;
+		this.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			generateMipmaps: false,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
 		/**
 		 * Indicates whether the render target should be resized when the size of
@@ -70,6 +76,24 @@ export class SavePass extends Pass {
 	}
 
 	/**
+	 * Adjusts the format of the render target.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialise(renderer, alpha) {
+
+		if(!alpha) {
+
+			this.renderTarget.texture.format = RGBFormat;
+
+		}
+
+	}
+
+	/**
 	 * Updates this pass with the renderer's size.
 	 *
 	 * @method setSize
@@ -79,7 +103,7 @@ export class SavePass extends Pass {
 
 	setSize(width, height) {
 
-		if(this.resize && this.renderTarget !== null) {
+		if(this.resize) {
 
 			width = Math.max(1, width);
 			height = Math.max(1, height);
