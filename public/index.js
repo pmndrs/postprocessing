@@ -5148,6 +5148,7 @@
 
    								renderPass.renderToScreen = !params.enabled;
    								blurPass.enabled = params.enabled;
+   								combinePass.enabled = params.enabled;
    						});
    				}
    		}]);
