@@ -1,14 +1,8 @@
-/**
- * postprocessing v2.0.0 build Feb 12 2017
- * https://github.com/vanruesc/postprocessing
- * Copyright 2017 Raoul van Rüschen, Zlib
- */
+(function (three,dat,Stats) {
+   'use strict';
 
-(function (global, factory) {
-   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
-   typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
-   (factory((global.POSTPROCESSING = global.POSTPROCESSING || {}),global.THREE));
-}(this, (function (exports,three) { 'use strict';
+   dat = 'default' in dat ? dat['default'] : dat;
+   Stats = 'default' in Stats ? Stats['default'] : Stats;
 
    var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor = vec4(adaptedLum, adaptedLum, adaptedLum, 1.0);\r\n\r\n}\r\n";
 
@@ -44,7 +38,30 @@
 
 
 
+   var get = function get(object, property, receiver) {
+     if (object === null) object = Function.prototype;
+     var desc = Object.getOwnPropertyDescriptor(object, property);
 
+     if (desc === undefined) {
+       var parent = Object.getPrototypeOf(object);
+
+       if (parent === null) {
+         return undefined;
+       } else {
+         return get(parent, property, receiver);
+       }
+     } else if ("value" in desc) {
+       return desc.value;
+     } else {
+       var getter = desc.get;
+
+       if (getter === undefined) {
+         return undefined;
+       }
+
+       return getter.call(receiver);
+     }
+   };
 
    var inherits = function (subClass, superClass) {
      if (typeof superClass !== "function" && superClass !== null) {
@@ -4526,44 +4543,3630 @@
     * @main postprocessing
     */
 
-   exports.EffectComposer = EffectComposer;
-   exports.BloomPass = BloomPass;
-   exports.BlurPass = BlurPass;
-   exports.BokehPass = BokehPass;
-   exports.Bokeh2Pass = Bokeh2Pass;
-   exports.ClearMaskPass = ClearMaskPass;
-   exports.DepthPass = DepthPass;
-   exports.DotScreenPass = DotScreenPass;
-   exports.FilmPass = FilmPass;
-   exports.GlitchMode = GlitchMode;
-   exports.GlitchPass = GlitchPass;
-   exports.GodRaysPass = GodRaysPass;
-   exports.MaskPass = MaskPass;
-   exports.Pass = Pass;
-   exports.RenderPass = RenderPass;
-   exports.SavePass = SavePass;
-   exports.SMAAPass = SMAAPass;
-   exports.ShaderPass = ShaderPass;
-   exports.TexturePass = TexturePass;
-   exports.ToneMappingPass = ToneMappingPass;
-   exports.AdaptiveLuminosityMaterial = AdaptiveLuminosityMaterial;
-   exports.BokehMaterial = BokehMaterial;
-   exports.Bokeh2Material = Bokeh2Material;
-   exports.CombineMaterial = CombineMaterial;
-   exports.ConvolutionMaterial = ConvolutionMaterial;
-   exports.CopyMaterial = CopyMaterial;
-   exports.DepthMaterial = DepthMaterial;
-   exports.DotScreenMaterial = DotScreenMaterial;
-   exports.FilmMaterial = FilmMaterial;
-   exports.GlitchMaterial = GlitchMaterial;
-   exports.GodRaysMaterial = GodRaysMaterial;
-   exports.KernelSize = KernelSize;
-   exports.LuminosityMaterial = LuminosityMaterial;
-   exports.SMAABlendMaterial = SMAABlendMaterial;
-   exports.SMAAColorEdgesMaterial = SMAAColorEdgesMaterial;
-   exports.SMAAWeightsMaterial = SMAAWeightsMaterial;
-   exports.ToneMappingMaterial = ToneMappingMaterial;
+   /**
+    * A demo base class.
+    *
+    * @class Demo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
 
-   Object.defineProperty(exports, '__esModule', { value: true });
+   var Demo = function () {
+   		function Demo(composer) {
+   				classCallCheck(this, Demo);
 
-})));
+
+   				/**
+        * An effect composer.
+        *
+        * @property composer
+        * @type EffectComposer
+        */
+
+   				this.composer = composer;
+
+   				/**
+        * A loading manager.
+        *
+        * @property loadingManager
+        * @type LoadingManager
+        */
+
+   				this.loadingManager = new three.LoadingManager();
+
+   				/**
+        * An asset map.
+        *
+        * @property assets
+        * @type Map
+        */
+
+   				this.assets = null;
+
+   				/**
+        * A scene.
+        *
+        * @property scene
+        * @type Scene
+        */
+
+   				this.scene = new three.Scene();
+   				this.scene.fog = new three.FogExp2(0x0d0d0d, 0.0025);
+
+   				/**
+        * A camera.
+        *
+        * @property camera
+        * @type PerspectiveCamera
+        */
+
+   				this.camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+
+   				/**
+        * Camera controls.
+        *
+        * @property controls
+        * @type OrbitControls
+        */
+
+   				this.controls = null;
+   		}
+
+   		/**
+      * Loads the demo.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(Demo, [{
+   				key: "load",
+   				value: function load(callback) {
+
+   						callback();
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {}
+
+   				/**
+        * Updates the demo.
+        *
+        * @method update
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        * @return {GUI} A GUI folder.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {}
+
+   				/**
+        * Resets this demo.
+        *
+        * @method reset
+        * @chainable
+        * @return {Demo} This demo.
+        */
+
+   		}, {
+   				key: "reset",
+   				value: function reset() {
+
+   						var fog = this.scene.fog;
+
+   						this.scene = new three.Scene();
+   						this.scene.fog = fog;
+
+   						if (this.controls !== null) {
+
+   								this.controls.dispose();
+   								this.controls = null;
+   						}
+
+   						return this;
+   				}
+   		}]);
+   		return Demo;
+   }();
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI = 2.0 * Math.PI;
+
+   /**
+    * A render demo setup.
+    *
+    * @class RenderDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var RenderDemo = function (_Demo) {
+   		inherits(RenderDemo, _Demo);
+
+   		function RenderDemo(composer) {
+   				classCallCheck(this, RenderDemo);
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (RenderDemo.__proto__ || Object.getPrototypeOf(RenderDemo)).call(this, composer));
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(RenderDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var textureLoader = new three.TextureLoader(loadingManager);
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/sunset/";
+   						var format = ".png";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+
+   								textureLoader.load("textures/crate.jpg", function (texture) {
+
+   										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+   										assets.set("crate-color", texture);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(-3, 0, -3);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(1440, 200, 2000);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
+   								color: 0xffffff,
+   								map: assets.get("crate-color")
+   						}));
+
+   						this.object = mesh;
+   						scene.add(mesh);
+
+   						// Passes.
+
+   						var pass = new RenderPass(scene, camera);
+   						pass.renderToScreen = true;
+
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.0005;
+   								object.rotation.y += 0.001;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI) {
+   										object.rotation.x -= TWO_PI;
+   								}
+   								if (object.rotation.y >= TWO_PI) {
+   										object.rotation.y -= TWO_PI;
+   								}
+   						}
+   				}
+   		}]);
+   		return RenderDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$1 = 2.0 * Math.PI;
+
+   /**
+    * A blur demo setup.
+    *
+    * @class BlurDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var BlurDemo = function (_Demo) {
+   		inherits(BlurDemo, _Demo);
+
+   		function BlurDemo(composer) {
+   				classCallCheck(this, BlurDemo);
+
+   				/**
+        * A render pass.
+        *
+        * @property renderPass
+        * @type RenderPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (BlurDemo.__proto__ || Object.getPrototypeOf(BlurDemo)).call(this, composer));
+
+   				_this.renderPass = null;
+
+   				/**
+        * A save pass.
+        *
+        * @property savePass
+        * @type SavePass
+        * @private
+        */
+
+   				_this.savePass = null;
+
+   				/**
+        * A blur pass.
+        *
+        * @property blurPass
+        * @type BlurPass
+        * @private
+        */
+
+   				_this.blurPass = null;
+
+   				/**
+        * A combine pass.
+        *
+        * @property combinePass
+        * @type ShaderPass
+        * @private
+        */
+
+   				_this.combinePass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(BlurDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/sunset/";
+   						var format = ".png";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(-15, 0, -15);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(1440, 200, 2000);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Random objects.
+
+   						var object = new three.Object3D();
+
+   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+   						var material = void 0;
+   						var i = void 0,
+   						    mesh = void 0;
+
+   						for (i = 0; i < 100; ++i) {
+
+   								material = new three.MeshPhongMaterial({
+   										color: 0xffffff * Math.random(),
+   										shading: three.FlatShading
+   								});
+
+   								mesh = new three.Mesh(geometry, material);
+   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+   								mesh.position.multiplyScalar(Math.random() * 10);
+   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+   								mesh.scale.multiplyScalar(Math.random());
+   								object.add(mesh);
+   						}
+
+   						this.object = object;
+
+   						scene.add(object);
+
+   						// Passes.
+
+   						var pass = new RenderPass(scene, camera);
+   						this.renderPass = pass;
+   						composer.addPass(pass);
+
+   						pass = new SavePass();
+   						this.savePass = pass;
+   						composer.addPass(pass);
+
+   						pass = new BlurPass();
+   						this.blurPass = pass;
+   						composer.addPass(pass);
+
+   						pass = new ShaderPass(new CombineMaterial(), "texture1");
+   						pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
+   						pass.material.uniforms.opacity1.value = 1.0;
+   						pass.material.uniforms.opacity2.value = 0.0;
+   						pass.renderToScreen = true;
+   						this.combinePass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.001;
+   								object.rotation.y += 0.005;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$1) {
+   										object.rotation.x -= TWO_PI$1;
+   								}
+   								if (object.rotation.y >= TWO_PI$1) {
+   										object.rotation.y -= TWO_PI$1;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var composer = this.composer;
+   						var renderPass = this.renderPass;
+   						var blurPass = this.blurPass;
+   						var combinePass = this.combinePass;
+
+   						var params = {
+   								"enabled": blurPass.enabled,
+   								"resolution": blurPass.resolutionScale,
+   								"kernel size": blurPass.kernelSize,
+   								"strength": combinePass.material.uniforms.opacity1.value
+   						};
+
+   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								blurPass.resolutionScale = params.resolution;composer.setSize();
+   						});
+   						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+   								blurPass.kernelSize = params["kernel size"];
+   						});
+
+   						gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function () {
+
+   								combinePass.material.uniforms.opacity1.value = params.strength;
+   								combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
+   						});
+
+   						gui.add(params, "enabled").onChange(function () {
+
+   								renderPass.renderToScreen = !params.enabled;
+   								blurPass.enabled = params.enabled;
+   						});
+   				}
+   		}]);
+   		return BlurDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$2 = 2.0 * Math.PI;
+
+   /**
+    * A depth texture demo setup.
+    *
+    * @class DepthDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var DepthDemo = function (_Demo) {
+   		inherits(DepthDemo, _Demo);
+
+   		function DepthDemo(composer) {
+   				classCallCheck(this, DepthDemo);
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (DepthDemo.__proto__ || Object.getPrototypeOf(DepthDemo)).call(this, composer));
+
+   				_this.object = null;
+
+   				/**
+        * A texture pass.
+        *
+        * @property texturePass
+        * @type TexturePass
+        * @private
+        */
+
+   				_this.texturePass = null;
+
+   				/**
+        * A depth pass.
+        *
+        * @property depthPass
+        * @type DepthPass
+        * @private
+        */
+
+   				_this.depthPass = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(DepthDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+
+   						this.initialise();
+   						callback();
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+   						this.controls.enablePan = false;
+   						this.controls.maxDistance = 40;
+
+   						// Camera.
+
+   						camera.near = 0.01;
+   						camera.far = 50;
+   						camera.position.set(2, 1, 2);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Objects.
+
+   						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshBasicMaterial());
+
+   						this.object = mesh;
+   						scene.add(mesh);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new TexturePass(composer.depthTexture);
+   						pass.enabled = false;
+
+   						this.texturePass = pass;
+   						composer.addPass(pass);
+
+   						pass = new DepthPass(camera);
+   						pass.renderToScreen = true;
+
+   						this.depthPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.001;
+   								object.rotation.y += 0.005;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$2) {
+   										object.rotation.x -= TWO_PI$2;
+   								}
+   								if (object.rotation.y >= TWO_PI$2) {
+   										object.rotation.y -= TWO_PI$2;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var texturePass = this.texturePass;
+   						var depthPass = this.depthPass;
+
+   						var params = {
+   								"raw": false
+   						};
+
+   						gui.add(params, "raw").onChange(function () {
+
+   								texturePass.enabled = params.raw;
+   								depthPass.enabled = !params.raw;
+   								texturePass.renderToScreen = params.raw;
+   								depthPass.renderToScreen = !params.raw;
+   						});
+   				}
+   		}]);
+   		return DepthDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$3 = 2.0 * Math.PI;
+
+   /**
+    * A dot screen demo setup.
+    *
+    * @class DotScreenDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var DotScreenDemo = function (_Demo) {
+   		inherits(DotScreenDemo, _Demo);
+
+   		function DotScreenDemo(composer) {
+   				classCallCheck(this, DotScreenDemo);
+
+   				/**
+        * A dot screen pass.
+        *
+        * @property dotScreenPass
+        * @type DotScreenPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (DotScreenDemo.__proto__ || Object.getPrototypeOf(DotScreenDemo)).call(this, composer));
+
+   				_this.dotScreenPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(DotScreenDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space3/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(10, 1, 10);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Random objects.
+
+   						var object = new three.Object3D();
+   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+
+   						var material = void 0,
+   						    mesh = void 0;
+   						var i = void 0;
+
+   						for (i = 0; i < 100; ++i) {
+
+   								material = new three.MeshPhongMaterial({
+   										color: 0xffffff * Math.random(),
+   										shading: three.FlatShading
+   								});
+
+   								mesh = new three.Mesh(geometry, material);
+   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+   								mesh.position.multiplyScalar(Math.random() * 10);
+   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+   								mesh.scale.multiplyScalar(Math.random());
+   								object.add(mesh);
+   						}
+
+   						this.object = object;
+   						scene.add(object);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new DotScreenPass({
+   								scale: 0.8,
+   								angle: Math.PI * 0.5,
+   								intensity: 0.25
+   						});
+
+   						pass.renderToScreen = true;
+   						this.dotScreenPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.0005;
+   								object.rotation.y += 0.001;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$3) {
+   										object.rotation.x -= TWO_PI$3;
+   								}
+   								if (object.rotation.y >= TWO_PI$3) {
+   										object.rotation.y -= TWO_PI$3;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var pass = this.dotScreenPass;
+
+   						var params = {
+   								"average": pass.material.defines.AVERAGE !== undefined,
+   								"scale": pass.material.uniforms.scale.value,
+   								"angle": pass.material.uniforms.angle.value,
+   								"intensity": pass.material.uniforms.intensity.value,
+   								"center X": pass.material.uniforms.offsetRepeat.value.x,
+   								"center Y": pass.material.uniforms.offsetRepeat.value.y
+   						};
+
+   						gui.add(params, "average").onChange(function () {
+
+   								params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.scale.value = params.scale;
+   						});
+   						gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
+   								pass.material.uniforms.angle.value = params.angle;
+   						});
+   						gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.intensity.value = params.intensity;
+   						});
+
+   						var f = gui.addFolder("Center");
+   						f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.offsetRepeat.value.x = params["center X"];
+   						});
+   						f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.offsetRepeat.value.y = params["center Y"];
+   						});
+   				}
+   		}]);
+   		return DotScreenDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$4 = 2.0 * Math.PI;
+
+   /**
+    * A film demo setup.
+    *
+    * @class FilmDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var FilmDemo = function (_Demo) {
+   		inherits(FilmDemo, _Demo);
+
+   		function FilmDemo(composer) {
+   				classCallCheck(this, FilmDemo);
+
+   				/**
+        * A film pass.
+        *
+        * @property filmPass
+        * @type FilmPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (FilmDemo.__proto__ || Object.getPrototypeOf(FilmDemo)).call(this, composer));
+
+   				_this.filmPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(FilmDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(10, 1, 10);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Random objects.
+
+   						var object = new three.Object3D();
+   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+
+   						var material = void 0,
+   						    mesh = void 0;
+   						var i = void 0;
+
+   						for (i = 0; i < 100; ++i) {
+
+   								material = new three.MeshPhongMaterial({
+   										color: 0xffffff * Math.random(),
+   										shading: three.FlatShading
+   								});
+
+   								mesh = new three.Mesh(geometry, material);
+   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+   								mesh.position.multiplyScalar(Math.random() * 10);
+   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+   								mesh.scale.multiplyScalar(Math.random());
+   								object.add(mesh);
+   						}
+
+   						this.object = object;
+   						scene.add(object);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new FilmPass({
+   								grayscale: false,
+   								sepia: false,
+   								vignette: false,
+   								eskil: false,
+   								scanlines: true,
+   								noise: true,
+   								noiseIntensity: 0.5,
+   								scanlineIntensity: 0.5,
+   								scanlineDensity: 1.5,
+   								greyscaleIntensity: 1.0,
+   								sepiaIntensity: 1.0,
+   								vignetteOffset: 0.0,
+   								vignetteDarkness: 0.5
+   						});
+
+   						pass.renderToScreen = true;
+   						this.filmPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.001;
+   								object.rotation.y += 0.005;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$4) {
+   										object.rotation.x -= TWO_PI$4;
+   								}
+   								if (object.rotation.y >= TWO_PI$4) {
+   										object.rotation.y -= TWO_PI$4;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var composer = this.composer;
+   						var pass = this.filmPass;
+
+   						var params = {
+   								"grayscale": pass.material.defines.GREYSCALE !== undefined,
+   								"sepia": pass.material.defines.SEPIA !== undefined,
+   								"vignette": pass.material.defines.VIGNETTE !== undefined,
+   								"eskil": pass.material.defines.ESKIL !== undefined,
+   								"noise": pass.material.defines.NOISE !== undefined,
+   								"scanlines": pass.material.defines.SCANLINES !== undefined,
+   								"noise intensity": pass.material.uniforms.noiseIntensity.value,
+   								"scanlines intensity": pass.material.uniforms.scanlineIntensity.value,
+   								"scanlines count": pass.scanlineDensity,
+   								"greyscale intensity": pass.material.uniforms.greyscaleIntensity.value,
+   								"sepia intensity": pass.material.uniforms.sepiaIntensity.value,
+   								"vignette offset": pass.material.uniforms.vignetteOffset.value,
+   								"vignette darkness": pass.material.uniforms.vignetteDarkness.value
+   						};
+
+   						var f = gui.addFolder("Greyscale");
+
+   						f.add(params, "grayscale").onChange(function () {
+   								params.grayscale ? pass.material.defines.GREYSCALE = "1" : delete pass.material.defines.GREYSCALE;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.greyscaleIntensity.value = params["greyscale intensity"];
+   						});
+
+   						f.open();
+
+   						f = gui.addFolder("Noise and scanlines");
+
+   						f.add(params, "noise").onChange(function () {
+   								params.noise ? pass.material.defines.NOISE = "1" : delete pass.material.defines.NOISE;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.noiseIntensity.value = params["noise intensity"];
+   						});
+
+   						f.add(params, "scanlines").onChange(function () {
+   								params.scanlines ? pass.material.defines.SCANLINES = "1" : delete pass.material.defines.SCANLINES;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.scanlineIntensity.value = params["scanlines intensity"];
+   						});
+
+   						f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function () {
+   								pass.scanlineDensity = params["scanlines count"];composer.setSize();
+   						});
+
+   						f.open();
+
+   						f = gui.addFolder("Sepia");
+
+   						f.add(params, "sepia").onChange(function () {
+   								params.sepia ? pass.material.defines.SEPIA = "1" : delete pass.material.defines.SEPIA;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.sepiaIntensity.value = params["sepia intensity"];
+   						});
+
+   						f.open();
+
+   						f = gui.addFolder("Vignette");
+
+   						f.add(params, "vignette").onChange(function () {
+   								params.vignette ? pass.material.defines.VIGNETTE = "1" : delete pass.material.defines.VIGNETTE;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "eskil").onChange(function () {
+   								params.eskil ? pass.material.defines.ESKIL = "1" : delete pass.material.defines.ESKIL;
+   								pass.material.needsUpdate = true;
+   						});
+
+   						f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.vignetteOffset.value = params["vignette offset"];
+   						});
+
+   						f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.material.uniforms.vignetteDarkness.value = params["vignette darkness"];
+   						});
+
+   						f.open();
+   				}
+   		}]);
+   		return FilmDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$5 = 2.0 * Math.PI;
+
+   /**
+    * A glitch demo setup.
+    *
+    * @class GlitchDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var GlitchDemo = function (_Demo) {
+   		inherits(GlitchDemo, _Demo);
+
+   		function GlitchDemo(composer) {
+   				classCallCheck(this, GlitchDemo);
+
+   				/**
+        * A glitch pass.
+        *
+        * @property glitchPass
+        * @type GlitchPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (GlitchDemo.__proto__ || Object.getPrototypeOf(GlitchDemo)).call(this, composer));
+
+   				_this.glitchPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(GlitchDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var textureLoader = new three.TextureLoader(loadingManager);
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space4/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+
+   								textureLoader.load("textures/perturb.jpg", function (texture) {
+
+   										texture.magFilter = texture.minFilter = three.NearestFilter;
+   										assets.set("perturb-map", texture);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(6, 1, 6);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Random objects.
+
+   						var object = new three.Object3D();
+   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+
+   						var material = void 0,
+   						    mesh = void 0;
+   						var i = void 0;
+
+   						for (i = 0; i < 100; ++i) {
+
+   								material = new three.MeshPhongMaterial({
+   										color: 0xffffff * Math.random(),
+   										shading: three.FlatShading
+   								});
+
+   								mesh = new three.Mesh(geometry, material);
+   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+   								mesh.position.multiplyScalar(Math.random() * 10);
+   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+   								mesh.scale.multiplyScalar(Math.random());
+   								object.add(mesh);
+   						}
+
+   						this.object = object;
+   						scene.add(object);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new GlitchPass({
+   								perturbMap: assets.get("perturb-map")
+   						});
+
+   						pass.renderToScreen = true;
+   						this.glitchPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.005;
+   								object.rotation.y += 0.01;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$5) {
+   										object.rotation.x -= TWO_PI$5;
+   								}
+   								if (object.rotation.y >= TWO_PI$5) {
+   										object.rotation.y -= TWO_PI$5;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var pass = this.glitchPass;
+   						var perturbMap = pass.perturbMap;
+
+   						var params = {
+   								"mode": pass.mode,
+   								"custom noise": true
+   						};
+
+   						gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function () {
+   								pass.mode = params.mode;
+   						});
+
+   						gui.add(params, "custom noise").onChange(function () {
+
+   								if (params["custom noise"]) {
+
+   										pass.perturbMap = perturbMap;
+   								} else {
+
+   										// Prevent the custom perturbation map from getting deleted.
+   										pass.perturbMap = null;
+   										pass.generatePerturbMap(64);
+   								}
+   						});
+   				}
+   		}]);
+   		return GlitchDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$6 = 2.0 * Math.PI;
+
+   /**
+    * A bloom demo setup.
+    *
+    * @class BloomDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var BloomDemo = function (_Demo) {
+   		inherits(BloomDemo, _Demo);
+
+   		function BloomDemo(composer) {
+   				classCallCheck(this, BloomDemo);
+
+   				/**
+        * A bloom pass.
+        *
+        * @property bloomPass
+        * @type BloomPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (BloomDemo.__proto__ || Object.getPrototypeOf(BloomDemo)).call(this, composer));
+
+   				_this.bloomPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(BloomDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space2/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(-10, 6, 15);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Random objects.
+
+   						var object = new three.Object3D();
+
+   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+   						var material = void 0;
+   						var i = void 0,
+   						    mesh = void 0;
+
+   						for (i = 0; i < 100; ++i) {
+
+   								material = new three.MeshPhongMaterial({
+   										color: 0xffffff * Math.random(),
+   										shading: three.FlatShading
+   								});
+
+   								mesh = new three.Mesh(geometry, material);
+   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+   								mesh.position.multiplyScalar(Math.random() * 4);
+   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+   								mesh.scale.multiplyScalar(Math.random() * 0.5);
+   								object.add(mesh);
+   						}
+
+   						this.object = object;
+
+   						scene.add(object);
+
+   						// Cage object.
+
+   						mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshLambertMaterial({
+   								color: 0x0b0b0b
+   						}));
+
+   						object = new three.Object3D();
+   						var o0 = void 0,
+   						    o1 = void 0,
+   						    o2 = void 0;
+
+   						o0 = object.clone();
+
+   						var clone = mesh.clone();
+   						clone.position.set(-4, 0, 4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(4, 0, 4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(-4, 0, -4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(4, 0, -4);
+   						o0.add(clone);
+
+   						o1 = o0.clone();
+   						o1.rotation.set(Math.PI / 2, 0, 0);
+   						o2 = o0.clone();
+   						o2.rotation.set(0, 0, Math.PI / 2);
+
+   						object.add(o0);
+   						object.add(o1);
+   						object.add(o2);
+
+   						scene.add(object);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new BloomPass({
+   								resolutionScale: 0.5,
+   								strength: 1.0,
+   								distinction: 4.0
+   						});
+
+   						pass.renderToScreen = true;
+   						this.bloomPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.001;
+   								object.rotation.y += 0.005;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$6) {
+   										object.rotation.x -= TWO_PI$6;
+   								}
+   								if (object.rotation.y >= TWO_PI$6) {
+   										object.rotation.y -= TWO_PI$6;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var composer = this.composer;
+   						var pass = this.bloomPass;
+
+   						var params = {
+   								"resolution": pass.resolutionScale,
+   								"kernel size": pass.kernelSize,
+   								"intensity": pass.intensity,
+   								"distinction": pass.distinction,
+   								"blend": true,
+   								"blend mode": "screen"
+   						};
+
+   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.resolutionScale = params.resolution;composer.setSize();
+   						});
+   						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+   								pass.kernelSize = params["kernel size"];
+   						});
+   						gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
+   								pass.intensity = params.intensity;
+   						});
+
+   						var folder = gui.addFolder("Luminance");
+   						folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
+   								pass.distinction = params.distinction;
+   						});
+   						folder.open();
+
+   						gui.add(params, "blend").onChange(function () {
+
+   								pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+   						});
+
+   						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
+
+   								if (params["blend mode"] === "add") {
+
+   										delete pass.combineMaterial.defines.SCREEN_MODE;
+   								} else {
+
+   										pass.combineMaterial.defines.SCREEN_MODE = "1";
+   								}
+
+   								pass.combineMaterial.needsUpdate = true;
+   						});
+   				}
+   		}]);
+   		return BloomDemo;
+   }(Demo);
+
+   /**
+    * A bokeh demo setup.
+    *
+    * @class BokehDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var BokehDemo = function (_Demo) {
+   		inherits(BokehDemo, _Demo);
+
+   		function BokehDemo(composer) {
+   				classCallCheck(this, BokehDemo);
+
+   				/**
+        * A bokeh pass.
+        *
+        * @property bloomPass
+        * @type BloomPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (BokehDemo.__proto__ || Object.getPrototypeOf(BokehDemo)).call(this, composer));
+
+   				_this.bokehPass = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(BokehDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space3/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+   						this.controls.enablePan = false;
+   						this.controls.minDistance = 2.5;
+   						this.controls.maxDistance = 40;
+
+   						// Camera.
+
+   						camera.near = 0.01;
+   						camera.far = 50;
+   						camera.position.set(3, 1, 3);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var geometry = new three.SphereBufferGeometry(1, 64, 64);
+   						var material = new three.MeshBasicMaterial({
+   								color: 0xffff00,
+   								envMap: assets.get("sky")
+   						});
+
+   						var mesh = new three.Mesh(geometry, material);
+   						scene.add(mesh);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new BokehPass(camera, {
+   								focus: 0.36,
+   								aperture: 0.007,
+   								maxBlur: 0.025
+   						});
+
+   						pass.renderToScreen = true;
+   						this.bokehPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var pass = this.bokehPass;
+
+   						var params = {
+   								"focus": pass.bokehMaterial.uniforms.focus.value,
+   								"aperture": pass.bokehMaterial.uniforms.aperture.value,
+   								"blur": pass.bokehMaterial.uniforms.maxBlur.value
+   						};
+
+   						gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function () {
+   								pass.bokehMaterial.uniforms.focus.value = params.focus;
+   						});
+   						gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function () {
+   								pass.bokehMaterial.uniforms.aperture.value = params.aperture;
+   						});
+   						gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function () {
+   								pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
+   						});
+   				}
+   		}]);
+   		return BokehDemo;
+   }(Demo);
+
+   /**
+    * A high quality bokeh demo setup.
+    *
+    * @class Bokeh2Demo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var Bokeh2Demo = function (_Demo) {
+   		inherits(Bokeh2Demo, _Demo);
+
+   		function Bokeh2Demo(composer) {
+   				classCallCheck(this, Bokeh2Demo);
+
+   				/**
+        * A bokeh pass.
+        *
+        * @property bloomPass
+        * @type BloomPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (Bokeh2Demo.__proto__ || Object.getPrototypeOf(Bokeh2Demo)).call(this, composer));
+
+   				_this.bokehPass = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(Bokeh2Demo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/space3/";
+   						var format = ".jpg";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+   						this.controls.enablePan = false;
+   						this.controls.minDistance = 2.5;
+   						this.controls.maxDistance = 40;
+
+   						// Camera.
+
+   						camera.near = 0.01;
+   						camera.far = 50;
+   						camera.position.set(3, 1, 3);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var geometry = new three.SphereBufferGeometry(1, 64, 64);
+   						var material = new three.MeshBasicMaterial({
+   								color: 0xffff00,
+   								envMap: assets.get("sky")
+   						});
+
+   						var mesh = new three.Mesh(geometry, material);
+   						scene.add(mesh);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new Bokeh2Pass(camera, {
+   								rings: 3,
+   								samples: 2,
+   								showFocus: false,
+   								manualDoF: false,
+   								vignette: false,
+   								pentagon: false,
+   								shaderFocus: true,
+   								noise: true
+   						});
+
+   						pass.bokehMaterial.uniforms.focalStop.value = 64;
+   						pass.renderToScreen = true;
+   						this.bokehPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var pass = this.bokehPass;
+
+   						var params = {
+   								"rings": Number.parseInt(pass.bokehMaterial.defines.RINGS_INT),
+   								"samples": Number.parseInt(pass.bokehMaterial.defines.SAMPLES_INT),
+   								"focal stop": pass.bokehMaterial.uniforms.focalStop.value,
+   								"focal length": pass.bokehMaterial.uniforms.focalLength.value,
+   								"shader focus": pass.bokehMaterial.defines.SHADER_FOCUS !== undefined,
+   								"focal depth": pass.bokehMaterial.uniforms.focalDepth.value,
+   								"focus coord X": pass.bokehMaterial.uniforms.focusCoords.value.x,
+   								"focus coord Y": pass.bokehMaterial.uniforms.focusCoords.value.y,
+   								"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
+   								"lum threshold": pass.bokehMaterial.uniforms.luminanceThreshold.value,
+   								"lum gain": pass.bokehMaterial.uniforms.luminanceGain.value,
+   								"bias": pass.bokehMaterial.uniforms.bias.value,
+   								"fringe": pass.bokehMaterial.uniforms.fringe.value,
+   								"dithering": pass.bokehMaterial.uniforms.ditherStrength.value,
+   								"vignette": pass.bokehMaterial.defines.VIGNETTE !== undefined,
+   								"pentagon": pass.bokehMaterial.defines.PENTAGON !== undefined,
+   								"manual DoF": pass.bokehMaterial.defines.MANUAL_DOF !== undefined,
+   								"show focus": pass.bokehMaterial.defines.SHOW_FOCUS !== undefined,
+   								"noise": pass.bokehMaterial.defines.NOISE !== undefined
+   						};
+
+   						var f = gui.addFolder("Focus");
+
+   						f.add(params, "show focus").onChange(function () {
+   								params["show focus"] ? pass.bokehMaterial.defines.SHOW_FOCUS = "1" : delete pass.bokehMaterial.defines.SHOW_FOCUS;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.add(params, "shader focus").onChange(function () {
+   								params["shader focus"] ? pass.bokehMaterial.defines.SHADER_FOCUS = "1" : delete pass.bokehMaterial.defines.SHADER_FOCUS;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.add(params, "manual DoF").onChange(function () {
+   								params["manual DoF"] ? pass.bokehMaterial.defines.MANUAL_DOF = "1" : delete pass.bokehMaterial.defines.MANUAL_DOF;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function () {
+   								pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"];
+   						});
+   						f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function () {
+   								pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"];
+   						});
+   						f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"];
+   						});
+   						f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"];
+   						});
+
+   						f.open();
+
+   						f = gui.addFolder("Sampling");
+
+   						f.add(params, "rings").min(1).max(6).step(1).onChange(function () {
+   								pass.bokehMaterial.defines.RINGS_INT = params.rings.toFixed(0);
+   								pass.bokehMaterial.defines.RINGS_FLOAT = params.rings.toFixed(1);
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.add(params, "samples").min(1).max(6).step(1).onChange(function () {
+   								pass.bokehMaterial.defines.SAMPLES_INT = params.samples.toFixed(0);
+   								pass.bokehMaterial.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f = gui.addFolder("Blur");
+
+   						f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function () {
+   								pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"];
+   						});
+   						f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function () {
+   								pass.bokehMaterial.uniforms.bias.value = params.bias;
+   						});
+   						f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function () {
+   								pass.bokehMaterial.uniforms.fringe.value = params.fringe;
+   						});
+
+   						f.add(params, "noise").onChange(function () {
+   								params.noise ? pass.bokehMaterial.defines.NOISE = "1" : delete pass.bokehMaterial.defines.NOISE;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function () {
+   								pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering;
+   						});
+
+   						f.add(params, "pentagon").onChange(function () {
+   								params.pentagon ? pass.bokehMaterial.defines.PENTAGON = "1" : delete pass.bokehMaterial.defines.PENTAGON;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+
+   						f.open();
+
+   						f = gui.addFolder("Luminosity");
+
+   						f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"];
+   						});
+   						f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function () {
+   								pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"];
+   						});
+
+   						gui.add(params, "vignette").onChange(function () {
+   								params.vignette ? pass.bokehMaterial.defines.VIGNETTE = "1" : delete pass.bokehMaterial.defines.VIGNETTE;
+   								pass.bokehMaterial.needsUpdate = true;
+   						});
+   				}
+   		}]);
+   		return Bokeh2Demo;
+   }(Demo);
+
+   /**
+    * A god rays demo setup.
+    *
+    * @class BloomDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var GodRaysDemo = function (_Demo) {
+   		inherits(GodRaysDemo, _Demo);
+
+   		function GodRaysDemo(composer) {
+   				classCallCheck(this, GodRaysDemo);
+
+   				/**
+        * A god rays pass.
+        *
+        * @property godRaysPass
+        * @type GodRaysPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (GodRaysDemo.__proto__ || Object.getPrototypeOf(GodRaysDemo)).call(this, composer));
+
+   				_this.godRaysPass = null;
+
+   				/**
+        * A sun.
+        *
+        * @property sun
+        * @type Points
+        * @private
+        */
+
+   				_this.sun = null;
+
+   				/**
+        * A directional light.
+        *
+        * @property directionalLight
+        * @type DirectionalLight
+        * @private
+        */
+
+   				_this.directionalLight = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(GodRaysDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+   						var textureLoader = new three.TextureLoader(loadingManager);
+   						var modelLoader = new three.ObjectLoader(loadingManager);
+
+   						var path = "textures/skies/starry/";
+   						var format = ".png";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+
+   								modelLoader.load("models/waggon.json", function (object) {
+
+   										object.rotation.x = Math.PI * 0.25;
+   										object.rotation.y = Math.PI * 0.75;
+
+   										assets.set("waggon", object);
+   								});
+
+   								textureLoader.load("textures/wood.jpg", function (texture) {
+
+   										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+   										assets.set("wood-diffuse", texture);
+   								});
+
+   								textureLoader.load("textures/woodnormals.jpg", function (texture) {
+
+   										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+   										assets.set("wood-normals", texture);
+   								});
+
+   								textureLoader.load("textures/sun.png", function (texture) {
+
+   										assets.set("sun-diffuse", texture);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+   						this.controls.target.set(0, 0.5, 0);
+
+   						// Camera.
+
+   						camera.position.set(-5, -1, -4);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x0f0f0f);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(-1, 1, 1);
+   						directionalLight.target.position.copy(scene.position);
+
+   						this.directionalLight = directionalLight;
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var object = assets.get("waggon");
+   						var material = new three.MeshPhongMaterial({
+   								color: 0xffffff,
+   								map: assets.get("wood-diffuse"),
+   								normalMap: assets.get("wood-normals"),
+   								fog: true
+   						});
+
+   						object.traverse(function (child) {
+
+   								child.material = material;
+   						});
+
+   						scene.add(object);
+
+   						// Sun.
+
+   						var sunMaterial = new three.PointsMaterial({
+   								map: assets.get("sun-diffuse"),
+   								size: 100,
+   								sizeAttenuation: true,
+   								color: 0xffddaa,
+   								alphaTest: 0,
+   								transparent: true,
+   								fog: false
+   						});
+
+   						var sunGeometry = new three.BufferGeometry();
+   						sunGeometry.addAttribute("position", new three.BufferAttribute(new Float32Array(3), 3));
+   						var sun = new three.Points(sunGeometry, sunMaterial);
+   						sun.frustumCulled = false;
+   						sun.position.set(75, 25, 100);
+
+   						this.sun = sun;
+   						scene.add(sun);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new GodRaysPass(scene, camera, sun, {
+   								resolutionScale: 0.6,
+   								kernelSize: KernelSize.SMALL,
+   								intensity: 1.0,
+   								density: 0.96,
+   								decay: 0.93,
+   								weight: 0.4,
+   								exposure: 0.6,
+   								samples: 60,
+   								clampMax: 1.0
+   						});
+
+   						pass.renderToScreen = true;
+   						this.godRaysPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var directionalLight = this.directionalLight;
+   						var composer = this.composer;
+   						var pass = this.godRaysPass;
+   						var sun = this.sun;
+
+   						var params = {
+   								"resolution": pass.resolutionScale,
+   								"blurriness": pass.kernelSize,
+   								"intensity": pass.intensity,
+   								"density": pass.godRaysMaterial.uniforms.density.value,
+   								"decay": pass.godRaysMaterial.uniforms.decay.value,
+   								"weight": pass.godRaysMaterial.uniforms.weight.value,
+   								"exposure": pass.godRaysMaterial.uniforms.exposure.value,
+   								"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
+   								"samples": pass.samples,
+   								"color": sun.material.color.getHex(),
+   								"blend mode": "screen"
+   						};
+
+   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.resolutionScale = params.resolution;composer.setSize();
+   						});
+   						gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+   								pass.kernelSize = params.blurriness;
+   						});
+   						gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.intensity = params.intensity;
+   						});
+   						gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.godRaysMaterial.uniforms.density.value = params.density;
+   						});
+   						gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.godRaysMaterial.uniforms.decay.value = params.decay;
+   						});
+   						gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.godRaysMaterial.uniforms.weight.value = params.weight;
+   						});
+   						gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
+   						});
+   						gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
+   						});
+   						gui.add(params, "samples").min(15).max(200).step(1).onChange(function () {
+   								pass.samples = params.samples;
+   						});
+   						gui.addColor(params, "color").onChange(function () {
+   								sun.material.color.setHex(params.color);directionalLight.color.setHex(params.color);
+   						});
+
+   						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
+
+   								if (params["blend mode"] === "add") {
+
+   										delete pass.combineMaterial.defines.SCREEN_MODE;
+   								} else {
+
+   										pass.combineMaterial.defines.SCREEN_MODE = "1";
+   								}
+
+   								pass.combineMaterial.needsUpdate = true;
+   						});
+   				}
+   		}]);
+   		return GodRaysDemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$7 = 2.0 * Math.PI;
+
+   /**
+    * An SMAA demo setup.
+    *
+    * @class SMAADemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var SMAADemo = function (_Demo) {
+   		inherits(SMAADemo, _Demo);
+
+   		function SMAADemo(composer) {
+   				classCallCheck(this, SMAADemo);
+
+   				/**
+        * The main renderer.
+        *
+        * @property renderer
+        * @type WebGLRenderer
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (SMAADemo.__proto__ || Object.getPrototypeOf(SMAADemo)).call(this, composer));
+
+   				_this.renderer = null;
+
+   				/**
+        * A secondary renderer.
+        *
+        * @property renderer2
+        * @type WebGLRenderer
+        * @private
+        */
+
+   				_this.renderer2 = null;
+
+   				/**
+        * Secondary camera controls.
+        *
+        * @property controls2
+        * @type OrbitControls
+        * @private
+        */
+
+   				_this.controls2 = null;
+
+   				/**
+        * A render pass.
+        *
+        * @property renderPass
+        * @type RenderPass
+        * @private
+        */
+
+   				_this.renderPass = null;
+
+   				/**
+        * An SMAA pass.
+        *
+        * @property smaaPass
+        * @type SMAAPass
+        * @private
+        */
+
+   				_this.smaaPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property objectA
+        * @type Object3D
+        * @private
+        */
+
+   				_this.objectA = null;
+
+   				/**
+        * An object.
+        *
+        * @property objectB
+        * @type Object3D
+        * @private
+        */
+
+   				_this.objectB = null;
+
+   				/**
+        * An object.
+        *
+        * @property objectC
+        * @type Object3D
+        * @private
+        */
+
+   				_this.objectC = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(SMAADemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var textureLoader = new three.TextureLoader(loadingManager);
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/sunset/";
+   						var format = ".png";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+
+   								textureLoader.load("textures/crate.jpg", function (texture) {
+
+   										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+   										assets.set("crate-color", texture);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Renderer without AA.
+
+   						this.renderer2 = function () {
+
+   								var renderer = new three.WebGLRenderer({
+   										logarithmicDepthBuffer: true,
+   										antialias: false
+   								});
+
+   								renderer.setSize(window.innerWidth, window.innerHeight);
+   								renderer.setClearColor(0x000000);
+   								renderer.setPixelRatio(window.devicePixelRatio);
+
+   								return renderer;
+   						}();
+
+   						this.renderer = composer.replaceRenderer(this.renderer2);
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, this.renderer.domElement);
+   						this.controls2 = new three.OrbitControls(camera, this.renderer2.domElement);
+
+   						// Camera.
+
+   						camera.position.set(-3, 0, -3);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(1440, 200, 2000);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshBasicMaterial({
+   								color: 0x000000,
+   								wireframe: true
+   						}));
+
+   						mesh.position.set(1.25, 0, -1.25);
+
+   						this.objectA = mesh;
+   						scene.add(mesh);
+
+   						mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
+   								map: assets.get("crate-color")
+   						}));
+
+   						mesh.position.set(-1.25, 0, 1.25);
+
+   						this.objectB = mesh;
+   						scene.add(mesh);
+
+   						mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshPhongMaterial({
+   								color: 0x0d0d0d
+   						}));
+
+   						var object = new three.Object3D();
+
+   						var o0 = void 0,
+   						    o1 = void 0,
+   						    o2 = void 0;
+
+   						o0 = object.clone();
+
+   						var clone = mesh.clone();
+   						clone.position.set(-4, 0, 4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(4, 0, 4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(-4, 0, -4);
+   						o0.add(clone);
+   						clone = mesh.clone();
+   						clone.position.set(4, 0, -4);
+   						o0.add(clone);
+
+   						o1 = o0.clone();
+   						o1.rotation.set(Math.PI / 2, 0, 0);
+   						o2 = o0.clone();
+   						o2.rotation.set(0, 0, Math.PI / 2);
+
+   						object.add(o0);
+   						object.add(o1);
+   						object.add(o2);
+
+   						object.scale.set(0.1, 0.1, 0.1);
+
+   						this.objectC = object;
+   						scene.add(object);
+
+   						// Passes.
+
+   						var pass = new RenderPass(scene, camera);
+   						this.renderPass = pass;
+   						composer.addPass(pass);
+
+   						pass = new SMAAPass(Image);
+   						pass.renderToScreen = true;
+   						this.smaaPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var objectA = this.objectA;
+   						var objectB = this.objectB;
+   						var objectC = this.objectC;
+
+   						if (objectA !== null) {
+
+   								objectA.rotation.x += 0.0005;
+   								objectA.rotation.y += 0.001;
+
+   								objectB.rotation.copy(objectA.rotation);
+   								objectC.rotation.copy(objectA.rotation);
+
+   								// Prevent overflow.
+   								if (objectA.rotation.x >= TWO_PI$7) {
+   										objectA.rotation.x -= TWO_PI$7;
+   								}
+   								if (objectA.rotation.y >= TWO_PI$7) {
+   										objectA.rotation.y -= TWO_PI$7;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var composer = this.composer;
+   						var renderPass = this.renderPass;
+   						var smaaPass = this.smaaPass;
+
+   						var renderer1 = this.renderer;
+   						var renderer2 = this.renderer2;
+
+   						var controls1 = this.controls;
+   						var controls2 = this.controls2;
+
+   						var params = {
+   								"browser AA": false,
+   								"SMAA": smaaPass.enabled,
+   								"SMAA threshold": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD)
+   						};
+
+   						function toggleSMAA() {
+
+   								renderPass.renderToScreen = !params.SMAA;
+   								smaaPass.enabled = params.SMAA;
+   						}
+
+   						function swapRenderers() {
+
+   								var size = composer.renderer.getSize();
+
+   								if (params["browser AA"]) {
+
+   										renderer1.setSize(size.width, size.height);
+   										composer.replaceRenderer(renderer1);
+   										controls1.enabled = true;
+   										controls2.enabled = false;
+   								} else {
+
+   										renderer2.setSize(size.width, size.height);
+   										composer.replaceRenderer(renderer2);
+   										controls1.enabled = false;
+   										controls2.enabled = true;
+   								}
+   						}
+
+   						gui.add(params, "browser AA").onChange(swapRenderers);
+   						gui.add(params, "SMAA").onChange(toggleSMAA);
+
+   						gui.add(params, "SMAA threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD = params["SMAA threshold"].toFixed(2);
+   								smaaPass.colorEdgesMaterial.needsUpdate = true;
+   						});
+   				}
+
+   				/**
+        * Resets this demo.
+        *
+        * @method reset
+        * @chainable
+        * @return {Demo} This demo.
+        */
+
+   		}, {
+   				key: "reset",
+   				value: function reset() {
+
+   						get(SMAADemo.prototype.__proto__ || Object.getPrototypeOf(SMAADemo.prototype), "reset", this).call(this);
+
+   						this.renderer.dispose();
+   						this.renderer = null;
+
+   						this.controls2.dispose();
+   						this.controls2 = null;
+   				}
+   		}]);
+   		return SMAADemo;
+   }(Demo);
+
+   /**
+    * PI times two.
+    *
+    * @property TWO_PI
+    * @type Number
+    * @private
+    * @static
+    * @final
+    */
+
+   var TWO_PI$8 = 2.0 * Math.PI;
+
+   /**
+    * A tone-mapping demo setup.
+    *
+    * @class ToneMappingDemo
+    * @constructor
+    * @param {EffectComposer} composer - An effect composer.
+    */
+
+   var ToneMappingDemo = function (_Demo) {
+   		inherits(ToneMappingDemo, _Demo);
+
+   		function ToneMappingDemo(composer) {
+   				classCallCheck(this, ToneMappingDemo);
+
+   				/**
+        * A dot screen pass.
+        *
+        * @property dotScreenPass
+        * @type DotScreenPass
+        * @private
+        */
+
+   				var _this = possibleConstructorReturn(this, (ToneMappingDemo.__proto__ || Object.getPrototypeOf(ToneMappingDemo)).call(this, composer));
+
+   				_this.toneMappingPass = null;
+
+   				/**
+        * An object.
+        *
+        * @property object
+        * @type Object3D
+        * @private
+        */
+
+   				_this.object = null;
+
+   				return _this;
+   		}
+
+   		/**
+      * Loads scene assets.
+      *
+      * @method load
+      * @param {Function} callback - A callback function.
+      */
+
+   		createClass(ToneMappingDemo, [{
+   				key: "load",
+   				value: function load(callback) {
+   						var _this2 = this;
+
+   						var assets = new Map();
+   						var loadingManager = this.loadingManager;
+   						var textureLoader = new three.TextureLoader(loadingManager);
+   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+   						var path = "textures/skies/sunset/";
+   						var format = ".png";
+   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+   						if (this.assets === null) {
+
+   								loadingManager.onProgress = function (item, loaded, total) {
+
+   										if (loaded === total) {
+
+   												_this2.assets = assets;
+   												_this2.initialise();
+   												callback();
+   										}
+   								};
+
+   								cubeTextureLoader.load(urls, function (textureCube) {
+
+   										assets.set("sky", textureCube);
+   								});
+
+   								textureLoader.load("textures/crate.jpg", function (texture) {
+
+   										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+   										assets.set("crate-color", texture);
+   								});
+   						} else {
+
+   								this.initialise();
+   								callback();
+   						}
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method initialise
+        */
+
+   		}, {
+   				key: "initialise",
+   				value: function initialise() {
+
+   						var scene = this.scene;
+   						var camera = this.camera;
+   						var assets = this.assets;
+   						var composer = this.composer;
+
+   						// Controls.
+
+   						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+   						// Camera.
+
+   						camera.position.set(-3, 0, -3);
+   						camera.lookAt(this.controls.target);
+   						scene.add(camera);
+
+   						// Sky.
+
+   						scene.background = assets.get("sky");
+
+   						// Lights.
+
+   						var ambientLight = new three.AmbientLight(0x666666);
+   						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+   						directionalLight.position.set(1440, 200, 2000);
+   						directionalLight.target.position.copy(scene.position);
+
+   						scene.add(directionalLight);
+   						scene.add(ambientLight);
+
+   						// Objects.
+
+   						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
+   								map: assets.get("crate-color")
+   						}));
+
+   						this.object = mesh;
+   						scene.add(mesh);
+
+   						// Passes.
+
+   						composer.addPass(new RenderPass(scene, camera));
+
+   						var pass = new ToneMappingPass({
+   								adaptive: true,
+   								resolution: 256,
+   								distinction: 1.0
+   						});
+
+   						pass.renderToScreen = true;
+   						this.toneMappingPass = pass;
+   						composer.addPass(pass);
+   				}
+
+   				/**
+        * Creates the scene.
+        *
+        * @method createScene
+        */
+
+   		}, {
+   				key: "update",
+   				value: function update() {
+
+   						var object = this.object;
+
+   						if (object !== null) {
+
+   								object.rotation.x += 0.0005;
+   								object.rotation.y += 0.001;
+
+   								// Prevent overflow.
+   								if (object.rotation.x >= TWO_PI$8) {
+   										object.rotation.x -= TWO_PI$8;
+   								}
+   								if (object.rotation.y >= TWO_PI$8) {
+   										object.rotation.y -= TWO_PI$8;
+   								}
+   						}
+   				}
+
+   				/**
+        * Registers configuration options.
+        *
+        * @method configure
+        * @param {GUI} gui - A GUI.
+        */
+
+   		}, {
+   				key: "configure",
+   				value: function configure(gui) {
+
+   						var pass = this.toneMappingPass;
+
+   						var params = {
+   								"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+   								"adaptive": pass.adaptive,
+   								"distinction": pass.luminosityMaterial.uniforms.distinction.value,
+   								"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
+   								"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
+   								"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
+   								"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
+   						};
+
+   						gui.add(params, "resolution").min(6).max(11).step(1).onChange(function () {
+   								pass.resolution = Math.pow(2, params.resolution);
+   						});
+   						gui.add(params, "adaptive").onChange(function () {
+   								pass.adaptive = params.adaptive;
+   						});
+
+   						var f = gui.addFolder("Luminance");
+   						f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
+   								pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
+   						});
+   						f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function () {
+   								pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
+   						});
+   						f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function () {
+   								pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
+   						});
+   						f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function () {
+   								pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
+   						});
+   						f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function () {
+   								pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
+   						});
+   						f.open();
+   				}
+   		}]);
+   		return ToneMappingDemo;
+   }(Demo);
+
+   /**
+    * A demo application.
+    *
+    * @class App
+    * @constructor
+    */
+
+   var App = function () {
+   		function App() {
+   				classCallCheck(this, App);
+
+
+   				/**
+        * A clock.
+        *
+        * @property clock
+        * @type Clock
+        * @private
+        */
+
+   				this.clock = new three.Clock();
+
+   				/**
+        * A composer.
+        *
+        * @property composer
+        * @type EffectComposer
+        * @private
+        */
+
+   				this.composer = function () {
+
+   						var renderer = new three.WebGLRenderer({
+   								logarithmicDepthBuffer: true,
+   								antialias: true
+   						});
+
+   						renderer.setSize(window.innerWidth, window.innerHeight);
+   						renderer.setClearColor(0x000000);
+   						renderer.setPixelRatio(window.devicePixelRatio);
+
+   						return new EffectComposer(renderer, {
+   								depthTexture: true
+   						});
+   				}();
+
+   				/**
+        * Statistics.
+        *
+        * @property stats
+        * @type Stats
+        * @private
+        */
+
+   				this.stats = function () {
+
+   						var stats = new Stats();
+   						stats.showPanel(0);
+   						stats.dom.id = "stats";
+
+   						return stats;
+   				}();
+
+   				/**
+        * Available demos.
+        *
+        * @property demos
+        * @type Map
+        * @private
+        */
+
+   				this.demos = function (composer) {
+
+   						var demos = new Map();
+
+   						demos.set("render", new RenderDemo(composer));
+   						demos.set("bloom", new BloomDemo(composer));
+   						demos.set("blur", new BlurDemo(composer));
+   						demos.set("bokeh", new BokehDemo(composer));
+   						demos.set("bokeh2", new Bokeh2Demo(composer));
+   						demos.set("depth", new DepthDemo(composer));
+   						demos.set("dot-screen", new DotScreenDemo(composer));
+   						demos.set("film", new FilmDemo(composer));
+   						demos.set("glitch", new GlitchDemo(composer));
+   						demos.set("god-rays", new GodRaysDemo(composer));
+   						demos.set("smaa", new SMAADemo(composer));
+   						demos.set("tone-mapping", new ToneMappingDemo(composer));
+
+   						return demos;
+   				}(this.composer);
+
+   				/**
+        * The key of the current effect.
+        *
+        * @property effect
+        * @type String
+        * @private
+        */
+
+   				this.effect = function (demos) {
+
+   						var key = window.location.hash.slice(1);
+
+   						if (key.length === 0 || !demos.has(key)) {
+
+   								key = demos.keys().next().value;
+   						}
+
+   						return key;
+   				}(this.demos);
+   		}
+
+   		/**
+      * Initialises the demo.
+      *
+      * @method initialise
+      * @static
+      * @param {HTMLElement} viewport - The viewport.
+      * @param {HTMLElement} aside - A secondary DOM container.
+      * @param {HTMLElement} loadingMessage - A loading message.
+      */
+
+   		createClass(App, [{
+   				key: "initialise",
+   				value: function initialise(viewport, aside, loadingMessage) {
+
+   						var app = this;
+
+   						var composer = this.composer;
+   						var renderer = composer.renderer;
+   						var clock = this.clock;
+   						var stats = this.stats;
+   						var demos = this.demos;
+
+   						var demo = null;
+   						var gui = null;
+
+   						viewport.appendChild(composer.renderer.domElement);
+   						aside.appendChild(stats.dom);
+
+   						/**
+          * Activates the currently selected demo.
+          *
+          * @method activateDemo
+          * @private
+          * @static
+          */
+
+   						function activateDemo() {
+
+   								var camera = demo.camera;
+   								camera.aspect = window.innerWidth / window.innerHeight;
+   								camera.updateProjectionMatrix();
+
+   								gui = new dat.GUI({ autoPlace: false });
+   								gui.add(app, "effect", Array.from(demos.keys())).onChange(loadDemo);
+   								demo.configure(gui);
+   								aside.appendChild(gui.domElement);
+
+   								loadingMessage.style.display = "none";
+   								renderer.domElement.style.visibility = "visible";
+   						}
+
+   						/**
+          * Loads the currently selected demo.
+          *
+          * @method loadDemo
+          * @private
+          * @static
+          */
+
+   						function loadDemo() {
+
+   								loadingMessage.style.display = "block";
+   								renderer.domElement.style.visibility = "hidden";
+
+   								if (gui !== null) {
+
+   										gui.destroy();
+   										aside.removeChild(gui.domElement);
+   								}
+
+   								if (demo !== null) {
+
+   										demo.reset();
+   										composer.replaceRenderer(renderer);
+   								}
+
+   								composer.reset();
+   								demo = demos.get(app.effect);
+   								demo.load(activateDemo);
+   						}
+
+   						loadDemo();
+
+   						/**
+          * Toggles the visibility of the interface on alt key press.
+          *
+          * @method onKeyDown
+          * @private
+          * @static
+          * @param {Event} event - An event.
+          */
+
+   						document.addEventListener("keydown", function onKeyDown(event) {
+
+   								if (event.altKey) {
+
+   										event.preventDefault();
+   										aside.style.visibility = aside.style.visibility === "hidden" ? "visible" : "hidden";
+   								}
+   						});
+
+   						/**
+          * Handles browser resizing.
+          *
+          * @method onResize
+          * @private
+          * @static
+          * @param {Event} event - An event.
+          */
+
+   						window.addEventListener("resize", function () {
+
+   								var id = 0;
+
+   								function handleResize(event) {
+
+   										var width = event.target.innerWidth;
+   										var height = event.target.innerHeight;
+
+   										composer.setSize(width, height);
+   										demo.camera.aspect = width / height;
+   										demo.camera.updateProjectionMatrix();
+
+   										id = 0;
+   								}
+
+   								return function onResize(event) {
+
+   										if (id === 0) {
+
+   												id = setTimeout(handleResize, 66, event);
+   										}
+   								};
+   						}());
+
+   						/**
+          * The main render loop.
+          *
+          * @method render
+          * @private
+          * @static
+          * @param {DOMHighResTimeStamp} now - An execution timestamp.
+          */
+
+   						(function render(now) {
+
+   								requestAnimationFrame(render);
+
+   								stats.begin();
+
+   								demo.update();
+   								composer.render(clock.getDelta());
+
+   								stats.end();
+   						})();
+   				}
+   		}]);
+   		return App;
+   }();
+
+   /**
+    * The program entry point.
+    *
+    * @class Main
+    * @static
+    */
+
+   /**
+    * Starts the program.
+    *
+    * @method main
+    * @private
+    * @static
+    * @param {Event} event - An event.
+    */
+
+   window.addEventListener("load", function main(event) {
+
+     var viewport = document.getElementById("viewport");
+     var loadingMessage = viewport.children[0];
+     var aside = document.getElementById("aside");
+
+     var app = new App();
+
+     window.removeEventListener("load", main);
+     aside.style.visibility = "visible";
+
+     app.initialise(viewport, aside, loadingMessage);
+   });
+
+}(THREE,dat,Stats));
