@@ -4,7 +4,7 @@ import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
 
 /**
- * An optimised convolution blur shader material.
+ * An optimised convolution shader material.
  *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
  *  Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)

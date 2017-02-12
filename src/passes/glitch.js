@@ -100,7 +100,7 @@ export class GlitchPass extends Pass {
 		this.mode = GlitchMode.SPORADIC;
 
 		/**
-		 * Counter for glitch activation/deactivation.
+		 * Counter for glitch activation and deactivation.
 		 *
 		 * @property counter
 		 * @type Number
@@ -232,7 +232,7 @@ export class GlitchPass extends Pass {
 /**
  * A glitch mode enumeration.
  *
- * @class GlitchPass.Mode
+ * @class GlitchMode
  * @submodule passes
  * @static
  */

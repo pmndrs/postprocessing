@@ -5,7 +5,7 @@ import { Pass } from "./pass.js";
 /**
  * A texture pass.
  *
- * Renders a given texture over the screen.
+ * Renders a given texture.
  *
  * @class TexturePass
  * @submodule passes

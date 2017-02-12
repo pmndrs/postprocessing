@@ -6,8 +6,8 @@ import { Pass } from "./pass.js";
  *
  * Yields more realistic results but is also more demanding.
  *
- * This pass requires a depth texture. See
- * {{#crossLink "EffectComposer/depthTexture:attribute"}}{{/crossLink}}.
+ * This pass requires a
+ * {{#crossLink "EffectComposer/depthTexture:property"}}{{/crossLink}}.
  *
  * @class Bokeh2Pass
  * @submodule passes

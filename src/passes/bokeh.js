@@ -4,8 +4,8 @@ import { Pass } from "./pass.js";
 /**
  * A Depth of Field (DoF) pass using a bokeh shader.
  *
- * This pass requires a depth texture. See
- * {{#crossLink "EffectComposer/depthTexture:attribute"}}{{/crossLink}}.
+ * This pass requires a
+ * {{#crossLink "EffectComposer/depthTexture:property"}}{{/crossLink}}.
  *
  * @class BokehPass
  * @submodule passes

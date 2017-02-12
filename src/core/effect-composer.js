@@ -8,18 +8,18 @@ import { CopyMaterial } from "../materials";
  * The auto clear behaviour of the provided renderer will be disabled to prevent
  * unnecessary clear operations.
  *
- * It is common to use a {{#crossLink "RenderPass"}}{{/crossLink}} as the first
- * pass to automatically clear the screen and render the scene to a texture for
- * further processing.
+ * It is common practice to use a {{#crossLink "RenderPass"}}{{/crossLink}} as
+ * the first pass to automatically clear the screen and render the scene to a
+ * texture for further processing.
  *
  * @class EffectComposer
- * @module postprocessing
+ * @submodule core
  * @constructor
  * @param {WebGLRenderer} [renderer] - The renderer that should be used.
  * @param {Object} [options] - The options.
  * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
  * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
- * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on the depth of the main scene.
+ * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on a depth texture.
  */
 
 export class EffectComposer {
@@ -124,9 +124,9 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Replaces the current renderer with the given one. The dom element of the
+	 * Replaces the current renderer with the given one. The DOM element of the
 	 * current renderer will automatically be removed from its parent node and the
-	 * dom element of the new renderer will take its place.
+	 * DOM element of the new renderer will take its place.
 	 *
 	 * The auto clear mechanism of the provided renderer will be disabled.
 	 *
