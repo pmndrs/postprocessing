@@ -15,7 +15,7 @@ import { Pass } from "./pass.js";
  * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
+ * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
  * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
  * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
  * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
@@ -86,12 +86,13 @@ export class BloomPass extends Pass {
 	/**
 	 * The resolution scale.
 	 *
-	 * You need to call the setSize method of the EffectComposer after changing
+	 * You need to call
+	 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
 	 * this value.
 	 *
-	 * @property kernelSize
-	 * @type ConvolutionMaterial.KernelSize
-	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 * @property resolutionScale
+	 * @type Number
+	 * @default 0.5
 	 */
 
 	get resolutionScale() { return this.blurPass.resolutionScale; }
@@ -106,8 +107,8 @@ export class BloomPass extends Pass {
 	 * The blur kernel size.
 	 *
 	 * @property kernelSize
-	 * @type ConvolutionMaterial.KernelSize
-	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 * @type KernelSize
+	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() { return this.blurPass.kernelSize; }

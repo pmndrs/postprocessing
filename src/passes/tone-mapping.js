@@ -132,7 +132,7 @@ export class ToneMappingPass extends Pass {
 	}
 
 	/**
-	 * The resolution of the render targets. Must be a power of two for mipmapping.
+	 * The resolution of the render targets. Must be a power of two.
 	 *
 	 * @property resolution
 	 * @type Number

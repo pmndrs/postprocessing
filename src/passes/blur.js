@@ -51,7 +51,8 @@ export class BlurPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call the setSize method of the EffectComposer after changing
+		 * You need to call
+		 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
 		 * this value.
 		 *
 		 * @property resolutionScale
@@ -81,8 +82,8 @@ export class BlurPass extends Pass {
 	 * The kernel size.
 	 *
 	 * @property kernelSize
-	 * @type ConvolutionMaterial.KernelSize
-	 * @default ConvolutionMaterial.KernelSize.LARGE
+	 * @type KernelSize
+	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() { return this.convolutionMaterial.kernelSize; }
