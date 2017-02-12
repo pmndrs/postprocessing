@@ -21,7 +21,7 @@ import vertex from "./glsl/shader.vert";
 
 export class CombineMaterial extends ShaderMaterial {
 
-	constructor(screenMode = true) {
+	constructor(screenMode = false) {
 
 		super({
 
