@@ -193,6 +193,8 @@ export class App {
 
 		function loadDemo() {
 
+			const size = composer.renderer.getSize();
+
 			loadingMessage.style.display = "block";
 			renderer.domElement.style.visibility = "hidden";
 
@@ -206,6 +208,7 @@ export class App {
 			if(demo !== null) {
 
 				demo.reset();
+				renderer.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer);
 
 			}

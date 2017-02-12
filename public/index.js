@@ -8045,6 +8045,8 @@
 
   						function loadDemo() {
 
+  								var size = composer.renderer.getSize();
+
   								loadingMessage.style.display = "block";
   								renderer.domElement.style.visibility = "hidden";
 
@@ -8057,6 +8059,7 @@
   								if (demo !== null) {
 
   										demo.reset();
+  										renderer.setSize(size.width, size.height);
   										composer.replaceRenderer(renderer);
   								}
 
