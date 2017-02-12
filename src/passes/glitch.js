@@ -138,7 +138,7 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * Generates a new perturbation map.
+	 * Deletes the current perturbation map and creates a new one.
 	 *
 	 * @method generatePerturbMap
 	 * @param {Number} [size=64] - The texture size.
@@ -150,7 +150,8 @@ export class GlitchPass extends Pass {
 		const pixels = size * size;
 		const data = new Float32Array(pixels * 3);
 
-		let i, x, dt;
+		let dt = this.perturbMap;
+		let i, x;
 
 		for(i = 0; i < pixels; ++i) {
 
@@ -162,8 +163,16 @@ export class GlitchPass extends Pass {
 
 		}
 
+		if(dt !== null) {
+
+			dt.dispose();
+
+		}
+
 		dt = new DataTexture(data, size, size, RGBFormat, FloatType);
 		dt.needsUpdate = true;
+
+		this.perturbMap = dt;
 
 		return dt;
 

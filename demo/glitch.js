@@ -252,7 +252,9 @@ export class GlitchDemo extends Demo {
 
 			} else {
 
-				pass.perturbMap = pass.generatePerturbMap(64);
+				// Prevent the custom perturbation map from getting deleted.
+				pass.perturbMap = null;
+				pass.generatePerturbMap(64);
 
 			}
 
