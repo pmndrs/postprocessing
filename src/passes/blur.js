@@ -116,7 +116,7 @@ export class BlurPass extends Pass {
 
 		const material = this.convolutionMaterial;
 		const uniforms = material.uniforms;
-		const kernel = material.kernel;
+		const kernel = material.getKernel();
 
 		let lastRT = readBuffer;
 		let destRT;
