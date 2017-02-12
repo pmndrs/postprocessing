@@ -1142,7 +1142,7 @@
                             "description": "- The blur kernel size.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "ConvolutionMaterial.KernelSize.LARGE"
+                            "optdefault": "KernelSize.LARGE"
                         },
                         {
                             "name": "intensity",
@@ -1713,7 +1713,7 @@
                             "description": "- The blur kernel size.",
                             "type": "Number",
                             "optional": true,
-                            "optdefault": "ConvolutionMaterial.KernelSize.LARGE"
+                            "optdefault": "KernelSize.LARGE"
                         },
                         {
                             "name": "samples",
@@ -2549,30 +2549,30 @@
         {
             "file": "src\\passes\\bloom.js",
             "line": 86,
-            "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
+            "description": "The resolution scale.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
-            "name": "kernelSize",
-            "type": "ConvolutionMaterial.KernelSize",
-            "default": "ConvolutionMaterial.KernelSize.LARGE",
+            "name": "resolutionScale",
+            "type": "Number",
+            "default": "0.5",
             "class": "BloomPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 105,
+            "line": 106,
             "description": "The blur kernel size.",
             "itemtype": "property",
             "name": "kernelSize",
-            "type": "ConvolutionMaterial.KernelSize",
-            "default": "ConvolutionMaterial.KernelSize.LARGE",
+            "type": "KernelSize",
+            "default": "KernelSize.LARGE",
             "class": "BloomPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 121,
+            "line": 122,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -2584,7 +2584,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 141,
+            "line": 142,
             "description": "The luminance distinction factor.",
             "itemtype": "property",
             "name": "distinction",
@@ -2596,7 +2596,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 161,
+            "line": 162,
             "description": "Renders the effect.\n\nExtracts a luminance map from the read buffer, blurs it and combines it\nwith the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -2623,7 +2623,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 203,
+            "line": 204,
             "description": "Adjusts the format of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2645,7 +2645,7 @@
         },
         {
             "file": "src\\passes\\bloom.js",
-            "line": 224,
+            "line": 225,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -2694,7 +2694,7 @@
         {
             "file": "src\\passes\\blur.js",
             "line": 51,
-            "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
+            "description": "The resolution scale.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
             "name": "resolutionScale",
             "type": "Number",
@@ -2705,7 +2705,7 @@
         },
         {
             "file": "src\\passes\\blur.js",
-            "line": 64,
+            "line": 65,
             "description": "A convolution shader material.",
             "itemtype": "property",
             "name": "convolutionMaterial",
@@ -2718,19 +2718,19 @@
         },
         {
             "file": "src\\passes\\blur.js",
-            "line": 80,
+            "line": 81,
             "description": "The kernel size.",
             "itemtype": "property",
             "name": "kernelSize",
-            "type": "ConvolutionMaterial.KernelSize",
-            "default": "ConvolutionMaterial.KernelSize.LARGE",
+            "type": "KernelSize",
+            "default": "KernelSize.LARGE",
             "class": "BlurPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\blur.js",
-            "line": 100,
+            "line": 101,
             "description": "Blurs the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -2757,7 +2757,7 @@
         },
         {
             "file": "src\\passes\\blur.js",
-            "line": 145,
+            "line": 146,
             "description": "Adjusts the format of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -2779,7 +2779,7 @@
         },
         {
             "file": "src\\passes\\blur.js",
-            "line": 164,
+            "line": 165,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -3053,7 +3053,7 @@
         {
             "file": "src\\passes\\film.js",
             "line": 47,
-            "description": "The amount of scanlines in percent, relative to the screen height.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
+            "description": "The amount of scanlines in percent, relative to the screen height.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
             "name": "scanlineDensity",
             "type": "Number",
@@ -3064,7 +3064,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 62,
+            "line": 63,
             "description": "Renders the effect.",
             "itemtype": "method",
             "name": "render",
@@ -3096,7 +3096,7 @@
         },
         {
             "file": "src\\passes\\film.js",
-            "line": 81,
+            "line": 82,
             "description": "Adjusts the scanline count using the renderer's height.",
             "itemtype": "method",
             "name": "setSize",
@@ -3530,30 +3530,30 @@
         {
             "file": "src\\passes\\god-rays.js",
             "line": 196,
-            "description": "The resolution scale.\n\nYou need to call the setSize method of the EffectComposer after changing\nthis value.",
+            "description": "The resolution scale.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
             "name": "kernelSize",
-            "type": "ConvolutionMaterial.KernelSize",
-            "default": "ConvolutionMaterial.KernelSize.LARGE",
+            "type": "Number",
+            "default": "0.5",
             "class": "GodRaysPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 215,
+            "line": 216,
             "description": "The blur kernel size.",
             "itemtype": "property",
             "name": "kernelSize",
-            "type": "ConvolutionMaterial.KernelSize",
-            "default": "ConvolutionMaterial.KernelSize.LARGE",
+            "type": "KernelSize",
+            "default": "KernelSize.LARGE",
             "class": "GodRaysPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 231,
+            "line": 232,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -3565,7 +3565,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 251,
+            "line": 252,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the GPU load.",
             "itemtype": "property",
             "name": "samples",
@@ -3577,7 +3577,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 277,
+            "line": 278,
             "description": "Renders the scene.\n\nThe god rays pass has four phases:\n\nMask Phase:\n The scene is rendered using a mask material.\n\nPreliminary Blur Phase:\n The masked scene is blurred.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines\n towards the light source.\n\nComposite Phase:\n The final result is combined with the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -3604,7 +3604,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 370,
+            "line": 371,
             "description": "Adjusts the format of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -3626,7 +3626,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 392,
+            "line": 393,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -4408,7 +4408,7 @@
         {
             "file": "src\\passes\\tone-mapping.js",
             "line": 134,
-            "description": "The resolution of the render targets. Must be a power of two for mipmapping.",
+            "description": "The resolution of the render targets. Must be a power of two.",
             "itemtype": "property",
             "name": "resolution",
             "type": "Number",

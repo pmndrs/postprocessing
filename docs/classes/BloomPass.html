@@ -206,7 +206,7 @@ convolution approach.</p>
 
                             </li>
                             <li class="param">
-                                    <code class="param-name optional">[kernelSize=ConvolutionMaterial.KernelSize.LARGE]</code>
+                                    <code class="param-name optional">[kernelSize=KernelSize.LARGE]</code>
                                     <span class="type">Number</span>
                                     <span class="flag optional" title="This parameter is optional.">optional</span>
 
@@ -334,10 +334,6 @@ convolution approach.</p>
                                 <a href="#property_kernelSize">kernelSize</a>
 
                             </li>
-                            <li class="index-item property">
-                                <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
                             <li class="index-item property private">
                                 <a href="#property_luminosityMaterial">luminosityMaterial</a>
 
@@ -360,6 +356,10 @@ convolution approach.</p>
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -442,7 +442,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l203"><code>src\passes\bloom.js:203</code></a>
+        <a href="../files/src_passes_bloom.js.html#l204"><code>src\passes\bloom.js:204</code></a>
         </p>
 
 
@@ -520,7 +520,7 @@ when you are certain that you don't need this pass anymore.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l161"><code>src\passes\bloom.js:161</code></a>
+        <a href="../files/src_passes_bloom.js.html#l162"><code>src\passes\bloom.js:162</code></a>
         </p>
 
 
@@ -610,7 +610,7 @@ with the read buffer.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bloom.js.html#l224"><code>src\passes\bloom.js:224</code></a>
+        <a href="../files/src_passes_bloom.js.html#l225"><code>src\passes\bloom.js:225</code></a>
         </p>
 
 
@@ -752,7 +752,7 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l141"><code>src\passes\bloom.js:141</code></a>
+        <a href="../files/src_passes_bloom.js.html#l142"><code>src\passes\bloom.js:142</code></a>
         </p>
 
 
@@ -803,7 +803,7 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l121"><code>src\passes\bloom.js:121</code></a>
+        <a href="../files/src_passes_bloom.js.html#l122"><code>src\passes\bloom.js:122</code></a>
         </p>
 
 
@@ -820,7 +820,7 @@ with the read buffer.</p>
 </div>
 <div id="property_kernelSize" class="property item">
     <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">ConvolutionMaterial.KernelSize</span>
+    <span class="type"><a href="../classes/KernelSize.html" class="crosslink">KernelSize</a></span>
 
 
 
@@ -829,7 +829,7 @@ with the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bloom.js.html#l105"><code>src\passes\bloom.js:105</code></a>
+        <a href="../files/src_passes_bloom.js.html#l106"><code>src\passes\bloom.js:106</code></a>
         </p>
 
 
@@ -840,35 +840,7 @@ with the read buffer.</p>
 
     </div>
 
-        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_kernelSize" class="property item">
-    <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">ConvolutionMaterial.KernelSize</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_bloom.js.html#l86"><code>src\passes\bloom.js:86</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call the setSize method of the EffectComposer after changing
-this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> ConvolutionMaterial.KernelSize.LARGE</p>
+        <p><strong>Default:</strong> KernelSize.LARGE</p>
 
 
 </div>
@@ -1038,6 +1010,35 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolutionScale" class="property item">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_bloom.js.html#l86"><code>src\passes\bloom.js:86</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call
+<a href="../classes/EffectComposer.html#method_setSize" class="crosslink">setSize</a> after changing
+this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>
