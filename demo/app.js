@@ -290,12 +290,14 @@ export class App {
 
 		(function render(now) {
 
+			const delta = clock.getDelta();
+
 			requestAnimationFrame(render);
 
 			stats.begin();
 
-			demo.update();
-			composer.render(clock.getDelta());
+			demo.update(delta);
+			composer.render(delta);
 
 			stats.end();
 

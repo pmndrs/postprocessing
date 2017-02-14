@@ -91,12 +91,13 @@ export class Demo {
 	initialise() {}
 
 	/**
-	 * Updates the demo.
+	 * Updates this demo.
 	 *
 	 * @method update
+	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update() {}
+	update(delta) {}
 
 	/**
 	 * Registers configuration options.

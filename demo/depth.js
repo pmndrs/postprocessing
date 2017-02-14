@@ -135,12 +135,13 @@ export class DepthDemo extends Demo {
 	}
 
 	/**
-	 * Creates the scene.
+	 * Updates this demo.
 	 *
-	 * @method createScene
+	 * @method update
+	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update() {
+	update(delta) {
 
 		const object = this.object;
 
