@@ -187,7 +187,7 @@ module.exports = {
 
 		"can be created and destroyed": function(test) {
 
-			const pass = new lib.SavePass(null);
+			const pass = new lib.SavePass();
 			test.ok(pass);
 			pass.dispose();
 			test.done();
