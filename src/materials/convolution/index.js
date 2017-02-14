@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -31,10 +31,10 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				texelSize: { value: new Vector2() },
-				halfTexelSize: { value: new Vector2() },
-				kernel: { value: 0.0 }
+				tDiffuse: new Uniform(null),
+				texelSize: new Uniform(new Vector2()),
+				halfTexelSize: new Uniform(new Vector2()),
+				kernel: new Uniform(0.0)
 
 			},
 

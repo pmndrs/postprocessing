@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -22,8 +22,8 @@ export class CopyMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				opacity: { value: 1.0 }
+				tDiffuse: new Uniform(null),
+				opacity: new Uniform(1.0)
 
 			},
 

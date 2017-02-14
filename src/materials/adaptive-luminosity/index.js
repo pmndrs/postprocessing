@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -28,10 +28,10 @@ export class AdaptiveLuminosityMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tPreviousLum: { value: null },
-				tCurrentLum: { value: null },
-				delta: { value: 0.0 },
-				tau: { value: 1.0 }
+				tPreviousLum: new Uniform(null),
+				tCurrentLum: new Uniform(null),
+				delta: new Uniform(0.0),
+				tau: new Uniform(1.0)
 
 			},
 

@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -29,11 +29,11 @@ export class CombineMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				texture1: { value: null },
-				texture2: { value: null },
+				texture1: new Uniform(null),
+				texture2: new Uniform(null),
 
-				opacity1: { value: 1.0 },
-				opacity2: { value: 1.0 }
+				opacity1: new Uniform(1.0),
+				opacity2: new Uniform(1.0)
 
 			},
 

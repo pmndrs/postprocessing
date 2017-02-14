@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -23,10 +23,10 @@ export class DepthMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
+				cameraNear: new Uniform(0.1),
+				cameraFar: new Uniform(2000),
 
-				tDepth: { value: null }
+				tDepth: new Uniform(null)
 
 			},
 

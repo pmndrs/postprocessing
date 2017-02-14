@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -25,19 +25,19 @@ export class GlitchMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				tPerturb: { value: null },
+				tDiffuse: new Uniform(null),
+				tPerturb: new Uniform(null),
 
-				active: { value: 1 },
+				active: new Uniform(1),
 
-				amount: { value: 0.8 },
-				angle: { value: 0.02 },
-				seed: { value: 0.02 },
-				seedX: { value: 0.02 },
-				seedY: { value: 0.02 },
-				distortionX: { value: 0.5 },
-				distortionY: { value: 0.6 },
-				colS: { value: 0.05 }
+				amount: new Uniform(0.8),
+				angle: new Uniform(0.02),
+				seed: new Uniform(0.02),
+				seedX: new Uniform(0.02),
+				seedY: new Uniform(0.02),
+				distortionX: new Uniform(0.5),
+				distortionY: new Uniform(0.6),
+				colS: new Uniform(0.05)
 
 			},
 

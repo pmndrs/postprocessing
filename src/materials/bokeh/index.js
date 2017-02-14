@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -6,7 +6,7 @@ import vertex from "./glsl/shader.vert";
 /**
  * Depth of Field shader (Bokeh).
  *
- * Original code by Martins Upitis:
+ * Original shader code by Martins Upitis:
  *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
  *
  * @class BokehMaterial
@@ -24,22 +24,26 @@ export class BokehMaterial extends ShaderMaterial {
 
 	constructor(camera = null, options = {}) {
 
+		if(options.focus !== undefined) { options.focus = 1.0; }
+		if(options.aperture !== undefined) { options.aperture = 0.025; }
+		if(options.maxBlur !== undefined) { options.maxBlur = 1.0; }
+
 		super({
 
 			type: "BokehMaterial",
 
 			uniforms: {
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
-				aspect: { value: 1.0 },
+				cameraNear: new Uniform(0.1),
+				cameraFar: new Uniform(2000),
+				aspect: new Uniform(1.0),
 
-				tDiffuse: { value: null },
-				tDepth: { value: null },
+				tDiffuse: new Uniform(null),
+				tDepth: new Uniform(null),
 
-				focus: { value: (options.focus !== undefined) ? options.focus : 1.0 },
-				aperture: { value: (options.aperture !== undefined) ? options.aperture : 0.025 },
-				maxBlur: { value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0 }
+				focus: new Uniform(options.focus),
+				aperture: new Uniform(options.aperture),
+				maxBlur: new Uniform(options.maxBlur)
 
 			},
 

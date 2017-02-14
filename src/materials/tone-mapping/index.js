@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -25,11 +25,11 @@ export class ToneMappingMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				luminanceMap: { value: null },
-				averageLuminance: { value: 1.0 },
-				maxLuminance: { value: 16.0 },
-				middleGrey: { value: 0.6 }
+				tDiffuse: new Uniform(null),
+				luminanceMap: new Uniform(null),
+				averageLuminance: new Uniform(1.0),
+				maxLuminance: new Uniform(16.0),
+				middleGrey: new Uniform(0.6)
 
 			},
 

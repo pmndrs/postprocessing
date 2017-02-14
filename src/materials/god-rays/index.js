@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -39,14 +39,14 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				lightPosition: { value: null },
+				tDiffuse: new Uniform(null),
+				lightPosition: new Uniform(null),
 
-				exposure: { value: 0.6 },
-				decay: { value: 0.93 },
-				density: { value: 0.96 },
-				weight: { value: 0.4 },
-				clampMax: { value: 1.0 }
+				exposure: new Uniform(0.6),
+				decay: new Uniform(0.93),
+				density: new Uniform(0.96),
+				weight: new Uniform(0.4),
+				clampMax: new Uniform(1.0)
 
 			},
 

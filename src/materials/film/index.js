@@ -1,4 +1,4 @@
-import { ShaderMaterial } from "three";
+import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -52,24 +52,32 @@ export class FilmMaterial extends ShaderMaterial {
 		if(options.vignette === undefined) { options.vignette = false; }
 		if(options.eskil === undefined) { options.eskil = false; }
 
+		if(options.noiseIntensity === undefined) { options.noiseIntensity = 0.5; }
+		if(options.scanlineIntensity === undefined) { options.scanlineIntensity = 0.05; }
+		if(options.greyscaleIntensity === undefined) { options.greyscaleIntensity = 1.0; }
+		if(options.sepiaIntensity === undefined) { options.sepiaIntensity = 1.0; }
+
+		if(options.vignetteOffset === undefined) { options.vignetteOffset = 1.0; }
+		if(options.vignetteDarkness === undefined) { options.vignetteDarkness = 1.0; }
+
 		super({
 
 			type: "FilmMaterial",
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				time: { value: 0.0 },
+				tDiffuse: new Uniform(null),
+				time: new Uniform(0.0),
 
-				noiseIntensity: { value: (options.noiseIntensity !== undefined) ? options.noiseIntensity : 0.5 },
-				scanlineIntensity: { value: (options.scanlineIntensity !== undefined) ? options.scanlineIntensity : 0.05 },
-				scanlineCount: { value: 0.0 },
+				noiseIntensity: new Uniform(options.noiseIntensity),
+				scanlineIntensity: new Uniform(options.scanlineIntensity),
+				scanlineCount: new Uniform(0.0),
 
-				greyscaleIntensity: { value: (options.greyscaleIntensity !== undefined) ? options.greyscaleIntensity : 1.0 },
-				sepiaIntensity: { value: (options.sepiaIntensity !== undefined) ? options.sepiaIntensity : 1.0 },
+				greyscaleIntensity: new Uniform(options.greyscaleIntensity),
+				sepiaIntensity: new Uniform(options.sepiaIntensity),
 
-				vignetteOffset: { value: (options.vignetteOffset !== undefined) ? options.vignetteOffset : 1.0 },
-				vignetteDarkness: { value: (options.vignetteDarkness !== undefined) ? options.vignetteDarkness : 1.0 }
+				vignetteOffset: new Uniform(options.vignetteOffset),
+				vignetteDarkness: new Uniform(options.vignetteDarkness)
 
 			},
 
@@ -81,14 +89,14 @@ export class FilmMaterial extends ShaderMaterial {
 
 		});
 
-		// These are enabled by default.
-		if(options.scanlines === undefined || options.scanlines) { this.defines.SCANLINES = "1"; }
-		if(options.noise === undefined || options.noise) { this.defines.NOISE = "1"; }
-
 		if(options.greyscale) { this.defines.GREYSCALE = "1"; }
 		if(options.sepia) { this.defines.SEPIA = "1"; }
 		if(options.vignette) { this.defines.VIGNETTE = "1"; }
 		if(options.eskil) { this.defines.ESKIL = "1"; }
+
+		// These are enabled by default.
+		if(options.scanlines === undefined || options.scanlines) { this.defines.SCANLINES = "1"; }
+		if(options.noise === undefined || options.noise) { this.defines.NOISE = "1"; }
 
 	}
 

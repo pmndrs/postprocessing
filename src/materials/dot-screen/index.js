@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector4 } from "three";
+import { ShaderMaterial, Uniform, Vector4 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -23,13 +23,13 @@ export class DotScreenMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
+				tDiffuse: new Uniform(null),
 
-				angle: { value: 1.57 },
-				scale: { value: 1.0 },
-				intensity: { value: 1.0 },
+				angle: new Uniform(1.57),
+				scale: new Uniform(1.0),
+				intensity: new Uniform(1.0),
 
-				offsetRepeat: { value: new Vector4(0.5, 0.5, 1.0, 1.0) }
+				offsetRepeat: new Uniform(new Vector4(0.5, 0.5, 1.0, 1.0))
 
 			},
 

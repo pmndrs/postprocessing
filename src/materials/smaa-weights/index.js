@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import areaImage from "./area-image.js";
 import searchImage from "./search-image.js";
@@ -40,10 +40,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				tArea: { value: null },
-				tSearch: { value: null },
-				texelSize: { value: texelSize }
+				tDiffuse: new Uniform(null),
+				tArea: new Uniform(null),
+				tSearch: new Uniform(null),
+				texelSize: new Uniform(texelSize)
 
 			},
 

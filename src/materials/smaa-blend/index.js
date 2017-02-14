@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -25,9 +25,9 @@ export class SMAABlendMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				tWeights: { value: null },
-				texelSize: { value: texelSize }
+				tDiffuse: new Uniform(null),
+				tWeights: new Uniform(null),
+				texelSize: new Uniform(texelSize)
 
 			},
 

@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -31,8 +31,8 @@ export class SMAAColorEdgesMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				texelSize: { value: texelSize }
+				tDiffuse: new Uniform(null),
+				texelSize: new Uniform(texelSize)
 
 			},
 

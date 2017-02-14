@@ -1,4 +1,4 @@
-import { ShaderMaterial, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
@@ -6,7 +6,7 @@ import vertex from "./glsl/shader.vert";
 /**
  * Depth of Field shader version 2.
  *
- * Original code by Martins Upitis:
+ * Original shader code by Martins Upitis:
  *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
  *
  * @class Bokeh2Material
@@ -53,27 +53,27 @@ export class Bokeh2Material extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: { value: null },
-				tDepth: { value: null },
+				tDiffuse: new Uniform(null),
+				tDepth: new Uniform(null),
 
-				texelSize: { value: new Vector2() },
-				halfTexelSize: { value: new Vector2() },
+				texelSize: new Uniform(new Vector2()),
+				halfTexelSize: new Uniform(new Vector2()),
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
+				cameraNear: new Uniform(0.1),
+				cameraFar: new Uniform(2000),
 
-				focalLength: { value: 24.0 },
-				focalStop: { value: 0.9 },
+				focalLength: new Uniform(24.0),
+				focalStop: new Uniform(0.9),
 
-				maxBlur: { value: 1.0 },
-				luminanceThreshold: { value: 0.5 },
-				luminanceGain: { value: 2.0 },
-				bias: { value: 0.5 },
-				fringe: { value: 0.7 },
-				ditherStrength: { value: 0.0001 },
+				maxBlur: new Uniform(1.0),
+				luminanceThreshold: new Uniform(0.5),
+				luminanceGain: new Uniform(2.0),
+				bias: new Uniform(0.5),
+				fringe: new Uniform(0.7),
+				ditherStrength: new Uniform(0.0001),
 
-				focusCoords: { value: new Vector2(0.5, 0.5) },
-				focalDepth: { value: 1.0 }
+				focusCoords: new Uniform(new Vector2(0.5, 0.5)),
+				focalDepth: new Uniform(1.0)
 
 			},
 
