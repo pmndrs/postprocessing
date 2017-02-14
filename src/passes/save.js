@@ -41,10 +41,11 @@ export class SavePass extends Pass {
 		this.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTarget.texture.generateMipmaps = false;
 
 		/**
 		 * Indicates whether the render target should be resized when the size of

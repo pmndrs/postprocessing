@@ -33,10 +33,11 @@ export class BlurPass extends Pass {
 		this.renderTargetX = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.

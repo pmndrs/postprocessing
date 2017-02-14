@@ -101,9 +101,10 @@ export class GodRaysPass extends Pass {
 
 		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			generateMipmaps: false
+			magFilter: LinearFilter
 		});
+
+		this.renderTargetMask.texture.generateMipmaps = false;
 
 		/**
 		 * The light source.

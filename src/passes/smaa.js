@@ -34,10 +34,11 @@ export class SMAAPass extends Pass {
 		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			format: RGBFormat,
-			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTargetColorEdges.texture.generateMipmaps = false;
 
 		/**
 		 * A render target for the SMAA weights.
