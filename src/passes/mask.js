@@ -17,6 +17,8 @@ export class MaskPass extends Pass {
 
 		super(scene, camera, null);
 
+		this.name = "MaskPass";
+
 		/**
 		 * Inverse flag.
 		 *

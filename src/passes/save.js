@@ -19,6 +19,8 @@ export class SavePass extends Pass {
 
 		super();
 
+		this.name = "SavePass";
+
 		/**
 		 * Copy shader material.
 		 *
@@ -45,6 +47,7 @@ export class SavePass extends Pass {
 			depthBuffer: false
 		});
 
+		this.renderTarget.texture.name = "Save.Target";
 		this.renderTarget.texture.generateMipmaps = false;
 
 		/**

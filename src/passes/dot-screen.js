@@ -21,6 +21,7 @@ export class DotScreenPass extends Pass {
 
 		super();
 
+		this.name = "DotScreenPass";
 		this.needsSwap = true;
 
 		/**

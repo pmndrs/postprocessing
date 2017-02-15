@@ -41,6 +41,7 @@ export class ToneMappingPass extends Pass {
 
 		super();
 
+		this.name = "ToneMappingPass";
 		this.needsSwap = true;
 
 		/**
@@ -49,7 +50,7 @@ export class ToneMappingPass extends Pass {
 		 * @property renderTargetLuminosity
 		 * @type WebGLRenderTarget
 		 * @private
-		 * @todo: use RED format in WebGL 2.0.
+		 * @todo Use RED format in WebGL 2.0.
 		 */
 
 		this.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {
@@ -59,6 +60,8 @@ export class ToneMappingPass extends Pass {
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTargetLuminosity.texture.name = "ToneMapping.Luminosity";
 
 		/**
 		 * Adapted luminance render target.
@@ -70,6 +73,7 @@ export class ToneMappingPass extends Pass {
 
 		this.renderTargetAdapted = this.renderTargetLuminosity.clone();
 
+		this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminosity";
 		this.renderTargetAdapted.texture.generateMipmaps = false;
 		this.renderTargetAdapted.texture.minFilter = LinearFilter;
 
@@ -82,6 +86,8 @@ export class ToneMappingPass extends Pass {
 		 */
 
 		this.renderTargetPrevious = this.renderTargetAdapted.clone();
+
+		this.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminosity";
 
 		/**
 		 * Copy shader material used for saving the luminance map.

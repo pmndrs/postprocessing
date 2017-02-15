@@ -21,6 +21,8 @@ export class TexturePass extends Pass {
 
 		super();
 
+		this.name = "TexturePass";
+
 		/**
 		 * A copy shader material used for rendering to texture.
 		 *

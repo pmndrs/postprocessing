@@ -30,6 +30,7 @@ export class FilmPass extends Pass {
 
 		super();
 
+		this.name = "FilmPass";
 		this.needsSwap = true;
 
 		/**

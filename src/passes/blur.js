@@ -20,6 +20,7 @@ export class BlurPass extends Pass {
 
 		super();
 
+		this.name = "BlurPass";
 		this.needsSwap = true;
 
 		/**
@@ -37,6 +38,7 @@ export class BlurPass extends Pass {
 			depthBuffer: false
 		});
 
+		this.renderTargetX.texture.name = "Blur.TargetX";
 		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
@@ -48,6 +50,8 @@ export class BlurPass extends Pass {
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
+
+		this.renderTargetY.texture.name = "Blur.TargetY";
 
 		/**
 		 * The resolution scale.

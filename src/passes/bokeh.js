@@ -24,6 +24,7 @@ export class BokehPass extends Pass {
 
 		super();
 
+		this.name = "BokehPass";
 		this.needsSwap = true;
 
 		/**

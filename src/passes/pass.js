@@ -29,6 +29,15 @@ export class Pass {
 	) {
 
 		/**
+		 * The name of this pass.
+		 *
+		 * @property name
+		 * @type String
+		 */
+
+		this.name = "Pass";
+
+		/**
 		 * The scene to render.
 		 *
 		 * @property scene

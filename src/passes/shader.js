@@ -19,6 +19,7 @@ export class ShaderPass extends Pass {
 
 		super();
 
+		this.name = "ShaderPass";
 		this.needsSwap = true;
 
 		/**

@@ -34,6 +34,8 @@ export class RenderPass extends Pass {
 
 		super(scene, camera, null);
 
+		this.name = "RenderPass";
+
 		/**
 		 * Override material.
 		 *

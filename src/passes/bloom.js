@@ -27,6 +27,8 @@ export class BloomPass extends Pass {
 
 		super();
 
+		this.name = "BloomPass";
+
 		/**
 		 * A blur pass.
 		 *
@@ -47,6 +49,8 @@ export class BloomPass extends Pass {
 
 		this.renderTargetX = this.blurPass.renderTargetX.clone();
 
+		this.renderTargetX.texture.name = "Bloom.TargetX";
+
 		/**
 		 * A second render target.
 		 *
@@ -56,6 +60,8 @@ export class BloomPass extends Pass {
 		 */
 
 		this.renderTargetY = this.blurPass.renderTargetY.clone();
+
+		this.renderTargetY.texture.name = "Bloom.TargetY";
 
 		/**
 		 * Combine shader material.

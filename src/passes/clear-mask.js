@@ -15,6 +15,8 @@ export class ClearMaskPass extends Pass {
 
 		super(null, null, null);
 
+		this.name = "ClearMaskPass";
+
 	}
 
 	/**

@@ -22,6 +22,8 @@ export class DepthPass extends Pass {
 
 		super();
 
+		this.name = "DepthPass";
+
 		/**
 		 * A depth shader material.
 		 *

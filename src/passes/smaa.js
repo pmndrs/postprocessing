@@ -21,6 +21,7 @@ export class SMAAPass extends Pass {
 
 		super();
 
+		this.name = "SMAAPass";
 		this.needsSwap = true;
 
 		/**
@@ -38,6 +39,7 @@ export class SMAAPass extends Pass {
 			depthBuffer: false
 		});
 
+		this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
 		this.renderTargetColorEdges.texture.generateMipmaps = false;
 
 		/**
@@ -50,6 +52,7 @@ export class SMAAPass extends Pass {
 
 		this.renderTargetWeights = this.renderTargetColorEdges.clone();
 
+		this.renderTargetWeights.texture.name = "SMAA.Weights";
 		this.renderTargetWeights.texture.format = RGBAFormat;
 
 		/**

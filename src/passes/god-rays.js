@@ -61,6 +61,8 @@ export class GodRaysPass extends Pass {
 
 		super();
 
+		this.name = "GodRaysPass";
+
 		/**
 		 * A blur pass.
 		 *
@@ -81,6 +83,8 @@ export class GodRaysPass extends Pass {
 
 		this.renderTargetX = this.blurPass.renderTargetX.clone();
 
+		this.renderTargetX.texture.name = "GodRays.TargetX";
+
 		/**
 		 * A second render target.
 		 *
@@ -90,6 +94,8 @@ export class GodRaysPass extends Pass {
 		 */
 
 		this.renderTargetY = this.blurPass.renderTargetY.clone();
+
+		this.renderTargetY.texture.name = "GodRays.TargetY";
 
 		/**
 		 * A render target for rendering the masked scene.
@@ -104,6 +110,7 @@ export class GodRaysPass extends Pass {
 			magFilter: LinearFilter
 		});
 
+		this.renderTargetMask.texture.name = "GodRays.Mask";
 		this.renderTargetMask.texture.generateMipmaps = false;
 
 		/**

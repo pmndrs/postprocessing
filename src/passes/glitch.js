@@ -54,6 +54,7 @@ export class GlitchPass extends Pass {
 
 		super();
 
+		this.name = "GlitchPass";
 		this.needsSwap = true;
 
 		/**
@@ -78,16 +79,9 @@ export class GlitchPass extends Pass {
 
 		this.texture = null;
 
-		if(options.perturbMap !== undefined) {
-
-			this.perturbMap = options.perturbMap;
-			this.perturbMap.generateMipmaps = false;
-
-		} else {
-
-			this.perturbMap = this.generatePerturbMap(options.dtSize);
-
-		}
+		this.perturbMap = (options.perturbMap !== undefined) ? options.perturbMap : this.generatePerturbMap(options.dtSize);
+		this.perturbMap.name = "Glitch.Perturbation";
+		this.perturbMap.generateMipmaps = false;
 
 		/**
 		 * The effect mode.
