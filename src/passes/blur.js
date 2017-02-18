@@ -11,7 +11,7 @@ import { Pass } from "./pass.js";
  * @constructor
  * @param {Object} [options] - The options.
  * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
+ * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
  */
 
 export class BlurPass extends Pass {
