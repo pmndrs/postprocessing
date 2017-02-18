@@ -24,9 +24,9 @@ export class BokehMaterial extends ShaderMaterial {
 
 	constructor(camera = null, options = {}) {
 
-		if(options.focus !== undefined) { options.focus = 1.0; }
-		if(options.aperture !== undefined) { options.aperture = 0.025; }
-		if(options.maxBlur !== undefined) { options.maxBlur = 1.0; }
+		if(options.focus === undefined) { options.focus = 1.0; }
+		if(options.aperture === undefined) { options.aperture = 0.025; }
+		if(options.maxBlur === undefined) { options.maxBlur = 1.0; }
 
 		super({
 
