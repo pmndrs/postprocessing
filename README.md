@@ -101,7 +101,7 @@ Maintain the existing coding style. Add unit tests for any new or changed functi
 
 ## License
 
-This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE).
+This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).
 
 The original code that this library is based on, was written by [alteredq](http://alteredqualia.com),
 [miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85),
