@@ -6,11 +6,8 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
  * Passes that do not rely on the depth buffer should explicitly disable the
  * depth test and depth write in their respective shader materials.
  *
- * This class implements a dispose method that frees memory on demand. The
- * EffectComposer calls this method when it is being destroyed. For this
- * mechanism to work properly, please assign your render targets, materials and
- * textures directly to your pass. You can prevent your disposable objects from
- * being deleted by keeping them inside deeper structures.
+ * This class implements a {{#crossLink "Pass/dispose:method"}}{{/crossLink}}
+ * method that frees memory on demand.
  *
  * @class Pass
  * @submodule passes
@@ -160,8 +157,8 @@ export class Pass {
 	 * This is an abstract method that may be overriden in case you want to be
 	 * informed about the main render size.
 	 *
-	 * The effect composer calls this method before this pass is initialised and
-	 * every time its own size is updated.
+	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
+	 * this pass is initialised and every time its own size is updated.
 	 *
 	 * @method setSize
 	 * @param {Number} width - The renderer's width.
@@ -182,7 +179,8 @@ export class Pass {
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
 	 *
-	 * The effect composer calls this method when this pass is added to its queue.
+	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
+	 * this pass is added to its queue.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -202,8 +200,8 @@ export class Pass {
 	 *  - materials
 	 *  - textures
 	 *
-	 * The EffectComposer calls this method automatically when it is being
-	 * destroyed. You may, however, use it independently to free memory
+	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
+	 * is being destroyed. You may, however, use it independently to free memory
 	 * when you are certain that you don't need this pass anymore.
 	 *
 	 * @method dispose
