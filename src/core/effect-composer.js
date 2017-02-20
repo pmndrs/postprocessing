@@ -200,6 +200,7 @@ export class EffectComposer {
 			stencilBuffer: stencilBuffer
 		});
 
+		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
 
 		if(depthTexture) {
