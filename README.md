@@ -57,6 +57,7 @@ export class MyPass extends Pass {
 
 		super();
 
+		this.name = "MyPass";
 		this.needsSwap = true;
 		this.material = new MyMaterial();
 		this.quad.material = this.material;
@@ -66,7 +67,7 @@ export class MyPass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 
