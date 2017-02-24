@@ -1,5 +1,15 @@
-import { Color, LinearFilter, MeshBasicMaterial, RGBFormat, Scene, Vector3, WebGLRenderTarget } from "three";
+import {
+	Color,
+	LinearFilter,
+	MeshBasicMaterial,
+	RGBFormat,
+	Scene,
+	Vector3,
+	WebGLRenderTarget
+} from "three";
+
 import { CombineMaterial, GodRaysMaterial } from "../materials";
+import { RenderPass } from "./render.js";
 import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
 
@@ -20,17 +30,6 @@ function clamp(value, min, max) {
 	return Math.max(min, Math.min(max, value));
 
 }
-
-/**
- * A clear color.
- *
- * @property CLEAR_COLOR
- * @type Color
- * @private
- * @static
- */
-
-const CLEAR_COLOR = new Color();
 
 /**
  * A crepuscular rays pass.
@@ -62,6 +61,58 @@ export class GodRaysPass extends Pass {
 		super();
 
 		this.name = "GodRaysPass";
+
+		/**
+		 * A scene that only contains the light source.
+		 *
+		 * @property lightScene
+		 * @type Scene
+		 */
+
+		this.lightScene = new Scene();
+
+		/**
+		 * The main scene.
+		 *
+		 * @property mainScene
+		 * @type Scene
+		 */
+
+		this.mainScene = scene;
+
+		/**
+		 * The main camera.
+		 *
+		 * @property mainCamera
+		 * @type Camera
+		 */
+
+		this.mainCamera = camera;
+
+		/**
+		 * A pass that only renders the light source.
+		 *
+		 * @property renderPassLight
+		 * @type RenderPass
+		 * @private
+		 */
+
+		this.renderPassLight = new RenderPass(this.lightScene, this.mainCamera);
+
+		/**
+		 * A pass that renders the masked scene over the light.
+		 *
+		 * @property renderPassMask
+		 * @type RenderPass
+		 * @private
+		 */
+
+		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new MeshBasicMaterial({ color: 0x000000 }),
+			clearColor: new Color(0x000000)
+		});
+
+		this.renderPassMask.clear = false;
 
 		/**
 		 * A blur pass.
@@ -98,7 +149,7 @@ export class GodRaysPass extends Pass {
 		this.renderTargetY.texture.name = "GodRays.TargetY";
 
 		/**
-		 * A render target for rendering the masked scene.
+		 * A render target for the masked light scene.
 		 *
 		 * @property renderTargetMask
 		 * @type WebGLRenderTarget
@@ -133,27 +184,7 @@ export class GodRaysPass extends Pass {
 		this.screenPosition = new Vector3();
 
 		/**
-		 * A combine shader material used for rendering to screen.
-		 *
-		 * @property combineMaterial
-		 * @type CombineMaterial
-		 * @private
-		 */
-
-		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
-
-		/**
-		 * A material used for masking the scene objects.
-		 *
-		 * @property maskMaterial
-		 * @type MeshBasicMaterial
-		 * @private
-		 */
-
-		this.maskMaterial = new MeshBasicMaterial({ color: 0x000000 });
-
-		/**
-		 * God rays shader material.
+		 * A god rays shader material.
 		 *
 		 * @property godRaysMaterial
 		 * @type GodRaysMaterial
@@ -170,34 +201,18 @@ export class GodRaysPass extends Pass {
 		if(options.clampMax !== undefined) { this.godRaysMaterial.uniforms.clampMax.value = options.clampMax; }
 
 		this.samples = options.samples;
+
+		/**
+		 * A combine shader material.
+		 *
+		 * @property combineMaterial
+		 * @type CombineMaterial
+		 * @private
+		 */
+
+		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
+
 		this.intensity = options.intensity;
-
-		/**
-		 * A scene that only contains the light source.
-		 *
-		 * @property lightScene
-		 * @type Scene
-		 */
-
-		this.lightScene = new Scene();
-
-		/**
-		 * The main scene.
-		 *
-		 * @property mainScene
-		 * @type Scene
-		 */
-
-		this.mainScene = scene;
-
-		/**
-		 * The main camera.
-		 *
-		 * @property mainCamera
-		 * @type Camera
-		 */
-
-		this.mainCamera = camera;
 
 	}
 
@@ -289,7 +304,8 @@ export class GodRaysPass extends Pass {
 	 * The god rays pass has four phases:
 	 *
 	 * Mask Phase:
-	 *  The scene is rendered using a mask material.
+	 *  First, the light source is rendered. Then the scene is rendered into the 
+	 *  same buffer using a mask override material with depth test enabled.
 	 *
 	 * Preliminary Blur Phase:
 	 *  The masked scene is blurred.
@@ -312,11 +328,7 @@ export class GodRaysPass extends Pass {
 		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
-		const blurPass = this.blurPass;
-
 		const mainScene = this.mainScene;
-		const mainCamera = this.mainCamera;
-		const lightScene = this.lightScene;
 
 		const lightSource = this.lightSource;
 		const screenPosition = this.screenPosition;
@@ -328,26 +340,21 @@ export class GodRaysPass extends Pass {
 		const renderTargetX = this.renderTargetX;
 		const renderTargetY = this.renderTargetY;
 
-		let clearAlpha, background, parent;
+		let background, parent;
 
-		// Compute the screen light position and translate the coordinates to [0, 1].
-		screenPosition.copy(lightSource.position).project(mainCamera);
+		// Compute the screen light position and translate it to [0, 1].
+		screenPosition.copy(lightSource.position).project(this.mainCamera);
 		screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
 		screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
 		// Render the masked scene.
 		parent = lightSource.parent;
 		background = mainScene.background;
-		CLEAR_COLOR.copy(renderer.getClearColor());
-		clearAlpha = renderer.getClearAlpha();
-
-		renderer.setClearColor(0x000000, 1);
-		mainScene.overrideMaterial = this.maskMaterial;
 		mainScene.background = null;
-		lightScene.add(lightSource);
+		this.lightScene.add(lightSource);
 
-		renderer.render(lightScene, mainCamera, renderTargetMask, true);
-		renderer.render(mainScene, mainCamera, renderTargetMask);
+		this.renderPassLight.render(renderer, renderTargetMask);
+		this.renderPassMask.render(renderer, renderTargetMask);
 
 		if(parent !== null) {
 
@@ -356,11 +363,9 @@ export class GodRaysPass extends Pass {
 		}
 
 		mainScene.background = background;
-		mainScene.overrideMaterial = null;
-		renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
 		// Convolution phase.
-		blurPass.render(renderer, renderTargetMask, renderTargetX);
+		this.blurPass.render(renderer, renderTargetMask, renderTargetX);
 
 		// Radial blur pass.
 		quad.material = godRaysMaterial;
@@ -386,6 +391,8 @@ export class GodRaysPass extends Pass {
 
 	initialise(renderer, alpha) {
 
+		this.renderPassLight.initialise(renderer, alpha);
+		this.renderPassMask.initialise(renderer, alpha);
 		this.blurPass.initialise(renderer, alpha);
 
 		if(!alpha) {
@@ -408,6 +415,8 @@ export class GodRaysPass extends Pass {
 
 	setSize(width, height) {
 
+		this.renderPassLight.setSize(width, height);
+		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
 		width = this.blurPass.renderTargetX.width;
