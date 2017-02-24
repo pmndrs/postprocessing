@@ -304,7 +304,7 @@ export class GodRaysPass extends Pass {
 	 * The god rays pass has four phases:
 	 *
 	 * Mask Phase:
-	 *  First, the light source is rendered. Then the scene is rendered into the 
+	 *  First, the light source is rendered. Then the scene is rendered into the
 	 *  same buffer using a mask override material with depth test enabled.
 	 *
 	 * Preliminary Blur Phase:
