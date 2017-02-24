@@ -23,7 +23,7 @@ export class ClearMaskPass extends Pass {
 	 * This pass disables the stencil test.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
 	render(renderer) {

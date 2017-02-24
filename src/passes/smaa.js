@@ -121,7 +121,7 @@ export class SMAAPass extends Pass {
 	 * Antialiases the scene.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */

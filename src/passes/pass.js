@@ -40,31 +40,31 @@ export class Pass {
 		 * @property scene
 		 * @type Scene
 		 * @private
-		 * @default Scene()
+		 * @default new Scene()
 		 */
 
 		this.scene = scene;
 
 		/**
-		 * The camera to render with.
+		 * The camera.
 		 *
 		 * @property camera
 		 * @type Camera
 		 * @private
-		 * @default OrthographicCamera(-1, 1, 1, -1, 0, 1)
+		 * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
 		 */
 
 		this.camera = camera;
 
 		/**
-		 * The quad mesh to use for rendering.
+		 * A quad mesh that fills the screen.
 		 *
 		 * Assign your shader material to this mesh!
 		 *
 		 * @property quad
 		 * @type Mesh
 		 * @private
-		 * @default Mesh(PlaneBufferGeometry(2, 2), null)
+		 * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
 		 * @example
 		 *     this.quad.material = this.myMaterial;
 		 */
@@ -138,7 +138,7 @@ export class Pass {
 	 *
 	 * @method render
 	 * @throws {Error} An error is thrown if the method is not overridden.
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
 	 * @param {Number} [delta] - The delta time.

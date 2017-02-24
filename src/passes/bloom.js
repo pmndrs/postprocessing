@@ -172,7 +172,7 @@ export class BloomPass extends Pass {
 	 * with the read buffer.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */

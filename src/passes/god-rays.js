@@ -302,7 +302,7 @@ export class GodRaysPass extends Pass {
 	 *  The final result is combined with the read buffer.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */

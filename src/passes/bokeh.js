@@ -45,7 +45,7 @@ export class BokehPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */

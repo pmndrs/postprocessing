@@ -8,7 +8,7 @@ import { Pass } from "./pass.js";
  * @extends Pass
  * @constructor
  * @param {Scene} scene - The scene to render.
- * @param {Camera} camera - The camera to use to render the scene.
+ * @param {Camera} camera - The camera to use.
  */
 
 export class MaskPass extends Pass {
@@ -46,7 +46,7 @@ export class MaskPass extends Pass {
 	 * The buffers will both be cleared first.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */

@@ -80,7 +80,7 @@ export class RenderPass extends Pass {
 	 * Renders the scene.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
