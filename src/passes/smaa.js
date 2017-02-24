@@ -88,6 +88,7 @@ export class SMAAPass extends Pass {
 
 		const areaTexture = new Texture();
 		areaTexture.image = areaImage;
+		areaTexture.name = "SMAA.Area";
 		areaTexture.minFilter = LinearFilter;
 		areaTexture.format = RGBFormat;
 		areaTexture.generateMipmaps = false;
@@ -99,6 +100,7 @@ export class SMAAPass extends Pass {
 
 		const searchTexture = new Texture();
 		searchTexture.image = searchImage;
+		searchTexture.name = "SMAA.Search";
 		searchTexture.magFilter = NearestFilter;
 		searchTexture.minFilter = NearestFilter;
 		searchTexture.generateMipmaps = false;
