@@ -23,9 +23,11 @@ const CLEAR_COLOR = new Color();
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  * @param {Object} [options] - Additional options.
- * @param {Material} [options.overrideMaterial] - An override material for the scene.
- * @param {Color} [options.clearColor] - An override clear color.
- * @param {Number} [options.clearAlpha] - An override clear alpha.
+ * @param {Material} [options.overrideMaterial=null] - An override material for the scene.
+ * @param {Color} [options.clearColor=null] - An override clear color.
+ * @param {Number} [options.clearAlpha=1.0] - An override clear alpha.
+ * @param {Boolean} [options.clearDepth=false] - Whether depth should be cleared explicitly.
+ * @param {Boolean} [options.clear=true] - Whether all buffers should be cleared.
  */
 
 export class RenderPass extends Pass {
@@ -41,6 +43,7 @@ export class RenderPass extends Pass {
 		 *
 		 * @property overrideMaterial
 		 * @type Material
+		 * @default null
 		 */
 
 		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
@@ -50,6 +53,7 @@ export class RenderPass extends Pass {
 		 *
 		 * @property clearColor
 		 * @type Color
+		 * @default null
 		 */
 
 		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
@@ -65,14 +69,28 @@ export class RenderPass extends Pass {
 		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 1.0;
 
 		/**
-		 * Clear flag.
+		 * Indicates whether the depth buffer should be cleared explicitly.
+		 *
+		 * @property clearDepth
+		 * @type Boolean
+		 * @default false
+		 */
+
+		this.clearDepth = (options.clearDepth !== undefined) ? options.clearDepth : false;
+
+		/**
+		 * Indicates whether the color, depth and stencil buffers should be cleared.
+		 *
+		 * Even with clear set to true you can prevent specific buffers from being
+		 * cleared by setting either the autoClearColor, autoClearStencil or
+		 * autoClearDepth properties of the renderer to false.
 		 *
 		 * @property clear
 		 * @type Boolean
 		 * @default true
 		 */
 
-		this.clear = true;
+		this.clear = (options.clear !== undefined) ? options.clear : true;
 
 	}
 
@@ -101,7 +119,13 @@ export class RenderPass extends Pass {
 
 		}
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
+		if(this.clearDepth) {
+
+			renderer.clearDepth();
+
+		}
+
+		renderer.render(scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
 
 		if(clearColor !== null) {
 
