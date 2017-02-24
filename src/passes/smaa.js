@@ -141,7 +141,7 @@ export class SMAAPass extends Pass {
 		this.quad.material = this.blendMaterial;
 		this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

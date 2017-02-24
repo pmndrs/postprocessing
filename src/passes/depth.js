@@ -50,7 +50,7 @@ export class DepthPass extends Pass {
 
 		this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
 
 	}
 

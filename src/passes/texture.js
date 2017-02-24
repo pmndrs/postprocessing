@@ -83,7 +83,7 @@ export class TexturePass extends Pass {
 
 	render(renderer, readBuffer) {
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
 
 	}
 

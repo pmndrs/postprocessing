@@ -75,7 +75,7 @@ export class SavePass extends Pass {
 
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
+		renderer.render(this.scene, this.camera, this.renderTarget);
 
 	}
 

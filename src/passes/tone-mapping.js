@@ -236,7 +236,7 @@ export class ToneMappingPass extends Pass {
 		quad.material = toneMappingMaterial;
 		toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

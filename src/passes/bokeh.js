@@ -55,7 +55,7 @@ export class BokehPass extends Pass {
 		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

@@ -62,7 +62,7 @@ export class ShaderPass extends Pass {
 
 		}
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

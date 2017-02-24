@@ -203,7 +203,7 @@ export class BloomPass extends Pass {
 		combineMaterial.uniforms.texture1.value = readBuffer.texture;
 		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

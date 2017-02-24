@@ -76,7 +76,7 @@ export class FilmPass extends Pass {
 		this.material.uniforms.tDiffuse.value = readBuffer.texture;
 		this.material.uniforms.time.value += delta;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 
