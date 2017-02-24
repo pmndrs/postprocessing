@@ -1,5 +1,18 @@
-import { LinearFilter, LinearMipMapLinearFilter, MeshBasicMaterial, RGBFormat, WebGLRenderTarget } from "three";
-import { AdaptiveLuminosityMaterial, CopyMaterial, LuminosityMaterial, ToneMappingMaterial } from "../materials";
+import {
+	LinearFilter,
+	LinearMipMapLinearFilter,
+	MeshBasicMaterial,
+	RGBFormat,
+	WebGLRenderTarget
+} from "three";
+
+import {
+	AdaptiveLuminosityMaterial,
+	CopyMaterial,
+	LuminosityMaterial,
+	ToneMappingMaterial
+} from "../materials";
+
 import { Pass } from "./pass.js";
 
 /**
@@ -206,6 +219,7 @@ export class ToneMappingPass extends Pass {
 		const adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;
 		const luminosityMaterial = this.luminosityMaterial;
 		const toneMappingMaterial = this.toneMappingMaterial;
+		const copyMaterial = this.copyMaterial;
 
 		const renderTargetPrevious = this.renderTargetPrevious;
 		const renderTargetLuminosity = this.renderTargetLuminosity;
@@ -226,8 +240,8 @@ export class ToneMappingPass extends Pass {
 			renderer.render(scene, camera, renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
-			quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
+			quad.material = copyMaterial;
+			copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
 			renderer.render(scene, camera, renderTargetPrevious);
 
 		}

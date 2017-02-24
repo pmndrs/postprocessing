@@ -1,4 +1,12 @@
-import { LinearFilter, NearestFilter, RGBAFormat, RGBFormat, Texture, WebGLRenderTarget } from "three";
+import {
+	LinearFilter,
+	NearestFilter,
+	RGBAFormat,
+	RGBFormat,
+	Texture,
+	WebGLRenderTarget
+} from "three";
+
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
