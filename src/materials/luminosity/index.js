@@ -19,8 +19,8 @@ import vertex from "./glsl/shader.vert";
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
- * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
+ * @param {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
+ * @param {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified luminance range.
  */
 
 export class LuminosityMaterial extends ShaderMaterial {

@@ -90,7 +90,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
  * The Kawase blur kernel presets.
  *
  * @property kernelPresets
- * @type Number
+ * @type Array
  * @private
  * @static
  */
