@@ -248,6 +248,7 @@ export class FilmDemo extends Demo {
 			"noise intensity": pass.material.uniforms.noiseIntensity.value,
 			"scanlines intensity": pass.material.uniforms.scanlineIntensity.value,
 			"scanlines count": pass.scanlineDensity,
+			"blend mode": "screen",
 			"greyscale intensity": pass.material.uniforms.greyscaleIntensity.value,
 			"sepia intensity": pass.material.uniforms.sepiaIntensity.value,
 			"vignette offset": pass.material.uniforms.vignetteOffset.value,
@@ -268,6 +269,22 @@ export class FilmDemo extends Demo {
 		f.open();
 
 		f = gui.addFolder("Noise and scanlines");
+
+		f.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+
+			if(params["blend mode"] === "add") {
+
+				delete pass.material.defines.SCREEN_MODE;
+
+			} else {
+
+				pass.material.defines.SCREEN_MODE = "1";
+
+			}
+
+			pass.material.needsUpdate = true;
+
+		});
 
 		f.add(params, "noise").onChange(function() {
 			params.noise ? pass.material.defines.NOISE = "1" : delete pass.material.defines.NOISE;

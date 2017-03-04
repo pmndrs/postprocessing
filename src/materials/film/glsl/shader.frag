@@ -40,20 +40,52 @@ void main() {
 	vec4 texel = texture2D(tDiffuse, vUv);
 	vec3 color = texel.rgb;
 
+	#ifdef SCREEN_MODE
+
+		vec3 invColor;
+
+	#endif
+
 	#ifdef NOISE
 
 		float x = vUv.x * vUv.y * time * 1000.0;
 		x = mod(x, 13.0) * mod(x, 123.0);
 		x = mod(x, 0.01);
 
-		color += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;
+		vec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;
+
+		#ifdef SCREEN_MODE
+
+			invColor = vec3(1.0) - color;
+			vec3 invNoise = vec3(1.0) - noise;
+
+			color = vec3(1.0) - invColor * invNoise;
+
+		#else
+
+			color += noise;
+
+		#endif
 
 	#endif
 
 	#ifdef SCANLINES
 
 		vec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));
-		color += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;
+		vec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;
+
+		#ifdef SCREEN_MODE
+
+			invColor = vec3(1.0) - color;
+			vec3 invScanlines = vec3(1.0) - scanlines;
+
+			color = vec3(1.0) - invColor * invScanlines;
+
+		#else
+
+			color += scanlines;
+
+		#endif
 
 	#endif
 
