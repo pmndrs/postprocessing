@@ -154,7 +154,7 @@ export class Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * This is an abstract method that may be overriden in case you want to be
+	 * This is an abstract method that may be overridden in case you want to be
 	 * informed about the main render size.
 	 *
 	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
