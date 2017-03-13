@@ -136,6 +136,18 @@ module.exports = {
 
 	},
 
+	"Pixellation": {
+
+		"can be created": function(test) {
+
+			const material = new lib.PixellationMaterial();
+			test.ok(material);
+			test.done();
+
+		}
+
+	},
+
 	"SMAABlend": {
 
 		"can be created": function(test) {

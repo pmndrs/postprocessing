@@ -21,10 +21,11 @@ export {
 	GodRaysPass,
 	MaskPass,
 	Pass,
+	PixellationPass,
 	RenderPass,
 	SavePass,
-	SMAAPass,
 	ShaderPass,
+	SMAAPass,
 	TexturePass,
 	ToneMappingPass
 } from "./passes";
@@ -43,6 +44,7 @@ export {
 	GodRaysMaterial,
 	KernelSize,
 	LuminosityMaterial,
+	PixellationMaterial,
 	SMAABlendMaterial,
 	SMAAColorEdgesMaterial,
 	SMAAWeightsMaterial,

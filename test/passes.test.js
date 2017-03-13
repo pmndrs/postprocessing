@@ -157,6 +157,19 @@ module.exports = {
 
 	},
 
+	"Pixellation": {
+
+		"can be created and destroyed": function(test) {
+
+			const pass = new lib.PixellationPass();
+			test.ok(pass);
+			pass.dispose();
+			test.done();
+
+		}
+
+	},
+
 	"Mask": {
 
 		"can be created and destroyed": function(test) {
