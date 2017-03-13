@@ -1,7 +1,7 @@
 import { Pass } from "./pass.js";
 
 /**
- * A clear mask pass.
+ * A pass that disables the stencil mask.
  *
  * @class ClearMaskPass
  * @submodule passes
@@ -20,7 +20,7 @@ export class ClearMaskPass extends Pass {
 	}
 
 	/**
-	 * This pass disables the stencil test.
+	 * Disables the stencil test.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -28,7 +28,7 @@ export class ClearMaskPass extends Pass {
 
 	render(renderer) {
 
-		renderer.context.disable(renderer.context.STENCIL_TEST);
+		renderer.state.buffers.stencil.setTest(false);
 
 	}
 

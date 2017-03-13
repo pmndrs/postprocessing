@@ -272,8 +272,8 @@ export class EffectComposer {
 		let writeBuffer = this.writeBuffer;
 
 		let maskActive = false;
-		let i, l, pass, buffer;
-		let context, state;
+		let pass, context, buffer;
+		let i, l;
 
 		for(i = 0, l = passes.length; i < l; ++i) {
 
@@ -288,10 +288,9 @@ export class EffectComposer {
 					if(maskActive) {
 
 						context = renderer.context;
-						state = renderer.state;
-						state.setStencilFunc(context.NOTEQUAL, 1, 0xffffffff);
+						context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
 						copyPass.render(renderer, readBuffer, writeBuffer);
-						state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
+						context.stencilFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
 
