@@ -104,7 +104,6 @@ export class Demo {
 	 *
 	 * @method configure
 	 * @param {GUI} gui - A GUI.
-	 * @return {GUI} A GUI folder.
 	 */
 
 	configure(gui) {}
