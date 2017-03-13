@@ -8,16 +8,16 @@ import { Pass } from "./pass.js";
  * @submodule passes
  * @extends Pass
  * @constructor
- * @param {Number} [intensity=30.0] - The intensity of the effect.
+ * @param {Number} [granularity=30.0] - The intensity of the effect.
  */
 
 export class PixelationPass extends Pass {
 
-	constructor(intensity = 30.0) {
+	constructor(granularity = 30.0) {
 
 		super();
 
-		this.name = "PixellationPass";
+		this.name = "PixelationPass";
 		this.needsSwap = true;
 
 		/**
@@ -30,27 +30,35 @@ export class PixelationPass extends Pass {
 
 		this.pixelationMaterial = new PixelationMaterial();
 
-		this.intensity = intensity;
+		this.granularity = granularity;
 
 		this.quad.material = this.pixelationMaterial;
 
 	}
 
 	/**
-	 * The intensity of the effect.
+	 * The pixel granularity. A higher value yields coarser visuals.
 	 *
-	 * @property intensity
+	 * @property granularity
 	 * @type Number
-	 * @default 1.0
+	 * @default 30.0
 	 */
 
-	get intensity() { return this.pixelationMaterial.uniforms.intensity.value; }
+	get granularity() { return this.pixelationMaterial.uniforms.granularity.value; }
 
-	set intensity(x) {
+	set granularity(x) {
 
 		if(typeof x === "number") {
 
-			this.pixelationMaterial.uniforms.intensity.value = x;
+			x = Math.floor(x);
+
+			if(x % 2 > 0) {
+
+				x += 1;
+
+			}
+
+			this.pixelationMaterial.uniforms.granularity.value = x;
 
 		}
 

@@ -17,7 +17,7 @@ import vertex from "./glsl/shader.vert";
 
 export class PixelationMaterial extends ShaderMaterial {
 
-	constructor(resolution = new Vector2(1.0, 1.0)) {
+	constructor() {
 
 		super({
 
@@ -26,8 +26,8 @@ export class PixelationMaterial extends ShaderMaterial {
 			uniforms: {
 
 				tDiffuse: new Uniform(null),
-				intensity: new Uniform(1.0),
-				resolution: new Uniform(resolution)
+				granularity: new Uniform(1.0),
+				resolution: new Uniform(new Vector2(1.0, 1.0))
 
 			},
 
