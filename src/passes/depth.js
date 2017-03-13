@@ -23,6 +23,7 @@ export class DepthPass extends Pass {
 		super();
 
 		this.name = "DepthPass";
+		this.needsSwap = true;
 
 		/**
 		 * A depth shader material.
@@ -44,13 +45,14 @@ export class DepthPass extends Pass {
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, readBuffer, writeBuffer) {
 
 		this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 
