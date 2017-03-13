@@ -174,7 +174,7 @@ export class Pass {
 	 *
 	 * By implementing this abstract method you gain access to the renderer.
 	 * You'll also be able to configure your custom render targets to use the
-	 * appropriate format (RGB or RGBA) if appropriate.
+	 * appropriate format (RGB or RGBA).
 	 *
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
