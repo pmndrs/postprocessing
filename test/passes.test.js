@@ -157,11 +157,11 @@ module.exports = {
 
 	},
 
-	"Pixellation": {
+	"Pixelation": {
 
 		"can be created and destroyed": function(test) {
 
-			const pass = new lib.PixellationPass();
+			const pass = new lib.PixelationPass();
 			test.ok(pass);
 			pass.dispose();
 			test.done();

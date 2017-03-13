@@ -136,11 +136,11 @@ module.exports = {
 
 	},
 
-	"Pixellation": {
+	"Pixelation": {
 
 		"can be created": function(test) {
 
-			const material = new lib.PixellationMaterial();
+			const material = new lib.PixelationMaterial();
 			test.ok(material);
 			test.done();
 

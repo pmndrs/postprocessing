@@ -1,17 +1,17 @@
-import { PixellationMaterial } from "../materials";
+import { PixelationMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
- * A pixellation pass.
+ * A pixelation pass.
  *
- * @class PixellationPass
+ * @class PixelationPass
  * @submodule passes
  * @extends Pass
  * @constructor
  * @param {Number} [intensity=30.0] - The intensity of the effect.
  */
 
-export class PixellationPass extends Pass {
+export class PixelationPass extends Pass {
 
 	constructor(intensity = 30.0) {
 
@@ -21,18 +21,18 @@ export class PixellationPass extends Pass {
 		this.needsSwap = true;
 
 		/**
-		 * A pixellation shader material.
+		 * A pixelation shader material.
 		 *
-		 * @property pixellationMaterial
-		 * @type PixellationMaterial
+		 * @property pixelationMaterial
+		 * @type PixelationMaterial
 		 * @private
 		 */
 
-		this.pixellationMaterial = new PixellationMaterial();
+		this.pixelationMaterial = new PixelationMaterial();
 
 		this.intensity = intensity;
 
-		this.quad.material = this.pixellationMaterial;
+		this.quad.material = this.pixelationMaterial;
 
 	}
 
@@ -44,13 +44,13 @@ export class PixellationPass extends Pass {
 	 * @default 1.0
 	 */
 
-	get intensity() { return this.pixellationMaterial.uniforms.intensity.value; }
+	get intensity() { return this.pixelationMaterial.uniforms.intensity.value; }
 
 	set intensity(x) {
 
 		if(typeof x === "number") {
 
-			this.pixellationMaterial.uniforms.intensity.value = x;
+			this.pixelationMaterial.uniforms.intensity.value = x;
 
 		}
 
@@ -67,7 +67,7 @@ export class PixellationPass extends Pass {
 
 	render(renderer, readBuffer, writeBuffer) {
 
-		this.pixellationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
@@ -83,7 +83,7 @@ export class PixellationPass extends Pass {
 
 	setSize(width, height) {
 
-		this.pixellationMaterial.uniforms.resolution.value.set(width, height);
+		this.pixelationMaterial.uniforms.resolution.value.set(width, height);
 
 	}
 

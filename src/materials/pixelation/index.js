@@ -4,18 +4,18 @@ import fragment from "./glsl/shader.frag";
 import vertex from "./glsl/shader.vert";
 
 /**
- * A pixellation shader material.
+ * A pixelation shader material.
  *
  * Original shader code by Robert Casanova:
  *  https://github.com/robertcasanova/pixelate-shader
  *
- * @class PixellationMaterial
+ * @class PixelationMaterial
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
  */
 
-export class PixellationMaterial extends ShaderMaterial {
+export class PixelationMaterial extends ShaderMaterial {
 
 	constructor(resolution = new Vector2(1.0, 1.0)) {
 

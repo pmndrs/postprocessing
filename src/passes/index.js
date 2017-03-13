@@ -17,7 +17,7 @@ export { GlitchMode, GlitchPass } from "./glitch.js";
 export { GodRaysPass } from "./god-rays.js";
 export { MaskPass } from "./mask.js";
 export { Pass } from "./pass.js";
-export { PixellationPass } from "./pixellation.js";
+export { PixelationPass } from "./pixelation.js";
 export { RenderPass } from "./render.js";
 export { SavePass } from "./save.js";
 export { ShaderPass } from "./shader.js";
