@@ -64,7 +64,7 @@ export class BloomPass extends Pass {
 		this.renderTargetY.texture.name = "Bloom.TargetY";
 
 		/**
-		 * Combine shader material.
+		 * A combine shader material.
 		 *
 		 * @property combineMaterial
 		 * @type CombineMaterial
@@ -76,7 +76,7 @@ export class BloomPass extends Pass {
 		this.intensity = options.intensity;
 
 		/**
-		 * Luminance shader material.
+		 * A luminosity shader material.
 		 *
 		 * @property luminosityMaterial
 		 * @type LuminosityMaterial

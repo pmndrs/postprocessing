@@ -28,7 +28,7 @@ export class BokehPass extends Pass {
 		this.needsSwap = true;
 
 		/**
-		 * Bokeh shader material.
+		 * A bokeh shader material.
 		 *
 		 * @property bokehMaterial
 		 * @type BokehMaterial

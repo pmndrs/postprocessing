@@ -367,12 +367,12 @@ export class GodRaysPass extends Pass {
 		// Convolution phase.
 		this.blurPass.render(renderer, renderTargetMask, renderTargetX);
 
-		// Radial blur pass.
+		// God rays pass.
 		quad.material = godRaysMaterial;
 		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
 		renderer.render(scene, camera, renderTargetY);
 
-		// Final pass - composite god rays onto colors.
+		// Final pass - composite god rays onto colours.
 		quad.material = combineMaterial;
 		combineMaterial.uniforms.texture1.value = readBuffer.texture;
 		combineMaterial.uniforms.texture2.value = renderTargetY.texture;

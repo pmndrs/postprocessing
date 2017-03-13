@@ -34,7 +34,7 @@ export class Bokeh2Pass extends Pass {
 		this.name = "Bokeh2Pass";
 
 		/**
-		 * Bokeh shader material.
+		 * A bokeh shader material.
 		 *
 		 * @property bokehMaterial
 		 * @type BokehMaterial

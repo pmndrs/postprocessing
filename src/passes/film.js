@@ -13,6 +13,7 @@ import { Pass } from "./pass.js";
  * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
  * @param {Boolean} [options.vignette=false] - Apply vignette effect.
  * @param {Boolean} [options.eskil=false] - Use Eskil's vignette approach. The default looks dusty while Eskil looks more burned out.
+ * @param {Boolean} [options.screenMode=true] - Whether the screen blend mode should be used for noise and scanlines.
  * @param {Boolean} [options.scanlines=true] - Show scanlines.
  * @param {Boolean} [options.noise=true] - Show noise-based film grain.
  * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
