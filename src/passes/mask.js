@@ -30,20 +30,19 @@ export class MaskPass extends Pass {
 		this.inverse = false;
 
 		/**
-		 * Clear flag.
+		 * Stencil buffer clear flag.
 		 *
-		 * @property clear
+		 * @property clearStencil
 		 * @type Boolean
 		 * @default true
 		 */
 
-		this.clear = true;
+		this.clearStencil = true;
 
 	}
 
 	/**
-	 * Creates a stencil bit mask by rendering the scene into both the read and
-	 * write buffer.
+	 * Creates a stencil bit mask.
 	 *
 	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -76,9 +75,20 @@ export class MaskPass extends Pass {
 		state.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
 		state.buffers.stencil.setClear(clearValue);
 
+		// Clear the stencil.
+		if(this.clearStencil) {
+
+			renderer.setRenderTarget(readBuffer);
+			renderer.clearStencil();
+
+			renderer.setRenderTarget(writeBuffer);
+			renderer.clearStencil();
+
+		}
+
 		// Draw the mask into both buffers.
-		renderer.render(scene, camera, readBuffer, this.clear);
-		renderer.render(scene, camera, writeBuffer, this.clear);
+		renderer.render(scene, camera, readBuffer);
+		renderer.render(scene, camera, writeBuffer);
 
 		// Unlock the buffers.
 		state.buffers.color.setLocked(false);
