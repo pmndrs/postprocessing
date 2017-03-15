@@ -3,16 +3,18 @@ import dat from "dat.gui";
 import Stats from "stats.js";
 
 import { EffectComposer } from "../src";
-import { RenderDemo } from "./render.js";
+
+import { BloomDemo } from "./bloom.js";
+import { BokehDemo } from "./bokeh.js";
+import { Bokeh2Demo } from "./bokeh2.js";
 import { BlurDemo } from "./blur.js";
 import { DepthDemo } from "./depth.js";
 import { DotScreenDemo } from "./dot-screen.js";
 import { FilmDemo } from "./film.js";
 import { GlitchDemo } from "./glitch.js";
-import { BloomDemo } from "./bloom.js";
-import { BokehDemo } from "./bokeh.js";
-import { Bokeh2Demo } from "./bokeh2.js";
 import { GodRaysDemo } from "./god-rays.js";
+import { RenderDemo } from "./render.js";
+import { ShockWaveDemo } from "./shock-wave.js";
 import { SMAADemo } from "./smaa.js";
 import { ToneMappingDemo } from "./tone-mapping.js";
 
@@ -102,6 +104,7 @@ export class App {
 			demos.set("film", new FilmDemo(composer));
 			demos.set("glitch", new GlitchDemo(composer));
 			demos.set("god-rays", new GodRaysDemo(composer));
+			demos.set("shock-wave", new ShockWaveDemo(composer));
 			demos.set("smaa", new SMAADemo(composer));
 			demos.set("tone-mapping", new ToneMappingDemo(composer));
 

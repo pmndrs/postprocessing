@@ -25,6 +25,7 @@ export {
 	RenderPass,
 	SavePass,
 	ShaderPass,
+	ShockWavePass,
 	SMAAPass,
 	TexturePass,
 	ToneMappingPass
@@ -45,6 +46,7 @@ export {
 	KernelSize,
 	LuminosityMaterial,
 	PixelationMaterial,
+	ShockWaveMaterial,
 	SMAABlendMaterial,
 	SMAAColorEdgesMaterial,
 	SMAAWeightsMaterial,

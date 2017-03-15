@@ -21,6 +21,7 @@ export { PixelationPass } from "./pixelation.js";
 export { RenderPass } from "./render.js";
 export { SavePass } from "./save.js";
 export { ShaderPass } from "./shader.js";
+export { ShockWavePass } from "./shock-wave.js";
 export { SMAAPass } from "./smaa.js";
 export { TexturePass } from "./texture.js";
 export { ToneMappingPass } from "./tone-mapping.js";

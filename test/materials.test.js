@@ -148,6 +148,18 @@ module.exports = {
 
 	},
 
+	"ShockWave": {
+
+		"can be created": function(test) {
+
+			const material = new lib.ShockWaveMaterial();
+			test.ok(material);
+			test.done();
+
+		}
+
+	},
+
 	"SMAABlend": {
 
 		"can be created": function(test) {

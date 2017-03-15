@@ -209,6 +209,19 @@ module.exports = {
 
 	},
 
+	"ShockWave": {
+
+		"can be created and destroyed": function(test) {
+
+			const pass = new lib.ShockWavePass(null);
+			test.ok(pass);
+			pass.dispose();
+			test.done();
+
+		}
+
+	},
+
 	"SMAA": {
 
 		"can be created and destroyed": function(test) {

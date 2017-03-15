@@ -18,6 +18,7 @@ export { GlitchMaterial } from "./glitch";
 export { GodRaysMaterial } from "./god-rays";
 export { LuminosityMaterial } from "./luminosity";
 export { PixelationMaterial } from "./pixelation";
+export { ShockWaveMaterial } from "./shock-wave";
 export { SMAABlendMaterial } from "./smaa-blend";
 export { SMAAColorEdgesMaterial } from "./smaa-color-edges";
 export { SMAAWeightsMaterial } from "./smaa-weights";

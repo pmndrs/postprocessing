@@ -91,6 +91,7 @@ Writing self-contained render-to-texture passes is also a feasible option.
  - [Glitch](http://vanruesc.github.io/postprocessing/public/#glitch)
  - [God Rays](http://vanruesc.github.io/postprocessing/public/#god-rays)
  - [Render](http://vanruesc.github.io/postprocessing/public/#render)
+ - [Shock Wave](http://vanruesc.github.io/postprocessing/public/#shock-wave)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/#smaa)
  - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/#tone-mapping)
 
