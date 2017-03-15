@@ -1,4 +1,13 @@
-import { DepthTexture, LinearFilter, RGBAFormat, RGBFormat, WebGLRenderTarget } from "three";
+import {
+	DepthStencilFormat,
+	DepthTexture,
+	LinearFilter,
+	RGBAFormat,
+	RGBFormat,
+	UnsignedInt248Type,
+	WebGLRenderTarget
+} from "three";
+
 import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
 import { CopyMaterial } from "../materials";
 
@@ -197,17 +206,19 @@ export class EffectComposer {
 			magFilter: LinearFilter,
 			format: alpha ? RGBAFormat : RGBFormat,
 			depthBuffer: depthBuffer,
-			stencilBuffer: stencilBuffer
+			stencilBuffer: stencilBuffer,
+			depthTexture: depthTexture ? new DepthTexture() : null
 		});
+
+		if(depthTexture && stencilBuffer) {
+
+			renderTarget.depthTexture.format = DepthStencilFormat;
+			renderTarget.depthTexture.type = UnsignedInt248Type;
+
+		}
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
-
-		if(depthTexture) {
-
-			renderTarget.depthTexture = new DepthTexture();
-
-		}
 
 		return renderTarget;
 
