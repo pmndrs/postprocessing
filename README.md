@@ -90,6 +90,7 @@ Writing self-contained render-to-texture passes is also a feasible option.
  - [Film](http://vanruesc.github.io/postprocessing/public/#film)
  - [Glitch](http://vanruesc.github.io/postprocessing/public/#glitch)
  - [God Rays](http://vanruesc.github.io/postprocessing/public/#god-rays)
+ - [Pixelation](http://vanruesc.github.io/postprocessing/public/#pixelation)
  - [Render](http://vanruesc.github.io/postprocessing/public/#render)
  - [Shock Wave](http://vanruesc.github.io/postprocessing/public/#shock-wave)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/#smaa)

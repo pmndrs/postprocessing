@@ -12,6 +12,7 @@ import { DepthDemo } from "./depth.js";
 import { DotScreenDemo } from "./dot-screen.js";
 import { FilmDemo } from "./film.js";
 import { GlitchDemo } from "./glitch.js";
+import { PixelationDemo } from "./pixelation.js";
 import { GodRaysDemo } from "./god-rays.js";
 import { RenderDemo } from "./render.js";
 import { ShockWaveDemo } from "./shock-wave.js";
@@ -59,6 +60,7 @@ export class App {
 			renderer.setPixelRatio(window.devicePixelRatio);
 
 			return new EffectComposer(renderer, {
+				stencilBuffer: true,
 				depthTexture: true
 			});
 
@@ -104,6 +106,7 @@ export class App {
 			demos.set("film", new FilmDemo(composer));
 			demos.set("glitch", new GlitchDemo(composer));
 			demos.set("god-rays", new GodRaysDemo(composer));
+			demos.set("pixelation", new PixelationDemo(composer));
 			demos.set("shock-wave", new ShockWaveDemo(composer));
 			demos.set("smaa", new SMAADemo(composer));
 			demos.set("tone-mapping", new ToneMappingDemo(composer));
