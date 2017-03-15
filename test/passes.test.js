@@ -67,6 +67,19 @@ module.exports = {
 
 	},
 
+	"Clear": {
+
+		"can be created and destroyed": function(test) {
+
+			const pass = new lib.ClearPass();
+			test.ok(pass);
+			pass.dispose();
+			test.done();
+
+		}
+
+	},
+
 	"ClearMask": {
 
 		"can be created and destroyed": function(test) {

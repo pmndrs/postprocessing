@@ -9,6 +9,7 @@ export { BloomPass } from "./bloom.js";
 export { BlurPass } from "./blur.js";
 export { BokehPass } from "./bokeh.js";
 export { Bokeh2Pass } from "./bokeh2.js";
+export { ClearPass } from "./clear.js";
 export { ClearMaskPass } from "./clear-mask.js";
 export { DotScreenPass } from "./dot-screen.js";
 export { DepthPass } from "./depth.js";

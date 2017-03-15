@@ -1,16 +1,5 @@
-import { Color } from "three";
+import { ClearPass } from "./clear.js";
 import { Pass } from "./pass.js";
-
-/**
- * Used for saving the original clear color during rendering.
- *
- * @property CLEAR_COLOR
- * @type Color
- * @private
- * @static
- */
-
-const CLEAR_COLOR = new Color();
 
 /**
  * A pass that renders a given scene directly on screen or into the read buffer
@@ -39,7 +28,16 @@ export class RenderPass extends Pass {
 		this.name = "RenderPass";
 
 		/**
-		 * Override material.
+		 * A clear pass.
+		 *
+		 * @property clearPass
+		 * @type ClearPass
+		 */
+
+		this.clearPass = new ClearPass(options);
+
+		/**
+		 * An override material.
 		 *
 		 * @property overrideMaterial
 		 * @type Material
@@ -47,26 +45,6 @@ export class RenderPass extends Pass {
 		 */
 
 		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
-
-		/**
-		 * Clear color.
-		 *
-		 * @property clearColor
-		 * @type Color
-		 * @default null
-		 */
-
-		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
-
-		/**
-		 * Clear alpha.
-		 *
-		 * @property clearAlpha
-		 * @type Number
-		 * @default 1.0
-		 */
-
-		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 1.0;
 
 		/**
 		 * Indicates whether the depth buffer should be cleared explicitly.
@@ -105,34 +83,21 @@ export class RenderPass extends Pass {
 	render(renderer, readBuffer) {
 
 		const scene = this.scene;
-		const clearColor = this.clearColor;
+		const target = this.renderToScreen ? null : readBuffer;
 
-		let clearAlpha;
+		if(this.clear) {
 
-		scene.overrideMaterial = this.overrideMaterial;
+			this.clearPass.render(renderer, target);
 
-		if(clearColor !== null) {
+		} else if(this.clearDepth) {
 
-			CLEAR_COLOR.copy(renderer.getClearColor());
-			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(clearColor, this.clearAlpha);
-
-		}
-
-		if(this.clearDepth) {
-
+			renderer.setRenderTarget(target);
 			renderer.clearDepth();
 
 		}
 
-		renderer.render(scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
-
-		if(clearColor !== null) {
-
-			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
-
-		}
-
+		scene.overrideMaterial = this.overrideMaterial;
+		renderer.render(scene, this.camera, target);
 		scene.overrideMaterial = null;
 
 	}

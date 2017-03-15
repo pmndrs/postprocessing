@@ -12,6 +12,7 @@ export {
 	BlurPass,
 	BokehPass,
 	Bokeh2Pass,
+	ClearPass,
 	ClearMaskPass,
 	DepthPass,
 	DotScreenPass,
