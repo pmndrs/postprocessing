@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -120,7 +125,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial } from &quot;three&quot;;
+import { ShaderMaterial, Uniform } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
@@ -128,7 +133,7 @@ import vertex from &quot;./glsl/shader.vert&quot;;
 /**
  * Depth of Field shader (Bokeh).
  *
- * Original code by Martins Upitis:
+ * Original shader code by Martins Upitis:
  *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
  *
  * @class BokehMaterial
@@ -146,22 +151,26 @@ export class BokehMaterial extends ShaderMaterial {
 
 	constructor(camera = null, options = {}) {
 
+		if(options.focus === undefined) { options.focus = 1.0; }
+		if(options.aperture === undefined) { options.aperture = 0.025; }
+		if(options.maxBlur === undefined) { options.maxBlur = 1.0; }
+
 		super({
 
 			type: &quot;BokehMaterial&quot;,
 
 			uniforms: {
 
-				cameraNear: { value: 0.1 },
-				cameraFar: { value: 2000 },
-				aspect: { value: 1.0 },
+				cameraNear: new Uniform(0.1),
+				cameraFar: new Uniform(2000),
+				aspect: new Uniform(1.0),
 
-				tDiffuse: { value: null },
-				tDepth: { value: null },
+				tDiffuse: new Uniform(null),
+				tDepth: new Uniform(null),
 
-				focus: { value: (options.focus !== undefined) ? options.focus : 1.0 },
-				aperture: { value: (options.aperture !== undefined) ? options.aperture : 0.025 },
-				maxBlur: { value: (options.maxBlur !== undefined) ? options.maxBlur : 1.0 }
+				focus: new Uniform(options.focus),
+				aperture: new Uniform(options.aperture),
+				maxBlur: new Uniform(options.maxBlur)
 
 			},
 

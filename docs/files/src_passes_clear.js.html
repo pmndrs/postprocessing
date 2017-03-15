@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\smaa-weights\index.js - postprocessing</title>
+    <title>src\passes\clear.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,84 +121,100 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\smaa-weights\index.js</h1>
+<h1 class="file-heading">File: src\passes\clear.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
-
-import areaImage from &quot;./area-image.js&quot;;
-import searchImage from &quot;./search-image.js&quot;;
-
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+import { Color } from &quot;three&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
- * Subpixel Morphological Antialiasing.
+ * Used for saving the original clear color of the renderer.
  *
- * This material computes weights for detected edges.
- *
- * @class SMAAWeightsMaterial
- * @submodule materials
- * @extends ShaderMaterial
- * @constructor
- * @param {Vector2} [texelSize] - The absolute screen texel size.
+ * @property CLEAR_COLOR
+ * @type Color
+ * @private
+ * @static
  */
 
-export class SMAAWeightsMaterial extends ShaderMaterial {
+const CLEAR_COLOR = new Color();
 
-	constructor(texelSize = new Vector2()) {
+/**
+ * A clear pass.
+ *
+ * You can prevent specific buffers from being cleared by setting either the
+ * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
+ * to false.
+ *
+ * @class ClearPass
+ * @submodule passes
+ * @extends Pass
+ * @constructor
+ * @param {Object} [options] - Additional options.
+ * @param {Color} [options.clearColor=null] - An override clear color.
+ * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
+ */
 
-		super({
+export class ClearPass extends Pass {
 
-			type: &quot;SMAAWeightsMaterial&quot;,
+	constructor(options = {}) {
 
-			defines: {
+		super(null, null, null);
 
-				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
-
-				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
-
-				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
-				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
-
-			},
-
-			uniforms: {
-
-				tDiffuse: new Uniform(null),
-				tArea: new Uniform(null),
-				tSearch: new Uniform(null),
-				texelSize: new Uniform(texelSize)
-
-			},
-
-			fragmentShader: fragment,
-			vertexShader: vertex,
-
-			depthWrite: false,
-			depthTest: false
-
-		});
+		this.name = &quot;ClearPass&quot;;
 
 		/**
-		 * The area pattern recognition image.
+		 * Clear color.
 		 *
-		 * @property areaImage
-		 * @type String
+		 * @property clearColor
+		 * @type Color
+		 * @default null
 		 */
 
-		this.areaImage = areaImage;
+		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
 
 		/**
-		 * The search image.
+		 * Clear alpha.
 		 *
-		 * @property searchImage
-		 * @type String
+		 * @property clearAlpha
+		 * @type Number
+		 * @default 0.0
 		 */
 
-		this.searchImage = searchImage;
+		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 0.0;
+
+	}
+
+	/**
+	 * Clears the read buffer or the screen.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 */
+
+	render(renderer, readBuffer) {
+
+		const clearColor = this.clearColor;
+
+		let clearAlpha;
+
+		if(clearColor !== null) {
+
+			CLEAR_COLOR.copy(renderer.getClearColor());
+			clearAlpha = renderer.getClearAlpha();
+			renderer.setClearColor(clearColor, this.clearAlpha);
+
+		}
+
+		renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+		renderer.clear();
+
+		if(clearColor !== null) {
+
+			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
+
+		}
 
 	}
 

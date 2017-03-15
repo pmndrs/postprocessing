@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -266,6 +271,10 @@
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_name">name</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
@@ -314,7 +323,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l187"><code>src\passes\pass.js:187</code></a>
+        <a href="../files/src_passes_pass.js.html#l183"><code>src\passes\pass.js:183</code></a>
         </p>
 
 
@@ -330,8 +339,8 @@ deletes them. The pass will be inoperative after this method was called!</p>
 <li>materials</li>
 <li>textures</li>
 </ul>
-<p>The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when it
+is being destroyed. You may, however, use it independently to free memory
 when you are certain that you don't need this pass anymore.</p>
 
     </div>
@@ -364,7 +373,7 @@ when you are certain that you don't need this pass anymore.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l166"><code>src\passes\pass.js:166</code></a>
+        <a href="../files/src_passes_pass.js.html#l161"><code>src\passes\pass.js:161</code></a>
         </p>
 
 
@@ -375,10 +384,11 @@ when you are certain that you don't need this pass anymore.</p>
         <p>Performs initialisation tasks.</p>
 <p>By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA) if appropriate.</p>
+appropriate format (RGB or RGBA).</p>
 <p>The provided renderer can be used to warm up special off-screen render
 targets by performing a preliminary render operation.</p>
-<p>The effect composer calls this method when this pass is added to its queue.</p>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when
+this pass is added to its queue.</p>
 
     </div>
 
@@ -453,7 +463,7 @@ targets by performing a preliminary render operation.</p>
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_texture.js.html#l74"><code>src\passes\texture.js:74</code></a>
+        <a href="../files/src_passes_texture.js.html#l76"><code>src\passes\texture.js:76</code></a>
         </p>
 
 
@@ -525,7 +535,7 @@ targets by performing a preliminary render operation.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l148"><code>src\passes\pass.js:148</code></a>
+        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
         </p>
 
 
@@ -534,10 +544,10 @@ targets by performing a preliminary render operation.</p>
 
     <div class="description">
         <p>Updates this pass with the renderer's size.</p>
-<p>This is an abstract method that may be overriden in case you want to be
+<p>This is an abstract method that may be overridden in case you want to be
 informed about the main render size.</p>
-<p>The effect composer calls this method before this pass is initialised and
-every time its own size is updated.</p>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method before
+this pass is initialised and every time its own size is updated.</p>
 
     </div>
 
@@ -602,18 +612,18 @@ every time its own size is updated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l42"><code>src\passes\pass.js:42</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The camera to render with.</p>
+        <p>The camera.</p>
 
     </div>
 
-        <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
+        <p><strong>Default:</strong> new OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
 
 
 </div>
@@ -629,7 +639,7 @@ every time its own size is updated.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_texture.js.html#l24"><code>src\passes\texture.js:24</code></a>
+        <a href="../files/src_passes_texture.js.html#l26"><code>src\passes\texture.js:26</code></a>
         </p>
 
 
@@ -654,7 +664,7 @@ every time its own size is updated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
+        <a href="../files/src_passes_pass.js.html#l101"><code>src\passes\pass.js:101</code></a>
         </p>
 
 
@@ -666,6 +676,31 @@ every time its own size is updated.</p>
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_name" class="property item inherited">
+    <h3 class="name"><code>name</code></h3>
+    <span class="type">String</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_name">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l28"><code>src\passes\pass.js:28</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The name of this pass.</p>
+
+    </div>
+
 
 
 </div>
@@ -681,7 +716,7 @@ every time its own size is updated.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
+        <a href="../files/src_passes_pass.js.html#l86"><code>src\passes\pass.js:86</code></a>
         </p>
 
 
@@ -710,7 +745,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_texture.js.html#l58"><code>src\passes\texture.js:58</code></a>
+        <a href="../files/src_passes_texture.js.html#l60"><code>src\passes\texture.js:60</code></a>
         </p>
 
 
@@ -737,19 +772,19 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l53"><code>src\passes\pass.js:53</code></a>
+        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>The quad mesh to use for rendering.</p>
+        <p>A quad mesh that fills the screen.</p>
 <p>Assign your shader material to this mesh!</p>
 
     </div>
 
-        <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
+        <p><strong>Default:</strong> new Mesh(new PlaneBufferGeometry(2, 2), null)</p>
 
         <div class="example">
             <h4>Example:</h4>
@@ -772,7 +807,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l99"><code>src\passes\pass.js:99</code></a>
+        <a href="../files/src_passes_pass.js.html#l111"><code>src\passes\pass.js:111</code></a>
         </p>
 
 
@@ -799,7 +834,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l31"><code>src\passes\pass.js:31</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -810,7 +845,7 @@ following pass can find the result in the read buffer.</p>
 
     </div>
 
-        <p><strong>Default:</strong> Scene()</p>
+        <p><strong>Default:</strong> new Scene()</p>
 
 
 </div>
@@ -825,7 +860,7 @@ following pass can find the result in the read buffer.</p>
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_texture.js.html#l43"><code>src\passes\texture.js:43</code></a>
+        <a href="../files/src_passes_texture.js.html#l45"><code>src\passes\texture.js:45</code></a>
         </p>
 
 

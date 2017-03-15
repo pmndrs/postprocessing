@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -120,7 +125,15 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { LinearFilter, NearestFilter, RGBAFormat, RGBFormat, Texture, WebGLRenderTarget } from &quot;three&quot;;
+import {
+	LinearFilter,
+	NearestFilter,
+	RGBAFormat,
+	RGBFormat,
+	Texture,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
@@ -143,6 +156,7 @@ export class SMAAPass extends Pass {
 
 		super();
 
+		this.name = &quot;SMAAPass&quot;;
 		this.needsSwap = true;
 
 		/**
@@ -156,10 +170,12 @@ export class SMAAPass extends Pass {
 		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			format: RGBFormat,
-			generateMipmaps: false,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTargetColorEdges.texture.name = &quot;SMAA.ColorEdges&quot;;
+		this.renderTargetColorEdges.texture.generateMipmaps = false;
 
 		/**
 		 * A render target for the SMAA weights.
@@ -171,6 +187,7 @@ export class SMAAPass extends Pass {
 
 		this.renderTargetWeights = this.renderTargetColorEdges.clone();
 
+		this.renderTargetWeights.texture.name = &quot;SMAA.Weights&quot;;
 		this.renderTargetWeights.texture.format = RGBAFormat;
 
 		/**
@@ -198,6 +215,7 @@ export class SMAAPass extends Pass {
 
 		const areaTexture = new Texture();
 		areaTexture.image = areaImage;
+		areaTexture.name = &quot;SMAA.Area&quot;;
 		areaTexture.minFilter = LinearFilter;
 		areaTexture.format = RGBFormat;
 		areaTexture.generateMipmaps = false;
@@ -209,6 +227,7 @@ export class SMAAPass extends Pass {
 
 		const searchTexture = new Texture();
 		searchTexture.image = searchImage;
+		searchTexture.name = &quot;SMAA.Search&quot;;
 		searchTexture.magFilter = NearestFilter;
 		searchTexture.minFilter = NearestFilter;
 		searchTexture.generateMipmaps = false;
@@ -239,7 +258,7 @@ export class SMAAPass extends Pass {
 	 * Antialiases the scene.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
@@ -259,7 +278,7 @@ export class SMAAPass extends Pass {
 		this.quad.material = this.blendMaterial;
 		this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -120,8 +125,21 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { LinearFilter, LinearMipMapLinearFilter, MeshBasicMaterial, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
-import { AdaptiveLuminosityMaterial, CopyMaterial, LuminosityMaterial, ToneMappingMaterial } from &quot;../materials&quot;;
+import {
+	LinearFilter,
+	LinearMipMapLinearFilter,
+	MeshBasicMaterial,
+	RGBFormat,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
+import {
+	AdaptiveLuminosityMaterial,
+	CopyMaterial,
+	LuminosityMaterial,
+	ToneMappingMaterial
+} from &quot;../materials&quot;;
+
 import { Pass } from &quot;./pass.js&quot;;
 
 /**
@@ -163,6 +181,7 @@ export class ToneMappingPass extends Pass {
 
 		super();
 
+		this.name = &quot;ToneMappingPass&quot;;
 		this.needsSwap = true;
 
 		/**
@@ -171,7 +190,7 @@ export class ToneMappingPass extends Pass {
 		 * @property renderTargetLuminosity
 		 * @type WebGLRenderTarget
 		 * @private
-		 * @todo: use RED format in WebGL 2.0.
+		 * @todo Use RED format in WebGL 2.0.
 		 */
 
 		this.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {
@@ -181,6 +200,8 @@ export class ToneMappingPass extends Pass {
 			stencilBuffer: false,
 			depthBuffer: false
 		});
+
+		this.renderTargetLuminosity.texture.name = &quot;ToneMapping.Luminosity&quot;;
 
 		/**
 		 * Adapted luminance render target.
@@ -192,6 +213,7 @@ export class ToneMappingPass extends Pass {
 
 		this.renderTargetAdapted = this.renderTargetLuminosity.clone();
 
+		this.renderTargetAdapted.texture.name = &quot;ToneMapping.AdaptedLuminosity&quot;;
 		this.renderTargetAdapted.texture.generateMipmaps = false;
 		this.renderTargetAdapted.texture.minFilter = LinearFilter;
 
@@ -204,6 +226,8 @@ export class ToneMappingPass extends Pass {
 		 */
 
 		this.renderTargetPrevious = this.renderTargetAdapted.clone();
+
+		this.renderTargetPrevious.texture.name = &quot;ToneMapping.PreviousLuminosity&quot;;
 
 		/**
 		 * Copy shader material used for saving the luminance map.
@@ -307,7 +331,7 @@ export class ToneMappingPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 * @param {Number} delta - The render delta time.
@@ -322,6 +346,7 @@ export class ToneMappingPass extends Pass {
 		const adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;
 		const luminosityMaterial = this.luminosityMaterial;
 		const toneMappingMaterial = this.toneMappingMaterial;
+		const copyMaterial = this.copyMaterial;
 
 		const renderTargetPrevious = this.renderTargetPrevious;
 		const renderTargetLuminosity = this.renderTargetLuminosity;
@@ -342,8 +367,8 @@ export class ToneMappingPass extends Pass {
 			renderer.render(scene, camera, renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
-			quad.material = this.copyMaterial;
-			this.copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
+			quad.material = copyMaterial;
+			copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
 			renderer.render(scene, camera, renderTargetPrevious);
 
 		}
@@ -352,7 +377,7 @@ export class ToneMappingPass extends Pass {
 		quad.material = toneMappingMaterial;
 		toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
 
 	}
 

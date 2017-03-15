@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -130,7 +135,7 @@ import { Pass } from &quot;./pass.js&quot;;
  * @extends Pass
  * @constructor
  * @param {Scene} scene - The scene to render.
- * @param {Camera} camera - The camera to use to render the scene.
+ * @param {Camera} camera - The camera to use.
  */
 
 export class MaskPass extends Pass {
@@ -138,6 +143,8 @@ export class MaskPass extends Pass {
 	constructor(scene, camera) {
 
 		super(scene, camera, null);
+
+		this.name = &quot;MaskPass&quot;;
 
 		/**
 		 * Inverse flag.
@@ -150,23 +157,22 @@ export class MaskPass extends Pass {
 		this.inverse = false;
 
 		/**
-		 * Clear flag.
+		 * Stencil buffer clear flag.
 		 *
-		 * @property clear
+		 * @property clearStencil
 		 * @type Boolean
 		 * @default true
 		 */
 
-		this.clear = true;
+		this.clearStencil = true;
 
 	}
 
 	/**
-	 * Renders the scene as a mask by only setting the stencil bits.
-	 * The buffers will both be cleared first.
+	 * Creates a stencil bit mask.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
 	 */
@@ -176,33 +182,48 @@ export class MaskPass extends Pass {
 		const context = renderer.context;
 		const state = renderer.state;
 
+		const scene = this.scene;
+		const camera = this.camera;
+
 		const writeValue = this.inverse ? 0 : 1;
 		const clearValue = 1 - writeValue;
 
-		const scene = this.scene;
-		const camera = this.camera;
-		const clear = this.clear;
-
 		// Don&#x27;t update color or depth.
-		state.setColorWrite(false);
-		state.setDepthWrite(false);
+		state.buffers.color.setMask(false);
+		state.buffers.depth.setMask(false);
 
-		state.setStencilTest(true);
-		state.setStencilOp(context.REPLACE, context.REPLACE, context.REPLACE);
-		state.setStencilFunc(context.ALWAYS, writeValue, 0xffffffff);
-		state.clearStencil(clearValue);
+		// Lock the buffers.
+		state.buffers.color.setLocked(true);
+		state.buffers.depth.setLocked(true);
+
+		// Configure the stencil.
+		state.buffers.stencil.setTest(true);
+		state.buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);
+		state.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
+		state.buffers.stencil.setClear(clearValue);
+
+		// Clear the stencil.
+		if(this.clearStencil) {
+
+			renderer.setRenderTarget(readBuffer);
+			renderer.clearStencil();
+
+			renderer.setRenderTarget(writeBuffer);
+			renderer.clearStencil();
+
+		}
 
 		// Draw the mask into both buffers.
-		renderer.render(scene, camera, readBuffer, clear);
-		renderer.render(scene, camera, writeBuffer, clear);
+		renderer.render(scene, camera, readBuffer);
+		renderer.render(scene, camera, writeBuffer);
 
-		// Re-enable update of color and depth.
-		state.setColorWrite(true);
-		state.setDepthWrite(true);
+		// Unlock the buffers.
+		state.buffers.color.setLocked(false);
+		state.buffers.depth.setLocked(false);
 
-		// Only render where stencil is set to 1.
-		state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
-		state.setStencilOp(context.KEEP, context.KEEP, context.KEEP);
+		// Only render where the stencil is set to 1.
+		state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+		state.buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
 
 	}
 

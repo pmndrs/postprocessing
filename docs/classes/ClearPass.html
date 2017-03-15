@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>DepthPass - postprocessing</title>
+    <title>ClearPass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,7 +121,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>DepthPass Class</h1>
+<h1>ClearPass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -129,7 +129,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+            Defined in: <a href="../files/src_passes_clear.js.html#l15"><code>src\passes\clear.js:15</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -139,22 +139,22 @@
 
 
 <div class="box intro">
-    <p>A depth pass.</p>
-<p>Reads the depth from a depth texture and renders it.</p>
-<p>This pass requires a
-<a href="../classes/EffectComposer.html#property_depthTexture" class="crosslink">depthTexture</a>.</p>
+    <p>A clear pass.</p>
+<p>You can prevent specific buffers from being cleared by setting either the
+autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
+to false.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_DepthPass" class="method item">
-    <h3 class="name"><code>DepthPass</code></h3>
+<div id="method_ClearPass" class="method item">
+    <h3 class="name"><code>ClearPass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>camera</code>
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -169,7 +169,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+        <a href="../files/src_passes_clear.js.html#l15"><code>src\passes\clear.js:15</code></a>
         </p>
 
 
@@ -185,17 +185,46 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">camera</code>
-                        <span class="type">PerspectiveCamera</span>
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The main camera. Used to obtain the near and far plane settings.</li>
+<li>Additional options.</li>
 </ul>
 
                     </div>
 
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[clearColor=null]</code>
+                                    <span class="type">Color</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>An override clear color.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[clearAlpha=0.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>An override clear alpha.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -249,7 +278,16 @@
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_depthMaterial">depthMaterial</a>
+                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_clearAlpha">clearAlpha</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_clearColor">clearColor</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -425,9 +463,6 @@ this pass is added to its queue.
                 <li class="arg">
                         <code>readBuffer</code>
                 </li>
-                <li class="arg">
-                        <code>writeBuffer</code>
-                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -444,7 +479,7 @@ this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_depth.js.html#l42"><code>src\passes\depth.js:42</code></a>
+        <a href="../files/src_passes_clear.js.html#l61"><code>src\passes\clear.js:61</code></a>
         </p>
 
 
@@ -452,7 +487,7 @@ this pass is added to its queue.
     </div>
 
     <div class="description">
-        <p>Renders the effect.</p>
+        <p>Clears the read buffer or the screen.</p>
 
     </div>
 
@@ -481,19 +516,6 @@ this pass is added to its queue.
                     <div class="param-description">
                         <ul>
 <li>The read buffer.</li>
-</ul>
-
-                    </div>
-
-                </li>
-                <li class="param">
-                        <code class="param-name">writeBuffer</code>
-                        <span class="type">WebGLRenderTarget</span>
-
-
-                    <div class="param-description">
-                        <ul>
-<li>The write buffer.</li>
 </ul>
 
                     </div>
@@ -621,29 +643,83 @@ this pass is initialised and every time its own size is updated.
 
 
 </div>
-<div id="property_depthMaterial" class="property item private">
-    <h3 class="name"><code>depthMaterial</code></h3>
-    <span class="type"><a href="../classes/DepthMaterial.html" class="crosslink">DepthMaterial</a></span>
+<div id="property_CLEAR_COLOR" class="property item private">
+    <h3 class="name"><code>CLEAR_COLOR</code></h3>
+    <span class="type">Color</span>
 
 
         <span class="flag private">private</span>
 
 
+        <span class="flag static">static</span>
 
     <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
                 <p>
                 Defined in
-        <a href="../files/src_passes_depth.js.html#l28"><code>src\passes\depth.js:28</code></a>
+        <a href="../files/src_passes_clear.js.html#l4"><code>src\passes\clear.js:4</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A depth shader material.</p>
+        <p>Used for saving the original clear color of the renderer.</p>
 
     </div>
 
+
+
+</div>
+<div id="property_clearAlpha" class="property item">
+    <h3 class="name"><code>clearAlpha</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_clear.js.html#l49"><code>src\passes\clear.js:49</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Clear alpha.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.0</p>
+
+
+</div>
+<div id="property_clearColor" class="property item">
+    <h3 class="name"><code>clearColor</code></h3>
+    <span class="type">Color</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_clear.js.html#l39"><code>src\passes\clear.js:39</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Clear color.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> null</p>
 
 
 </div>

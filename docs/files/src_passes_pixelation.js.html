@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\smaa-weights\index.js - postprocessing</title>
+    <title>src\passes\pixelation.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,84 +121,104 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\smaa-weights\index.js</h1>
+<h1 class="file-heading">File: src\passes\pixelation.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
-
-import areaImage from &quot;./area-image.js&quot;;
-import searchImage from &quot;./search-image.js&quot;;
-
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+import { PixelationMaterial } from &quot;../materials&quot;;
+import { Pass } from &quot;./pass.js&quot;;
 
 /**
- * Subpixel Morphological Antialiasing.
+ * A pixelation pass.
  *
- * This material computes weights for detected edges.
- *
- * @class SMAAWeightsMaterial
- * @submodule materials
- * @extends ShaderMaterial
+ * @class PixelationPass
+ * @submodule passes
+ * @extends Pass
  * @constructor
- * @param {Vector2} [texelSize] - The absolute screen texel size.
+ * @param {Number} [granularity=30.0] - The intensity of the effect.
  */
 
-export class SMAAWeightsMaterial extends ShaderMaterial {
+export class PixelationPass extends Pass {
 
-	constructor(texelSize = new Vector2()) {
+	constructor(granularity = 30.0) {
 
-		super({
+		super();
 
-			type: &quot;SMAAWeightsMaterial&quot;,
-
-			defines: {
-
-				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
-
-				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
-
-				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
-				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
-
-			},
-
-			uniforms: {
-
-				tDiffuse: new Uniform(null),
-				tArea: new Uniform(null),
-				tSearch: new Uniform(null),
-				texelSize: new Uniform(texelSize)
-
-			},
-
-			fragmentShader: fragment,
-			vertexShader: vertex,
-
-			depthWrite: false,
-			depthTest: false
-
-		});
+		this.name = &quot;PixelationPass&quot;;
+		this.needsSwap = true;
 
 		/**
-		 * The area pattern recognition image.
+		 * A pixelation shader material.
 		 *
-		 * @property areaImage
-		 * @type String
+		 * @property pixelationMaterial
+		 * @type PixelationMaterial
+		 * @private
 		 */
 
-		this.areaImage = areaImage;
+		this.pixelationMaterial = new PixelationMaterial();
 
-		/**
-		 * The search image.
-		 *
-		 * @property searchImage
-		 * @type String
-		 */
+		this.granularity = granularity;
 
-		this.searchImage = searchImage;
+		this.quad.material = this.pixelationMaterial;
+
+	}
+
+	/**
+	 * The pixel granularity. A higher value yields coarser visuals.
+	 *
+	 * @property granularity
+	 * @type Number
+	 * @default 30.0
+	 */
+
+	get granularity() { return this.pixelationMaterial.uniforms.granularity.value; }
+
+	set granularity(x) {
+
+		if(typeof x === &quot;number&quot;) {
+
+			x = Math.floor(x);
+
+			if(x % 2 &gt; 0) {
+
+				x += 1;
+
+			}
+
+			this.pixelationMaterial.uniforms.granularity.value = x;
+
+		}
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * @method render
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 */
+
+	render(renderer, readBuffer, writeBuffer) {
+
+		this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+
+	}
+
+	/**
+	 * Updates this pass with the renderer&#x27;s size.
+	 *
+	 * @method setSize
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.pixelationMaterial.uniforms.resolution.value.set(width, height);
 
 	}
 

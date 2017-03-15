@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\smaa-weights\index.js - postprocessing</title>
+    <title>ShockWaveMaterial - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,90 +121,137 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\smaa-weights\index.js</h1>
+<h1>ShockWaveMaterial Class</h1>
+<div class="box meta">
 
-<div class="file">
-    <pre class="code prettyprint linenums">
-import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
+        <div class="extends">
+            Extends ShaderMaterial
+        </div>
 
-import areaImage from &quot;./area-image.js&quot;;
-import searchImage from &quot;./search-image.js&quot;;
+        <div class="foundat">
+            Defined in: <a href="../files/src_materials_shock-wave_index.js.html#l6"><code>src\materials\shock-wave\index.js:6</code></a>
+        </div>
 
-import fragment from &quot;./glsl/shader.frag&quot;;
-import vertex from &quot;./glsl/shader.vert&quot;;
+            Module: <a href="../modules/materials.html">materials</a><br>
+            Parent Module: <a href="../modules/postprocessing.html">postprocessing</a>
 
-/**
- * Subpixel Morphological Antialiasing.
- *
- * This material computes weights for detected edges.
- *
- * @class SMAAWeightsMaterial
- * @submodule materials
- * @extends ShaderMaterial
- * @constructor
- * @param {Vector2} [texelSize] - The absolute screen texel size.
- */
+</div>
 
-export class SMAAWeightsMaterial extends ShaderMaterial {
 
-	constructor(texelSize = new Vector2()) {
+<div class="box intro">
+    <p>A shock wave shader material.</p>
+<p>Based on a Gist by Jean-Philippe Sarda:
+<a href="https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda">https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda</a></p>
 
-		super({
+</div>
 
-			type: &quot;SMAAWeightsMaterial&quot;,
+    <div class="constructor">
+        <h2>Constructor</h2>
+<div id="method_ShockWaveMaterial" class="method item">
+    <h3 class="name"><code>ShockWaveMaterial</code></h3>
 
-			defines: {
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+                <li class="arg">
+                        <code class="optional">[options]</code>
+                </li>
+            </ul><span class="paren">)</span>
+        </div>
 
-				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
 
-				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
 
-				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
-				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
 
-			},
 
-			uniforms: {
 
-				tDiffuse: new Uniform(null),
-				tArea: new Uniform(null),
-				tSearch: new Uniform(null),
-				texelSize: new Uniform(texelSize)
 
-			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_materials_shock-wave_index.js.html#l6"><code>src\materials\shock-wave\index.js:6</code></a>
+        </p>
 
-			depthWrite: false,
-			depthTest: false
 
-		});
 
-		/**
-		 * The area pattern recognition image.
-		 *
-		 * @property areaImage
-		 * @type String
-		 */
+    </div>
 
-		this.areaImage = areaImage;
+    <div class="description">
+        
+    </div>
 
-		/**
-		 * The search image.
-		 *
-		 * @property searchImage
-		 * @type String
-		 */
+        <div class="params">
+            <h4>Parameters:</h4>
 
-		this.searchImage = searchImage;
+            <ul class="params-list">
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
-	}
 
-}
+                    <div class="param-description">
+                        <ul>
+<li>The options.</li>
+</ul>
 
-    </pre>
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[waveSize=0.2]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The wave size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[amplitude=0.05]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The distortion amplitude.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
+                </li>
+            </ul>
+        </div>
+
+
+
+</div>
+    </div>
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+
+
+
+        </div>
+
+
+
+
+    </div>
 </div>
                     </div>
                 </div>

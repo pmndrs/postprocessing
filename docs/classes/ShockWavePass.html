@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>DepthPass - postprocessing</title>
+    <title>ShockWavePass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,7 +121,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>DepthPass Class</h1>
+<h1>ShockWavePass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -129,7 +129,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+            Defined in: <a href="../files/src_passes_shock-wave.js.html#l41"><code>src\passes\shock-wave.js:41</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -139,22 +139,25 @@
 
 
 <div class="box intro">
-    <p>A depth pass.</p>
-<p>Reads the depth from a depth texture and renders it.</p>
-<p>This pass requires a
-<a href="../classes/EffectComposer.html#property_depthTexture" class="crosslink">depthTexture</a>.</p>
+    <p>A shock wave pass.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_DepthPass" class="method item">
-    <h3 class="name"><code>DepthPass</code></h3>
+<div id="method_ShockWavePass" class="method item">
+    <h3 class="name"><code>ShockWavePass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
                         <code>camera</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[epicenter]</code>
+                </li>
+                <li class="arg">
+                        <code class="optional">[options]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -169,7 +172,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+        <a href="../files/src_passes_shock-wave.js.html#l41"><code>src\passes\shock-wave.js:41</code></a>
         </p>
 
 
@@ -186,16 +189,98 @@
             <ul class="params-list">
                 <li class="param">
                         <code class="param-name">camera</code>
-                        <span class="type">PerspectiveCamera</span>
+                        <span class="type">Camera</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The main camera. Used to obtain the near and far plane settings.</li>
+<li>The main camera.</li>
 </ul>
 
                     </div>
 
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[epicenter]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The world position of the shock wave epicenter.</li>
+</ul>
+
+                    </div>
+
+                </li>
+                <li class="param">
+                        <code class="param-name optional">[options]</code>
+                        <span class="type">Object</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The options.</li>
+</ul>
+
+                    </div>
+
+                        <ul class="params-list">
+                            <li class="param">
+                                    <code class="param-name optional">[speed=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The animation speed.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[maxRadius=1.0]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The extent of the shock wave.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[waveSize=0.2]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The wave size.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                            <li class="param">
+                                    <code class="param-name optional">[amplitude=0.05]</code>
+                                    <span class="type">Number</span>
+                                    <span class="flag optional" title="This parameter is optional.">optional</span>
+
+                                <div class="param-description">
+                                    <ul>
+<li>The distortion amplitude.</li>
+</ul>
+
+                                </div>
+
+                            </li>
+                        </ul>
                 </li>
             </ul>
         </div>
@@ -225,6 +310,10 @@
                                 <a href="#method_dispose">dispose</a>
 
                             </li>
+                            <li class="index-item method">
+                                <a href="#method_explode">explode</a>
+
+                            </li>
                             <li class="index-item method inherited">
                                 <a href="#method_initialise">initialise</a>
 
@@ -244,16 +333,38 @@
                     <h3>Properties</h3>
 
                     <ul class="index-list properties extends">
+                            <li class="index-item property private">
+                                <a href="#property_AB">AB</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_active">active</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_camera">camera</a>
 
                             </li>
                             <li class="index-item property private">
-                                <a href="#property_depthMaterial">depthMaterial</a>
+                                <a href="#property_copyMaterial">copyMaterial</a>
 
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_epicenter">epicenter</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_HALF_PI">HALF_PI</a>
+
+                                    <span class="flag static">static</span>
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_mainCamera">mainCamera</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -275,6 +386,27 @@
                             <li class="index-item property private inherited">
                                 <a href="#property_scene">scene</a>
 
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_screenPosition">screenPosition</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_shockWaveMaterial">shockWaveMaterial</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_time">time</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_time">time</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_V">V</a>
+
+                                    <span class="flag static">static</span>
                             </li>
                     </ul>
                 </div>
@@ -308,17 +440,49 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose method and
-deletes them. The pass will be inoperative after this method was called!
-
-Disposable objects:
- - render targets
- - materials
- - textures
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
+        <p>Performs a shallow search for properties that define a dispose method and
+deletes them. The pass will be inoperative after this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when it
 is being destroyed. You may, however, use it independently to free memory
-when you are certain that you don't need this pass anymore.
+when you are certain that you don't need this pass anymore.</p>
+
+    </div>
+
+
+
+
+</div>
+<div id="method_explode" class="method item">
+    <h3 class="name"><code>explode</code></h3>
+
+        <span class="paren">()</span>
+
+
+
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l148"><code>src\passes\shock-wave.js:148</code></a>
+        </p>
+
+
+
+    </div>
+
+    <div class="description">
+        <p>Emits the shock wave.</p>
+
     </div>
 
 
@@ -357,17 +521,15 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Performs initialisation tasks.
-
-By implementing this abstract method you gain access to the renderer.
+        <p>Performs initialisation tasks.</p>
+<p>By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).
+appropriate format (RGB or RGBA).</p>
+<p>The provided renderer can be used to warm up special off-screen render
+targets by performing a preliminary render operation.</p>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when
+this pass is added to its queue.</p>
 
-The provided renderer can be used to warm up special off-screen render
-targets by performing a preliminary render operation.
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
-this pass is added to its queue.
     </div>
 
         <div class="params">
@@ -428,6 +590,9 @@ this pass is added to its queue.
                 <li class="arg">
                         <code>writeBuffer</code>
                 </li>
+                <li class="arg">
+                        <code>delta</code>
+                </li>
             </ul><span class="paren">)</span>
         </div>
 
@@ -444,7 +609,7 @@ this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_depth.js.html#l42"><code>src\passes\depth.js:42</code></a>
+        <a href="../files/src_passes_shock-wave.js.html#l161"><code>src\passes\shock-wave.js:161</code></a>
         </p>
 
 
@@ -499,13 +664,26 @@ this pass is added to its queue.
                     </div>
 
                 </li>
+                <li class="param">
+                        <code class="param-name">delta</code>
+                        <span class="type">Number</span>
+
+
+                    <div class="param-description">
+                        <ul>
+<li>The render delta time.</li>
+</ul>
+
+                    </div>
+
+                </li>
             </ul>
         </div>
 
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -527,9 +705,12 @@ this pass is added to its queue.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_shock-wave.js.html#l225"><code>src\passes\shock-wave.js:225</code></a>
         </p>
 
 
@@ -537,13 +718,8 @@ this pass is added to its queue.
     </div>
 
     <div class="description">
-        Updates this pass with the renderer's size.
+        <p>Updates this pass with the renderer's size.</p>
 
-This is an abstract method that may be overridden in case you want to be
-informed about the main render size.
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
-this pass is initialised and every time its own size is updated.
     </div>
 
         <div class="params">
@@ -557,7 +733,7 @@ this pass is initialised and every time its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
@@ -570,7 +746,7 @@ this pass is initialised and every time its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
@@ -581,20 +757,67 @@ this pass is initialised and every time its own size is updated.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>this.myRenderTarget.setSize(width, height);</code></pre>
-
-            </div>
-        </div>
 </div>
             </div>
 
             <div id="properties" class="api-class-tabpanel">
                 <h2 class="off-left">Properties</h2>
 
+<div id="property_AB" class="property item private">
+    <h3 class="name"><code>AB</code></h3>
+    <span class="type">Vector3</span>
+
+
+        <span class="flag private">private</span>
+
+        <span class="flag final">final</span>
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l29"><code>src\passes\shock-wave.js:29</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A vector.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_active" class="property item private">
+    <h3 class="name"><code>active</code></h3>
+    <span class="type">Boolean</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l114"><code>src\passes\shock-wave.js:114</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Indicates whether the shock wave animation is active.</p>
+
+    </div>
+
+
+
+</div>
 <div id="property_camera" class="property item private inherited">
     <h3 class="name"><code>camera</code></h3>
     <span class="type">Camera</span>
@@ -614,16 +837,17 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        The camera.
+        <p>The camera.</p>
+
     </div>
 
         <p><strong>Default:</strong> new OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
 
 
 </div>
-<div id="property_depthMaterial" class="property item private">
-    <h3 class="name"><code>depthMaterial</code></h3>
-    <span class="type"><a href="../classes/DepthMaterial.html" class="crosslink">DepthMaterial</a></span>
+<div id="property_copyMaterial" class="property item private">
+    <h3 class="name"><code>copyMaterial</code></h3>
+    <span class="type"><a href="../classes/CopyMaterial.html" class="crosslink">CopyMaterial</a></span>
 
 
         <span class="flag private">private</span>
@@ -633,14 +857,14 @@ this pass is initialised and every time its own size is updated.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_depth.js.html#l28"><code>src\passes\depth.js:28</code></a>
+        <a href="../files/src_passes_shock-wave.js.html#l136"><code>src\passes\shock-wave.js:136</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>A depth shader material.</p>
+        <p>A copy shader material.</p>
 
     </div>
 
@@ -665,10 +889,90 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        Enabled flag.
+        <p>Enabled flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_epicenter" class="property item">
+    <h3 class="name"><code>epicenter</code></h3>
+    <span class="type">Vector3</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l75"><code>src\passes\shock-wave.js:75</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The epicenter.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_HALF_PI" class="property item private">
+    <h3 class="name"><code>HALF_PI</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+        <span class="flag final">final</span>
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l5"><code>src\passes\shock-wave.js:5</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Half PI.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_mainCamera" class="property item">
+    <h3 class="name"><code>mainCamera</code></h3>
+    <span class="type">Object3D</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l66"><code>src\passes\shock-wave.js:66</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The main camera.</p>
+
+    </div>
+
 
 
 </div>
@@ -690,7 +994,8 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        The name of this pass.
+        <p>The name of this pass.</p>
+
     </div>
 
 
@@ -715,11 +1020,11 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.
+        <p>Indicates whether the read and write buffers should be swapped after this
+pass has finished rendering.</p>
+<p>Set this to true if this pass renders to the write buffer so that a
+following pass can find the result in the read buffer.</p>
 
-Set this to true if this pass renders to the write buffer so that a
-following pass can find the result in the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -745,9 +1050,9 @@ following pass can find the result in the read buffer.
     </div>
 
     <div class="description">
-        A quad mesh that fills the screen.
+        <p>A quad mesh that fills the screen.</p>
+<p>Assign your shader material to this mesh!</p>
 
-Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> new Mesh(new PlaneBufferGeometry(2, 2), null)</p>
@@ -780,7 +1085,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        Render to screen flag.
+        <p>Render to screen flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -806,10 +1112,144 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        The scene to render.
+        <p>The scene to render.</p>
+
     </div>
 
         <p><strong>Default:</strong> new Scene()</p>
+
+
+</div>
+<div id="property_screenPosition" class="property item private">
+    <h3 class="name"><code>screenPosition</code></h3>
+    <span class="type">Vector3</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l84"><code>src\passes\shock-wave.js:84</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The object position in screen space.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_shockWaveMaterial" class="property item private">
+    <h3 class="name"><code>shockWaveMaterial</code></h3>
+    <span class="type"><a href="../classes/ShockWaveMaterial.html" class="crosslink">ShockWaveMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l124"><code>src\passes\shock-wave.js:124</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A shock wave shader material.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_time" class="property item private">
+    <h3 class="name"><code>time</code></h3>
+    <span class="type">Number</span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l104"><code>src\passes\shock-wave.js:104</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A time accumulator.</p>
+
+    </div>
+
+
+
+</div>
+<div id="property_time" class="property item">
+    <h3 class="name"><code>time</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l94"><code>src\passes\shock-wave.js:94</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The speed of the shock wave animation.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 2.0</p>
+
+
+</div>
+<div id="property_V" class="property item private">
+    <h3 class="name"><code>V</code></h3>
+    <span class="type">Vector3</span>
+
+
+        <span class="flag private">private</span>
+
+        <span class="flag final">final</span>
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_shock-wave.js.html#l17"><code>src\passes\shock-wave.js:17</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A vector.</p>
+
+    </div>
+
 
 
 </div>

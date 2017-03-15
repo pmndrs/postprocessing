@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -374,6 +379,10 @@
                                 <a href="#property_enabled">enabled</a>
 
                             </li>
+                            <li class="index-item property inherited">
+                                <a href="#property_name">name</a>
+
+                            </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
@@ -414,7 +423,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l187"><code>src\passes\pass.js:187</code></a>
+        <a href="../files/src_passes_pass.js.html#l183"><code>src\passes\pass.js:183</code></a>
         </p>
 
 
@@ -430,8 +439,8 @@ Disposable objects:
  - materials
  - textures
 
-The EffectComposer calls this method automatically when it is being
-destroyed. You may, however, use it independently to free memory
+The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
+is being destroyed. You may, however, use it independently to free memory
 when you are certain that you don't need this pass anymore.
     </div>
 
@@ -463,7 +472,7 @@ when you are certain that you don't need this pass anymore.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_initialise">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l166"><code>src\passes\pass.js:166</code></a>
+        <a href="../files/src_passes_pass.js.html#l161"><code>src\passes\pass.js:161</code></a>
         </p>
 
 
@@ -475,12 +484,13 @@ when you are certain that you don't need this pass anymore.
 
 By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA) if appropriate.
+appropriate format (RGB or RGBA).
 
 The provided renderer can be used to warm up special off-screen render
 targets by performing a preliminary render operation.
 
-The effect composer calls this method when this pass is added to its queue.
+The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
+this pass is added to its queue.
     </div>
 
         <div class="params">
@@ -557,7 +567,7 @@ The effect composer calls this method when this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bokeh2.js.html#l48"><code>src\passes\bokeh2.js:48</code></a>
+        <a href="../files/src_passes_bokeh2.js.html#l51"><code>src\passes\bokeh2.js:51</code></a>
         </p>
 
 
@@ -580,7 +590,7 @@ The effect composer calls this method when this pass is added to its queue.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer to use.</li>
+<li>The renderer.</li>
 </ul>
 
                     </div>
@@ -645,7 +655,7 @@ The effect composer calls this method when this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_bokeh2.js.html#l66"><code>src\passes\bokeh2.js:66</code></a>
+        <a href="../files/src_passes_bokeh2.js.html#l69"><code>src\passes\bokeh2.js:69</code></a>
         </p>
 
 
@@ -710,14 +720,14 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_bokeh2.js.html#l34"><code>src\passes\bokeh2.js:34</code></a>
+        <a href="../files/src_passes_bokeh2.js.html#l37"><code>src\passes\bokeh2.js:37</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        <p>Bokeh shader material.</p>
+        <p>A bokeh shader material.</p>
 
     </div>
 
@@ -736,17 +746,17 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_camera">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l42"><code>src\passes\pass.js:42</code></a>
+        <a href="../files/src_passes_pass.js.html#l48"><code>src\passes\pass.js:48</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        The camera to render with.
+        The camera.
     </div>
 
-        <p><strong>Default:</strong> OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
+        <p><strong>Default:</strong> new OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
 
 
 </div>
@@ -761,7 +771,7 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l89"><code>src\passes\pass.js:89</code></a>
+        <a href="../files/src_passes_pass.js.html#l101"><code>src\passes\pass.js:101</code></a>
         </p>
 
 
@@ -772,6 +782,30 @@ The effect composer calls this method when this pass is added to its queue.
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_name" class="property item inherited">
+    <h3 class="name"><code>name</code></h3>
+    <span class="type">String</span>
+
+
+
+
+
+    <div class="meta">
+                <p>Inherited from
+                <a href="../classes/Pass.html#property_name">Pass</a>:
+        <a href="../files/src_passes_pass.js.html#l28"><code>src\passes\pass.js:28</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        The name of this pass.
+    </div>
+
 
 
 </div>
@@ -787,7 +821,7 @@ The effect composer calls this method when this pass is added to its queue.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_needsSwap">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l74"><code>src\passes\pass.js:74</code></a>
+        <a href="../files/src_passes_pass.js.html#l86"><code>src\passes\pass.js:86</code></a>
         </p>
 
 
@@ -817,19 +851,19 @@ following pass can find the result in the read buffer.
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_quad">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l53"><code>src\passes\pass.js:53</code></a>
+        <a href="../files/src_passes_pass.js.html#l59"><code>src\passes\pass.js:59</code></a>
         </p>
 
 
     </div>
 
     <div class="description">
-        The quad mesh to use for rendering.
+        A quad mesh that fills the screen.
 
 Assign your shader material to this mesh!
     </div>
 
-        <p><strong>Default:</strong> Mesh(PlaneBufferGeometry(2, 2), null)</p>
+        <p><strong>Default:</strong> new Mesh(new PlaneBufferGeometry(2, 2), null)</p>
 
         <div class="example">
             <h4>Example:</h4>
@@ -852,7 +886,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l99"><code>src\passes\pass.js:99</code></a>
+        <a href="../files/src_passes_pass.js.html#l111"><code>src\passes\pass.js:111</code></a>
         </p>
 
 
@@ -878,7 +912,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_scene">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l31"><code>src\passes\pass.js:31</code></a>
+        <a href="../files/src_passes_pass.js.html#l37"><code>src\passes\pass.js:37</code></a>
         </p>
 
 
@@ -888,7 +922,7 @@ Assign your shader material to this mesh!
         The scene to render.
     </div>
 
-        <p><strong>Default:</strong> Scene()</p>
+        <p><strong>Default:</strong> new Scene()</p>
 
 
 </div>

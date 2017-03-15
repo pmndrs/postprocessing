@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src\materials\smaa-weights\index.js - postprocessing</title>
+    <title>src\materials\pixelation\index.js - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,56 +121,40 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1 class="file-heading">File: src\materials\smaa-weights\index.js</h1>
+<h1 class="file-heading">File: src\materials\pixelation\index.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import areaImage from &quot;./area-image.js&quot;;
-import searchImage from &quot;./search-image.js&quot;;
-
 import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
 
 /**
- * Subpixel Morphological Antialiasing.
+ * A pixelation shader material.
  *
- * This material computes weights for detected edges.
+ * Original shader code by Robert Casanova:
+ *  https://github.com/robertcasanova/pixelate-shader
  *
- * @class SMAAWeightsMaterial
+ * @class PixelationMaterial
  * @submodule materials
  * @extends ShaderMaterial
  * @constructor
- * @param {Vector2} [texelSize] - The absolute screen texel size.
  */
 
-export class SMAAWeightsMaterial extends ShaderMaterial {
+export class PixelationMaterial extends ShaderMaterial {
 
-	constructor(texelSize = new Vector2()) {
+	constructor() {
 
 		super({
 
-			type: &quot;SMAAWeightsMaterial&quot;,
-
-			defines: {
-
-				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
-
-				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
-
-				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
-				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
-
-			},
+			type: &quot;PixelationMaterial&quot;,
 
 			uniforms: {
 
 				tDiffuse: new Uniform(null),
-				tArea: new Uniform(null),
-				tSearch: new Uniform(null),
-				texelSize: new Uniform(texelSize)
+				granularity: new Uniform(1.0),
+				resolution: new Uniform(new Vector2(1.0, 1.0))
 
 			},
 
@@ -181,24 +165,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
-
-		/**
-		 * The area pattern recognition image.
-		 *
-		 * @property areaImage
-		 * @type String
-		 */
-
-		this.areaImage = areaImage;
-
-		/**
-		 * The search image.
-		 *
-		 * @property searchImage
-		 * @type String
-		 */
-
-		this.searchImage = searchImage;
 
 	}
 

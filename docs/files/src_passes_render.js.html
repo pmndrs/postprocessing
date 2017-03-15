@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.0.0</em>
+            <em>API Docs for: 2.1.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -46,6 +46,7 @@
                                 <li><a href="../classes/BokehMaterial.html">BokehMaterial</a></li>
                                 <li><a href="../classes/BokehPass.html">BokehPass</a></li>
                                 <li><a href="../classes/ClearMaskPass.html">ClearMaskPass</a></li>
+                                <li><a href="../classes/ClearPass.html">ClearPass</a></li>
                                 <li><a href="../classes/CombineMaterial.html">CombineMaterial</a></li>
                                 <li><a href="../classes/ConvolutionMaterial.html">ConvolutionMaterial</a></li>
                                 <li><a href="../classes/CopyMaterial.html">CopyMaterial</a></li>
@@ -65,9 +66,13 @@
                                 <li><a href="../classes/LuminosityMaterial.html">LuminosityMaterial</a></li>
                                 <li><a href="../classes/MaskPass.html">MaskPass</a></li>
                                 <li><a href="../classes/Pass.html">Pass</a></li>
+                                <li><a href="../classes/PixelationMaterial.html">PixelationMaterial</a></li>
+                                <li><a href="../classes/PixelationPass.html">PixelationPass</a></li>
                                 <li><a href="../classes/RenderPass.html">RenderPass</a></li>
                                 <li><a href="../classes/SavePass.html">SavePass</a></li>
                                 <li><a href="../classes/ShaderPass.html">ShaderPass</a></li>
+                                <li><a href="../classes/ShockWaveMaterial.html">ShockWaveMaterial</a></li>
+                                <li><a href="../classes/ShockWavePass.html">ShockWavePass</a></li>
                                 <li><a href="../classes/SMAABlendMaterial.html">SMAABlendMaterial</a></li>
                                 <li><a href="../classes/SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></li>
                                 <li><a href="../classes/SMAAPass.html">SMAAPass</a></li>
@@ -120,19 +125,8 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { Color } from &quot;three&quot;;
+import { ClearPass } from &quot;./clear.js&quot;;
 import { Pass } from &quot;./pass.js&quot;;
-
-/**
- * Used for saving the original clear color during rendering.
- *
- * @property CLEAR_COLOR
- * @type Color
- * @private
- * @static
- */
-
-const CLEAR_COLOR = new Color();
 
 /**
  * A pass that renders a given scene directly on screen or into the read buffer
@@ -145,9 +139,11 @@ const CLEAR_COLOR = new Color();
  * @param {Scene} scene - The scene to render.
  * @param {Camera} camera - The camera to use to render the scene.
  * @param {Object} [options] - Additional options.
- * @param {Material} [options.overrideMaterial] - An override material for the scene.
- * @param {Color} [options.clearColor] - An override clear color.
- * @param {Number} [options.clearAlpha] - An override clear alpha.
+ * @param {Material} [options.overrideMaterial=null] - An override material for the scene.
+ * @param {Color} [options.clearColor=null] - An override clear color.
+ * @param {Number} [options.clearAlpha=1.0] - An override clear alpha.
+ * @param {Boolean} [options.clearDepth=false] - Whether depth should be cleared explicitly.
+ * @param {Boolean} [options.clear=true] - Whether all buffers should be cleared.
  */
 
 export class RenderPass extends Pass {
@@ -156,43 +152,50 @@ export class RenderPass extends Pass {
 
 		super(scene, camera, null);
 
+		this.name = &quot;RenderPass&quot;;
+
 		/**
-		 * Override material.
+		 * A clear pass.
+		 *
+		 * @property clearPass
+		 * @type ClearPass
+		 */
+
+		this.clearPass = new ClearPass(options);
+
+		/**
+		 * An override material.
 		 *
 		 * @property overrideMaterial
 		 * @type Material
+		 * @default null
 		 */
 
 		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
 
 		/**
-		 * Clear color.
+		 * Indicates whether the depth buffer should be cleared explicitly.
 		 *
-		 * @property clearColor
-		 * @type Color
+		 * @property clearDepth
+		 * @type Boolean
+		 * @default false
 		 */
 
-		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
+		this.clearDepth = (options.clearDepth !== undefined) ? options.clearDepth : false;
 
 		/**
-		 * Clear alpha.
+		 * Indicates whether the color, depth and stencil buffers should be cleared.
 		 *
-		 * @property clearAlpha
-		 * @type Number
-		 * @default 1.0
-		 */
-
-		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 1.0;
-
-		/**
-		 * Clear flag.
+		 * Even with clear set to true you can prevent specific buffers from being
+		 * cleared by setting either the autoClearColor, autoClearStencil or
+		 * autoClearDepth properties of the renderer to false.
 		 *
 		 * @property clear
 		 * @type Boolean
 		 * @default true
 		 */
 
-		this.clear = true;
+		this.clear = (options.clear !== undefined) ? options.clear : true;
 
 	}
 
@@ -200,35 +203,28 @@ export class RenderPass extends Pass {
 	 * Renders the scene.
 	 *
 	 * @method render
-	 * @param {WebGLRenderer} renderer - The renderer to use.
+	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
 
 	render(renderer, readBuffer) {
 
 		const scene = this.scene;
-		const clearColor = this.clearColor;
+		const target = this.renderToScreen ? null : readBuffer;
 
-		let clearAlpha;
+		if(this.clear) {
+
+			this.clearPass.render(renderer, target);
+
+		} else if(this.clearDepth) {
+
+			renderer.setRenderTarget(target);
+			renderer.clearDepth();
+
+		}
 
 		scene.overrideMaterial = this.overrideMaterial;
-
-		if(clearColor !== null) {
-
-			CLEAR_COLOR.copy(renderer.getClearColor());
-			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(clearColor, this.clearAlpha);
-
-		}
-
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
-
-		if(clearColor !== null) {
-
-			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
-
-		}
-
+		renderer.render(scene, this.camera, target);
 		scene.overrideMaterial = null;
 
 	}

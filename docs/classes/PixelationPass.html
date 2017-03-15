@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>DepthPass - postprocessing</title>
+    <title>PixelationPass - postprocessing</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -121,7 +121,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-<h1>DepthPass Class</h1>
+<h1>PixelationPass Class</h1>
 <div class="box meta">
 
         <div class="extends">
@@ -129,7 +129,7 @@
         </div>
 
         <div class="foundat">
-            Defined in: <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+            Defined in: <a href="../files/src_passes_pixelation.js.html#l4"><code>src\passes\pixelation.js:4</code></a>
         </div>
 
             Module: <a href="../modules/passes.html">passes</a><br>
@@ -139,22 +139,19 @@
 
 
 <div class="box intro">
-    <p>A depth pass.</p>
-<p>Reads the depth from a depth texture and renders it.</p>
-<p>This pass requires a
-<a href="../classes/EffectComposer.html#property_depthTexture" class="crosslink">depthTexture</a>.</p>
+    <p>A pixelation pass.</p>
 
 </div>
 
     <div class="constructor">
         <h2>Constructor</h2>
-<div id="method_DepthPass" class="method item">
-    <h3 class="name"><code>DepthPass</code></h3>
+<div id="method_PixelationPass" class="method item">
+    <h3 class="name"><code>PixelationPass</code></h3>
 
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
                 <li class="arg">
-                        <code>camera</code>
+                        <code class="optional">[granularity=30.0]</code>
                 </li>
             </ul><span class="paren">)</span>
         </div>
@@ -169,7 +166,7 @@
     <div class="meta">
                 <p>
                 Defined in
-        <a href="../files/src_passes_depth.js.html#l4"><code>src\passes\depth.js:4</code></a>
+        <a href="../files/src_passes_pixelation.js.html#l4"><code>src\passes\pixelation.js:4</code></a>
         </p>
 
 
@@ -185,13 +182,14 @@
 
             <ul class="params-list">
                 <li class="param">
-                        <code class="param-name">camera</code>
-                        <span class="type">PerspectiveCamera</span>
+                        <code class="param-name optional">[granularity=30.0]</code>
+                        <span class="type">Number</span>
+                        <span class="flag optional" title="This parameter is optional.">optional</span>
 
 
                     <div class="param-description">
                         <ul>
-<li>The main camera. Used to obtain the near and far plane settings.</li>
+<li>The intensity of the effect.</li>
 </ul>
 
                     </div>
@@ -248,12 +246,12 @@
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_depthMaterial">depthMaterial</a>
-
-                            </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_granularity">granularity</a>
 
                             </li>
                             <li class="index-item property inherited">
@@ -262,6 +260,10 @@
                             </li>
                             <li class="index-item property private inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
+
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_pixelationMaterial">pixelationMaterial</a>
 
                             </li>
                             <li class="index-item property private inherited">
@@ -308,17 +310,18 @@
     </div>
 
     <div class="description">
-        Performs a shallow search for properties that define a dispose method and
-deletes them. The pass will be inoperative after this method was called!
-
-Disposable objects:
- - render targets
- - materials
- - textures
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
+        <p>Performs a shallow search for properties that define a dispose method and
+deletes them. The pass will be inoperative after this method was called!</p>
+<p>Disposable objects:</p>
+<ul>
+<li>render targets</li>
+<li>materials</li>
+<li>textures</li>
+</ul>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when it
 is being destroyed. You may, however, use it independently to free memory
-when you are certain that you don't need this pass anymore.
+when you are certain that you don't need this pass anymore.</p>
+
     </div>
 
 
@@ -357,17 +360,15 @@ when you are certain that you don't need this pass anymore.
     </div>
 
     <div class="description">
-        Performs initialisation tasks.
-
-By implementing this abstract method you gain access to the renderer.
+        <p>Performs initialisation tasks.</p>
+<p>By implementing this abstract method you gain access to the renderer.
 You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).
+appropriate format (RGB or RGBA).</p>
+<p>The provided renderer can be used to warm up special off-screen render
+targets by performing a preliminary render operation.</p>
+<p>The <a href="../classes/EffectComposer.html" class="crosslink">EffectComposer</a> calls this method when
+this pass is added to its queue.</p>
 
-The provided renderer can be used to warm up special off-screen render
-targets by performing a preliminary render operation.
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
-this pass is added to its queue.
     </div>
 
         <div class="params">
@@ -444,7 +445,7 @@ this pass is added to its queue.
                 Pass
             </a>
             but overwritten in
-        <a href="../files/src_passes_depth.js.html#l42"><code>src\passes\depth.js:42</code></a>
+        <a href="../files/src_passes_pixelation.js.html#l67"><code>src\passes\pixelation.js:67</code></a>
         </p>
 
 
@@ -505,7 +506,7 @@ this pass is added to its queue.
 
 
 </div>
-<div id="method_setSize" class="method item inherited">
+<div id="method_setSize" class="method item">
     <h3 class="name"><code>setSize</code></h3>
 
         <div class="args">
@@ -527,9 +528,12 @@ this pass is added to its queue.
 
 
     <div class="meta">
-                <p>Inherited from
-                <a href="../classes/Pass.html#method_setSize">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l143"><code>src\passes\pass.js:143</code></a>
+            <p>Inherited from
+            <a href="../classes/Pass.html#method_setSize">
+                Pass
+            </a>
+            but overwritten in
+        <a href="../files/src_passes_pixelation.js.html#l84"><code>src\passes\pixelation.js:84</code></a>
         </p>
 
 
@@ -537,13 +541,8 @@ this pass is added to its queue.
     </div>
 
     <div class="description">
-        Updates this pass with the renderer's size.
+        <p>Updates this pass with the renderer's size.</p>
 
-This is an abstract method that may be overridden in case you want to be
-informed about the main render size.
-
-The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
-this pass is initialised and every time its own size is updated.
     </div>
 
         <div class="params">
@@ -557,7 +556,7 @@ this pass is initialised and every time its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's width.</li>
+<li>The width.</li>
 </ul>
 
                     </div>
@@ -570,7 +569,7 @@ this pass is initialised and every time its own size is updated.
 
                     <div class="param-description">
                         <ul>
-<li>The renderer's height.</li>
+<li>The height.</li>
 </ul>
 
                     </div>
@@ -581,14 +580,6 @@ this pass is initialised and every time its own size is updated.
 
 
 
-        <div class="example">
-            <h4>Example:</h4>
-
-            <div class="example-content">
-                <pre class="code prettyprint"><code>this.myRenderTarget.setSize(width, height);</code></pre>
-
-            </div>
-        </div>
 </div>
             </div>
 
@@ -614,36 +605,11 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        The camera.
+        <p>The camera.</p>
+
     </div>
 
         <p><strong>Default:</strong> new OrthographicCamera(-1, 1, 1, -1, 0, 1)</p>
-
-
-</div>
-<div id="property_depthMaterial" class="property item private">
-    <h3 class="name"><code>depthMaterial</code></h3>
-    <span class="type"><a href="../classes/DepthMaterial.html" class="crosslink">DepthMaterial</a></span>
-
-
-        <span class="flag private">private</span>
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_depth.js.html#l28"><code>src\passes\depth.js:28</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>A depth shader material.</p>
-
-    </div>
-
 
 
 </div>
@@ -665,10 +631,37 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        Enabled flag.
+        <p>Enabled flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> true</p>
+
+
+</div>
+<div id="property_granularity" class="property item">
+    <h3 class="name"><code>granularity</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_pixelation.js.html#l39"><code>src\passes\pixelation.js:39</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The pixel granularity. A higher value yields coarser visuals.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 30.0</p>
 
 
 </div>
@@ -690,7 +683,8 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        The name of this pass.
+        <p>The name of this pass.</p>
+
     </div>
 
 
@@ -715,14 +709,40 @@ this pass is initialised and every time its own size is updated.
     </div>
 
     <div class="description">
-        Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.
+        <p>Indicates whether the read and write buffers should be swapped after this
+pass has finished rendering.</p>
+<p>Set this to true if this pass renders to the write buffer so that a
+following pass can find the result in the read buffer.</p>
 
-Set this to true if this pass renders to the write buffer so that a
-following pass can find the result in the read buffer.
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_pixelationMaterial" class="property item private">
+    <h3 class="name"><code>pixelationMaterial</code></h3>
+    <span class="type"><a href="../classes/PixelationMaterial.html" class="crosslink">PixelationMaterial</a></span>
+
+
+        <span class="flag private">private</span>
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_pixelation.js.html#l23"><code>src\passes\pixelation.js:23</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>A pixelation shader material.</p>
+
+    </div>
+
 
 
 </div>
@@ -745,9 +765,9 @@ following pass can find the result in the read buffer.
     </div>
 
     <div class="description">
-        A quad mesh that fills the screen.
+        <p>A quad mesh that fills the screen.</p>
+<p>Assign your shader material to this mesh!</p>
 
-Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> new Mesh(new PlaneBufferGeometry(2, 2), null)</p>
@@ -780,7 +800,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        Render to screen flag.
+        <p>Render to screen flag.</p>
+
     </div>
 
         <p><strong>Default:</strong> false</p>
@@ -806,7 +827,8 @@ Assign your shader material to this mesh!
     </div>
 
     <div class="description">
-        The scene to render.
+        <p>The scene to render.</p>
+
     </div>
 
         <p><strong>Default:</strong> new Scene()</p>
