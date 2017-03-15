@@ -123,10 +123,10 @@
 
   									uniforms: {
 
-  												tPreviousLum: { value: null },
-  												tCurrentLum: { value: null },
-  												delta: { value: 0.0 },
-  												tau: { value: 1.0 }
+  												tPreviousLum: new three.Uniform(null),
+  												tCurrentLum: new three.Uniform(null),
+  												delta: new three.Uniform(0.0),
+  												tau: new three.Uniform(1.0)
 
   									},
 
@@ -149,7 +149,7 @@
   /**
    * Depth of Field shader (Bokeh).
    *
-   * Original code by Martins Upitis:
+   * Original shader code by Martins Upitis:
    *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
    *
    * @class BokehMaterial
@@ -171,22 +171,33 @@
   		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   		classCallCheck(this, BokehMaterial);
 
+
+  		if (options.focus === undefined) {
+  			options.focus = 1.0;
+  		}
+  		if (options.aperture === undefined) {
+  			options.aperture = 0.025;
+  		}
+  		if (options.maxBlur === undefined) {
+  			options.maxBlur = 1.0;
+  		}
+
   		var _this = possibleConstructorReturn(this, (BokehMaterial.__proto__ || Object.getPrototypeOf(BokehMaterial)).call(this, {
 
   			type: "BokehMaterial",
 
   			uniforms: {
 
-  				cameraNear: { value: 0.1 },
-  				cameraFar: { value: 2000 },
-  				aspect: { value: 1.0 },
+  				cameraNear: new three.Uniform(0.1),
+  				cameraFar: new three.Uniform(2000),
+  				aspect: new three.Uniform(1.0),
 
-  				tDiffuse: { value: null },
-  				tDepth: { value: null },
+  				tDiffuse: new three.Uniform(null),
+  				tDepth: new three.Uniform(null),
 
-  				focus: { value: options.focus !== undefined ? options.focus : 1.0 },
-  				aperture: { value: options.aperture !== undefined ? options.aperture : 0.025 },
-  				maxBlur: { value: options.maxBlur !== undefined ? options.maxBlur : 1.0 }
+  				focus: new three.Uniform(options.focus),
+  				aperture: new three.Uniform(options.aperture),
+  				maxBlur: new three.Uniform(options.maxBlur)
 
   			},
 
@@ -231,7 +242,7 @@
   /**
    * Depth of Field shader version 2.
    *
-   * Original code by Martins Upitis:
+   * Original shader code by Martins Upitis:
    *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
    *
    * @class Bokeh2Material
@@ -301,27 +312,27 @@
 
   			uniforms: {
 
-  				tDiffuse: { value: null },
-  				tDepth: { value: null },
+  				tDiffuse: new three.Uniform(null),
+  				tDepth: new three.Uniform(null),
 
-  				texelSize: { value: new three.Vector2() },
-  				halfTexelSize: { value: new three.Vector2() },
+  				texelSize: new three.Uniform(new three.Vector2()),
+  				halfTexelSize: new three.Uniform(new three.Vector2()),
 
-  				cameraNear: { value: 0.1 },
-  				cameraFar: { value: 2000 },
+  				cameraNear: new three.Uniform(0.1),
+  				cameraFar: new three.Uniform(2000),
 
-  				focalLength: { value: 24.0 },
-  				focalStop: { value: 0.9 },
+  				focalLength: new three.Uniform(24.0),
+  				focalStop: new three.Uniform(0.9),
 
-  				maxBlur: { value: 1.0 },
-  				luminanceThreshold: { value: 0.5 },
-  				luminanceGain: { value: 2.0 },
-  				bias: { value: 0.5 },
-  				fringe: { value: 0.7 },
-  				ditherStrength: { value: 0.0001 },
+  				maxBlur: new three.Uniform(1.0),
+  				luminanceThreshold: new three.Uniform(0.5),
+  				luminanceGain: new three.Uniform(2.0),
+  				bias: new three.Uniform(0.5),
+  				fringe: new three.Uniform(0.7),
+  				ditherStrength: new three.Uniform(0.0001),
 
-  				focusCoords: { value: new three.Vector2(0.5, 0.5) },
-  				focalDepth: { value: 1.0 }
+  				focusCoords: new three.Uniform(new three.Vector2(0.5, 0.5)),
+  				focalDepth: new three.Uniform(1.0)
 
   			},
 
@@ -430,11 +441,11 @@
 
   									uniforms: {
 
-  												texture1: { value: null },
-  												texture2: { value: null },
+  												texture1: new three.Uniform(null),
+  												texture2: new three.Uniform(null),
 
-  												opacity1: { value: 1.0 },
-  												opacity2: { value: 1.0 }
+  												opacity1: new three.Uniform(1.0),
+  												opacity2: new three.Uniform(1.0)
 
   									},
 
@@ -491,10 +502,10 @@
 
   			uniforms: {
 
-  				tDiffuse: { value: null },
-  				texelSize: { value: new three.Vector2() },
-  				halfTexelSize: { value: new three.Vector2() },
-  				kernel: { value: 0.0 }
+  				tDiffuse: new three.Uniform(null),
+  				texelSize: new three.Uniform(new three.Vector2()),
+  				halfTexelSize: new three.Uniform(new three.Vector2()),
+  				kernel: new three.Uniform(0.0)
 
   			},
 
@@ -557,7 +568,7 @@
    * The Kawase blur kernel presets.
    *
    * @property kernelPresets
-   * @type Number
+   * @type Array
    * @private
    * @static
    */
@@ -660,8 +671,8 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												opacity: { value: 1.0 }
+  												tDiffuse: new three.Uniform(null),
+  												opacity: new three.Uniform(1.0)
 
   									},
 
@@ -704,10 +715,10 @@
 
   			uniforms: {
 
-  				cameraNear: { value: 0.1 },
-  				cameraFar: { value: 2000 },
+  				cameraNear: new three.Uniform(0.1),
+  				cameraFar: new three.Uniform(2000),
 
-  				tDepth: { value: null }
+  				tDepth: new three.Uniform(null)
 
   			},
 
@@ -771,13 +782,13 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
+  												tDiffuse: new three.Uniform(null),
 
-  												angle: { value: 1.57 },
-  												scale: { value: 1.0 },
-  												intensity: { value: 1.0 },
+  												angle: new three.Uniform(1.57),
+  												scale: new three.Uniform(1.0),
+  												intensity: new three.Uniform(1.0),
 
-  												offsetRepeat: { value: new three.Vector4(0.5, 0.5, 1.0, 1.0) }
+  												offsetRepeat: new three.Uniform(new three.Vector4(0.5, 0.5, 1.0, 1.0))
 
   									},
 
@@ -799,7 +810,7 @@
   			return DotScreenMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tcolor += texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tcolor += texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - CENTER) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, CENTER);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
+  var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n\tconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tvec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invNoise = vec3(1.0) - noise;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invNoise;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += noise;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tvec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invScanlines = vec3(1.0) - scanlines;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invScanlines;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += scanlines;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(dot(color, LUM_COEFF)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - CENTER) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, CENTER);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
 
   var vertex$8 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -833,8 +844,9 @@
    * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
    * @param {Boolean} [options.vignette=false] - Apply vignette effect.
    * @param {Boolean} [options.eskil=false] - Use Eskil's vignette approach. The default looks dusty while Eskil looks burned out.
-   * @param {Boolean} [options.scanlines=true] - Show scanlines.
+   * @param {Boolean} [options.screenMode=true] - Whether the screen blend mode should be used for noise and scanlines. Both of these effects are computed independently.
    * @param {Boolean} [options.noise=true] - Show noise-based film grain.
+   * @param {Boolean} [options.scanlines=true] - Show scanlines.
    * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
    * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
    * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect.
@@ -844,80 +856,112 @@
    */
 
   var FilmMaterial = function (_ShaderMaterial) {
-    inherits(FilmMaterial, _ShaderMaterial);
+  		inherits(FilmMaterial, _ShaderMaterial);
 
-    function FilmMaterial() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      classCallCheck(this, FilmMaterial);
+  		function FilmMaterial() {
+  				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  				classCallCheck(this, FilmMaterial);
 
 
-      if (options.greyscale === undefined) {
-        options.greyscale = false;
-      }
-      if (options.sepia === undefined) {
-        options.sepia = false;
-      }
-      if (options.vignette === undefined) {
-        options.vignette = false;
-      }
-      if (options.eskil === undefined) {
-        options.eskil = false;
-      }
+  				if (options.screenMode === undefined) {
+  						options.screenMode = true;
+  				}
+  				if (options.noise === undefined) {
+  						options.noise = true;
+  				}
+  				if (options.scanlines === undefined) {
+  						options.scanlines = true;
+  				}
 
-      // These are enabled by default.
-      var _this = possibleConstructorReturn(this, (FilmMaterial.__proto__ || Object.getPrototypeOf(FilmMaterial)).call(this, {
+  				if (options.greyscale === undefined) {
+  						options.greyscale = false;
+  				}
+  				if (options.sepia === undefined) {
+  						options.sepia = false;
+  				}
+  				if (options.vignette === undefined) {
+  						options.vignette = false;
+  				}
+  				if (options.eskil === undefined) {
+  						options.eskil = false;
+  				}
 
-        type: "FilmMaterial",
+  				if (options.noiseIntensity === undefined) {
+  						options.noiseIntensity = 0.5;
+  				}
+  				if (options.scanlineIntensity === undefined) {
+  						options.scanlineIntensity = 0.05;
+  				}
+  				if (options.greyscaleIntensity === undefined) {
+  						options.greyscaleIntensity = 1.0;
+  				}
+  				if (options.sepiaIntensity === undefined) {
+  						options.sepiaIntensity = 1.0;
+  				}
 
-        uniforms: {
+  				if (options.vignetteOffset === undefined) {
+  						options.vignetteOffset = 1.0;
+  				}
+  				if (options.vignetteDarkness === undefined) {
+  						options.vignetteDarkness = 1.0;
+  				}
 
-          tDiffuse: { value: null },
-          time: { value: 0.0 },
+  				var _this = possibleConstructorReturn(this, (FilmMaterial.__proto__ || Object.getPrototypeOf(FilmMaterial)).call(this, {
 
-          noiseIntensity: { value: options.noiseIntensity !== undefined ? options.noiseIntensity : 0.5 },
-          scanlineIntensity: { value: options.scanlineIntensity !== undefined ? options.scanlineIntensity : 0.05 },
-          scanlineCount: { value: 0.0 },
+  						type: "FilmMaterial",
 
-          greyscaleIntensity: { value: options.greyscaleIntensity !== undefined ? options.greyscaleIntensity : 1.0 },
-          sepiaIntensity: { value: options.sepiaIntensity !== undefined ? options.sepiaIntensity : 1.0 },
+  						uniforms: {
 
-          vignetteOffset: { value: options.vignetteOffset !== undefined ? options.vignetteOffset : 1.0 },
-          vignetteDarkness: { value: options.vignetteDarkness !== undefined ? options.vignetteDarkness : 1.0 }
+  								tDiffuse: new three.Uniform(null),
+  								time: new three.Uniform(0.0),
 
-        },
+  								noiseIntensity: new three.Uniform(options.noiseIntensity),
+  								scanlineIntensity: new three.Uniform(options.scanlineIntensity),
+  								scanlineCount: new three.Uniform(0.0),
 
-        fragmentShader: fragment$8,
-        vertexShader: vertex$8,
+  								greyscaleIntensity: new three.Uniform(options.greyscaleIntensity),
+  								sepiaIntensity: new three.Uniform(options.sepiaIntensity),
 
-        depthWrite: false,
-        depthTest: false
+  								vignetteOffset: new three.Uniform(options.vignetteOffset),
+  								vignetteDarkness: new three.Uniform(options.vignetteDarkness)
 
-      }));
+  						},
 
-      if (options.scanlines === undefined || options.scanlines) {
-        _this.defines.SCANLINES = "1";
-      }
-      if (options.noise === undefined || options.noise) {
-        _this.defines.NOISE = "1";
-      }
+  						fragmentShader: fragment$8,
+  						vertexShader: vertex$8,
 
-      if (options.greyscale) {
-        _this.defines.GREYSCALE = "1";
-      }
-      if (options.sepia) {
-        _this.defines.SEPIA = "1";
-      }
-      if (options.vignette) {
-        _this.defines.VIGNETTE = "1";
-      }
-      if (options.eskil) {
-        _this.defines.ESKIL = "1";
-      }
+  						depthWrite: false,
+  						depthTest: false
 
-      return _this;
-    }
+  				}));
 
-    return FilmMaterial;
+  				if (options.greyscale) {
+  						_this.defines.GREYSCALE = "1";
+  				}
+  				if (options.sepia) {
+  						_this.defines.SEPIA = "1";
+  				}
+  				if (options.vignette) {
+  						_this.defines.VIGNETTE = "1";
+  				}
+  				if (options.eskil) {
+  						_this.defines.ESKIL = "1";
+  				}
+
+  				if (options.screenMode) {
+  						_this.defines.SCREEN_MODE = "1";
+  				}
+  				if (options.noise) {
+  						_this.defines.NOISE = "1";
+  				}
+  				if (options.scanlines) {
+  						_this.defines.SCANLINES = "1";
+  				}
+
+  				return _this;
+  		}
+
+  		return FilmMaterial;
   }(three.ShaderMaterial);
 
   var fragment$9 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tPerturb;\r\n\r\nuniform bool active;\r\n\r\nuniform float amount;\r\nuniform float angle;\r\nuniform float seed;\r\nuniform float seedX;\r\nuniform float seedY;\r\nuniform float distortionX;\r\nuniform float distortionY;\r\nuniform float colS;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat rand(vec2 tc) {\r\n\r\n\tconst float a = 12.9898;\r\n\tconst float b = 78.233;\r\n\tconst float c = 43758.5453;\r\n\r\n\tfloat dt = dot(tc, vec2(a, b));\r\n\tfloat sn = mod(dt, 3.14);\r\n\r\n\treturn fract(sin(sn) * c);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\tfloat xs, ys;\r\n\tvec4 normal;\r\n\r\n\tvec2 offset;\r\n\tvec4 cr, cga, cb;\r\n\tvec4 snow, color;\r\n\r\n\tfloat sx, sy;\r\n\r\n\tif(active) {\r\n\r\n\t\txs = floor(gl_FragCoord.x / 0.5);\r\n\t\tys = floor(gl_FragCoord.y / 0.5);\r\n\r\n\t\tnormal = texture2D(tPerturb, coord * seed * seed);\r\n\r\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\r\n\r\n\t\t\tsx = clamp(ceil(seedX), 0.0, 1.0);\r\n\t\t\tcoord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;\r\n\r\n\t\t}\r\n\r\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\r\n\r\n\t\t\tsy = clamp(ceil(seedY), 0.0, 1.0);\r\n\t\t\tcoord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));\r\n\r\n\t\t}\r\n\r\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\r\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\r\n\r\n\t\toffset = amount * vec2(cos(angle), sin(angle));\r\n\r\n\t\tcr = texture2D(tDiffuse, coord + offset);\r\n\t\tcga = texture2D(tDiffuse, coord);\r\n\t\tcb = texture2D(tDiffuse, coord - offset);\r\n\r\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\r\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);\r\n\t\tcolor += snow;\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
@@ -947,19 +991,19 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												tPerturb: { value: null },
+  												tDiffuse: new three.Uniform(null),
+  												tPerturb: new three.Uniform(null),
 
-  												active: { value: 1 },
+  												active: new three.Uniform(1),
 
-  												amount: { value: 0.8 },
-  												angle: { value: 0.02 },
-  												seed: { value: 0.02 },
-  												seedX: { value: 0.02 },
-  												seedY: { value: 0.02 },
-  												distortionX: { value: 0.5 },
-  												distortionY: { value: 0.6 },
-  												colS: { value: 0.05 }
+  												amount: new three.Uniform(0.8),
+  												angle: new three.Uniform(0.02),
+  												seed: new three.Uniform(0.02),
+  												seedX: new three.Uniform(0.02),
+  												seedY: new three.Uniform(0.02),
+  												distortionX: new three.Uniform(0.5),
+  												distortionY: new three.Uniform(0.6),
+  												colS: new three.Uniform(0.05)
 
   									},
 
@@ -1016,14 +1060,14 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												lightPosition: { value: null },
+  												tDiffuse: new three.Uniform(null),
+  												lightPosition: new three.Uniform(null),
 
-  												exposure: { value: 0.6 },
-  												decay: { value: 0.93 },
-  												density: { value: 0.96 },
-  												weight: { value: 0.4 },
-  												clampMax: { value: 1.0 }
+  												exposure: new three.Uniform(0.6),
+  												decay: new three.Uniform(0.93),
+  												density: new three.Uniform(0.96),
+  												weight: new three.Uniform(0.4),
+  												clampMax: new three.Uniform(1.0)
 
   									},
 
@@ -1059,8 +1103,8 @@
    * @submodule materials
    * @extends ShaderMaterial
    * @constructor
-   * @params {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
-   * @params {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified range.
+   * @param {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
+   * @param {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified luminance range.
    */
 
   var LuminosityMaterial = function (_ShaderMaterial) {
@@ -1077,9 +1121,9 @@
 
            uniforms: {
 
-              tDiffuse: { value: null },
-              distinction: { value: 1.0 },
-              range: { value: range !== null ? range : new three.Vector2() }
+              tDiffuse: new three.Uniform(null),
+              distinction: new three.Uniform(1.0),
+              range: new three.Uniform(range)
 
            },
 
@@ -1101,9 +1145,123 @@
      return LuminosityMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tWeights;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\t// Fetch the blending weights for current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(tWeights, vUv).xz;\r\n\ta.y = texture2D(tWeights, vOffset.zw).g;\r\n\ta.w = texture2D(tWeights, vOffset.xy).a;\r\n\r\n\tvec4 color;\r\n\r\n\t// Check if there is any blending weight with a value greater than 0.0.\r\n\tif(dot(a, vec4(1.0)) < 1e-5) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\r\n\t} else {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge). We favor\r\n\t\t * blending by choosing the line with the maximum weight for each direction.\r\n\t\t */\r\n\r\n\t\tvec2 offset;\r\n\t\toffset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.\r\n\t\toffset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).\r\n\r\n\t\t// Then we go in the direction that has the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\t\tvec2 coord = vUv + sign(offset) * texelSize;\r\n\t\tvec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform float granularity;\r\nuniform vec2 resolution;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel;\r\n\r\n\tif(granularity > 0.0) {\r\n\r\n\t\tfloat dx = granularity / resolution.x;\r\n\t\tfloat dy = granularity / resolution.y;\r\n\r\n\t\tvec2 coord = vec2(\r\n\t\t\tdx * (floor(vUv.x / dx) + 0.5),\r\n\t\t\tdy * (floor(vUv.y / dy) + 0.5)\r\n\t\t);\r\n\r\n\t\ttexel = texture2D(tDiffuse, coord);\r\n\r\n\t} else {\r\n\r\n\t\ttexel = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texel;\r\n\r\n}\r\n";
 
-  var vertex$12 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$12 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+
+  /**
+   * A pixelation shader material.
+   *
+   * Original shader code by Robert Casanova:
+   *  https://github.com/robertcasanova/pixelate-shader
+   *
+   * @class PixelationMaterial
+   * @submodule materials
+   * @extends ShaderMaterial
+   * @constructor
+   */
+
+  var PixelationMaterial = function (_ShaderMaterial) {
+  			inherits(PixelationMaterial, _ShaderMaterial);
+
+  			function PixelationMaterial() {
+  						classCallCheck(this, PixelationMaterial);
+  						return possibleConstructorReturn(this, (PixelationMaterial.__proto__ || Object.getPrototypeOf(PixelationMaterial)).call(this, {
+
+  									type: "PixelationMaterial",
+
+  									uniforms: {
+
+  												tDiffuse: new three.Uniform(null),
+  												granularity: new three.Uniform(1.0),
+  												resolution: new three.Uniform(new three.Vector2(1.0, 1.0))
+
+  									},
+
+  									fragmentShader: fragment$12,
+  									vertexShader: vertex$12,
+
+  									depthWrite: false,
+  									depthTest: false
+
+  						}));
+  			}
+
+  			return PixelationMaterial;
+  }(three.ShaderMaterial);
+
+  var fragment$13 = "#include <common>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform vec2 center;\r\nuniform float aspect;\r\nuniform float waveSize;\r\nuniform float radius;\r\nuniform float maxRadius;\r\nuniform float amplitude;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\r\n\tvec2 difference = vUv * aspectCorrection - center * aspectCorrection;\r\n\tfloat distance = sqrt(dot(difference, difference)) * vSize;\r\n\r\n\tvec2 displacement = vec2(0.0);\r\n\r\n\tif(distance > radius) {\r\n\r\n\t\tif(distance < radius + waveSize) {\r\n\r\n\t\t\tfloat angle = (distance - radius) * PI2 / waveSize;\r\n\t\t\tfloat cosSin = (1.0 - cos(angle)) * 0.5;\r\n\r\n\t\t\tfloat extent = maxRadius + waveSize;\r\n\t\t\tfloat decay = max(extent - distance * distance, 0.0) / extent;\r\n\r\n\t\t\tdisplacement = ((cosSin * amplitude * difference) / distance) * decay;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texture2D(tDiffuse, vUv - displacement);\r\n\r\n}\r\n";
+
+  var vertex$13 = "uniform float size;\r\nuniform float scale;\r\nuniform float cameraDistance;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvSize = (0.1 * cameraDistance) / size;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+
+  /**
+   * A shock wave shader material.
+   *
+   * Based on a Gist by Jean-Philippe Sarda:
+   *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
+   *
+   * @class ShockWaveMaterial
+   * @submodule materials
+   * @extends ShaderMaterial
+   * @constructor
+   * @param {Object} [options] - The options.
+   * @param {Number} [options.waveSize=0.2] - The wave size.
+   * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
+   */
+
+  var ShockWaveMaterial = function (_ShaderMaterial) {
+  			inherits(ShockWaveMaterial, _ShaderMaterial);
+
+  			function ShockWaveMaterial() {
+  						var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  						classCallCheck(this, ShockWaveMaterial);
+
+
+  						if (options.maxRadius === undefined) {
+  									options.maxRadius = 1.0;
+  						}
+  						if (options.waveSize === undefined) {
+  									options.waveSize = 0.2;
+  						}
+  						if (options.amplitude === undefined) {
+  									options.amplitude = 0.05;
+  						}
+
+  						return possibleConstructorReturn(this, (ShockWaveMaterial.__proto__ || Object.getPrototypeOf(ShockWaveMaterial)).call(this, {
+
+  									type: "ShockWaveMaterial",
+
+  									uniforms: {
+
+  												tDiffuse: new three.Uniform(null),
+
+  												center: new three.Uniform(new three.Vector2(0.5, 0.5)),
+  												aspect: new three.Uniform(1.0),
+  												cameraDistance: new three.Uniform(1.0),
+
+  												size: new three.Uniform(1.0),
+  												radius: new three.Uniform(-options.waveSize),
+  												maxRadius: new three.Uniform(options.maxRadius),
+  												waveSize: new three.Uniform(options.waveSize),
+  												amplitude: new three.Uniform(options.amplitude)
+
+  									},
+
+  									fragmentShader: fragment$13,
+  									vertexShader: vertex$13,
+
+  									depthWrite: false,
+  									depthTest: false
+
+  						}));
+  			}
+
+  			return ShockWaveMaterial;
+  }(three.ShaderMaterial);
+
+  var fragment$14 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tWeights;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\t// Fetch the blending weights for current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(tWeights, vUv).xz;\r\n\ta.y = texture2D(tWeights, vOffset.zw).g;\r\n\ta.w = texture2D(tWeights, vOffset.xy).a;\r\n\r\n\tvec4 color;\r\n\r\n\t// Check if there is any blending weight with a value greater than 0.0.\r\n\tif(dot(a, vec4(1.0)) < 1e-5) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\r\n\t} else {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge). We favor\r\n\t\t * blending by choosing the line with the maximum weight for each direction.\r\n\t\t */\r\n\r\n\t\tvec2 offset;\r\n\t\toffset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.\r\n\t\toffset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).\r\n\r\n\t\t// Then we go in the direction that has the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\t\tvec2 coord = vUv + sign(offset) * texelSize;\r\n\t\tvec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+
+  var vertex$14 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   /**
    * Subpixel Morphological Antialiasing.
@@ -1129,14 +1287,14 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												tWeights: { value: null },
-  												texelSize: { value: texelSize }
+  												tDiffuse: new three.Uniform(null),
+  												tWeights: new three.Uniform(null),
+  												texelSize: new three.Uniform(texelSize)
 
   									},
 
-  									fragmentShader: fragment$12,
-  									vertexShader: vertex$12,
+  									fragmentShader: fragment$14,
+  									vertexShader: vertex$14,
 
   									depthWrite: false,
   									depthTest: false
@@ -1147,9 +1305,9 @@
   			return SMAABlendMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$13 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tconst vec2 THRESHOLD = vec2(EDGE_THRESHOLD);\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(THRESHOLD, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
+  var fragment$15 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tconst vec2 THRESHOLD = vec2(EDGE_THRESHOLD);\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(THRESHOLD, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
 
-  var vertex$13 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$15 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   /**
    * Subpixel Morphological Antialiasing.
@@ -1181,13 +1339,13 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												texelSize: { value: texelSize }
+  												tDiffuse: new three.Uniform(null),
+  												texelSize: new three.Uniform(texelSize)
 
   									},
 
-  									fragmentShader: fragment$13,
-  									vertexShader: vertex$13,
+  									fragmentShader: fragment$15,
+  									vertexShader: vertex$15,
 
   									depthWrite: false,
   									depthTest: false
@@ -1202,9 +1360,9 @@
 
   var searchImage = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII=";
 
-  var fragment$14 = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tArea;\r\nuniform sampler2D tSearch;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvec2 round(vec2 x) {\r\n\r\n\treturn sign(x) * floor(abs(x) + 0.5);\r\n\r\n}\r\n\r\nfloat searchLength(vec2 e, float bias, float scale) {\r\n\r\n\t// Not required if tSearch accesses are set to point.\r\n\t// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);\r\n\t// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;\r\n\r\n\te.r = bias + e.r * scale;\r\n\r\n\treturn 255.0 * texture2D(tSearch, e, 0.0).r;\r\n\r\n}\r\n\r\nfloat searchXLeft(vec2 texCoord, float end) {\r\n\r\n\t/* @PSEUDO_GATHER4\r\n\t * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to\r\n\t * sample between edge, thus fetching four edges in a row.\r\n\t * Sampling with different offsets in each direction allows to disambiguate\r\n\t * which edges are active from the four fetched ones.\r\n\t */\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\t// Correct the previously applied offset (-0.25, -0.125).\r\n\ttexCoord.x += 0.25 * texelSize.x;\r\n\r\n\t// The searches are biased by 1, so adjust the coords accordingly.\r\n\ttexCoord.x += texelSize.x;\r\n\r\n\t// Disambiguate the length added by the last step.\r\n\ttexCoord.x += 2.0 * texelSize.x; // Undo last step.\r\n\ttexCoord.x -= texelSize.x * searchLength(e, 0.0, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchXRight(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.x -= 0.25 * texelSize.x;\r\n\ttexCoord.x -= texelSize.x;\r\n\ttexCoord.x -= 2.0 * texelSize.x;\r\n\ttexCoord.x += texelSize.x * searchLength(e, 0.5, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchYUp(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y -= 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y; // Changed sign.\r\n\ttexCoord.y -= 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y * searchLength(e.gr, 0.0, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nfloat searchYDown(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i ) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y += 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y; // Changed sign.\r\n\ttexCoord.y += 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y * searchLength(e.gr, 0.5, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nvec2 area(vec2 dist, float e1, float e2, float offset) {\r\n\r\n\t// Rounding prevents precision errors of bilinear filtering.\r\n\tvec2 texCoord = SMAA_AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;\r\n\r\n\t// Scale and bias for texel space translation.\r\n\ttexCoord = SMAA_AREATEX_PIXEL_SIZE * texCoord + (0.5 * SMAA_AREATEX_PIXEL_SIZE);\r\n\r\n\t// Move to proper place, according to the subpixel offset.\r\n\ttexCoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;\r\n\r\n\treturn texture2D(tArea, texCoord, 0.0).rg;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 weights = vec4(0.0);\r\n\tvec4 subsampleIndices = vec4(0.0);\r\n\tvec2 e = texture2D(tDiffuse, vUv).rg;\r\n\r\n\tif(e.g > 0.0) {\r\n\r\n\t\t// Edge at north.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the left.\r\n\t\tvec2 coords;\r\n\t\tcoords.x = searchXLeft(vOffset[0].xy, vOffset[2].x);\r\n\t\tcoords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)\r\n\t\td.x = coords.x;\r\n\r\n\t\t/* Now fetch the left crossing edges, two at a time using bilinear filtering.\r\n\t\t * Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has.\r\n\t\t */\r\n\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).r;\r\n\r\n\t\t// Find the distance to the right.\r\n\t\tcoords.x = searchXRight(vOffset[0].zw, vOffset[2].y);\r\n\t\td.y = coords.x;\r\n\r\n\t\t// Translate distances to pixel units for better interleave arithmetic and memory accesses.\r\n\t\td = d / texelSize.x - vPixCoord.x;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the right crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(1, 0)).r;\r\n\r\n\t\t// Pattern recognised, now get the actual area.\r\n\t\tweights.rg = area(sqrtD, e1, e2, subsampleIndices.y);\r\n\r\n\t}\r\n\r\n\tif(e.r > 0.0) {\r\n\r\n\t\t// Edge at west.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the top.\r\n\t\tvec2 coords;\r\n\r\n\t\tcoords.y = searchYUp(vOffset[1].xy, vOffset[2].z);\r\n\t\tcoords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;\r\n\t\td.x = coords.y;\r\n\r\n\t\t// Fetch the top crossing edges.\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).g;\r\n\r\n\t\t// Find the distance to the bottom.\r\n\t\tcoords.y = searchYDown(vOffset[1].zw, vOffset[2].w);\r\n\t\td.y = coords.y;\r\n\r\n\t\t// Distances in pixel units.\r\n\t\td = d / texelSize.y - vPixCoord.y;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the bottom crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(0, 1)).g;\r\n\r\n\t\t// Get the area for this direction.\r\n\t\tweights.ba = area(sqrtD, e1, e2, subsampleIndices.x);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = weights;\r\n\r\n}\r\n";
+  var fragment$16 = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tArea;\r\nuniform sampler2D tSearch;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvec2 round(vec2 x) {\r\n\r\n\treturn sign(x) * floor(abs(x) + 0.5);\r\n\r\n}\r\n\r\nfloat searchLength(vec2 e, float bias, float scale) {\r\n\r\n\t// Not required if tSearch accesses are set to point.\r\n\t// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);\r\n\t// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;\r\n\r\n\te.r = bias + e.r * scale;\r\n\r\n\treturn 255.0 * texture2D(tSearch, e, 0.0).r;\r\n\r\n}\r\n\r\nfloat searchXLeft(vec2 texCoord, float end) {\r\n\r\n\t/* @PSEUDO_GATHER4\r\n\t * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to\r\n\t * sample between edge, thus fetching four edges in a row.\r\n\t * Sampling with different offsets in each direction allows to disambiguate\r\n\t * which edges are active from the four fetched ones.\r\n\t */\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\t// Correct the previously applied offset (-0.25, -0.125).\r\n\ttexCoord.x += 0.25 * texelSize.x;\r\n\r\n\t// The searches are biased by 1, so adjust the coords accordingly.\r\n\ttexCoord.x += texelSize.x;\r\n\r\n\t// Disambiguate the length added by the last step.\r\n\ttexCoord.x += 2.0 * texelSize.x; // Undo last step.\r\n\ttexCoord.x -= texelSize.x * searchLength(e, 0.0, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchXRight(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.x -= 0.25 * texelSize.x;\r\n\ttexCoord.x -= texelSize.x;\r\n\ttexCoord.x -= 2.0 * texelSize.x;\r\n\ttexCoord.x += texelSize.x * searchLength(e, 0.5, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchYUp(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y -= 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y; // Changed sign.\r\n\ttexCoord.y -= 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y * searchLength(e.gr, 0.0, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nfloat searchYDown(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i ) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y += 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y; // Changed sign.\r\n\ttexCoord.y += 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y * searchLength(e.gr, 0.5, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nvec2 area(vec2 dist, float e1, float e2, float offset) {\r\n\r\n\t// Rounding prevents precision errors of bilinear filtering.\r\n\tvec2 texCoord = SMAA_AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;\r\n\r\n\t// Scale and bias for texel space translation.\r\n\ttexCoord = SMAA_AREATEX_PIXEL_SIZE * texCoord + (0.5 * SMAA_AREATEX_PIXEL_SIZE);\r\n\r\n\t// Move to proper place, according to the subpixel offset.\r\n\ttexCoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;\r\n\r\n\treturn texture2D(tArea, texCoord, 0.0).rg;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 weights = vec4(0.0);\r\n\tvec4 subsampleIndices = vec4(0.0);\r\n\tvec2 e = texture2D(tDiffuse, vUv).rg;\r\n\r\n\tif(e.g > 0.0) {\r\n\r\n\t\t// Edge at north.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the left.\r\n\t\tvec2 coords;\r\n\t\tcoords.x = searchXLeft(vOffset[0].xy, vOffset[2].x);\r\n\t\tcoords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)\r\n\t\td.x = coords.x;\r\n\r\n\t\t/* Now fetch the left crossing edges, two at a time using bilinear filtering.\r\n\t\t * Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has.\r\n\t\t */\r\n\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).r;\r\n\r\n\t\t// Find the distance to the right.\r\n\t\tcoords.x = searchXRight(vOffset[0].zw, vOffset[2].y);\r\n\t\td.y = coords.x;\r\n\r\n\t\t// Translate distances to pixel units for better interleave arithmetic and memory accesses.\r\n\t\td = d / texelSize.x - vPixCoord.x;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the right crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(1, 0)).r;\r\n\r\n\t\t// Pattern recognised, now get the actual area.\r\n\t\tweights.rg = area(sqrtD, e1, e2, subsampleIndices.y);\r\n\r\n\t}\r\n\r\n\tif(e.r > 0.0) {\r\n\r\n\t\t// Edge at west.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the top.\r\n\t\tvec2 coords;\r\n\r\n\t\tcoords.y = searchYUp(vOffset[1].xy, vOffset[2].z);\r\n\t\tcoords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;\r\n\t\td.x = coords.y;\r\n\r\n\t\t// Fetch the top crossing edges.\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).g;\r\n\r\n\t\t// Find the distance to the bottom.\r\n\t\tcoords.y = searchYDown(vOffset[1].zw, vOffset[2].w);\r\n\t\td.y = coords.y;\r\n\r\n\t\t// Distances in pixel units.\r\n\t\td = d / texelSize.y - vPixCoord.y;\r\n\r\n\t\t// The area below needs a sqrt, as the areas texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the bottom crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(0, 1)).g;\r\n\r\n\t\t// Get the area for this direction.\r\n\t\tweights.ba = area(sqrtD, e1, e2, subsampleIndices.x);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = weights;\r\n\r\n}\r\n";
 
-  var vertex$14 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvPixCoord = uv / texelSize;\r\n\r\n\t// Offsets for the searches (see @PSEUDO_GATHER4).\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-0.25, 0.125, 1.25, 0.125); // Changed sign in Y and W components.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(-0.125, 0.25, -0.125, -1.25); //Changed sign in Y and W components.\r\n\r\n\t// This indicates the ends of the loops.\r\n\tvOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) + vec4(-2.0, 2.0, -2.0, 2.0) * texelSize.xxyy * SMAA_MAX_SEARCH_STEPS_FLOAT;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$16 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvPixCoord = uv / texelSize;\r\n\r\n\t// Offsets for the searches (see @PSEUDO_GATHER4).\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-0.25, 0.125, 1.25, 0.125); // Changed sign in Y and W components.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(-0.125, 0.25, -0.125, -1.25); //Changed sign in Y and W components.\r\n\r\n\t// This indicates the ends of the loops.\r\n\tvOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) + vec4(-2.0, 2.0, -2.0, 2.0) * texelSize.xxyy * SMAA_MAX_SEARCH_STEPS_FLOAT;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   /**
    * Subpixel Morphological Antialiasing.
@@ -1250,15 +1408,15 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												tArea: { value: null },
-  												tSearch: { value: null },
-  												texelSize: { value: texelSize }
+  												tDiffuse: new three.Uniform(null),
+  												tArea: new three.Uniform(null),
+  												tSearch: new three.Uniform(null),
+  												texelSize: new three.Uniform(texelSize)
 
   									},
 
-  									fragmentShader: fragment$14,
-  									vertexShader: vertex$14,
+  									fragmentShader: fragment$16,
+  									vertexShader: vertex$16,
 
   									depthWrite: false,
   									depthTest: false
@@ -1282,9 +1440,9 @@
   			return SMAAWeightsMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$15 = "uniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\nconst vec2 CENTER = vec2(0.5, 0.5);\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, CENTER).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = dot(c, LUM_COEFF);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n}\r\n";
+  var fragment$17 = "uniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nconst vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);\r\nconst vec2 CENTER = vec2(0.5, 0.5);\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, CENTER).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = dot(c, LUM_COEFF);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n}\r\n";
 
-  var vertex$15 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$17 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   /**
    * Full-screen tone-mapping shader material.
@@ -1309,16 +1467,16 @@
 
   									uniforms: {
 
-  												tDiffuse: { value: null },
-  												luminanceMap: { value: null },
-  												averageLuminance: { value: 1.0 },
-  												maxLuminance: { value: 16.0 },
-  												middleGrey: { value: 0.6 }
+  												tDiffuse: new three.Uniform(null),
+  												luminanceMap: new three.Uniform(null),
+  												averageLuminance: new three.Uniform(1.0),
+  												maxLuminance: new three.Uniform(16.0),
+  												middleGrey: new three.Uniform(0.6)
 
   									},
 
-  									fragmentShader: fragment$15,
-  									vertexShader: vertex$15,
+  									fragmentShader: fragment$17,
+  									vertexShader: vertex$17,
 
   									depthWrite: false,
   									depthTest: false
@@ -1342,17 +1500,14 @@
    * Passes that do not rely on the depth buffer should explicitly disable the
    * depth test and depth write in their respective shader materials.
    *
-   * This class implements a dispose method that frees memory on demand. The
-   * EffectComposer calls this method when it is being destroyed. For this
-   * mechanism to work properly, please assign your render targets, materials and
-   * textures directly to your pass. You can prevent your disposable objects from
-   * being deleted by keeping them inside deeper structures.
+   * This class implements a {{#crossLink "Pass/dispose:method"}}{{/crossLink}}
+   * method that frees memory on demand.
    *
    * @class Pass
    * @submodule passes
    * @constructor
    * @param {Scene} [scene] - The scene to render.
-   * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
+   * @param {Camera} [camera] - The camera.
    * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
    */
 
@@ -1365,36 +1520,45 @@
 
 
   				/**
+       * The name of this pass.
+       *
+       * @property name
+       * @type String
+       */
+
+  				this.name = "Pass";
+
+  				/**
        * The scene to render.
        *
        * @property scene
        * @type Scene
        * @private
-       * @default Scene()
+       * @default new Scene()
        */
 
   				this.scene = scene;
 
   				/**
-       * The camera to render with.
+       * The camera.
        *
        * @property camera
        * @type Camera
        * @private
-       * @default OrthographicCamera(-1, 1, 1, -1, 0, 1)
+       * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
        */
 
   				this.camera = camera;
 
   				/**
-       * The quad mesh to use for rendering.
+       * A quad mesh that fills the screen.
        *
        * Assign your shader material to this mesh!
        *
        * @property quad
        * @type Mesh
        * @private
-       * @default Mesh(PlaneBufferGeometry(2, 2), null)
+       * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
        * @example
        *     this.quad.material = this.myMaterial;
        */
@@ -1404,6 +1568,11 @@
   				if (this.quad !== null) {
 
   						this.quad.frustumCulled = false;
+
+  						if (this.scene !== null) {
+
+  								this.scene.add(this.quad);
+  						}
   				}
 
   				/**
@@ -1440,20 +1609,6 @@
        */
 
   				this.renderToScreen = false;
-
-  				// Add the camera and the quad to the scene.
-  				if (this.scene !== null) {
-
-  						if (this.camera !== null && this.camera.parent === null) {
-
-  								this.scene.add(this.camera);
-  						}
-
-  						if (this.quad !== null) {
-
-  								this.scene.add(this.quad);
-  						}
-  				}
   		}
 
   		/**
@@ -1463,7 +1618,7 @@
      *
      * @method render
      * @throws {Error} An error is thrown if the method is not overridden.
-     * @param {WebGLRenderer} renderer - The renderer to use.
+     * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
      * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
      * @param {Number} [delta] - The delta time.
@@ -1480,11 +1635,11 @@
   				/**
        * Updates this pass with the renderer's size.
        *
-       * This is an abstract method that may be overriden in case you want to be
+       * This is an abstract method that may be overridden in case you want to be
        * informed about the main render size.
        *
-       * The effect composer calls this method before this pass is initialised and
-       * every time its own size is updated.
+       * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
+       * this pass is initialised and every time its own size is updated.
        *
        * @method setSize
        * @param {Number} width - The renderer's width.
@@ -1502,12 +1657,13 @@
        *
        * By implementing this abstract method you gain access to the renderer.
        * You'll also be able to configure your custom render targets to use the
-       * appropriate format (RGB or RGBA) if appropriate.
+       * appropriate format (RGB or RGBA).
        *
        * The provided renderer can be used to warm up special off-screen render
        * targets by performing a preliminary render operation.
        *
-       * The effect composer calls this method when this pass is added to its queue.
+       * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
+       * this pass is added to its queue.
        *
        * @method initialise
        * @param {WebGLRenderer} renderer - The renderer.
@@ -1529,8 +1685,8 @@
        *  - materials
        *  - textures
        *
-       * The EffectComposer calls this method automatically when it is being
-       * destroyed. You may, however, use it independently to free memory
+       * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
+       * is being destroyed. You may, however, use it independently to free memory
        * when you are certain that you don't need this pass anymore.
        *
        * @method dispose
@@ -1587,7 +1743,7 @@
    * @constructor
    * @param {Object} [options] - The options.
    * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
-   * @param {Number} [options.kernelSize=ConvolutionMaterial.KernelSize.LARGE] - The blur kernel size.
+   * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
    */
 
   var BlurPass = function (_Pass) {
@@ -1599,6 +1755,7 @@
 
   				var _this = possibleConstructorReturn(this, (BlurPass.__proto__ || Object.getPrototypeOf(BlurPass)).call(this));
 
+  				_this.name = "BlurPass";
   				_this.needsSwap = true;
 
   				/**
@@ -1612,10 +1769,12 @@
   				_this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
   						magFilter: three.LinearFilter,
-  						generateMipmaps: false,
   						stencilBuffer: false,
   						depthBuffer: false
   				});
+
+  				_this.renderTargetX.texture.name = "Blur.TargetX";
+  				_this.renderTargetX.texture.generateMipmaps = false;
 
   				/**
        * A second render target.
@@ -1626,6 +1785,8 @@
        */
 
   				_this.renderTargetY = _this.renderTargetX.clone();
+
+  				_this.renderTargetY.texture.name = "Blur.TargetY";
 
   				/**
        * The resolution scale.
@@ -1674,7 +1835,7 @@
        * Blurs the read buffer.
        *
        * @method render
-       * @param {WebGLRenderer} renderer - The renderer to use.
+       * @param {WebGLRenderer} renderer - The renderer.
        * @param {WebGLRenderTarget} readBuffer - The read buffer.
        * @param {WebGLRenderTarget} writeBuffer - The write buffer.
        */
@@ -1711,7 +1872,7 @@
 
   						uniforms.kernel.value = kernel[i];
   						uniforms.tDiffuse.value = lastRT.texture;
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -1794,6 +1955,10 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, BloomPass);
 
+  				var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this));
+
+  				_this.name = "BloomPass";
+
   				/**
        * A blur pass.
        *
@@ -1801,8 +1966,6 @@
        * @type BlurPass
        * @private
        */
-
-  				var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this));
 
   				_this.blurPass = new BlurPass(options);
 
@@ -1816,6 +1979,8 @@
 
   				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
 
+  				_this.renderTargetX.texture.name = "Bloom.TargetX";
+
   				/**
        * A second render target.
        *
@@ -1826,8 +1991,10 @@
 
   				_this.renderTargetY = _this.blurPass.renderTargetY.clone();
 
+  				_this.renderTargetY.texture.name = "Bloom.TargetY";
+
   				/**
-       * Combine shader material.
+       * A combine shader material.
        *
        * @property combineMaterial
        * @type CombineMaterial
@@ -1839,7 +2006,7 @@
   				_this.intensity = options.intensity;
 
   				/**
-       * Luminance shader material.
+       * A luminosity shader material.
        *
        * @property luminosityMaterial
        * @type LuminosityMaterial
@@ -1876,7 +2043,7 @@
        * with the read buffer.
        *
        * @method render
-       * @param {WebGLRenderer} renderer - The renderer to use.
+       * @param {WebGLRenderer} renderer - The renderer.
        * @param {WebGLRenderTarget} readBuffer - The read buffer.
        * @param {WebGLRenderTarget} writeBuffer - The write buffer.
        */
@@ -1907,7 +2074,7 @@
   						combineMaterial.uniforms.texture1.value = readBuffer.texture;
   						combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -2050,10 +2217,11 @@
 
   		var _this = possibleConstructorReturn(this, (BokehPass.__proto__ || Object.getPrototypeOf(BokehPass)).call(this));
 
+  		_this.name = "BokehPass";
   		_this.needsSwap = true;
 
   		/**
-     * Bokeh shader material.
+     * A bokeh shader material.
      *
      * @property bokehMaterial
      * @type BokehMaterial
@@ -2071,7 +2239,7 @@
     * Renders the effect.
     *
     * @method render
-    * @param {WebGLRenderer} renderer - The renderer to use.
+    * @param {WebGLRenderer} renderer - The renderer.
     * @param {WebGLRenderTarget} readBuffer - The read buffer.
     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
     */
@@ -2083,7 +2251,7 @@
   			this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
   			this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   		}
 
   		/**
@@ -2135,15 +2303,18 @@
   		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   		classCallCheck(this, Bokeh2Pass);
 
+  		var _this = possibleConstructorReturn(this, (Bokeh2Pass.__proto__ || Object.getPrototypeOf(Bokeh2Pass)).call(this));
+
+  		_this.name = "Bokeh2Pass";
+  		_this.needsSwap = true;
+
   		/**
-     * Bokeh shader material.
+     * A bokeh shader material.
      *
      * @property bokehMaterial
      * @type BokehMaterial
      * @private
      */
-
-  		var _this = possibleConstructorReturn(this, (Bokeh2Pass.__proto__ || Object.getPrototypeOf(Bokeh2Pass)).call(this));
 
   		_this.bokehMaterial = new Bokeh2Material(camera, options);
 
@@ -2156,7 +2327,7 @@
     * Renders the effect.
     *
     * @method render
-    * @param {WebGLRenderer} renderer - The renderer to use.
+    * @param {WebGLRenderer} renderer - The renderer.
     * @param {WebGLRenderTarget} readBuffer - The read buffer.
     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
     */
@@ -2168,7 +2339,7 @@
   			this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
   			this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   		}
 
   		/**
@@ -2190,7 +2361,103 @@
   }(Pass);
 
   /**
-   * A clear mask pass.
+   * Used for saving the original clear color of the renderer.
+   *
+   * @property CLEAR_COLOR
+   * @type Color
+   * @private
+   * @static
+   */
+
+  var CLEAR_COLOR = new three.Color();
+
+  /**
+   * A clear pass.
+   *
+   * You can prevent specific buffers from being cleared by setting either the
+   * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
+   * to false.
+   *
+   * @class ClearPass
+   * @submodule passes
+   * @extends Pass
+   * @constructor
+   * @param {Object} [options] - Additional options.
+   * @param {Color} [options.clearColor=null] - An override clear color.
+   * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
+   */
+
+  var ClearPass = function (_Pass) {
+  		inherits(ClearPass, _Pass);
+
+  		function ClearPass() {
+  				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  				classCallCheck(this, ClearPass);
+
+  				var _this = possibleConstructorReturn(this, (ClearPass.__proto__ || Object.getPrototypeOf(ClearPass)).call(this, null, null, null));
+
+  				_this.name = "ClearPass";
+
+  				/**
+       * Clear color.
+       *
+       * @property clearColor
+       * @type Color
+       * @default null
+       */
+
+  				_this.clearColor = options.clearColor !== undefined ? options.clearColor : null;
+
+  				/**
+       * Clear alpha.
+       *
+       * @property clearAlpha
+       * @type Number
+       * @default 0.0
+       */
+
+  				_this.clearAlpha = options.clearAlpha !== undefined ? options.clearAlpha : 0.0;
+
+  				return _this;
+  		}
+
+  		/**
+     * Clears the read buffer or the screen.
+     *
+     * @method render
+     * @param {WebGLRenderer} renderer - The renderer.
+     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     */
+
+  		createClass(ClearPass, [{
+  				key: "render",
+  				value: function render(renderer, readBuffer) {
+
+  						var clearColor = this.clearColor;
+
+  						var clearAlpha = void 0;
+
+  						if (clearColor !== null) {
+
+  								CLEAR_COLOR.copy(renderer.getClearColor());
+  								clearAlpha = renderer.getClearAlpha();
+  								renderer.setClearColor(clearColor, this.clearAlpha);
+  						}
+
+  						renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+  						renderer.clear();
+
+  						if (clearColor !== null) {
+
+  								renderer.setClearColor(CLEAR_COLOR, clearAlpha);
+  						}
+  				}
+  		}]);
+  		return ClearPass;
+  }(Pass);
+
+  /**
+   * A pass that disables the stencil mask.
    *
    * @class ClearMaskPass
    * @submodule passes
@@ -2203,21 +2470,26 @@
 
   	function ClearMaskPass() {
   		classCallCheck(this, ClearMaskPass);
-  		return possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
+
+  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
+
+  		_this.name = "ClearMaskPass";
+
+  		return _this;
   	}
 
   	/**
-    * This pass disables the stencil test.
+    * Disables the stencil test.
     *
     * @method render
-    * @param {WebGLRenderer} renderer - The renderer to use.
+    * @param {WebGLRenderer} renderer - The renderer.
     */
 
   	createClass(ClearMaskPass, [{
   		key: "render",
   		value: function render(renderer) {
 
-  			renderer.context.disable(renderer.context.STENCIL_TEST);
+  			renderer.state.buffers.stencil.setTest(false);
   		}
   	}]);
   	return ClearMaskPass;
@@ -2246,6 +2518,7 @@
 
   				var _this = possibleConstructorReturn(this, (DotScreenPass.__proto__ || Object.getPrototypeOf(DotScreenPass)).call(this));
 
+  				_this.name = "DotScreenPass";
   				_this.needsSwap = true;
 
   				/**
@@ -2277,7 +2550,7 @@
      * Renders the effect.
      *
      * @method render
-     * @param {WebGLRenderer} renderer - The renderer to use.
+     * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} readBuffer - The read buffer.
      * @param {WebGLRenderTarget} writeBuffer - The write buffer.
      */
@@ -2288,7 +2561,7 @@
 
   						this.material.uniforms.tDiffuse.value = readBuffer.texture;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -2329,46 +2602,50 @@
    */
 
   var DepthPass = function (_Pass) {
-  	inherits(DepthPass, _Pass);
+  		inherits(DepthPass, _Pass);
 
-  	function DepthPass(camera) {
-  		classCallCheck(this, DepthPass);
+  		function DepthPass(camera) {
+  				classCallCheck(this, DepthPass);
+
+  				var _this = possibleConstructorReturn(this, (DepthPass.__proto__ || Object.getPrototypeOf(DepthPass)).call(this));
+
+  				_this.name = "DepthPass";
+  				_this.needsSwap = true;
+
+  				/**
+       * A depth shader material.
+       *
+       * @property depthMaterial
+       * @type DepthMaterial
+       * @private
+       */
+
+  				_this.depthMaterial = new DepthMaterial(camera);
+
+  				_this.quad.material = _this.depthMaterial;
+
+  				return _this;
+  		}
 
   		/**
-     * A depth shader material.
+     * Renders the effect.
      *
-     * @property depthMaterial
-     * @type DepthMaterial
-     * @private
+     * @method render
+     * @param {WebGLRenderer} renderer - The renderer.
+     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
      */
 
-  		var _this = possibleConstructorReturn(this, (DepthPass.__proto__ || Object.getPrototypeOf(DepthPass)).call(this));
+  		createClass(DepthPass, [{
+  				key: "render",
+  				value: function render(renderer, readBuffer, writeBuffer) {
 
-  		_this.depthMaterial = new DepthMaterial(camera);
+  						this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
 
-  		_this.quad.material = _this.depthMaterial;
-
-  		return _this;
-  	}
-
-  	/**
-    * Renders the effect.
-    *
-    * @method render
-    * @param {WebGLRenderer} renderer - The renderer.
-    * @param {WebGLRenderTarget} readBuffer - The read buffer.
-    */
-
-  	createClass(DepthPass, [{
-  		key: "render",
-  		value: function render(renderer, readBuffer) {
-
-  			this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
-
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
-  		}
-  	}]);
-  	return DepthPass;
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  				}
+  		}]);
+  		return DepthPass;
   }(Pass);
 
   /**
@@ -2383,6 +2660,7 @@
    * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.
    * @param {Boolean} [options.vignette=false] - Apply vignette effect.
    * @param {Boolean} [options.eskil=false] - Use Eskil's vignette approach. The default looks dusty while Eskil looks more burned out.
+   * @param {Boolean} [options.screenMode=true] - Whether the screen blend mode should be used for noise and scanlines.
    * @param {Boolean} [options.scanlines=true] - Show scanlines.
    * @param {Boolean} [options.noise=true] - Show noise-based film grain.
    * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
@@ -2403,6 +2681,7 @@
 
   				var _this = possibleConstructorReturn(this, (FilmPass.__proto__ || Object.getPrototypeOf(FilmPass)).call(this));
 
+  				_this.name = "FilmPass";
   				_this.needsSwap = true;
 
   				/**
@@ -2438,7 +2717,7 @@
      * Renders the effect.
      *
      * @method render
-     * @param {WebGLRenderer} renderer - The renderer to use.
+     * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} readBuffer - The read buffer.
      * @param {WebGLRenderTarget} writeBuffer - The write buffer.
      * @param {Number} delta - The render delta time.
@@ -2451,7 +2730,7 @@
   						this.material.uniforms.tDiffuse.value = readBuffer.texture;
   						this.material.uniforms.time.value += delta;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -2525,6 +2804,7 @@
 
   				var _this = possibleConstructorReturn(this, (GlitchPass.__proto__ || Object.getPrototypeOf(GlitchPass)).call(this));
 
+  				_this.name = "GlitchPass";
   				_this.needsSwap = true;
 
   				/**
@@ -2549,14 +2829,9 @@
 
   				_this.texture = null;
 
-  				if (options.perturbMap !== undefined) {
-
-  						_this.perturbMap = options.perturbMap;
-  						_this.perturbMap.generateMipmaps = false;
-  				} else {
-
-  						_this.perturbMap = _this.generatePerturbMap(options.dtSize);
-  				}
+  				_this.perturbMap = options.perturbMap !== undefined ? options.perturbMap : _this.generatePerturbMap(options.dtSize);
+  				_this.perturbMap.name = "Glitch.Perturbation";
+  				_this.perturbMap.generateMipmaps = false;
 
   				/**
        * The effect mode.
@@ -2647,7 +2922,7 @@
        * Renders the effect.
        *
        * @method render
-       * @param {WebGLRenderer} renderer - The renderer to use.
+       * @param {WebGLRenderer} renderer - The renderer.
        * @param {WebGLRenderTarget} readBuffer - The read buffer.
        * @param {WebGLRenderTarget} writeBuffer - The write buffer.
        */
@@ -2695,7 +2970,7 @@
 
   						++this.counter;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
   		}, {
   				key: "perturbMap",
@@ -2754,6 +3029,113 @@
   };
 
   /**
+   * A pass that renders a given scene directly on screen or into the read buffer
+   * for further processing.
+   *
+   * @class RenderPass
+   * @submodule passes
+   * @extends Pass
+   * @constructor
+   * @param {Scene} scene - The scene to render.
+   * @param {Camera} camera - The camera to use to render the scene.
+   * @param {Object} [options] - Additional options.
+   * @param {Material} [options.overrideMaterial=null] - An override material for the scene.
+   * @param {Color} [options.clearColor=null] - An override clear color.
+   * @param {Number} [options.clearAlpha=1.0] - An override clear alpha.
+   * @param {Boolean} [options.clearDepth=false] - Whether depth should be cleared explicitly.
+   * @param {Boolean} [options.clear=true] - Whether all buffers should be cleared.
+   */
+
+  var RenderPass = function (_Pass) {
+  		inherits(RenderPass, _Pass);
+
+  		function RenderPass(scene, camera) {
+  				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  				classCallCheck(this, RenderPass);
+
+  				var _this = possibleConstructorReturn(this, (RenderPass.__proto__ || Object.getPrototypeOf(RenderPass)).call(this, scene, camera, null));
+
+  				_this.name = "RenderPass";
+
+  				/**
+       * A clear pass.
+       *
+       * @property clearPass
+       * @type ClearPass
+       */
+
+  				_this.clearPass = new ClearPass(options);
+
+  				/**
+       * An override material.
+       *
+       * @property overrideMaterial
+       * @type Material
+       * @default null
+       */
+
+  				_this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
+
+  				/**
+       * Indicates whether the depth buffer should be cleared explicitly.
+       *
+       * @property clearDepth
+       * @type Boolean
+       * @default false
+       */
+
+  				_this.clearDepth = options.clearDepth !== undefined ? options.clearDepth : false;
+
+  				/**
+       * Indicates whether the color, depth and stencil buffers should be cleared.
+       *
+       * Even with clear set to true you can prevent specific buffers from being
+       * cleared by setting either the autoClearColor, autoClearStencil or
+       * autoClearDepth properties of the renderer to false.
+       *
+       * @property clear
+       * @type Boolean
+       * @default true
+       */
+
+  				_this.clear = options.clear !== undefined ? options.clear : true;
+
+  				return _this;
+  		}
+
+  		/**
+     * Renders the scene.
+     *
+     * @method render
+     * @param {WebGLRenderer} renderer - The renderer.
+     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     */
+
+  		createClass(RenderPass, [{
+  				key: "render",
+  				value: function render(renderer, readBuffer) {
+
+  						var scene = this.scene;
+  						var target = this.renderToScreen ? null : readBuffer;
+
+  						if (this.clear) {
+
+  								this.clearPass.render(renderer, target);
+  						} else if (this.clearDepth) {
+
+  								renderer.setRenderTarget(target);
+  								renderer.clearDepth();
+  						}
+
+  						scene.overrideMaterial = this.overrideMaterial;
+  						renderer.render(scene, this.camera, target);
+  						scene.overrideMaterial = null;
+  				}
+  		}]);
+  		return RenderPass;
+  }(Pass);
+
+  /**
    * Clamps a given value.
    *
    * @method clamp
@@ -2769,17 +3151,6 @@
 
   		return Math.max(min, Math.min(max, value));
   }
-
-  /**
-   * A clear color.
-   *
-   * @property CLEAR_COLOR
-   * @type Color
-   * @private
-   * @static
-   */
-
-  var CLEAR_COLOR = new three.Color();
 
   /**
    * A crepuscular rays pass.
@@ -2811,120 +3182,9 @@
   				var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
   				classCallCheck(this, GodRaysPass);
 
-  				/**
-       * A blur pass.
-       *
-       * @property blurPass
-       * @type BlurPass
-       * @private
-       */
-
   				var _this = possibleConstructorReturn(this, (GodRaysPass.__proto__ || Object.getPrototypeOf(GodRaysPass)).call(this));
 
-  				_this.blurPass = new BlurPass(options);
-
-  				/**
-       * A render target.
-       *
-       * @property renderTargetX
-       * @type WebGLRenderTarget
-       * @private
-       */
-
-  				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
-
-  				/**
-       * A second render target.
-       *
-       * @property renderTargetY
-       * @type WebGLRenderTarget
-       * @private
-       */
-
-  				_this.renderTargetY = _this.blurPass.renderTargetY.clone();
-
-  				/**
-       * A render target for rendering the masked scene.
-       *
-       * @property renderTargetMask
-       * @type WebGLRenderTarget
-       * @private
-       */
-
-  				_this.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
-  						minFilter: three.LinearFilter,
-  						magFilter: three.LinearFilter,
-  						generateMipmaps: false
-  				});
-
-  				/**
-       * The light source.
-       *
-       * @property lightSource
-       * @type Object3D
-       */
-
-  				_this.lightSource = lightSource;
-
-  				/**
-       * The light position in screen space.
-       *
-       * @property screenPosition
-       * @type Vector3
-       * @private
-       */
-
-  				_this.screenPosition = new three.Vector3();
-
-  				/**
-       * A combine shader material used for rendering to screen.
-       *
-       * @property combineMaterial
-       * @type CombineMaterial
-       * @private
-       */
-
-  				_this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
-
-  				/**
-       * A material used for masking the scene objects.
-       *
-       * @property maskMaterial
-       * @type MeshBasicMaterial
-       * @private
-       */
-
-  				_this.maskMaterial = new three.MeshBasicMaterial({ color: 0x000000 });
-
-  				/**
-       * God rays shader material.
-       *
-       * @property godRaysMaterial
-       * @type GodRaysMaterial
-       * @private
-       */
-
-  				_this.godRaysMaterial = new GodRaysMaterial();
-  				_this.godRaysMaterial.uniforms.lightPosition.value = _this.screenPosition;
-
-  				if (options.exposure !== undefined) {
-  						_this.godRaysMaterial.uniforms.exposure.value = options.exposure;
-  				}
-  				if (options.density !== undefined) {
-  						_this.godRaysMaterial.uniforms.density.value = options.density;
-  				}
-  				if (options.decay !== undefined) {
-  						_this.godRaysMaterial.uniforms.decay.value = options.decay;
-  				}
-  				if (options.weight !== undefined) {
-  						_this.godRaysMaterial.uniforms.weight.value = options.weight;
-  				}
-  				if (options.clampMax !== undefined) {
-  						_this.godRaysMaterial.uniforms.clampMax.value = options.clampMax;
-  				}
-
-  				_this.samples = options.samples;
-  				_this.intensity = options.intensity;
+  				_this.name = "GodRaysPass";
 
   				/**
        * A scene that only contains the light source.
@@ -2953,6 +3213,141 @@
 
   				_this.mainCamera = camera;
 
+  				/**
+       * A pass that only renders the light source.
+       *
+       * @property renderPassLight
+       * @type RenderPass
+       * @private
+       */
+
+  				_this.renderPassLight = new RenderPass(_this.lightScene, _this.mainCamera);
+
+  				/**
+       * A pass that renders the masked scene over the light.
+       *
+       * @property renderPassMask
+       * @type RenderPass
+       * @private
+       */
+
+  				_this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
+  						overrideMaterial: new three.MeshBasicMaterial({ color: 0x000000 }),
+  						clearColor: new three.Color(0x000000)
+  				});
+
+  				_this.renderPassMask.clear = false;
+
+  				/**
+       * A blur pass.
+       *
+       * @property blurPass
+       * @type BlurPass
+       * @private
+       */
+
+  				_this.blurPass = new BlurPass(options);
+
+  				/**
+       * A render target.
+       *
+       * @property renderTargetX
+       * @type WebGLRenderTarget
+       * @private
+       */
+
+  				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
+
+  				_this.renderTargetX.texture.name = "GodRays.TargetX";
+
+  				/**
+       * A second render target.
+       *
+       * @property renderTargetY
+       * @type WebGLRenderTarget
+       * @private
+       */
+
+  				_this.renderTargetY = _this.blurPass.renderTargetY.clone();
+
+  				_this.renderTargetY.texture.name = "GodRays.TargetY";
+
+  				/**
+       * A render target for the masked light scene.
+       *
+       * @property renderTargetMask
+       * @type WebGLRenderTarget
+       * @private
+       */
+
+  				_this.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
+  						minFilter: three.LinearFilter,
+  						magFilter: three.LinearFilter
+  				});
+
+  				_this.renderTargetMask.texture.name = "GodRays.Mask";
+  				_this.renderTargetMask.texture.generateMipmaps = false;
+
+  				/**
+       * The light source.
+       *
+       * @property lightSource
+       * @type Object3D
+       */
+
+  				_this.lightSource = lightSource;
+
+  				/**
+       * The light position in screen space.
+       *
+       * @property screenPosition
+       * @type Vector3
+       * @private
+       */
+
+  				_this.screenPosition = new three.Vector3();
+
+  				/**
+       * A god rays shader material.
+       *
+       * @property godRaysMaterial
+       * @type GodRaysMaterial
+       * @private
+       */
+
+  				_this.godRaysMaterial = new GodRaysMaterial();
+  				_this.godRaysMaterial.uniforms.lightPosition.value = _this.screenPosition;
+
+  				if (options.exposure !== undefined) {
+  						_this.godRaysMaterial.uniforms.exposure.value = options.exposure;
+  				}
+  				if (options.density !== undefined) {
+  						_this.godRaysMaterial.uniforms.density.value = options.density;
+  				}
+  				if (options.decay !== undefined) {
+  						_this.godRaysMaterial.uniforms.decay.value = options.decay;
+  				}
+  				if (options.weight !== undefined) {
+  						_this.godRaysMaterial.uniforms.weight.value = options.weight;
+  				}
+  				if (options.clampMax !== undefined) {
+  						_this.godRaysMaterial.uniforms.clampMax.value = options.clampMax;
+  				}
+
+  				_this.samples = options.samples;
+
+  				/**
+       * A combine shader material.
+       *
+       * @property combineMaterial
+       * @type CombineMaterial
+       * @private
+       */
+
+  				_this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
+
+  				_this.intensity = options.intensity;
+
   				return _this;
   		}
 
@@ -2978,7 +3373,8 @@
        * The god rays pass has four phases:
        *
        * Mask Phase:
-       *  The scene is rendered using a mask material.
+       *  First, the light source is rendered. Then the scene is rendered into the
+       *  same buffer using a mask override material with depth test enabled.
        *
        * Preliminary Blur Phase:
        *  The masked scene is blurred.
@@ -2991,7 +3387,7 @@
        *  The final result is combined with the read buffer.
        *
        * @method render
-       * @param {WebGLRenderer} renderer - The renderer to use.
+       * @param {WebGLRenderer} renderer - The renderer.
        * @param {WebGLRenderTarget} readBuffer - The read buffer.
        * @param {WebGLRenderTarget} writeBuffer - The write buffer.
        */
@@ -3001,11 +3397,7 @@
   						var quad = this.quad;
   						var scene = this.scene;
   						var camera = this.camera;
-  						var blurPass = this.blurPass;
-
   						var mainScene = this.mainScene;
-  						var mainCamera = this.mainCamera;
-  						var lightScene = this.lightScene;
 
   						var lightSource = this.lightSource;
   						var screenPosition = this.screenPosition;
@@ -3017,28 +3409,22 @@
   						var renderTargetX = this.renderTargetX;
   						var renderTargetY = this.renderTargetY;
 
-  						var clearAlpha = void 0,
-  						    background = void 0,
+  						var background = void 0,
   						    parent = void 0;
 
-  						// Compute the screen light position and translate the coordinates to [0, 1].
-  						screenPosition.copy(lightSource.position).project(mainCamera);
+  						// Compute the screen light position and translate it to [0, 1].
+  						screenPosition.copy(lightSource.position).project(this.mainCamera);
   						screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
   						screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
   						// Render the masked scene.
   						parent = lightSource.parent;
   						background = mainScene.background;
-  						CLEAR_COLOR.copy(renderer.getClearColor());
-  						clearAlpha = renderer.getClearAlpha();
-
-  						renderer.setClearColor(0x000000, 1);
-  						mainScene.overrideMaterial = this.maskMaterial;
   						mainScene.background = null;
-  						lightScene.add(lightSource);
+  						this.lightScene.add(lightSource);
 
-  						renderer.render(lightScene, mainCamera, renderTargetMask, true);
-  						renderer.render(mainScene, mainCamera, renderTargetMask);
+  						this.renderPassLight.render(renderer, renderTargetMask);
+  						this.renderPassMask.render(renderer, renderTargetMask);
 
   						if (parent !== null) {
 
@@ -3046,23 +3432,21 @@
   						}
 
   						mainScene.background = background;
-  						mainScene.overrideMaterial = null;
-  						renderer.setClearColor(CLEAR_COLOR, clearAlpha);
 
   						// Convolution phase.
-  						blurPass.render(renderer, renderTargetMask, renderTargetX);
+  						this.blurPass.render(renderer, renderTargetMask, renderTargetX);
 
-  						// Radial blur pass.
+  						// God rays pass.
   						quad.material = godRaysMaterial;
   						godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
   						renderer.render(scene, camera, renderTargetY);
 
-  						// Final pass - composite god rays onto colors.
+  						// Final pass - composite god rays onto colours.
   						quad.material = combineMaterial;
   						combineMaterial.uniforms.texture1.value = readBuffer.texture;
   						combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -3077,6 +3461,8 @@
   				key: "initialise",
   				value: function initialise(renderer, alpha) {
 
+  						this.renderPassLight.initialise(renderer, alpha);
+  						this.renderPassMask.initialise(renderer, alpha);
   						this.blurPass.initialise(renderer, alpha);
 
   						if (!alpha) {
@@ -3099,6 +3485,8 @@
   				key: "setSize",
   				value: function setSize(width, height) {
 
+  						this.renderPassLight.setSize(width, height);
+  						this.renderPassMask.setSize(width, height);
   						this.blurPass.setSize(width, height);
 
   						width = this.blurPass.renderTargetX.width;
@@ -3195,7 +3583,7 @@
    * @extends Pass
    * @constructor
    * @param {Scene} scene - The scene to render.
-   * @param {Camera} camera - The camera to use to render the scene.
+   * @param {Camera} camera - The camera to use.
    */
 
   var MaskPass = function (_Pass) {
@@ -3203,6 +3591,10 @@
 
   		function MaskPass(scene, camera) {
   				classCallCheck(this, MaskPass);
+
+  				var _this = possibleConstructorReturn(this, (MaskPass.__proto__ || Object.getPrototypeOf(MaskPass)).call(this, scene, camera, null));
+
+  				_this.name = "MaskPass";
 
   				/**
        * Inverse flag.
@@ -3212,29 +3604,26 @@
        * @default false
        */
 
-  				var _this = possibleConstructorReturn(this, (MaskPass.__proto__ || Object.getPrototypeOf(MaskPass)).call(this, scene, camera, null));
-
   				_this.inverse = false;
 
   				/**
-       * Clear flag.
+       * Stencil buffer clear flag.
        *
-       * @property clear
+       * @property clearStencil
        * @type Boolean
        * @default true
        */
 
-  				_this.clear = true;
+  				_this.clearStencil = true;
 
   				return _this;
   		}
 
   		/**
-     * Renders the scene as a mask by only setting the stencil bits.
-     * The buffers will both be cleared first.
+     * Creates a stencil bit mask.
      *
      * @method render
-     * @param {WebGLRenderer} renderer - The renderer to use.
+     * @param {WebGLRenderer} renderer - The renderer.
      * @param {WebGLRenderTarget} readBuffer - The read buffer.
      * @param {WebGLRenderTarget} writeBuffer - The write buffer.
      */
@@ -3246,152 +3635,154 @@
   						var context = renderer.context;
   						var state = renderer.state;
 
+  						var scene = this.scene;
+  						var camera = this.camera;
+
   						var writeValue = this.inverse ? 0 : 1;
   						var clearValue = 1 - writeValue;
 
-  						var scene = this.scene;
-  						var camera = this.camera;
-  						var clear = this.clear;
-
   						// Don't update color or depth.
-  						state.setColorWrite(false);
-  						state.setDepthWrite(false);
+  						state.buffers.color.setMask(false);
+  						state.buffers.depth.setMask(false);
 
-  						state.setStencilTest(true);
-  						state.setStencilOp(context.REPLACE, context.REPLACE, context.REPLACE);
-  						state.setStencilFunc(context.ALWAYS, writeValue, 0xffffffff);
-  						state.clearStencil(clearValue);
+  						// Lock the buffers.
+  						state.buffers.color.setLocked(true);
+  						state.buffers.depth.setLocked(true);
+
+  						// Configure the stencil.
+  						state.buffers.stencil.setTest(true);
+  						state.buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);
+  						state.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
+  						state.buffers.stencil.setClear(clearValue);
+
+  						// Clear the stencil.
+  						if (this.clearStencil) {
+
+  								renderer.setRenderTarget(readBuffer);
+  								renderer.clearStencil();
+
+  								renderer.setRenderTarget(writeBuffer);
+  								renderer.clearStencil();
+  						}
 
   						// Draw the mask into both buffers.
-  						renderer.render(scene, camera, readBuffer, clear);
-  						renderer.render(scene, camera, writeBuffer, clear);
+  						renderer.render(scene, camera, readBuffer);
+  						renderer.render(scene, camera, writeBuffer);
 
-  						// Re-enable update of color and depth.
-  						state.setColorWrite(true);
-  						state.setDepthWrite(true);
+  						// Unlock the buffers.
+  						state.buffers.color.setLocked(false);
+  						state.buffers.depth.setLocked(false);
 
-  						// Only render where stencil is set to 1.
-  						state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
-  						state.setStencilOp(context.KEEP, context.KEEP, context.KEEP);
+  						// Only render where the stencil is set to 1.
+  						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+  						state.buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
   				}
   		}]);
   		return MaskPass;
   }(Pass);
 
   /**
-   * Used for saving the original clear color during rendering.
+   * A pixelation pass.
    *
-   * @property CLEAR_COLOR
-   * @type Color
-   * @private
-   * @static
-   */
-
-  var CLEAR_COLOR$1 = new three.Color();
-
-  /**
-   * A pass that renders a given scene directly on screen or into the read buffer
-   * for further processing.
-   *
-   * @class RenderPass
+   * @class PixelationPass
    * @submodule passes
    * @extends Pass
    * @constructor
-   * @param {Scene} scene - The scene to render.
-   * @param {Camera} camera - The camera to use to render the scene.
-   * @param {Object} [options] - Additional options.
-   * @param {Material} [options.overrideMaterial] - An override material for the scene.
-   * @param {Color} [options.clearColor] - An override clear color.
-   * @param {Number} [options.clearAlpha] - An override clear alpha.
+   * @param {Number} [granularity=30.0] - The intensity of the effect.
    */
 
-  var RenderPass = function (_Pass) {
-  		inherits(RenderPass, _Pass);
+  var PixelationPass = function (_Pass) {
+  	inherits(PixelationPass, _Pass);
 
-  		function RenderPass(scene, camera) {
-  				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  				classCallCheck(this, RenderPass);
+  	function PixelationPass() {
+  		var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
+  		classCallCheck(this, PixelationPass);
 
-  				/**
-       * Override material.
-       *
-       * @property overrideMaterial
-       * @type Material
-       */
+  		var _this = possibleConstructorReturn(this, (PixelationPass.__proto__ || Object.getPrototypeOf(PixelationPass)).call(this));
 
-  				var _this = possibleConstructorReturn(this, (RenderPass.__proto__ || Object.getPrototypeOf(RenderPass)).call(this, scene, camera, null));
+  		_this.name = "PixelationPass";
+  		_this.needsSwap = true;
 
-  				_this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
+  		/**
+     * A pixelation shader material.
+     *
+     * @property pixelationMaterial
+     * @type PixelationMaterial
+     * @private
+     */
 
-  				/**
-       * Clear color.
-       *
-       * @property clearColor
-       * @type Color
-       */
+  		_this.pixelationMaterial = new PixelationMaterial();
 
-  				_this.clearColor = options.clearColor !== undefined ? options.clearColor : null;
+  		_this.granularity = granularity;
 
-  				/**
-       * Clear alpha.
-       *
-       * @property clearAlpha
-       * @type Number
-       * @default 1.0
-       */
+  		_this.quad.material = _this.pixelationMaterial;
 
-  				_this.clearAlpha = options.clearAlpha !== undefined ? options.clearAlpha : 1.0;
+  		return _this;
+  	}
 
-  				/**
-       * Clear flag.
-       *
-       * @property clear
-       * @type Boolean
-       * @default true
-       */
+  	/**
+    * The pixel granularity. A higher value yields coarser visuals.
+    *
+    * @property granularity
+    * @type Number
+    * @default 30.0
+    */
 
-  				_this.clear = true;
+  	createClass(PixelationPass, [{
+  		key: "render",
 
-  				return _this;
+
+  		/**
+     * Renders the effect.
+     *
+     * @method render
+     * @param {WebGLRenderer} renderer - The renderer.
+     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+     */
+
+  		value: function render(renderer, readBuffer, writeBuffer) {
+
+  			this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   		}
 
   		/**
-     * Renders the scene.
+     * Updates this pass with the renderer's size.
      *
-     * @method render
-     * @param {WebGLRenderer} renderer - The renderer to use.
-     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     * @method setSize
+     * @param {Number} width - The width.
+     * @param {Number} height - The height.
      */
 
-  		createClass(RenderPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer) {
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  						var scene = this.scene;
-  						var clearColor = this.clearColor;
+  			this.pixelationMaterial.uniforms.resolution.value.set(width, height);
+  		}
+  	}, {
+  		key: "granularity",
+  		get: function get$$1() {
+  			return this.pixelationMaterial.uniforms.granularity.value;
+  		},
+  		set: function set$$1(x) {
 
-  						var clearAlpha = void 0;
+  			if (typeof x === "number") {
 
-  						scene.overrideMaterial = this.overrideMaterial;
+  				x = Math.floor(x);
 
-  						if (clearColor !== null) {
+  				if (x % 2 > 0) {
 
-  								CLEAR_COLOR$1.copy(renderer.getClearColor());
-  								clearAlpha = renderer.getClearAlpha();
-  								renderer.setClearColor(clearColor, this.clearAlpha);
-  						}
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
-
-  						if (clearColor !== null) {
-
-  								renderer.setClearColor(CLEAR_COLOR$1, clearAlpha);
-  						}
-
-  						scene.overrideMaterial = null;
+  					x += 1;
   				}
-  		}]);
-  		return RenderPass;
+
+  				this.pixelationMaterial.uniforms.granularity.value = x;
+  			}
+  		}
+  	}]);
+  	return PixelationPass;
   }(Pass);
 
   /**
@@ -3412,6 +3803,10 @@
   				var resize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
   				classCallCheck(this, SavePass);
 
+  				var _this = possibleConstructorReturn(this, (SavePass.__proto__ || Object.getPrototypeOf(SavePass)).call(this));
+
+  				_this.name = "SavePass";
+
   				/**
        * Copy shader material.
        *
@@ -3419,8 +3814,6 @@
        * @type CopyMaterial
        * @private
        */
-
-  				var _this = possibleConstructorReturn(this, (SavePass.__proto__ || Object.getPrototypeOf(SavePass)).call(this));
 
   				_this.material = new CopyMaterial();
 
@@ -3436,10 +3829,12 @@
   				_this.renderTarget = renderTarget !== undefined ? renderTarget : new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
   						magFilter: three.LinearFilter,
-  						generateMipmaps: false,
   						stencilBuffer: false,
   						depthBuffer: false
   				});
+
+  				_this.renderTarget.texture.name = "Save.Target";
+  				_this.renderTarget.texture.generateMipmaps = false;
 
   				/**
        * Indicates whether the render target should be resized when the size of
@@ -3469,7 +3864,7 @@
 
   						this.material.uniforms.tDiffuse.value = readBuffer.texture;
 
-  						renderer.render(this.scene, this.camera, this.renderTarget, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderTarget);
   				}
 
   				/**
@@ -3515,170 +3910,6 @@
   }(Pass);
 
   /**
-   * Subpixel Morphological Antialiasing (SMAA) v2.8.
-   *
-   * Preset: SMAA 1x Medium (with color edge detection).
-   *  https://github.com/iryoku/smaa/releases/tag/v2.8
-   *
-   * @class SMAAPass
-   * @submodule passes
-   * @extends Pass
-   * @constructor
-   * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
-   */
-
-  var SMAAPass = function (_Pass) {
-  		inherits(SMAAPass, _Pass);
-
-  		function SMAAPass(Image) {
-  				classCallCheck(this, SMAAPass);
-
-  				var _this = possibleConstructorReturn(this, (SMAAPass.__proto__ || Object.getPrototypeOf(SMAAPass)).call(this));
-
-  				_this.needsSwap = true;
-
-  				/**
-       * A render target for the color edge detection.
-       *
-       * @property renderTargetColorEdges
-       * @type WebGLRenderTarget
-       * @private
-       */
-
-  				_this.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
-  						minFilter: three.LinearFilter,
-  						format: three.RGBFormat,
-  						generateMipmaps: false,
-  						stencilBuffer: false,
-  						depthBuffer: false
-  				});
-
-  				/**
-       * A render target for the SMAA weights.
-       *
-       * @property renderTargetWeights
-       * @type Material
-       * @private
-       */
-
-  				_this.renderTargetWeights = _this.renderTargetColorEdges.clone();
-
-  				_this.renderTargetWeights.texture.format = three.RGBAFormat;
-
-  				/**
-       * SMAA color edge detection shader material.
-       *
-       * @property colorEdgesMaterial
-       * @type SMAAColorEdgesMaterial
-       * @private
-       */
-
-  				_this.colorEdgesMaterial = new SMAAColorEdgesMaterial();
-
-  				/**
-       * SMAA weights shader material.
-       *
-       * @property weightsMaterial
-       * @type SMAAWeightsMaterial
-       * @private
-       */
-
-  				_this.weightsMaterial = new SMAAWeightsMaterial();
-
-  				var areaImage = new Image();
-  				areaImage.src = _this.weightsMaterial.areaImage;
-
-  				var areaTexture = new three.Texture();
-  				areaTexture.image = areaImage;
-  				areaTexture.minFilter = three.LinearFilter;
-  				areaTexture.format = three.RGBFormat;
-  				areaTexture.generateMipmaps = false;
-  				areaTexture.needsUpdate = true;
-  				areaTexture.flipY = false;
-
-  				var searchImage = new Image();
-  				searchImage.src = _this.weightsMaterial.searchImage;
-
-  				var searchTexture = new three.Texture();
-  				searchTexture.image = searchImage;
-  				searchTexture.magFilter = three.NearestFilter;
-  				searchTexture.minFilter = three.NearestFilter;
-  				searchTexture.generateMipmaps = false;
-  				searchTexture.needsUpdate = true;
-  				searchTexture.flipY = false;
-
-  				_this.weightsMaterial.uniforms.tDiffuse.value = _this.renderTargetColorEdges.texture;
-  				_this.weightsMaterial.uniforms.tArea.value = areaTexture;
-  				_this.weightsMaterial.uniforms.tSearch.value = searchTexture;
-
-  				/**
-       * SMAA blend shader material.
-       *
-       * @property blendMaterial
-       * @type SMAABlendMaterial
-       * @private
-       */
-
-  				_this.blendMaterial = new SMAABlendMaterial();
-
-  				_this.blendMaterial.uniforms.tWeights.value = _this.renderTargetWeights.texture;
-
-  				_this.quad.material = _this.blendMaterial;
-
-  				return _this;
-  		}
-
-  		/**
-     * Antialiases the scene.
-     *
-     * @method render
-     * @param {WebGLRenderer} renderer - The renderer to use.
-     * @param {WebGLRenderTarget} readBuffer - The read buffer.
-     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-     */
-
-  		createClass(SMAAPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
-
-  						// Detect color edges.
-  						this.quad.material = this.colorEdgesMaterial;
-  						this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						renderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);
-
-  						// Compute edge weights.
-  						this.quad.material = this.weightsMaterial;
-  						renderer.render(this.scene, this.camera, this.renderTargetWeights, false);
-
-  						// Apply the antialiasing filter to the colors.
-  						this.quad.material = this.blendMaterial;
-  						this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
-  				}
-
-  				/**
-       * Updates this pass with the renderer's size.
-       *
-       * @method setSize
-       * @param {Number} width - The width.
-       * @param {Number} height - The height.
-       */
-
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						this.renderTargetColorEdges.setSize(width, height);
-  						this.renderTargetWeights.setSize(width, height);
-
-  						this.colorEdgesMaterial.uniforms.texelSize.value.copy(this.weightsMaterial.uniforms.texelSize.value.copy(this.blendMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height)));
-  				}
-  		}]);
-  		return SMAAPass;
-  }(Pass);
-
-  /**
    * A shader pass.
    *
    * Used to render any shader material as a 2D filter.
@@ -3700,6 +3931,7 @@
 
   				var _this = possibleConstructorReturn(this, (ShaderPass.__proto__ || Object.getPrototypeOf(ShaderPass)).call(this));
 
+  				_this.name = "ShaderPass";
   				_this.needsSwap = true;
 
   				/**
@@ -3744,10 +3976,422 @@
   								this.material.uniforms[this.textureID].value = readBuffer.texture;
   						}
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
   		}]);
   		return ShaderPass;
+  }(Pass);
+
+  /**
+   * Half PI.
+   *
+   * @property HALF_PI
+   * @type Number
+   * @private
+   * @static
+   * @final
+   */
+
+  var HALF_PI = Math.PI * 0.5;
+
+  /**
+   * A vector.
+   *
+   * @property V
+   * @type Vector3
+   * @private
+   * @static
+   * @final
+   */
+
+  var V = new three.Vector3();
+
+  /**
+   * A vector.
+   *
+   * @property AB
+   * @type Vector3
+   * @private
+   * @static
+   * @final
+   */
+
+  var AB = new three.Vector3();
+
+  /**
+   * A shock wave pass.
+   *
+   * @class ShockWavePass
+   * @submodule passes
+   * @extends Pass
+   * @constructor
+   * @param {Camera} camera - The main camera.
+   * @param {Object} [epicenter] - The world position of the shock wave epicenter.
+   * @param {Object} [options] - The options.
+   * @param {Number} [options.speed=1.0] - The animation speed.
+   * @param {Number} [options.maxRadius=1.0] - The extent of the shock wave.
+   * @param {Number} [options.waveSize=0.2] - The wave size.
+   * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
+   */
+
+  var ShockWavePass = function (_Pass) {
+  		inherits(ShockWavePass, _Pass);
+
+  		function ShockWavePass(camera) {
+  				var epicenter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector3();
+  				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  				classCallCheck(this, ShockWavePass);
+
+  				var _this = possibleConstructorReturn(this, (ShockWavePass.__proto__ || Object.getPrototypeOf(ShockWavePass)).call(this));
+
+  				_this.name = "ShockWavePass";
+  				_this.needsSwap = true;
+
+  				/**
+       * The main camera.
+       *
+       * @property mainCamera
+       * @type Object3D
+       */
+
+  				_this.mainCamera = camera;
+
+  				/**
+       * The epicenter.
+       *
+       * @property epicenter
+       * @type Vector3
+       */
+
+  				_this.epicenter = epicenter;
+
+  				/**
+       * The object position in screen space.
+       *
+       * @property screenPosition
+       * @type Vector3
+       * @private
+       */
+
+  				_this.screenPosition = new three.Vector3();
+
+  				/**
+       * The speed of the shock wave animation.
+       *
+       * @property time
+       * @type Number
+       * @default 2.0
+       */
+
+  				_this.speed = options.speed !== undefined ? options.speed : 2.0;
+
+  				/**
+       * A time accumulator.
+       *
+       * @property time
+       * @type Number
+       * @private
+       */
+
+  				_this.time = 0.0;
+
+  				/**
+       * Indicates whether the shock wave animation is active.
+       *
+       * @property active
+       * @type Boolean
+       * @private
+       */
+
+  				_this.active = false;
+
+  				/**
+       * A shock wave shader material.
+       *
+       * @property shockWaveMaterial
+       * @type ShockWaveMaterial
+       * @private
+       */
+
+  				_this.shockWaveMaterial = new ShockWaveMaterial(options);
+
+  				_this.shockWaveMaterial.uniforms.center.value = _this.screenPosition;
+
+  				/**
+       * A copy shader material.
+       *
+       * @property copyMaterial
+       * @type CopyMaterial
+       * @private
+       */
+
+  				_this.copyMaterial = new CopyMaterial();
+
+  				return _this;
+  		}
+
+  		/**
+     * Emits the shock wave.
+     *
+     * @method explode
+     */
+
+  		createClass(ShockWavePass, [{
+  				key: "explode",
+  				value: function explode() {
+
+  						this.time = 0.0;
+  						this.active = true;
+  				}
+
+  				/**
+       * Renders the effect.
+       *
+       * @method render
+       * @param {WebGLRenderer} renderer - The renderer.
+       * @param {WebGLRenderTarget} readBuffer - The read buffer.
+       * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+       * @param {Number} delta - The render delta time.
+       */
+
+  		}, {
+  				key: "render",
+  				value: function render(renderer, readBuffer, writeBuffer, delta) {
+
+  						var epicenter = this.epicenter;
+  						var mainCamera = this.mainCamera;
+  						var screenPosition = this.screenPosition;
+
+  						var shockWaveMaterial = this.shockWaveMaterial;
+  						var uniforms = shockWaveMaterial.uniforms;
+  						var center = uniforms.center;
+  						var radius = uniforms.radius;
+  						var maxRadius = uniforms.maxRadius;
+  						var waveSize = uniforms.waveSize;
+
+  						this.copyMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  						this.quad.material = this.copyMaterial;
+
+  						if (this.active) {
+
+  								// Calculate direction vectors.
+  								mainCamera.getWorldDirection(V);
+  								AB.copy(mainCamera.position).sub(epicenter);
+
+  								// Don't render the effect if the object is behind the camera.
+  								if (V.angleTo(AB) > HALF_PI) {
+
+  										// Scale the effect based on distance to the object.
+  										uniforms.cameraDistance.value = mainCamera.position.distanceTo(epicenter);
+
+  										// Calculate the screen position of the epicenter.
+  										screenPosition.copy(epicenter).project(mainCamera);
+  										center.value.x = (screenPosition.x + 1.0) * 0.5;
+  										center.value.y = (screenPosition.y + 1.0) * 0.5;
+
+  										uniforms.tDiffuse.value = readBuffer.texture;
+  										this.quad.material = shockWaveMaterial;
+  								}
+
+  								// Update the shock wave radius based on time.
+  								this.time += delta;
+  								radius.value = this.time * this.speed - waveSize.value;
+
+  								if (radius.value >= (maxRadius.value + waveSize.value) * 2) {
+
+  										this.active = false;
+  								}
+  						}
+
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  				}
+
+  				/**
+       * Updates this pass with the renderer's size.
+       *
+       * @method setSize
+       * @param {Number} width - The width.
+       * @param {Number} height - The height.
+       */
+
+  		}, {
+  				key: "setSize",
+  				value: function setSize(width, height) {
+
+  						this.shockWaveMaterial.uniforms.aspect.value = width / height;
+  				}
+  		}]);
+  		return ShockWavePass;
+  }(Pass);
+
+  /**
+   * Subpixel Morphological Antialiasing (SMAA) v2.8.
+   *
+   * Preset: SMAA 1x Medium (with color edge detection).
+   *  https://github.com/iryoku/smaa/releases/tag/v2.8
+   *
+   * @class SMAAPass
+   * @submodule passes
+   * @extends Pass
+   * @constructor
+   * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
+   */
+
+  var SMAAPass = function (_Pass) {
+  		inherits(SMAAPass, _Pass);
+
+  		function SMAAPass(Image) {
+  				classCallCheck(this, SMAAPass);
+
+  				var _this = possibleConstructorReturn(this, (SMAAPass.__proto__ || Object.getPrototypeOf(SMAAPass)).call(this));
+
+  				_this.name = "SMAAPass";
+  				_this.needsSwap = true;
+
+  				/**
+       * A render target for the color edge detection.
+       *
+       * @property renderTargetColorEdges
+       * @type WebGLRenderTarget
+       * @private
+       */
+
+  				_this.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
+  						minFilter: three.LinearFilter,
+  						format: three.RGBFormat,
+  						stencilBuffer: false,
+  						depthBuffer: false
+  				});
+
+  				_this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
+  				_this.renderTargetColorEdges.texture.generateMipmaps = false;
+
+  				/**
+       * A render target for the SMAA weights.
+       *
+       * @property renderTargetWeights
+       * @type Material
+       * @private
+       */
+
+  				_this.renderTargetWeights = _this.renderTargetColorEdges.clone();
+
+  				_this.renderTargetWeights.texture.name = "SMAA.Weights";
+  				_this.renderTargetWeights.texture.format = three.RGBAFormat;
+
+  				/**
+       * SMAA color edge detection shader material.
+       *
+       * @property colorEdgesMaterial
+       * @type SMAAColorEdgesMaterial
+       * @private
+       */
+
+  				_this.colorEdgesMaterial = new SMAAColorEdgesMaterial();
+
+  				/**
+       * SMAA weights shader material.
+       *
+       * @property weightsMaterial
+       * @type SMAAWeightsMaterial
+       * @private
+       */
+
+  				_this.weightsMaterial = new SMAAWeightsMaterial();
+
+  				var areaImage = new Image();
+  				areaImage.src = _this.weightsMaterial.areaImage;
+
+  				var areaTexture = new three.Texture();
+  				areaTexture.image = areaImage;
+  				areaTexture.name = "SMAA.Area";
+  				areaTexture.minFilter = three.LinearFilter;
+  				areaTexture.format = three.RGBFormat;
+  				areaTexture.generateMipmaps = false;
+  				areaTexture.needsUpdate = true;
+  				areaTexture.flipY = false;
+
+  				var searchImage = new Image();
+  				searchImage.src = _this.weightsMaterial.searchImage;
+
+  				var searchTexture = new three.Texture();
+  				searchTexture.image = searchImage;
+  				searchTexture.name = "SMAA.Search";
+  				searchTexture.magFilter = three.NearestFilter;
+  				searchTexture.minFilter = three.NearestFilter;
+  				searchTexture.generateMipmaps = false;
+  				searchTexture.needsUpdate = true;
+  				searchTexture.flipY = false;
+
+  				_this.weightsMaterial.uniforms.tDiffuse.value = _this.renderTargetColorEdges.texture;
+  				_this.weightsMaterial.uniforms.tArea.value = areaTexture;
+  				_this.weightsMaterial.uniforms.tSearch.value = searchTexture;
+
+  				/**
+       * SMAA blend shader material.
+       *
+       * @property blendMaterial
+       * @type SMAABlendMaterial
+       * @private
+       */
+
+  				_this.blendMaterial = new SMAABlendMaterial();
+
+  				_this.blendMaterial.uniforms.tWeights.value = _this.renderTargetWeights.texture;
+
+  				_this.quad.material = _this.blendMaterial;
+
+  				return _this;
+  		}
+
+  		/**
+     * Antialiases the scene.
+     *
+     * @method render
+     * @param {WebGLRenderer} renderer - The renderer.
+     * @param {WebGLRenderTarget} readBuffer - The read buffer.
+     * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+     */
+
+  		createClass(SMAAPass, [{
+  				key: "render",
+  				value: function render(renderer, readBuffer, writeBuffer) {
+
+  						// Detect color edges.
+  						this.quad.material = this.colorEdgesMaterial;
+  						this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  						renderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);
+
+  						// Compute edge weights.
+  						this.quad.material = this.weightsMaterial;
+  						renderer.render(this.scene, this.camera, this.renderTargetWeights, false);
+
+  						// Apply the antialiasing filter to the colors.
+  						this.quad.material = this.blendMaterial;
+  						this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  				}
+
+  				/**
+       * Updates this pass with the renderer's size.
+       *
+       * @method setSize
+       * @param {Number} width - The width.
+       * @param {Number} height - The height.
+       */
+
+  		}, {
+  				key: "setSize",
+  				value: function setSize(width, height) {
+
+  						this.renderTargetColorEdges.setSize(width, height);
+  						this.renderTargetWeights.setSize(width, height);
+
+  						this.colorEdgesMaterial.uniforms.texelSize.value.copy(this.weightsMaterial.uniforms.texelSize.value.copy(this.blendMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height)));
+  				}
+  		}]);
+  		return SMAAPass;
   }(Pass);
 
   /**
@@ -3770,6 +4414,10 @@
   		var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
   		classCallCheck(this, TexturePass);
 
+  		var _this = possibleConstructorReturn(this, (TexturePass.__proto__ || Object.getPrototypeOf(TexturePass)).call(this));
+
+  		_this.name = "TexturePass";
+
   		/**
      * A copy shader material used for rendering to texture.
      *
@@ -3777,8 +4425,6 @@
      * @type CopyMaterial
      * @private
      */
-
-  		var _this = possibleConstructorReturn(this, (TexturePass.__proto__ || Object.getPrototypeOf(TexturePass)).call(this));
 
   		_this.copyMaterial = new CopyMaterial();
   		_this.copyMaterial.blending = three.AdditiveBlending;
@@ -3813,7 +4459,7 @@
 
   		value: function render(renderer, readBuffer) {
 
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer, this.clear);
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
   		}
   	}, {
   		key: "texture",
@@ -3890,6 +4536,7 @@
 
   				var _this = possibleConstructorReturn(this, (ToneMappingPass.__proto__ || Object.getPrototypeOf(ToneMappingPass)).call(this));
 
+  				_this.name = "ToneMappingPass";
   				_this.needsSwap = true;
 
   				/**
@@ -3898,7 +4545,7 @@
        * @property renderTargetLuminosity
        * @type WebGLRenderTarget
        * @private
-       * @todo: use RED format in WebGL 2.0.
+       * @todo Use RED format in WebGL 2.0.
        */
 
   				_this.renderTargetLuminosity = new three.WebGLRenderTarget(1, 1, {
@@ -3908,6 +4555,8 @@
   						stencilBuffer: false,
   						depthBuffer: false
   				});
+
+  				_this.renderTargetLuminosity.texture.name = "ToneMapping.Luminosity";
 
   				/**
        * Adapted luminance render target.
@@ -3919,6 +4568,7 @@
 
   				_this.renderTargetAdapted = _this.renderTargetLuminosity.clone();
 
+  				_this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminosity";
   				_this.renderTargetAdapted.texture.generateMipmaps = false;
   				_this.renderTargetAdapted.texture.minFilter = three.LinearFilter;
 
@@ -3931,6 +4581,8 @@
        */
 
   				_this.renderTargetPrevious = _this.renderTargetAdapted.clone();
+
+  				_this.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminosity";
 
   				/**
        * Copy shader material used for saving the luminance map.
@@ -3997,7 +4649,7 @@
        * Renders the effect.
        *
        * @method render
-       * @param {WebGLRenderer} renderer - The renderer to use.
+       * @param {WebGLRenderer} renderer - The renderer.
        * @param {WebGLRenderTarget} readBuffer - The read buffer.
        * @param {WebGLRenderTarget} writeBuffer - The write buffer.
        * @param {Number} delta - The render delta time.
@@ -4012,6 +4664,7 @@
   						var adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;
   						var luminosityMaterial = this.luminosityMaterial;
   						var toneMappingMaterial = this.toneMappingMaterial;
+  						var copyMaterial = this.copyMaterial;
 
   						var renderTargetPrevious = this.renderTargetPrevious;
   						var renderTargetLuminosity = this.renderTargetLuminosity;
@@ -4032,8 +4685,8 @@
   								renderer.render(scene, camera, renderTargetAdapted);
 
   								// Copy the new adapted luminance value so that it can be used by the next frame.
-  								quad.material = this.copyMaterial;
-  								this.copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
+  								quad.material = copyMaterial;
+  								copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
   								renderer.render(scene, camera, renderTargetPrevious);
   						}
 
@@ -4041,7 +4694,7 @@
   						quad.material = toneMappingMaterial;
   						toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer, this.clear);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
 
   				/**
@@ -4300,15 +4953,18 @@
   								magFilter: three.LinearFilter,
   								format: alpha ? three.RGBAFormat : three.RGBFormat,
   								depthBuffer: depthBuffer,
-  								stencilBuffer: stencilBuffer
+  								stencilBuffer: stencilBuffer,
+  								depthTexture: depthTexture ? new three.DepthTexture() : null
   						});
 
-  						renderTarget.texture.generateMipmaps = false;
+  						if (depthTexture && stencilBuffer) {
 
-  						if (depthTexture) {
-
-  								renderTarget.depthTexture = new three.DepthTexture();
+  								renderTarget.depthTexture.format = three.DepthStencilFormat;
+  								renderTarget.depthTexture.type = three.UnsignedInt248Type;
   						}
+
+  						renderTarget.texture.name = "EffectComposer.Buffer";
+  						renderTarget.texture.generateMipmaps = false;
 
   						return renderTarget;
   				}
@@ -4374,12 +5030,11 @@
   						var writeBuffer = this.writeBuffer;
 
   						var maskActive = false;
-  						var i = void 0,
-  						    l = void 0,
-  						    pass = void 0,
+  						var pass = void 0,
+  						    context = void 0,
   						    buffer = void 0;
-  						var context = void 0,
-  						    state = void 0;
+  						var i = void 0,
+  						    l = void 0;
 
   						for (i = 0, l = passes.length; i < l; ++i) {
 
@@ -4394,10 +5049,9 @@
   												if (maskActive) {
 
   														context = renderer.context;
-  														state = renderer.state;
-  														state.setStencilFunc(context.NOTEQUAL, 1, 0xffffffff);
+  														context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
   														copyPass.render(renderer, readBuffer, writeBuffer);
-  														state.setStencilFunc(context.EQUAL, 1, 0xffffffff);
+  														context.stencilFunc(context.EQUAL, 1, 0xffffffff);
   												}
 
   												buffer = readBuffer;
@@ -4641,21 +5295,21 @@
   				value: function initialise() {}
 
   				/**
-       * Updates the demo.
+       * Updates this demo.
        *
        * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {}
+  				value: function update(delta) {}
 
   				/**
        * Registers configuration options.
        *
        * @method configure
        * @param {GUI} gui - A GUI.
-       * @return {GUI} A GUI folder.
        */
 
   		}, {
@@ -4704,18 +5358,30 @@
   var TWO_PI = 2.0 * Math.PI;
 
   /**
-   * A render demo setup.
+   * A bloom demo setup.
    *
-   * @class RenderDemo
+   * @class BloomDemo
    * @constructor
    * @param {EffectComposer} composer - An effect composer.
    */
 
-  var RenderDemo = function (_Demo) {
-  		inherits(RenderDemo, _Demo);
+  var BloomDemo = function (_Demo) {
+  		inherits(BloomDemo, _Demo);
 
-  		function RenderDemo(composer) {
-  				classCallCheck(this, RenderDemo);
+  		function BloomDemo(composer) {
+  				classCallCheck(this, BloomDemo);
+
+  				/**
+       * A bloom pass.
+       *
+       * @property bloomPass
+       * @type BloomPass
+       * @private
+       */
+
+  				var _this = possibleConstructorReturn(this, (BloomDemo.__proto__ || Object.getPrototypeOf(BloomDemo)).call(this, composer));
+
+  				_this.bloomPass = null;
 
   				/**
        * An object.
@@ -4724,8 +5390,6 @@
        * @type Object3D
        * @private
        */
-
-  				var _this = possibleConstructorReturn(this, (RenderDemo.__proto__ || Object.getPrototypeOf(RenderDemo)).call(this, composer));
 
   				_this.object = null;
 
@@ -4739,18 +5403,17 @@
      * @param {Function} callback - A callback function.
      */
 
-  		createClass(RenderDemo, [{
+  		createClass(BloomDemo, [{
   				key: "load",
   				value: function load(callback) {
   						var _this2 = this;
 
   						var assets = new Map();
   						var loadingManager = this.loadingManager;
-  						var textureLoader = new three.TextureLoader(loadingManager);
   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
 
-  						var path = "textures/skies/sunset/";
-  						var format = ".png";
+  						var path = "textures/skies/space2/";
+  						var format = ".jpg";
   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
 
   						if (this.assets === null) {
@@ -4768,12 +5431,6 @@
   								cubeTextureLoader.load(urls, function (textureCube) {
 
   										assets.set("sky", textureCube);
-  								});
-
-  								textureLoader.load("textures/crate.jpg", function (texture) {
-
-  										texture.wrapS = texture.wrapT = three.RepeatWrapping;
-  										assets.set("crate-color", texture);
   								});
   						} else {
 
@@ -4803,9 +5460,8 @@
 
   						// Camera.
 
-  						camera.position.set(-3, 0, -3);
+  						camera.position.set(-10, 6, 15);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -4816,46 +5472,109 @@
   						var ambientLight = new three.AmbientLight(0x666666);
   						var directionalLight = new three.DirectionalLight(0xffbbaa);
 
-  						directionalLight.position.set(1440, 200, 2000);
+  						directionalLight.position.set(-1, 1, 1);
   						directionalLight.target.position.copy(scene.position);
 
   						scene.add(directionalLight);
   						scene.add(ambientLight);
 
-  						// Objects.
+  						// Random objects.
 
-  						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
-  								color: 0xffffff,
-  								map: assets.get("crate-color")
+  						var object = new three.Object3D();
+
+  						var geometry = new three.SphereBufferGeometry(1, 4, 4);
+  						var material = void 0;
+  						var i = void 0,
+  						    mesh = void 0;
+
+  						for (i = 0; i < 100; ++i) {
+
+  								material = new three.MeshPhongMaterial({
+  										color: 0xffffff * Math.random(),
+  										shading: three.FlatShading
+  								});
+
+  								mesh = new three.Mesh(geometry, material);
+  								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+  								mesh.position.multiplyScalar(Math.random() * 4);
+  								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+  								mesh.scale.multiplyScalar(Math.random() * 0.5);
+  								object.add(mesh);
+  						}
+
+  						this.object = object;
+
+  						scene.add(object);
+
+  						// Cage object.
+
+  						mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshLambertMaterial({
+  								color: 0x0b0b0b
   						}));
 
-  						this.object = mesh;
-  						scene.add(mesh);
+  						object = new three.Object3D();
+  						var o0 = void 0,
+  						    o1 = void 0,
+  						    o2 = void 0;
+
+  						o0 = object.clone();
+
+  						var clone = mesh.clone();
+  						clone.position.set(-4, 0, 4);
+  						o0.add(clone);
+  						clone = mesh.clone();
+  						clone.position.set(4, 0, 4);
+  						o0.add(clone);
+  						clone = mesh.clone();
+  						clone.position.set(-4, 0, -4);
+  						o0.add(clone);
+  						clone = mesh.clone();
+  						clone.position.set(4, 0, -4);
+  						o0.add(clone);
+
+  						o1 = o0.clone();
+  						o1.rotation.set(Math.PI / 2, 0, 0);
+  						o2 = o0.clone();
+  						o2.rotation.set(0, 0, Math.PI / 2);
+
+  						object.add(o0);
+  						object.add(o1);
+  						object.add(o2);
+
+  						scene.add(object);
 
   						// Passes.
 
-  						var pass = new RenderPass(scene, camera);
-  						pass.renderToScreen = true;
+  						composer.addPass(new RenderPass(scene, camera));
 
+  						var pass = new BloomPass({
+  								resolutionScale: 0.5,
+  								strength: 1.0,
+  								distinction: 4.0
+  						});
+
+  						pass.renderToScreen = true;
+  						this.bloomPass = pass;
   						composer.addPass(pass);
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
   						if (object !== null) {
 
-  								object.rotation.x += 0.0005;
-  								object.rotation.y += 0.001;
+  								object.rotation.x += 0.001;
+  								object.rotation.y += 0.005;
 
   								// Prevent overflow.
   								if (object.rotation.x >= TWO_PI) {
@@ -4866,8 +5585,516 @@
   								}
   						}
   				}
+
+  				/**
+       * Registers configuration options.
+       *
+       * @method configure
+       * @param {GUI} gui - A GUI.
+       */
+
+  		}, {
+  				key: "configure",
+  				value: function configure(gui) {
+
+  						var composer = this.composer;
+  						var pass = this.bloomPass;
+
+  						var params = {
+  								"resolution": pass.resolutionScale,
+  								"kernel size": pass.kernelSize,
+  								"intensity": pass.intensity,
+  								"distinction": pass.distinction,
+  								"blend": true,
+  								"blend mode": "screen"
+  						};
+
+  						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+  								pass.resolutionScale = params.resolution;composer.setSize();
+  						});
+  						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+  								pass.kernelSize = params["kernel size"];
+  						});
+  						gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
+  								pass.intensity = params.intensity;
+  						});
+
+  						var folder = gui.addFolder("Luminance");
+  						folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
+  								pass.distinction = params.distinction;
+  						});
+  						folder.open();
+
+  						gui.add(params, "blend").onChange(function () {
+
+  								pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+  						});
+
+  						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
+
+  								if (params["blend mode"] === "add") {
+
+  										delete pass.combineMaterial.defines.SCREEN_MODE;
+  								} else {
+
+  										pass.combineMaterial.defines.SCREEN_MODE = "1";
+  								}
+
+  								pass.combineMaterial.needsUpdate = true;
+  						});
+  				}
   		}]);
-  		return RenderDemo;
+  		return BloomDemo;
+  }(Demo);
+
+  /**
+   * A bokeh demo setup.
+   *
+   * @class BokehDemo
+   * @constructor
+   * @param {EffectComposer} composer - An effect composer.
+   */
+
+  var BokehDemo = function (_Demo) {
+  		inherits(BokehDemo, _Demo);
+
+  		function BokehDemo(composer) {
+  				classCallCheck(this, BokehDemo);
+
+  				/**
+       * A bokeh pass.
+       *
+       * @property bloomPass
+       * @type BloomPass
+       * @private
+       */
+
+  				var _this = possibleConstructorReturn(this, (BokehDemo.__proto__ || Object.getPrototypeOf(BokehDemo)).call(this, composer));
+
+  				_this.bokehPass = null;
+
+  				return _this;
+  		}
+
+  		/**
+     * Loads scene assets.
+     *
+     * @method load
+     * @param {Function} callback - A callback function.
+     */
+
+  		createClass(BokehDemo, [{
+  				key: "load",
+  				value: function load(callback) {
+  						var _this2 = this;
+
+  						var assets = new Map();
+  						var loadingManager = this.loadingManager;
+  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+  						var path = "textures/skies/space3/";
+  						var format = ".jpg";
+  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+  						if (this.assets === null) {
+
+  								loadingManager.onProgress = function (item, loaded, total) {
+
+  										if (loaded === total) {
+
+  												_this2.assets = assets;
+  												_this2.initialise();
+  												callback();
+  										}
+  								};
+
+  								cubeTextureLoader.load(urls, function (textureCube) {
+
+  										assets.set("sky", textureCube);
+  								});
+  						} else {
+
+  								this.initialise();
+  								callback();
+  						}
+  				}
+
+  				/**
+       * Creates the scene.
+       *
+       * @method initialise
+       */
+
+  		}, {
+  				key: "initialise",
+  				value: function initialise() {
+
+  						var scene = this.scene;
+  						var camera = this.camera;
+  						var assets = this.assets;
+  						var composer = this.composer;
+
+  						// Controls.
+
+  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+  						this.controls.enablePan = false;
+  						this.controls.minDistance = 2.5;
+  						this.controls.maxDistance = 40;
+
+  						// Camera.
+
+  						camera.near = 0.01;
+  						camera.far = 50;
+  						camera.position.set(3, 1, 3);
+  						camera.lookAt(this.controls.target);
+
+  						// Sky.
+
+  						scene.background = assets.get("sky");
+
+  						// Lights.
+
+  						var ambientLight = new three.AmbientLight(0x666666);
+  						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+  						directionalLight.position.set(-1, 1, 1);
+  						directionalLight.target.position.copy(scene.position);
+
+  						scene.add(directionalLight);
+  						scene.add(ambientLight);
+
+  						// Objects.
+
+  						var geometry = new three.SphereBufferGeometry(1, 64, 64);
+  						var material = new three.MeshBasicMaterial({
+  								color: 0xffff00,
+  								envMap: assets.get("sky")
+  						});
+
+  						var mesh = new three.Mesh(geometry, material);
+  						scene.add(mesh);
+
+  						// Passes.
+
+  						composer.addPass(new RenderPass(scene, camera));
+
+  						var pass = new BokehPass(camera, {
+  								focus: 0.36,
+  								aperture: 0.007,
+  								maxBlur: 0.025
+  						});
+
+  						pass.renderToScreen = true;
+  						this.bokehPass = pass;
+  						composer.addPass(pass);
+  				}
+
+  				/**
+       * Registers configuration options.
+       *
+       * @method configure
+       * @param {GUI} gui - A GUI.
+       */
+
+  		}, {
+  				key: "configure",
+  				value: function configure(gui) {
+
+  						var pass = this.bokehPass;
+
+  						var params = {
+  								"focus": pass.bokehMaterial.uniforms.focus.value,
+  								"aperture": pass.bokehMaterial.uniforms.aperture.value,
+  								"blur": pass.bokehMaterial.uniforms.maxBlur.value
+  						};
+
+  						gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function () {
+  								pass.bokehMaterial.uniforms.focus.value = params.focus;
+  						});
+  						gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function () {
+  								pass.bokehMaterial.uniforms.aperture.value = params.aperture;
+  						});
+  						gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function () {
+  								pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
+  						});
+  				}
+  		}]);
+  		return BokehDemo;
+  }(Demo);
+
+  /**
+   * A high quality bokeh demo setup.
+   *
+   * @class Bokeh2Demo
+   * @constructor
+   * @param {EffectComposer} composer - An effect composer.
+   */
+
+  var Bokeh2Demo = function (_Demo) {
+  		inherits(Bokeh2Demo, _Demo);
+
+  		function Bokeh2Demo(composer) {
+  				classCallCheck(this, Bokeh2Demo);
+
+  				/**
+       * A bokeh pass.
+       *
+       * @property bloomPass
+       * @type BloomPass
+       * @private
+       */
+
+  				var _this = possibleConstructorReturn(this, (Bokeh2Demo.__proto__ || Object.getPrototypeOf(Bokeh2Demo)).call(this, composer));
+
+  				_this.bokehPass = null;
+
+  				return _this;
+  		}
+
+  		/**
+     * Loads scene assets.
+     *
+     * @method load
+     * @param {Function} callback - A callback function.
+     */
+
+  		createClass(Bokeh2Demo, [{
+  				key: "load",
+  				value: function load(callback) {
+  						var _this2 = this;
+
+  						var assets = new Map();
+  						var loadingManager = this.loadingManager;
+  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+  						var path = "textures/skies/space3/";
+  						var format = ".jpg";
+  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+  						if (this.assets === null) {
+
+  								loadingManager.onProgress = function (item, loaded, total) {
+
+  										if (loaded === total) {
+
+  												_this2.assets = assets;
+  												_this2.initialise();
+  												callback();
+  										}
+  								};
+
+  								cubeTextureLoader.load(urls, function (textureCube) {
+
+  										assets.set("sky", textureCube);
+  								});
+  						} else {
+
+  								this.initialise();
+  								callback();
+  						}
+  				}
+
+  				/**
+       * Creates the scene.
+       *
+       * @method initialise
+       */
+
+  		}, {
+  				key: "initialise",
+  				value: function initialise() {
+
+  						var scene = this.scene;
+  						var camera = this.camera;
+  						var assets = this.assets;
+  						var composer = this.composer;
+
+  						// Controls.
+
+  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+  						this.controls.enablePan = false;
+  						this.controls.minDistance = 2.5;
+  						this.controls.maxDistance = 40;
+
+  						// Camera.
+
+  						camera.near = 0.01;
+  						camera.far = 50;
+  						camera.position.set(3, 1, 3);
+  						camera.lookAt(this.controls.target);
+
+  						// Sky.
+
+  						scene.background = assets.get("sky");
+
+  						// Lights.
+
+  						var ambientLight = new three.AmbientLight(0x666666);
+  						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+  						directionalLight.position.set(-1, 1, 1);
+  						directionalLight.target.position.copy(scene.position);
+
+  						scene.add(directionalLight);
+  						scene.add(ambientLight);
+
+  						// Objects.
+
+  						var geometry = new three.SphereBufferGeometry(1, 64, 64);
+  						var material = new three.MeshBasicMaterial({
+  								color: 0xffff00,
+  								envMap: assets.get("sky")
+  						});
+
+  						var mesh = new three.Mesh(geometry, material);
+  						scene.add(mesh);
+
+  						// Passes.
+
+  						composer.addPass(new RenderPass(scene, camera));
+
+  						var pass = new Bokeh2Pass(camera, {
+  								rings: 3,
+  								samples: 2,
+  								showFocus: false,
+  								manualDoF: false,
+  								vignette: false,
+  								pentagon: false,
+  								shaderFocus: true,
+  								noise: true
+  						});
+
+  						pass.bokehMaterial.uniforms.focalStop.value = 64;
+  						pass.renderToScreen = true;
+  						this.bokehPass = pass;
+  						composer.addPass(pass);
+  				}
+
+  				/**
+       * Registers configuration options.
+       *
+       * @method configure
+       * @param {GUI} gui - A GUI.
+       */
+
+  		}, {
+  				key: "configure",
+  				value: function configure(gui) {
+
+  						var pass = this.bokehPass;
+
+  						var params = {
+  								"rings": Number.parseInt(pass.bokehMaterial.defines.RINGS_INT),
+  								"samples": Number.parseInt(pass.bokehMaterial.defines.SAMPLES_INT),
+  								"focal stop": pass.bokehMaterial.uniforms.focalStop.value,
+  								"focal length": pass.bokehMaterial.uniforms.focalLength.value,
+  								"shader focus": pass.bokehMaterial.defines.SHADER_FOCUS !== undefined,
+  								"focal depth": pass.bokehMaterial.uniforms.focalDepth.value,
+  								"focus coord X": pass.bokehMaterial.uniforms.focusCoords.value.x,
+  								"focus coord Y": pass.bokehMaterial.uniforms.focusCoords.value.y,
+  								"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
+  								"lum threshold": pass.bokehMaterial.uniforms.luminanceThreshold.value,
+  								"lum gain": pass.bokehMaterial.uniforms.luminanceGain.value,
+  								"bias": pass.bokehMaterial.uniforms.bias.value,
+  								"fringe": pass.bokehMaterial.uniforms.fringe.value,
+  								"dithering": pass.bokehMaterial.uniforms.ditherStrength.value,
+  								"vignette": pass.bokehMaterial.defines.VIGNETTE !== undefined,
+  								"pentagon": pass.bokehMaterial.defines.PENTAGON !== undefined,
+  								"manual DoF": pass.bokehMaterial.defines.MANUAL_DOF !== undefined,
+  								"show focus": pass.bokehMaterial.defines.SHOW_FOCUS !== undefined,
+  								"noise": pass.bokehMaterial.defines.NOISE !== undefined
+  						};
+
+  						var f = gui.addFolder("Focus");
+
+  						f.add(params, "show focus").onChange(function () {
+  								params["show focus"] ? pass.bokehMaterial.defines.SHOW_FOCUS = "1" : delete pass.bokehMaterial.defines.SHOW_FOCUS;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.add(params, "shader focus").onChange(function () {
+  								params["shader focus"] ? pass.bokehMaterial.defines.SHADER_FOCUS = "1" : delete pass.bokehMaterial.defines.SHADER_FOCUS;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.add(params, "manual DoF").onChange(function () {
+  								params["manual DoF"] ? pass.bokehMaterial.defines.MANUAL_DOF = "1" : delete pass.bokehMaterial.defines.MANUAL_DOF;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function () {
+  								pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"];
+  						});
+  						f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function () {
+  								pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"];
+  						});
+  						f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function () {
+  								pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"];
+  						});
+  						f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function () {
+  								pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"];
+  						});
+
+  						f.open();
+
+  						f = gui.addFolder("Sampling");
+
+  						f.add(params, "rings").min(1).max(6).step(1).onChange(function () {
+  								pass.bokehMaterial.defines.RINGS_INT = params.rings.toFixed(0);
+  								pass.bokehMaterial.defines.RINGS_FLOAT = params.rings.toFixed(1);
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.add(params, "samples").min(1).max(6).step(1).onChange(function () {
+  								pass.bokehMaterial.defines.SAMPLES_INT = params.samples.toFixed(0);
+  								pass.bokehMaterial.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f = gui.addFolder("Blur");
+
+  						f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function () {
+  								pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"];
+  						});
+  						f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function () {
+  								pass.bokehMaterial.uniforms.bias.value = params.bias;
+  						});
+  						f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function () {
+  								pass.bokehMaterial.uniforms.fringe.value = params.fringe;
+  						});
+
+  						f.add(params, "noise").onChange(function () {
+  								params.noise ? pass.bokehMaterial.defines.NOISE = "1" : delete pass.bokehMaterial.defines.NOISE;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function () {
+  								pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering;
+  						});
+
+  						f.add(params, "pentagon").onChange(function () {
+  								params.pentagon ? pass.bokehMaterial.defines.PENTAGON = "1" : delete pass.bokehMaterial.defines.PENTAGON;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+
+  						f.open();
+
+  						f = gui.addFolder("Luminosity");
+
+  						f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
+  								pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"];
+  						});
+  						f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function () {
+  								pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"];
+  						});
+
+  						gui.add(params, "vignette").onChange(function () {
+  								params.vignette ? pass.bokehMaterial.defines.VIGNETTE = "1" : delete pass.bokehMaterial.defines.VIGNETTE;
+  								pass.bokehMaterial.needsUpdate = true;
+  						});
+  				}
+  		}]);
+  		return Bokeh2Demo;
   }(Demo);
 
   /**
@@ -5017,7 +6244,6 @@
 
   						camera.position.set(-15, 0, -15);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -5086,14 +6312,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -5261,7 +6488,6 @@
   						camera.far = 50;
   						camera.position.set(2, 1, 2);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Objects.
 
@@ -5288,14 +6514,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -5461,7 +6688,6 @@
 
   						camera.position.set(10, 1, 10);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -5521,14 +6747,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -5714,7 +6941,6 @@
 
   						camera.position.set(10, 1, 10);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -5784,14 +7010,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -5834,6 +7061,7 @@
   								"noise intensity": pass.material.uniforms.noiseIntensity.value,
   								"scanlines intensity": pass.material.uniforms.scanlineIntensity.value,
   								"scanlines count": pass.scanlineDensity,
+  								"blend mode": "screen",
   								"greyscale intensity": pass.material.uniforms.greyscaleIntensity.value,
   								"sepia intensity": pass.material.uniforms.sepiaIntensity.value,
   								"vignette offset": pass.material.uniforms.vignetteOffset.value,
@@ -5854,6 +7082,19 @@
   						f.open();
 
   						f = gui.addFolder("Noise and scanlines");
+
+  						f.add(params, "blend mode", ["add", "screen"]).onChange(function () {
+
+  								if (params["blend mode"] === "add") {
+
+  										delete pass.material.defines.SCREEN_MODE;
+  								} else {
+
+  										pass.material.defines.SCREEN_MODE = "1";
+  								}
+
+  								pass.material.needsUpdate = true;
+  						});
 
   						f.add(params, "noise").onChange(function () {
   								params.noise ? pass.material.defines.NOISE = "1" : delete pass.material.defines.NOISE;
@@ -6042,7 +7283,6 @@
 
   						camera.position.set(6, 1, 6);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -6100,14 +7340,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -6179,30 +7420,18 @@
   var TWO_PI$6 = 2.0 * Math.PI;
 
   /**
-   * A bloom demo setup.
+   * A pixelation demo setup.
    *
-   * @class BloomDemo
+   * @class PixelationDemo
    * @constructor
    * @param {EffectComposer} composer - An effect composer.
    */
 
-  var BloomDemo = function (_Demo) {
-  		inherits(BloomDemo, _Demo);
+  var PixelationDemo = function (_Demo) {
+  		inherits(PixelationDemo, _Demo);
 
-  		function BloomDemo(composer) {
-  				classCallCheck(this, BloomDemo);
-
-  				/**
-       * A bloom pass.
-       *
-       * @property bloomPass
-       * @type BloomPass
-       * @private
-       */
-
-  				var _this = possibleConstructorReturn(this, (BloomDemo.__proto__ || Object.getPrototypeOf(BloomDemo)).call(this, composer));
-
-  				_this.bloomPass = null;
+  		function PixelationDemo(composer) {
+  				classCallCheck(this, PixelationDemo);
 
   				/**
        * An object.
@@ -6212,7 +7441,39 @@
        * @private
        */
 
+  				var _this = possibleConstructorReturn(this, (PixelationDemo.__proto__ || Object.getPrototypeOf(PixelationDemo)).call(this, composer));
+
   				_this.object = null;
+
+  				/**
+       * An object used for masking.
+       *
+       * @property maskObject
+       * @type Mesh
+       * @private
+       */
+
+  				_this.maskObject = null;
+
+  				/**
+       * A mask pass.
+       *
+       * @property maskPass
+       * @type MaskPass
+       * @private
+       */
+
+  				_this.maskPass = null;
+
+  				/**
+       * A pixelation pass.
+       *
+       * @property pixelationPass
+       * @type PixelationPass
+       * @private
+       */
+
+  				_this.pixelationPass = null;
 
   				return _this;
   		}
@@ -6224,7 +7485,7 @@
      * @param {Function} callback - A callback function.
      */
 
-  		createClass(BloomDemo, [{
+  		createClass(PixelationDemo, [{
   				key: "load",
   				value: function load(callback) {
   						var _this2 = this;
@@ -6233,7 +7494,7 @@
   						var loadingManager = this.loadingManager;
   						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
 
-  						var path = "textures/skies/space2/";
+  						var path = "textures/skies/space/";
   						var format = ".jpg";
   						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
 
@@ -6281,9 +7542,8 @@
 
   						// Camera.
 
-  						camera.position.set(-10, 6, 15);
+  						camera.position.set(10, 1, 10);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -6303,11 +7563,11 @@
   						// Random objects.
 
   						var object = new three.Object3D();
-
   						var geometry = new three.SphereBufferGeometry(1, 4, 4);
-  						var material = void 0;
-  						var i = void 0,
+
+  						var material = void 0,
   						    mesh = void 0;
+  						var i = void 0;
 
   						for (i = 0; i < 100; ++i) {
 
@@ -6318,81 +7578,60 @@
 
   								mesh = new three.Mesh(geometry, material);
   								mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-  								mesh.position.multiplyScalar(Math.random() * 4);
+  								mesh.position.multiplyScalar(Math.random() * 10);
   								mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-  								mesh.scale.multiplyScalar(Math.random() * 0.5);
+  								mesh.scale.multiplyScalar(Math.random());
   								object.add(mesh);
   						}
 
   						this.object = object;
-
   						scene.add(object);
 
-  						// Cage object.
+  						// Stencil mask scene.
 
-  						mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshLambertMaterial({
-  								color: 0x0b0b0b
-  						}));
+  						var maskScene = new three.Scene();
 
-  						object = new three.Object3D();
-  						var o0 = void 0,
-  						    o1 = void 0,
-  						    o2 = void 0;
-
-  						o0 = object.clone();
-
-  						var clone = mesh.clone();
-  						clone.position.set(-4, 0, 4);
-  						o0.add(clone);
-  						clone = mesh.clone();
-  						clone.position.set(4, 0, 4);
-  						o0.add(clone);
-  						clone = mesh.clone();
-  						clone.position.set(-4, 0, -4);
-  						o0.add(clone);
-  						clone = mesh.clone();
-  						clone.position.set(4, 0, -4);
-  						o0.add(clone);
-
-  						o1 = o0.clone();
-  						o1.rotation.set(Math.PI / 2, 0, 0);
-  						o2 = o0.clone();
-  						o2.rotation.set(0, 0, Math.PI / 2);
-
-  						object.add(o0);
-  						object.add(o1);
-  						object.add(o2);
-
-  						scene.add(object);
+  						mesh = new three.Mesh(new three.BoxBufferGeometry(4, 4, 4));
+  						this.maskObject = mesh;
+  						maskScene.add(mesh);
 
   						// Passes.
 
-  						composer.addPass(new RenderPass(scene, camera));
+  						var pass = new RenderPass(scene, camera);
+  						composer.addPass(pass);
 
-  						var pass = new BloomPass({
-  								resolutionScale: 0.5,
-  								strength: 1.0,
-  								distinction: 4.0
-  						});
+  						pass = new MaskPass(maskScene, camera);
+  						this.maskPass = pass;
+  						composer.addPass(pass);
 
+  						pass = new PixelationPass(5.0);
+  						this.pixelationPass = pass;
+  						composer.addPass(pass);
+
+  						composer.addPass(new ClearMaskPass());
+
+  						pass = new ShaderPass(new CopyMaterial());
   						pass.renderToScreen = true;
-  						this.bloomPass = pass;
   						composer.addPass(pass);
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
+  						var maskObject = this.maskObject;
 
-  						if (object !== null) {
+  						var time = void 0;
+
+  						if (object !== null && maskObject !== null) {
 
   								object.rotation.x += 0.001;
   								object.rotation.y += 0.005;
@@ -6404,6 +7643,13 @@
   								if (object.rotation.y >= TWO_PI$6) {
   										object.rotation.y -= TWO_PI$6;
   								}
+
+  								time = performance.now() * 0.001;
+
+  								maskObject.position.x = Math.cos(time / 1.5) * 4;
+  								maskObject.position.y = Math.sin(time) * 4;
+  								maskObject.rotation.x = time;
+  								maskObject.rotation.y = time * 0.5;
   						}
   				}
 
@@ -6418,506 +7664,19 @@
   				key: "configure",
   				value: function configure(gui) {
 
-  						var composer = this.composer;
-  						var pass = this.bloomPass;
+  						var maskPass = this.maskPass;
 
   						var params = {
-  								"resolution": pass.resolutionScale,
-  								"kernel size": pass.kernelSize,
-  								"intensity": pass.intensity,
-  								"distinction": pass.distinction,
-  								"blend": true,
-  								"blend mode": "screen"
+  								"use mask": maskPass.enabled
   						};
 
-  						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.resolutionScale = params.resolution;composer.setSize();
-  						});
-  						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
-  								pass.kernelSize = params["kernel size"];
-  						});
-  						gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
-  								pass.intensity = params.intensity;
-  						});
-
-  						var folder = gui.addFolder("Luminance");
-  						folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
-  								pass.distinction = params.distinction;
-  						});
-  						folder.open();
-
-  						gui.add(params, "blend").onChange(function () {
-
-  								pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
-  						});
-
-  						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
-
-  								if (params["blend mode"] === "add") {
-
-  										delete pass.combineMaterial.defines.SCREEN_MODE;
-  								} else {
-
-  										pass.combineMaterial.defines.SCREEN_MODE = "1";
-  								}
-
-  								pass.combineMaterial.needsUpdate = true;
+  						gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+  						gui.add(params, "use mask").onChange(function () {
+  								maskPass.enabled = params["use mask"];
   						});
   				}
   		}]);
-  		return BloomDemo;
-  }(Demo);
-
-  /**
-   * A bokeh demo setup.
-   *
-   * @class BokehDemo
-   * @constructor
-   * @param {EffectComposer} composer - An effect composer.
-   */
-
-  var BokehDemo = function (_Demo) {
-  		inherits(BokehDemo, _Demo);
-
-  		function BokehDemo(composer) {
-  				classCallCheck(this, BokehDemo);
-
-  				/**
-       * A bokeh pass.
-       *
-       * @property bloomPass
-       * @type BloomPass
-       * @private
-       */
-
-  				var _this = possibleConstructorReturn(this, (BokehDemo.__proto__ || Object.getPrototypeOf(BokehDemo)).call(this, composer));
-
-  				_this.bokehPass = null;
-
-  				return _this;
-  		}
-
-  		/**
-     * Loads scene assets.
-     *
-     * @method load
-     * @param {Function} callback - A callback function.
-     */
-
-  		createClass(BokehDemo, [{
-  				key: "load",
-  				value: function load(callback) {
-  						var _this2 = this;
-
-  						var assets = new Map();
-  						var loadingManager = this.loadingManager;
-  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-
-  						var path = "textures/skies/space3/";
-  						var format = ".jpg";
-  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-
-  						if (this.assets === null) {
-
-  								loadingManager.onProgress = function (item, loaded, total) {
-
-  										if (loaded === total) {
-
-  												_this2.assets = assets;
-  												_this2.initialise();
-  												callback();
-  										}
-  								};
-
-  								cubeTextureLoader.load(urls, function (textureCube) {
-
-  										assets.set("sky", textureCube);
-  								});
-  						} else {
-
-  								this.initialise();
-  								callback();
-  						}
-  				}
-
-  				/**
-       * Creates the scene.
-       *
-       * @method initialise
-       */
-
-  		}, {
-  				key: "initialise",
-  				value: function initialise() {
-
-  						var scene = this.scene;
-  						var camera = this.camera;
-  						var assets = this.assets;
-  						var composer = this.composer;
-
-  						// Controls.
-
-  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
-  						this.controls.enablePan = false;
-  						this.controls.minDistance = 2.5;
-  						this.controls.maxDistance = 40;
-
-  						// Camera.
-
-  						camera.near = 0.01;
-  						camera.far = 50;
-  						camera.position.set(3, 1, 3);
-  						camera.lookAt(this.controls.target);
-  						scene.add(camera);
-
-  						// Sky.
-
-  						scene.background = assets.get("sky");
-
-  						// Lights.
-
-  						var ambientLight = new three.AmbientLight(0x666666);
-  						var directionalLight = new three.DirectionalLight(0xffbbaa);
-
-  						directionalLight.position.set(-1, 1, 1);
-  						directionalLight.target.position.copy(scene.position);
-
-  						scene.add(directionalLight);
-  						scene.add(ambientLight);
-
-  						// Objects.
-
-  						var geometry = new three.SphereBufferGeometry(1, 64, 64);
-  						var material = new three.MeshBasicMaterial({
-  								color: 0xffff00,
-  								envMap: assets.get("sky")
-  						});
-
-  						var mesh = new three.Mesh(geometry, material);
-  						scene.add(mesh);
-
-  						// Passes.
-
-  						composer.addPass(new RenderPass(scene, camera));
-
-  						var pass = new BokehPass(camera, {
-  								focus: 0.36,
-  								aperture: 0.007,
-  								maxBlur: 0.025
-  						});
-
-  						pass.renderToScreen = true;
-  						this.bokehPass = pass;
-  						composer.addPass(pass);
-  				}
-
-  				/**
-       * Registers configuration options.
-       *
-       * @method configure
-       * @param {GUI} gui - A GUI.
-       */
-
-  		}, {
-  				key: "configure",
-  				value: function configure(gui) {
-
-  						var pass = this.bokehPass;
-
-  						var params = {
-  								"focus": pass.bokehMaterial.uniforms.focus.value,
-  								"aperture": pass.bokehMaterial.uniforms.aperture.value,
-  								"blur": pass.bokehMaterial.uniforms.maxBlur.value
-  						};
-
-  						gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function () {
-  								pass.bokehMaterial.uniforms.focus.value = params.focus;
-  						});
-  						gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function () {
-  								pass.bokehMaterial.uniforms.aperture.value = params.aperture;
-  						});
-  						gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function () {
-  								pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
-  						});
-  				}
-  		}]);
-  		return BokehDemo;
-  }(Demo);
-
-  /**
-   * A high quality bokeh demo setup.
-   *
-   * @class Bokeh2Demo
-   * @constructor
-   * @param {EffectComposer} composer - An effect composer.
-   */
-
-  var Bokeh2Demo = function (_Demo) {
-  		inherits(Bokeh2Demo, _Demo);
-
-  		function Bokeh2Demo(composer) {
-  				classCallCheck(this, Bokeh2Demo);
-
-  				/**
-       * A bokeh pass.
-       *
-       * @property bloomPass
-       * @type BloomPass
-       * @private
-       */
-
-  				var _this = possibleConstructorReturn(this, (Bokeh2Demo.__proto__ || Object.getPrototypeOf(Bokeh2Demo)).call(this, composer));
-
-  				_this.bokehPass = null;
-
-  				return _this;
-  		}
-
-  		/**
-     * Loads scene assets.
-     *
-     * @method load
-     * @param {Function} callback - A callback function.
-     */
-
-  		createClass(Bokeh2Demo, [{
-  				key: "load",
-  				value: function load(callback) {
-  						var _this2 = this;
-
-  						var assets = new Map();
-  						var loadingManager = this.loadingManager;
-  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-
-  						var path = "textures/skies/space3/";
-  						var format = ".jpg";
-  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-
-  						if (this.assets === null) {
-
-  								loadingManager.onProgress = function (item, loaded, total) {
-
-  										if (loaded === total) {
-
-  												_this2.assets = assets;
-  												_this2.initialise();
-  												callback();
-  										}
-  								};
-
-  								cubeTextureLoader.load(urls, function (textureCube) {
-
-  										assets.set("sky", textureCube);
-  								});
-  						} else {
-
-  								this.initialise();
-  								callback();
-  						}
-  				}
-
-  				/**
-       * Creates the scene.
-       *
-       * @method initialise
-       */
-
-  		}, {
-  				key: "initialise",
-  				value: function initialise() {
-
-  						var scene = this.scene;
-  						var camera = this.camera;
-  						var assets = this.assets;
-  						var composer = this.composer;
-
-  						// Controls.
-
-  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
-  						this.controls.enablePan = false;
-  						this.controls.minDistance = 2.5;
-  						this.controls.maxDistance = 40;
-
-  						// Camera.
-
-  						camera.near = 0.01;
-  						camera.far = 50;
-  						camera.position.set(3, 1, 3);
-  						camera.lookAt(this.controls.target);
-  						scene.add(camera);
-
-  						// Sky.
-
-  						scene.background = assets.get("sky");
-
-  						// Lights.
-
-  						var ambientLight = new three.AmbientLight(0x666666);
-  						var directionalLight = new three.DirectionalLight(0xffbbaa);
-
-  						directionalLight.position.set(-1, 1, 1);
-  						directionalLight.target.position.copy(scene.position);
-
-  						scene.add(directionalLight);
-  						scene.add(ambientLight);
-
-  						// Objects.
-
-  						var geometry = new three.SphereBufferGeometry(1, 64, 64);
-  						var material = new three.MeshBasicMaterial({
-  								color: 0xffff00,
-  								envMap: assets.get("sky")
-  						});
-
-  						var mesh = new three.Mesh(geometry, material);
-  						scene.add(mesh);
-
-  						// Passes.
-
-  						composer.addPass(new RenderPass(scene, camera));
-
-  						var pass = new Bokeh2Pass(camera, {
-  								rings: 3,
-  								samples: 2,
-  								showFocus: false,
-  								manualDoF: false,
-  								vignette: false,
-  								pentagon: false,
-  								shaderFocus: true,
-  								noise: true
-  						});
-
-  						pass.bokehMaterial.uniforms.focalStop.value = 64;
-  						pass.renderToScreen = true;
-  						this.bokehPass = pass;
-  						composer.addPass(pass);
-  				}
-
-  				/**
-       * Registers configuration options.
-       *
-       * @method configure
-       * @param {GUI} gui - A GUI.
-       */
-
-  		}, {
-  				key: "configure",
-  				value: function configure(gui) {
-
-  						var pass = this.bokehPass;
-
-  						var params = {
-  								"rings": Number.parseInt(pass.bokehMaterial.defines.RINGS_INT),
-  								"samples": Number.parseInt(pass.bokehMaterial.defines.SAMPLES_INT),
-  								"focal stop": pass.bokehMaterial.uniforms.focalStop.value,
-  								"focal length": pass.bokehMaterial.uniforms.focalLength.value,
-  								"shader focus": pass.bokehMaterial.defines.SHADER_FOCUS !== undefined,
-  								"focal depth": pass.bokehMaterial.uniforms.focalDepth.value,
-  								"focus coord X": pass.bokehMaterial.uniforms.focusCoords.value.x,
-  								"focus coord Y": pass.bokehMaterial.uniforms.focusCoords.value.y,
-  								"max blur": pass.bokehMaterial.uniforms.maxBlur.value,
-  								"lum threshold": pass.bokehMaterial.uniforms.luminanceThreshold.value,
-  								"lum gain": pass.bokehMaterial.uniforms.luminanceGain.value,
-  								"bias": pass.bokehMaterial.uniforms.bias.value,
-  								"fringe": pass.bokehMaterial.uniforms.fringe.value,
-  								"dithering": pass.bokehMaterial.uniforms.ditherStrength.value,
-  								"vignette": pass.bokehMaterial.defines.VIGNETTE !== undefined,
-  								"pentagon": pass.bokehMaterial.defines.PENTAGON !== undefined,
-  								"manual DoF": pass.bokehMaterial.defines.MANUAL_DOF !== undefined,
-  								"show focus": pass.bokehMaterial.defines.SHOW_FOCUS !== undefined,
-  								"noise": pass.bokehMaterial.defines.NOISE !== undefined
-  						};
-
-  						var f = gui.addFolder("Focus");
-
-  						f.add(params, "show focus").onChange(function () {
-  								params["show focus"] ? pass.bokehMaterial.defines.SHOW_FOCUS = "1" : delete pass.bokehMaterial.defines.SHOW_FOCUS;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.add(params, "shader focus").onChange(function () {
-  								params["shader focus"] ? pass.bokehMaterial.defines.SHADER_FOCUS = "1" : delete pass.bokehMaterial.defines.SHADER_FOCUS;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.add(params, "manual DoF").onChange(function () {
-  								params["manual DoF"] ? pass.bokehMaterial.defines.MANUAL_DOF = "1" : delete pass.bokehMaterial.defines.MANUAL_DOF;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function () {
-  								pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"];
-  						});
-  						f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function () {
-  								pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"];
-  						});
-  						f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"];
-  						});
-  						f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"];
-  						});
-
-  						f.open();
-
-  						f = gui.addFolder("Sampling");
-
-  						f.add(params, "rings").min(1).max(6).step(1).onChange(function () {
-  								pass.bokehMaterial.defines.RINGS_INT = params.rings.toFixed(0);
-  								pass.bokehMaterial.defines.RINGS_FLOAT = params.rings.toFixed(1);
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.add(params, "samples").min(1).max(6).step(1).onChange(function () {
-  								pass.bokehMaterial.defines.SAMPLES_INT = params.samples.toFixed(0);
-  								pass.bokehMaterial.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f = gui.addFolder("Blur");
-
-  						f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function () {
-  								pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"];
-  						});
-  						f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function () {
-  								pass.bokehMaterial.uniforms.bias.value = params.bias;
-  						});
-  						f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function () {
-  								pass.bokehMaterial.uniforms.fringe.value = params.fringe;
-  						});
-
-  						f.add(params, "noise").onChange(function () {
-  								params.noise ? pass.bokehMaterial.defines.NOISE = "1" : delete pass.bokehMaterial.defines.NOISE;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function () {
-  								pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering;
-  						});
-
-  						f.add(params, "pentagon").onChange(function () {
-  								params.pentagon ? pass.bokehMaterial.defines.PENTAGON = "1" : delete pass.bokehMaterial.defines.PENTAGON;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-
-  						f.open();
-
-  						f = gui.addFolder("Luminosity");
-
-  						f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"];
-  						});
-  						f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function () {
-  								pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"];
-  						});
-
-  						gui.add(params, "vignette").onChange(function () {
-  								params.vignette ? pass.bokehMaterial.defines.VIGNETTE = "1" : delete pass.bokehMaterial.defines.VIGNETTE;
-  								pass.bokehMaterial.needsUpdate = true;
-  						});
-  				}
-  		}]);
-  		return Bokeh2Demo;
+  		return PixelationDemo;
   }(Demo);
 
   /**
@@ -7063,7 +7822,6 @@
 
   						camera.position.set(-5, -1, -4);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -7230,6 +7988,368 @@
    */
 
   var TWO_PI$7 = 2.0 * Math.PI;
+
+  /**
+   * A render demo setup.
+   *
+   * @class RenderDemo
+   * @constructor
+   * @param {EffectComposer} composer - An effect composer.
+   */
+
+  var RenderDemo = function (_Demo) {
+  		inherits(RenderDemo, _Demo);
+
+  		function RenderDemo(composer) {
+  				classCallCheck(this, RenderDemo);
+
+  				/**
+       * An object.
+       *
+       * @property object
+       * @type Object3D
+       * @private
+       */
+
+  				var _this = possibleConstructorReturn(this, (RenderDemo.__proto__ || Object.getPrototypeOf(RenderDemo)).call(this, composer));
+
+  				_this.object = null;
+
+  				return _this;
+  		}
+
+  		/**
+     * Loads scene assets.
+     *
+     * @method load
+     * @param {Function} callback - A callback function.
+     */
+
+  		createClass(RenderDemo, [{
+  				key: "load",
+  				value: function load(callback) {
+  						var _this2 = this;
+
+  						var assets = new Map();
+  						var loadingManager = this.loadingManager;
+  						var textureLoader = new three.TextureLoader(loadingManager);
+  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+  						var path = "textures/skies/sunset/";
+  						var format = ".png";
+  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+  						if (this.assets === null) {
+
+  								loadingManager.onProgress = function (item, loaded, total) {
+
+  										if (loaded === total) {
+
+  												_this2.assets = assets;
+  												_this2.initialise();
+  												callback();
+  										}
+  								};
+
+  								cubeTextureLoader.load(urls, function (textureCube) {
+
+  										assets.set("sky", textureCube);
+  								});
+
+  								textureLoader.load("textures/crate.jpg", function (texture) {
+
+  										texture.wrapS = texture.wrapT = three.RepeatWrapping;
+  										assets.set("crate-color", texture);
+  								});
+  						} else {
+
+  								this.initialise();
+  								callback();
+  						}
+  				}
+
+  				/**
+       * Creates the scene.
+       *
+       * @method initialise
+       */
+
+  		}, {
+  				key: "initialise",
+  				value: function initialise() {
+
+  						var scene = this.scene;
+  						var camera = this.camera;
+  						var assets = this.assets;
+  						var composer = this.composer;
+
+  						// Controls.
+
+  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+  						// Camera.
+
+  						camera.position.set(-3, 0, -3);
+  						camera.lookAt(this.controls.target);
+
+  						// Sky.
+
+  						scene.background = assets.get("sky");
+
+  						// Lights.
+
+  						var ambientLight = new three.AmbientLight(0x666666);
+  						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+  						directionalLight.position.set(1440, 200, 2000);
+  						directionalLight.target.position.copy(scene.position);
+
+  						scene.add(directionalLight);
+  						scene.add(ambientLight);
+
+  						// Objects.
+
+  						var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
+  								color: 0xffffff,
+  								map: assets.get("crate-color")
+  						}));
+
+  						this.object = mesh;
+  						scene.add(mesh);
+
+  						// Passes.
+
+  						var pass = new RenderPass(scene, camera);
+  						pass.renderToScreen = true;
+
+  						composer.addPass(pass);
+  				}
+
+  				/**
+       * Updates this demo.
+       *
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
+       */
+
+  		}, {
+  				key: "update",
+  				value: function update(delta) {
+
+  						var object = this.object;
+
+  						if (object !== null) {
+
+  								object.rotation.x += 0.0005;
+  								object.rotation.y += 0.001;
+
+  								// Prevent overflow.
+  								if (object.rotation.x >= TWO_PI$7) {
+  										object.rotation.x -= TWO_PI$7;
+  								}
+  								if (object.rotation.y >= TWO_PI$7) {
+  										object.rotation.y -= TWO_PI$7;
+  								}
+  						}
+  				}
+  		}]);
+  		return RenderDemo;
+  }(Demo);
+
+  /**
+   * A shock wave demo setup.
+   *
+   * @class ShockWaveDemo
+   * @constructor
+   * @param {EffectComposer} composer - An effect composer.
+   */
+
+  var ShockWaveDemo = function (_Demo) {
+  		inherits(ShockWaveDemo, _Demo);
+
+  		function ShockWaveDemo(composer) {
+  				classCallCheck(this, ShockWaveDemo);
+
+  				/**
+       * A shock wave pass.
+       *
+       * @property shockWavePass
+       * @type ShockWavePass
+       * @private
+       */
+
+  				var _this = possibleConstructorReturn(this, (ShockWaveDemo.__proto__ || Object.getPrototypeOf(ShockWaveDemo)).call(this, composer));
+
+  				_this.shockWavePass = null;
+
+  				return _this;
+  		}
+
+  		/**
+     * Loads scene assets.
+     *
+     * @method load
+     * @param {Function} callback - A callback function.
+     */
+
+  		createClass(ShockWaveDemo, [{
+  				key: "load",
+  				value: function load(callback) {
+  						var _this2 = this;
+
+  						var assets = new Map();
+  						var loadingManager = this.loadingManager;
+  						var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+
+  						var path = "textures/skies/space3/";
+  						var format = ".jpg";
+  						var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+
+  						if (this.assets === null) {
+
+  								loadingManager.onProgress = function (item, loaded, total) {
+
+  										if (loaded === total) {
+
+  												_this2.assets = assets;
+  												_this2.initialise();
+  												callback();
+  										}
+  								};
+
+  								cubeTextureLoader.load(urls, function (textureCube) {
+
+  										assets.set("sky", textureCube);
+  								});
+  						} else {
+
+  								this.initialise();
+  								callback();
+  						}
+  				}
+
+  				/**
+       * Creates the scene.
+       *
+       * @method initialise
+       */
+
+  		}, {
+  				key: "initialise",
+  				value: function initialise() {
+
+  						var scene = this.scene;
+  						var camera = this.camera;
+  						var assets = this.assets;
+  						var composer = this.composer;
+
+  						// Controls.
+
+  						this.controls = new three.OrbitControls(camera, composer.renderer.domElement);
+
+  						// Camera.
+
+  						camera.position.set(5, 1, 5);
+  						camera.lookAt(this.controls.target);
+
+  						// Sky.
+
+  						scene.background = assets.get("sky");
+
+  						// Lights.
+
+  						var ambientLight = new three.AmbientLight(0x666666);
+  						var directionalLight = new three.DirectionalLight(0xffbbaa);
+
+  						directionalLight.position.set(-1, 1, 1);
+  						directionalLight.target.position.copy(scene.position);
+
+  						scene.add(directionalLight);
+  						scene.add(ambientLight);
+
+  						// Objects.
+
+  						var geometry = new three.SphereBufferGeometry(1, 64, 64);
+  						var material = new three.MeshBasicMaterial({
+  								color: 0xffff00,
+  								envMap: assets.get("sky")
+  						});
+
+  						var mesh = new three.Mesh(geometry, material);
+  						scene.add(mesh);
+
+  						// Passes.
+
+  						composer.addPass(new RenderPass(scene, camera));
+
+  						var pass = new ShockWavePass(camera, mesh.position, {
+  								speed: 2.0,
+  								maxRadius: 0.5,
+  								waveSize: 0.2,
+  								amplitude: 0.05
+  						});
+
+  						pass.renderToScreen = true;
+  						this.shockWavePass = pass;
+  						composer.addPass(pass);
+  				}
+
+  				/**
+       * Registers configuration options.
+       *
+       * @method configure
+       * @param {GUI} gui - A GUI.
+       */
+
+  		}, {
+  				key: "configure",
+  				value: function configure(gui) {
+
+  						var pass = this.shockWavePass;
+
+  						var params = {
+  								"speed": pass.speed,
+  								"size": pass.shockWaveMaterial.uniforms.size.value,
+  								"extent": pass.shockWaveMaterial.uniforms.maxRadius.value,
+  								"waveSize": pass.shockWaveMaterial.uniforms.waveSize.value,
+  								"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value,
+  								"explode": function explode() {
+  										pass.explode();
+  								}
+  						};
+
+  						gui.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function () {
+  								pass.speed = params.speed;
+  						});
+  						gui.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function () {
+  								pass.shockWaveMaterial.uniforms.size.value = params.size;
+  						});
+  						gui.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function () {
+  								pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent;
+  						});
+  						gui.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function () {
+  								pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize;
+  						});
+  						gui.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function () {
+  								pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude;
+  						});
+  						gui.add(params, "explode");
+  				}
+  		}]);
+  		return ShockWaveDemo;
+  }(Demo);
+
+  /**
+   * PI times two.
+   *
+   * @property TWO_PI
+   * @type Number
+   * @private
+   * @static
+   * @final
+   */
+
+  var TWO_PI$8 = 2.0 * Math.PI;
 
   /**
    * An SMAA demo setup.
@@ -7422,7 +8542,6 @@
 
   						camera.position.set(-3, 0, -3);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -7512,14 +8631,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var objectA = this.objectA;
   						var objectB = this.objectB;
@@ -7534,11 +8654,11 @@
   								objectC.rotation.copy(objectA.rotation);
 
   								// Prevent overflow.
-  								if (objectA.rotation.x >= TWO_PI$7) {
-  										objectA.rotation.x -= TWO_PI$7;
+  								if (objectA.rotation.x >= TWO_PI$8) {
+  										objectA.rotation.x -= TWO_PI$8;
   								}
-  								if (objectA.rotation.y >= TWO_PI$7) {
-  										objectA.rotation.y -= TWO_PI$7;
+  								if (objectA.rotation.y >= TWO_PI$8) {
+  										objectA.rotation.y -= TWO_PI$8;
   								}
   						}
   				}
@@ -7638,7 +8758,7 @@
    * @final
    */
 
-  var TWO_PI$8 = 2.0 * Math.PI;
+  var TWO_PI$9 = 2.0 * Math.PI;
 
   /**
    * A tone-mapping demo setup.
@@ -7752,7 +8872,6 @@
 
   						camera.position.set(-3, 0, -3);
   						camera.lookAt(this.controls.target);
-  						scene.add(camera);
 
   						// Sky.
 
@@ -7794,14 +8913,15 @@
   				}
 
   				/**
-       * Creates the scene.
+       * Updates this demo.
        *
-       * @method createScene
+       * @method update
+       * @param {Number} delta - The time since the last frame in seconds.
        */
 
   		}, {
   				key: "update",
-  				value: function update() {
+  				value: function update(delta) {
 
   						var object = this.object;
 
@@ -7811,11 +8931,11 @@
   								object.rotation.y += 0.001;
 
   								// Prevent overflow.
-  								if (object.rotation.x >= TWO_PI$8) {
-  										object.rotation.x -= TWO_PI$8;
+  								if (object.rotation.x >= TWO_PI$9) {
+  										object.rotation.x -= TWO_PI$9;
   								}
-  								if (object.rotation.y >= TWO_PI$8) {
-  										object.rotation.y -= TWO_PI$8;
+  								if (object.rotation.y >= TWO_PI$9) {
+  										object.rotation.y -= TWO_PI$9;
   								}
   						}
   				}
@@ -7914,6 +9034,7 @@
   						renderer.setPixelRatio(window.devicePixelRatio);
 
   						return new EffectComposer(renderer, {
+  								stencilBuffer: true,
   								depthTexture: true
   						});
   				}();
@@ -7957,6 +9078,8 @@
   						demos.set("film", new FilmDemo(composer));
   						demos.set("glitch", new GlitchDemo(composer));
   						demos.set("god-rays", new GodRaysDemo(composer));
+  						demos.set("pixelation", new PixelationDemo(composer));
+  						demos.set("shock-wave", new ShockWaveDemo(composer));
   						demos.set("smaa", new SMAADemo(composer));
   						demos.set("tone-mapping", new ToneMappingDemo(composer));
 
@@ -8133,12 +9256,14 @@
 
   						(function render(now) {
 
+  								var delta = clock.getDelta();
+
   								requestAnimationFrame(render);
 
   								stats.begin();
 
-  								demo.update();
-  								composer.render(clock.getDelta());
+  								demo.update(delta);
+  								composer.render(delta);
 
   								stats.end();
   						})();
