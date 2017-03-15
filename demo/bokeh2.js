@@ -113,7 +113,6 @@ export class Bokeh2Demo extends Demo {
 		camera.far = 50;
 		camera.position.set(3, 1, 3);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

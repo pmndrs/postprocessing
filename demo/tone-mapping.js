@@ -140,7 +140,6 @@ export class ToneMappingDemo extends Demo {
 
 		camera.position.set(-3, 0, -3);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

@@ -165,7 +165,6 @@ export class GodRaysDemo extends Demo {
 
 		camera.position.set(-5, -1, -4);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

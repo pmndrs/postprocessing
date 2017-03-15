@@ -13,7 +13,7 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
  * @submodule passes
  * @constructor
  * @param {Scene} [scene] - The scene to render.
- * @param {Camera} [camera] - The camera will be added to the given scene if it has no parent.
+ * @param {Camera} [camera] - The camera.
  * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
  */
 
@@ -75,6 +75,12 @@ export class Pass {
 
 			this.quad.frustumCulled = false;
 
+			if(this.scene !== null) {
+
+				this.scene.add(this.quad);
+
+			}
+
 		}
 
 		/**
@@ -111,23 +117,6 @@ export class Pass {
 		 */
 
 		this.renderToScreen = false;
-
-		// Add the camera and the quad to the scene.
-		if(this.scene !== null) {
-
-			if(this.camera !== null && this.camera.parent === null) {
-
-				this.scene.add(this.camera);
-
-			}
-
-			if(this.quad !== null) {
-
-				this.scene.add(this.quad);
-
-			}
-
-		}
 
 	}
 

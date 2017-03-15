@@ -104,7 +104,6 @@ export class DepthDemo extends Demo {
 		camera.far = 50;
 		camera.position.set(2, 1, 2);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Objects.
 

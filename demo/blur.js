@@ -170,7 +170,6 @@ export class BlurDemo extends Demo {
 
 		camera.position.set(-15, 0, -15);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

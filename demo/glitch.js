@@ -142,7 +142,6 @@ export class GlitchDemo extends Demo {
 
 		camera.position.set(6, 1, 6);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

@@ -134,7 +134,6 @@ export class BloomDemo extends Demo {
 
 		camera.position.set(-10, 6, 15);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 

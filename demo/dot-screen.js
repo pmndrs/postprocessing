@@ -132,7 +132,6 @@ export class DotScreenDemo extends Demo {
 
 		camera.position.set(10, 1, 10);
 		camera.lookAt(this.controls.target);
-		scene.add(camera);
 
 		// Sky.
 
