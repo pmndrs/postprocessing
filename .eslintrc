@@ -38,7 +38,7 @@
 		"wrap-iife": "error",
 
 		"no-undef-init": "error",
-		"no-unused-vars": ["error", { "vars": "all", "args": "none" }],
+		"no-unused-vars": ["warn", { "vars": "all", "args": "none" }],
 
 		"camelcase": "error",
 		"eol-last": "error",
@@ -63,7 +63,7 @@
 		"space-in-parens": ["error", "never"],
 		"space-infix-ops": "error",
 		"space-unary-ops": ["error", { "words": true, "nonwords": false }],
-		"spaced-comment": ["error", "always"],
+		"spaced-comment": ["warn", "always"],
 		"yoda": ["error", "never"],
 
 		"no-var": "error"
