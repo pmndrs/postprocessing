@@ -27,7 +27,9 @@ export class PixelationMaterial extends ShaderMaterial {
 
 				tDiffuse: new Uniform(null),
 				granularity: new Uniform(1.0),
-				resolution: new Uniform(new Vector2(1.0, 1.0))
+				resolution: new Uniform(new Vector2(1.0, 1.0)),
+				dx: new Uniform(1.0),
+				dy: new Uniform(1.0)
 
 			},
 
@@ -38,6 +40,41 @@ export class PixelationMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
+
+	}
+
+	/**
+	 * The pixel granularity.
+	 *
+	 * @property granularity
+	 * @type Number
+	 */
+
+	get granularity() { return this.uniforms.granularity.value; }
+
+	set granularity(x) {
+
+		const uniforms = this.uniforms;
+		const resolution = uniforms.resolution.value;
+
+		uniforms.granularity.value = x;
+		uniforms.dx.value = x / resolution.x;
+		uniforms.dy.value = x / resolution.y;
+
+	}
+
+	/**
+	 * Sets the resolution.
+	 *
+	 * @method setResolution
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setResolution(width, height) {
+
+		this.uniforms.resolution.value.set(width, height);
+		this.granularity = this.granularity;
 
 	}
 

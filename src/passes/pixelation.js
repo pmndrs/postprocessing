@@ -44,7 +44,7 @@ export class PixelationPass extends Pass {
 	 * @default 30.0
 	 */
 
-	get granularity() { return this.pixelationMaterial.uniforms.granularity.value; }
+	get granularity() { return this.pixelationMaterial.granularity; }
 
 	set granularity(x) {
 
@@ -58,7 +58,7 @@ export class PixelationPass extends Pass {
 
 			}
 
-			this.pixelationMaterial.uniforms.granularity.value = x;
+			this.pixelationMaterial.granularity = x;
 
 		}
 
@@ -91,7 +91,7 @@ export class PixelationPass extends Pass {
 
 	setSize(width, height) {
 
-		this.pixelationMaterial.uniforms.resolution.value.set(width, height);
+		this.pixelationMaterial.setResolution(width, height);
 
 	}
 
