@@ -94,7 +94,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * The speed of the shock wave animation.
 		 *
-		 * @property time
+		 * @property speed
 		 * @type Number
 		 * @default 2.0
 		 */
