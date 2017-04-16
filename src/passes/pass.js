@@ -92,7 +92,6 @@ export class Pass {
 		 *
 		 * @property needsSwap
 		 * @type Boolean
-		 * @private
 		 * @default false
 		 */
 

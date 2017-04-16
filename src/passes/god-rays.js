@@ -223,7 +223,7 @@ export class GodRaysPass extends Pass {
 	 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
 	 * this value.
 	 *
-	 * @property kernelSize
+	 * @property resolutionScale
 	 * @type Number
 	 * @default 0.5
 	 */
