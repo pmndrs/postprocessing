@@ -7,7 +7,7 @@ import vertex from "./glsl/shader.vert";
  * Full-screen tone-mapping shader material.
  *
  * Reference:
- *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+ *  http://www.cis.rit.edu/people/faculty/ferwerda/publications/sig02_paper.pdf
  *
  * @class ToneMappingMaterial
  * @submodule materials

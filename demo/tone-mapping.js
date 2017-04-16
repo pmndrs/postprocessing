@@ -225,6 +225,7 @@ export class ToneMappingDemo extends Demo {
 			"distinction": pass.luminosityMaterial.uniforms.distinction.value,
 			"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
 			"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
+			"min lum": pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value,
 			"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
 			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
 		};
@@ -236,6 +237,7 @@ export class ToneMappingDemo extends Demo {
 		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params.distinction; });
 		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"]; });
 		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
+		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"]; });
 		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"]; });
 		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
 		f.open();
