@@ -1,5 +1,5 @@
 /**
- * postprocessing v2.1.0 build Mar 15 2017
+ * postprocessing v2.1.1 build Apr 17 2017
  * https://github.com/vanruesc/postprocessing
  * Copyright 2017 Raoul van Rüschen, Zlib
  */
@@ -10,7 +10,7 @@
   (factory((global.POSTPROCESSING = global.POSTPROCESSING || {}),global.THREE));
 }(this, (function (exports,three) { 'use strict';
 
-  var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor = vec4(adaptedLum, adaptedLum, adaptedLum, 1.0);\r\n\r\n}\r\n";
+  var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
 
   var vertex = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -108,6 +108,7 @@
 
   												tPreviousLum: new three.Uniform(null),
   												tCurrentLum: new three.Uniform(null),
+  												minLuminance: new three.Uniform(0.01),
   												delta: new three.Uniform(0.0),
   												tau: new three.Uniform(1.0)
 
@@ -1106,7 +1107,7 @@
 
               tDiffuse: new three.Uniform(null),
               distinction: new three.Uniform(1.0),
-              range: new three.Uniform(range)
+              range: new three.Uniform(range !== null ? range : new three.Vector2())
 
            },
 
@@ -1128,7 +1129,7 @@
      return LuminosityMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform float granularity;\r\nuniform vec2 resolution;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel;\r\n\r\n\tif(granularity > 0.0) {\r\n\r\n\t\tfloat dx = granularity / resolution.x;\r\n\t\tfloat dy = granularity / resolution.y;\r\n\r\n\t\tvec2 coord = vec2(\r\n\t\t\tdx * (floor(vUv.x / dx) + 0.5),\r\n\t\t\tdy * (floor(vUv.y / dy) + 0.5)\r\n\t\t);\r\n\r\n\t\ttexel = texture2D(tDiffuse, coord);\r\n\r\n\t} else {\r\n\r\n\t\ttexel = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texel;\r\n\r\n}\r\n";
+  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform float granularity;\r\nuniform float dx;\r\nuniform float dy;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel;\r\n\r\n\tif(granularity > 0.0) {\r\n\r\n\t\tvec2 coord = vec2(\r\n\t\t\tdx * (floor(vUv.x / dx) + 0.5),\r\n\t\t\tdy * (floor(vUv.y / dy) + 0.5)\r\n\t\t);\r\n\r\n\t\ttexel = texture2D(tDiffuse, coord);\r\n\r\n\t} else {\r\n\r\n\t\ttexel = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texel;\r\n\r\n}\r\n";
 
   var vertex$12 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -1145,32 +1146,73 @@
    */
 
   var PixelationMaterial = function (_ShaderMaterial) {
-  			inherits(PixelationMaterial, _ShaderMaterial);
+  	inherits(PixelationMaterial, _ShaderMaterial);
 
-  			function PixelationMaterial() {
-  						classCallCheck(this, PixelationMaterial);
-  						return possibleConstructorReturn(this, (PixelationMaterial.__proto__ || Object.getPrototypeOf(PixelationMaterial)).call(this, {
+  	function PixelationMaterial() {
+  		classCallCheck(this, PixelationMaterial);
+  		return possibleConstructorReturn(this, (PixelationMaterial.__proto__ || Object.getPrototypeOf(PixelationMaterial)).call(this, {
 
-  									type: "PixelationMaterial",
+  			type: "PixelationMaterial",
 
-  									uniforms: {
+  			uniforms: {
 
-  												tDiffuse: new three.Uniform(null),
-  												granularity: new three.Uniform(1.0),
-  												resolution: new three.Uniform(new three.Vector2(1.0, 1.0))
+  				tDiffuse: new three.Uniform(null),
+  				granularity: new three.Uniform(1.0),
+  				resolution: new three.Uniform(new three.Vector2(1.0, 1.0)),
+  				dx: new three.Uniform(1.0),
+  				dy: new three.Uniform(1.0)
 
-  									},
+  			},
 
-  									fragmentShader: fragment$12,
-  									vertexShader: vertex$12,
+  			fragmentShader: fragment$12,
+  			vertexShader: vertex$12,
 
-  									depthWrite: false,
-  									depthTest: false
+  			depthWrite: false,
+  			depthTest: false
 
-  						}));
-  			}
+  		}));
+  	}
 
-  			return PixelationMaterial;
+  	/**
+    * The pixel granularity.
+    *
+    * @property granularity
+    * @type Number
+    */
+
+  	createClass(PixelationMaterial, [{
+  		key: "setResolution",
+
+
+  		/**
+     * Sets the resolution.
+     *
+     * @method setResolution
+     * @param {Number} width - The width.
+     * @param {Number} height - The height.
+     */
+
+  		value: function setResolution(width, height) {
+
+  			this.uniforms.resolution.value.set(width, height);
+  			this.granularity = this.granularity;
+  		}
+  	}, {
+  		key: "granularity",
+  		get: function get$$1() {
+  			return this.uniforms.granularity.value;
+  		},
+  		set: function set$$1(x) {
+
+  			var uniforms = this.uniforms;
+  			var resolution = uniforms.resolution.value;
+
+  			uniforms.granularity.value = x;
+  			uniforms.dx.value = x / resolution.x;
+  			uniforms.dy.value = x / resolution.y;
+  		}
+  	}]);
+  	return PixelationMaterial;
   }(three.ShaderMaterial);
 
   var fragment$13 = "#include <common>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform vec2 center;\r\nuniform float aspect;\r\nuniform float waveSize;\r\nuniform float radius;\r\nuniform float maxRadius;\r\nuniform float amplitude;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\r\n\tvec2 difference = vUv * aspectCorrection - center * aspectCorrection;\r\n\tfloat distance = sqrt(dot(difference, difference)) * vSize;\r\n\r\n\tvec2 displacement = vec2(0.0);\r\n\r\n\tif(distance > radius) {\r\n\r\n\t\tif(distance < radius + waveSize) {\r\n\r\n\t\t\tfloat angle = (distance - radius) * PI2 / waveSize;\r\n\t\t\tfloat cosSin = (1.0 - cos(angle)) * 0.5;\r\n\r\n\t\t\tfloat extent = maxRadius + waveSize;\r\n\t\t\tfloat decay = max(extent - distance * distance, 0.0) / extent;\r\n\r\n\t\t\tdisplacement = ((cosSin * amplitude * difference) / distance) * decay;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texture2D(tDiffuse, vUv - displacement);\r\n\r\n}\r\n";
@@ -1431,7 +1473,7 @@
    * Full-screen tone-mapping shader material.
    *
    * Reference:
-   *  http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf
+   *  http://www.cis.rit.edu/people/faculty/ferwerda/publications/sig02_paper.pdf
    *
    * @class ToneMappingMaterial
    * @submodule materials
@@ -1567,7 +1609,6 @@
        *
        * @property needsSwap
        * @type Boolean
-       * @private
        * @default false
        */
 
@@ -3341,7 +3382,7 @@
      * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
      * this value.
      *
-     * @property kernelSize
+     * @property resolutionScale
      * @type Number
      * @default 0.5
      */
@@ -3743,12 +3784,12 @@
   		key: "setSize",
   		value: function setSize(width, height) {
 
-  			this.pixelationMaterial.uniforms.resolution.value.set(width, height);
+  			this.pixelationMaterial.setResolution(width, height);
   		}
   	}, {
   		key: "granularity",
   		get: function get$$1() {
-  			return this.pixelationMaterial.uniforms.granularity.value;
+  			return this.pixelationMaterial.granularity;
   		},
   		set: function set$$1(x) {
 
@@ -3761,7 +3802,7 @@
   					x += 1;
   				}
 
-  				this.pixelationMaterial.uniforms.granularity.value = x;
+  				this.pixelationMaterial.granularity = x;
   			}
   		}
   	}]);
@@ -4061,7 +4102,7 @@
   				/**
        * The speed of the shock wave animation.
        *
-       * @property time
+       * @property speed
        * @type Number
        * @default 2.0
        */
