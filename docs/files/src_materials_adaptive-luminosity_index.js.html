@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.1.0</em>
+            <em>API Docs for: 2.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -157,6 +157,7 @@ export class AdaptiveLuminosityMaterial extends ShaderMaterial {
 
 				tPreviousLum: new Uniform(null),
 				tCurrentLum: new Uniform(null),
+				minLuminance: new Uniform(0.01),
 				delta: new Uniform(0.0),
 				tau: new Uniform(1.0)
 

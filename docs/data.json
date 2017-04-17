@@ -2,7 +2,7 @@
     "project": {
         "name": "postprocessing",
         "description": "A post processing library that provides the means to implement 2D filter effects for three.js.",
-        "version": "2.1.0",
+        "version": "2.1.1",
         "url": "https://github.com/vanruesc/postprocessing"
     },
     "files": {
@@ -1222,7 +1222,7 @@
             "namespace": "",
             "file": "src\\materials\\tone-mapping\\index.js",
             "line": 6,
-            "description": "Full-screen tone-mapping shader material.\n\nReference:\n http://www.graphics.cornell.edu/~jaf/publications/sig02_paper.pdf",
+            "description": "Full-screen tone-mapping shader material.\n\nReference:\n http://www.cis.rit.edu/people/faculty/ferwerda/publications/sig02_paper.pdf",
             "submodule": "materials",
             "extends": "ShaderMaterial",
             "is_constructor": 1
@@ -2737,6 +2737,39 @@
             "submodule": "materials"
         },
         {
+            "file": "src\\materials\\pixelation\\index.js",
+            "line": 46,
+            "description": "The pixel granularity.",
+            "itemtype": "property",
+            "name": "granularity",
+            "type": "Number",
+            "class": "PixelationMaterial",
+            "module": "postprocessing",
+            "submodule": "materials"
+        },
+        {
+            "file": "src\\materials\\pixelation\\index.js",
+            "line": 66,
+            "description": "Sets the resolution.",
+            "itemtype": "method",
+            "name": "setResolution",
+            "params": [
+                {
+                    "name": "width",
+                    "description": "- The width.",
+                    "type": "Number"
+                },
+                {
+                    "name": "height",
+                    "description": "- The height.",
+                    "type": "Number"
+                }
+            ],
+            "class": "PixelationMaterial",
+            "module": "postprocessing",
+            "submodule": "materials"
+        },
+        {
             "file": "src\\materials\\smaa-weights\\index.js",
             "line": 58,
             "description": "The area pattern recognition image.",
@@ -3873,7 +3906,7 @@
             "line": 219,
             "description": "The resolution scale.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
-            "name": "kernelSize",
+            "name": "resolutionScale",
             "type": "Number",
             "default": "0.5",
             "class": "GodRaysPass",
@@ -4101,8 +4134,6 @@
             "itemtype": "property",
             "name": "needsSwap",
             "type": "Boolean",
-            "access": "private",
-            "tagname": "",
             "default": "false",
             "class": "Pass",
             "module": "postprocessing",
@@ -4110,7 +4141,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 101,
+            "line": 100,
             "description": "Enabled flag.",
             "itemtype": "property",
             "name": "enabled",
@@ -4122,7 +4153,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 111,
+            "line": 110,
             "description": "Render to screen flag.",
             "itemtype": "property",
             "name": "renderToScreen",
@@ -4134,7 +4165,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 123,
+            "line": 122,
             "description": "Renders the effect.\n\nThis is an abstract method that must be overridden.",
             "itemtype": "method",
             "name": "render",
@@ -4177,7 +4208,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 143,
+            "line": 142,
             "description": "Updates this pass with the renderer's size.\n\nThis is an abstract method that may be overridden in case you want to be\ninformed about the main render size.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method before\nthis pass is initialised and every time its own size is updated.",
             "itemtype": "method",
             "name": "setSize",
@@ -4202,7 +4233,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 161,
+            "line": 160,
             "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the\nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render\ntargets by performing a preliminary render operation.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method when\nthis pass is added to its queue.",
             "itemtype": "method",
             "name": "initialise",
@@ -4227,7 +4258,7 @@
         },
         {
             "file": "src\\passes\\pass.js",
-            "line": 183,
+            "line": 182,
             "description": "Performs a shallow search for properties that define a dispose method and\ndeletes them. The pass will be inoperative after this method was called!\n\nDisposable objects:\n - render targets\n - materials\n - textures\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method when it\nis being destroyed. You may, however, use it independently to free memory\nwhen you are certain that you don't need this pass anymore.",
             "itemtype": "method",
             "name": "dispose",
@@ -4612,7 +4643,7 @@
             "line": 94,
             "description": "The speed of the shock wave animation.",
             "itemtype": "property",
-            "name": "time",
+            "name": "speed",
             "type": "Number",
             "default": "2.0",
             "class": "ShockWavePass",

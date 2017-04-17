@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.1.0</em>
+            <em>API Docs for: 2.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -125,7 +125,7 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-import { ShaderMaterial, Uniform } from &quot;three&quot;;
+import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/shader.frag&quot;;
 import vertex from &quot;./glsl/shader.vert&quot;;
@@ -162,7 +162,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 				tDiffuse: new Uniform(null),
 				distinction: new Uniform(1.0),
-				range: new Uniform(range)
+				range: new Uniform((range !== null) ? range : new Vector2())
 
 			},
 

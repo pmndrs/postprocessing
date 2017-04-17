@@ -17,7 +17,7 @@
                 <h1><img src="../assets/css/logo.png" title="postprocessing" width="117" height="52"></h1>
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 2.1.0</em>
+            <em>API Docs for: 2.1.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -456,10 +456,6 @@
 
                             </li>
                             <li class="index-item property">
-                                <a href="#property_kernelSize">kernelSize</a>
-
-                            </li>
-                            <li class="index-item property">
                                 <a href="#property_lightScene">lightScene</a>
 
                             </li>
@@ -479,7 +475,7 @@
                                 <a href="#property_name">name</a>
 
                             </li>
-                            <li class="index-item property private inherited">
+                            <li class="index-item property inherited">
                                 <a href="#property_needsSwap">needsSwap</a>
 
                             </li>
@@ -509,6 +505,10 @@
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_renderToScreen">renderToScreen</a>
+
+                            </li>
+                            <li class="index-item property">
+                                <a href="#property_resolutionScale">resolutionScale</a>
 
                             </li>
                             <li class="index-item property">
@@ -650,7 +650,7 @@
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#method_dispose">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l183"><code>src\passes\pass.js:183</code></a>
+        <a href="../files/src_passes_pass.js.html#l182"><code>src\passes\pass.js:182</code></a>
         </p>
 
 
@@ -1021,7 +1021,7 @@ The final result is combined with the read buffer.</p>
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_enabled">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l101"><code>src\passes\pass.js:101</code></a>
+        <a href="../files/src_passes_pass.js.html#l100"><code>src\passes\pass.js:100</code></a>
         </p>
 
 
@@ -1110,35 +1110,6 @@ The final result is combined with the read buffer.</p>
     </div>
 
         <p><strong>Default:</strong> KernelSize.LARGE</p>
-
-
-</div>
-<div id="property_kernelSize" class="property item">
-    <h3 class="name"><code>kernelSize</code></h3>
-    <span class="type">Number</span>
-
-
-
-
-
-    <div class="meta">
-                <p>
-                Defined in
-        <a href="../files/src_passes_god-rays.js.html#l219"><code>src\passes\god-rays.js:219</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>The resolution scale.</p>
-<p>You need to call
-<a href="../classes/EffectComposer.html#method_setSize" class="crosslink">setSize</a> after changing
-this value.</p>
-
-    </div>
-
-        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>
@@ -1266,12 +1237,11 @@ this value.</p>
 
 
 </div>
-<div id="property_needsSwap" class="property item private inherited">
+<div id="property_needsSwap" class="property item inherited">
     <h3 class="name"><code>needsSwap</code></h3>
     <span class="type">Boolean</span>
 
 
-        <span class="flag private">private</span>
 
 
 
@@ -1473,7 +1443,7 @@ Assign your shader material to this mesh!
     <div class="meta">
                 <p>Inherited from
                 <a href="../classes/Pass.html#property_renderToScreen">Pass</a>:
-        <a href="../files/src_passes_pass.js.html#l111"><code>src\passes\pass.js:111</code></a>
+        <a href="../files/src_passes_pass.js.html#l110"><code>src\passes\pass.js:110</code></a>
         </p>
 
 
@@ -1484,6 +1454,35 @@ Assign your shader material to this mesh!
     </div>
 
         <p><strong>Default:</strong> false</p>
+
+
+</div>
+<div id="property_resolutionScale" class="property item">
+    <h3 class="name"><code>resolutionScale</code></h3>
+    <span class="type">Number</span>
+
+
+
+
+
+    <div class="meta">
+                <p>
+                Defined in
+        <a href="../files/src_passes_god-rays.js.html#l219"><code>src\passes\god-rays.js:219</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>The resolution scale.</p>
+<p>You need to call
+<a href="../classes/EffectComposer.html#method_setSize" class="crosslink">setSize</a> after changing
+this value.</p>
+
+    </div>
+
+        <p><strong>Default:</strong> 0.5</p>
 
 
 </div>
