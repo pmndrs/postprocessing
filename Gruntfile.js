@@ -1,12 +1,14 @@
+const loadGruntConfig = require("load-grunt-config");
+const timeGrunt = require("time-grunt");
 const path = require("path");
 
 module.exports = function(grunt) {
 
 	const date = grunt.template.today("mmm dd yyyy");
 
-	require("time-grunt")(grunt);
+	timeGrunt(grunt);
 
-	require("load-grunt-config")(grunt, {
+	loadGruntConfig(grunt, {
 
 		configPath: path.join(process.cwd(), "grunt/config"),
 
