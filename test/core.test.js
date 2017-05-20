@@ -8,7 +8,7 @@ module.exports = {
 
 		"can be instantiated and disposed": function(test) {
 
-			let composer = new lib.EffectComposer();
+			const composer = new lib.EffectComposer();
 			test.ok(composer);
 			composer.dispose();
 
