@@ -39,7 +39,7 @@ export class Pass {
 		 *
 		 * @property scene
 		 * @type Scene
-		 * @private
+		 * @protected
 		 * @default new Scene()
 		 */
 
@@ -50,7 +50,7 @@ export class Pass {
 		 *
 		 * @property camera
 		 * @type Camera
-		 * @private
+		 * @protected
 		 * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
 		 */
 
@@ -63,7 +63,7 @@ export class Pass {
 		 *
 		 * @property quad
 		 * @type Mesh
-		 * @private
+		 * @protected
 		 * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
 		 * @example
 		 *     this.quad.material = this.myMaterial;
