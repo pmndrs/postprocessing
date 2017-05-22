@@ -277,11 +277,6 @@ to false.</p>
                                 <a href="#property_camera">camera</a>
 
                             </li>
-                            <li class="index-item property private">
-                                <a href="#property_CLEAR_COLOR">CLEAR_COLOR</a>
-
-                                    <span class="flag static">static</span>
-                            </li>
                             <li class="index-item property">
                                 <a href="#property_clearAlpha">clearAlpha</a>
 
@@ -289,6 +284,11 @@ to false.</p>
                             <li class="index-item property">
                                 <a href="#property_clearColor">clearColor</a>
 
+                            </li>
+                            <li class="index-item property private">
+                                <a href="#property_color">color</a>
+
+                                    <span class="flag static">static</span>
                             </li>
                             <li class="index-item property inherited">
                                 <a href="#property_enabled">enabled</a>
@@ -397,9 +397,9 @@ when you are certain that you don't need this pass anymore.
     <div class="description">
         Performs initialisation tasks.
 
-By implementing this abstract method you gain access to the renderer.
-You'll also be able to configure your custom render targets to use the
-appropriate format (RGB or RGBA).
+By overriding this method you gain access to the renderer. You'll also be
+able to configure your custom render targets to use the appropriate format
+(RGB or RGBA).
 
 The provided renderer can be used to warm up special off-screen render
 targets by performing a preliminary render operation.
@@ -561,8 +561,8 @@ this pass is added to its queue.
     <div class="description">
         Updates this pass with the renderer's size.
 
-This is an abstract method that may be overridden in case you want to be
-informed about the main render size.
+You may override this method in case you want to be informed about the main
+render size.
 
 The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
 this pass is initialised and every time its own size is updated.
@@ -643,34 +643,6 @@ this pass is initialised and every time its own size is updated.
 
 
 </div>
-<div id="property_CLEAR_COLOR" class="property item private">
-    <h3 class="name"><code>CLEAR_COLOR</code></h3>
-    <span class="type">Color</span>
-
-
-        <span class="flag private">private</span>
-
-
-        <span class="flag static">static</span>
-
-    <div class="meta">
-                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
-                <p>
-                Defined in
-        <a href="../files/src_passes_clear.js.html#l4"><code>src\passes\clear.js:4</code></a>
-        </p>
-
-
-    </div>
-
-    <div class="description">
-        <p>Used for saving the original clear color of the renderer.</p>
-
-    </div>
-
-
-
-</div>
 <div id="property_clearAlpha" class="property item">
     <h3 class="name"><code>clearAlpha</code></h3>
     <span class="type">Number</span>
@@ -720,6 +692,34 @@ this pass is initialised and every time its own size is updated.
     </div>
 
         <p><strong>Default:</strong> null</p>
+
+
+</div>
+<div id="property_color" class="property item private">
+    <h3 class="name"><code>color</code></h3>
+    <span class="type">Color</span>
+
+
+        <span class="flag private">private</span>
+
+
+        <span class="flag static">static</span>
+
+    <div class="meta">
+                    <p>Provided by the <a href="../modules/postprocessing.html">postprocessing</a> module.</p>
+                <p>
+                Defined in
+        <a href="../files/src_passes_clear.js.html#l4"><code>src\passes\clear.js:4</code></a>
+        </p>
+
+
+    </div>
+
+    <div class="description">
+        <p>Used for saving the original clear color of the renderer.</p>
+
+    </div>
+
 
 
 </div>

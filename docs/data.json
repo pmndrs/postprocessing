@@ -3255,7 +3255,7 @@
             "line": 4,
             "description": "Used for saving the original clear color of the renderer.",
             "itemtype": "property",
-            "name": "CLEAR_COLOR",
+            "name": "color",
             "type": "Color",
             "access": "private",
             "tagname": "",
@@ -3747,35 +3747,41 @@
             "itemtype": "property",
             "name": "lightScene",
             "type": "Scene",
+            "access": "private",
+            "tagname": "",
             "class": "GodRaysPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 74,
+            "line": 75,
             "description": "The main scene.",
             "itemtype": "property",
             "name": "mainScene",
             "type": "Scene",
+            "access": "private",
+            "tagname": "",
             "class": "GodRaysPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 83,
+            "line": 85,
             "description": "The main camera.",
             "itemtype": "property",
             "name": "mainCamera",
             "type": "Camera",
+            "access": "private",
+            "tagname": "",
             "class": "GodRaysPass",
             "module": "postprocessing",
             "submodule": "passes"
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 92,
+            "line": 95,
             "description": "A pass that only renders the light source.",
             "itemtype": "property",
             "name": "renderPassLight",
@@ -3788,7 +3794,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 102,
+            "line": 105,
             "description": "A pass that renders the masked scene over the light.",
             "itemtype": "property",
             "name": "renderPassMask",
@@ -3801,7 +3807,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 117,
+            "line": 120,
             "description": "A blur pass.",
             "itemtype": "property",
             "name": "blurPass",
@@ -3814,7 +3820,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 127,
+            "line": 130,
             "description": "A render target.",
             "itemtype": "property",
             "name": "renderTargetX",
@@ -3827,7 +3833,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 139,
+            "line": 142,
             "description": "A second render target.",
             "itemtype": "property",
             "name": "renderTargetY",
@@ -3840,7 +3846,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 151,
+            "line": 154,
             "description": "A render target for the masked light scene.",
             "itemtype": "property",
             "name": "renderTargetMask",
@@ -3853,7 +3859,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 167,
+            "line": 170,
             "description": "The light source.",
             "itemtype": "property",
             "name": "lightSource",
@@ -3864,7 +3870,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 176,
+            "line": 179,
             "description": "The light position in screen space.",
             "itemtype": "property",
             "name": "screenPosition",
@@ -3877,7 +3883,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 186,
+            "line": 189,
             "description": "A god rays shader material.",
             "itemtype": "property",
             "name": "godRaysMaterial",
@@ -3890,7 +3896,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 205,
+            "line": 208,
             "description": "A combine shader material.",
             "itemtype": "property",
             "name": "combineMaterial",
@@ -3903,7 +3909,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 219,
+            "line": 222,
             "description": "The resolution scale.\n\nYou need to call\n{{#crossLink \"EffectComposer/setSize:method\"}}{{/crossLink}} after changing\nthis value.",
             "itemtype": "property",
             "name": "resolutionScale",
@@ -3915,7 +3921,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 239,
+            "line": 242,
             "description": "The blur kernel size.",
             "itemtype": "property",
             "name": "kernelSize",
@@ -3927,7 +3933,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 255,
+            "line": 258,
             "description": "The overall intensity of the effect.",
             "itemtype": "property",
             "name": "intensity",
@@ -3939,7 +3945,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 275,
+            "line": 278,
             "description": "The number of samples per pixel.\n\nThis value must be carefully chosen. A higher value increases the GPU load.",
             "itemtype": "property",
             "name": "samples",
@@ -3951,7 +3957,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 301,
+            "line": 304,
             "description": "Renders the scene.\n\nThe god rays pass has four phases:\n\nMask Phase:\n First, the light source is rendered. Then the scene is rendered into the\n same buffer using a mask override material with depth test enabled.\n\nPreliminary Blur Phase:\n The masked scene is blurred.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines\n towards the light source.\n\nComposite Phase:\n The final result is combined with the read buffer.",
             "itemtype": "method",
             "name": "render",
@@ -3978,7 +3984,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 384,
+            "line": 387,
             "description": "Adjusts the format of the render targets.",
             "itemtype": "method",
             "name": "initialise",
@@ -4000,7 +4006,7 @@
         },
         {
             "file": "src\\passes\\god-rays.js",
-            "line": 408,
+            "line": 411,
             "description": "Updates this pass with the renderer's size.",
             "itemtype": "method",
             "name": "setSize",
@@ -4209,7 +4215,7 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 142,
-            "description": "Updates this pass with the renderer's size.\n\nThis is an abstract method that may be overridden in case you want to be\ninformed about the main render size.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method before\nthis pass is initialised and every time its own size is updated.",
+            "description": "Updates this pass with the renderer's size.\n\nYou may override this method in case you want to be informed about the main\nrender size.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method before\nthis pass is initialised and every time its own size is updated.",
             "itemtype": "method",
             "name": "setSize",
             "params": [
@@ -4234,7 +4240,7 @@
         {
             "file": "src\\passes\\pass.js",
             "line": 160,
-            "description": "Performs initialisation tasks.\n\nBy implementing this abstract method you gain access to the renderer.\nYou'll also be able to configure your custom render targets to use the\nappropriate format (RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render\ntargets by performing a preliminary render operation.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method when\nthis pass is added to its queue.",
+            "description": "Performs initialisation tasks.\n\nBy overriding this method you gain access to the renderer. You'll also be\nable to configure your custom render targets to use the appropriate format\n(RGB or RGBA).\n\nThe provided renderer can be used to warm up special off-screen render\ntargets by performing a preliminary render operation.\n\nThe {{#crossLink \"EffectComposer\"}}{{/crossLink}} calls this method when\nthis pass is added to its queue.",
             "itemtype": "method",
             "name": "initialise",
             "params": [
@@ -4580,7 +4586,7 @@
             "line": 17,
             "description": "A vector.",
             "itemtype": "property",
-            "name": "V",
+            "name": "v",
             "type": "Vector3",
             "access": "private",
             "tagname": "",
@@ -4594,7 +4600,7 @@
             "line": 29,
             "description": "A vector.",
             "itemtype": "property",
-            "name": "AB",
+            "name": "ab",
             "type": "Vector3",
             "access": "private",
             "tagname": "",
