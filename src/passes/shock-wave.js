@@ -17,26 +17,26 @@ const HALF_PI = Math.PI * 0.5;
 /**
  * A vector.
  *
- * @property V
+ * @property v
  * @type Vector3
  * @private
  * @static
  * @final
  */
 
-const V = new Vector3();
+const v = new Vector3();
 
 /**
  * A vector.
  *
- * @property AB
+ * @property ab
  * @type Vector3
  * @private
  * @static
  * @final
  */
 
-const AB = new Vector3();
+const ab = new Vector3();
 
 /**
  * A shock wave pass.
@@ -187,11 +187,11 @@ export class ShockWavePass extends Pass {
 		if(this.active) {
 
 			// Calculate direction vectors.
-			mainCamera.getWorldDirection(V);
-			AB.copy(mainCamera.position).sub(epicenter);
+			mainCamera.getWorldDirection(v);
+			ab.copy(mainCamera.position).sub(epicenter);
 
 			// Don't render the effect if the object is behind the camera.
-			if(V.angleTo(AB) > HALF_PI) {
+			if(v.angleTo(ab) > HALF_PI) {
 
 				// Scale the effect based on distance to the object.
 				uniforms.cameraDistance.value = mainCamera.position.distanceTo(epicenter);

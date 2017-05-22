@@ -4,13 +4,13 @@ import { Pass } from "./pass.js";
 /**
  * Used for saving the original clear color of the renderer.
  *
- * @property CLEAR_COLOR
+ * @property color
  * @type Color
  * @private
  * @static
  */
 
-const CLEAR_COLOR = new Color();
+const color = new Color();
 
 /**
  * A clear pass.
@@ -74,7 +74,7 @@ export class ClearPass extends Pass {
 
 		if(clearColor !== null) {
 
-			CLEAR_COLOR.copy(renderer.getClearColor());
+			color.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
 			renderer.setClearColor(clearColor, this.clearAlpha);
 
@@ -85,7 +85,7 @@ export class ClearPass extends Pass {
 
 		if(clearColor !== null) {
 
-			renderer.setClearColor(CLEAR_COLOR, clearAlpha);
+			renderer.setClearColor(color, clearAlpha);
 
 		}
 
