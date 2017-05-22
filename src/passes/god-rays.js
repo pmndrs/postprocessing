@@ -67,6 +67,7 @@ export class GodRaysPass extends Pass {
 		 *
 		 * @property lightScene
 		 * @type Scene
+		 * @private
 		 */
 
 		this.lightScene = new Scene();
@@ -76,6 +77,7 @@ export class GodRaysPass extends Pass {
 		 *
 		 * @property mainScene
 		 * @type Scene
+		 * @private
 		 */
 
 		this.mainScene = scene;
@@ -85,6 +87,7 @@ export class GodRaysPass extends Pass {
 		 *
 		 * @property mainCamera
 		 * @type Camera
+		 * @private
 		 */
 
 		this.mainCamera = camera;

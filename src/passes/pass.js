@@ -142,8 +142,8 @@ export class Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * This is an abstract method that may be overridden in case you want to be
-	 * informed about the main render size.
+	 * You may override this method in case you want to be informed about the main
+	 * render size.
 	 *
 	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
 	 * this pass is initialised and every time its own size is updated.
@@ -160,9 +160,9 @@ export class Pass {
 	/**
 	 * Performs initialisation tasks.
 	 *
-	 * By implementing this abstract method you gain access to the renderer.
-	 * You'll also be able to configure your custom render targets to use the
-	 * appropriate format (RGB or RGBA).
+	 * By overriding this method you gain access to the renderer. You'll also be
+	 * able to configure your custom render targets to use the appropriate format
+	 * (RGB or RGBA).
 	 *
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
