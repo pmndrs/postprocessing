@@ -4,7 +4,6 @@ import { App } from "./app.js";
  * Starts the program.
  *
  * @private
- * @static
  * @param {Event} event - An event.
  */
 

@@ -159,7 +159,6 @@ export class App {
 		 * Activates the currently selected demo.
 		 *
 		 * @private
-		 * @static
 		 */
 
 		function activateDemo() {
@@ -182,7 +181,6 @@ export class App {
 		 * Loads the currently selected demo.
 		 *
 		 * @private
-		 * @static
 		 */
 
 		function loadDemo() {
@@ -219,7 +217,6 @@ export class App {
 		 * Toggles the visibility of the interface on alt key press.
 		 *
 		 * @private
-		 * @static
 		 * @param {Event} event - An event.
 		 */
 
@@ -238,7 +235,6 @@ export class App {
 		 * Handles browser resizing.
 		 *
 		 * @private
-		 * @static
 		 * @param {Event} event - An event.
 		 */
 
@@ -275,7 +271,6 @@ export class App {
 		 * The main render loop.
 		 *
 		 * @private
-		 * @static
 		 * @param {DOMHighResTimeStamp} now - An execution timestamp.
 		 */
 
