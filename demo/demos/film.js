@@ -16,24 +16,23 @@ import { Demo } from "./demo.js";
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
  * A film demo setup.
- *
- * @class FilmDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class FilmDemo extends Demo {
+
+	/**
+	 * Constructs a new film demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -42,8 +41,7 @@ export class FilmDemo extends Demo {
 		/**
 		 * A film pass.
 		 *
-		 * @property filmPass
-		 * @type FilmPass
+		 * @type {FilmPass}
 		 * @private
 		 */
 
@@ -52,8 +50,7 @@ export class FilmDemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -64,7 +61,6 @@ export class FilmDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -113,8 +109,6 @@ export class FilmDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -204,7 +198,6 @@ export class FilmDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -228,7 +221,6 @@ export class FilmDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

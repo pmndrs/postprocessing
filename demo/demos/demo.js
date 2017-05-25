@@ -2,21 +2,22 @@ import { FogExp2, LoadingManager, PerspectiveCamera, Scene } from "three";
 
 /**
  * A demo base class.
- *
- * @class Demo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class Demo {
+
+	/**
+	 * Constructs a new demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		/**
 		 * An effect composer.
 		 *
-		 * @property composer
-		 * @type EffectComposer
+		 * @type {EffectComposer}
 		 */
 
 		this.composer = composer;
@@ -24,8 +25,7 @@ export class Demo {
 		/**
 		 * A loading manager.
 		 *
-		 * @property loadingManager
-		 * @type LoadingManager
+		 * @type {LoadingManager}
 		 */
 
 		this.loadingManager = new LoadingManager();
@@ -33,8 +33,7 @@ export class Demo {
 		/**
 		 * An asset map.
 		 *
-		 * @property assets
-		 * @type Map
+		 * @type {Map}
 		 */
 
 		this.assets = null;
@@ -42,8 +41,7 @@ export class Demo {
 		/**
 		 * A scene.
 		 *
-		 * @property scene
-		 * @type Scene
+		 * @type {Scene}
 		 */
 
 		this.scene = new Scene();
@@ -52,8 +50,7 @@ export class Demo {
 		/**
 		 * A camera.
 		 *
-		 * @property camera
-		 * @type PerspectiveCamera
+		 * @type {PerspectiveCamera}
 		 */
 
 		this.camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
@@ -61,8 +58,7 @@ export class Demo {
 		/**
 		 * Camera controls.
 		 *
-		 * @property controls
-		 * @type OrbitControls
+		 * @type {OrbitControls}
 		 */
 
 		this.controls = null;
@@ -72,7 +68,6 @@ export class Demo {
 	/**
 	 * Loads the demo.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -84,8 +79,6 @@ export class Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {}
@@ -93,7 +86,6 @@ export class Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -102,7 +94,6 @@ export class Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
@@ -111,8 +102,6 @@ export class Demo {
 	/**
 	 * Resets this demo.
 	 *
-	 * @method reset
-	 * @chainable
 	 * @return {Demo} This demo.
 	 */
 

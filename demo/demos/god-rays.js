@@ -18,13 +18,15 @@ import { Demo } from "./demo.js";
 
 /**
  * A god rays demo setup.
- *
- * @class BloomDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class GodRaysDemo extends Demo {
+
+	/**
+	 * Constructs a new god rays demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -33,8 +35,7 @@ export class GodRaysDemo extends Demo {
 		/**
 		 * A god rays pass.
 		 *
-		 * @property godRaysPass
-		 * @type GodRaysPass
+		 * @type {GodRaysPass}
 		 * @private
 		 */
 
@@ -43,8 +44,7 @@ export class GodRaysDemo extends Demo {
 		/**
 		 * A sun.
 		 *
-		 * @property sun
-		 * @type Points
+		 * @type {Points}
 		 * @private
 		 */
 
@@ -53,8 +53,7 @@ export class GodRaysDemo extends Demo {
 		/**
 		 * A directional light.
 		 *
-		 * @property directionalLight
-		 * @type DirectionalLight
+		 * @type {DirectionalLight}
 		 * @private
 		 */
 
@@ -65,7 +64,6 @@ export class GodRaysDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -145,8 +143,6 @@ export class GodRaysDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -247,7 +243,6 @@ export class GodRaysDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

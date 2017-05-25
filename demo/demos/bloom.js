@@ -18,24 +18,23 @@ import { Demo } from "./demo.js";
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
  * A bloom demo setup.
- *
- * @class BloomDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class BloomDemo extends Demo {
+
+	/**
+	 * Constructs a new bloom demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -44,8 +43,7 @@ export class BloomDemo extends Demo {
 		/**
 		 * A bloom pass.
 		 *
-		 * @property bloomPass
-		 * @type BloomPass
+		 * @type {BloomPass}
 		 * @private
 		 */
 
@@ -54,8 +52,7 @@ export class BloomDemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -66,7 +63,6 @@ export class BloomDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -115,8 +111,6 @@ export class BloomDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -235,7 +229,6 @@ export class BloomDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -259,7 +252,6 @@ export class BloomDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

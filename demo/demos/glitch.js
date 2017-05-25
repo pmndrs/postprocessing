@@ -5,93 +5,54 @@ import {
 	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
+	NearestFilter,
 	Object3D,
 	OrbitControls,
-	SphereBufferGeometry
+	SphereBufferGeometry,
+	TextureLoader
 } from "three";
 
-import {
-	BlurPass,
-	CombineMaterial,
-	KernelSize,
-	RenderPass,
-	SavePass,
-	ShaderPass
-} from "../src";
-
+import { GlitchMode, GlitchPass, RenderPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A blur demo setup.
- *
- * @class BlurDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
+ * A glitch demo setup.
  */
 
-export class BlurDemo extends Demo {
+export class GlitchDemo extends Demo {
+
+	/**
+	 * Constructs a new glitch demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
-		 * A render pass.
+		 * A glitch pass.
 		 *
-		 * @property renderPass
-		 * @type RenderPass
+		 * @type {GlitchPass}
 		 * @private
 		 */
 
-		this.renderPass = null;
-
-		/**
-		 * A save pass.
-		 *
-		 * @property savePass
-		 * @type SavePass
-		 * @private
-		 */
-
-		this.savePass = null;
-
-		/**
-		 * A blur pass.
-		 *
-		 * @property blurPass
-		 * @type BlurPass
-		 * @private
-		 */
-
-		this.blurPass = null;
-
-		/**
-		 * A combine pass.
-		 *
-		 * @property combinePass
-		 * @type ShaderPass
-		 * @private
-		 */
-
-		this.combinePass = null;
+		this.glitchPass = null;
 
 		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -102,7 +63,6 @@ export class BlurDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -110,10 +70,11 @@ export class BlurDemo extends Demo {
 
 		const assets = new Map();
 		const loadingManager = this.loadingManager;
+		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/sunset/";
-		const format = ".png";
+		const path = "textures/skies/space4/";
+		const format = ".jpg";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
 			path + "py" + format, path + "ny" + format,
@@ -140,6 +101,13 @@ export class BlurDemo extends Demo {
 
 			});
 
+			textureLoader.load("textures/perturb.jpg", function(texture) {
+
+				texture.magFilter = texture.minFilter = NearestFilter;
+				assets.set("perturb-map", texture);
+
+			});
+
 		} else {
 
 			this.initialise();
@@ -151,8 +119,6 @@ export class BlurDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -168,7 +134,7 @@ export class BlurDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(-15, 0, -15);
+		camera.position.set(6, 1, 6);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -180,7 +146,7 @@ export class BlurDemo extends Demo {
 		const ambientLight = new AmbientLight(0x666666);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
-		directionalLight.position.set(1440, 200, 2000);
+		directionalLight.position.set(-1, 1, 1);
 		directionalLight.target.position.copy(scene.position);
 
 		scene.add(directionalLight);
@@ -188,11 +154,11 @@ export class BlurDemo extends Demo {
 
 		// Random objects.
 
-		let object = new Object3D();
+		const object = new Object3D();
+		const geometry = new SphereBufferGeometry(1, 4, 4);
 
-		let geometry = new SphereBufferGeometry(1, 4, 4);
-		let material;
-		let i, mesh;
+		let material, mesh;
+		let i;
 
 		for(i = 0; i < 100; ++i) {
 
@@ -211,29 +177,18 @@ export class BlurDemo extends Demo {
 		}
 
 		this.object = object;
-
 		scene.add(object);
 
 		// Passes.
 
-		let pass = new RenderPass(scene, camera);
-		this.renderPass = pass;
-		composer.addPass(pass);
+		composer.addPass(new RenderPass(scene, camera));
 
-		pass = new SavePass();
-		this.savePass = pass;
-		composer.addPass(pass);
+		const pass = new GlitchPass({
+			perturbMap: assets.get("perturb-map")
+		});
 
-		pass = new BlurPass();
-		this.blurPass = pass;
-		composer.addPass(pass);
-
-		pass = new ShaderPass(new CombineMaterial(), "texture1");
-		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
-		pass.material.uniforms.opacity1.value = 1.0;
-		pass.material.uniforms.opacity2.value = 0.0;
 		pass.renderToScreen = true;
-		this.combinePass = pass;
+		this.glitchPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -241,7 +196,6 @@ export class BlurDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -251,8 +205,8 @@ export class BlurDemo extends Demo {
 
 		if(object !== null) {
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+			object.rotation.x += 0.005;
+			object.rotation.y += 0.01;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
@@ -265,39 +219,36 @@ export class BlurDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
 	configure(gui) {
 
-		const composer = this.composer;
-		const renderPass = this.renderPass;
-		const blurPass = this.blurPass;
-		const combinePass = this.combinePass;
+		const pass = this.glitchPass;
+		const perturbMap = pass.perturbMap;
 
 		const params = {
-			"enabled": blurPass.enabled,
-			"resolution": blurPass.resolutionScale,
-			"kernel size": blurPass.kernelSize,
-			"strength": combinePass.material.uniforms.opacity1.value
+			"mode": pass.mode,
+			"custom noise": true
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
-
-		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
-
-			combinePass.material.uniforms.opacity1.value = params.strength;
-			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
-
+		gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function() {
+			pass.mode = params.mode;
 		});
 
-		gui.add(params, "enabled").onChange(function() {
+		gui.add(params, "custom noise").onChange(function() {
 
-			renderPass.renderToScreen = !params.enabled;
-			blurPass.enabled = params.enabled;
-			combinePass.enabled = params.enabled;
+			if(params["custom noise"]) {
+
+				pass.perturbMap = perturbMap;
+
+			} else {
+
+				// Prevent the custom perturbation map from getting deleted.
+				pass.perturbMap = null;
+				pass.generatePerturbMap(64);
+
+			}
 
 		});
 

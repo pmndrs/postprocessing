@@ -1,5 +1,6 @@
 import {
 	AmbientLight,
+	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
 	FlatShading,
@@ -7,64 +8,87 @@ import {
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
+	Scene,
 	SphereBufferGeometry
 } from "three";
 
-import { DotScreenPass, RenderPass } from "../src";
+import {
+	ClearMaskPass,
+	CopyMaterial,
+	MaskPass,
+	PixelationPass,
+	RenderPass,
+	ShaderPass
+} from "../src";
+
 import { Demo } from "./demo.js";
 
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A dot screen demo setup.
- *
- * @class DotScreenDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
+ * A pixelation demo setup.
  */
 
-export class DotScreenDemo extends Demo {
+export class PixelationDemo extends Demo {
+
+	/**
+	 * Constructs a new pixelation demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
-		 * A dot screen pass.
-		 *
-		 * @property dotScreenPass
-		 * @type DotScreenPass
-		 * @private
-		 */
-
-		this.dotScreenPass = null;
-
-		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
 		this.object = null;
+
+		/**
+		 * An object used for masking.
+		 *
+		 * @type {Mesh}
+		 * @private
+		 */
+
+		this.maskObject = null;
+
+		/**
+		 * A mask pass.
+		 *
+		 * @type {MaskPass}
+		 * @private
+		 */
+
+		this.maskPass = null;
+
+		/**
+		 * A pixelation pass.
+		 *
+		 * @type {PixelationPass}
+		 * @private
+		 */
+
+		this.pixelationPass = null;
 
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -74,7 +98,7 @@ export class DotScreenDemo extends Demo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space3/";
+		const path = "textures/skies/space/";
 		const format = ".jpg";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
@@ -113,8 +137,6 @@ export class DotScreenDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -175,18 +197,31 @@ export class DotScreenDemo extends Demo {
 		this.object = object;
 		scene.add(object);
 
+		// Stencil mask scene.
+
+		const maskScene = new Scene();
+
+		mesh = new Mesh(new BoxBufferGeometry(4, 4, 4));
+		this.maskObject = mesh;
+		maskScene.add(mesh);
+
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
+		let pass = new RenderPass(scene, camera);
+		composer.addPass(pass);
 
-		const pass = new DotScreenPass({
-			scale: 0.8,
-			angle: Math.PI * 0.5,
-			intensity: 0.25
-		});
+		pass = new MaskPass(maskScene, camera);
+		this.maskPass = pass;
+		composer.addPass(pass);
 
+		pass = new PixelationPass(5.0);
+		this.pixelationPass = pass;
+		composer.addPass(pass);
+
+		composer.addPass(new ClearMaskPass());
+
+		pass = new ShaderPass(new CopyMaterial());
 		pass.renderToScreen = true;
-		this.dotScreenPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -194,22 +229,31 @@ export class DotScreenDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
 	update(delta) {
 
 		const object = this.object;
+		const maskObject = this.maskObject;
 
-		if(object !== null) {
+		let time;
 
-			object.rotation.x += 0.0005;
-			object.rotation.y += 0.001;
+		if(object !== null && maskObject !== null) {
+
+			object.rotation.x += 0.001;
+			object.rotation.y += 0.005;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
 			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+
+			time = performance.now() * 0.001;
+
+			maskObject.position.x = Math.cos(time / 1.5) * 4;
+			maskObject.position.y = Math.sin(time) * 4;
+			maskObject.rotation.x = time;
+			maskObject.rotation.y = time * 0.5;
 
 		}
 
@@ -218,37 +262,19 @@ export class DotScreenDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
 	configure(gui) {
 
-		const pass = this.dotScreenPass;
+		const maskPass = this.maskPass;
 
 		const params = {
-			"average": pass.material.defines.AVERAGE !== undefined,
-			"scale": pass.material.uniforms.scale.value,
-			"angle": pass.material.uniforms.angle.value,
-			"intensity": pass.material.uniforms.intensity.value,
-			"center X": pass.material.uniforms.offsetRepeat.value.x,
-			"center Y": pass.material.uniforms.offsetRepeat.value.y
+			"use mask": maskPass.enabled
 		};
 
-		gui.add(params, "average").onChange(function() {
-
-			params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
-			pass.material.needsUpdate = true;
-
-		});
-
-		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params.scale; });
-		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params.angle; });
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params.intensity; });
-
-		let f = gui.addFolder("Center");
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
+		gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+		gui.add(params, "use mask").onChange(function() { maskPass.enabled = params["use mask"]; });
 
 	}
 

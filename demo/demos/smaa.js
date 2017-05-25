@@ -19,24 +19,23 @@ import { Demo } from "./demo.js";
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
  * An SMAA demo setup.
- *
- * @class SMAADemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class SMAADemo extends Demo {
+
+	/**
+	 * Constructs a new SMAA demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -45,8 +44,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * The main renderer.
 		 *
-		 * @property renderer
-		 * @type WebGLRenderer
+		 * @type {WebGLRenderer}
 		 * @private
 		 */
 
@@ -55,8 +53,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * A secondary renderer.
 		 *
-		 * @property renderer2
-		 * @type WebGLRenderer
+		 * @type {WebGLRenderer}
 		 * @private
 		 */
 
@@ -65,8 +62,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * Secondary camera controls.
 		 *
-		 * @property controls2
-		 * @type OrbitControls
+		 * @type {OrbitControls}
 		 * @private
 		 */
 
@@ -75,8 +71,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * A render pass.
 		 *
-		 * @property renderPass
-		 * @type RenderPass
+		 * @type {RenderPass}
 		 * @private
 		 */
 
@@ -85,8 +80,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * An SMAA pass.
 		 *
-		 * @property smaaPass
-		 * @type SMAAPass
+		 * @type {SMAAPass}
 		 * @private
 		 */
 
@@ -95,8 +89,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property objectA
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -105,8 +98,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property objectB
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -115,8 +107,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property objectC
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -127,7 +118,6 @@ export class SMAADemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -184,8 +174,6 @@ export class SMAADemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -322,7 +310,6 @@ export class SMAADemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -351,7 +338,6 @@ export class SMAADemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
@@ -415,8 +401,6 @@ export class SMAADemo extends Demo {
 	/**
 	 * Resets this demo.
 	 *
-	 * @method reset
-	 * @chainable
 	 * @return {Demo} This demo.
 	 */
 

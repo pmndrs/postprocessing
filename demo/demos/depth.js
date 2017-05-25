@@ -11,24 +11,23 @@ import { Demo } from "./demo.js";
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
  * A depth texture demo setup.
- *
- * @class DepthDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class DepthDemo extends Demo {
+
+	/**
+	 * Constructs a new depth demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -37,8 +36,7 @@ export class DepthDemo extends Demo {
 		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -47,8 +45,7 @@ export class DepthDemo extends Demo {
 		/**
 		 * A texture pass.
 		 *
-		 * @property texturePass
-		 * @type TexturePass
+		 * @type {TexturePass}
 		 * @private
 		 */
 
@@ -57,8 +54,7 @@ export class DepthDemo extends Demo {
 		/**
 		 * A depth pass.
 		 *
-		 * @property depthPass
-		 * @type DepthPass
+		 * @type {DepthPass}
 		 * @private
 		 */
 
@@ -69,7 +65,6 @@ export class DepthDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -82,8 +77,6 @@ export class DepthDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -136,7 +129,6 @@ export class DepthDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -160,7 +152,6 @@ export class DepthDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

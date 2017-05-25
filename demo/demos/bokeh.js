@@ -13,13 +13,15 @@ import { Demo } from "./demo.js";
 
 /**
  * A bokeh demo setup.
- *
- * @class BokehDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class BokehDemo extends Demo {
+
+	/**
+	 * Constructs a new bokeh demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -28,8 +30,7 @@ export class BokehDemo extends Demo {
 		/**
 		 * A bokeh pass.
 		 *
-		 * @property bloomPass
-		 * @type BloomPass
+		 * @type {BloomPass}
 		 * @private
 		 */
 
@@ -40,7 +41,6 @@ export class BokehDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -89,8 +89,6 @@ export class BokehDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -159,7 +157,6 @@ export class BokehDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

@@ -5,57 +5,52 @@ import {
 	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
-	NearestFilter,
 	Object3D,
 	OrbitControls,
-	SphereBufferGeometry,
-	TextureLoader
+	SphereBufferGeometry
 } from "three";
 
-import { GlitchMode, GlitchPass, RenderPass } from "../src";
+import { DotScreenPass, RenderPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A glitch demo setup.
- *
- * @class GlitchDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
+ * A dot screen demo setup.
  */
 
-export class GlitchDemo extends Demo {
+export class DotScreenDemo extends Demo {
+
+	/**
+	 * Constructs a new dot screen demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
-		 * A glitch pass.
+		 * A dot screen pass.
 		 *
-		 * @property glitchPass
-		 * @type GlitchPass
+		 * @type {DotScreenPass}
 		 * @private
 		 */
 
-		this.glitchPass = null;
+		this.dotScreenPass = null;
 
 		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -66,7 +61,6 @@ export class GlitchDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -74,10 +68,9 @@ export class GlitchDemo extends Demo {
 
 		const assets = new Map();
 		const loadingManager = this.loadingManager;
-		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space4/";
+		const path = "textures/skies/space3/";
 		const format = ".jpg";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
@@ -105,13 +98,6 @@ export class GlitchDemo extends Demo {
 
 			});
 
-			textureLoader.load("textures/perturb.jpg", function(texture) {
-
-				texture.magFilter = texture.minFilter = NearestFilter;
-				assets.set("perturb-map", texture);
-
-			});
-
 		} else {
 
 			this.initialise();
@@ -123,8 +109,6 @@ export class GlitchDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -140,7 +124,7 @@ export class GlitchDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(6, 1, 6);
+		camera.position.set(10, 1, 10);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -189,12 +173,14 @@ export class GlitchDemo extends Demo {
 
 		composer.addPass(new RenderPass(scene, camera));
 
-		const pass = new GlitchPass({
-			perturbMap: assets.get("perturb-map")
+		const pass = new DotScreenPass({
+			scale: 0.8,
+			angle: Math.PI * 0.5,
+			intensity: 0.25
 		});
 
 		pass.renderToScreen = true;
-		this.glitchPass = pass;
+		this.dotScreenPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -202,7 +188,6 @@ export class GlitchDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -212,8 +197,8 @@ export class GlitchDemo extends Demo {
 
 		if(object !== null) {
 
-			object.rotation.x += 0.005;
-			object.rotation.y += 0.01;
+			object.rotation.x += 0.0005;
+			object.rotation.y += 0.001;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
@@ -226,39 +211,36 @@ export class GlitchDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
 	configure(gui) {
 
-		const pass = this.glitchPass;
-		const perturbMap = pass.perturbMap;
+		const pass = this.dotScreenPass;
 
 		const params = {
-			"mode": pass.mode,
-			"custom noise": true
+			"average": pass.material.defines.AVERAGE !== undefined,
+			"scale": pass.material.uniforms.scale.value,
+			"angle": pass.material.uniforms.angle.value,
+			"intensity": pass.material.uniforms.intensity.value,
+			"center X": pass.material.uniforms.offsetRepeat.value.x,
+			"center Y": pass.material.uniforms.offsetRepeat.value.y
 		};
 
-		gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function() {
-			pass.mode = params.mode;
-		});
+		gui.add(params, "average").onChange(function() {
 
-		gui.add(params, "custom noise").onChange(function() {
-
-			if(params["custom noise"]) {
-
-				pass.perturbMap = perturbMap;
-
-			} else {
-
-				// Prevent the custom perturbation map from getting deleted.
-				pass.perturbMap = null;
-				pass.generatePerturbMap(64);
-
-			}
+			params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
+			pass.material.needsUpdate = true;
 
 		});
+
+		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params.scale; });
+		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params.angle; });
+		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params.intensity; });
+
+		let f = gui.addFolder("Center");
+		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
+		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
 
 	}
 

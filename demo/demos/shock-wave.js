@@ -13,13 +13,15 @@ import { Demo } from "./demo.js";
 
 /**
  * A shock wave demo setup.
- *
- * @class ShockWaveDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
  */
 
 export class ShockWaveDemo extends Demo {
+
+	/**
+	 * Constructs a new shock wave demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
@@ -28,8 +30,7 @@ export class ShockWaveDemo extends Demo {
 		/**
 		 * A shock wave pass.
 		 *
-		 * @property shockWavePass
-		 * @type ShockWavePass
+		 * @type {ShockWavePass}
 		 * @private
 		 */
 
@@ -40,7 +41,6 @@ export class ShockWaveDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -89,8 +89,6 @@ export class ShockWaveDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -155,7 +153,6 @@ export class ShockWaveDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 

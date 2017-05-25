@@ -1,6 +1,5 @@
 import {
 	AmbientLight,
-	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
 	FlatShading,
@@ -8,16 +7,15 @@ import {
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
-	Scene,
 	SphereBufferGeometry
 } from "three";
 
 import {
-	ClearMaskPass,
-	CopyMaterial,
-	MaskPass,
-	PixelationPass,
+	BlurPass,
+	CombineMaterial,
+	KernelSize,
 	RenderPass,
+	SavePass,
 	ShaderPass
 } from "../src";
 
@@ -26,75 +24,78 @@ import { Demo } from "./demo.js";
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A pixelation demo setup.
- *
- * @class PixelationDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
+ * A blur demo setup.
  */
 
-export class PixelationDemo extends Demo {
+export class BlurDemo extends Demo {
+
+	/**
+	 * Constructs a new blur demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
+		 * A render pass.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPass = null;
+
+		/**
+		 * A save pass.
+		 *
+		 * @type {SavePass}
+		 * @private
+		 */
+
+		this.savePass = null;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = null;
+
+		/**
+		 * A combine pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.combinePass = null;
+
+		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
 		this.object = null;
-
-		/**
-		 * An object used for masking.
-		 *
-		 * @property maskObject
-		 * @type Mesh
-		 * @private
-		 */
-
-		this.maskObject = null;
-
-		/**
-		 * A mask pass.
-		 *
-		 * @property maskPass
-		 * @type MaskPass
-		 * @private
-		 */
-
-		this.maskPass = null;
-
-		/**
-		 * A pixelation pass.
-		 *
-		 * @property pixelationPass
-		 * @type PixelationPass
-		 * @private
-		 */
-
-		this.pixelationPass = null;
 
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -104,8 +105,8 @@ export class PixelationDemo extends Demo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space/";
-		const format = ".jpg";
+		const path = "textures/skies/sunset/";
+		const format = ".png";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
 			path + "py" + format, path + "ny" + format,
@@ -143,8 +144,6 @@ export class PixelationDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -160,7 +159,7 @@ export class PixelationDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(10, 1, 10);
+		camera.position.set(-15, 0, -15);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -172,7 +171,7 @@ export class PixelationDemo extends Demo {
 		const ambientLight = new AmbientLight(0x666666);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
-		directionalLight.position.set(-1, 1, 1);
+		directionalLight.position.set(1440, 200, 2000);
 		directionalLight.target.position.copy(scene.position);
 
 		scene.add(directionalLight);
@@ -180,11 +179,11 @@ export class PixelationDemo extends Demo {
 
 		// Random objects.
 
-		const object = new Object3D();
-		const geometry = new SphereBufferGeometry(1, 4, 4);
+		let object = new Object3D();
 
-		let material, mesh;
-		let i;
+		let geometry = new SphereBufferGeometry(1, 4, 4);
+		let material;
+		let i, mesh;
 
 		for(i = 0; i < 100; ++i) {
 
@@ -203,33 +202,29 @@ export class PixelationDemo extends Demo {
 		}
 
 		this.object = object;
+
 		scene.add(object);
-
-		// Stencil mask scene.
-
-		const maskScene = new Scene();
-
-		mesh = new Mesh(new BoxBufferGeometry(4, 4, 4));
-		this.maskObject = mesh;
-		maskScene.add(mesh);
 
 		// Passes.
 
 		let pass = new RenderPass(scene, camera);
+		this.renderPass = pass;
 		composer.addPass(pass);
 
-		pass = new MaskPass(maskScene, camera);
-		this.maskPass = pass;
+		pass = new SavePass();
+		this.savePass = pass;
 		composer.addPass(pass);
 
-		pass = new PixelationPass(5.0);
-		this.pixelationPass = pass;
+		pass = new BlurPass();
+		this.blurPass = pass;
 		composer.addPass(pass);
 
-		composer.addPass(new ClearMaskPass());
-
-		pass = new ShaderPass(new CopyMaterial());
+		pass = new ShaderPass(new CombineMaterial(), "texture1");
+		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
+		pass.material.uniforms.opacity1.value = 1.0;
+		pass.material.uniforms.opacity2.value = 0.0;
 		pass.renderToScreen = true;
+		this.combinePass = pass;
 		composer.addPass(pass);
 
 	}
@@ -237,18 +232,14 @@ export class PixelationDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
 	update(delta) {
 
 		const object = this.object;
-		const maskObject = this.maskObject;
 
-		let time;
-
-		if(object !== null && maskObject !== null) {
+		if(object !== null) {
 
 			object.rotation.x += 0.001;
 			object.rotation.y += 0.005;
@@ -257,13 +248,6 @@ export class PixelationDemo extends Demo {
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
 			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
-			time = performance.now() * 0.001;
-
-			maskObject.position.x = Math.cos(time / 1.5) * 4;
-			maskObject.position.y = Math.sin(time) * 4;
-			maskObject.rotation.x = time;
-			maskObject.rotation.y = time * 0.5;
-
 		}
 
 	}
@@ -271,20 +255,40 @@ export class PixelationDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @method configure
 	 * @param {GUI} gui - A GUI.
 	 */
 
 	configure(gui) {
 
-		const maskPass = this.maskPass;
+		const composer = this.composer;
+		const renderPass = this.renderPass;
+		const blurPass = this.blurPass;
+		const combinePass = this.combinePass;
 
 		const params = {
-			"use mask": maskPass.enabled
+			"enabled": blurPass.enabled,
+			"resolution": blurPass.resolutionScale,
+			"kernel size": blurPass.kernelSize,
+			"strength": combinePass.material.uniforms.opacity1.value
 		};
 
-		gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
-		gui.add(params, "use mask").onChange(function() { maskPass.enabled = params["use mask"]; });
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
+		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
+
+		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			combinePass.material.uniforms.opacity1.value = params.strength;
+			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
+
+		});
+
+		gui.add(params, "enabled").onChange(function() {
+
+			renderPass.renderToScreen = !params.enabled;
+			blurPass.enabled = params.enabled;
+			combinePass.enabled = params.enabled;
+
+		});
 
 	}
 

@@ -10,40 +10,47 @@ import {
 	TextureLoader
 } from "three";
 
-import { RenderPass } from "../src";
+import { RenderPass, ToneMappingPass } from "../src";
 import { Demo } from "./demo.js";
 
 /**
  * PI times two.
  *
- * @property TWO_PI
- * @type Number
+ * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A render demo setup.
- *
- * @class RenderDemo
- * @constructor
- * @param {EffectComposer} composer - An effect composer.
+ * A tone mapping demo setup.
  */
 
-export class RenderDemo extends Demo {
+export class ToneMappingDemo extends Demo {
+
+	/**
+	 * Constructs a new tone mapping demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
+	 */
 
 	constructor(composer) {
 
 		super(composer);
 
 		/**
+		 * A dot screen pass.
+		 *
+		 * @type {DotScreenPass}
+		 * @private
+		 */
+
+		this.toneMappingPass = null;
+
+		/**
 		 * An object.
 		 *
-		 * @property object
-		 * @type Object3D
+		 * @type {Object3D}
 		 * @private
 		 */
 
@@ -54,7 +61,6 @@ export class RenderDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @method load
 	 * @param {Function} callback - A callback function.
 	 */
 
@@ -111,8 +117,6 @@ export class RenderDemo extends Demo {
 
 	/**
 	 * Creates the scene.
-	 *
-	 * @method initialise
 	 */
 
 	initialise() {
@@ -151,7 +155,6 @@ export class RenderDemo extends Demo {
 		const mesh = new Mesh(
 			new BoxBufferGeometry(1, 1, 1),
 			new MeshPhongMaterial({
-				color: 0xffffff,
 				map: assets.get("crate-color")
 			})
 		);
@@ -161,9 +164,16 @@ export class RenderDemo extends Demo {
 
 		// Passes.
 
-		const pass = new RenderPass(scene, camera);
-		pass.renderToScreen = true;
+		composer.addPass(new RenderPass(scene, camera));
 
+		const pass = new ToneMappingPass({
+			adaptive: true,
+			resolution: 256,
+			distinction: 1.0
+		});
+
+		pass.renderToScreen = true;
+		this.toneMappingPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -171,7 +181,6 @@ export class RenderDemo extends Demo {
 	/**
 	 * Updates this demo.
 	 *
-	 * @method update
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
@@ -189,6 +198,41 @@ export class RenderDemo extends Demo {
 			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
 		}
+
+	}
+
+	/**
+	 * Registers configuration options.
+	 *
+	 * @param {GUI} gui - A GUI.
+	 */
+
+	configure(gui) {
+
+		const pass = this.toneMappingPass;
+
+		const params = {
+			"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
+			"adaptive": pass.adaptive,
+			"distinction": pass.luminosityMaterial.uniforms.distinction.value,
+			"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
+			"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
+			"min lum": pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value,
+			"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
+			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
+		};
+
+		gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params.resolution); });
+		gui.add(params, "adaptive").onChange(function() { pass.adaptive = params.adaptive; });
+
+		let f = gui.addFolder("Luminance");
+		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params.distinction; });
+		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"]; });
+		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
+		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"]; });
+		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"]; });
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
+		f.open();
 
 	}
 

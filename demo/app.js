@@ -4,26 +4,23 @@ import Stats from "stats.js";
 
 import { EffectComposer } from "../src";
 
-import { BloomDemo } from "./bloom.js";
-import { BokehDemo } from "./bokeh.js";
-import { Bokeh2Demo } from "./bokeh2.js";
-import { BlurDemo } from "./blur.js";
-import { DepthDemo } from "./depth.js";
-import { DotScreenDemo } from "./dot-screen.js";
-import { FilmDemo } from "./film.js";
-import { GlitchDemo } from "./glitch.js";
-import { PixelationDemo } from "./pixelation.js";
-import { GodRaysDemo } from "./god-rays.js";
-import { RenderDemo } from "./render.js";
-import { ShockWaveDemo } from "./shock-wave.js";
-import { SMAADemo } from "./smaa.js";
-import { ToneMappingDemo } from "./tone-mapping.js";
+import { BloomDemo } from "./demos/bloom.js";
+import { BokehDemo } from "./demos/bokeh.js";
+import { Bokeh2Demo } from "./demos/bokeh2.js";
+import { BlurDemo } from "./demos/blur.js";
+import { DepthDemo } from "./demos/depth.js";
+import { DotScreenDemo } from "./demos/dot-screen.js";
+import { FilmDemo } from "./demos/film.js";
+import { GlitchDemo } from "./demos/glitch.js";
+import { PixelationDemo } from "./demos/pixelation.js";
+import { GodRaysDemo } from "./demos/god-rays.js";
+import { RenderDemo } from "./demos/render.js";
+import { ShockWaveDemo } from "./demos/shock-wave.js";
+import { SMAADemo } from "./demos/smaa.js";
+import { ToneMappingDemo } from "./demos/tone-mapping.js";
 
 /**
  * A demo application.
- *
- * @class App
- * @constructor
  */
 
 export class App {
@@ -33,8 +30,7 @@ export class App {
 		/**
 		 * A clock.
 		 *
-		 * @property clock
-		 * @type Clock
+		 * @type {Clock}
 		 * @private
 		 */
 
@@ -43,8 +39,7 @@ export class App {
 		/**
 		 * A composer.
 		 *
-		 * @property composer
-		 * @type EffectComposer
+		 * @type {EffectComposer}
 		 * @private
 		 */
 
@@ -69,8 +64,7 @@ export class App {
 		/**
 		 * Statistics.
 		 *
-		 * @property stats
-		 * @type Stats
+		 * @type {Stats}
 		 * @private
 		 */
 
@@ -87,8 +81,7 @@ export class App {
 		/**
 		 * Available demos.
 		 *
-		 * @property demos
-		 * @type Map
+		 * @type {Map}
 		 * @private
 		 */
 
@@ -118,8 +111,7 @@ export class App {
 		/**
 		 * The key of the current effect.
 		 *
-		 * @property effect
-		 * @type String
+		 * @type {String}
 		 * @private
 		 */
 
@@ -142,8 +134,6 @@ export class App {
 	/**
 	 * Initialises the demo.
 	 *
-	 * @method initialise
-	 * @static
 	 * @param {HTMLElement} viewport - The viewport.
 	 * @param {HTMLElement} aside - A secondary DOM container.
 	 * @param {HTMLElement} loadingMessage - A loading message.
@@ -168,7 +158,6 @@ export class App {
 		/**
 		 * Activates the currently selected demo.
 		 *
-		 * @method activateDemo
 		 * @private
 		 * @static
 		 */
@@ -192,7 +181,6 @@ export class App {
 		/**
 		 * Loads the currently selected demo.
 		 *
-		 * @method loadDemo
 		 * @private
 		 * @static
 		 */
@@ -230,7 +218,6 @@ export class App {
 		/**
 		 * Toggles the visibility of the interface on alt key press.
 		 *
-		 * @method onKeyDown
 		 * @private
 		 * @static
 		 * @param {Event} event - An event.
@@ -250,7 +237,6 @@ export class App {
 		/**
 		 * Handles browser resizing.
 		 *
-		 * @method onResize
 		 * @private
 		 * @static
 		 * @param {Event} event - An event.
@@ -288,7 +274,6 @@ export class App {
 		/**
 		 * The main render loop.
 		 *
-		 * @method render
 		 * @private
 		 * @static
 		 * @param {DOMHighResTimeStamp} now - An execution timestamp.
