@@ -8,7 +8,7 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { Bokeh2Pass, RenderPass } from "../src";
+import { Bokeh2Pass, RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

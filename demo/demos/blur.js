@@ -17,7 +17,7 @@ import {
 	RenderPass,
 	SavePass,
 	ShaderPass
-} from "../src";
+} from "../../src";
 
 import { Demo } from "./demo.js";
 

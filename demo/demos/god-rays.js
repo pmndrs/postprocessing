@@ -13,7 +13,7 @@ import {
 	TextureLoader
 } from "three";
 
-import { GodRaysPass, KernelSize, RenderPass } from "../src";
+import { GodRaysPass, KernelSize, RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

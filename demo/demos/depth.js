@@ -5,7 +5,7 @@ import {
 	OrbitControls
 } from "three";
 
-import { DepthPass, RenderPass, TexturePass } from "../src";
+import { DepthPass, RenderPass, TexturePass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

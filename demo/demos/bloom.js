@@ -12,7 +12,7 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { BloomPass, KernelSize, RenderPass } from "../src";
+import { BloomPass, KernelSize, RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

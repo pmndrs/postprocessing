@@ -10,7 +10,7 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { DotScreenPass, RenderPass } from "../src";
+import { DotScreenPass, RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

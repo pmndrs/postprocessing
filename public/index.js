@@ -5758,16 +5758,16 @@
 
   window.addEventListener("load", function main(event) {
 
-    var viewport = document.getElementById("viewport");
-    var loadingMessage = viewport.children[0];
-    var aside = document.getElementById("aside");
+  	var viewport = document.getElementById("viewport");
+  	var loadingMessage = viewport.children[0];
+  	var aside = document.getElementById("aside");
 
-    var app = new App();
+  	var app = new App();
 
-    window.removeEventListener("load", main);
-    aside.style.visibility = "visible";
+  	window.removeEventListener("load", main);
+  	aside.style.visibility = "visible";
 
-    app.initialise(viewport, aside, loadingMessage);
+  	app.initialise(viewport, aside, loadingMessage);
   });
 
 }(THREE,dat,Stats));

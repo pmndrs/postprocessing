@@ -12,7 +12,7 @@ import {
 	TextureLoader
 } from "three";
 
-import { GlitchMode, GlitchPass, RenderPass } from "../src";
+import { GlitchMode, GlitchPass, RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**

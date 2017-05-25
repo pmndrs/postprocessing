@@ -10,7 +10,7 @@ import {
 	TextureLoader
 } from "three";
 
-import { RenderPass } from "../src";
+import { RenderPass } from "../../src";
 import { Demo } from "./demo.js";
 
 /**
