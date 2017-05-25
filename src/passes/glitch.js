@@ -5,7 +5,6 @@ import { Pass } from "./pass.js";
 /**
  * Returns a random integer in the specified range.
  *
- * @method randomInt
  * @private
  * @static
  * @param {Number} low - The lowest possible value.
@@ -22,7 +21,6 @@ function randomInt(low, high) {
 /**
  * Returns a random float in the specified range.
  *
- * @method randomFloat
  * @private
  * @static
  * @param {Number} low - The lowest possible value.
@@ -38,30 +36,38 @@ function randomFloat(low, high) {
 
 /**
  * A glitch pass.
- *
- * @class GlitchPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - The options.
- * @param {Texture} [options.perturbMap] - A perturbation map. If none is provided, a noise texture will be created.
- * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
  */
 
 export class GlitchPass extends Pass {
+
+	/**
+	 * Constructs a new glitch pass.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Texture} [options.perturbMap] - A perturbation map. If none is provided, a noise texture will be created.
+	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
+	 */
 
 	constructor(options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "GlitchPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * Glitch shader material.
 		 *
-		 * @property material
-		 * @type GlitchMaterial
+		 * @type {GlitchMaterial}
 		 * @private
 		 */
 
@@ -72,8 +78,7 @@ export class GlitchPass extends Pass {
 		/**
 		 * A perturbation map.
 		 *
-		 * @property texture
-		 * @type Texture
+		 * @type {Texture}
 		 * @private
 		 */
 
@@ -86,8 +91,7 @@ export class GlitchPass extends Pass {
 		/**
 		 * The effect mode.
 		 *
-		 * @property mode
-		 * @type GlitchMode
+		 * @type {GlitchMode}
 		 * @default GlitchMode.SPORADIC
 		 */
 
@@ -96,8 +100,7 @@ export class GlitchPass extends Pass {
 		/**
 		 * Counter for glitch activation and deactivation.
 		 *
-		 * @property counter
-		 * @type Number
+		 * @type {Number}
 		 * @private
 		 */
 
@@ -106,8 +109,7 @@ export class GlitchPass extends Pass {
 		/**
 		 * A random break point for the sporadic glitch activation.
 		 *
-		 * @property breakPoint
-		 * @type Number
+		 * @type {Number}
 		 * @private
 		 */
 
@@ -116,13 +118,18 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * A perturbation map.
+	 * The current perturbation map.
 	 *
-	 * @property perturbMap
-	 * @type Texture
+	 * @type {Texture}
 	 */
 
 	get perturbMap() { return this.texture; }
+
+	/**
+	 * Assigning a new perturbation map does not destroy the current one!
+	 *
+	 * @type {Texture}
+	 */
 
 	set perturbMap(x) {
 
@@ -132,9 +139,8 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * Deletes the current perturbation map and creates a new one.
+	 * Destroys the current perturbation map and creates a new one.
 	 *
-	 * @method generatePerturbMap
 	 * @param {Number} [size=64] - The texture size.
 	 * @return {DataTexture} The perturbation texture.
 	 */
@@ -175,7 +181,6 @@ export class GlitchPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -235,41 +240,16 @@ export class GlitchPass extends Pass {
 /**
  * A glitch mode enumeration.
  *
- * @class GlitchMode
- * @submodule passes
- * @static
+ * @type {Object}
+ * @property {Number} SPORADIC - Sporadic glitches.
+ * @property {Number} CONSTANT_MILD - Constant mild glitches.
+ * @property {Number} CONSTANT_WILD - Constant wild glitches.
  */
 
 export const GlitchMode = {
 
-	/**
-	 * Sporadic glitches.
-	 *
-	 * @property SPORADIC
-	 * @type Number
-	 * @static
-	 */
-
 	SPORADIC: 0,
-
-	/**
-	 * Constant mild glitches.
-	 *
-	 * @property CONSTANT_MILD
-	 * @type Number
-	 * @static
-	 */
-
 	CONSTANT_MILD: 1,
-
-	/**
-	 * Constant wild glitches.
-	 *
-	 * @property CONSTANT_WILD
-	 * @type Number
-	 * @static
-	 */
-
 	CONSTANT_WILD: 2
 
 };

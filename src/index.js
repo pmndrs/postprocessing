@@ -2,7 +2,6 @@
  * Exposure of the library components.
  *
  * @module postprocessing
- * @main postprocessing
  */
 
 export { EffectComposer } from "./core";

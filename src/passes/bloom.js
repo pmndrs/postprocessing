@@ -8,32 +8,35 @@ import { Pass } from "./pass.js";
  *
  * This pass renders a scene with superimposed blur by utilising the fast Kawase
  * convolution approach.
- *
- * @class BloomPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - The options.
- * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
- * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
- * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
- * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
  */
 
 export class BloomPass extends Pass {
 
+	/**
+	 * Constructs a new bloom pass.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.
+	 * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
+	 * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.
+	 */
+
 	constructor(options = {}) {
 
 		super();
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "BloomPass";
 
 		/**
 		 * A blur pass.
 		 *
-		 * @property blurPass
-		 * @type BlurPass
+		 * @type {BlurPass}
 		 * @private
 		 */
 
@@ -42,8 +45,7 @@ export class BloomPass extends Pass {
 		/**
 		 * A render target.
 		 *
-		 * @property renderTargetX
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -54,8 +56,7 @@ export class BloomPass extends Pass {
 		/**
 		 * A second render target.
 		 *
-		 * @property renderTargetY
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -66,8 +67,7 @@ export class BloomPass extends Pass {
 		/**
 		 * A combine shader material.
 		 *
-		 * @property combineMaterial
-		 * @type CombineMaterial
+		 * @type {CombineMaterial}
 		 * @private
 		 */
 
@@ -78,8 +78,7 @@ export class BloomPass extends Pass {
 		/**
 		 * A luminosity shader material.
 		 *
-		 * @property luminosityMaterial
-		 * @type LuminosityMaterial
+		 * @type {LuminosityMaterial}
 		 * @private
 		 */
 
@@ -92,16 +91,17 @@ export class BloomPass extends Pass {
 	/**
 	 * The resolution scale.
 	 *
-	 * You need to call
-	 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
-	 * this value.
-	 *
-	 * @property resolutionScale
-	 * @type Number
+	 * @type {Number}
 	 * @default 0.5
 	 */
 
 	get resolutionScale() { return this.blurPass.resolutionScale; }
+
+	/**
+	 * You need to call {@link EffectComposer#setSize} after changing this value.
+	 *
+	 * @type {Number}
+	 */
 
 	set resolutionScale(x) {
 
@@ -112,12 +112,15 @@ export class BloomPass extends Pass {
 	/**
 	 * The blur kernel size.
 	 *
-	 * @property kernelSize
-	 * @type KernelSize
+	 * @type {KernelSize}
 	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() { return this.blurPass.kernelSize; }
+
+	/**
+	 * @type {KernelSize}
+	 */
 
 	set kernelSize(x) {
 
@@ -128,12 +131,15 @@ export class BloomPass extends Pass {
 	/**
 	 * The overall intensity of the effect.
 	 *
-	 * @property intensity
-	 * @type Number
+	 * @type {Number}
 	 * @default 1.0
 	 */
 
 	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
+
+	/**
+	 * @type {Number}
+	 */
 
 	set intensity(x) {
 
@@ -148,12 +154,15 @@ export class BloomPass extends Pass {
 	/**
 	 * The luminance distinction factor.
 	 *
-	 * @property distinction
-	 * @type Number
+	 * @type {Number}
 	 * @default 1.0
 	 */
 
 	get distinction() { return this.luminosityMaterial.uniforms.distinction.value; }
+
+	/**
+	 * @type {Number}
+	 */
 
 	set distinction(x) {
 
@@ -171,7 +180,6 @@ export class BloomPass extends Pass {
 	 * Extracts a luminance map from the read buffer, blurs it and combines it
 	 * with the read buffer.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -210,7 +218,6 @@ export class BloomPass extends Pass {
 	/**
 	 * Adjusts the format of the render targets.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
@@ -231,7 +238,6 @@ export class BloomPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

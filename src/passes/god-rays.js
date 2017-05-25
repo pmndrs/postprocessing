@@ -16,7 +16,6 @@ import { Pass } from "./pass.js";
 /**
  * Clamps a given value.
  *
- * @method clamp
  * @private
  * @static
  * @param {Number} value - The value to clamp.
@@ -33,40 +32,43 @@ function clamp(value, min, max) {
 
 /**
  * A crepuscular rays pass.
- *
- * @class GodRaysPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Scene} scene - The main scene.
- * @param {Camera} camera - The main camera.
- * @param {Object3D} lightSource - The main light source.
- * @param {Object} [options] - The options.
- * @param {Number} [options.density=0.96] - The density of the light rays.
- * @param {Number} [options.decay=0.93] - An illumination decay factor.
- * @param {Number} [options.weight=0.4] - A light ray weight factor.
- * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
- * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
- * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
- * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
- * @param {Number} [options.samples=60] - The number of samples per pixel.
- * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.
  */
 
 export class GodRaysPass extends Pass {
 
+	/**
+	 * Constructs a new god rays pass.
+	 *
+	 * @param {Scene} scene - The main scene.
+	 * @param {Camera} camera - The main camera.
+	 * @param {Object3D} lightSource - The main light source.
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.density=0.96] - The density of the light rays.
+	 * @param {Number} [options.decay=0.93] - An illumination decay factor.
+	 * @param {Number} [options.weight=0.4] - A light ray weight factor.
+	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
+	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
+	 * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.samples=60] - The number of samples per pixel.
+	 * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.
+	 */
+
 	constructor(scene, camera, lightSource, options = {}) {
 
 		super();
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "GodRaysPass";
 
 		/**
 		 * A scene that only contains the light source.
 		 *
-		 * @property lightScene
-		 * @type Scene
+		 * @type {Scene}
 		 * @private
 		 */
 
@@ -75,8 +77,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The main scene.
 		 *
-		 * @property mainScene
-		 * @type Scene
+		 * @type {Scene}
 		 * @private
 		 */
 
@@ -85,8 +86,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The main camera.
 		 *
-		 * @property mainCamera
-		 * @type Camera
+		 * @type {Camera}
 		 * @private
 		 */
 
@@ -95,8 +95,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A pass that only renders the light source.
 		 *
-		 * @property renderPassLight
-		 * @type RenderPass
+		 * @type {RenderPass}
 		 * @private
 		 */
 
@@ -105,8 +104,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A pass that renders the masked scene over the light.
 		 *
-		 * @property renderPassMask
-		 * @type RenderPass
+		 * @type {RenderPass}
 		 * @private
 		 */
 
@@ -120,8 +118,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A blur pass.
 		 *
-		 * @property blurPass
-		 * @type BlurPass
+		 * @type {BlurPass}
 		 * @private
 		 */
 
@@ -130,8 +127,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A render target.
 		 *
-		 * @property renderTargetX
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -142,8 +138,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A second render target.
 		 *
-		 * @property renderTargetY
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -154,8 +149,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A render target for the masked light scene.
 		 *
-		 * @property renderTargetMask
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -170,8 +164,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The light source.
 		 *
-		 * @property lightSource
-		 * @type Object3D
+		 * @type {Object3D}
 		 */
 
 		this.lightSource = lightSource;
@@ -179,8 +172,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * The light position in screen space.
 		 *
-		 * @property screenPosition
-		 * @type Vector3
+		 * @type {Vector3}
 		 * @private
 		 */
 
@@ -189,8 +181,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A god rays shader material.
 		 *
-		 * @property godRaysMaterial
-		 * @type GodRaysMaterial
+		 * @type {GodRaysMaterial}
 		 * @private
 		 */
 
@@ -208,8 +199,7 @@ export class GodRaysPass extends Pass {
 		/**
 		 * A combine shader material.
 		 *
-		 * @property combineMaterial
-		 * @type CombineMaterial
+		 * @type {CombineMaterial}
 		 * @private
 		 */
 
@@ -222,16 +212,17 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The resolution scale.
 	 *
-	 * You need to call
-	 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
-	 * this value.
-	 *
-	 * @property resolutionScale
-	 * @type Number
+	 * @type {Number}
 	 * @default 0.5
 	 */
 
 	get resolutionScale() { return this.blurPass.resolutionScale; }
+
+	/**
+	 * You need to call {@link EffectComposer#setSize} after changing this value.
+	 *
+	 * @type {Number}
+	 */
 
 	set resolutionScale(x) {
 
@@ -242,12 +233,15 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The blur kernel size.
 	 *
-	 * @property kernelSize
-	 * @type KernelSize
+	 * @type {KernelSize}
 	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() { return this.blurPass.kernelSize; }
+
+	/**
+	 * @type {KernelSize}
+	 */
 
 	set kernelSize(x) {
 
@@ -258,12 +252,15 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The overall intensity of the effect.
 	 *
-	 * @property intensity
-	 * @type Number
+	 * @type {Number}
 	 * @default 1.0
 	 */
 
 	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
+
+	/**
+	 * @type {Number}
+	 */
 
 	set intensity(x) {
 
@@ -278,14 +275,18 @@ export class GodRaysPass extends Pass {
 	/**
 	 * The number of samples per pixel.
 	 *
-	 * This value must be carefully chosen. A higher value increases the GPU load.
-	 *
-	 * @property samples
-	 * @type Number
+	 * @type {Number}
 	 * @default 60
 	 */
 
 	get samples() { return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT); }
+
+	/**
+	 * This value must be carefully chosen. A higher value directly increases the
+	 * GPU load.
+	 *
+	 * @type {Number}
+	 */
 
 	set samples(x) {
 
@@ -320,7 +321,6 @@ export class GodRaysPass extends Pass {
 	 * Composite Phase:
 	 *  The final result is combined with the read buffer.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -387,7 +387,6 @@ export class GodRaysPass extends Pass {
 	/**
 	 * Adjusts the format of the render targets.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
@@ -411,7 +410,6 @@ export class GodRaysPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

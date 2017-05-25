@@ -15,28 +15,36 @@ import { Pass } from "./pass.js";
  *
  * Preset: SMAA 1x Medium (with color edge detection).
  *  https://github.com/iryoku/smaa/releases/tag/v2.8
- *
- * @class SMAAPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
  */
 
 export class SMAAPass extends Pass {
+
+	/**
+	 * Constructs a new SMAA pass.
+	 *
+	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
+	 */
 
 	constructor(Image) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "SMAAPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A render target for the color edge detection.
 		 *
-		 * @property renderTargetColorEdges
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -53,8 +61,7 @@ export class SMAAPass extends Pass {
 		/**
 		 * A render target for the SMAA weights.
 		 *
-		 * @property renderTargetWeights
-		 * @type Material
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -66,8 +73,7 @@ export class SMAAPass extends Pass {
 		/**
 		 * SMAA color edge detection shader material.
 		 *
-		 * @property colorEdgesMaterial
-		 * @type SMAAColorEdgesMaterial
+		 * @type {SMAAColorEdgesMaterial}
 		 * @private
 		 */
 
@@ -76,8 +82,7 @@ export class SMAAPass extends Pass {
 		/**
 		 * SMAA weights shader material.
 		 *
-		 * @property weightsMaterial
-		 * @type SMAAWeightsMaterial
+		 * @type {SMAAWeightsMaterial}
 		 * @private
 		 */
 
@@ -114,8 +119,7 @@ export class SMAAPass extends Pass {
 		/**
 		 * SMAA blend shader material.
 		 *
-		 * @property blendMaterial
-		 * @type SMAABlendMaterial
+		 * @type {SMAABlendMaterial}
 		 * @private
 		 */
 
@@ -130,7 +134,6 @@ export class SMAAPass extends Pass {
 	/**
 	 * Antialiases the scene.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -158,7 +161,6 @@ export class SMAAPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

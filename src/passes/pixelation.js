@@ -3,28 +3,36 @@ import { Pass } from "./pass.js";
 
 /**
  * A pixelation pass.
- *
- * @class PixelationPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Number} [granularity=30.0] - The intensity of the effect.
  */
 
 export class PixelationPass extends Pass {
+
+	/**
+	 * Constructs a new pixelation pass.
+	 *
+	 * @param {Number} [granularity=30.0] - The intensity of the effect.
+	 */
 
 	constructor(granularity = 30.0) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "PixelationPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A pixelation shader material.
 		 *
-		 * @property pixelationMaterial
-		 * @type PixelationMaterial
+		 * @type {PixelationMaterial}
 		 * @private
 		 */
 
@@ -37,14 +45,19 @@ export class PixelationPass extends Pass {
 	}
 
 	/**
-	 * The pixel granularity. A higher value yields coarser visuals.
+	 * The pixel granularity.
 	 *
-	 * @property granularity
-	 * @type Number
+	 * @type {Number}
 	 * @default 30.0
 	 */
 
 	get granularity() { return this.pixelationMaterial.granularity; }
+
+	/**
+	 * A higher value yields coarser visuals.
+	 *
+	 * @type {Number}
+	 */
 
 	set granularity(x) {
 
@@ -67,7 +80,6 @@ export class PixelationPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -84,7 +96,6 @@ export class PixelationPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

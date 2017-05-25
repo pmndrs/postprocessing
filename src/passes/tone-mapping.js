@@ -18,7 +18,6 @@ import { Pass } from "./pass.js";
 /**
  * Rounds the given number up to the next power of two.
  *
- * @method ceil2
  * @private
  * @static
  * @param {Number} n - A number.
@@ -37,31 +36,39 @@ function ceil2(n) { return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n)))); }
  * Reference:
  *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
  *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
- *
- * @class ToneMappingPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - The options.
- * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
- * @param {Number} [options.resolution=256] - The render texture resolution.
- * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
  */
 
 export class ToneMappingPass extends Pass {
+
+	/**
+	 * Constructs a new tone mapping pass.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
+	 * @param {Number} [options.resolution=256] - The render texture resolution.
+	 * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
+	 */
 
 	constructor(options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "ToneMappingPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
-		 * Render target for the current limonosity.
+		 * The render target for the current luminosity.
 		 *
-		 * @property renderTargetLuminosity
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 * @todo Use RED format in WebGL 2.0.
 		 */
@@ -77,10 +84,9 @@ export class ToneMappingPass extends Pass {
 		this.renderTargetLuminosity.texture.name = "ToneMapping.Luminosity";
 
 		/**
-		 * Adapted luminance render target.
+		 * The render target for adapted luminosity.
 		 *
-		 * @property renderTargetLuminosity
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -91,10 +97,9 @@ export class ToneMappingPass extends Pass {
 		this.renderTargetAdapted.texture.minFilter = LinearFilter;
 
 		/**
-		 * Render target that holds a copy of the adapted limonosity.
+		 * A render target that holds a copy of the adapted limonosity.
 		 *
-		 * @property renderTargetX
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -105,18 +110,16 @@ export class ToneMappingPass extends Pass {
 		/**
 		 * Copy shader material used for saving the luminance map.
 		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
+		 * @type {CopyMaterial}
 		 * @private
 		 */
 
 		this.copyMaterial = new CopyMaterial();
 
 		/**
-		 * Luminosity shader material.
+		 * A luminosity shader material.
 		 *
-		 * @property luminosityMaterial
-		 * @type LuminosityMaterial
+		 * @type {LuminosityMaterial}
 		 * @private
 		 */
 
@@ -125,10 +128,9 @@ export class ToneMappingPass extends Pass {
 		this.luminosityMaterial.uniforms.distinction.value = (options.distinction !== undefined) ? options.distinction : 1.0;
 
 		/**
-		 * Adaptive luminance shader material.
+		 * An adaptive luminance shader material.
 		 *
-		 * @property adaptiveLuminosityMaterial
-		 * @type AdaptiveLuminosityMaterial
+		 * @type {AdaptiveLuminosityMaterial}
 		 * @private
 		 */
 
@@ -137,10 +139,9 @@ export class ToneMappingPass extends Pass {
 		this.resolution = (options.resolution !== undefined) ? options.resolution : 256;
 
 		/**
-		 * Tone mapping shader material.
+		 * A tone mapping shader material.
 		 *
-		 * @property toneMappingMaterial
-		 * @type ToneMappingMaterial
+		 * @type {ToneMappingMaterial}
 		 * @private
 		 */
 
@@ -151,14 +152,20 @@ export class ToneMappingPass extends Pass {
 	}
 
 	/**
-	 * The resolution of the render targets. Must be a power of two.
+	 * The resolution of the render targets.
 	 *
-	 * @property resolution
-	 * @type Number
+	 * @type {Number}
 	 * @default 256
 	 */
 
 	get resolution() { return this.renderTargetLuminosity.width; }
+
+	/**
+	 * The resolution of the render targets. Must be a power of two and will be
+	 * rounded up if it isn't.
+	 *
+	 * @type {Number}
+	 */
 
 	set resolution(x) {
 
@@ -176,11 +183,16 @@ export class ToneMappingPass extends Pass {
 	/**
 	 * Whether this pass uses adaptive luminosity.
 	 *
-	 * @property adaptive
-	 * @type Boolean
+	 * @type {Boolean}
 	 */
 
 	get adaptive() { return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined; }
+
+	/**
+	 * Whether this pass should use adaptive luminosity.
+	 *
+	 * @type {Boolean}
+	 */
 
 	set adaptive(x) {
 
@@ -203,7 +215,6 @@ export class ToneMappingPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -257,7 +268,6 @@ export class ToneMappingPass extends Pass {
 	/**
 	 * Renders something into the previous luminosity texture.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 

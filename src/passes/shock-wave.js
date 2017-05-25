@@ -5,8 +5,7 @@ import { Pass } from "./pass.js";
 /**
  * Half PI.
  *
- * @property HALF_PI
- * @type Number
+ * @type {Number}
  * @private
  * @static
  * @final
@@ -17,8 +16,7 @@ const HALF_PI = Math.PI * 0.5;
 /**
  * A vector.
  *
- * @property v
- * @type Vector3
+ * @type {Vector3}
  * @private
  * @static
  * @final
@@ -29,8 +27,7 @@ const v = new Vector3();
 /**
  * A vector.
  *
- * @property ab
- * @type Vector3
+ * @type {Vector3}
  * @private
  * @static
  * @final
@@ -40,34 +37,42 @@ const ab = new Vector3();
 
 /**
  * A shock wave pass.
- *
- * @class ShockWavePass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Camera} camera - The main camera.
- * @param {Object} [epicenter] - The world position of the shock wave epicenter.
- * @param {Object} [options] - The options.
- * @param {Number} [options.speed=1.0] - The animation speed.
- * @param {Number} [options.maxRadius=1.0] - The extent of the shock wave.
- * @param {Number} [options.waveSize=0.2] - The wave size.
- * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
  */
 
 export class ShockWavePass extends Pass {
+
+	/**
+	 * Constructs a new shock wave pass.
+	 *
+	 * @param {Camera} camera - The main camera.
+	 * @param {Vector3} [epicenter] - The world position of the shock wave epicenter.
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.speed=1.0] - The animation speed.
+	 * @param {Number} [options.maxRadius=1.0] - The extent of the shock wave.
+	 * @param {Number} [options.waveSize=0.2] - The wave size.
+	 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
+	 */
 
 	constructor(camera, epicenter = new Vector3(), options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "ShockWavePass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * The main camera.
 		 *
-		 * @property mainCamera
-		 * @type Object3D
+		 * @type {Object3D}
 		 */
 
 		this.mainCamera = camera;
@@ -75,8 +80,8 @@ export class ShockWavePass extends Pass {
 		/**
 		 * The epicenter.
 		 *
-		 * @property epicenter
-		 * @type Vector3
+		 * @type {Vector3}
+		 * @example shockWavePass.epicenter = myMesh.position;
 		 */
 
 		this.epicenter = epicenter;
@@ -84,8 +89,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * The object position in screen space.
 		 *
-		 * @property screenPosition
-		 * @type Vector3
+		 * @type {Vector3}
 		 * @private
 		 */
 
@@ -94,8 +98,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * The speed of the shock wave animation.
 		 *
-		 * @property speed
-		 * @type Number
+		 * @type {Number}
 		 * @default 2.0
 		 */
 
@@ -104,8 +107,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * A time accumulator.
 		 *
-		 * @property time
-		 * @type Number
+		 * @type {Number}
 		 * @private
 		 */
 
@@ -114,8 +116,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * Indicates whether the shock wave animation is active.
 		 *
-		 * @property active
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @private
 		 */
 
@@ -124,8 +125,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * A shock wave shader material.
 		 *
-		 * @property shockWaveMaterial
-		 * @type ShockWaveMaterial
+		 * @type {ShockWaveMaterial}
 		 * @private
 		 */
 
@@ -136,8 +136,7 @@ export class ShockWavePass extends Pass {
 		/**
 		 * A copy shader material.
 		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
+		 * @type {CopyMaterial}
 		 * @private
 		 */
 
@@ -147,8 +146,6 @@ export class ShockWavePass extends Pass {
 
 	/**
 	 * Emits the shock wave.
-	 *
-	 * @method explode
 	 */
 
 	explode() {
@@ -161,7 +158,6 @@ export class ShockWavePass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -225,7 +221,6 @@ export class ShockWavePass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

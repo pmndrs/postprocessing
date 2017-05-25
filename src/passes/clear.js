@@ -4,7 +4,6 @@ import { Pass } from "./pass.js";
 /**
  * Used for saving the original clear color of the renderer.
  *
- * @property color
  * @type Color
  * @private
  * @static
@@ -18,29 +17,32 @@ const color = new Color();
  * You can prevent specific buffers from being cleared by setting either the
  * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
  * to false.
- *
- * @class ClearPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - Additional options.
- * @param {Color} [options.clearColor=null] - An override clear color.
- * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
  */
 
 export class ClearPass extends Pass {
 
+	/**
+	 * Constructs a new clear pass.
+	 *
+	 * @param {Object} [options] - Additional options.
+	 * @param {Color} [options.clearColor=null] - An override clear color.
+	 * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
+	 */
+
 	constructor(options = {}) {
 
 		super(null, null, null);
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "ClearPass";
 
 		/**
 		 * Clear color.
 		 *
-		 * @property clearColor
-		 * @type Color
+		 * @type {Color}
 		 * @default null
 		 */
 
@@ -49,8 +51,7 @@ export class ClearPass extends Pass {
 		/**
 		 * Clear alpha.
 		 *
-		 * @property clearAlpha
-		 * @type Number
+		 * @type {Number}
 		 * @default 0.0
 		 */
 
@@ -61,7 +62,6 @@ export class ClearPass extends Pass {
 	/**
 	 * Clears the read buffer or the screen.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */

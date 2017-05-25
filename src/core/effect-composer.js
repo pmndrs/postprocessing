@@ -17,33 +17,32 @@ import { CopyMaterial } from "../materials";
  * The auto clear behaviour of the provided renderer will be disabled to prevent
  * unnecessary clear operations.
  *
- * It is common practice to use a {{#crossLink "RenderPass"}}{{/crossLink}} as
- * the first pass to automatically clear the screen and render the scene to a
- * texture for further processing.
- *
- * @class EffectComposer
- * @submodule core
- * @constructor
- * @param {WebGLRenderer} [renderer] - The renderer that should be used.
- * @param {Object} [options] - The options.
- * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
- * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
- * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on a depth texture.
+ * It is common practice to use a {@link RenderPass} as the first pass to
+ * automatically clear the screen and render the scene to a texture for further
+ * processing.
  */
 
 export class EffectComposer {
+
+	/**
+	 * Constructs a new effect composer.
+	 *
+	 * @param {WebGLRenderer} [renderer] - The renderer that should be used.
+	 * @param {Object} [options] - The options.
+	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
+	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on a depth texture.
+	 */
 
 	constructor(renderer = null, options = {}) {
 
 		/**
 		 * The renderer.
 		 *
-		 * You may replace the renderer at any time by using the
-		 * {{#crossLink "EffectComposer/replaceRenderer:method"}}{{/crossLink}}
-		 * method.
+		 * You may replace the renderer at any time by using
+		 * {@link EffectComposer#replaceRenderer}.
 		 *
-		 * @property renderer
-		 * @type WebGLRenderer
+		 * @type {WebGLRenderer}
 		 */
 
 		this.renderer = renderer;
@@ -54,8 +53,7 @@ export class EffectComposer {
 		 * Reading from and writing to the same render target should be avoided.
 		 * Therefore, two seperate yet identical buffers are used.
 		 *
-		 * @property readBuffer
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -64,8 +62,7 @@ export class EffectComposer {
 		/**
 		 * The write buffer.
 		 *
-		 * @property writeBuffer
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -88,8 +85,7 @@ export class EffectComposer {
 		/**
 		 * A copy pass used for copying masked scenes.
 		 *
-		 * @property copyPass
-		 * @type ShaderPass
+		 * @type {ShaderPass}
 		 * @private
 		 */
 
@@ -98,8 +94,7 @@ export class EffectComposer {
 		/**
 		 * The passes.
 		 *
-		 * @property passes
-		 * @type Array
+		 * @type {Pass[]}
 		 * @private
 		 */
 
@@ -110,6 +105,13 @@ export class EffectComposer {
 	/**
 	 * The depth texture of the read and write buffers.
 	 *
+	 * @type {DepthTexture}
+	 * @default null
+	 */
+
+	get depthTexture() { return this.readBuffer.depthTexture; }
+
+	/**
 	 * The read and write buffers share a single depth texture. Depth will be
 	 * written to this texture when something is rendered into one of the buffers
 	 * and the involved materials have depth write enabled.
@@ -118,12 +120,8 @@ export class EffectComposer {
 	 * by assigning a DepthTexture instance later on. You may also disable it by
 	 * assigning null.
 	 *
-	 * @property depthTexture
-	 * @type DepthTexture
-	 * @default null
+	 * @type {DepthTexture}
 	 */
-
-	get depthTexture() { return this.readBuffer.depthTexture; }
 
 	set depthTexture(x) {
 
@@ -142,7 +140,6 @@ export class EffectComposer {
 	 * Switching between renderers allows you to dynamically enable or disable
 	 * antialiasing.
 	 *
-	 * @method replaceRenderer
 	 * @param {WebGLRenderer} renderer - The new renderer.
 	 * @return {WebGLRenderer} The old renderer.
 	 */
@@ -188,7 +185,6 @@ export class EffectComposer {
 	 * magnification. Its render texture format depends on whether the renderer
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
-	 * @method createBuffer
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Boolean} depthTexture - Whether the render target should have a depth texture.
@@ -227,7 +223,6 @@ export class EffectComposer {
 	/**
 	 * Adds a pass, optionally at a specific index.
 	 *
-	 * @method addPass
 	 * @param {Pass} pass - A new pass.
 	 * @param {Number} [index] - An index at which the pass should be inserted.
 	 */
@@ -256,7 +251,6 @@ export class EffectComposer {
 	/**
 	 * Removes a pass.
 	 *
-	 * @method removePass
 	 * @param {Pass} pass - The pass.
 	 */
 
@@ -269,7 +263,6 @@ export class EffectComposer {
 	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @method render
 	 * @param {Number} delta - The time between the last frame and the current one in seconds.
 	 */
 
@@ -336,7 +329,6 @@ export class EffectComposer {
 	 * If no width or height is specified, the render targets and passes will be
 	 * updated with the current size of the renderer.
 	 *
-	 * @method setSize
 	 * @param {Number} [width] - The width.
 	 * @param {Number} [height] - The height.
 	 */
@@ -375,7 +367,6 @@ export class EffectComposer {
 	/**
 	 * Resets this composer by deleting all passes and creating new buffers.
 	 *
-	 * @method reset
 	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the settings of the renderer will be used.
 	 */
 
@@ -398,7 +389,6 @@ export class EffectComposer {
 	 * This method deallocates all render targets, textures and materials created
 	 * by the passes. It also deletes this composer's frame buffers.
 	 *
-	 * @method dispose
 	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.
 	 */
 

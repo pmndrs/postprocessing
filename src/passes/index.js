@@ -1,8 +1,7 @@
 /**
  * A compilation of the post processing passes.
  *
- * @module postprocessing
- * @submodule passes
+ * @module postprocessing/passes
  */
 
 export { BloomPass } from "./bloom.js";

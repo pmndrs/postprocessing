@@ -3,32 +3,40 @@ import { Pass } from "./pass.js";
 
 /**
  * A dot screen pass.
- *
- * @class DotScreenPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - The options.
- * @param {Number} [options.angle=1.57] - The angle of the pattern.
- * @param {Number} [options.scale=1.0] - The scale of the overall effect.
- * @param {Number} [options.intensity=1.0] - The intensity of the effect.
- * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
  */
 
 export class DotScreenPass extends Pass {
+
+	/**
+	 * Constructs a new dot screen pass.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.angle=1.57] - The angle of the pattern.
+	 * @param {Number} [options.scale=1.0] - The scale of the overall effect.
+	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
+	 * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
+	 */
 
 	constructor(options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "DotScreenPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A dot screen shader material.
 		 *
-		 * @property material
-		 * @type DotScreenMaterial
+		 * @type {DotScreenMaterial}
 		 * @private
 		 */
 
@@ -45,7 +53,6 @@ export class DotScreenPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -62,7 +69,6 @@ export class DotScreenPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} heght - The height.
 	 */

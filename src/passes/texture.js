@@ -3,31 +3,32 @@ import { CopyMaterial } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
- * A texture pass.
- *
- * Renders a given texture.
- *
- * @class TexturePass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Texture} texture - The texture.
- * @param {Number} [opacity=1.0] - The texture opacity.
+ * A pass that renders a given texture.
  */
 
 export class TexturePass extends Pass {
 
+	/**
+	 * Constructs a new texture pass.
+	 *
+	 * @param {Texture} texture - The texture.
+	 * @param {Number} [opacity=1.0] - The texture opacity.
+	 */
+
 	constructor(texture, opacity = 1.0) {
 
 		super();
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "TexturePass";
 
 		/**
 		 * A copy shader material used for rendering to texture.
 		 *
-		 * @property copyMaterial
-		 * @type CopyMaterial
+		 * @type {CopyMaterial}
 		 * @private
 		 */
 
@@ -45,11 +46,14 @@ export class TexturePass extends Pass {
 	/**
 	 * The texture.
 	 *
-	 * @property texture
-	 * @type Texture
+	 * @type {Texture}
 	 */
 
 	get texture() { return this.copyMaterial.uniforms.tDiffuse.value; }
+
+	/**
+	 * @type {Texture}
+	 */
 
 	set texture(x) {
 
@@ -60,12 +64,15 @@ export class TexturePass extends Pass {
 	/**
 	 * The opacity.
 	 *
-	 * @property opacity
-	 * @type Number
+	 * @type {Number}
 	 * @default 1.0
 	 */
 
 	get opacity() { return this.copyMaterial.uniforms.opacity.value; }
+
+	/**
+	 * @type {Number}
+	 */
 
 	set opacity(x) {
 
@@ -76,7 +83,6 @@ export class TexturePass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */

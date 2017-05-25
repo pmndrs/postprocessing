@@ -6,30 +6,37 @@ import { Pass } from "./pass.js";
  *
  * Reads the depth from a depth texture and renders it.
  *
- * This pass requires a
- * {{#crossLink "EffectComposer/depthTexture:property"}}{{/crossLink}}.
- *
- * @class DepthPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {PerspectiveCamera} camera - The main camera. Used to obtain the near and far plane settings.
+ * This pass requires a {@link EffectComposer#depthTexture}.
  */
 
 export class DepthPass extends Pass {
+
+	/**
+	 * Constructs a new depth pass.
+	 *
+	 * @param {PerspectiveCamera} camera - The main camera. Used to obtain the near and far plane settings.
+	 */
 
 	constructor(camera) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "DepthPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A depth shader material.
 		 *
-		 * @property depthMaterial
-		 * @type DepthMaterial
+		 * @type {DepthMaterial}
 		 * @private
 		 */
 
@@ -42,7 +49,6 @@ export class DepthPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.

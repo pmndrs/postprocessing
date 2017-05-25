@@ -1,8 +1,7 @@
 /**
  * Core components.
  *
- * @module postprocessing
- * @submodule core
+ * @module postprocessing/core
  */
 
 export { EffectComposer } from "./effect-composer.js";

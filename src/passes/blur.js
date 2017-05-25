@@ -4,30 +4,38 @@ import { Pass } from "./pass.js";
 
 /**
  * A blur pass.
- *
- * @class BlurPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Object} [options] - The options.
- * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
- * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
  */
 
 export class BlurPass extends Pass {
+
+	/**
+	 * Constructs a new blur pass.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 */
 
 	constructor(options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "BlurPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A render target.
 		 *
-		 * @property renderTargetX
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -44,8 +52,7 @@ export class BlurPass extends Pass {
 		/**
 		 * A second render target.
 		 *
-		 * @property renderTargetY
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
@@ -56,12 +63,9 @@ export class BlurPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call
-		 * {{#crossLink "EffectComposer/setSize:method"}}{{/crossLink}} after changing
-		 * this value.
+		 * You need to call {@link EffectComposer#setSize} after changing this value.
 		 *
-		 * @property resolutionScale
-		 * @type Number
+		 * @type {Number}
 		 * @default 0.5
 		 */
 
@@ -70,8 +74,7 @@ export class BlurPass extends Pass {
 		/**
 		 * A convolution shader material.
 		 *
-		 * @property convolutionMaterial
-		 * @type ConvolutionMaterial
+		 * @type {ConvolutionMaterial}
 		 * @private
 		 */
 
@@ -86,12 +89,15 @@ export class BlurPass extends Pass {
 	/**
 	 * The kernel size.
 	 *
-	 * @property kernelSize
-	 * @type KernelSize
+	 * @type {KernelSize}
 	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() { return this.convolutionMaterial.kernelSize; }
+
+	/**
+	 * @type {KernelSize}
+	 */
 
 	set kernelSize(x) {
 
@@ -106,7 +112,6 @@ export class BlurPass extends Pass {
 	/**
 	 * Blurs the read buffer.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -151,7 +156,6 @@ export class BlurPass extends Pass {
 	/**
 	 * Adjusts the format of the render targets.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
@@ -170,7 +174,6 @@ export class BlurPass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

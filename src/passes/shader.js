@@ -4,29 +4,37 @@ import { Pass } from "./pass.js";
  * A shader pass.
  *
  * Used to render any shader material as a 2D filter.
- *
- * @class ShaderPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {ShaderMaterial} material - The shader material to use.
- * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
  */
 
 export class ShaderPass extends Pass {
+
+	/**
+	 * Constructs a new shader pass.
+	 *
+	 * @param {ShaderMaterial} material - The shader material to use.
+	 * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
+	 */
 
 	constructor(material, textureID = "tDiffuse") {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "ShaderPass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * The shader material to use for rendering.
 		 *
-		 * @property material
-		 * @type ShaderMaterial
+		 * @type {ShaderMaterial}
 		 */
 
 		this.material = material;
@@ -36,8 +44,7 @@ export class ShaderPass extends Pass {
 		/**
 		 * The name of the color sampler uniform of the given material.
 		 *
-		 * @property textureID
-		 * @type String
+		 * @type {String}
 		 * @default "tDiffuse"
 		 */
 
@@ -48,7 +55,6 @@ export class ShaderPass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.

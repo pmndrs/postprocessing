@@ -6,18 +6,19 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
  * Passes that do not rely on the depth buffer should explicitly disable the
  * depth test and depth write in their respective shader materials.
  *
- * This class implements a {{#crossLink "Pass/dispose:method"}}{{/crossLink}}
- * method that frees memory on demand.
- *
- * @class Pass
- * @submodule passes
- * @constructor
- * @param {Scene} [scene] - The scene to render.
- * @param {Camera} [camera] - The camera.
- * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {{#crossLink "RenderPass"}}{{/crossLink}}).
+ * This class implements a {@link Pass#dispose} method that frees memory on
+ * demand.
  */
 
 export class Pass {
+
+	/**
+	 * Constructs a new pass.
+	 *
+	 * @param {Scene} [scene] - The scene to render.
+	 * @param {Camera} [camera] - The camera.
+	 * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {@link RenderPass}).
+	 */
 
 	constructor(
 		scene = new Scene(),
@@ -28,8 +29,7 @@ export class Pass {
 		/**
 		 * The name of this pass.
 		 *
-		 * @property name
-		 * @type String
+		 * @type {String}
 		 */
 
 		this.name = "Pass";
@@ -37,8 +37,7 @@ export class Pass {
 		/**
 		 * The scene to render.
 		 *
-		 * @property scene
-		 * @type Scene
+		 * @type {Scene}
 		 * @protected
 		 * @default new Scene()
 		 */
@@ -48,8 +47,7 @@ export class Pass {
 		/**
 		 * The camera.
 		 *
-		 * @property camera
-		 * @type Camera
+		 * @type {Camera}
 		 * @protected
 		 * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
 		 */
@@ -61,12 +59,10 @@ export class Pass {
 		 *
 		 * Assign your shader material to this mesh!
 		 *
-		 * @property quad
-		 * @type Mesh
+		 * @type {Mesh}
 		 * @protected
 		 * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
-		 * @example
-		 *     this.quad.material = this.myMaterial;
+		 * @example this.quad.material = this.myMaterial;
 		 */
 
 		this.quad = quad;
@@ -90,8 +86,7 @@ export class Pass {
 		 * Set this to true if this pass renders to the write buffer so that a
 		 * following pass can find the result in the read buffer.
 		 *
-		 * @property needsSwap
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default false
 		 */
 
@@ -100,8 +95,7 @@ export class Pass {
 		/**
 		 * Enabled flag.
 		 *
-		 * @property enabled
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default true
 		 */
 
@@ -110,8 +104,7 @@ export class Pass {
 		/**
 		 * Render to screen flag.
 		 *
-		 * @property renderToScreen
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default false
 		 */
 
@@ -124,7 +117,7 @@ export class Pass {
 	 *
 	 * This is an abstract method that must be overridden.
 	 *
-	 * @method render
+	 * @abstract
 	 * @throws {Error} An error is thrown if the method is not overridden.
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
@@ -145,14 +138,12 @@ export class Pass {
 	 * You may override this method in case you want to be informed about the main
 	 * render size.
 	 *
-	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method before
-	 * this pass is initialised and every time its own size is updated.
+	 * The {@link EffectComposer} calls this method before this pass is
+	 * initialised and every time its own size is updated.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The renderer's width.
 	 * @param {Number} height - The renderer's height.
-	 * @example
-	 *     this.myRenderTarget.setSize(width, height);
+	 * @example this.myRenderTarget.setSize(width, height);
 	 */
 
 	setSize(width, height) {}
@@ -167,14 +158,13 @@ export class Pass {
 	 * The provided renderer can be used to warm up special off-screen render
 	 * targets by performing a preliminary render operation.
 	 *
-	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when
-	 * this pass is added to its queue.
+	 * The {@link EffectComposer} calls this method when this pass is added to its
+	 * queue.
 	 *
 	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @example
-	 *     if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
+	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialise(renderer, alpha) {}
@@ -188,11 +178,9 @@ export class Pass {
 	 *  - materials
 	 *  - textures
 	 *
-	 * The {{#crossLink "EffectComposer"}}{{/crossLink}} calls this method when it
-	 * is being destroyed. You may, however, use it independently to free memory
-	 * when you are certain that you don't need this pass anymore.
-	 *
-	 * @method dispose
+	 * The {@link EffectComposer} calls this method when it is being destroyed.
+	 * You may, however, use it independently to free memory when you are certain
+	 * that you don't need this pass anymore.
 	 */
 
 	dispose() {

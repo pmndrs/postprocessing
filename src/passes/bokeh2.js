@@ -6,39 +6,46 @@ import { Pass } from "./pass.js";
  *
  * Yields more realistic results but is also more demanding.
  *
- * This pass requires a
- * {{#crossLink "EffectComposer/depthTexture:property"}}{{/crossLink}}.
- *
- * @class Bokeh2Pass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {PerspectiveCamera} camera - The main camera. Used to obtain the focal length and the near and far plane settings.
- * @param {Object} [options] - Additional parameters.
- * @param {Number} [options.rings=3] - The amount of blur rings.
- * @param {Number} [options.samples=4] - The amount of samples per ring.
- * @param {Boolean} [options.showFocus=false] - Whether the focus point should be highlighted.
- * @param {Boolean} [options.manualDoF=false] - Enables manual depth of field blur.
- * @param {Boolean} [options.vignette=false] - Enables a vignette effect.
- * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.
- * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).
- * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.
+ * This pass requires a {@link EffectComposer#depthTexture}.
  */
 
 export class Bokeh2Pass extends Pass {
+
+	/**
+	 * Constructs a new bokeh2 pass.
+	 *
+	 * @param {PerspectiveCamera} camera - The main camera. Used to obtain the focal length and the near and far plane settings.
+	 * @param {Object} [options] - Additional parameters.
+	 * @param {Number} [options.rings=3] - The amount of blur rings.
+	 * @param {Number} [options.samples=4] - The amount of samples per ring.
+	 * @param {Boolean} [options.showFocus=false] - Whether the focus point should be highlighted.
+	 * @param {Boolean} [options.manualDoF=false] - Enables manual depth of field blur.
+	 * @param {Boolean} [options.vignette=false] - Enables a vignette effect.
+	 * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.
+	 * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).
+	 * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.
+	 */
 
 	constructor(camera, options = {}) {
 
 		super();
 
+		/**
+		 * The name of this pass.
+		 */
+
 		this.name = "Bokeh2Pass";
+
+		/**
+		 * This pass renders to the write buffer.
+		 */
+
 		this.needsSwap = true;
 
 		/**
 		 * A bokeh shader material.
 		 *
-		 * @property bokehMaterial
-		 * @type BokehMaterial
+		 * @type {BokehMaterial}
 		 * @private
 		 */
 
@@ -51,7 +58,6 @@ export class Bokeh2Pass extends Pass {
 	/**
 	 * Renders the effect.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
@@ -69,7 +75,6 @@ export class Bokeh2Pass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */

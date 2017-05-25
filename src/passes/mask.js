@@ -2,28 +2,31 @@ import { Pass } from "./pass.js";
 
 /**
  * A mask pass.
- *
- * @class MaskPass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {Scene} scene - The scene to render.
- * @param {Camera} camera - The camera to use.
  */
 
 export class MaskPass extends Pass {
 
+	/**
+	 * Constructs a new mask pass.
+	 *
+	 * @param {Scene} scene - The scene to render.
+	 * @param {Camera} camera - The camera to use.
+	 */
+
 	constructor(scene, camera) {
 
 		super(scene, camera, null);
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "MaskPass";
 
 		/**
 		 * Inverse flag.
 		 *
-		 * @property inverse
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default false
 		 */
 
@@ -32,8 +35,7 @@ export class MaskPass extends Pass {
 		/**
 		 * Stencil buffer clear flag.
 		 *
-		 * @property clearStencil
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default true
 		 */
 
@@ -44,7 +46,6 @@ export class MaskPass extends Pass {
 	/**
 	 * Creates a stencil bit mask.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.

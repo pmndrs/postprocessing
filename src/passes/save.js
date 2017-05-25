@@ -4,28 +4,31 @@ import { Pass } from "./pass.js";
 
 /**
  * A pass that renders the result from a previous pass to another render target.
- *
- * @class SavePass
- * @submodule passes
- * @extends Pass
- * @constructor
- * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.
- * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.
  */
 
 export class SavePass extends Pass {
 
+	/**
+	 * Constructs a new save pass.
+	 *
+	 * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.
+	 * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.
+	 */
+
 	constructor(renderTarget, resize = true) {
 
 		super();
+
+		/**
+		 * The name of this pass.
+		 */
 
 		this.name = "SavePass";
 
 		/**
 		 * Copy shader material.
 		 *
-		 * @property material
-		 * @type CopyMaterial
+		 * @type {CopyMaterial}
 		 * @private
 		 */
 
@@ -36,8 +39,7 @@ export class SavePass extends Pass {
 		/**
 		 * The render target.
 		 *
-		 * @property renderTarget
-		 * @type WebGLRenderTarget
+		 * @type {WebGLRenderTarget}
 		 */
 
 		this.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {
@@ -54,8 +56,7 @@ export class SavePass extends Pass {
 		 * Indicates whether the render target should be resized when the size of
 		 * the composer's read/write buffer changes.
 		 *
-		 * @property resize
-		 * @type Boolean
+		 * @type {Boolean}
 		 * @default true
 		 */
 
@@ -66,7 +67,6 @@ export class SavePass extends Pass {
 	/**
 	 * Saves the read buffer.
 	 *
-	 * @method render
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
 	 */
@@ -82,7 +82,6 @@ export class SavePass extends Pass {
 	/**
 	 * Adjusts the format of the render target.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
@@ -100,7 +99,6 @@ export class SavePass extends Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * @method setSize
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
 	 */
