@@ -66,6 +66,12 @@ export class GodRaysPass extends Pass {
 		this.name = "GodRaysPass";
 
 		/**
+		 * This pass renders to the write buffer.
+		 */
+
+		this.needsSwap = true;
+
+		/**
 		 * A scene that only contains the light source.
 		 *
 		 * @type {Scene}
