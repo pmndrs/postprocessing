@@ -25,6 +25,10 @@ import { ToneMappingDemo } from "./demos/tone-mapping.js";
 
 export class App {
 
+	/**
+	 * Constructs a new demo application.
+	 */
+
 	constructor() {
 
 		/**
