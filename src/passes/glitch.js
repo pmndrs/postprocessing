@@ -139,7 +139,7 @@ export class GlitchPass extends Pass {
 	}
 
 	/**
-	 * Destroys the current perturbation map and creates a new one.
+	 * Destroys the current perturbation map and replaces it with a new one.
 	 *
 	 * @param {Number} [size=64] - The texture size.
 	 * @return {DataTexture} The perturbation texture.
