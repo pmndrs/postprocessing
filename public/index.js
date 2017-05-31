@@ -1304,6 +1304,8 @@
 
   				_this.name = "BloomPass";
 
+  				_this.needsSwap = true;
+
   				_this.blurPass = new BlurPass(options);
 
   				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
@@ -1896,6 +1898,8 @@
   				var _this = possibleConstructorReturn(this, (GodRaysPass.__proto__ || Object.getPrototypeOf(GodRaysPass)).call(this));
 
   				_this.name = "GodRaysPass";
+
+  				_this.needsSwap = true;
 
   				_this.lightScene = new three.Scene();
 

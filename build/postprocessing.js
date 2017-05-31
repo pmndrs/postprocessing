@@ -1,5 +1,5 @@
 /**
- * postprocessing v2.1.2 build May 25 2017
+ * postprocessing v2.1.3 build May 31 2017
  * https://github.com/vanruesc/postprocessing
  * Copyright 2017 Raoul van Rüschen, Zlib
  */
@@ -1287,6 +1287,8 @@
 
   				_this.name = "BloomPass";
 
+  				_this.needsSwap = true;
+
   				_this.blurPass = new BlurPass(options);
 
   				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
@@ -1879,6 +1881,8 @@
   				var _this = possibleConstructorReturn(this, (GodRaysPass.__proto__ || Object.getPrototypeOf(GodRaysPass)).call(this));
 
   				_this.name = "GodRaysPass";
+
+  				_this.needsSwap = true;
 
   				_this.lightScene = new three.Scene();
 
