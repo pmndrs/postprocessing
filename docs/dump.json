@@ -2441,7 +2441,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { RGBFormat } from \"three\";\r\nimport { CombineMaterial, LuminosityMaterial } from \"../materials\";\r\nimport { BlurPass } from \"./blur.js\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A bloom pass.\r\n *\r\n * This pass renders a scene with superimposed blur by utilising the fast Kawase\r\n * convolution approach.\r\n */\r\n\r\nexport class BloomPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new bloom pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.\r\n\t * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.\r\n\t * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.\r\n\t * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"BloomPass\";\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(options);\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = this.blurPass.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetX.texture.name = \"Bloom.TargetX\";\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.blurPass.renderTargetY.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"Bloom.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A combine shader material.\r\n\t\t *\r\n\t\t * @type {CombineMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);\r\n\r\n\t\tthis.intensity = options.intensity;\r\n\r\n\t\t/**\r\n\t\t * A luminosity shader material.\r\n\t\t *\r\n\t\t * @type {LuminosityMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.luminosityMaterial = new LuminosityMaterial(true);\r\n\r\n\t\tthis.distinction = options.distinction;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution scale.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 0.5\r\n\t */\r\n\r\n\tget resolutionScale() { return this.blurPass.resolutionScale; }\r\n\r\n\t/**\r\n\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolutionScale(x) {\r\n\r\n\t\tthis.blurPass.resolutionScale = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t * @default KernelSize.LARGE\r\n\t */\r\n\r\n\tget kernelSize() { return this.blurPass.kernelSize; }\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(x) {\r\n\r\n\t\tthis.blurPass.kernelSize = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The overall intensity of the effect.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget intensity() { return this.combineMaterial.uniforms.opacity2.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset intensity(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.combineMaterial.uniforms.opacity2.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance distinction factor.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget distinction() { return this.luminosityMaterial.uniforms.distinction.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset distinction(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.luminosityMaterial.uniforms.distinction.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * Extracts a luminance map from the read buffer, blurs it and combines it\r\n\t * with the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst quad = this.quad;\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\t\tconst blurPass = this.blurPass;\r\n\r\n\t\tconst luminosityMaterial = this.luminosityMaterial;\r\n\t\tconst combineMaterial = this.combineMaterial;\r\n\r\n\t\tconst renderTargetX = this.renderTargetX;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\t// Luminance filter.\r\n\t\tquad.material = luminosityMaterial;\r\n\t\tluminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\trenderer.render(scene, camera, renderTargetX);\r\n\r\n\t\t// Convolution phase.\r\n\t\tblurPass.render(renderer, renderTargetX, renderTargetY);\r\n\r\n\t\t// Render the original scene with superimposed blur.\r\n\t\tquad.material = combineMaterial;\r\n\t\tcombineMaterial.uniforms.texture1.value = readBuffer.texture;\r\n\t\tcombineMaterial.uniforms.texture2.value = renderTargetY.texture;\r\n\r\n\t\trenderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render targets.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tthis.blurPass.initialise(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.blurPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.renderTargetX.width;\r\n\t\theight = this.blurPass.renderTargetX.height;\r\n\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n}\r\n"
+    "content": "import { RGBFormat } from \"three\";\r\nimport { CombineMaterial, LuminosityMaterial } from \"../materials\";\r\nimport { BlurPass } from \"./blur.js\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A bloom pass.\r\n *\r\n * This pass renders a scene with superimposed blur by utilising the fast Kawase\r\n * convolution approach.\r\n */\r\n\r\nexport class BloomPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new bloom pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.\r\n\t * @param {Number} [options.intensity=1.0] - The strength of the bloom effect.\r\n\t * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.\r\n\t * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the bloom texture with the scene colors.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"BloomPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(options);\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = this.blurPass.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetX.texture.name = \"Bloom.TargetX\";\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.blurPass.renderTargetY.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"Bloom.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A combine shader material.\r\n\t\t *\r\n\t\t * @type {CombineMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);\r\n\r\n\t\tthis.intensity = options.intensity;\r\n\r\n\t\t/**\r\n\t\t * A luminosity shader material.\r\n\t\t *\r\n\t\t * @type {LuminosityMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.luminosityMaterial = new LuminosityMaterial(true);\r\n\r\n\t\tthis.distinction = options.distinction;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution scale.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 0.5\r\n\t */\r\n\r\n\tget resolutionScale() { return this.blurPass.resolutionScale; }\r\n\r\n\t/**\r\n\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolutionScale(x) {\r\n\r\n\t\tthis.blurPass.resolutionScale = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t * @default KernelSize.LARGE\r\n\t */\r\n\r\n\tget kernelSize() { return this.blurPass.kernelSize; }\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(x) {\r\n\r\n\t\tthis.blurPass.kernelSize = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The overall intensity of the effect.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget intensity() { return this.combineMaterial.uniforms.opacity2.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset intensity(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.combineMaterial.uniforms.opacity2.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance distinction factor.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget distinction() { return this.luminosityMaterial.uniforms.distinction.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset distinction(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.luminosityMaterial.uniforms.distinction.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * Extracts a luminance map from the read buffer, blurs it and combines it\r\n\t * with the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst quad = this.quad;\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\t\tconst blurPass = this.blurPass;\r\n\r\n\t\tconst luminosityMaterial = this.luminosityMaterial;\r\n\t\tconst combineMaterial = this.combineMaterial;\r\n\r\n\t\tconst renderTargetX = this.renderTargetX;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\t// Luminance filter.\r\n\t\tquad.material = luminosityMaterial;\r\n\t\tluminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\trenderer.render(scene, camera, renderTargetX);\r\n\r\n\t\t// Convolution phase.\r\n\t\tblurPass.render(renderer, renderTargetX, renderTargetY);\r\n\r\n\t\t// Render the original scene with superimposed blur.\r\n\t\tquad.material = combineMaterial;\r\n\t\tcombineMaterial.uniforms.texture1.value = readBuffer.texture;\r\n\t\tcombineMaterial.uniforms.texture2.value = renderTargetY.texture;\r\n\r\n\t\trenderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render targets.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tthis.blurPass.initialise(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.blurPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.renderTargetX.width;\r\n\t\theight = this.blurPass.renderTargetX.height;\r\n\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
     "__docId__": 100,
@@ -2569,12 +2569,29 @@
     "kind": "member",
     "static": false,
     "variation": null,
+    "name": "needsSwap",
+    "memberof": "src/passes/bloom.js~BloomPass",
+    "longname": "src/passes/bloom.js~BloomPass#needsSwap",
+    "access": null,
+    "description": "This pass renders to the write buffer.",
+    "lineNumber": 40,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 104,
+    "kind": "member",
+    "static": false,
+    "variation": null,
     "name": "blurPass",
     "memberof": "src/passes/bloom.js~BloomPass",
     "longname": "src/passes/bloom.js~BloomPass#blurPass",
     "access": "private",
     "description": "A blur pass.",
-    "lineNumber": 43,
+    "lineNumber": 49,
     "type": {
       "nullable": null,
       "types": [
@@ -2585,7 +2602,7 @@
     }
   },
   {
-    "__docId__": 104,
+    "__docId__": 105,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -2594,27 +2611,7 @@
     "longname": "src/passes/bloom.js~BloomPass#renderTargetX",
     "access": "private",
     "description": "A render target.",
-    "lineNumber": 52,
-    "type": {
-      "nullable": null,
-      "types": [
-        "WebGLRenderTarget"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 105,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "renderTargetY",
-    "memberof": "src/passes/bloom.js~BloomPass",
-    "longname": "src/passes/bloom.js~BloomPass#renderTargetY",
-    "access": "private",
-    "description": "A second render target.",
-    "lineNumber": 63,
+    "lineNumber": 58,
     "type": {
       "nullable": null,
       "types": [
@@ -2629,16 +2626,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "combineMaterial",
+    "name": "renderTargetY",
     "memberof": "src/passes/bloom.js~BloomPass",
-    "longname": "src/passes/bloom.js~BloomPass#combineMaterial",
+    "longname": "src/passes/bloom.js~BloomPass#renderTargetY",
     "access": "private",
-    "description": "A combine shader material.",
-    "lineNumber": 74,
+    "description": "A second render target.",
+    "lineNumber": 69,
     "type": {
       "nullable": null,
       "types": [
-        "CombineMaterial"
+        "WebGLRenderTarget"
       ],
       "spread": false,
       "description": null
@@ -2649,12 +2646,32 @@
     "kind": "member",
     "static": false,
     "variation": null,
+    "name": "combineMaterial",
+    "memberof": "src/passes/bloom.js~BloomPass",
+    "longname": "src/passes/bloom.js~BloomPass#combineMaterial",
+    "access": "private",
+    "description": "A combine shader material.",
+    "lineNumber": 80,
+    "type": {
+      "nullable": null,
+      "types": [
+        "CombineMaterial"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 108,
+    "kind": "member",
+    "static": false,
+    "variation": null,
     "name": "intensity",
     "memberof": "src/passes/bloom.js~BloomPass",
     "longname": "src/passes/bloom.js~BloomPass#intensity",
     "access": null,
     "description": null,
-    "lineNumber": 76,
+    "lineNumber": 82,
     "undocument": true,
     "type": {
       "types": [
@@ -2663,7 +2680,7 @@
     }
   },
   {
-    "__docId__": 108,
+    "__docId__": 109,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -2672,7 +2689,7 @@
     "longname": "src/passes/bloom.js~BloomPass#luminosityMaterial",
     "access": "private",
     "description": "A luminosity shader material.",
-    "lineNumber": 85,
+    "lineNumber": 91,
     "type": {
       "nullable": null,
       "types": [
@@ -2683,7 +2700,7 @@
     }
   },
   {
-    "__docId__": 109,
+    "__docId__": 110,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -2692,7 +2709,7 @@
     "longname": "src/passes/bloom.js~BloomPass#distinction",
     "access": null,
     "description": null,
-    "lineNumber": 87,
+    "lineNumber": 93,
     "undocument": true,
     "type": {
       "types": [
@@ -2701,7 +2718,7 @@
     }
   },
   {
-    "__docId__": 110,
+    "__docId__": 111,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -2710,7 +2727,7 @@
     "longname": "src/passes/bloom.js~BloomPass#resolutionScale",
     "access": null,
     "description": "The resolution scale.",
-    "lineNumber": 98,
+    "lineNumber": 104,
     "unknown": [
       {
         "tagName": "@default",
@@ -2728,7 +2745,7 @@
     "generator": false
   },
   {
-    "__docId__": 111,
+    "__docId__": 112,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -2737,7 +2754,7 @@
     "longname": "src/passes/bloom.js~BloomPass#resolutionScale",
     "access": null,
     "description": "You need to call {@link EffectComposer#setSize} after changing this value.",
-    "lineNumber": 106,
+    "lineNumber": 112,
     "type": {
       "nullable": null,
       "types": [
@@ -2749,7 +2766,7 @@
     "generator": false
   },
   {
-    "__docId__": 112,
+    "__docId__": 113,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -2758,7 +2775,7 @@
     "longname": "src/passes/bloom.js~BloomPass#kernelSize",
     "access": null,
     "description": "The blur kernel size.",
-    "lineNumber": 119,
+    "lineNumber": 125,
     "unknown": [
       {
         "tagName": "@default",
@@ -2776,7 +2793,7 @@
     "generator": false
   },
   {
-    "__docId__": 113,
+    "__docId__": 114,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -2785,7 +2802,7 @@
     "longname": "src/passes/bloom.js~BloomPass#kernelSize",
     "access": null,
     "description": "",
-    "lineNumber": 125,
+    "lineNumber": 131,
     "type": {
       "nullable": null,
       "types": [
@@ -2797,7 +2814,7 @@
     "generator": false
   },
   {
-    "__docId__": 114,
+    "__docId__": 115,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -2806,34 +2823,13 @@
     "longname": "src/passes/bloom.js~BloomPass#intensity",
     "access": null,
     "description": "The overall intensity of the effect.",
-    "lineNumber": 138,
+    "lineNumber": 144,
     "unknown": [
       {
         "tagName": "@default",
         "tagValue": "1.0"
       }
     ],
-    "type": {
-      "nullable": null,
-      "types": [
-        "Number"
-      ],
-      "spread": false,
-      "description": null
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 115,
-    "kind": "set",
-    "static": false,
-    "variation": null,
-    "name": "intensity",
-    "memberof": "src/passes/bloom.js~BloomPass",
-    "longname": "src/passes/bloom.js~BloomPass#intensity",
-    "access": null,
-    "description": "",
-    "lineNumber": 144,
     "type": {
       "nullable": null,
       "types": [
@@ -2846,6 +2842,27 @@
   },
   {
     "__docId__": 116,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "intensity",
+    "memberof": "src/passes/bloom.js~BloomPass",
+    "longname": "src/passes/bloom.js~BloomPass#intensity",
+    "access": null,
+    "description": "",
+    "lineNumber": 150,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Number"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 117,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -2854,7 +2871,7 @@
     "longname": "src/passes/bloom.js~BloomPass#distinction",
     "access": null,
     "description": "The luminance distinction factor.",
-    "lineNumber": 161,
+    "lineNumber": 167,
     "unknown": [
       {
         "tagName": "@default",
@@ -2872,7 +2889,7 @@
     "generator": false
   },
   {
-    "__docId__": 117,
+    "__docId__": 118,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -2881,7 +2898,7 @@
     "longname": "src/passes/bloom.js~BloomPass#distinction",
     "access": null,
     "description": "",
-    "lineNumber": 167,
+    "lineNumber": 173,
     "type": {
       "nullable": null,
       "types": [
@@ -2893,7 +2910,7 @@
     "generator": false
   },
   {
-    "__docId__": 118,
+    "__docId__": 119,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -2902,7 +2919,7 @@
     "longname": "src/passes/bloom.js~BloomPass#render",
     "access": null,
     "description": "Renders the effect.\n\nExtracts a luminance map from the read buffer, blurs it and combines it\nwith the read buffer.",
-    "lineNumber": 188,
+    "lineNumber": 194,
     "params": [
       {
         "nullable": null,
@@ -2938,7 +2955,7 @@
     "generator": false
   },
   {
-    "__docId__": 119,
+    "__docId__": 120,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -2947,7 +2964,7 @@
     "longname": "src/passes/bloom.js~BloomPass#initialise",
     "access": null,
     "description": "Adjusts the format of the render targets.",
-    "lineNumber": 225,
+    "lineNumber": 231,
     "params": [
       {
         "nullable": null,
@@ -2973,7 +2990,7 @@
     "generator": false
   },
   {
-    "__docId__": 120,
+    "__docId__": 121,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -2982,7 +2999,7 @@
     "longname": "src/passes/bloom.js~BloomPass#setSize",
     "access": null,
     "description": "Updates this pass with the renderer's size.",
-    "lineNumber": 245,
+    "lineNumber": 251,
     "params": [
       {
         "nullable": null,
@@ -3008,7 +3025,7 @@
     "generator": false
   },
   {
-    "__docId__": 121,
+    "__docId__": 122,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -3021,7 +3038,7 @@
     "content": "import { LinearFilter, RGBFormat, WebGLRenderTarget } from \"three\";\r\nimport { ConvolutionMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A blur pass.\r\n */\r\n\r\nexport class BlurPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new blur pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"BlurPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetX.texture.name = \"Blur.TargetX\";\r\n\t\tthis.renderTargetX.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"Blur.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * The resolution scale.\r\n\t\t *\r\n\t\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @default 0.5\r\n\t\t */\r\n\r\n\t\tthis.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;\r\n\r\n\t\t/**\r\n\t\t * A convolution shader material.\r\n\t\t *\r\n\t\t * @type {ConvolutionMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.convolutionMaterial = new ConvolutionMaterial();\r\n\r\n\t\tthis.kernelSize = options.kernelSize;\r\n\r\n\t\tthis.quad.material = this.convolutionMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t * @default KernelSize.LARGE\r\n\t */\r\n\r\n\tget kernelSize() { return this.convolutionMaterial.kernelSize; }\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.convolutionMaterial.kernelSize = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Blurs the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\r\n\t\tconst renderTargetX = this.renderTargetX;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\tconst material = this.convolutionMaterial;\r\n\t\tconst uniforms = material.uniforms;\r\n\t\tconst kernel = material.getKernel();\r\n\r\n\t\tlet lastRT = readBuffer;\r\n\t\tlet destRT;\r\n\t\tlet i, l;\r\n\r\n\t\t// Apply the multi-pass blur.\r\n\t\tfor(i = 0, l = kernel.length - 1; i < l; ++i) {\r\n\r\n\t\t\t// Alternate between targets.\r\n\t\t\tdestRT = ((i % 2) === 0) ? renderTargetX : renderTargetY;\r\n\r\n\t\t\tuniforms.kernel.value = kernel[i];\r\n\t\t\tuniforms.tDiffuse.value = lastRT.texture;\r\n\t\t\trenderer.render(scene, camera, destRT);\r\n\r\n\t\t\tlastRT = destRT;\r\n\r\n\t\t}\r\n\r\n\t\tuniforms.kernel.value = kernel[i];\r\n\t\tuniforms.tDiffuse.value = lastRT.texture;\r\n\t\trenderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render targets.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\twidth = Math.max(1, Math.floor(width * this.resolutionScale));\r\n\t\theight = Math.max(1, Math.floor(height * this.resolutionScale));\r\n\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t\tthis.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 122,
+    "__docId__": 123,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -3040,7 +3057,7 @@
     ]
   },
   {
-    "__docId__": 123,
+    "__docId__": 124,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -3089,7 +3106,7 @@
     "generator": false
   },
   {
-    "__docId__": 124,
+    "__docId__": 125,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3106,7 +3123,7 @@
     }
   },
   {
-    "__docId__": 125,
+    "__docId__": 126,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3123,7 +3140,7 @@
     }
   },
   {
-    "__docId__": 126,
+    "__docId__": 127,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3143,7 +3160,7 @@
     }
   },
   {
-    "__docId__": 127,
+    "__docId__": 128,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3163,7 +3180,7 @@
     }
   },
   {
-    "__docId__": 128,
+    "__docId__": 129,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3189,7 +3206,7 @@
     }
   },
   {
-    "__docId__": 129,
+    "__docId__": 130,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3209,7 +3226,7 @@
     }
   },
   {
-    "__docId__": 130,
+    "__docId__": 131,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3227,7 +3244,7 @@
     }
   },
   {
-    "__docId__": 131,
+    "__docId__": 132,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -3254,7 +3271,7 @@
     "generator": false
   },
   {
-    "__docId__": 132,
+    "__docId__": 133,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -3275,7 +3292,7 @@
     "generator": false
   },
   {
-    "__docId__": 133,
+    "__docId__": 134,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3320,7 +3337,7 @@
     "generator": false
   },
   {
-    "__docId__": 134,
+    "__docId__": 135,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3355,7 +3372,7 @@
     "generator": false
   },
   {
-    "__docId__": 135,
+    "__docId__": 136,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3390,7 +3407,7 @@
     "generator": false
   },
   {
-    "__docId__": 136,
+    "__docId__": 137,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -3403,7 +3420,7 @@
     "content": "import { BokehMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A Depth of Field (DoF) pass using a bokeh shader.\r\n *\r\n * This pass requires a {@link EffectComposer#depthTexture}.\r\n */\r\n\r\nexport class BokehPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new bokeh pass.\r\n\t *\r\n\t * @param {PerspectiveCamera} camera - The main camera. Used to obtain the aspect ratio and the near and far plane settings.\r\n\t * @param {Object} [options] - Additional parameters.\r\n\t * @param {Number} [options.focus=1.0] - Focus distance.\r\n\t * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.\r\n\t * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.\r\n\t */\r\n\r\n\tconstructor(camera, options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"BokehPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A bokeh shader material.\r\n\t\t *\r\n\t\t * @type {BokehMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.bokehMaterial = new BokehMaterial(camera, options);\r\n\r\n\t\tthis.quad.material = this.bokehMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tthis.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tthis.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.bokehMaterial.uniforms.aspect.value = width / height;\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 137,
+    "__docId__": 138,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -3422,7 +3439,7 @@
     ]
   },
   {
-    "__docId__": 138,
+    "__docId__": 139,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -3493,7 +3510,7 @@
     "generator": false
   },
   {
-    "__docId__": 139,
+    "__docId__": 140,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3510,7 +3527,7 @@
     }
   },
   {
-    "__docId__": 140,
+    "__docId__": 141,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3527,7 +3544,7 @@
     }
   },
   {
-    "__docId__": 141,
+    "__docId__": 142,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3547,7 +3564,7 @@
     }
   },
   {
-    "__docId__": 142,
+    "__docId__": 143,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3592,7 +3609,7 @@
     "generator": false
   },
   {
-    "__docId__": 143,
+    "__docId__": 144,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3627,7 +3644,7 @@
     "generator": false
   },
   {
-    "__docId__": 144,
+    "__docId__": 145,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -3640,7 +3657,7 @@
     "content": "import { Bokeh2Material } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * An advanced Depth of Field (DoF) pass.\r\n *\r\n * Yields more realistic results but is also more demanding.\r\n *\r\n * This pass requires a {@link EffectComposer#depthTexture}.\r\n */\r\n\r\nexport class Bokeh2Pass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new bokeh2 pass.\r\n\t *\r\n\t * @param {PerspectiveCamera} camera - The main camera. Used to obtain the focal length and the near and far plane settings.\r\n\t * @param {Object} [options] - Additional parameters.\r\n\t * @param {Number} [options.rings=3] - The amount of blur rings.\r\n\t * @param {Number} [options.samples=4] - The amount of samples per ring.\r\n\t * @param {Boolean} [options.showFocus=false] - Whether the focus point should be highlighted.\r\n\t * @param {Boolean} [options.manualDoF=false] - Enables manual depth of field blur.\r\n\t * @param {Boolean} [options.vignette=false] - Enables a vignette effect.\r\n\t * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.\r\n\t * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).\r\n\t * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.\r\n\t */\r\n\r\n\tconstructor(camera, options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"Bokeh2Pass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A bokeh shader material.\r\n\t\t *\r\n\t\t * @type {BokehMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.bokehMaterial = new Bokeh2Material(camera, options);\r\n\r\n\t\tthis.quad.material = this.bokehMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tthis.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tthis.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.bokehMaterial.setTexelSize(1.0 / width, 1.0 / height);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 145,
+    "__docId__": 146,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -3659,7 +3676,7 @@
     ]
   },
   {
-    "__docId__": 146,
+    "__docId__": 147,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -3790,7 +3807,7 @@
     "generator": false
   },
   {
-    "__docId__": 147,
+    "__docId__": 148,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3807,7 +3824,7 @@
     }
   },
   {
-    "__docId__": 148,
+    "__docId__": 149,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3824,7 +3841,7 @@
     }
   },
   {
-    "__docId__": 149,
+    "__docId__": 150,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3844,7 +3861,7 @@
     }
   },
   {
-    "__docId__": 150,
+    "__docId__": 151,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3889,7 +3906,7 @@
     "generator": false
   },
   {
-    "__docId__": 151,
+    "__docId__": 152,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -3924,7 +3941,7 @@
     "generator": false
   },
   {
-    "__docId__": 152,
+    "__docId__": 153,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -3937,7 +3954,7 @@
     "content": "import { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A pass that disables the stencil mask.\r\n */\r\n\r\nexport class ClearMaskPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new clear mask pass.\r\n\t */\r\n\r\n\tconstructor() {\r\n\r\n\t\tsuper(null, null, null);\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"ClearMaskPass\";\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Disables the stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t */\r\n\r\n\trender(renderer) {\r\n\r\n\t\trenderer.state.buffers.stencil.setTest(false);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 153,
+    "__docId__": 154,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -3956,7 +3973,7 @@
     ]
   },
   {
-    "__docId__": 154,
+    "__docId__": 155,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -3970,7 +3987,7 @@
     "generator": false
   },
   {
-    "__docId__": 155,
+    "__docId__": 156,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -3987,7 +4004,7 @@
     }
   },
   {
-    "__docId__": 156,
+    "__docId__": 157,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4012,7 +4029,7 @@
     "generator": false
   },
   {
-    "__docId__": 157,
+    "__docId__": 158,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -4025,7 +4042,7 @@
     "content": "import { Color } from \"three\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Used for saving the original clear color of the renderer.\r\n *\r\n * @type Color\r\n * @private\r\n * @static\r\n */\r\n\r\nconst color = new Color();\r\n\r\n/**\r\n * A clear pass.\r\n *\r\n * You can prevent specific buffers from being cleared by setting either the\r\n * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer\r\n * to false.\r\n */\r\n\r\nexport class ClearPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new clear pass.\r\n\t *\r\n\t * @param {Object} [options] - Additional options.\r\n\t * @param {Color} [options.clearColor=null] - An override clear color.\r\n\t * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper(null, null, null);\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"ClearPass\";\r\n\r\n\t\t/**\r\n\t\t * Clear color.\r\n\t\t *\r\n\t\t * @type {Color}\r\n\t\t * @default null\r\n\t\t */\r\n\r\n\t\tthis.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;\r\n\r\n\t\t/**\r\n\t\t * Clear alpha.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @default 0.0\r\n\t\t */\r\n\r\n\t\tthis.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 0.0;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Clears the read buffer or the screen.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer) {\r\n\r\n\t\tconst clearColor = this.clearColor;\r\n\r\n\t\tlet clearAlpha;\r\n\r\n\t\tif(clearColor !== null) {\r\n\r\n\t\t\tcolor.copy(renderer.getClearColor());\r\n\t\t\tclearAlpha = renderer.getClearAlpha();\r\n\t\t\trenderer.setClearColor(clearColor, this.clearAlpha);\r\n\r\n\t\t}\r\n\r\n\t\trenderer.setRenderTarget(this.renderToScreen ? null : readBuffer);\r\n\t\trenderer.clear();\r\n\r\n\t\tif(clearColor !== null) {\r\n\r\n\t\t\trenderer.setClearColor(color, clearAlpha);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 158,
+    "__docId__": 159,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -4054,7 +4071,7 @@
     }
   },
   {
-    "__docId__": 159,
+    "__docId__": 160,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -4073,7 +4090,7 @@
     ]
   },
   {
-    "__docId__": 160,
+    "__docId__": 161,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -4122,7 +4139,7 @@
     "generator": false
   },
   {
-    "__docId__": 161,
+    "__docId__": 162,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4139,7 +4156,7 @@
     }
   },
   {
-    "__docId__": 162,
+    "__docId__": 163,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4165,7 +4182,7 @@
     }
   },
   {
-    "__docId__": 163,
+    "__docId__": 164,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4191,7 +4208,7 @@
     }
   },
   {
-    "__docId__": 164,
+    "__docId__": 165,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4226,7 +4243,7 @@
     "generator": false
   },
   {
-    "__docId__": 165,
+    "__docId__": 166,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -4239,7 +4256,7 @@
     "content": "import { DepthMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A depth pass.\r\n *\r\n * Reads the depth from a depth texture and renders it.\r\n *\r\n * This pass requires a {@link EffectComposer#depthTexture}.\r\n */\r\n\r\nexport class DepthPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new depth pass.\r\n\t *\r\n\t * @param {PerspectiveCamera} camera - The main camera. Used to obtain the near and far plane settings.\r\n\t */\r\n\r\n\tconstructor(camera) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"DepthPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A depth shader material.\r\n\t\t *\r\n\t\t * @type {DepthMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.depthMaterial = new DepthMaterial(camera);\r\n\r\n\t\tthis.quad.material = this.depthMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tthis.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 166,
+    "__docId__": 167,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -4258,7 +4275,7 @@
     ]
   },
   {
-    "__docId__": 167,
+    "__docId__": 168,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -4283,7 +4300,7 @@
     "generator": false
   },
   {
-    "__docId__": 168,
+    "__docId__": 169,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4300,7 +4317,7 @@
     }
   },
   {
-    "__docId__": 169,
+    "__docId__": 170,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4317,7 +4334,7 @@
     }
   },
   {
-    "__docId__": 170,
+    "__docId__": 171,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4337,7 +4354,7 @@
     }
   },
   {
-    "__docId__": 171,
+    "__docId__": 172,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4382,7 +4399,7 @@
     "generator": false
   },
   {
-    "__docId__": 172,
+    "__docId__": 173,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -4395,7 +4412,7 @@
     "content": "import { DotScreenMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A dot screen pass.\r\n */\r\n\r\nexport class DotScreenPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new dot screen pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.angle=1.57] - The angle of the pattern.\r\n\t * @param {Number} [options.scale=1.0] - The scale of the overall effect.\r\n\t * @param {Number} [options.intensity=1.0] - The intensity of the effect.\r\n\t * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"DotScreenPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A dot screen shader material.\r\n\t\t *\r\n\t\t * @type {DotScreenMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.material = new DotScreenMaterial(options.average);\r\n\r\n\t\tif(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }\r\n\t\tif(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }\r\n\t\tif(options.intensity !== undefined) { this.material.uniforms.intensity.value = options.intensity; }\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tthis.material.uniforms.tDiffuse.value = readBuffer.texture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} heght - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\twidth = Math.max(1, width);\r\n\t\theight = Math.max(1, height);\r\n\r\n\t\tthis.material.uniforms.offsetRepeat.value.z = width;\r\n\t\tthis.material.uniforms.offsetRepeat.value.w = height;\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 173,
+    "__docId__": 174,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -4414,7 +4431,7 @@
     ]
   },
   {
-    "__docId__": 174,
+    "__docId__": 175,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -4487,7 +4504,7 @@
     "generator": false
   },
   {
-    "__docId__": 175,
+    "__docId__": 176,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4504,7 +4521,7 @@
     }
   },
   {
-    "__docId__": 176,
+    "__docId__": 177,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4521,7 +4538,7 @@
     }
   },
   {
-    "__docId__": 177,
+    "__docId__": 178,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4541,7 +4558,7 @@
     }
   },
   {
-    "__docId__": 178,
+    "__docId__": 179,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4586,7 +4603,7 @@
     "generator": false
   },
   {
-    "__docId__": 179,
+    "__docId__": 180,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4621,7 +4638,7 @@
     "generator": false
   },
   {
-    "__docId__": 180,
+    "__docId__": 181,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -4634,7 +4651,7 @@
     "content": "import { FilmMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A film pass.\r\n *\r\n * Provides various cinematic effects.\r\n */\r\n\r\nexport class FilmPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new film pass.\r\n\t *\r\n\t * @param {Object} [options] - The options. Disabled effects have no negative impact on performance.\r\n\t * @param {Boolean} [options.greyscale=false] - Enable greyscale effect. Greyscale and sepia are mutually exclusive.\r\n\t * @param {Boolean} [options.sepia=false] - Enable sepia effect. Greyscale and sepia are mutually exclusive.\r\n\t * @param {Boolean} [options.vignette=false] - Apply vignette effect.\r\n\t * @param {Boolean} [options.eskil=false] - Use Eskil's vignette approach. The default looks dusty while Eskil looks more burned out.\r\n\t * @param {Boolean} [options.screenMode=true] - Whether the screen blend mode should be used for noise and scanlines.\r\n\t * @param {Boolean} [options.scanlines=true] - Show scanlines.\r\n\t * @param {Boolean} [options.noise=true] - Show noise-based film grain.\r\n\t * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.\r\n\t * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.\r\n\t * @param {Number} [options.scanlineDensity=1.0] - The number of scanlines in percent, relative to the screen height.\r\n\t * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect.\r\n\t * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect.\r\n\t * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect.\r\n\t * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"FilmPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Film shader material.\r\n\t\t *\r\n\t\t * @type {FilmMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.material = new FilmMaterial(options);\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t\t/**\r\n\t\t * The amount of scanlines in percent, relative to the screen height.\r\n\t\t *\r\n\t\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @default 1.25\r\n\t\t */\r\n\r\n\t\tthis.scanlineDensity = (options.scanlineDensity === undefined) ? 1.25 : options.scanlineDensity;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t * @param {Number} delta - The render delta time.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer, delta) {\r\n\r\n\t\tthis.material.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tthis.material.uniforms.time.value += delta;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the scanline count using the renderer's height.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.material.uniforms.scanlineCount.value = Math.round(height * this.scanlineDensity);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 181,
+    "__docId__": 182,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -4653,7 +4670,7 @@
     ]
   },
   {
-    "__docId__": 182,
+    "__docId__": 183,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -4846,7 +4863,7 @@
     "generator": false
   },
   {
-    "__docId__": 183,
+    "__docId__": 184,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4863,7 +4880,7 @@
     }
   },
   {
-    "__docId__": 184,
+    "__docId__": 185,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4880,7 +4897,7 @@
     }
   },
   {
-    "__docId__": 185,
+    "__docId__": 186,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4900,7 +4917,7 @@
     }
   },
   {
-    "__docId__": 186,
+    "__docId__": 187,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -4926,7 +4943,7 @@
     }
   },
   {
-    "__docId__": 187,
+    "__docId__": 188,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -4981,7 +4998,7 @@
     "generator": false
   },
   {
-    "__docId__": 188,
+    "__docId__": 189,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -5016,7 +5033,7 @@
     "generator": false
   },
   {
-    "__docId__": 189,
+    "__docId__": 190,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -5026,10 +5043,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { DataTexture, RGBFormat, FloatType } from \"three\";\r\nimport { GlitchMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Returns a random integer in the specified range.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomInt(low, high) {\r\n\r\n\treturn low + Math.floor(Math.random() * (high - low + 1));\r\n\r\n}\r\n\r\n/**\r\n * Returns a random float in the specified range.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomFloat(low, high) {\r\n\r\n\treturn low + Math.random() * (high - low);\r\n\r\n}\r\n\r\n/**\r\n * A glitch pass.\r\n */\r\n\r\nexport class GlitchPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new glitch pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Texture} [options.perturbMap] - A perturbation map. If none is provided, a noise texture will be created.\r\n\t * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"GlitchPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Glitch shader material.\r\n\t\t *\r\n\t\t * @type {GlitchMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.material = new GlitchMaterial();\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t\t/**\r\n\t\t * A perturbation map.\r\n\t\t *\r\n\t\t * @type {Texture}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.texture = null;\r\n\r\n\t\tthis.perturbMap = (options.perturbMap !== undefined) ? options.perturbMap : this.generatePerturbMap(options.dtSize);\r\n\t\tthis.perturbMap.name = \"Glitch.Perturbation\";\r\n\t\tthis.perturbMap.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The effect mode.\r\n\t\t *\r\n\t\t * @type {GlitchMode}\r\n\t\t * @default GlitchMode.SPORADIC\r\n\t\t */\r\n\r\n\t\tthis.mode = GlitchMode.SPORADIC;\r\n\r\n\t\t/**\r\n\t\t * Counter for glitch activation and deactivation.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.counter = 0;\r\n\r\n\t\t/**\r\n\t\t * A random break point for the sporadic glitch activation.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.breakPoint = randomInt(120, 240);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The current perturbation map.\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tget perturbMap() { return this.texture; }\r\n\r\n\t/**\r\n\t * Assigning a new perturbation map does not destroy the current one!\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tset perturbMap(x) {\r\n\r\n\t\tthis.texture = x;\r\n\t\tthis.material.uniforms.tPerturb.value = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Destroys the current perturbation map and creates a new one.\r\n\t *\r\n\t * @param {Number} [size=64] - The texture size.\r\n\t * @return {DataTexture} The perturbation texture.\r\n\t */\r\n\r\n\tgeneratePerturbMap(size = 64) {\r\n\r\n\t\tconst pixels = size * size;\r\n\t\tconst data = new Float32Array(pixels * 3);\r\n\r\n\t\tlet dt = this.perturbMap;\r\n\t\tlet i, x;\r\n\r\n\t\tfor(i = 0; i < pixels; ++i) {\r\n\r\n\t\t\tx = Math.random();\r\n\r\n\t\t\tdata[i * 3] = x;\r\n\t\t\tdata[i * 3 + 1] = x;\r\n\t\t\tdata[i * 3 + 2] = x;\r\n\r\n\t\t}\r\n\r\n\t\tif(dt !== null) {\r\n\r\n\t\t\tdt.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tdt = new DataTexture(data, size, size, RGBFormat, FloatType);\r\n\t\tdt.needsUpdate = true;\r\n\r\n\t\tthis.perturbMap = dt;\r\n\r\n\t\treturn dt;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst mode = this.mode;\r\n\t\tconst counter = this.counter;\r\n\t\tconst breakPoint = this.breakPoint;\r\n\t\tconst uniforms = this.material.uniforms;\r\n\r\n\t\tuniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tuniforms.seed.value = Math.random();\r\n\t\tuniforms.active.value = true;\r\n\r\n\t\tif(counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {\r\n\r\n\t\t\tuniforms.amount.value = Math.random() / 30.0;\r\n\t\t\tuniforms.angle.value = randomFloat(-Math.PI, Math.PI);\r\n\t\t\tuniforms.seedX.value = randomFloat(-1.0, 1.0);\r\n\t\t\tuniforms.seedY.value = randomFloat(-1.0, 1.0);\r\n\t\t\tuniforms.distortionX.value = randomFloat(0.0, 1.0);\r\n\t\t\tuniforms.distortionY.value = randomFloat(0.0, 1.0);\r\n\r\n\t\t\tthis.breakPoint = randomInt(120, 240);\r\n\t\t\tthis.counter = 0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tif(counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {\r\n\r\n\t\t\t\tuniforms.amount.value = Math.random() / 90.0;\r\n\t\t\t\tuniforms.angle.value = randomFloat(-Math.PI, Math.PI);\r\n\t\t\t\tuniforms.distortionX.value = randomFloat(0.0, 1.0);\r\n\t\t\t\tuniforms.distortionY.value = randomFloat(0.0, 1.0);\r\n\t\t\t\tuniforms.seedX.value = randomFloat(-0.3, 0.3);\r\n\t\t\t\tuniforms.seedY.value = randomFloat(-0.3, 0.3);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\t// Sporadic.\r\n\t\t\t\tuniforms.active.value = false;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t++this.counter;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * A glitch mode enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} SPORADIC - Sporadic glitches.\r\n * @property {Number} CONSTANT_MILD - Constant mild glitches.\r\n * @property {Number} CONSTANT_WILD - Constant wild glitches.\r\n */\r\n\r\nexport const GlitchMode = {\r\n\r\n\tSPORADIC: 0,\r\n\tCONSTANT_MILD: 1,\r\n\tCONSTANT_WILD: 2\r\n\r\n};\r\n"
+    "content": "import { DataTexture, RGBFormat, FloatType } from \"three\";\r\nimport { GlitchMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Returns a random integer in the specified range.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomInt(low, high) {\r\n\r\n\treturn low + Math.floor(Math.random() * (high - low + 1));\r\n\r\n}\r\n\r\n/**\r\n * Returns a random float in the specified range.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomFloat(low, high) {\r\n\r\n\treturn low + Math.random() * (high - low);\r\n\r\n}\r\n\r\n/**\r\n * A glitch pass.\r\n */\r\n\r\nexport class GlitchPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new glitch pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Texture} [options.perturbMap] - A perturbation map. If none is provided, a noise texture will be created.\r\n\t * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"GlitchPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Glitch shader material.\r\n\t\t *\r\n\t\t * @type {GlitchMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.material = new GlitchMaterial();\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t\t/**\r\n\t\t * A perturbation map.\r\n\t\t *\r\n\t\t * @type {Texture}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.texture = null;\r\n\r\n\t\tthis.perturbMap = (options.perturbMap !== undefined) ? options.perturbMap : this.generatePerturbMap(options.dtSize);\r\n\t\tthis.perturbMap.name = \"Glitch.Perturbation\";\r\n\t\tthis.perturbMap.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The effect mode.\r\n\t\t *\r\n\t\t * @type {GlitchMode}\r\n\t\t * @default GlitchMode.SPORADIC\r\n\t\t */\r\n\r\n\t\tthis.mode = GlitchMode.SPORADIC;\r\n\r\n\t\t/**\r\n\t\t * Counter for glitch activation and deactivation.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.counter = 0;\r\n\r\n\t\t/**\r\n\t\t * A random break point for the sporadic glitch activation.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.breakPoint = randomInt(120, 240);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The current perturbation map.\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tget perturbMap() { return this.texture; }\r\n\r\n\t/**\r\n\t * Assigning a new perturbation map does not destroy the current one!\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tset perturbMap(x) {\r\n\r\n\t\tthis.texture = x;\r\n\t\tthis.material.uniforms.tPerturb.value = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Destroys the current perturbation map and replaces it with a new one.\r\n\t *\r\n\t * @param {Number} [size=64] - The texture size.\r\n\t * @return {DataTexture} The perturbation texture.\r\n\t */\r\n\r\n\tgeneratePerturbMap(size = 64) {\r\n\r\n\t\tconst pixels = size * size;\r\n\t\tconst data = new Float32Array(pixels * 3);\r\n\r\n\t\tlet dt = this.perturbMap;\r\n\t\tlet i, x;\r\n\r\n\t\tfor(i = 0; i < pixels; ++i) {\r\n\r\n\t\t\tx = Math.random();\r\n\r\n\t\t\tdata[i * 3] = x;\r\n\t\t\tdata[i * 3 + 1] = x;\r\n\t\t\tdata[i * 3 + 2] = x;\r\n\r\n\t\t}\r\n\r\n\t\tif(dt !== null) {\r\n\r\n\t\t\tdt.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tdt = new DataTexture(data, size, size, RGBFormat, FloatType);\r\n\t\tdt.needsUpdate = true;\r\n\r\n\t\tthis.perturbMap = dt;\r\n\r\n\t\treturn dt;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst mode = this.mode;\r\n\t\tconst counter = this.counter;\r\n\t\tconst breakPoint = this.breakPoint;\r\n\t\tconst uniforms = this.material.uniforms;\r\n\r\n\t\tuniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tuniforms.seed.value = Math.random();\r\n\t\tuniforms.active.value = true;\r\n\r\n\t\tif(counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {\r\n\r\n\t\t\tuniforms.amount.value = Math.random() / 30.0;\r\n\t\t\tuniforms.angle.value = randomFloat(-Math.PI, Math.PI);\r\n\t\t\tuniforms.seedX.value = randomFloat(-1.0, 1.0);\r\n\t\t\tuniforms.seedY.value = randomFloat(-1.0, 1.0);\r\n\t\t\tuniforms.distortionX.value = randomFloat(0.0, 1.0);\r\n\t\t\tuniforms.distortionY.value = randomFloat(0.0, 1.0);\r\n\r\n\t\t\tthis.breakPoint = randomInt(120, 240);\r\n\t\t\tthis.counter = 0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tif(counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {\r\n\r\n\t\t\t\tuniforms.amount.value = Math.random() / 90.0;\r\n\t\t\t\tuniforms.angle.value = randomFloat(-Math.PI, Math.PI);\r\n\t\t\t\tuniforms.distortionX.value = randomFloat(0.0, 1.0);\r\n\t\t\t\tuniforms.distortionY.value = randomFloat(0.0, 1.0);\r\n\t\t\t\tuniforms.seedX.value = randomFloat(-0.3, 0.3);\r\n\t\t\t\tuniforms.seedY.value = randomFloat(-0.3, 0.3);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\t// Sporadic.\r\n\t\t\t\tuniforms.active.value = false;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t++this.counter;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * A glitch mode enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} SPORADIC - Sporadic glitches.\r\n * @property {Number} CONSTANT_MILD - Constant mild glitches.\r\n * @property {Number} CONSTANT_WILD - Constant wild glitches.\r\n */\r\n\r\nexport const GlitchMode = {\r\n\r\n\tSPORADIC: 0,\r\n\tCONSTANT_MILD: 1,\r\n\tCONSTANT_WILD: 2\r\n\r\n};\r\n"
   },
   {
-    "__docId__": 190,
+    "__docId__": 191,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -5081,7 +5098,7 @@
     "generator": false
   },
   {
-    "__docId__": 191,
+    "__docId__": 192,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -5133,7 +5150,7 @@
     "generator": false
   },
   {
-    "__docId__": 192,
+    "__docId__": 193,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -5152,7 +5169,7 @@
     ]
   },
   {
-    "__docId__": 193,
+    "__docId__": 194,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -5199,7 +5216,7 @@
     "generator": false
   },
   {
-    "__docId__": 194,
+    "__docId__": 195,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5216,7 +5233,7 @@
     }
   },
   {
-    "__docId__": 195,
+    "__docId__": 196,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5233,7 +5250,7 @@
     }
   },
   {
-    "__docId__": 196,
+    "__docId__": 197,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5253,7 +5270,7 @@
     }
   },
   {
-    "__docId__": 197,
+    "__docId__": 198,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5273,7 +5290,7 @@
     }
   },
   {
-    "__docId__": 198,
+    "__docId__": 199,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5291,7 +5308,7 @@
     }
   },
   {
-    "__docId__": 199,
+    "__docId__": 200,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5317,7 +5334,7 @@
     }
   },
   {
-    "__docId__": 200,
+    "__docId__": 201,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5337,7 +5354,7 @@
     }
   },
   {
-    "__docId__": 201,
+    "__docId__": 202,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5357,7 +5374,7 @@
     }
   },
   {
-    "__docId__": 202,
+    "__docId__": 203,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -5378,7 +5395,7 @@
     "generator": false
   },
   {
-    "__docId__": 203,
+    "__docId__": 204,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -5399,7 +5416,7 @@
     "generator": false
   },
   {
-    "__docId__": 204,
+    "__docId__": 205,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5417,7 +5434,7 @@
     }
   },
   {
-    "__docId__": 205,
+    "__docId__": 206,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -5425,7 +5442,7 @@
     "memberof": "src/passes/glitch.js~GlitchPass",
     "longname": "src/passes/glitch.js~GlitchPass#generatePerturbMap",
     "access": null,
-    "description": "Destroys the current perturbation map and creates a new one.",
+    "description": "Destroys the current perturbation map and replaces it with a new one.",
     "lineNumber": 148,
     "params": [
       {
@@ -5452,7 +5469,7 @@
     "generator": false
   },
   {
-    "__docId__": 206,
+    "__docId__": 207,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5470,7 +5487,7 @@
     }
   },
   {
-    "__docId__": 207,
+    "__docId__": 208,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -5515,7 +5532,7 @@
     "generator": false
   },
   {
-    "__docId__": 208,
+    "__docId__": 209,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5533,7 +5550,7 @@
     }
   },
   {
-    "__docId__": 209,
+    "__docId__": 210,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5551,7 +5568,7 @@
     }
   },
   {
-    "__docId__": 210,
+    "__docId__": 211,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -5606,7 +5623,7 @@
     }
   },
   {
-    "__docId__": 211,
+    "__docId__": 212,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -5616,10 +5633,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tMeshBasicMaterial,\r\n\tRGBFormat,\r\n\tScene,\r\n\tVector3,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { CombineMaterial, GodRaysMaterial } from \"../materials\";\r\nimport { RenderPass } from \"./render.js\";\r\nimport { BlurPass } from \"./blur.js\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Clamps a given value.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} value - The value to clamp.\r\n * @param {Number} min - The lowest possible value.\r\n * @param {Number} max - The highest possible value.\r\n * @return {Number} The clamped value.\r\n */\r\n\r\nfunction clamp(value, min, max) {\r\n\r\n\treturn Math.max(min, Math.min(max, value));\r\n\r\n}\r\n\r\n/**\r\n * A crepuscular rays pass.\r\n */\r\n\r\nexport class GodRaysPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new god rays pass.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object3D} lightSource - The main light source.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.density=0.96] - The density of the light rays.\r\n\t * @param {Number} [options.decay=0.93] - An illumination decay factor.\r\n\t * @param {Number} [options.weight=0.4] - A light ray weight factor.\r\n\t * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.\r\n\t * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.\r\n\t * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.\r\n\t * @param {Number} [options.samples=60] - The number of samples per pixel.\r\n\t * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.\r\n\t */\r\n\r\n\tconstructor(scene, camera, lightSource, options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"GodRaysPass\";\r\n\r\n\t\t/**\r\n\t\t * A scene that only contains the light source.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.lightScene = new Scene();\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainScene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * A pass that only renders the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassLight = new RenderPass(this.lightScene, this.mainCamera);\r\n\r\n\t\t/**\r\n\t\t * A pass that renders the masked scene over the light.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {\r\n\t\t\toverrideMaterial: new MeshBasicMaterial({ color: 0x000000 }),\r\n\t\t\tclearColor: new Color(0x000000)\r\n\t\t});\r\n\r\n\t\tthis.renderPassMask.clear = false;\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(options);\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = this.blurPass.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetX.texture.name = \"GodRays.TargetX\";\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.blurPass.renderTargetY.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"GodRays.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A render target for the masked light scene.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter\r\n\t\t});\r\n\r\n\t\tthis.renderTargetMask.texture.name = \"GodRays.Mask\";\r\n\t\tthis.renderTargetMask.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The light source.\r\n\t\t *\r\n\t\t * @type {Object3D}\r\n\t\t */\r\n\r\n\t\tthis.lightSource = lightSource;\r\n\r\n\t\t/**\r\n\t\t * The light position in screen space.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screenPosition = new Vector3();\r\n\r\n\t\t/**\r\n\t\t * A god rays shader material.\r\n\t\t *\r\n\t\t * @type {GodRaysMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.godRaysMaterial = new GodRaysMaterial();\r\n\t\tthis.godRaysMaterial.uniforms.lightPosition.value = this.screenPosition;\r\n\r\n\t\tif(options.exposure !== undefined) { this.godRaysMaterial.uniforms.exposure.value = options.exposure; }\r\n\t\tif(options.density !== undefined) { this.godRaysMaterial.uniforms.density.value = options.density; }\r\n\t\tif(options.decay !== undefined) { this.godRaysMaterial.uniforms.decay.value = options.decay; }\r\n\t\tif(options.weight !== undefined) { this.godRaysMaterial.uniforms.weight.value = options.weight; }\r\n\t\tif(options.clampMax !== undefined) { this.godRaysMaterial.uniforms.clampMax.value = options.clampMax; }\r\n\r\n\t\tthis.samples = options.samples;\r\n\r\n\t\t/**\r\n\t\t * A combine shader material.\r\n\t\t *\r\n\t\t * @type {CombineMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);\r\n\r\n\t\tthis.intensity = options.intensity;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution scale.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 0.5\r\n\t */\r\n\r\n\tget resolutionScale() { return this.blurPass.resolutionScale; }\r\n\r\n\t/**\r\n\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolutionScale(x) {\r\n\r\n\t\tthis.blurPass.resolutionScale = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t * @default KernelSize.LARGE\r\n\t */\r\n\r\n\tget kernelSize() { return this.blurPass.kernelSize; }\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(x) {\r\n\r\n\t\tthis.blurPass.kernelSize = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The overall intensity of the effect.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget intensity() { return this.combineMaterial.uniforms.opacity2.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset intensity(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.combineMaterial.uniforms.opacity2.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The number of samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 60\r\n\t */\r\n\r\n\tget samples() { return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT); }\r\n\r\n\t/**\r\n\t * This value must be carefully chosen. A higher value directly increases the\r\n\t * GPU load.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tx = Math.floor(x);\r\n\r\n\t\t\tthis.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);\r\n\t\t\tthis.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);\r\n\t\t\tthis.godRaysMaterial.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the scene.\r\n\t *\r\n\t * The god rays pass has four phases:\r\n\t *\r\n\t * Mask Phase:\r\n\t *  First, the light source is rendered. Then the scene is rendered into the\r\n\t *  same buffer using a mask override material with depth test enabled.\r\n\t *\r\n\t * Preliminary Blur Phase:\r\n\t *  The masked scene is blurred.\r\n\t *\r\n\t * God Rays Phase:\r\n\t *  The blurred scene is blurred again, but this time along radial lines\r\n\t *  towards the light source.\r\n\t *\r\n\t * Composite Phase:\r\n\t *  The final result is combined with the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst quad = this.quad;\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\t\tconst mainScene = this.mainScene;\r\n\r\n\t\tconst lightSource = this.lightSource;\r\n\t\tconst screenPosition = this.screenPosition;\r\n\r\n\t\tconst godRaysMaterial = this.godRaysMaterial;\r\n\t\tconst combineMaterial = this.combineMaterial;\r\n\r\n\t\tconst renderTargetMask = this.renderTargetMask;\r\n\t\tconst renderTargetX = this.renderTargetX;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\tlet background, parent;\r\n\r\n\t\t// Compute the screen light position and translate it to [0, 1].\r\n\t\tscreenPosition.copy(lightSource.position).project(this.mainCamera);\r\n\t\tscreenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);\r\n\t\tscreenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);\r\n\r\n\t\t// Render the masked scene.\r\n\t\tparent = lightSource.parent;\r\n\t\tbackground = mainScene.background;\r\n\t\tmainScene.background = null;\r\n\t\tthis.lightScene.add(lightSource);\r\n\r\n\t\tthis.renderPassLight.render(renderer, renderTargetMask);\r\n\t\tthis.renderPassMask.render(renderer, renderTargetMask);\r\n\r\n\t\tif(parent !== null) {\r\n\r\n\t\t\tparent.add(lightSource);\r\n\r\n\t\t}\r\n\r\n\t\tmainScene.background = background;\r\n\r\n\t\t// Convolution phase.\r\n\t\tthis.blurPass.render(renderer, renderTargetMask, renderTargetX);\r\n\r\n\t\t// God rays pass.\r\n\t\tquad.material = godRaysMaterial;\r\n\t\tgodRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;\r\n\t\trenderer.render(scene, camera, renderTargetY);\r\n\r\n\t\t// Final pass - composite god rays onto colours.\r\n\t\tquad.material = combineMaterial;\r\n\t\tcombineMaterial.uniforms.texture1.value = readBuffer.texture;\r\n\t\tcombineMaterial.uniforms.texture2.value = renderTargetY.texture;\r\n\r\n\t\trenderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render targets.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tthis.renderPassLight.initialise(renderer, alpha);\r\n\t\tthis.renderPassMask.initialise(renderer, alpha);\r\n\t\tthis.blurPass.initialise(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.renderPassLight.setSize(width, height);\r\n\t\tthis.renderPassMask.setSize(width, height);\r\n\t\tthis.blurPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.renderTargetX.width;\r\n\t\theight = this.blurPass.renderTargetX.height;\r\n\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n}\r\n"
+    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tMeshBasicMaterial,\r\n\tRGBFormat,\r\n\tScene,\r\n\tVector3,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { CombineMaterial, GodRaysMaterial } from \"../materials\";\r\nimport { RenderPass } from \"./render.js\";\r\nimport { BlurPass } from \"./blur.js\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Clamps a given value.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} value - The value to clamp.\r\n * @param {Number} min - The lowest possible value.\r\n * @param {Number} max - The highest possible value.\r\n * @return {Number} The clamped value.\r\n */\r\n\r\nfunction clamp(value, min, max) {\r\n\r\n\treturn Math.max(min, Math.min(max, value));\r\n\r\n}\r\n\r\n/**\r\n * A crepuscular rays pass.\r\n */\r\n\r\nexport class GodRaysPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new god rays pass.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object3D} lightSource - The main light source.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.density=0.96] - The density of the light rays.\r\n\t * @param {Number} [options.decay=0.93] - An illumination decay factor.\r\n\t * @param {Number} [options.weight=0.4] - A light ray weight factor.\r\n\t * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.\r\n\t * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.\r\n\t * @param {Number} [options.intensity=1.0] - A constant factor for additive blending.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.\r\n\t * @param {Number} [options.samples=60] - The number of samples per pixel.\r\n\t * @param {Number} [options.screenMode=true] - Whether the screen blend mode should be used for combining the god rays texture with the scene colors.\r\n\t */\r\n\r\n\tconstructor(scene, camera, lightSource, options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"GodRaysPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A scene that only contains the light source.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.lightScene = new Scene();\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainScene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * A pass that only renders the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassLight = new RenderPass(this.lightScene, this.mainCamera);\r\n\r\n\t\t/**\r\n\t\t * A pass that renders the masked scene over the light.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {\r\n\t\t\toverrideMaterial: new MeshBasicMaterial({ color: 0x000000 }),\r\n\t\t\tclearColor: new Color(0x000000)\r\n\t\t});\r\n\r\n\t\tthis.renderPassMask.clear = false;\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(options);\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = this.blurPass.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetX.texture.name = \"GodRays.TargetX\";\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.blurPass.renderTargetY.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"GodRays.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A render target for the masked light scene.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter\r\n\t\t});\r\n\r\n\t\tthis.renderTargetMask.texture.name = \"GodRays.Mask\";\r\n\t\tthis.renderTargetMask.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The light source.\r\n\t\t *\r\n\t\t * @type {Object3D}\r\n\t\t */\r\n\r\n\t\tthis.lightSource = lightSource;\r\n\r\n\t\t/**\r\n\t\t * The light position in screen space.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screenPosition = new Vector3();\r\n\r\n\t\t/**\r\n\t\t * A god rays shader material.\r\n\t\t *\r\n\t\t * @type {GodRaysMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.godRaysMaterial = new GodRaysMaterial();\r\n\t\tthis.godRaysMaterial.uniforms.lightPosition.value = this.screenPosition;\r\n\r\n\t\tif(options.exposure !== undefined) { this.godRaysMaterial.uniforms.exposure.value = options.exposure; }\r\n\t\tif(options.density !== undefined) { this.godRaysMaterial.uniforms.density.value = options.density; }\r\n\t\tif(options.decay !== undefined) { this.godRaysMaterial.uniforms.decay.value = options.decay; }\r\n\t\tif(options.weight !== undefined) { this.godRaysMaterial.uniforms.weight.value = options.weight; }\r\n\t\tif(options.clampMax !== undefined) { this.godRaysMaterial.uniforms.clampMax.value = options.clampMax; }\r\n\r\n\t\tthis.samples = options.samples;\r\n\r\n\t\t/**\r\n\t\t * A combine shader material.\r\n\t\t *\r\n\t\t * @type {CombineMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);\r\n\r\n\t\tthis.intensity = options.intensity;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution scale.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 0.5\r\n\t */\r\n\r\n\tget resolutionScale() { return this.blurPass.resolutionScale; }\r\n\r\n\t/**\r\n\t * You need to call {@link EffectComposer#setSize} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolutionScale(x) {\r\n\r\n\t\tthis.blurPass.resolutionScale = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t * @default KernelSize.LARGE\r\n\t */\r\n\r\n\tget kernelSize() { return this.blurPass.kernelSize; }\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(x) {\r\n\r\n\t\tthis.blurPass.kernelSize = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The overall intensity of the effect.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget intensity() { return this.combineMaterial.uniforms.opacity2.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset intensity(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tthis.combineMaterial.uniforms.opacity2.value = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The number of samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 60\r\n\t */\r\n\r\n\tget samples() { return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT); }\r\n\r\n\t/**\r\n\t * This value must be carefully chosen. A higher value directly increases the\r\n\t * GPU load.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tx = Math.floor(x);\r\n\r\n\t\t\tthis.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);\r\n\t\t\tthis.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);\r\n\t\t\tthis.godRaysMaterial.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the scene.\r\n\t *\r\n\t * The god rays pass has four phases:\r\n\t *\r\n\t * Mask Phase:\r\n\t *  First, the light source is rendered. Then the scene is rendered into the\r\n\t *  same buffer using a mask override material with depth test enabled.\r\n\t *\r\n\t * Preliminary Blur Phase:\r\n\t *  The masked scene is blurred.\r\n\t *\r\n\t * God Rays Phase:\r\n\t *  The blurred scene is blurred again, but this time along radial lines\r\n\t *  towards the light source.\r\n\t *\r\n\t * Composite Phase:\r\n\t *  The final result is combined with the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst quad = this.quad;\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\t\tconst mainScene = this.mainScene;\r\n\r\n\t\tconst lightSource = this.lightSource;\r\n\t\tconst screenPosition = this.screenPosition;\r\n\r\n\t\tconst godRaysMaterial = this.godRaysMaterial;\r\n\t\tconst combineMaterial = this.combineMaterial;\r\n\r\n\t\tconst renderTargetMask = this.renderTargetMask;\r\n\t\tconst renderTargetX = this.renderTargetX;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\tlet background, parent;\r\n\r\n\t\t// Compute the screen light position and translate it to [0, 1].\r\n\t\tscreenPosition.copy(lightSource.position).project(this.mainCamera);\r\n\t\tscreenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);\r\n\t\tscreenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);\r\n\r\n\t\t// Render the masked scene.\r\n\t\tparent = lightSource.parent;\r\n\t\tbackground = mainScene.background;\r\n\t\tmainScene.background = null;\r\n\t\tthis.lightScene.add(lightSource);\r\n\r\n\t\tthis.renderPassLight.render(renderer, renderTargetMask);\r\n\t\tthis.renderPassMask.render(renderer, renderTargetMask);\r\n\r\n\t\tif(parent !== null) {\r\n\r\n\t\t\tparent.add(lightSource);\r\n\r\n\t\t}\r\n\r\n\t\tmainScene.background = background;\r\n\r\n\t\t// Convolution phase.\r\n\t\tthis.blurPass.render(renderer, renderTargetMask, renderTargetX);\r\n\r\n\t\t// God rays pass.\r\n\t\tquad.material = godRaysMaterial;\r\n\t\tgodRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;\r\n\t\trenderer.render(scene, camera, renderTargetY);\r\n\r\n\t\t// Final pass - composite god rays onto colours.\r\n\t\tquad.material = combineMaterial;\r\n\t\tcombineMaterial.uniforms.texture1.value = readBuffer.texture;\r\n\t\tcombineMaterial.uniforms.texture2.value = renderTargetY.texture;\r\n\r\n\t\trenderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render targets.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tthis.renderPassLight.initialise(renderer, alpha);\r\n\t\tthis.renderPassMask.initialise(renderer, alpha);\r\n\t\tthis.blurPass.initialise(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.renderPassLight.setSize(width, height);\r\n\t\tthis.renderPassMask.setSize(width, height);\r\n\t\tthis.blurPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.renderTargetX.width;\r\n\t\theight = this.blurPass.renderTargetX.height;\r\n\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 212,
+    "__docId__": 213,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -5681,7 +5698,7 @@
     "generator": false
   },
   {
-    "__docId__": 213,
+    "__docId__": 214,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -5700,7 +5717,7 @@
     ]
   },
   {
-    "__docId__": 214,
+    "__docId__": 215,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -5875,7 +5892,7 @@
     "generator": false
   },
   {
-    "__docId__": 215,
+    "__docId__": 216,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5892,7 +5909,24 @@
     }
   },
   {
-    "__docId__": 216,
+    "__docId__": 217,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "needsSwap",
+    "memberof": "src/passes/god-rays.js~GodRaysPass",
+    "longname": "src/passes/god-rays.js~GodRaysPass#needsSwap",
+    "access": null,
+    "description": "This pass renders to the write buffer.",
+    "lineNumber": 72,
+    "type": {
+      "types": [
+        "boolean"
+      ]
+    }
+  },
+  {
+    "__docId__": 218,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -5901,51 +5935,11 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#lightScene",
     "access": "private",
     "description": "A scene that only contains the light source.",
-    "lineNumber": 75,
+    "lineNumber": 81,
     "type": {
       "nullable": null,
       "types": [
         "Scene"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 217,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "mainScene",
-    "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#mainScene",
-    "access": "private",
-    "description": "The main scene.",
-    "lineNumber": 84,
-    "type": {
-      "nullable": null,
-      "types": [
-        "Scene"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 218,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "mainCamera",
-    "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#mainCamera",
-    "access": "private",
-    "description": "The main camera.",
-    "lineNumber": 93,
-    "type": {
-      "nullable": null,
-      "types": [
-        "Camera"
       ],
       "spread": false,
       "description": null
@@ -5956,16 +5950,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "renderPassLight",
+    "name": "mainScene",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#renderPassLight",
+    "longname": "src/passes/god-rays.js~GodRaysPass#mainScene",
     "access": "private",
-    "description": "A pass that only renders the light source.",
-    "lineNumber": 102,
+    "description": "The main scene.",
+    "lineNumber": 90,
     "type": {
       "nullable": null,
       "types": [
-        "RenderPass"
+        "Scene"
       ],
       "spread": false,
       "description": null
@@ -5976,16 +5970,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "renderPassMask",
+    "name": "mainCamera",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#renderPassMask",
+    "longname": "src/passes/god-rays.js~GodRaysPass#mainCamera",
     "access": "private",
-    "description": "A pass that renders the masked scene over the light.",
-    "lineNumber": 111,
+    "description": "The main camera.",
+    "lineNumber": 99,
     "type": {
       "nullable": null,
       "types": [
-        "RenderPass"
+        "Camera"
       ],
       "spread": false,
       "description": null
@@ -5996,16 +5990,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "blurPass",
+    "name": "renderPassLight",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#blurPass",
+    "longname": "src/passes/god-rays.js~GodRaysPass#renderPassLight",
     "access": "private",
-    "description": "A blur pass.",
-    "lineNumber": 125,
+    "description": "A pass that only renders the light source.",
+    "lineNumber": 108,
     "type": {
       "nullable": null,
       "types": [
-        "BlurPass"
+        "RenderPass"
       ],
       "spread": false,
       "description": null
@@ -6016,16 +6010,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "renderTargetX",
+    "name": "renderPassMask",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetX",
+    "longname": "src/passes/god-rays.js~GodRaysPass#renderPassMask",
     "access": "private",
-    "description": "A render target.",
-    "lineNumber": 134,
+    "description": "A pass that renders the masked scene over the light.",
+    "lineNumber": 117,
     "type": {
       "nullable": null,
       "types": [
-        "WebGLRenderTarget"
+        "RenderPass"
       ],
       "spread": false,
       "description": null
@@ -6036,16 +6030,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "renderTargetY",
+    "name": "blurPass",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetY",
+    "longname": "src/passes/god-rays.js~GodRaysPass#blurPass",
     "access": "private",
-    "description": "A second render target.",
-    "lineNumber": 145,
+    "description": "A blur pass.",
+    "lineNumber": 131,
     "type": {
       "nullable": null,
       "types": [
-        "WebGLRenderTarget"
+        "BlurPass"
       ],
       "spread": false,
       "description": null
@@ -6056,12 +6050,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "renderTargetMask",
+    "name": "renderTargetX",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetMask",
+    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetX",
     "access": "private",
-    "description": "A render target for the masked light scene.",
-    "lineNumber": 156,
+    "description": "A render target.",
+    "lineNumber": 140,
     "type": {
       "nullable": null,
       "types": [
@@ -6076,16 +6070,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "lightSource",
+    "name": "renderTargetY",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#lightSource",
-    "access": null,
-    "description": "The light source.",
-    "lineNumber": 170,
+    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetY",
+    "access": "private",
+    "description": "A second render target.",
+    "lineNumber": 151,
     "type": {
       "nullable": null,
       "types": [
-        "Object3D"
+        "WebGLRenderTarget"
       ],
       "spread": false,
       "description": null
@@ -6096,16 +6090,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "screenPosition",
+    "name": "renderTargetMask",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#screenPosition",
+    "longname": "src/passes/god-rays.js~GodRaysPass#renderTargetMask",
     "access": "private",
-    "description": "The light position in screen space.",
-    "lineNumber": 179,
+    "description": "A render target for the masked light scene.",
+    "lineNumber": 162,
     "type": {
       "nullable": null,
       "types": [
-        "Vector3"
+        "WebGLRenderTarget"
       ],
       "spread": false,
       "description": null
@@ -6116,16 +6110,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "godRaysMaterial",
+    "name": "lightSource",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#godRaysMaterial",
-    "access": "private",
-    "description": "A god rays shader material.",
-    "lineNumber": 188,
+    "longname": "src/passes/god-rays.js~GodRaysPass#lightSource",
+    "access": null,
+    "description": "The light source.",
+    "lineNumber": 176,
     "type": {
       "nullable": null,
       "types": [
-        "GodRaysMaterial"
+        "Object3D"
       ],
       "spread": false,
       "description": null
@@ -6136,17 +6130,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "samples",
+    "name": "screenPosition",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#samples",
-    "access": null,
-    "description": null,
-    "lineNumber": 197,
-    "undocument": true,
+    "longname": "src/passes/god-rays.js~GodRaysPass#screenPosition",
+    "access": "private",
+    "description": "The light position in screen space.",
+    "lineNumber": 185,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Vector3"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -6154,16 +6150,16 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "combineMaterial",
+    "name": "godRaysMaterial",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#combineMaterial",
+    "longname": "src/passes/god-rays.js~GodRaysPass#godRaysMaterial",
     "access": "private",
-    "description": "A combine shader material.",
-    "lineNumber": 206,
+    "description": "A god rays shader material.",
+    "lineNumber": 194,
     "type": {
       "nullable": null,
       "types": [
-        "CombineMaterial"
+        "GodRaysMaterial"
       ],
       "spread": false,
       "description": null
@@ -6174,12 +6170,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "intensity",
+    "name": "samples",
     "memberof": "src/passes/god-rays.js~GodRaysPass",
-    "longname": "src/passes/god-rays.js~GodRaysPass#intensity",
+    "longname": "src/passes/god-rays.js~GodRaysPass#samples",
     "access": null,
     "description": null,
-    "lineNumber": 208,
+    "lineNumber": 203,
     "undocument": true,
     "type": {
       "types": [
@@ -6189,6 +6185,44 @@
   },
   {
     "__docId__": 231,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "combineMaterial",
+    "memberof": "src/passes/god-rays.js~GodRaysPass",
+    "longname": "src/passes/god-rays.js~GodRaysPass#combineMaterial",
+    "access": "private",
+    "description": "A combine shader material.",
+    "lineNumber": 212,
+    "type": {
+      "nullable": null,
+      "types": [
+        "CombineMaterial"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 232,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "intensity",
+    "memberof": "src/passes/god-rays.js~GodRaysPass",
+    "longname": "src/passes/god-rays.js~GodRaysPass#intensity",
+    "access": null,
+    "description": null,
+    "lineNumber": 214,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 233,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -6197,7 +6231,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#resolutionScale",
     "access": null,
     "description": "The resolution scale.",
-    "lineNumber": 219,
+    "lineNumber": 225,
     "unknown": [
       {
         "tagName": "@default",
@@ -6215,7 +6249,7 @@
     "generator": false
   },
   {
-    "__docId__": 232,
+    "__docId__": 234,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -6224,7 +6258,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#resolutionScale",
     "access": null,
     "description": "You need to call {@link EffectComposer#setSize} after changing this value.",
-    "lineNumber": 227,
+    "lineNumber": 233,
     "type": {
       "nullable": null,
       "types": [
@@ -6236,7 +6270,7 @@
     "generator": false
   },
   {
-    "__docId__": 233,
+    "__docId__": 235,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -6245,7 +6279,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#kernelSize",
     "access": null,
     "description": "The blur kernel size.",
-    "lineNumber": 240,
+    "lineNumber": 246,
     "unknown": [
       {
         "tagName": "@default",
@@ -6263,7 +6297,7 @@
     "generator": false
   },
   {
-    "__docId__": 234,
+    "__docId__": 236,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -6272,7 +6306,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#kernelSize",
     "access": null,
     "description": "",
-    "lineNumber": 246,
+    "lineNumber": 252,
     "type": {
       "nullable": null,
       "types": [
@@ -6284,7 +6318,7 @@
     "generator": false
   },
   {
-    "__docId__": 235,
+    "__docId__": 237,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -6293,7 +6327,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#intensity",
     "access": null,
     "description": "The overall intensity of the effect.",
-    "lineNumber": 259,
+    "lineNumber": 265,
     "unknown": [
       {
         "tagName": "@default",
@@ -6311,7 +6345,7 @@
     "generator": false
   },
   {
-    "__docId__": 236,
+    "__docId__": 238,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -6320,7 +6354,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#intensity",
     "access": null,
     "description": "",
-    "lineNumber": 265,
+    "lineNumber": 271,
     "type": {
       "nullable": null,
       "types": [
@@ -6332,7 +6366,7 @@
     "generator": false
   },
   {
-    "__docId__": 237,
+    "__docId__": 239,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -6341,7 +6375,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#samples",
     "access": null,
     "description": "The number of samples per pixel.",
-    "lineNumber": 282,
+    "lineNumber": 288,
     "unknown": [
       {
         "tagName": "@default",
@@ -6359,7 +6393,7 @@
     "generator": false
   },
   {
-    "__docId__": 238,
+    "__docId__": 240,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -6368,7 +6402,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#samples",
     "access": null,
     "description": "This value must be carefully chosen. A higher value directly increases the\nGPU load.",
-    "lineNumber": 291,
+    "lineNumber": 297,
     "type": {
       "nullable": null,
       "types": [
@@ -6380,7 +6414,7 @@
     "generator": false
   },
   {
-    "__docId__": 239,
+    "__docId__": 241,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -6389,7 +6423,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#render",
     "access": null,
     "description": "Renders the scene.\n\nThe god rays pass has four phases:\n\nMask Phase:\n First, the light source is rendered. Then the scene is rendered into the\n same buffer using a mask override material with depth test enabled.\n\nPreliminary Blur Phase:\n The masked scene is blurred.\n\nGod Rays Phase:\n The blurred scene is blurred again, but this time along radial lines\n towards the light source.\n\nComposite Phase:\n The final result is combined with the read buffer.",
-    "lineNumber": 329,
+    "lineNumber": 335,
     "params": [
       {
         "nullable": null,
@@ -6425,7 +6459,7 @@
     "generator": false
   },
   {
-    "__docId__": 240,
+    "__docId__": 242,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -6434,7 +6468,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#initialise",
     "access": null,
     "description": "Adjusts the format of the render targets.",
-    "lineNumber": 394,
+    "lineNumber": 400,
     "params": [
       {
         "nullable": null,
@@ -6460,7 +6494,7 @@
     "generator": false
   },
   {
-    "__docId__": 241,
+    "__docId__": 243,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -6469,7 +6503,7 @@
     "longname": "src/passes/god-rays.js~GodRaysPass#setSize",
     "access": null,
     "description": "Updates this pass with the renderer's size.",
-    "lineNumber": 417,
+    "lineNumber": 423,
     "params": [
       {
         "nullable": null,
@@ -6495,7 +6529,7 @@
     "generator": false
   },
   {
-    "__docId__": 242,
+    "__docId__": 244,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -6508,7 +6542,7 @@
     "content": "/**\r\n * A compilation of the post processing passes.\r\n *\r\n * @module postprocessing/passes\r\n */\r\n\r\nexport { BloomPass } from \"./bloom.js\";\r\nexport { BlurPass } from \"./blur.js\";\r\nexport { BokehPass } from \"./bokeh.js\";\r\nexport { Bokeh2Pass } from \"./bokeh2.js\";\r\nexport { ClearPass } from \"./clear.js\";\r\nexport { ClearMaskPass } from \"./clear-mask.js\";\r\nexport { DotScreenPass } from \"./dot-screen.js\";\r\nexport { DepthPass } from \"./depth.js\";\r\nexport { FilmPass } from \"./film.js\";\r\nexport { GlitchMode, GlitchPass } from \"./glitch.js\";\r\nexport { GodRaysPass } from \"./god-rays.js\";\r\nexport { MaskPass } from \"./mask.js\";\r\nexport { Pass } from \"./pass.js\";\r\nexport { PixelationPass } from \"./pixelation.js\";\r\nexport { RenderPass } from \"./render.js\";\r\nexport { SavePass } from \"./save.js\";\r\nexport { ShaderPass } from \"./shader.js\";\r\nexport { ShockWavePass } from \"./shock-wave.js\";\r\nexport { SMAAPass } from \"./smaa.js\";\r\nexport { TexturePass } from \"./texture.js\";\r\nexport { ToneMappingPass } from \"./tone-mapping.js\";\r\n"
   },
   {
-    "__docId__": 243,
+    "__docId__": 245,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -6521,7 +6555,7 @@
     "content": "import { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A mask pass.\r\n */\r\n\r\nexport class MaskPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new mask pass.\r\n\t *\r\n\t * @param {Scene} scene - The scene to render.\r\n\t * @param {Camera} camera - The camera to use.\r\n\t */\r\n\r\n\tconstructor(scene, camera) {\r\n\r\n\t\tsuper(scene, camera, null);\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"MaskPass\";\r\n\r\n\t\t/**\r\n\t\t * Inverse flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default false\r\n\t\t */\r\n\r\n\t\tthis.inverse = false;\r\n\r\n\t\t/**\r\n\t\t * Stencil buffer clear flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default true\r\n\t\t */\r\n\r\n\t\tthis.clearStencil = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Creates a stencil bit mask.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tconst context = renderer.context;\r\n\t\tconst state = renderer.state;\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\r\n\t\tconst writeValue = this.inverse ? 0 : 1;\r\n\t\tconst clearValue = 1 - writeValue;\r\n\r\n\t\t// Don't update color or depth.\r\n\t\tstate.buffers.color.setMask(false);\r\n\t\tstate.buffers.depth.setMask(false);\r\n\r\n\t\t// Lock the buffers.\r\n\t\tstate.buffers.color.setLocked(true);\r\n\t\tstate.buffers.depth.setLocked(true);\r\n\r\n\t\t// Configure the stencil.\r\n\t\tstate.buffers.stencil.setTest(true);\r\n\t\tstate.buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);\r\n\t\tstate.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);\r\n\t\tstate.buffers.stencil.setClear(clearValue);\r\n\r\n\t\t// Clear the stencil.\r\n\t\tif(this.clearStencil) {\r\n\r\n\t\t\trenderer.setRenderTarget(readBuffer);\r\n\t\t\trenderer.clearStencil();\r\n\r\n\t\t\trenderer.setRenderTarget(writeBuffer);\r\n\t\t\trenderer.clearStencil();\r\n\r\n\t\t}\r\n\r\n\t\t// Draw the mask into both buffers.\r\n\t\trenderer.render(scene, camera, readBuffer);\r\n\t\trenderer.render(scene, camera, writeBuffer);\r\n\r\n\t\t// Unlock the buffers.\r\n\t\tstate.buffers.color.setLocked(false);\r\n\t\tstate.buffers.depth.setLocked(false);\r\n\r\n\t\t// Only render where the stencil is set to 1.\r\n\t\tstate.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);\r\n\t\tstate.buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 244,
+    "__docId__": 246,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -6540,7 +6574,7 @@
     ]
   },
   {
-    "__docId__": 245,
+    "__docId__": 247,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -6575,7 +6609,7 @@
     "generator": false
   },
   {
-    "__docId__": 246,
+    "__docId__": 248,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6592,7 +6626,7 @@
     }
   },
   {
-    "__docId__": 247,
+    "__docId__": 249,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6618,7 +6652,7 @@
     }
   },
   {
-    "__docId__": 248,
+    "__docId__": 250,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6644,7 +6678,7 @@
     }
   },
   {
-    "__docId__": 249,
+    "__docId__": 251,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -6689,7 +6723,7 @@
     "generator": false
   },
   {
-    "__docId__": 250,
+    "__docId__": 252,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -6702,7 +6736,7 @@
     "content": "import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from \"three\";\r\n\r\n/**\r\n * An abstract pass.\r\n *\r\n * Passes that do not rely on the depth buffer should explicitly disable the\r\n * depth test and depth write in their respective shader materials.\r\n *\r\n * This class implements a {@link Pass#dispose} method that frees memory on\r\n * demand.\r\n */\r\n\r\nexport class Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pass.\r\n\t *\r\n\t * @param {Scene} [scene] - The scene to render.\r\n\t * @param {Camera} [camera] - The camera.\r\n\t * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {@link RenderPass}).\r\n\t */\r\n\r\n\tconstructor(\r\n\t\tscene = new Scene(),\r\n\t\tcamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),\r\n\t\tquad = new Mesh(new PlaneBufferGeometry(2, 2), null)\r\n\t) {\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t */\r\n\r\n\t\tthis.name = \"Pass\";\r\n\r\n\t\t/**\r\n\t\t * The scene to render.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @protected\r\n\t\t * @default new Scene()\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @protected\r\n\t\t * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * A quad mesh that fills the screen.\r\n\t\t *\r\n\t\t * Assign your shader material to this mesh!\r\n\t\t *\r\n\t\t * @type {Mesh}\r\n\t\t * @protected\r\n\t\t * @default new Mesh(new PlaneBufferGeometry(2, 2), null)\r\n\t\t * @example this.quad.material = this.myMaterial;\r\n\t\t */\r\n\r\n\t\tthis.quad = quad;\r\n\r\n\t\tif(this.quad !== null) {\r\n\r\n\t\t\tthis.quad.frustumCulled = false;\r\n\r\n\t\t\tif(this.scene !== null) {\r\n\r\n\t\t\t\tthis.scene.add(this.quad);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the read and write buffers should be swapped after this\r\n\t\t * pass has finished rendering.\r\n\t\t *\r\n\t\t * Set this to true if this pass renders to the write buffer so that a\r\n\t\t * following pass can find the result in the read buffer.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default false\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = false;\r\n\r\n\t\t/**\r\n\t\t * Enabled flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default true\r\n\t\t */\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t\t/**\r\n\t\t * Render to screen flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default false\r\n\t\t */\r\n\r\n\t\tthis.renderToScreen = false;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * This is an abstract method that must be overridden.\r\n\t *\r\n\t * @abstract\r\n\t * @throws {Error} An error is thrown if the method is not overridden.\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.\r\n\t * @param {Number} [delta] - The delta time.\r\n\t * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer, delta, maskActive) {\r\n\r\n\t\tthrow new Error(\"Render method not implemented!\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * You may override this method in case you want to be informed about the main\r\n\t * render size.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method before this pass is\r\n\t * initialised and every time its own size is updated.\r\n\t *\r\n\t * @param {Number} width - The renderer's width.\r\n\t * @param {Number} height - The renderer's height.\r\n\t * @example this.myRenderTarget.setSize(width, height);\r\n\t */\r\n\r\n\tsetSize(width, height) {}\r\n\r\n\t/**\r\n\t * Performs initialisation tasks.\r\n\t *\r\n\t * By overriding this method you gain access to the renderer. You'll also be\r\n\t * able to configure your custom render targets to use the appropriate format\r\n\t * (RGB or RGBA).\r\n\t *\r\n\t * The provided renderer can be used to warm up special off-screen render\r\n\t * targets by performing a preliminary render operation.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when this pass is added to its\r\n\t * queue.\r\n\t *\r\n\t * @method initialise\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {}\r\n\r\n\t/**\r\n\t * Performs a shallow search for properties that define a dispose method and\r\n\t * deletes them. The pass will be inoperative after this method was called!\r\n\t *\r\n\t * Disposable objects:\r\n\t *  - render targets\r\n\t *  - materials\r\n\t *  - textures\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when it is being destroyed.\r\n\t * You may, however, use it independently to free memory when you are certain\r\n\t * that you don't need this pass anymore.\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tconst keys = Object.keys(this);\r\n\r\n\t\tlet key;\r\n\r\n\t\tfor(key of keys) {\r\n\r\n\t\t\tif(this[key] !== null && typeof this[key].dispose === \"function\") {\r\n\r\n\t\t\t\tthis[key].dispose();\r\n\t\t\t\tthis[key] = null;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 251,
+    "__docId__": 253,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -6718,7 +6752,7 @@
     "interface": false
   },
   {
-    "__docId__": 252,
+    "__docId__": 254,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -6763,7 +6797,7 @@
     "generator": false
   },
   {
-    "__docId__": 253,
+    "__docId__": 255,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6783,7 +6817,7 @@
     }
   },
   {
-    "__docId__": 254,
+    "__docId__": 256,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6809,7 +6843,7 @@
     }
   },
   {
-    "__docId__": 255,
+    "__docId__": 257,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6835,7 +6869,7 @@
     }
   },
   {
-    "__docId__": 256,
+    "__docId__": 258,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6864,7 +6898,7 @@
     }
   },
   {
-    "__docId__": 257,
+    "__docId__": 259,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6890,7 +6924,7 @@
     }
   },
   {
-    "__docId__": 258,
+    "__docId__": 260,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6916,7 +6950,7 @@
     }
   },
   {
-    "__docId__": 259,
+    "__docId__": 261,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -6942,7 +6976,7 @@
     }
   },
   {
-    "__docId__": 260,
+    "__docId__": 262,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7016,7 +7050,7 @@
     "generator": false
   },
   {
-    "__docId__": 261,
+    "__docId__": 263,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7054,7 +7088,7 @@
     "generator": false
   },
   {
-    "__docId__": 262,
+    "__docId__": 264,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7098,7 +7132,7 @@
     "generator": false
   },
   {
-    "__docId__": 263,
+    "__docId__": 265,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7112,7 +7146,7 @@
     "generator": false
   },
   {
-    "__docId__": 264,
+    "__docId__": 266,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -7125,7 +7159,7 @@
     "content": "import { PixelationMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A pixelation pass.\r\n */\r\n\r\nexport class PixelationPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pixelation pass.\r\n\t *\r\n\t * @param {Number} [granularity=30.0] - The intensity of the effect.\r\n\t */\r\n\r\n\tconstructor(granularity = 30.0) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"PixelationPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A pixelation shader material.\r\n\t\t *\r\n\t\t * @type {PixelationMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.pixelationMaterial = new PixelationMaterial();\r\n\r\n\t\tthis.granularity = granularity;\r\n\r\n\t\tthis.quad.material = this.pixelationMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The pixel granularity.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 30.0\r\n\t */\r\n\r\n\tget granularity() { return this.pixelationMaterial.granularity; }\r\n\r\n\t/**\r\n\t * A higher value yields coarser visuals.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset granularity(x) {\r\n\r\n\t\tif(typeof x === \"number\") {\r\n\r\n\t\t\tx = Math.floor(x);\r\n\r\n\t\t\tif(x % 2 > 0) {\r\n\r\n\t\t\t\tx += 1;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.pixelationMaterial.granularity = x;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tthis.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.pixelationMaterial.setResolution(width, height);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 265,
+    "__docId__": 267,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -7144,7 +7178,7 @@
     ]
   },
   {
-    "__docId__": 266,
+    "__docId__": 268,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -7171,7 +7205,7 @@
     "generator": false
   },
   {
-    "__docId__": 267,
+    "__docId__": 269,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7188,7 +7222,7 @@
     }
   },
   {
-    "__docId__": 268,
+    "__docId__": 270,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7205,7 +7239,7 @@
     }
   },
   {
-    "__docId__": 269,
+    "__docId__": 271,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7225,7 +7259,7 @@
     }
   },
   {
-    "__docId__": 270,
+    "__docId__": 272,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7243,7 +7277,7 @@
     }
   },
   {
-    "__docId__": 271,
+    "__docId__": 273,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -7270,7 +7304,7 @@
     "generator": false
   },
   {
-    "__docId__": 272,
+    "__docId__": 274,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -7291,7 +7325,7 @@
     "generator": false
   },
   {
-    "__docId__": 273,
+    "__docId__": 275,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7336,7 +7370,7 @@
     "generator": false
   },
   {
-    "__docId__": 274,
+    "__docId__": 276,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7371,7 +7405,7 @@
     "generator": false
   },
   {
-    "__docId__": 275,
+    "__docId__": 277,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -7384,7 +7418,7 @@
     "content": "import { ClearPass } from \"./clear.js\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A pass that renders a given scene directly on screen or into the read buffer\r\n * for further processing.\r\n */\r\n\r\nexport class RenderPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new render pass.\r\n\t *\r\n\t * @param {Scene} scene - The scene to render.\r\n\t * @param {Camera} camera - The camera to use to render the scene.\r\n\t * @param {Object} [options] - Additional options.\r\n\t * @param {Material} [options.overrideMaterial=null] - An override material for the scene.\r\n\t * @param {Color} [options.clearColor=null] - An override clear color.\r\n\t * @param {Number} [options.clearAlpha=1.0] - An override clear alpha.\r\n\t * @param {Boolean} [options.clearDepth=false] - Whether depth should be cleared explicitly.\r\n\t * @param {Boolean} [options.clear=true] - Whether all buffers should be cleared.\r\n\t */\r\n\r\n\tconstructor(scene, camera, options = {}) {\r\n\r\n\t\tsuper(scene, camera, null);\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"RenderPass\";\r\n\r\n\t\t/**\r\n\t\t * A clear pass.\r\n\t\t *\r\n\t\t * @type {ClearPass}\r\n\t\t */\r\n\r\n\t\tthis.clearPass = new ClearPass(options);\r\n\r\n\t\t/**\r\n\t\t * An override material.\r\n\t\t *\r\n\t\t * @type {Material}\r\n\t\t * @default null\r\n\t\t */\r\n\r\n\t\tthis.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the depth buffer should be cleared explicitly.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default false\r\n\t\t */\r\n\r\n\t\tthis.clearDepth = (options.clearDepth !== undefined) ? options.clearDepth : false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the color, depth and stencil buffers should be cleared.\r\n\t\t *\r\n\t\t * Even with clear set to true you can prevent specific buffers from being\r\n\t\t * cleared by setting either the autoClearColor, autoClearStencil or\r\n\t\t * autoClearDepth properties of the renderer to false.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default true\r\n\t\t */\r\n\r\n\t\tthis.clear = (options.clear !== undefined) ? options.clear : true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the scene.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer) {\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst target = this.renderToScreen ? null : readBuffer;\r\n\r\n\t\tif(this.clear) {\r\n\r\n\t\t\tthis.clearPass.render(renderer, target);\r\n\r\n\t\t} else if(this.clearDepth) {\r\n\r\n\t\t\trenderer.setRenderTarget(target);\r\n\t\t\trenderer.clearDepth();\r\n\r\n\t\t}\r\n\r\n\t\tscene.overrideMaterial = this.overrideMaterial;\r\n\t\trenderer.render(scene, this.camera, target);\r\n\t\tscene.overrideMaterial = null;\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 276,
+    "__docId__": 278,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -7403,7 +7437,7 @@
     ]
   },
   {
-    "__docId__": 277,
+    "__docId__": 279,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -7508,7 +7542,7 @@
     "generator": false
   },
   {
-    "__docId__": 278,
+    "__docId__": 280,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7525,7 +7559,7 @@
     }
   },
   {
-    "__docId__": 279,
+    "__docId__": 281,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7545,7 +7579,7 @@
     }
   },
   {
-    "__docId__": 280,
+    "__docId__": 282,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7571,7 +7605,7 @@
     }
   },
   {
-    "__docId__": 281,
+    "__docId__": 283,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7597,7 +7631,7 @@
     }
   },
   {
-    "__docId__": 282,
+    "__docId__": 284,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7623,7 +7657,7 @@
     }
   },
   {
-    "__docId__": 283,
+    "__docId__": 285,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7658,7 +7692,7 @@
     "generator": false
   },
   {
-    "__docId__": 284,
+    "__docId__": 286,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -7671,7 +7705,7 @@
     "content": "import { LinearFilter, RGBFormat, WebGLRenderTarget } from \"three\";\r\nimport { CopyMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A pass that renders the result from a previous pass to another render target.\r\n */\r\n\r\nexport class SavePass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new save pass.\r\n\t *\r\n\t * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.\r\n\t * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.\r\n\t */\r\n\r\n\tconstructor(renderTarget, resize = true) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"SavePass\";\r\n\r\n\t\t/**\r\n\t\t * Copy shader material.\r\n\t\t *\r\n\t\t * @type {CopyMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.material = new CopyMaterial();\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t\t/**\r\n\t\t * The render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t */\r\n\r\n\t\tthis.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTarget.texture.name = \"Save.Target\";\r\n\t\tthis.renderTarget.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the render target should be resized when the size of\r\n\t\t * the composer's read/write buffer changes.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @default true\r\n\t\t */\r\n\r\n\t\tthis.resize = resize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Saves the read buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer) {\r\n\r\n\t\tthis.material.uniforms.tDiffuse.value = readBuffer.texture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderTarget);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adjusts the format of the render target.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialise(renderer, alpha) {\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTarget.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tif(this.resize) {\r\n\r\n\t\t\twidth = Math.max(1, width);\r\n\t\t\theight = Math.max(1, height);\r\n\r\n\t\t\tthis.renderTarget.setSize(width, height);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 285,
+    "__docId__": 287,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -7690,7 +7724,7 @@
     ]
   },
   {
-    "__docId__": 286,
+    "__docId__": 288,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -7727,7 +7761,7 @@
     "generator": false
   },
   {
-    "__docId__": 287,
+    "__docId__": 289,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7744,7 +7778,7 @@
     }
   },
   {
-    "__docId__": 288,
+    "__docId__": 290,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7764,7 +7798,7 @@
     }
   },
   {
-    "__docId__": 289,
+    "__docId__": 291,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7784,7 +7818,7 @@
     }
   },
   {
-    "__docId__": 290,
+    "__docId__": 292,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -7810,7 +7844,7 @@
     }
   },
   {
-    "__docId__": 291,
+    "__docId__": 293,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7845,7 +7879,7 @@
     "generator": false
   },
   {
-    "__docId__": 292,
+    "__docId__": 294,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7880,7 +7914,7 @@
     "generator": false
   },
   {
-    "__docId__": 293,
+    "__docId__": 295,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -7915,7 +7949,7 @@
     "generator": false
   },
   {
-    "__docId__": 294,
+    "__docId__": 296,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -7928,7 +7962,7 @@
     "content": "import { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A shader pass.\r\n *\r\n * Used to render any shader material as a 2D filter.\r\n */\r\n\r\nexport class ShaderPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new shader pass.\r\n\t *\r\n\t * @param {ShaderMaterial} material - The shader material to use.\r\n\t * @param {String} [textureID=\"tDiffuse\"] - The texture uniform identifier.\r\n\t */\r\n\r\n\tconstructor(material, textureID = \"tDiffuse\") {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"ShaderPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * The shader material to use for rendering.\r\n\t\t *\r\n\t\t * @type {ShaderMaterial}\r\n\t\t */\r\n\r\n\t\tthis.material = material;\r\n\r\n\t\tthis.quad.material = this.material;\r\n\r\n\t\t/**\r\n\t\t * The name of the color sampler uniform of the given material.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t * @default \"tDiffuse\"\r\n\t\t */\r\n\r\n\t\tthis.textureID = textureID;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\tif(this.material.uniforms[this.textureID] !== undefined) {\r\n\r\n\t\t\tthis.material.uniforms[this.textureID].value = readBuffer.texture;\r\n\r\n\t\t}\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 295,
+    "__docId__": 297,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -7947,7 +7981,7 @@
     ]
   },
   {
-    "__docId__": 296,
+    "__docId__": 298,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -7984,7 +8018,7 @@
     "generator": false
   },
   {
-    "__docId__": 297,
+    "__docId__": 299,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8001,7 +8035,7 @@
     }
   },
   {
-    "__docId__": 298,
+    "__docId__": 300,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8018,7 +8052,7 @@
     }
   },
   {
-    "__docId__": 299,
+    "__docId__": 301,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8038,7 +8072,7 @@
     }
   },
   {
-    "__docId__": 300,
+    "__docId__": 302,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8064,7 +8098,7 @@
     }
   },
   {
-    "__docId__": 301,
+    "__docId__": 303,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8109,7 +8143,7 @@
     "generator": false
   },
   {
-    "__docId__": 302,
+    "__docId__": 304,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -8122,7 +8156,7 @@
     "content": "import { Vector3 } from \"three\";\r\nimport { CopyMaterial, ShockWaveMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Half PI.\r\n *\r\n * @type {Number}\r\n * @private\r\n * @static\r\n * @final\r\n */\r\n\r\nconst HALF_PI = Math.PI * 0.5;\r\n\r\n/**\r\n * A vector.\r\n *\r\n * @type {Vector3}\r\n * @private\r\n * @static\r\n * @final\r\n */\r\n\r\nconst v = new Vector3();\r\n\r\n/**\r\n * A vector.\r\n *\r\n * @type {Vector3}\r\n * @private\r\n * @static\r\n * @final\r\n */\r\n\r\nconst ab = new Vector3();\r\n\r\n/**\r\n * A shock wave pass.\r\n */\r\n\r\nexport class ShockWavePass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new shock wave pass.\r\n\t *\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Vector3} [epicenter] - The world position of the shock wave epicenter.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Number} [options.speed=1.0] - The animation speed.\r\n\t * @param {Number} [options.maxRadius=1.0] - The extent of the shock wave.\r\n\t * @param {Number} [options.waveSize=0.2] - The wave size.\r\n\t * @param {Number} [options.amplitude=0.05] - The distortion amplitude.\r\n\t */\r\n\r\n\tconstructor(camera, epicenter = new Vector3(), options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"ShockWavePass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Object3D}\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * The epicenter.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @example shockWavePass.epicenter = myMesh.position;\r\n\t\t */\r\n\r\n\t\tthis.epicenter = epicenter;\r\n\r\n\t\t/**\r\n\t\t * The object position in screen space.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screenPosition = new Vector3();\r\n\r\n\t\t/**\r\n\t\t * The speed of the shock wave animation.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @default 2.0\r\n\t\t */\r\n\r\n\t\tthis.speed = (options.speed !== undefined) ? options.speed : 2.0;\r\n\r\n\t\t/**\r\n\t\t * A time accumulator.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.time = 0.0;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the shock wave animation is active.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.active = false;\r\n\r\n\t\t/**\r\n\t\t * A shock wave shader material.\r\n\t\t *\r\n\t\t * @type {ShockWaveMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.shockWaveMaterial = new ShockWaveMaterial(options);\r\n\r\n\t\tthis.shockWaveMaterial.uniforms.center.value = this.screenPosition;\r\n\r\n\t\t/**\r\n\t\t * A copy shader material.\r\n\t\t *\r\n\t\t * @type {CopyMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.copyMaterial = new CopyMaterial();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Emits the shock wave.\r\n\t */\r\n\r\n\texplode() {\r\n\r\n\t\tthis.time = 0.0;\r\n\t\tthis.active = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t * @param {Number} delta - The render delta time.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer, delta) {\r\n\r\n\t\tconst epicenter = this.epicenter;\r\n\t\tconst mainCamera = this.mainCamera;\r\n\t\tconst screenPosition = this.screenPosition;\r\n\r\n\t\tconst shockWaveMaterial = this.shockWaveMaterial;\r\n\t\tconst uniforms = shockWaveMaterial.uniforms;\r\n\t\tconst center = uniforms.center;\r\n\t\tconst radius = uniforms.radius;\r\n\t\tconst maxRadius = uniforms.maxRadius;\r\n\t\tconst waveSize = uniforms.waveSize;\r\n\r\n\t\tthis.copyMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\tthis.quad.material = this.copyMaterial;\r\n\r\n\t\tif(this.active) {\r\n\r\n\t\t\t// Calculate direction vectors.\r\n\t\t\tmainCamera.getWorldDirection(v);\r\n\t\t\tab.copy(mainCamera.position).sub(epicenter);\r\n\r\n\t\t\t// Don't render the effect if the object is behind the camera.\r\n\t\t\tif(v.angleTo(ab) > HALF_PI) {\r\n\r\n\t\t\t\t// Scale the effect based on distance to the object.\r\n\t\t\t\tuniforms.cameraDistance.value = mainCamera.position.distanceTo(epicenter);\r\n\r\n\t\t\t\t// Calculate the screen position of the epicenter.\r\n\t\t\t\tscreenPosition.copy(epicenter).project(mainCamera);\r\n\t\t\t\tcenter.value.x = (screenPosition.x + 1.0) * 0.5;\r\n\t\t\t\tcenter.value.y = (screenPosition.y + 1.0) * 0.5;\r\n\r\n\t\t\t\tuniforms.tDiffuse.value = readBuffer.texture;\r\n\t\t\t\tthis.quad.material = shockWaveMaterial;\r\n\r\n\t\t\t}\r\n\r\n\t\t\t// Update the shock wave radius based on time.\r\n\t\t\tthis.time += delta;\r\n\t\t\tradius.value = this.time * this.speed - waveSize.value;\r\n\r\n\t\t\tif(radius.value >= (maxRadius.value + waveSize.value) * 2) {\r\n\r\n\t\t\t\tthis.active = false;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.shockWaveMaterial.uniforms.aspect.value = width / height;\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 303,
+    "__docId__": 305,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -8155,7 +8189,7 @@
     }
   },
   {
-    "__docId__": 304,
+    "__docId__": 306,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -8188,7 +8222,7 @@
     }
   },
   {
-    "__docId__": 305,
+    "__docId__": 307,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -8221,7 +8255,7 @@
     }
   },
   {
-    "__docId__": 306,
+    "__docId__": 308,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -8240,7 +8274,7 @@
     ]
   },
   {
-    "__docId__": 307,
+    "__docId__": 309,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -8333,7 +8367,7 @@
     "generator": false
   },
   {
-    "__docId__": 308,
+    "__docId__": 310,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8350,7 +8384,7 @@
     }
   },
   {
-    "__docId__": 309,
+    "__docId__": 311,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8367,7 +8401,7 @@
     }
   },
   {
-    "__docId__": 310,
+    "__docId__": 312,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8387,7 +8421,7 @@
     }
   },
   {
-    "__docId__": 311,
+    "__docId__": 313,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8410,7 +8444,7 @@
     }
   },
   {
-    "__docId__": 312,
+    "__docId__": 314,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8430,7 +8464,7 @@
     }
   },
   {
-    "__docId__": 313,
+    "__docId__": 315,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8456,7 +8490,7 @@
     }
   },
   {
-    "__docId__": 314,
+    "__docId__": 316,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8476,7 +8510,7 @@
     }
   },
   {
-    "__docId__": 315,
+    "__docId__": 317,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8496,7 +8530,7 @@
     }
   },
   {
-    "__docId__": 316,
+    "__docId__": 318,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8516,7 +8550,7 @@
     }
   },
   {
-    "__docId__": 317,
+    "__docId__": 319,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8536,7 +8570,7 @@
     }
   },
   {
-    "__docId__": 318,
+    "__docId__": 320,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8550,7 +8584,7 @@
     "generator": false
   },
   {
-    "__docId__": 319,
+    "__docId__": 321,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8568,7 +8602,7 @@
     }
   },
   {
-    "__docId__": 320,
+    "__docId__": 322,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8586,7 +8620,7 @@
     }
   },
   {
-    "__docId__": 321,
+    "__docId__": 323,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8641,7 +8675,7 @@
     "generator": false
   },
   {
-    "__docId__": 322,
+    "__docId__": 324,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8659,7 +8693,7 @@
     }
   },
   {
-    "__docId__": 323,
+    "__docId__": 325,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8677,7 +8711,7 @@
     }
   },
   {
-    "__docId__": 324,
+    "__docId__": 326,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8712,7 +8746,7 @@
     "generator": false
   },
   {
-    "__docId__": 325,
+    "__docId__": 327,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -8725,7 +8759,7 @@
     "content": "import {\r\n\tLinearFilter,\r\n\tNearestFilter,\r\n\tRGBAFormat,\r\n\tRGBFormat,\r\n\tTexture,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Subpixel Morphological Antialiasing (SMAA) v2.8.\r\n *\r\n * Preset: SMAA 1x Medium (with color edge detection).\r\n *  https://github.com/iryoku/smaa/releases/tag/v2.8\r\n */\r\n\r\nexport class SMAAPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new SMAA pass.\r\n\t *\r\n\t * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.\r\n\t */\r\n\r\n\tconstructor(Image) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"SMAAPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * A render target for the color edge detection.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tformat: RGBFormat,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetColorEdges.texture.name = \"SMAA.ColorEdges\";\r\n\t\tthis.renderTargetColorEdges.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A render target for the SMAA weights.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetWeights = this.renderTargetColorEdges.clone();\r\n\r\n\t\tthis.renderTargetWeights.texture.name = \"SMAA.Weights\";\r\n\t\tthis.renderTargetWeights.texture.format = RGBAFormat;\r\n\r\n\t\t/**\r\n\t\t * SMAA color edge detection shader material.\r\n\t\t *\r\n\t\t * @type {SMAAColorEdgesMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.colorEdgesMaterial = new SMAAColorEdgesMaterial();\r\n\r\n\t\t/**\r\n\t\t * SMAA weights shader material.\r\n\t\t *\r\n\t\t * @type {SMAAWeightsMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.weightsMaterial = new SMAAWeightsMaterial();\r\n\r\n\t\tconst areaImage = new Image();\r\n\t\tareaImage.src = this.weightsMaterial.areaImage;\r\n\r\n\t\tconst areaTexture = new Texture();\r\n\t\tareaTexture.image = areaImage;\r\n\t\tareaTexture.name = \"SMAA.Area\";\r\n\t\tareaTexture.minFilter = LinearFilter;\r\n\t\tareaTexture.format = RGBFormat;\r\n\t\tareaTexture.generateMipmaps = false;\r\n\t\tareaTexture.needsUpdate = true;\r\n\t\tareaTexture.flipY = false;\r\n\r\n\t\tconst searchImage = new Image();\r\n\t\tsearchImage.src = this.weightsMaterial.searchImage;\r\n\r\n\t\tconst searchTexture = new Texture();\r\n\t\tsearchTexture.image = searchImage;\r\n\t\tsearchTexture.name = \"SMAA.Search\";\r\n\t\tsearchTexture.magFilter = NearestFilter;\r\n\t\tsearchTexture.minFilter = NearestFilter;\r\n\t\tsearchTexture.generateMipmaps = false;\r\n\t\tsearchTexture.needsUpdate = true;\r\n\t\tsearchTexture.flipY = false;\r\n\r\n\t\tthis.weightsMaterial.uniforms.tDiffuse.value = this.renderTargetColorEdges.texture;\r\n\t\tthis.weightsMaterial.uniforms.tArea.value = areaTexture;\r\n\t\tthis.weightsMaterial.uniforms.tSearch.value = searchTexture;\r\n\r\n\t\t/**\r\n\t\t * SMAA blend shader material.\r\n\t\t *\r\n\t\t * @type {SMAABlendMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blendMaterial = new SMAABlendMaterial();\r\n\r\n\t\tthis.blendMaterial.uniforms.tWeights.value = this.renderTargetWeights.texture;\r\n\r\n\t\tthis.quad.material = this.blendMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Antialiases the scene.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer) {\r\n\r\n\t\t// Detect color edges.\r\n\t\tthis.quad.material = this.colorEdgesMaterial;\r\n\t\tthis.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\trenderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);\r\n\r\n\t\t// Compute edge weights.\r\n\t\tthis.quad.material = this.weightsMaterial;\r\n\t\trenderer.render(this.scene, this.camera, this.renderTargetWeights, false);\r\n\r\n\t\t// Apply the antialiasing filter to the colors.\r\n\t\tthis.quad.material = this.blendMaterial;\r\n\t\tthis.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.renderTargetColorEdges.setSize(width, height);\r\n\t\tthis.renderTargetWeights.setSize(width, height);\r\n\r\n\t\tthis.colorEdgesMaterial.uniforms.texelSize.value.copy(\r\n\t\t\tthis.weightsMaterial.uniforms.texelSize.value.copy(\r\n\t\t\t\tthis.blendMaterial.uniforms.texelSize.value.set(\r\n\t\t\t\t\t1.0 / width, 1.0 / height\r\n\t\t)));\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 326,
+    "__docId__": 328,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -8744,7 +8778,7 @@
     ]
   },
   {
-    "__docId__": 327,
+    "__docId__": 329,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -8769,7 +8803,7 @@
     "generator": false
   },
   {
-    "__docId__": 328,
+    "__docId__": 330,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8786,7 +8820,7 @@
     }
   },
   {
-    "__docId__": 329,
+    "__docId__": 331,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8803,7 +8837,7 @@
     }
   },
   {
-    "__docId__": 330,
+    "__docId__": 332,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8823,7 +8857,7 @@
     }
   },
   {
-    "__docId__": 331,
+    "__docId__": 333,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8843,7 +8877,7 @@
     }
   },
   {
-    "__docId__": 332,
+    "__docId__": 334,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8863,7 +8897,7 @@
     }
   },
   {
-    "__docId__": 333,
+    "__docId__": 335,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8883,7 +8917,7 @@
     }
   },
   {
-    "__docId__": 334,
+    "__docId__": 336,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -8903,7 +8937,7 @@
     }
   },
   {
-    "__docId__": 335,
+    "__docId__": 337,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8948,7 +8982,7 @@
     "generator": false
   },
   {
-    "__docId__": 336,
+    "__docId__": 338,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -8983,7 +9017,7 @@
     "generator": false
   },
   {
-    "__docId__": 337,
+    "__docId__": 339,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -8996,7 +9030,7 @@
     "content": "import { AdditiveBlending } from \"three\";\r\nimport { CopyMaterial } from \"../materials\";\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * A pass that renders a given texture.\r\n */\r\n\r\nexport class TexturePass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new texture pass.\r\n\t *\r\n\t * @param {Texture} texture - The texture.\r\n\t * @param {Number} [opacity=1.0] - The texture opacity.\r\n\t */\r\n\r\n\tconstructor(texture, opacity = 1.0) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"TexturePass\";\r\n\r\n\t\t/**\r\n\t\t * A copy shader material used for rendering to texture.\r\n\t\t *\r\n\t\t * @type {CopyMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.copyMaterial = new CopyMaterial();\r\n\t\tthis.copyMaterial.blending = AdditiveBlending;\r\n\t\tthis.copyMaterial.transparent = true;\r\n\r\n\t\tthis.texture = texture;\r\n\t\tthis.opacity = opacity;\r\n\r\n\t\tthis.quad.material = this.copyMaterial;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The texture.\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tget texture() { return this.copyMaterial.uniforms.tDiffuse.value; }\r\n\r\n\t/**\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tset texture(x) {\r\n\r\n\t\tthis.copyMaterial.uniforms.tDiffuse.value = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The opacity.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 1.0\r\n\t */\r\n\r\n\tget opacity() { return this.copyMaterial.uniforms.opacity.value; }\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset opacity(x) {\r\n\r\n\t\tthis.copyMaterial.uniforms.opacity.value = x;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t */\r\n\r\n\trender(renderer, readBuffer) {\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 338,
+    "__docId__": 340,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -9015,7 +9049,7 @@
     ]
   },
   {
-    "__docId__": 339,
+    "__docId__": 341,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -9052,7 +9086,7 @@
     "generator": false
   },
   {
-    "__docId__": 340,
+    "__docId__": 342,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9069,7 +9103,7 @@
     }
   },
   {
-    "__docId__": 341,
+    "__docId__": 343,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9089,7 +9123,7 @@
     }
   },
   {
-    "__docId__": 342,
+    "__docId__": 344,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9107,7 +9141,7 @@
     }
   },
   {
-    "__docId__": 343,
+    "__docId__": 345,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9125,7 +9159,7 @@
     }
   },
   {
-    "__docId__": 344,
+    "__docId__": 346,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -9146,7 +9180,7 @@
     "generator": false
   },
   {
-    "__docId__": 345,
+    "__docId__": 347,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -9167,7 +9201,7 @@
     "generator": false
   },
   {
-    "__docId__": 346,
+    "__docId__": 348,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -9194,7 +9228,7 @@
     "generator": false
   },
   {
-    "__docId__": 347,
+    "__docId__": 349,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -9215,7 +9249,7 @@
     "generator": false
   },
   {
-    "__docId__": 348,
+    "__docId__": 350,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -9250,7 +9284,7 @@
     "generator": false
   },
   {
-    "__docId__": 349,
+    "__docId__": 351,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -9263,7 +9297,7 @@
     "content": "import {\r\n\tLinearFilter,\r\n\tLinearMipMapLinearFilter,\r\n\tMeshBasicMaterial,\r\n\tRGBFormat,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport {\r\n\tAdaptiveLuminosityMaterial,\r\n\tCopyMaterial,\r\n\tLuminosityMaterial,\r\n\tToneMappingMaterial\r\n} from \"../materials\";\r\n\r\nimport { Pass } from \"./pass.js\";\r\n\r\n/**\r\n * Rounds the given number up to the next power of two.\r\n *\r\n * @private\r\n * @static\r\n * @param {Number} n - A number.\r\n * @return {Number} The next power of two.\r\n */\r\n\r\nfunction ceil2(n) { return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n)))); }\r\n\r\n/**\r\n * A tone mapping pass that supports adaptive luminosity.\r\n *\r\n * If adaptivity is enabled, this pass generates a texture that represents the\r\n * luminosity of the current scene and adjusts it over time to simulate the\r\n * optic nerve responding to the amount of light it is receiving.\r\n *\r\n * Reference:\r\n *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline\r\n *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf\r\n */\r\n\r\nexport class ToneMappingPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new tone mapping pass.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.\r\n\t * @param {Number} [options.resolution=256] - The render texture resolution.\r\n\t * @param {Number} [options.distinction=1.0] - A luminance distinction factor.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tsuper();\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t */\r\n\r\n\t\tthis.name = \"ToneMappingPass\";\r\n\r\n\t\t/**\r\n\t\t * This pass renders to the write buffer.\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * The render target for the current luminosity.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t * @todo Use RED format in WebGL 2.0.\r\n\t\t */\r\n\r\n\t\tthis.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearMipMapLinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tformat: RGBFormat,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetLuminosity.texture.name = \"ToneMapping.Luminosity\";\r\n\r\n\t\t/**\r\n\t\t * The render target for adapted luminosity.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetAdapted = this.renderTargetLuminosity.clone();\r\n\r\n\t\tthis.renderTargetAdapted.texture.name = \"ToneMapping.AdaptedLuminosity\";\r\n\t\tthis.renderTargetAdapted.texture.generateMipmaps = false;\r\n\t\tthis.renderTargetAdapted.texture.minFilter = LinearFilter;\r\n\r\n\t\t/**\r\n\t\t * A render target that holds a copy of the adapted limonosity.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetPrevious = this.renderTargetAdapted.clone();\r\n\r\n\t\tthis.renderTargetPrevious.texture.name = \"ToneMapping.PreviousLuminosity\";\r\n\r\n\t\t/**\r\n\t\t * Copy shader material used for saving the luminance map.\r\n\t\t *\r\n\t\t * @type {CopyMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.copyMaterial = new CopyMaterial();\r\n\r\n\t\t/**\r\n\t\t * A luminosity shader material.\r\n\t\t *\r\n\t\t * @type {LuminosityMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.luminosityMaterial = new LuminosityMaterial();\r\n\r\n\t\tthis.luminosityMaterial.uniforms.distinction.value = (options.distinction !== undefined) ? options.distinction : 1.0;\r\n\r\n\t\t/**\r\n\t\t * An adaptive luminance shader material.\r\n\t\t *\r\n\t\t * @type {AdaptiveLuminosityMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();\r\n\r\n\t\tthis.resolution = (options.resolution !== undefined) ? options.resolution : 256;\r\n\r\n\t\t/**\r\n\t\t * A tone mapping shader material.\r\n\t\t *\r\n\t\t * @type {ToneMappingMaterial}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.toneMappingMaterial = new ToneMappingMaterial();\r\n\r\n\t\tthis.adaptive = (options.adaptive !== undefined) ? options.adaptive : true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution of the render targets.\r\n\t *\r\n\t * @type {Number}\r\n\t * @default 256\r\n\t */\r\n\r\n\tget resolution() { return this.renderTargetLuminosity.width; }\r\n\r\n\t/**\r\n\t * The resolution of the render targets. Must be a power of two and will be\r\n\t * rounded up if it isn't.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolution(x) {\r\n\r\n\t\tx = ceil2(x);\r\n\r\n\t\tthis.renderTargetLuminosity.setSize(x, x);\r\n\t\tthis.renderTargetPrevious.setSize(x, x);\r\n\t\tthis.renderTargetAdapted.setSize(x, x);\r\n\r\n\t\tthis.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);\r\n\t\tthis.adaptiveLuminosityMaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Whether this pass uses adaptive luminosity.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget adaptive() { return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined; }\r\n\r\n\t/**\r\n\t * Whether this pass should use adaptive luminosity.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset adaptive(x) {\r\n\r\n\t\tif(x) {\r\n\r\n\t\t\tthis.toneMappingMaterial.defines.ADAPTED_LUMINANCE = \"1\";\r\n\t\t\tthis.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tdelete this.toneMappingMaterial.defines.ADAPTED_LUMINANCE;\r\n\t\t\tthis.toneMappingMaterial.uniforms.luminanceMap.value = null;\r\n\r\n\t\t}\r\n\r\n\t\tthis.toneMappingMaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} readBuffer - The read buffer.\r\n\t * @param {WebGLRenderTarget} writeBuffer - The write buffer.\r\n\t * @param {Number} delta - The render delta time.\r\n\t */\r\n\r\n\trender(renderer, readBuffer, writeBuffer, delta) {\r\n\r\n\t\tconst quad = this.quad;\r\n\t\tconst scene = this.scene;\r\n\t\tconst camera = this.camera;\r\n\r\n\t\tconst adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;\r\n\t\tconst luminosityMaterial = this.luminosityMaterial;\r\n\t\tconst toneMappingMaterial = this.toneMappingMaterial;\r\n\t\tconst copyMaterial = this.copyMaterial;\r\n\r\n\t\tconst renderTargetPrevious = this.renderTargetPrevious;\r\n\t\tconst renderTargetLuminosity = this.renderTargetLuminosity;\r\n\t\tconst renderTargetAdapted = this.renderTargetAdapted;\r\n\r\n\t\tif(this.adaptive) {\r\n\r\n\t\t\t// Render the luminance of the current scene into a render target with mipmapping enabled.\r\n\t\t\tquad.material = luminosityMaterial;\r\n\t\t\tluminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\t\t\trenderer.render(scene, camera, renderTargetLuminosity);\r\n\r\n\t\t\t// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.\r\n\t\t\tquad.material = adaptiveLuminosityMaterial;\r\n\t\t\tadaptiveLuminosityMaterial.uniforms.delta.value = delta;\r\n\t\t\tadaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;\r\n\t\t\tadaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;\r\n\t\t\trenderer.render(scene, camera, renderTargetAdapted);\r\n\r\n\t\t\t// Copy the new adapted luminance value so that it can be used by the next frame.\r\n\t\t\tquad.material = copyMaterial;\r\n\t\t\tcopyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;\r\n\t\t\trenderer.render(scene, camera, renderTargetPrevious);\r\n\r\n\t\t}\r\n\r\n\t\t// Apply the tone mapping to the colours.\r\n\t\tquad.material = toneMappingMaterial;\r\n\t\ttoneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;\r\n\r\n\t\trenderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders something into the previous luminosity texture.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t */\r\n\r\n\tinitialise(renderer) {\r\n\r\n\t\tthis.quad.material = new MeshBasicMaterial({ color: 0x7fffff });\r\n\t\trenderer.render(this.scene, this.camera, this.renderTargetPrevious);\r\n\t\tthis.quad.material.dispose();\r\n\r\n\t}\r\n\r\n}\r\n"
   },
   {
-    "__docId__": 350,
+    "__docId__": 352,
     "kind": "function",
     "static": true,
     "variation": null,
@@ -9305,7 +9339,7 @@
     "generator": false
   },
   {
-    "__docId__": 351,
+    "__docId__": 353,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -9324,7 +9358,7 @@
     ]
   },
   {
-    "__docId__": 352,
+    "__docId__": 354,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -9385,7 +9419,7 @@
     "generator": false
   },
   {
-    "__docId__": 353,
+    "__docId__": 355,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9402,7 +9436,7 @@
     }
   },
   {
-    "__docId__": 354,
+    "__docId__": 356,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9419,7 +9453,7 @@
     }
   },
   {
-    "__docId__": 355,
+    "__docId__": 357,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9442,7 +9476,7 @@
     }
   },
   {
-    "__docId__": 356,
+    "__docId__": 358,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9462,7 +9496,7 @@
     }
   },
   {
-    "__docId__": 357,
+    "__docId__": 359,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9482,7 +9516,7 @@
     }
   },
   {
-    "__docId__": 358,
+    "__docId__": 360,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9502,7 +9536,7 @@
     }
   },
   {
-    "__docId__": 359,
+    "__docId__": 361,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9522,7 +9556,7 @@
     }
   },
   {
-    "__docId__": 360,
+    "__docId__": 362,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9542,7 +9576,7 @@
     }
   },
   {
-    "__docId__": 361,
+    "__docId__": 363,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9560,7 +9594,7 @@
     }
   },
   {
-    "__docId__": 362,
+    "__docId__": 364,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9580,7 +9614,7 @@
     }
   },
   {
-    "__docId__": 363,
+    "__docId__": 365,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -9598,7 +9632,7 @@
     }
   },
   {
-    "__docId__": 364,
+    "__docId__": 366,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -9625,7 +9659,7 @@
     "generator": false
   },
   {
-    "__docId__": 365,
+    "__docId__": 367,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -9646,7 +9680,7 @@
     "generator": false
   },
   {
-    "__docId__": 366,
+    "__docId__": 368,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -9667,7 +9701,7 @@
     "generator": false
   },
   {
-    "__docId__": 367,
+    "__docId__": 369,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -9688,7 +9722,7 @@
     "generator": false
   },
   {
-    "__docId__": 368,
+    "__docId__": 370,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -9743,7 +9777,7 @@
     "generator": false
   },
   {
-    "__docId__": 369,
+    "__docId__": 371,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -9768,7 +9802,7 @@
     "generator": false
   },
   {
-    "__docId__": 371,
+    "__docId__": 373,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9781,7 +9815,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 372,
+    "__docId__": 374,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9794,7 +9828,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 373,
+    "__docId__": 375,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9807,7 +9841,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 374,
+    "__docId__": 376,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9820,7 +9854,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 375,
+    "__docId__": 377,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9833,7 +9867,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 376,
+    "__docId__": 378,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9846,7 +9880,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 377,
+    "__docId__": 379,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9859,7 +9893,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 378,
+    "__docId__": 380,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9872,7 +9906,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 379,
+    "__docId__": 381,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9885,7 +9919,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 380,
+    "__docId__": 382,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9898,7 +9932,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 381,
+    "__docId__": 383,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9911,7 +9945,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 382,
+    "__docId__": 384,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9924,7 +9958,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 383,
+    "__docId__": 385,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9937,7 +9971,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 384,
+    "__docId__": 386,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9950,7 +9984,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 385,
+    "__docId__": 387,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9963,7 +9997,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 386,
+    "__docId__": 388,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9976,7 +10010,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 387,
+    "__docId__": 389,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -9989,7 +10023,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 388,
+    "__docId__": 390,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10002,7 +10036,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 389,
+    "__docId__": 391,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10015,7 +10049,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 390,
+    "__docId__": 392,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10028,7 +10062,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 391,
+    "__docId__": 393,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10041,7 +10075,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 392,
+    "__docId__": 394,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10054,7 +10088,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 393,
+    "__docId__": 395,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10067,7 +10101,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 394,
+    "__docId__": 396,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10080,7 +10114,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 395,
+    "__docId__": 397,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10093,7 +10127,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 396,
+    "__docId__": 398,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10106,7 +10140,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 397,
+    "__docId__": 399,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10119,7 +10153,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 398,
+    "__docId__": 400,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10132,7 +10166,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 399,
+    "__docId__": 401,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10145,7 +10179,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 400,
+    "__docId__": 402,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10158,7 +10192,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 401,
+    "__docId__": 403,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10171,7 +10205,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 402,
+    "__docId__": 404,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10184,7 +10218,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 403,
+    "__docId__": 405,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10197,7 +10231,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 404,
+    "__docId__": 406,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10210,7 +10244,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 405,
+    "__docId__": 407,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10223,7 +10257,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 406,
+    "__docId__": 408,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10236,7 +10270,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 407,
+    "__docId__": 409,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10249,7 +10283,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 408,
+    "__docId__": 410,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10262,7 +10296,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 409,
+    "__docId__": 411,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10275,7 +10309,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 410,
+    "__docId__": 412,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10288,7 +10322,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 411,
+    "__docId__": 413,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10301,7 +10335,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 412,
+    "__docId__": 414,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10314,7 +10348,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 413,
+    "__docId__": 415,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10327,7 +10361,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 414,
+    "__docId__": 416,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10340,7 +10374,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 415,
+    "__docId__": 417,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10353,7 +10387,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 416,
+    "__docId__": 418,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10366,7 +10400,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 417,
+    "__docId__": 419,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10379,7 +10413,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 419,
+    "__docId__": 421,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10392,7 +10426,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 420,
+    "__docId__": 422,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10405,7 +10439,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 421,
+    "__docId__": 423,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10418,7 +10452,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 422,
+    "__docId__": 424,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10431,7 +10465,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 423,
+    "__docId__": 425,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10444,7 +10478,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 424,
+    "__docId__": 426,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10457,7 +10491,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 425,
+    "__docId__": 427,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -10470,7 +10504,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 426,
+    "__docId__": 428,
     "kind": "external",
     "static": true,
     "variation": null,
