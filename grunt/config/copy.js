@@ -3,7 +3,7 @@ module.exports = {
 	backup: {
 		expand: true,
 		cwd: "src",
-		src: "materials/*/index.js",
+		src: "materials/*.js",
 		dest: "backup",
 		filter: "isFile"
 	},
