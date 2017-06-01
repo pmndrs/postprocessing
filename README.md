@@ -4,7 +4,7 @@
 [![npm version](https://badge.fury.io/js/postprocessing.svg)](http://badge.fury.io/js/postprocessing)
 [![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
 
-A post processing library that provides the means to implement 2D filter effects for three.js.
+A post processing library that provides the means to implement 2D filter effects for [three.js](https://threejs.org/).
 
 *[Extensive Demo](https://vanruesc.github.io/postprocessing/public) &there4;
 [API Reference](https://vanruesc.github.io/postprocessing/docs)*
