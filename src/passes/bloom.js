@@ -1,5 +1,5 @@
 import { RGBFormat } from "three";
-import { CombineMaterial, LuminosityMaterial } from "../materials";
+import { CombineMaterial, KernelSize, LuminosityMaterial } from "../materials";
 import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
 
@@ -109,11 +109,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x) {
-
-		this.blurPass.resolutionScale = x;
-
-	}
+	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
 
 	/**
 	 * The blur kernel size.
@@ -128,11 +124,7 @@ export class BloomPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		this.blurPass.kernelSize = x;
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -147,15 +139,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x) {
-
-		if(typeof x === "number") {
-
-			this.combineMaterial.uniforms.opacity2.value = x;
-
-		}
-
-	}
+	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
 
 	/**
 	 * The luminance distinction factor.
@@ -170,15 +154,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set distinction(x) {
-
-		if(typeof x === "number") {
-
-			this.luminosityMaterial.uniforms.distinction.value = x;
-
-		}
-
-	}
+	set distinction(x = 1.0) { this.luminosityMaterial.uniforms.distinction.value = x; }
 
 	/**
 	 * Renders the effect.

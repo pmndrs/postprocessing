@@ -59,21 +59,17 @@ export class PixelationPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set granularity(x) {
+	set granularity(x = 30) {
 
-		if(typeof x === "number") {
+		x = Math.floor(x);
 
-			x = Math.floor(x);
+		if(x % 2 > 0) {
 
-			if(x % 2 > 0) {
-
-				x += 1;
-
-			}
-
-			this.pixelationMaterial.granularity = x;
+			x += 1;
 
 		}
+
+		this.pixelationMaterial.granularity = x;
 
 	}
 

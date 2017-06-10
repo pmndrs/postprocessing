@@ -8,7 +8,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { CombineMaterial, GodRaysMaterial } from "../materials";
+import { CombineMaterial, GodRaysMaterial, KernelSize } from "../materials";
 import { RenderPass } from "./render.js";
 import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
@@ -230,11 +230,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x) {
-
-		this.blurPass.resolutionScale = x;
-
-	}
+	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
 
 	/**
 	 * The blur kernel size.
@@ -249,11 +245,7 @@ export class GodRaysPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		this.blurPass.kernelSize = x;
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -268,15 +260,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x) {
-
-		if(typeof x === "number") {
-
-			this.combineMaterial.uniforms.opacity2.value = x;
-
-		}
-
-	}
+	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
 
 	/**
 	 * The number of samples per pixel.
@@ -294,17 +278,13 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set samples(x) {
+	set samples(x = 60) {
 
-		if(typeof x === "number") {
+		x = Math.floor(x);
 
-			x = Math.floor(x);
-
-			this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-			this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
-			this.godRaysMaterial.needsUpdate = true;
-
-		}
+		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+		this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+		this.godRaysMaterial.needsUpdate = true;
 
 	}
 

@@ -136,7 +136,7 @@ export class ToneMappingPass extends Pass {
 
 		this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
 
-		this.resolution = (options.resolution !== undefined) ? options.resolution : 256;
+		this.resolution = options.resolution;
 
 		/**
 		 * A tone mapping shader material.
@@ -147,7 +147,7 @@ export class ToneMappingPass extends Pass {
 
 		this.toneMappingMaterial = new ToneMappingMaterial();
 
-		this.adaptive = (options.adaptive !== undefined) ? options.adaptive : true;
+		this.adaptive = options.adaptive;
 
 	}
 
@@ -161,13 +161,12 @@ export class ToneMappingPass extends Pass {
 	get resolution() { return this.renderTargetLuminosity.width; }
 
 	/**
-	 * The resolution of the render targets. Must be a power of two and will be
-	 * rounded up if it isn't.
+	 * The resolution of the render targets. Must be a power of two for mipmaps.
 	 *
 	 * @type {Number}
 	 */
 
-	set resolution(x) {
+	set resolution(x = 256) {
 
 		x = ceil2(x);
 
@@ -184,9 +183,10 @@ export class ToneMappingPass extends Pass {
 	 * Whether this pass uses adaptive luminosity.
 	 *
 	 * @type {Boolean}
+	 * @default true
 	 */
 
-	get adaptive() { return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined; }
+	get adaptive() { return (this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined); }
 
 	/**
 	 * Whether this pass should use adaptive luminosity.
@@ -194,7 +194,7 @@ export class ToneMappingPass extends Pass {
 	 * @type {Boolean}
 	 */
 
-	set adaptive(x) {
+	set adaptive(x = true) {
 
 		if(x) {
 

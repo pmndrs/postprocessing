@@ -1,5 +1,5 @@
 import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
-import { ConvolutionMaterial } from "../materials";
+import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Pass } from "./pass.js";
 
 /**
@@ -99,15 +99,7 @@ export class BlurPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		if(typeof x === "number") {
-
-			this.convolutionMaterial.kernelSize = x;
-
-		}
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.convolutionMaterial.kernelSize = x; }
 
 	/**
 	 * Blurs the read buffer.
