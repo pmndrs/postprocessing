@@ -137,7 +137,12 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = this.blurPass.renderTargetX.clone();
+		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
 		this.renderTargetX.texture.name = "GodRays.TargetX";
 
@@ -148,7 +153,12 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.blurPass.renderTargetY.clone();
+		this.renderTargetY = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
 		this.renderTargetY.texture.name = "GodRays.TargetY";
 
@@ -406,8 +416,8 @@ export class GodRaysPass extends Pass {
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
-		width = this.blurPass.renderTargetX.width;
-		height = this.blurPass.renderTargetX.height;
+		width = this.blurPass.width;
+		height = this.blurPass.height;
 
 		this.renderTargetMask.setSize(width, height);
 		this.renderTargetX.setSize(width, height);

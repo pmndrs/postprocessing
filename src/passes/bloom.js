@@ -1,4 +1,4 @@
-import { RGBFormat } from "three";
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
 import { CombineMaterial, KernelSize, LuminosityMaterial } from "../materials";
 import { BlurPass } from "./blur.js";
 import { Pass } from "./pass.js";
@@ -55,20 +55,14 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = this.blurPass.renderTargetX.clone();
+		this.renderTarget = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
-		this.renderTargetX.texture.name = "Bloom.TargetX";
-
-		/**
-		 * A second render target.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetY = this.blurPass.renderTargetY.clone();
-
-		this.renderTargetY.texture.name = "Bloom.TargetY";
+		this.renderTarget.texture.name = "Bloom.Target";
 
 		/**
 		 * A combine shader material.
@@ -176,22 +170,20 @@ export class BloomPass extends Pass {
 
 		const luminosityMaterial = this.luminosityMaterial;
 		const combineMaterial = this.combineMaterial;
-
-		const renderTargetX = this.renderTargetX;
-		const renderTargetY = this.renderTargetY;
+		const renderTarget = this.renderTarget;
 
 		// Luminance filter.
 		quad.material = luminosityMaterial;
 		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		renderer.render(scene, camera, renderTargetX);
+		renderer.render(scene, camera, renderTarget);
 
 		// Convolution phase.
-		blurPass.render(renderer, renderTargetX, renderTargetY);
+		blurPass.render(renderer, renderTarget, renderTarget);
 
 		// Render the original scene with superimposed blur.
 		quad.material = combineMaterial;
 		combineMaterial.uniforms.texture1.value = readBuffer.texture;
-		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
+		combineMaterial.uniforms.texture2.value = renderTarget.texture;
 
 		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
 
@@ -208,12 +200,7 @@ export class BloomPass extends Pass {
 
 		this.blurPass.initialise(renderer, alpha);
 
-		if(!alpha) {
-
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
-
-		}
+		if(!alpha) { this.renderTarget.texture.format = RGBFormat; }
 
 	}
 
@@ -228,11 +215,10 @@ export class BloomPass extends Pass {
 
 		this.blurPass.setSize(width, height);
 
-		width = this.blurPass.renderTargetX.width;
-		height = this.blurPass.renderTargetX.height;
+		width = this.blurPass.width;
+		height = this.blurPass.height;
 
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTarget.setSize(width, height);
 
 	}
 
