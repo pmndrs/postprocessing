@@ -145,6 +145,7 @@ export class GodRaysPass extends Pass {
 		});
 
 		this.renderTargetX.texture.name = "GodRays.TargetX";
+		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.

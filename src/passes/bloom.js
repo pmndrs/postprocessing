@@ -63,6 +63,7 @@ export class BloomPass extends Pass {
 		});
 
 		this.renderTarget.texture.name = "Bloom.Target";
+		this.renderTarget.texture.generateMipmaps = false;
 
 		/**
 		 * A combine shader material.
