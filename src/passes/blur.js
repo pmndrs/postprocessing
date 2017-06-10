@@ -63,7 +63,8 @@ export class BlurPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this value.
+		 * You need to call {@link EffectComposer#setSize} after changing this
+		 * value.
 		 *
 		 * @type {Number}
 		 * @default 0.5

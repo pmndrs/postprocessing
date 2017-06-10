@@ -59,7 +59,8 @@ export class FilmPass extends Pass {
 		/**
 		 * The amount of scanlines in percent, relative to the screen height.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this value.
+		 * You need to call {@link EffectComposer#setSize} after changing this
+		 * value.
 		 *
 		 * @type {Number}
 		 * @default 1.25

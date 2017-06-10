@@ -88,7 +88,6 @@ export class ConvolutionMaterial extends ShaderMaterial {
  *
  * @type {Float32Array[]}
  * @private
- * @static
  */
 
 const kernelPresets = [
