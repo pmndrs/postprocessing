@@ -88,6 +88,22 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * The absolute width of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get width() { return this.renderTargetX.width; }
+
+	/**
+	 * The absolute height of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get height() { return this.renderTargetX.height; }
+
+	/**
 	 * The kernel size.
 	 *
 	 * @type {KernelSize}
