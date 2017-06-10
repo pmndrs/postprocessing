@@ -154,12 +154,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
+		this.renderTargetY = this.renderTargetX.clone();
 
 		this.renderTargetY.texture.name = "GodRays.TargetY";
 
