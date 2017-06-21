@@ -2979,7 +2979,6 @@
   		createClass(Demo, [{
   				key: "load",
   				value: function load(callback) {
-
   						callback();
   				}
   		}, {
@@ -3049,7 +3048,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -3060,7 +3059,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -3268,7 +3266,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -3279,7 +3277,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -3393,7 +3390,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -3404,7 +3401,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -3628,7 +3624,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -3639,7 +3635,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -3793,13 +3788,6 @@
   		}
 
   		createClass(DepthDemo, [{
-  				key: "load",
-  				value: function load(callback) {
-
-  						this.initialise();
-  						callback();
-  				}
-  		}, {
   				key: "initialise",
   				value: function initialise() {
 
@@ -3914,7 +3902,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -3925,7 +3913,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -4090,7 +4077,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -4101,7 +4088,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -4349,7 +4335,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -4366,7 +4352,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -4521,7 +4506,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -4532,7 +4517,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -4696,7 +4680,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -4732,7 +4716,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -4923,7 +4906,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -4940,7 +4923,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -5038,7 +5020,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -5049,7 +5031,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -5188,7 +5169,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -5205,7 +5186,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -5449,7 +5429,7 @@
   										if (loaded === total) {
 
   												_this2.assets = assets;
-  												_this2.initialise();
+
   												callback();
   										}
   								};
@@ -5466,7 +5446,6 @@
   								});
   						} else {
 
-  								this.initialise();
   								callback();
   						}
   				}
@@ -5583,183 +5562,184 @@
   }(Demo);
 
   var App = function () {
-  		function App() {
-  				classCallCheck(this, App);
+  			function App() {
+  						classCallCheck(this, App);
 
 
-  				this.clock = new three.Clock();
+  						this.clock = new three.Clock();
 
-  				this.composer = function () {
+  						this.composer = function () {
 
-  						var renderer = new three.WebGLRenderer({
-  								logarithmicDepthBuffer: true,
-  								antialias: true
-  						});
+  									var renderer = new three.WebGLRenderer({
+  												logarithmicDepthBuffer: true,
+  												antialias: true
+  									});
 
-  						renderer.setSize(window.innerWidth, window.innerHeight);
-  						renderer.setClearColor(0x000000);
-  						renderer.setPixelRatio(window.devicePixelRatio);
+  									renderer.setSize(window.innerWidth, window.innerHeight);
+  									renderer.setClearColor(0x000000);
+  									renderer.setPixelRatio(window.devicePixelRatio);
 
-  						return new EffectComposer(renderer, {
-  								stencilBuffer: true,
-  								depthTexture: true
-  						});
-  				}();
+  									return new EffectComposer(renderer, {
+  												stencilBuffer: true,
+  												depthTexture: true
+  									});
+  						}();
 
-  				this.stats = function () {
+  						this.stats = function () {
 
-  						var stats = new Stats();
-  						stats.showPanel(0);
-  						stats.dom.id = "stats";
+  									var stats = new Stats();
+  									stats.showPanel(0);
+  									stats.dom.id = "stats";
 
-  						return stats;
-  				}();
+  									return stats;
+  						}();
 
-  				this.demos = function (composer) {
+  						this.demos = function (composer) {
 
-  						var demos = new Map();
+  									var demos = new Map();
 
-  						demos.set("render", new RenderDemo(composer));
-  						demos.set("bloom", new BloomDemo(composer));
-  						demos.set("blur", new BlurDemo(composer));
-  						demos.set("bokeh", new BokehDemo(composer));
-  						demos.set("bokeh2", new Bokeh2Demo(composer));
-  						demos.set("depth", new DepthDemo(composer));
-  						demos.set("dot-screen", new DotScreenDemo(composer));
-  						demos.set("film", new FilmDemo(composer));
-  						demos.set("glitch", new GlitchDemo(composer));
-  						demos.set("god-rays", new GodRaysDemo(composer));
-  						demos.set("pixelation", new PixelationDemo(composer));
-  						demos.set("shock-wave", new ShockWaveDemo(composer));
-  						demos.set("smaa", new SMAADemo(composer));
-  						demos.set("tone-mapping", new ToneMappingDemo(composer));
+  									demos.set("render", new RenderDemo(composer));
+  									demos.set("bloom", new BloomDemo(composer));
+  									demos.set("blur", new BlurDemo(composer));
+  									demos.set("bokeh", new BokehDemo(composer));
+  									demos.set("bokeh2", new Bokeh2Demo(composer));
+  									demos.set("depth", new DepthDemo(composer));
+  									demos.set("dot-screen", new DotScreenDemo(composer));
+  									demos.set("film", new FilmDemo(composer));
+  									demos.set("glitch", new GlitchDemo(composer));
+  									demos.set("god-rays", new GodRaysDemo(composer));
+  									demos.set("pixelation", new PixelationDemo(composer));
+  									demos.set("shock-wave", new ShockWaveDemo(composer));
+  									demos.set("smaa", new SMAADemo(composer));
+  									demos.set("tone-mapping", new ToneMappingDemo(composer));
 
-  						return demos;
-  				}(this.composer);
+  									return demos;
+  						}(this.composer);
 
-  				this.effect = function (demos) {
+  						this.effect = function (demos) {
 
-  						var key = window.location.hash.slice(1);
+  									var key = window.location.hash.slice(1);
 
-  						if (key.length === 0 || !demos.has(key)) {
+  									if (key.length === 0 || !demos.has(key)) {
 
-  								key = demos.keys().next().value;
+  												key = demos.keys().next().value;
+  									}
+
+  									return key;
+  						}(this.demos);
+  			}
+
+  			createClass(App, [{
+  						key: "initialise",
+  						value: function initialise(viewport, aside, loadingMessage) {
+
+  									var app = this;
+
+  									var composer = this.composer;
+  									var renderer = composer.renderer;
+  									var clock = this.clock;
+  									var stats = this.stats;
+  									var demos = this.demos;
+
+  									var demo = null;
+  									var gui = null;
+
+  									viewport.appendChild(composer.renderer.domElement);
+  									aside.appendChild(stats.dom);
+
+  									function activateDemo() {
+
+  												demo.initialise();
+
+  												demo.camera.aspect = window.innerWidth / window.innerHeight;
+  												demo.camera.updateProjectionMatrix();
+
+  												gui = new dat.GUI({ autoPlace: false });
+  												gui.add(app, "effect", Array.from(demos.keys())).onChange(loadDemo);
+  												demo.configure(gui);
+  												aside.appendChild(gui.domElement);
+
+  												loadingMessage.style.display = "none";
+  												renderer.domElement.style.visibility = "visible";
+  									}
+
+  									function loadDemo() {
+
+  												var size = composer.renderer.getSize();
+
+  												loadingMessage.style.display = "block";
+  												renderer.domElement.style.visibility = "hidden";
+
+  												if (gui !== null) {
+
+  															gui.destroy();
+  															aside.removeChild(gui.domElement);
+  												}
+
+  												if (demo !== null) {
+
+  															demo.reset();
+  															renderer.setSize(size.width, size.height);
+  															composer.replaceRenderer(renderer);
+  												}
+
+  												composer.reset();
+  												demo = demos.get(app.effect);
+  												demo.load(activateDemo);
+  									}
+
+  									loadDemo();
+
+  									document.addEventListener("keydown", function onKeyDown(event) {
+
+  												if (event.altKey) {
+
+  															event.preventDefault();
+  															aside.style.visibility = aside.style.visibility === "hidden" ? "visible" : "hidden";
+  												}
+  									});
+
+  									window.addEventListener("resize", function () {
+
+  												var id = 0;
+
+  												function handleResize(event) {
+
+  															var width = event.target.innerWidth;
+  															var height = event.target.innerHeight;
+
+  															composer.setSize(width, height);
+  															demo.camera.aspect = width / height;
+  															demo.camera.updateProjectionMatrix();
+
+  															id = 0;
+  												}
+
+  												return function onResize(event) {
+
+  															if (id === 0) {
+
+  																		id = setTimeout(handleResize, 66, event);
+  															}
+  												};
+  									}());
+
+  									(function render(now) {
+
+  												var delta = clock.getDelta();
+
+  												requestAnimationFrame(render);
+
+  												stats.begin();
+
+  												demo.update(delta);
+  												composer.render(delta);
+
+  												stats.end();
+  									})();
   						}
-
-  						return key;
-  				}(this.demos);
-  		}
-
-  		createClass(App, [{
-  				key: "initialise",
-  				value: function initialise(viewport, aside, loadingMessage) {
-
-  						var app = this;
-
-  						var composer = this.composer;
-  						var renderer = composer.renderer;
-  						var clock = this.clock;
-  						var stats = this.stats;
-  						var demos = this.demos;
-
-  						var demo = null;
-  						var gui = null;
-
-  						viewport.appendChild(composer.renderer.domElement);
-  						aside.appendChild(stats.dom);
-
-  						function activateDemo() {
-
-  								var camera = demo.camera;
-  								camera.aspect = window.innerWidth / window.innerHeight;
-  								camera.updateProjectionMatrix();
-
-  								gui = new dat.GUI({ autoPlace: false });
-  								gui.add(app, "effect", Array.from(demos.keys())).onChange(loadDemo);
-  								demo.configure(gui);
-  								aside.appendChild(gui.domElement);
-
-  								loadingMessage.style.display = "none";
-  								renderer.domElement.style.visibility = "visible";
-  						}
-
-  						function loadDemo() {
-
-  								var size = composer.renderer.getSize();
-
-  								loadingMessage.style.display = "block";
-  								renderer.domElement.style.visibility = "hidden";
-
-  								if (gui !== null) {
-
-  										gui.destroy();
-  										aside.removeChild(gui.domElement);
-  								}
-
-  								if (demo !== null) {
-
-  										demo.reset();
-  										renderer.setSize(size.width, size.height);
-  										composer.replaceRenderer(renderer);
-  								}
-
-  								composer.reset();
-  								demo = demos.get(app.effect);
-  								demo.load(activateDemo);
-  						}
-
-  						loadDemo();
-
-  						document.addEventListener("keydown", function onKeyDown(event) {
-
-  								if (event.altKey) {
-
-  										event.preventDefault();
-  										aside.style.visibility = aside.style.visibility === "hidden" ? "visible" : "hidden";
-  								}
-  						});
-
-  						window.addEventListener("resize", function () {
-
-  								var id = 0;
-
-  								function handleResize(event) {
-
-  										var width = event.target.innerWidth;
-  										var height = event.target.innerHeight;
-
-  										composer.setSize(width, height);
-  										demo.camera.aspect = width / height;
-  										demo.camera.updateProjectionMatrix();
-
-  										id = 0;
-  								}
-
-  								return function onResize(event) {
-
-  										if (id === 0) {
-
-  												id = setTimeout(handleResize, 66, event);
-  										}
-  								};
-  						}());
-
-  						(function render(now) {
-
-  								var delta = clock.getDelta();
-
-  								requestAnimationFrame(render);
-
-  								stats.begin();
-
-  								demo.update(delta);
-  								composer.render(delta);
-
-  								stats.end();
-  						})();
-  				}
-  		}]);
-  		return App;
+  			}]);
+  			return App;
   }();
 
   window.addEventListener("load", function main(event) {
