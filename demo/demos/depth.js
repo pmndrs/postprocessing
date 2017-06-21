@@ -63,19 +63,6 @@ export class DepthDemo extends Demo {
 	}
 
 	/**
-	 * Loads scene assets.
-	 *
-	 * @param {Function} callback - A callback function.
-	 */
-
-	load(callback) {
-
-		this.initialise();
-		callback();
-
-	}
-
-	/**
 	 * Creates the scene.
 	 */
 

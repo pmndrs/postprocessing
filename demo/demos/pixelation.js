@@ -113,7 +113,7 @@ export class PixelationDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -128,7 +128,6 @@ export class PixelationDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

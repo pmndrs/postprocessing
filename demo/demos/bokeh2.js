@@ -65,7 +65,7 @@ export class Bokeh2Demo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -80,7 +80,6 @@ export class Bokeh2Demo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

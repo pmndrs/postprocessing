@@ -77,7 +77,7 @@ export class RenderDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -99,7 +99,6 @@ export class RenderDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

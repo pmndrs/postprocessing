@@ -66,16 +66,12 @@ export class Demo {
 	}
 
 	/**
-	 * Loads the demo.
+	 * Loads the demo. Override this method to load assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @param {Function} callback - Call this function when all assets have been loaded.
 	 */
 
-	load(callback) {
-
-		callback();
-
-	}
+	load(callback) { callback(); }
 
 	/**
 	 * Creates the scene.

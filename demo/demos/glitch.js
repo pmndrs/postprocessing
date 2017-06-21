@@ -88,7 +88,7 @@ export class GlitchDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -110,7 +110,6 @@ export class GlitchDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

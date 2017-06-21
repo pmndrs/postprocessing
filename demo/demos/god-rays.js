@@ -90,7 +90,7 @@ export class GodRaysDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -134,7 +134,6 @@ export class GodRaysDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

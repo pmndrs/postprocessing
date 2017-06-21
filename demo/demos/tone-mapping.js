@@ -86,7 +86,7 @@ export class ToneMappingDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -108,7 +108,6 @@ export class ToneMappingDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

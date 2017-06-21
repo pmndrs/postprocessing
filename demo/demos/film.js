@@ -85,7 +85,7 @@ export class FilmDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -100,7 +100,6 @@ export class FilmDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

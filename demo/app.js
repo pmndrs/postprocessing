@@ -167,9 +167,10 @@ export class App {
 
 		function activateDemo() {
 
-			const camera = demo.camera;
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+			demo.initialise();
+
+			demo.camera.aspect = window.innerWidth / window.innerHeight;
+			demo.camera.updateProjectionMatrix();
 
 			gui = new dat.GUI({ autoPlace: false });
 			gui.add(app, "effect", Array.from(demos.keys())).onChange(loadDemo);

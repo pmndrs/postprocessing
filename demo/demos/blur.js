@@ -120,7 +120,7 @@ export class BlurDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -135,7 +135,6 @@ export class BlurDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

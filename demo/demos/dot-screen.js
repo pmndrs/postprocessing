@@ -85,7 +85,7 @@ export class DotScreenDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -100,7 +100,6 @@ export class DotScreenDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

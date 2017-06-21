@@ -65,7 +65,7 @@ export class ShockWaveDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -80,7 +80,6 @@ export class ShockWaveDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}

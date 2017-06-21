@@ -87,7 +87,7 @@ export class BloomDemo extends Demo {
 				if(loaded === total) {
 
 					this.assets = assets;
-					this.initialise();
+
 					callback();
 
 				}
@@ -102,7 +102,6 @@ export class BloomDemo extends Demo {
 
 		} else {
 
-			this.initialise();
 			callback();
 
 		}
