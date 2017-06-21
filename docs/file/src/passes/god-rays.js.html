@@ -89,7 +89,7 @@
 	WebGLRenderTarget
 } from &quot;three&quot;;
 
-import { CombineMaterial, GodRaysMaterial } from &quot;../materials&quot;;
+import { CombineMaterial, GodRaysMaterial, KernelSize } from &quot;../materials&quot;;
 import { RenderPass } from &quot;./render.js&quot;;
 import { BlurPass } from &quot;./blur.js&quot;;
 import { Pass } from &quot;./pass.js&quot;;
@@ -218,9 +218,15 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = this.blurPass.renderTargetX.clone();
+		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
 		this.renderTargetX.texture.name = &quot;GodRays.TargetX&quot;;
+		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.
@@ -229,7 +235,7 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.blurPass.renderTargetY.clone();
+		this.renderTargetY = this.renderTargetX.clone();
 
 		this.renderTargetY.texture.name = &quot;GodRays.TargetY&quot;;
 
@@ -311,11 +317,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x) {
-
-		this.blurPass.resolutionScale = x;
-
-	}
+	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
 
 	/**
 	 * The blur kernel size.
@@ -330,11 +332,7 @@ export class GodRaysPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		this.blurPass.kernelSize = x;
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -349,15 +347,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x) {
-
-		if(typeof x === &quot;number&quot;) {
-
-			this.combineMaterial.uniforms.opacity2.value = x;
-
-		}
-
-	}
+	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
 
 	/**
 	 * The number of samples per pixel.
@@ -375,17 +365,13 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set samples(x) {
+	set samples(x = 60) {
 
-		if(typeof x === &quot;number&quot;) {
+		x = Math.floor(x);
 
-			x = Math.floor(x);
-
-			this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-			this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
-			this.godRaysMaterial.needsUpdate = true;
-
-		}
+		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+		this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+		this.godRaysMaterial.needsUpdate = true;
 
 	}
 
@@ -507,8 +493,8 @@ export class GodRaysPass extends Pass {
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
-		width = this.blurPass.renderTargetX.width;
-		height = this.blurPass.renderTargetX.height;
+		width = this.blurPass.width;
+		height = this.blurPass.height;
 
 		this.renderTargetMask.setSize(width, height);
 		this.renderTargetX.setSize(width, height);

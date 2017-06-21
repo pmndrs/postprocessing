@@ -80,7 +80,7 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/blur.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
-import { ConvolutionMaterial } from &quot;../materials&quot;;
+import { ConvolutionMaterial, KernelSize } from &quot;../materials&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
 /**
@@ -144,7 +144,8 @@ export class BlurPass extends Pass {
 		/**
 		 * The resolution scale.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this value.
+		 * You need to call {@link EffectComposer#setSize} after changing this
+		 * value.
 		 *
 		 * @type {Number}
 		 * @default 0.5
@@ -168,6 +169,22 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * The absolute width of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get width() { return this.renderTargetX.width; }
+
+	/**
+	 * The absolute height of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get height() { return this.renderTargetX.height; }
+
+	/**
 	 * The kernel size.
 	 *
 	 * @type {KernelSize}
@@ -180,15 +197,7 @@ export class BlurPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		if(typeof x === &quot;number&quot;) {
-
-			this.convolutionMaterial.kernelSize = x;
-
-		}
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.convolutionMaterial.kernelSize = x; }
 
 	/**
 	 * Blurs the read buffer.

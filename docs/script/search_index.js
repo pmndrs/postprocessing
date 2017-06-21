@@ -991,13 +991,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloom.js~bloompass#distinction",
-    "class/src/passes/bloom.js~BloomPass.html#instance-set-distinction",
+    "class/src/passes/bloom.js~BloomPass.html#instance-get-distinction",
     "src/passes/bloom.js~BloomPass#distinction",
     "member"
   ],
   [
     "src/passes/bloom.js~bloompass#distinction",
-    "class/src/passes/bloom.js~BloomPass.html#instance-get-distinction",
+    "class/src/passes/bloom.js~BloomPass.html#instance-set-distinction",
     "src/passes/bloom.js~BloomPass#distinction",
     "member"
   ],
@@ -1009,25 +1009,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloom.js~bloompass#intensity",
-    "class/src/passes/bloom.js~BloomPass.html#instance-get-intensity",
-    "src/passes/bloom.js~BloomPass#intensity",
-    "member"
-  ],
-  [
-    "src/passes/bloom.js~bloompass#intensity",
     "class/src/passes/bloom.js~BloomPass.html#instance-set-intensity",
     "src/passes/bloom.js~BloomPass#intensity",
     "member"
   ],
   [
-    "src/passes/bloom.js~bloompass#kernelsize",
-    "class/src/passes/bloom.js~BloomPass.html#instance-get-kernelSize",
-    "src/passes/bloom.js~BloomPass#kernelSize",
+    "src/passes/bloom.js~bloompass#intensity",
+    "class/src/passes/bloom.js~BloomPass.html#instance-get-intensity",
+    "src/passes/bloom.js~BloomPass#intensity",
     "member"
   ],
   [
     "src/passes/bloom.js~bloompass#kernelsize",
     "class/src/passes/bloom.js~BloomPass.html#instance-set-kernelSize",
+    "src/passes/bloom.js~BloomPass#kernelSize",
+    "member"
+  ],
+  [
+    "src/passes/bloom.js~bloompass#kernelsize",
+    "class/src/passes/bloom.js~BloomPass.html#instance-get-kernelSize",
     "src/passes/bloom.js~BloomPass#kernelSize",
     "member"
   ],
@@ -1080,6 +1080,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/blur.js~blurpass#height",
+    "class/src/passes/blur.js~BlurPass.html#instance-get-height",
+    "src/passes/blur.js~BlurPass#height",
+    "member"
+  ],
+  [
     "src/passes/blur.js~blurpass#initialise",
     "class/src/passes/blur.js~BlurPass.html#instance-method-initialise",
     "src/passes/blur.js~BlurPass#initialise",
@@ -1087,13 +1093,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/blur.js~blurpass#kernelsize",
-    "class/src/passes/blur.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/blur.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/blur.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blur.js~blurpass#kernelsize",
-    "class/src/passes/blur.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/blur.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/blur.js~BlurPass#kernelSize",
     "member"
   ],
@@ -1126,6 +1132,12 @@ window.esdocSearchIndex = [
     "class/src/passes/blur.js~BlurPass.html#instance-method-setSize",
     "src/passes/blur.js~BlurPass#setSize",
     "method"
+  ],
+  [
+    "src/passes/blur.js~blurpass#width",
+    "class/src/passes/blur.js~BlurPass.html#instance-get-width",
+    "src/passes/blur.js~BlurPass#width",
+    "member"
   ],
   [
     "src/passes/bokeh.js",
@@ -1405,13 +1417,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/glitch.js~glitchpass#perturbmap",
-    "class/src/passes/glitch.js~GlitchPass.html#instance-set-perturbMap",
+    "class/src/passes/glitch.js~GlitchPass.html#instance-get-perturbMap",
     "src/passes/glitch.js~GlitchPass#perturbMap",
     "member"
   ],
   [
     "src/passes/glitch.js~glitchpass#perturbmap",
-    "class/src/passes/glitch.js~GlitchPass.html#instance-get-perturbMap",
+    "class/src/passes/glitch.js~GlitchPass.html#instance-set-perturbMap",
     "src/passes/glitch.js~GlitchPass#perturbMap",
     "member"
   ],
@@ -1441,13 +1453,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/god-rays.js~godrayspass#intensity",
-    "class/src/passes/god-rays.js~GodRaysPass.html#instance-set-intensity",
+    "class/src/passes/god-rays.js~GodRaysPass.html#instance-get-intensity",
     "src/passes/god-rays.js~GodRaysPass#intensity",
     "member"
   ],
   [
     "src/passes/god-rays.js~godrayspass#intensity",
-    "class/src/passes/god-rays.js~GodRaysPass.html#instance-get-intensity",
+    "class/src/passes/god-rays.js~GodRaysPass.html#instance-set-intensity",
     "src/passes/god-rays.js~GodRaysPass#intensity",
     "member"
   ],
@@ -1651,13 +1663,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelation.js~pixelationpass#granularity",
-    "class/src/passes/pixelation.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/pixelation.js~PixelationPass.html#instance-set-granularity",
     "src/passes/pixelation.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelation.js~pixelationpass#granularity",
-    "class/src/passes/pixelation.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/pixelation.js~PixelationPass.html#instance-get-granularity",
     "src/passes/pixelation.js~PixelationPass#granularity",
     "member"
   ],
@@ -1957,13 +1969,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texture.js~texturepass#texture",
-    "class/src/passes/texture.js~TexturePass.html#instance-set-texture",
+    "class/src/passes/texture.js~TexturePass.html#instance-get-texture",
     "src/passes/texture.js~TexturePass#texture",
     "member"
   ],
   [
     "src/passes/texture.js~texturepass#texture",
-    "class/src/passes/texture.js~TexturePass.html#instance-get-texture",
+    "class/src/passes/texture.js~TexturePass.html#instance-set-texture",
     "src/passes/texture.js~TexturePass#texture",
     "member"
   ],
@@ -1975,13 +1987,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tone-mapping.js~tonemappingpass#adaptive",
-    "class/src/passes/tone-mapping.js~ToneMappingPass.html#instance-set-adaptive",
+    "class/src/passes/tone-mapping.js~ToneMappingPass.html#instance-get-adaptive",
     "src/passes/tone-mapping.js~ToneMappingPass#adaptive",
     "member"
   ],
   [
     "src/passes/tone-mapping.js~tonemappingpass#adaptive",
-    "class/src/passes/tone-mapping.js~ToneMappingPass.html#instance-get-adaptive",
+    "class/src/passes/tone-mapping.js~ToneMappingPass.html#instance-set-adaptive",
     "src/passes/tone-mapping.js~ToneMappingPass#adaptive",
     "member"
   ],

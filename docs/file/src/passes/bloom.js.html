@@ -79,8 +79,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/bloom.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { RGBFormat } from &quot;three&quot;;
-import { CombineMaterial, LuminosityMaterial } from &quot;../materials&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
+import { CombineMaterial, KernelSize, LuminosityMaterial } from &quot;../materials&quot;;
 import { BlurPass } from &quot;./blur.js&quot;;
 import { Pass } from &quot;./pass.js&quot;;
 
@@ -136,20 +136,15 @@ export class BloomPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = this.blurPass.renderTargetX.clone();
+		this.renderTarget = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
 
-		this.renderTargetX.texture.name = &quot;Bloom.TargetX&quot;;
-
-		/**
-		 * A second render target.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetY = this.blurPass.renderTargetY.clone();
-
-		this.renderTargetY.texture.name = &quot;Bloom.TargetY&quot;;
+		this.renderTarget.texture.name = &quot;Bloom.Target&quot;;
+		this.renderTarget.texture.generateMipmaps = false;
 
 		/**
 		 * A combine shader material.
@@ -190,11 +185,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x) {
-
-		this.blurPass.resolutionScale = x;
-
-	}
+	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
 
 	/**
 	 * The blur kernel size.
@@ -209,11 +200,7 @@ export class BloomPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x) {
-
-		this.blurPass.kernelSize = x;
-
-	}
+	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -228,15 +215,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x) {
-
-		if(typeof x === &quot;number&quot;) {
-
-			this.combineMaterial.uniforms.opacity2.value = x;
-
-		}
-
-	}
+	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
 
 	/**
 	 * The luminance distinction factor.
@@ -251,15 +230,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set distinction(x) {
-
-		if(typeof x === &quot;number&quot;) {
-
-			this.luminosityMaterial.uniforms.distinction.value = x;
-
-		}
-
-	}
+	set distinction(x = 1.0) { this.luminosityMaterial.uniforms.distinction.value = x; }
 
 	/**
 	 * Renders the effect.
@@ -281,22 +252,20 @@ export class BloomPass extends Pass {
 
 		const luminosityMaterial = this.luminosityMaterial;
 		const combineMaterial = this.combineMaterial;
-
-		const renderTargetX = this.renderTargetX;
-		const renderTargetY = this.renderTargetY;
+		const renderTarget = this.renderTarget;
 
 		// Luminance filter.
 		quad.material = luminosityMaterial;
 		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		renderer.render(scene, camera, renderTargetX);
+		renderer.render(scene, camera, renderTarget);
 
 		// Convolution phase.
-		blurPass.render(renderer, renderTargetX, renderTargetY);
+		blurPass.render(renderer, renderTarget, renderTarget);
 
 		// Render the original scene with superimposed blur.
 		quad.material = combineMaterial;
 		combineMaterial.uniforms.texture1.value = readBuffer.texture;
-		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
+		combineMaterial.uniforms.texture2.value = renderTarget.texture;
 
 		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
 
@@ -313,12 +282,7 @@ export class BloomPass extends Pass {
 
 		this.blurPass.initialise(renderer, alpha);
 
-		if(!alpha) {
-
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
-
-		}
+		if(!alpha) { this.renderTarget.texture.format = RGBFormat; }
 
 	}
 
@@ -333,11 +297,10 @@ export class BloomPass extends Pass {
 
 		this.blurPass.setSize(width, height);
 
-		width = this.blurPass.renderTargetX.width;
-		height = this.blurPass.renderTargetX.height;
+		width = this.blurPass.width;
+		height = this.blurPass.height;
 
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTarget.setSize(width, height);
 
 	}
 
