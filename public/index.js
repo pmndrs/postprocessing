@@ -1,8 +1,8 @@
 (function (three,dat,Stats) {
   'use strict';
 
-  dat = 'default' in dat ? dat['default'] : dat;
-  Stats = 'default' in Stats ? Stats['default'] : Stats;
+  dat = dat && 'default' in dat ? dat['default'] : dat;
+  Stats = Stats && 'default' in Stats ? Stats['default'] : Stats;
 
   var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
 
@@ -1278,150 +1278,148 @@
   						this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
   				}
   		}, {
+  				key: "width",
+  				get: function get$$1() {
+  						return this.renderTargetX.width;
+  				}
+  		}, {
+  				key: "height",
+  				get: function get$$1() {
+  						return this.renderTargetX.height;
+  				}
+  		}, {
   				key: "kernelSize",
   				get: function get$$1() {
   						return this.convolutionMaterial.kernelSize;
   				},
-  				set: function set$$1(x) {
-
-  						if (typeof x === "number") {
-
-  								this.convolutionMaterial.kernelSize = x;
-  						}
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
+  						this.convolutionMaterial.kernelSize = x;
   				}
   		}]);
   		return BlurPass;
   }(Pass);
 
   var BloomPass = function (_Pass) {
-  		inherits(BloomPass, _Pass);
+  	inherits(BloomPass, _Pass);
 
-  		function BloomPass() {
-  				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  				classCallCheck(this, BloomPass);
+  	function BloomPass() {
+  		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  		classCallCheck(this, BloomPass);
 
-  				var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this));
 
-  				_this.name = "BloomPass";
+  		_this.name = "BloomPass";
 
-  				_this.needsSwap = true;
+  		_this.needsSwap = true;
 
-  				_this.blurPass = new BlurPass(options);
+  		_this.blurPass = new BlurPass(options);
 
-  				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
+  		_this.renderTarget = new three.WebGLRenderTarget(1, 1, {
+  			minFilter: three.LinearFilter,
+  			magFilter: three.LinearFilter,
+  			stencilBuffer: false,
+  			depthBuffer: false
+  		});
 
-  				_this.renderTargetX.texture.name = "Bloom.TargetX";
+  		_this.renderTarget.texture.name = "Bloom.Target";
+  		_this.renderTarget.texture.generateMipmaps = false;
 
-  				_this.renderTargetY = _this.blurPass.renderTargetY.clone();
+  		_this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
 
-  				_this.renderTargetY.texture.name = "Bloom.TargetY";
+  		_this.intensity = options.intensity;
 
-  				_this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
+  		_this.luminosityMaterial = new LuminosityMaterial(true);
 
-  				_this.intensity = options.intensity;
+  		_this.distinction = options.distinction;
 
-  				_this.luminosityMaterial = new LuminosityMaterial(true);
+  		return _this;
+  	}
 
-  				_this.distinction = options.distinction;
+  	createClass(BloomPass, [{
+  		key: "render",
+  		value: function render(renderer, readBuffer, writeBuffer) {
 
-  				return _this;
+  			var quad = this.quad;
+  			var scene = this.scene;
+  			var camera = this.camera;
+  			var blurPass = this.blurPass;
+
+  			var luminosityMaterial = this.luminosityMaterial;
+  			var combineMaterial = this.combineMaterial;
+  			var renderTarget = this.renderTarget;
+
+  			quad.material = luminosityMaterial;
+  			luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  			renderer.render(scene, camera, renderTarget);
+
+  			blurPass.render(renderer, renderTarget, renderTarget);
+
+  			quad.material = combineMaterial;
+  			combineMaterial.uniforms.texture1.value = readBuffer.texture;
+  			combineMaterial.uniforms.texture2.value = renderTarget.texture;
+
+  			renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   		}
+  	}, {
+  		key: "initialise",
+  		value: function initialise(renderer, alpha) {
 
-  		createClass(BloomPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  			this.blurPass.initialise(renderer, alpha);
 
-  						var quad = this.quad;
-  						var scene = this.scene;
-  						var camera = this.camera;
-  						var blurPass = this.blurPass;
+  			if (!alpha) {
+  				this.renderTarget.texture.format = three.RGBFormat;
+  			}
+  		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  						var luminosityMaterial = this.luminosityMaterial;
-  						var combineMaterial = this.combineMaterial;
+  			this.blurPass.setSize(width, height);
 
-  						var renderTargetX = this.renderTargetX;
-  						var renderTargetY = this.renderTargetY;
+  			width = this.blurPass.width;
+  			height = this.blurPass.height;
 
-  						quad.material = luminosityMaterial;
-  						luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						renderer.render(scene, camera, renderTargetX);
-
-  						blurPass.render(renderer, renderTargetX, renderTargetY);
-
-  						quad.material = combineMaterial;
-  						combineMaterial.uniforms.texture1.value = readBuffer.texture;
-  						combineMaterial.uniforms.texture2.value = renderTargetY.texture;
-
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "initialise",
-  				value: function initialise(renderer, alpha) {
-
-  						this.blurPass.initialise(renderer, alpha);
-
-  						if (!alpha) {
-
-  								this.renderTargetX.texture.format = three.RGBFormat;
-  								this.renderTargetY.texture.format = three.RGBFormat;
-  						}
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						this.blurPass.setSize(width, height);
-
-  						width = this.blurPass.renderTargetX.width;
-  						height = this.blurPass.renderTargetX.height;
-
-  						this.renderTargetX.setSize(width, height);
-  						this.renderTargetY.setSize(width, height);
-  				}
-  		}, {
-  				key: "resolutionScale",
-  				get: function get$$1() {
-  						return this.blurPass.resolutionScale;
-  				},
-  				set: function set$$1(x) {
-
-  						this.blurPass.resolutionScale = x;
-  				}
-  		}, {
-  				key: "kernelSize",
-  				get: function get$$1() {
-  						return this.blurPass.kernelSize;
-  				},
-  				set: function set$$1(x) {
-
-  						this.blurPass.kernelSize = x;
-  				}
-  		}, {
-  				key: "intensity",
-  				get: function get$$1() {
-  						return this.combineMaterial.uniforms.opacity2.value;
-  				},
-  				set: function set$$1(x) {
-
-  						if (typeof x === "number") {
-
-  								this.combineMaterial.uniforms.opacity2.value = x;
-  						}
-  				}
-  		}, {
-  				key: "distinction",
-  				get: function get$$1() {
-  						return this.luminosityMaterial.uniforms.distinction.value;
-  				},
-  				set: function set$$1(x) {
-
-  						if (typeof x === "number") {
-
-  								this.luminosityMaterial.uniforms.distinction.value = x;
-  						}
-  				}
-  		}]);
-  		return BloomPass;
+  			this.renderTarget.setSize(width, height);
+  		}
+  	}, {
+  		key: "resolutionScale",
+  		get: function get$$1() {
+  			return this.blurPass.resolutionScale;
+  		},
+  		set: function set$$1() {
+  			var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
+  			this.blurPass.resolutionScale = x;
+  		}
+  	}, {
+  		key: "kernelSize",
+  		get: function get$$1() {
+  			return this.blurPass.kernelSize;
+  		},
+  		set: function set$$1() {
+  			var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
+  			this.blurPass.kernelSize = x;
+  		}
+  	}, {
+  		key: "intensity",
+  		get: function get$$1() {
+  			return this.combineMaterial.uniforms.opacity2.value;
+  		},
+  		set: function set$$1() {
+  			var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+  			this.combineMaterial.uniforms.opacity2.value = x;
+  		}
+  	}, {
+  		key: "distinction",
+  		get: function get$$1() {
+  			return this.luminosityMaterial.uniforms.distinction.value;
+  		},
+  		set: function set$$1() {
+  			var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+  			this.luminosityMaterial.uniforms.distinction.value = x;
+  		}
+  	}]);
+  	return BloomPass;
   }(Pass);
 
   var BokehPass = function (_Pass) {
@@ -1918,11 +1916,17 @@
 
   				_this.blurPass = new BlurPass(options);
 
-  				_this.renderTargetX = _this.blurPass.renderTargetX.clone();
+  				_this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+  						minFilter: three.LinearFilter,
+  						magFilter: three.LinearFilter,
+  						stencilBuffer: false,
+  						depthBuffer: false
+  				});
 
   				_this.renderTargetX.texture.name = "GodRays.TargetX";
+  				_this.renderTargetX.texture.generateMipmaps = false;
 
-  				_this.renderTargetY = _this.blurPass.renderTargetY.clone();
+  				_this.renderTargetY = _this.renderTargetX.clone();
 
   				_this.renderTargetY.texture.name = "GodRays.TargetY";
 
@@ -2042,8 +2046,8 @@
   						this.renderPassMask.setSize(width, height);
   						this.blurPass.setSize(width, height);
 
-  						width = this.blurPass.renderTargetX.width;
-  						height = this.blurPass.renderTargetX.height;
+  						width = this.blurPass.width;
+  						height = this.blurPass.height;
 
   						this.renderTargetMask.setSize(width, height);
   						this.renderTargetX.setSize(width, height);
@@ -2054,8 +2058,8 @@
   				get: function get$$1() {
   						return this.blurPass.resolutionScale;
   				},
-  				set: function set$$1(x) {
-
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
   						this.blurPass.resolutionScale = x;
   				}
   		}, {
@@ -2063,8 +2067,8 @@
   				get: function get$$1() {
   						return this.blurPass.kernelSize;
   				},
-  				set: function set$$1(x) {
-
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
   						this.blurPass.kernelSize = x;
   				}
   		}, {
@@ -2072,28 +2076,24 @@
   				get: function get$$1() {
   						return this.combineMaterial.uniforms.opacity2.value;
   				},
-  				set: function set$$1(x) {
-
-  						if (typeof x === "number") {
-
-  								this.combineMaterial.uniforms.opacity2.value = x;
-  						}
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+  						this.combineMaterial.uniforms.opacity2.value = x;
   				}
   		}, {
   				key: "samples",
   				get: function get$$1() {
   						return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT);
   				},
-  				set: function set$$1(x) {
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 60;
 
-  						if (typeof x === "number") {
 
-  								x = Math.floor(x);
+  						x = Math.floor(x);
 
-  								this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-  								this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
-  								this.godRaysMaterial.needsUpdate = true;
-  						}
+  						this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
+  						this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+  						this.godRaysMaterial.needsUpdate = true;
   				}
   		}]);
   		return GodRaysPass;
@@ -2163,62 +2163,61 @@
   }(Pass);
 
   var PixelationPass = function (_Pass) {
-  	inherits(PixelationPass, _Pass);
+  		inherits(PixelationPass, _Pass);
 
-  	function PixelationPass() {
-  		var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
-  		classCallCheck(this, PixelationPass);
+  		function PixelationPass() {
+  				var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
+  				classCallCheck(this, PixelationPass);
 
-  		var _this = possibleConstructorReturn(this, (PixelationPass.__proto__ || Object.getPrototypeOf(PixelationPass)).call(this));
+  				var _this = possibleConstructorReturn(this, (PixelationPass.__proto__ || Object.getPrototypeOf(PixelationPass)).call(this));
 
-  		_this.name = "PixelationPass";
+  				_this.name = "PixelationPass";
 
-  		_this.needsSwap = true;
+  				_this.needsSwap = true;
 
-  		_this.pixelationMaterial = new PixelationMaterial();
+  				_this.pixelationMaterial = new PixelationMaterial();
 
-  		_this.granularity = granularity;
+  				_this.granularity = granularity;
 
-  		_this.quad.material = _this.pixelationMaterial;
+  				_this.quad.material = _this.pixelationMaterial;
 
-  		return _this;
-  	}
-
-  	createClass(PixelationPass, [{
-  		key: "render",
-  		value: function render(renderer, readBuffer, writeBuffer) {
-
-  			this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  				return _this;
   		}
-  	}, {
-  		key: "setSize",
-  		value: function setSize(width, height) {
 
-  			this.pixelationMaterial.setResolution(width, height);
-  		}
-  	}, {
-  		key: "granularity",
-  		get: function get$$1() {
-  			return this.pixelationMaterial.granularity;
-  		},
-  		set: function set$$1(x) {
+  		createClass(PixelationPass, [{
+  				key: "render",
+  				value: function render(renderer, readBuffer, writeBuffer) {
 
-  			if (typeof x === "number") {
+  						this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 
-  				x = Math.floor(x);
-
-  				if (x % 2 > 0) {
-
-  					x += 1;
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
+  		}, {
+  				key: "setSize",
+  				value: function setSize(width, height) {
 
-  				this.pixelationMaterial.granularity = x;
-  			}
-  		}
-  	}]);
-  	return PixelationPass;
+  						this.pixelationMaterial.setResolution(width, height);
+  				}
+  		}, {
+  				key: "granularity",
+  				get: function get$$1() {
+  						return this.pixelationMaterial.granularity;
+  				},
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
+
+
+  						x = Math.floor(x);
+
+  						if (x % 2 > 0) {
+
+  								x += 1;
+  						}
+
+  						this.pixelationMaterial.granularity = x;
+  				}
+  		}]);
+  		return PixelationPass;
   }(Pass);
 
   var SavePass = function (_Pass) {
@@ -2554,7 +2553,6 @@
   			return this.copyMaterial.uniforms.tDiffuse.value;
   		},
   		set: function set$$1(x) {
-
   			this.copyMaterial.uniforms.tDiffuse.value = x;
   		}
   	}, {
@@ -2562,8 +2560,8 @@
   		get: function get$$1() {
   			return this.copyMaterial.uniforms.opacity.value;
   		},
-  		set: function set$$1(x) {
-
+  		set: function set$$1() {
+  			var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
   			this.copyMaterial.uniforms.opacity.value = x;
   		}
   	}]);
@@ -2615,11 +2613,11 @@
 
   				_this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
 
-  				_this.resolution = options.resolution !== undefined ? options.resolution : 256;
+  				_this.resolution = options.resolution;
 
   				_this.toneMappingMaterial = new ToneMappingMaterial();
 
-  				_this.adaptive = options.adaptive !== undefined ? options.adaptive : true;
+  				_this.adaptive = options.adaptive;
 
   				return _this;
   		}
@@ -2675,7 +2673,9 @@
   				get: function get$$1() {
   						return this.renderTargetLuminosity.width;
   				},
-  				set: function set$$1(x) {
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
+
 
   						x = ceil2(x);
 
@@ -2691,7 +2691,9 @@
   				get: function get$$1() {
   						return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined;
   				},
-  				set: function set$$1(x) {
+  				set: function set$$1() {
+  						var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+
 
   						if (x) {
 
