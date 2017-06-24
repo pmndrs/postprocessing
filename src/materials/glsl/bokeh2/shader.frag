@@ -11,6 +11,7 @@ uniform float focalLength;
 uniform float focalStop;
 
 uniform float maxBlur;
+uniform vec3 luminanceCoefficients;
 uniform float luminanceThreshold;
 uniform float luminanceGain;
 uniform float bias;
@@ -149,15 +150,13 @@ vec2 rand(vec2 coord) {
 
 vec3 processTexel(vec2 coords, float blur) {
 
-	const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
-
 	vec3 c;
 	c.r = texture2D(tDiffuse, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r;
 	c.g = texture2D(tDiffuse, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g;
 	c.b = texture2D(tDiffuse, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b;
 
 	// Calculate the luminance of the constructed colour.
-	float luminance = dot(c.rgb, LUM_COEFF);
+	float luminance = dot(c, luminanceCoefficients);
 	float threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);
 
 	return c + mix(vec3(0.0), c, threshold * blur);

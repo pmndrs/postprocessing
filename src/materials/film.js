@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { ShaderMaterial, Uniform, Vector3 } from "three";
 
 import fragment from "./glsl/film/shader.frag";
 import vertex from "./glsl/film/shader.vert";
@@ -78,6 +78,7 @@ export class FilmMaterial extends ShaderMaterial {
 				scanlineIntensity: new Uniform(options.scanlineIntensity),
 				scanlineCount: new Uniform(0.0),
 
+				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722)),
 				greyscaleIntensity: new Uniform(options.greyscaleIntensity),
 				sepiaIntensity: new Uniform(options.sepiaIntensity),
 

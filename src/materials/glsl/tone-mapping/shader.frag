@@ -1,6 +1,7 @@
 uniform sampler2D tDiffuse;
 uniform float middleGrey;
 uniform float maxLuminance;
+uniform vec3 luminanceCoefficients;
 
 #ifdef ADAPTED_LUMINANCE
 
@@ -14,15 +15,12 @@ uniform float maxLuminance;
 
 varying vec2 vUv;
 
-const vec3 LUM_COEFF = vec3(0.299, 0.587, 0.114);
-const vec2 CENTER = vec2(0.5, 0.5);
-
 vec3 toneMap(vec3 c) {
 
 	#ifdef ADAPTED_LUMINANCE
 
-		// Get the calculated average luminance.
-		float lumAvg = texture2D(luminanceMap, CENTER).r;
+		// Get the calculated average luminance by sampling the center.
+		float lumAvg = texture2D(luminanceMap, vec2(0.5)).r;
 
 	#else
 
@@ -31,7 +29,7 @@ vec3 toneMap(vec3 c) {
 	#endif
 
 	// Calculate the luminance of the current pixel.
-	float lumPixel = dot(c, LUM_COEFF);
+	float lumPixel = dot(c, luminanceCoefficients);
 
 	// Apply the modified operator (Reinhard Eq. 4).
 	float lumScaled = (lumPixel * middleGrey) / lumAvg;

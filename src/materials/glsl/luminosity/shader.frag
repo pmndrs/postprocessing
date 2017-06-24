@@ -1,15 +1,14 @@
 uniform sampler2D tDiffuse;
 uniform float distinction;
 uniform vec2 range;
+uniform vec3 luminanceCoefficients;
 
 varying vec2 vUv;
 
 void main() {
 
-	const vec4 LUM_COEFF = vec4(0.299, 0.587, 0.114, 0.0);
-
 	vec4 texel = texture2D(tDiffuse, vUv);
-	float v = dot(texel, LUM_COEFF);
+	float v = dot(texel.rgb, luminanceCoefficients);
 
 	#ifdef RANGE
 
