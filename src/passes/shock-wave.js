@@ -203,8 +203,8 @@ export class ShockWavePass extends Pass {
 			}
 
 			// Update the shock wave radius based on time.
-			this.time += delta;
-			radius.value = this.time * this.speed - waveSize.value;
+			this.time += delta * this.speed;
+			radius.value = this.time - waveSize.value;
 
 			if(radius.value >= (maxRadius.value + waveSize.value) * 2) {
 
