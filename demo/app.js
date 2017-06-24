@@ -156,7 +156,7 @@ export class App {
 		let demo = null;
 		let gui = null;
 
-		viewport.appendChild(composer.renderer.domElement);
+		viewport.appendChild(renderer.domElement);
 		aside.appendChild(stats.dom);
 
 		/**
@@ -190,7 +190,7 @@ export class App {
 
 		function loadDemo() {
 
-			const size = composer.renderer.getSize();
+			const size = renderer.getSize();
 
 			loadingMessage.style.display = "block";
 			renderer.domElement.style.visibility = "hidden";

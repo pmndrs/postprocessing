@@ -161,8 +161,7 @@ void main() {
 		d.x = coords.x;
 
 		/* Now fetch the left crossing edges, two at a time using bilinear filtering.
-		 * Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has.
-		 */
+		Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has. */
 
 		float e1 = texture2D(tDiffuse, coords, 0.0).r;
 
