@@ -104,16 +104,16 @@ void main() {
 
 	#ifdef VIGNETTE
 
-		const vec2 CENTER = vec2(0.5);
+		const vec2 center = vec2(0.5);
 
 		#ifdef ESKIL
 
-			vec2 uv = (vUv - CENTER) * vec2(vignetteOffset);
+			vec2 uv = (vUv - center) * vec2(vignetteOffset);
 			color = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));
 
 		#else
 
-			float dist = distance(vUv, CENTER);
+			float dist = distance(vUv, center);
 			color *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));
 
 		#endif		
