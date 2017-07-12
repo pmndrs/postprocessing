@@ -40,10 +40,10 @@ export class FilmMaterial extends ShaderMaterial {
 	 * @param {Boolean} [options.scanlines=true] - Show scanlines.
 	 * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
 	 * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
-	 * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect.
-	 * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect.
-	 * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect.
-	 * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect.
+	 * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect. 0.0 to 1.0.
+	 * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect. 0.0 to 1.0.
+	 * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect. 0.0 to 1.0.
+	 * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect. 0.0 to 1.0.
 	 */
 
 	constructor(options = {}) {
