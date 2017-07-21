@@ -215,7 +215,7 @@ export class BloomDemo extends Demo {
 
 		const pass = new BloomPass({
 			resolutionScale: 0.5,
-			strength: 1.0,
+			strength: 2.0,
 			distinction: 4.0
 		});
 
