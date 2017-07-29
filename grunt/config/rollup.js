@@ -18,18 +18,7 @@ module.exports = function(grunt) {
 				"dat.gui"
 			],
 			plugins() {
-				return grunt.option("production") ? [
-					resolve({
-						jsnext: true
-					}),
-					string({
-						include: [
-							"**/*.frag",
-							"**/*.vert"
-						]
-					}),
-					babel()
-				] : [
+				return [
 					resolve({
 						jsnext: true
 					}),
@@ -39,7 +28,7 @@ module.exports = function(grunt) {
 							"**/*.vert"
 						]
 					})
-				];
+				].concat(grunt.option("production") ? [babel()] : []);
 			}
 		},
 
