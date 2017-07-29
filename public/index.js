@@ -3156,7 +3156,7 @@
 
   						var pass = new BloomPass({
   								resolutionScale: 0.5,
-  								strength: 2.0,
+  								intensity: 2.0,
   								distinction: 4.0
   						});
 
