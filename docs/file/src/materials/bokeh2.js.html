@@ -79,7 +79,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/bokeh2.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2, Vector3 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/bokeh2/shader.frag&quot;;
 import vertex from &quot;./glsl/bokeh2/shader.vert&quot;;
@@ -149,6 +149,7 @@ export class Bokeh2Material extends ShaderMaterial {
 				maxBlur: new Uniform(1.0),
 				luminanceThreshold: new Uniform(0.5),
 				luminanceGain: new Uniform(2.0),
+				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722)),
 				bias: new Uniform(0.5),
 				fringe: new Uniform(0.7),
 				ditherStrength: new Uniform(0.0001),

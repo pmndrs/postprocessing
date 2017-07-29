@@ -79,13 +79,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LuminosityMaterial} from &apos;<span><a href="file/src/materials/luminosity.js.html#lineNumber19">postprocessing/src/materials/luminosity.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {LuminosityMaterial} from &apos;<span><a href="file/src/materials/luminosity.js.html#lineNumber26">postprocessing/src/materials/luminosity.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/materials/luminosity.js.html#lineNumber19">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/materials/luminosity.js.html#lineNumber26">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -106,10 +106,15 @@
   
   
   <div class="description" data-ice="description"><p>A luminosity shader material.</p>
-<p>This shader produces a greyscale luminance map. It can also be configured to
-output colours that are scaled with their respective luminance value.
-Additionally, a range may be provided to mask out undesired texels.</p>
+<p>This shader produces a greyscale luminance map that describes the absolute
+amount of light emitted by a scene. It can also be configured to output
+colours that are scaled with their respective luminance value. Additionally,
+a range may be provided to mask out undesired texels.</p>
 <p>The alpha channel will remain unaffected in all cases.</p>
+<p>On luminance coefficients:
+ <a href="http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9">http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9</a></p>
+<p>Coefficients for different colour spaces:
+ <a href="https://hsto.org/getpro/habr/post_images/2ab/69d/084/2ab69d084f9a597e032624bcd74d57a7.png">https://hsto.org/getpro/habr/post_images/2ab/69d/084/2ab69d084f9a597e032624bcd74d57a7.png</a></p>
 <p>Luminance range reference:
  <a href="https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z">https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z</a></p>
 </div>
@@ -178,7 +183,7 @@ Additionally, a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/luminosity.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/luminosity.js.html#lineNumber35">source</a></span></span>
     </span>
   </h3>
 

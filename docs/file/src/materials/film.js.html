@@ -79,7 +79,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/film.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector3 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/film/shader.frag&quot;;
 import vertex from &quot;./glsl/film/shader.vert&quot;;
@@ -121,10 +121,10 @@ export class FilmMaterial extends ShaderMaterial {
 	 * @param {Boolean} [options.scanlines=true] - Show scanlines.
 	 * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
 	 * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
-	 * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect.
-	 * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect.
-	 * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect.
-	 * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect.
+	 * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect. 0.0 to 1.0.
+	 * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect. 0.0 to 1.0.
+	 * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect. 0.0 to 1.0.
+	 * @param {Number} [options.vignetteDarkness=1.0] - The darkness of the vignette effect. 0.0 to 1.0.
 	 */
 
 	constructor(options = {}) {
@@ -159,6 +159,7 @@ export class FilmMaterial extends ShaderMaterial {
 				scanlineIntensity: new Uniform(options.scanlineIntensity),
 				scanlineCount: new Uniform(0.0),
 
+				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722)),
 				greyscaleIntensity: new Uniform(options.greyscaleIntensity),
 				sepiaIntensity: new Uniform(options.sepiaIntensity),
 

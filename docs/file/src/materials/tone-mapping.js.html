@@ -79,7 +79,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/tone-mapping.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector3 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/tone-mapping/shader.frag&quot;;
 import vertex from &quot;./glsl/tone-mapping/shader.vert&quot;;
@@ -108,6 +108,7 @@ export class ToneMappingMaterial extends ShaderMaterial {
 				tDiffuse: new Uniform(null),
 				luminanceMap: new Uniform(null),
 				averageLuminance: new Uniform(1.0),
+				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722)),
 				maxLuminance: new Uniform(16.0),
 				middleGrey: new Uniform(0.6)
 
