@@ -8,7 +8,7 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { ShockWavePass, RenderPass } from "../../src";
+import { ShockWavePass, RenderPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**

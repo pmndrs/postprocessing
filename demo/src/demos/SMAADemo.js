@@ -13,7 +13,7 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { RenderPass, SMAAPass } from "../../src";
+import { RenderPass, SMAAPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**

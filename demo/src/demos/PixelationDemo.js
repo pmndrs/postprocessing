@@ -19,7 +19,7 @@ import {
 	PixelationPass,
 	RenderPass,
 	ShaderPass
-} from "../../src";
+} from "../../../src";
 
 import { Demo } from "./Demo.js";
 

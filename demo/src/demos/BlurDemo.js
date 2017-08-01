@@ -10,7 +10,15 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { DotScreenPass, RenderPass } from "../../src";
+import {
+	BlurPass,
+	CombineMaterial,
+	KernelSize,
+	RenderPass,
+	SavePass,
+	ShaderPass
+} from "../../../src";
+
 import { Demo } from "./Demo.js";
 
 /**
@@ -23,13 +31,13 @@ import { Demo } from "./Demo.js";
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A dot screen demo setup.
+ * A blur demo setup.
  */
 
-export class DotScreenDemo extends Demo {
+export class BlurDemo extends Demo {
 
 	/**
-	 * Constructs a new dot screen demo.
+	 * Constructs a new blur demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
@@ -39,13 +47,40 @@ export class DotScreenDemo extends Demo {
 		super(composer);
 
 		/**
-		 * A dot screen pass.
+		 * A render pass.
 		 *
-		 * @type {DotScreenPass}
+		 * @type {RenderPass}
 		 * @private
 		 */
 
-		this.dotScreenPass = null;
+		this.renderPass = null;
+
+		/**
+		 * A save pass.
+		 *
+		 * @type {SavePass}
+		 * @private
+		 */
+
+		this.savePass = null;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = null;
+
+		/**
+		 * A combine pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.combinePass = null;
 
 		/**
 		 * An object.
@@ -70,8 +105,8 @@ export class DotScreenDemo extends Demo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space3/";
-		const format = ".jpg";
+		const path = "textures/skies/sunset/";
+		const format = ".png";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
 			path + "py" + format, path + "ny" + format,
@@ -123,7 +158,7 @@ export class DotScreenDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(10, 1, 10);
+		camera.position.set(-15, 0, -15);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -135,7 +170,7 @@ export class DotScreenDemo extends Demo {
 		const ambientLight = new AmbientLight(0x666666);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
-		directionalLight.position.set(-1, 1, 1);
+		directionalLight.position.set(1440, 200, 2000);
 		directionalLight.target.position.copy(scene.position);
 
 		scene.add(directionalLight);
@@ -143,11 +178,11 @@ export class DotScreenDemo extends Demo {
 
 		// Random objects.
 
-		const object = new Object3D();
-		const geometry = new SphereBufferGeometry(1, 4, 4);
+		let object = new Object3D();
 
-		let material, mesh;
-		let i;
+		let geometry = new SphereBufferGeometry(1, 4, 4);
+		let material;
+		let i, mesh;
 
 		for(i = 0; i < 100; ++i) {
 
@@ -166,20 +201,29 @@ export class DotScreenDemo extends Demo {
 		}
 
 		this.object = object;
+
 		scene.add(object);
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
+		let pass = new RenderPass(scene, camera);
+		this.renderPass = pass;
+		composer.addPass(pass);
 
-		const pass = new DotScreenPass({
-			scale: 0.8,
-			angle: Math.PI * 0.5,
-			intensity: 0.25
-		});
+		pass = new SavePass();
+		this.savePass = pass;
+		composer.addPass(pass);
 
+		pass = new BlurPass();
+		this.blurPass = pass;
+		composer.addPass(pass);
+
+		pass = new ShaderPass(new CombineMaterial(), "texture1");
+		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
+		pass.material.uniforms.opacity1.value = 1.0;
+		pass.material.uniforms.opacity2.value = 0.0;
 		pass.renderToScreen = true;
-		this.dotScreenPass = pass;
+		this.combinePass = pass;
 		composer.addPass(pass);
 
 	}
@@ -196,8 +240,8 @@ export class DotScreenDemo extends Demo {
 
 		if(object !== null) {
 
-			object.rotation.x += 0.0005;
-			object.rotation.y += 0.001;
+			object.rotation.x += 0.001;
+			object.rotation.y += 0.005;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
@@ -215,31 +259,35 @@ export class DotScreenDemo extends Demo {
 
 	configure(gui) {
 
-		const pass = this.dotScreenPass;
+		const composer = this.composer;
+		const renderPass = this.renderPass;
+		const blurPass = this.blurPass;
+		const combinePass = this.combinePass;
 
 		const params = {
-			"average": pass.material.defines.AVERAGE !== undefined,
-			"scale": pass.material.uniforms.scale.value,
-			"angle": pass.material.uniforms.angle.value,
-			"intensity": pass.material.uniforms.intensity.value,
-			"center X": pass.material.uniforms.offsetRepeat.value.x,
-			"center Y": pass.material.uniforms.offsetRepeat.value.y
+			"enabled": blurPass.enabled,
+			"resolution": blurPass.resolutionScale,
+			"kernel size": blurPass.kernelSize,
+			"strength": combinePass.material.uniforms.opacity1.value
 		};
 
-		gui.add(params, "average").onChange(function() {
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
+		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
 
-			params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
-			pass.material.needsUpdate = true;
+		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			combinePass.material.uniforms.opacity1.value = params.strength;
+			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
 
 		});
 
-		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params.scale; });
-		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params.angle; });
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params.intensity; });
+		gui.add(params, "enabled").onChange(function() {
 
-		let f = gui.addFolder("Center");
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
+			renderPass.renderToScreen = !params.enabled;
+			blurPass.enabled = params.enabled;
+			combinePass.enabled = params.enabled;
+
+		});
 
 	}
 

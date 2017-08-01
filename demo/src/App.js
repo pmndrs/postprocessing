@@ -2,7 +2,7 @@ import { Clock, WebGLRenderer } from "three";
 import dat from "dat.gui";
 import Stats from "stats.js";
 
-import { EffectComposer } from "../src";
+import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";

@@ -1,18 +1,16 @@
 import {
 	AmbientLight,
-	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
 	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
-	MeshLambertMaterial,
 	Object3D,
 	OrbitControls,
 	SphereBufferGeometry
 } from "three";
 
-import { BloomPass, KernelSize, RenderPass } from "../../src";
+import { DotScreenPass, RenderPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**
@@ -25,13 +23,13 @@ import { Demo } from "./Demo.js";
 const TWO_PI = 2.0 * Math.PI;
 
 /**
- * A bloom demo setup.
+ * A dot screen demo setup.
  */
 
-export class BloomDemo extends Demo {
+export class DotScreenDemo extends Demo {
 
 	/**
-	 * Constructs a new bloom demo.
+	 * Constructs a new dot screen demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
@@ -41,13 +39,13 @@ export class BloomDemo extends Demo {
 		super(composer);
 
 		/**
-		 * A bloom pass.
+		 * A dot screen pass.
 		 *
-		 * @type {BloomPass}
+		 * @type {DotScreenPass}
 		 * @private
 		 */
 
-		this.bloomPass = null;
+		this.dotScreenPass = null;
 
 		/**
 		 * An object.
@@ -72,7 +70,7 @@ export class BloomDemo extends Demo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
-		const path = "textures/skies/space2/";
+		const path = "textures/skies/space3/";
 		const format = ".jpg";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
@@ -125,7 +123,7 @@ export class BloomDemo extends Demo {
 
 		// Camera.
 
-		camera.position.set(-10, 6, 15);
+		camera.position.set(10, 1, 10);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -145,11 +143,11 @@ export class BloomDemo extends Demo {
 
 		// Random objects.
 
-		let object = new Object3D();
+		const object = new Object3D();
+		const geometry = new SphereBufferGeometry(1, 4, 4);
 
-		let geometry = new SphereBufferGeometry(1, 4, 4);
-		let material;
-		let i, mesh;
+		let material, mesh;
+		let i;
 
 		for(i = 0; i < 100; ++i) {
 
@@ -160,67 +158,28 @@ export class BloomDemo extends Demo {
 
 			mesh = new Mesh(geometry, material);
 			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 4);
+			mesh.position.multiplyScalar(Math.random() * 10);
 			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random() * 0.5);
+			mesh.scale.multiplyScalar(Math.random());
 			object.add(mesh);
 
 		}
 
 		this.object = object;
-
-		scene.add(object);
-
-		// Cage object.
-
-		mesh = new Mesh(
-			new BoxBufferGeometry(0.25, 8.25, 0.25),
-			new MeshLambertMaterial({
-				color: 0x0b0b0b
-			})
-		);
-
-		object = new Object3D();
-		let o0, o1, o2;
-
-		o0 = object.clone();
-
-		let clone = mesh.clone();
-		clone.position.set(-4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(-4, 0, -4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, -4);
-		o0.add(clone);
-
-		o1 = o0.clone();
-		o1.rotation.set(Math.PI / 2, 0, 0);
-		o2 = o0.clone();
-		o2.rotation.set(0, 0, Math.PI / 2);
-
-		object.add(o0);
-		object.add(o1);
-		object.add(o2);
-
 		scene.add(object);
 
 		// Passes.
 
 		composer.addPass(new RenderPass(scene, camera));
 
-		const pass = new BloomPass({
-			resolutionScale: 0.5,
-			intensity: 2.0,
-			distinction: 4.0
+		const pass = new DotScreenPass({
+			scale: 0.8,
+			angle: Math.PI * 0.5,
+			intensity: 0.25
 		});
 
 		pass.renderToScreen = true;
-		this.bloomPass = pass;
+		this.dotScreenPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -237,8 +196,8 @@ export class BloomDemo extends Demo {
 
 		if(object !== null) {
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+			object.rotation.x += 0.0005;
+			object.rotation.y += 0.001;
 
 			// Prevent overflow.
 			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
@@ -256,47 +215,31 @@ export class BloomDemo extends Demo {
 
 	configure(gui) {
 
-		const composer = this.composer;
-		const pass = this.bloomPass;
+		const pass = this.dotScreenPass;
 
 		const params = {
-			"resolution": pass.resolutionScale,
-			"kernel size": pass.kernelSize,
-			"intensity": pass.intensity,
-			"distinction": pass.distinction,
-			"blend": true,
-			"blend mode": "screen"
+			"average": pass.material.defines.AVERAGE !== undefined,
+			"scale": pass.material.uniforms.scale.value,
+			"angle": pass.material.uniforms.angle.value,
+			"intensity": pass.material.uniforms.intensity.value,
+			"center X": pass.material.uniforms.offsetRepeat.value.x,
+			"center Y": pass.material.uniforms.offsetRepeat.value.y
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { pass.kernelSize = params["kernel size"]; });
-		gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function() { pass.intensity = params.intensity; });
+		gui.add(params, "average").onChange(function() {
 
-		const folder = gui.addFolder("Luminance");
-		folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.distinction = params.distinction; });
-		folder.open();
-
-		gui.add(params, "blend").onChange(function() {
-
-			pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+			params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
+			pass.material.needsUpdate = true;
 
 		});
 
-		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params.scale; });
+		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params.angle; });
+		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params.intensity; });
 
-			if(params["blend mode"] === "add") {
-
-				delete pass.combineMaterial.defines.SCREEN_MODE;
-
-			} else {
-
-				pass.combineMaterial.defines.SCREEN_MODE = "1";
-
-			}
-
-			pass.combineMaterial.needsUpdate = true;
-
-		});
+		let f = gui.addFolder("Center");
+		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
+		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
 
 	}
 

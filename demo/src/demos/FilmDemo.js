@@ -10,7 +10,7 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { FilmPass, RenderPass } from "../../src";
+import { FilmPass, RenderPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**

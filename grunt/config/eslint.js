@@ -10,7 +10,7 @@ module.exports = {
 	],
 
 	demo: [
-		"demo/**/*.js"
+		"demo/src/**/*.js"
 	],
 
 	test: [
