@@ -49,7 +49,7 @@ const clock = new Clock();
 
 ```javascript
 import { Pass } from "postprocessing";
-import { MyMaterial } from "./my-material.js";
+import { MyMaterial } from "./MyMaterial.js";
 
 export class MyPass extends Pass {
 
