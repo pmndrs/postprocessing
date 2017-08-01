@@ -1,5 +1,5 @@
 /**
- * postprocessing v2.2.0 build Jul 29 2017
+ * postprocessing v2.2.0 build Aug 01 2017
  * https://github.com/vanruesc/postprocessing
  * Copyright 2017 Raoul van Rüschen, Zlib
  */
@@ -1487,6 +1487,29 @@
   		return Bokeh2Pass;
   }(Pass);
 
+  var ClearMaskPass = function (_Pass) {
+  	inherits(ClearMaskPass, _Pass);
+
+  	function ClearMaskPass() {
+  		classCallCheck(this, ClearMaskPass);
+
+  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
+
+  		_this.name = "ClearMaskPass";
+
+  		return _this;
+  	}
+
+  	createClass(ClearMaskPass, [{
+  		key: "render",
+  		value: function render(renderer) {
+
+  			renderer.state.buffers.stencil.setTest(false);
+  		}
+  	}]);
+  	return ClearMaskPass;
+  }(Pass);
+
   var color = new three.Color();
 
   var ClearPass = function (_Pass) {
@@ -1532,29 +1555,6 @@
   				}
   		}]);
   		return ClearPass;
-  }(Pass);
-
-  var ClearMaskPass = function (_Pass) {
-  	inherits(ClearMaskPass, _Pass);
-
-  	function ClearMaskPass() {
-  		classCallCheck(this, ClearMaskPass);
-
-  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
-
-  		_this.name = "ClearMaskPass";
-
-  		return _this;
-  	}
-
-  	createClass(ClearMaskPass, [{
-  		key: "render",
-  		value: function render(renderer) {
-
-  			renderer.state.buffers.stencil.setTest(false);
-  		}
-  	}]);
-  	return ClearMaskPass;
   }(Pass);
 
   var DotScreenPass = function (_Pass) {

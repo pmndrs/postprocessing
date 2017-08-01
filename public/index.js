@@ -1,8 +1,8 @@
 (function (three,dat,Stats) {
   'use strict';
 
-  dat = dat && 'default' in dat ? dat['default'] : dat;
-  Stats = Stats && 'default' in Stats ? Stats['default'] : Stats;
+  dat = dat && dat.hasOwnProperty('default') ? dat['default'] : dat;
+  Stats = Stats && Stats.hasOwnProperty('default') ? Stats['default'] : Stats;
 
   var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
 
@@ -1504,6 +1504,29 @@
   		return Bokeh2Pass;
   }(Pass);
 
+  var ClearMaskPass = function (_Pass) {
+  	inherits(ClearMaskPass, _Pass);
+
+  	function ClearMaskPass() {
+  		classCallCheck(this, ClearMaskPass);
+
+  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
+
+  		_this.name = "ClearMaskPass";
+
+  		return _this;
+  	}
+
+  	createClass(ClearMaskPass, [{
+  		key: "render",
+  		value: function render(renderer) {
+
+  			renderer.state.buffers.stencil.setTest(false);
+  		}
+  	}]);
+  	return ClearMaskPass;
+  }(Pass);
+
   var color = new three.Color();
 
   var ClearPass = function (_Pass) {
@@ -1549,29 +1572,6 @@
   				}
   		}]);
   		return ClearPass;
-  }(Pass);
-
-  var ClearMaskPass = function (_Pass) {
-  	inherits(ClearMaskPass, _Pass);
-
-  	function ClearMaskPass() {
-  		classCallCheck(this, ClearMaskPass);
-
-  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
-
-  		_this.name = "ClearMaskPass";
-
-  		return _this;
-  	}
-
-  	createClass(ClearMaskPass, [{
-  		key: "render",
-  		value: function render(renderer) {
-
-  			renderer.state.buffers.stencil.setTest(false);
-  		}
-  	}]);
-  	return ClearMaskPass;
   }(Pass);
 
   var DotScreenPass = function (_Pass) {
