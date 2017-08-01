@@ -4,7 +4,7 @@ module.exports = {
 		options: {
 			coverage: true,
 			source: "src",
-			destination: "docs"
+			destination: "public/docs"
 		}
 	}
 

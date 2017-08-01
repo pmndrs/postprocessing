@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/passes/Pass.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/vanruesc/postprocessing.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/Bokeh2Material.js~Bokeh2Material.html">Bokeh2Material</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaterial.js~DepthMaterial.html">DepthMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/PixelationMaterial.js~PixelationMaterial.html">PixelationMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html">SMAABlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html">SMAAColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ShockWaveMaterial.js~ShockWaveMaterial.html">ShockWaveMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">passes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html">Bokeh2Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DotScreenPass.js~DotScreenPass.html">DotScreenPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/FilmPass.js~FilmPass.html">FilmPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html">SMAAPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShockWavePass.js~ShockWavePass.html">ShockWavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TexturePass.js~TexturePass.html">TexturePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html">ToneMappingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/passes/Pass.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from &quot;three&quot;;
+
+/**
+ * An abstract pass.
+ *
+ * Passes that do not rely on the depth buffer should explicitly disable the
+ * depth test and depth write in their respective shader materials.
+ *
+ * This class implements a {@link Pass#dispose} method that frees memory on
+ * demand.
+ */
+
+export class Pass {
+
+	/**
+	 * Constructs a new pass.
+	 *
+	 * @param {Scene} [scene] - The scene to render.
+	 * @param {Camera} [camera] - The camera.
+	 * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don&apos;t need it (see {@link RenderPass}).
+	 */
+
+	constructor(
+		scene = new Scene(),
+		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),
+		quad = new Mesh(new PlaneBufferGeometry(2, 2), null)
+	) {
+
+		/**
+		 * The name of this pass.
+		 *
+		 * @type {String}
+		 */
+
+		this.name = &quot;Pass&quot;;
+
+		/**
+		 * The scene to render.
+		 *
+		 * @type {Scene}
+		 * @protected
+		 * @default new Scene()
+		 */
+
+		this.scene = scene;
+
+		/**
+		 * The camera.
+		 *
+		 * @type {Camera}
+		 * @protected
+		 * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
+		 */
+
+		this.camera = camera;
+
+		/**
+		 * A quad mesh that fills the screen.
+		 *
+		 * Assign your shader material to this mesh!
+		 *
+		 * @type {Mesh}
+		 * @protected
+		 * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
+		 * @example this.quad.material = this.myMaterial;
+		 */
+
+		this.quad = quad;
+
+		if(this.quad !== null) {
+
+			this.quad.frustumCulled = false;
+
+			if(this.scene !== null) {
+
+				this.scene.add(this.quad);
+
+			}
+
+		}
+
+		/**
+		 * Indicates whether the read and write buffers should be swapped after this
+		 * pass has finished rendering.
+		 *
+		 * Set this to true if this pass renders to the write buffer so that a
+		 * following pass can find the result in the read buffer.
+		 *
+		 * @type {Boolean}
+		 * @default false
+		 */
+
+		this.needsSwap = false;
+
+		/**
+		 * Enabled flag.
+		 *
+		 * @type {Boolean}
+		 * @default true
+		 */
+
+		this.enabled = true;
+
+		/**
+		 * Render to screen flag.
+		 *
+		 * @type {Boolean}
+		 * @default false
+		 */
+
+		this.renderToScreen = false;
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * This is an abstract method that must be overridden.
+	 *
+	 * @abstract
+	 * @throws {Error} An error is thrown if the method is not overridden.
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
+	 * @param {Number} [delta] - The delta time.
+	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
+	 */
+
+	render(renderer, readBuffer, writeBuffer, delta, maskActive) {
+
+		throw new Error(&quot;Render method not implemented!&quot;);
+
+	}
+
+	/**
+	 * Updates this pass with the renderer&apos;s size.
+	 *
+	 * You may override this method in case you want to be informed about the main
+	 * render size.
+	 *
+	 * The {@link EffectComposer} calls this method before this pass is
+	 * initialised and every time its own size is updated.
+	 *
+	 * @param {Number} width - The renderer&apos;s width.
+	 * @param {Number} height - The renderer&apos;s height.
+	 * @example this.myRenderTarget.setSize(width, height);
+	 */
+
+	setSize(width, height) {}
+
+	/**
+	 * Performs initialisation tasks.
+	 *
+	 * By overriding this method you gain access to the renderer. You&apos;ll also be
+	 * able to configure your custom render targets to use the appropriate format
+	 * (RGB or RGBA).
+	 *
+	 * The provided renderer can be used to warm up special off-screen render
+	 * targets by performing a preliminary render operation.
+	 *
+	 * The {@link EffectComposer} calls this method when this pass is added to its
+	 * queue.
+	 *
+	 * @method initialise
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
+	 */
+
+	initialise(renderer, alpha) {}
+
+	/**
+	 * Performs a shallow search for properties that define a dispose method and
+	 * deletes them. The pass will be inoperative after this method was called!
+	 *
+	 * Disposable objects:
+	 *  - render targets
+	 *  - materials
+	 *  - textures
+	 *
+	 * The {@link EffectComposer} calls this method when it is being destroyed.
+	 * You may, however, use it independently to free memory when you are certain
+	 * that you don&apos;t need this pass anymore.
+	 */
+
+	dispose() {
+
+		const keys = Object.keys(this);
+
+		let key;
+
+		for(key of keys) {
+
+			if(this[key] !== null &amp;&amp; typeof this[key].dispose === &quot;function&quot;) {
+
+				this[key].dispose();
+				this[key] = null;
+
+			}
+
+		}
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

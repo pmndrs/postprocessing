@@ -7,7 +7,7 @@
 A post processing library that provides the means to implement 2D filter effects for [three.js](https://threejs.org/).
 
 *[Extensive Demo](https://vanruesc.github.io/postprocessing/public) &there4;
-[API Reference](https://vanruesc.github.io/postprocessing/docs)*
+[API Reference](https://vanruesc.github.io/postprocessing/public/docs)*
 
 
 ## Installation
