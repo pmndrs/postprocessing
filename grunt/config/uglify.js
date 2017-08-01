@@ -11,7 +11,7 @@ module.exports = {
 
 	demo: {
 		files: {
-			"public/index.min.js": ["public/index.js"]
+			"public/demo/index.min.js": ["public/demo/index.js"]
 		}
 	}
 

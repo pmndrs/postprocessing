@@ -7,16 +7,6 @@ module.exports = function(grunt) {
 	return {
 
 		options: {
-			globals: {
-				"three": "THREE",
-				"stats.js": "Stats",
-				"dat.gui": "dat"
-			},
-			external: [
-				"three",
-				"stats.js",
-				"dat.gui"
-			],
 			plugins() {
 				return [
 					resolve({
@@ -34,6 +24,12 @@ module.exports = function(grunt) {
 
 		lib: {
 			options: {
+				globals: {
+					"three": "THREE"
+				},
+				external: [
+					"three"
+				],
 				format: "umd",
 				moduleName: "<%= package.name.replace(/-/g, \"\").toUpperCase() %>",
 				banner: "<%= banner %>"
@@ -44,10 +40,20 @@ module.exports = function(grunt) {
 
 		demo: {
 			options: {
+				globals: {
+					"dat.gui": "dat",
+					"stats.js": "Stats",
+					"three": "THREE"
+				},
+				external: [
+					"dat.gui",
+					"stats.js",
+					"three"
+				],
 				format: "iife"
 			},
-			src: "demo/index.js",
-			dest: "public/index.js"
+			src: "demo/src/index.js",
+			dest: "public/demo/index.js"
 		}
 
 	};
