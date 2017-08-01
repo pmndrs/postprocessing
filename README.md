@@ -6,7 +6,7 @@
 
 A post processing library that provides the means to implement 2D filter effects for [three.js](https://threejs.org/).
 
-*[Extensive Demo](https://vanruesc.github.io/postprocessing/public) &there4;
+*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo) &there4;
 [API Reference](https://vanruesc.github.io/postprocessing/public/docs)*
 
 
@@ -81,20 +81,20 @@ Writing self-contained render-to-texture passes is also a feasible option.
 
 ## Included Filters
 
- - [Bloom](http://vanruesc.github.io/postprocessing/public/#bloom)
- - [Blur](http://vanruesc.github.io/postprocessing/public/#blur)
- - [Bokeh](http://vanruesc.github.io/postprocessing/public/#bokeh)
- - [Bokeh v2](http://vanruesc.github.io/postprocessing/public/#bokeh2)
- - [Depth](http://vanruesc.github.io/postprocessing/public/#depth)
- - [Dot Screen](http://vanruesc.github.io/postprocessing/public/#dot-screen)
- - [Film](http://vanruesc.github.io/postprocessing/public/#film)
- - [Glitch](http://vanruesc.github.io/postprocessing/public/#glitch)
- - [God Rays](http://vanruesc.github.io/postprocessing/public/#god-rays)
- - [Pixelation](http://vanruesc.github.io/postprocessing/public/#pixelation)
- - [Render](http://vanruesc.github.io/postprocessing/public/#render)
- - [Shock Wave](http://vanruesc.github.io/postprocessing/public/#shock-wave)
- - [SMAA](http://vanruesc.github.io/postprocessing/public/#smaa)
- - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/#tone-mapping)
+ - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
+ - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
+ - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh)
+ - [Bokeh v2](http://vanruesc.github.io/postprocessing/public/demo/#bokeh2)
+ - [Depth](http://vanruesc.github.io/postprocessing/public/demo/#depth)
+ - [Dot Screen](http://vanruesc.github.io/postprocessing/public/demo/#dot-screen)
+ - [Film](http://vanruesc.github.io/postprocessing/public/demo/#film)
+ - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
+ - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)
+ - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)
+ - [Render](http://vanruesc.github.io/postprocessing/public/demo/#render)
+ - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
+ - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)
+ - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
 
 
 ## Contributing
