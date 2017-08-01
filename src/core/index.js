@@ -4,4 +4,4 @@
  * @module postprocessing/core
  */
 
-export { EffectComposer } from "./effect-composer.js";
+export { EffectComposer } from "./EffectComposer.js";

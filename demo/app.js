@@ -4,20 +4,20 @@ import Stats from "stats.js";
 
 import { EffectComposer } from "../src";
 
-import { BloomDemo } from "./demos/bloom.js";
-import { BokehDemo } from "./demos/bokeh.js";
-import { Bokeh2Demo } from "./demos/bokeh2.js";
-import { BlurDemo } from "./demos/blur.js";
-import { DepthDemo } from "./demos/depth.js";
-import { DotScreenDemo } from "./demos/dot-screen.js";
-import { FilmDemo } from "./demos/film.js";
-import { GlitchDemo } from "./demos/glitch.js";
-import { PixelationDemo } from "./demos/pixelation.js";
-import { GodRaysDemo } from "./demos/god-rays.js";
-import { RenderDemo } from "./demos/render.js";
-import { ShockWaveDemo } from "./demos/shock-wave.js";
-import { SMAADemo } from "./demos/smaa.js";
-import { ToneMappingDemo } from "./demos/tone-mapping.js";
+import { BloomDemo } from "./demos/BloomDemo.js";
+import { BokehDemo } from "./demos/BokehDemo.js";
+import { Bokeh2Demo } from "./demos/Bokeh2Demo.js";
+import { BlurDemo } from "./demos/BlurDemo.js";
+import { DepthDemo } from "./demos/DepthDemo.js";
+import { DotScreenDemo } from "./demos/DotScreenDemo.js";
+import { FilmDemo } from "./demos/FilmDemo.js";
+import { GlitchDemo } from "./demos/GlitchDemo.js";
+import { PixelationDemo } from "./demos/PixelationDemo.js";
+import { GodRaysDemo } from "./demos/GodRaysDemo.js";
+import { RenderDemo } from "./demos/RenderDemo.js";
+import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
+import { SMAADemo } from "./demos/SMAADemo.js";
+import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 
 /**
  * A demo application.
