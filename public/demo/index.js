@@ -3102,7 +3102,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
@@ -3678,7 +3678,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
@@ -3956,7 +3956,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
@@ -4131,7 +4131,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
@@ -4395,7 +4395,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
@@ -4560,7 +4560,7 @@
 
   								material = new three.MeshPhongMaterial({
   										color: 0xffffff * Math.random(),
-  										shading: three.FlatShading
+  										flatShading: true
   								});
 
   								mesh = new three.Mesh(geometry, material);
