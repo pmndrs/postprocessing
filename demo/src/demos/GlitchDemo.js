@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
 	NearestFilter,
@@ -163,7 +162,7 @@ export class GlitchDemo extends Demo {
 
 			material = new MeshPhongMaterial({
 				color: 0xffffff * Math.random(),
-				shading: FlatShading
+				flatShading: true
 			});
 
 			mesh = new Mesh(geometry, material);

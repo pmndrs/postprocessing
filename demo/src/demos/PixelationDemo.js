@@ -3,7 +3,6 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	FlatShading,
 	Mesh,
 	MeshPhongMaterial,
 	Object3D,
@@ -181,7 +180,7 @@ export class PixelationDemo extends Demo {
 
 			material = new MeshPhongMaterial({
 				color: 0xffffff * Math.random(),
-				shading: FlatShading
+				flatShading: true
 			});
 
 			mesh = new Mesh(geometry, material);
