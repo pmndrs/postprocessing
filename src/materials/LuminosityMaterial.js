@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2, Vector3 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/luminosity/shader.frag";
 import vertex from "./glsl/luminosity/shader.vert";
@@ -42,8 +42,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 				tDiffuse: new Uniform(null),
 				distinction: new Uniform(1.0),
-				range: new Uniform((range !== null) ? range : new Vector2()),
-				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722))
+				range: new Uniform((range !== null) ? range : new Vector2())
 
 			},
 

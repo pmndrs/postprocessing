@@ -1,3 +1,5 @@
+#include <common>
+
 uniform sampler2D tDiffuse;
 uniform sampler2D tDepth;
 
@@ -11,7 +13,6 @@ uniform float focalLength;
 uniform float focalStop;
 
 uniform float maxBlur;
-uniform vec3 luminanceCoefficients;
 uniform float luminanceThreshold;
 uniform float luminanceGain;
 uniform float bias;
@@ -124,7 +125,7 @@ varying vec2 vUv;
 
 #endif
 
-vec2 rand(vec2 coord) {
+vec2 rand2(vec2 coord) {
 
 	vec2 noise;
 
@@ -156,7 +157,7 @@ vec3 processTexel(vec2 coords, float blur) {
 	c.b = texture2D(tDiffuse, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b;
 
 	// Calculate the luminance of the constructed colour.
-	float luminance = dot(c, luminanceCoefficients);
+	float luminance = linearToRelativeLuminance(c);
 	float threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);
 
 	return c + mix(vec3(0.0), c, threshold * blur);
@@ -254,7 +255,7 @@ void main() {
 	blur = clamp(blur, 0.0, 1.0);
 
 	// Dithering.
-	vec2 noise = rand(vUv) * ditherStrength * blur;
+	vec2 noise = rand2(vUv) * ditherStrength * blur;
 
 	float blurFactorX = texelSize.x * blur * maxBlur + noise.x;
 	float blurFactorY = texelSize.y * blur * maxBlur + noise.y;

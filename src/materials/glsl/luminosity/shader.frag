@@ -1,34 +1,35 @@
+#include <common>
+
 uniform sampler2D tDiffuse;
 uniform float distinction;
 uniform vec2 range;
-uniform vec3 luminanceCoefficients;
 
 varying vec2 vUv;
 
 void main() {
 
 	vec4 texel = texture2D(tDiffuse, vUv);
-	float v = dot(texel.rgb, luminanceCoefficients);
+	float l = linearToRelativeLuminance(texel.rgb);
 
 	#ifdef RANGE
 
-		float low = step(range.x, v);
-		float high = step(v, range.y);
+		float low = step(range.x, l);
+		float high = step(l, range.y);
 
 		// Apply the mask.
-		v *= low * high;
+		l *= low * high;
 
 	#endif
 
-	v = pow(abs(v), distinction);
+	l = pow(abs(l), distinction);
 
 	#ifdef COLOR
 
-		gl_FragColor = vec4(texel.rgb * v, texel.a);
+		gl_FragColor = vec4(texel.rgb * l, texel.a);
 
 	#else
 
-		gl_FragColor = vec4(v, v, v, texel.a);
+		gl_FragColor = vec4(l, l, l, texel.a);
 
 	#endif
 

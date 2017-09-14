@@ -18,7 +18,8 @@ varying vec2 vUv;
 
 #ifdef GREYSCALE
 
-	uniform vec3 luminanceCoefficients;
+	#include <common>
+
 	uniform float greyscaleIntensity;
 
 #elif defined(SEPIA)
@@ -90,7 +91,7 @@ void main() {
 
 	#ifdef GREYSCALE
 
-		color = mix(color, vec3(dot(color, luminanceCoefficients)), greyscaleIntensity);
+		color = mix(color, vec3(linearToRelativeLuminance(color)), greyscaleIntensity);
 
 	#elif defined(SEPIA)
 

@@ -1,7 +1,8 @@
+#include <common>
+
 uniform sampler2D tDiffuse;
 uniform float middleGrey;
 uniform float maxLuminance;
-uniform vec3 luminanceCoefficients;
 
 #ifdef ADAPTED_LUMINANCE
 
@@ -29,7 +30,7 @@ vec3 toneMap(vec3 c) {
 	#endif
 
 	// Calculate the luminance of the current pixel.
-	float lumPixel = dot(c, luminanceCoefficients);
+	float lumPixel = linearToRelativeLuminance(c);
 
 	// Apply the modified operator (Reinhard Eq. 4).
 	float lumScaled = (lumPixel * middleGrey) / lumAvg;

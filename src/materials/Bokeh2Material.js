@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform, Vector2, Vector3 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/bokeh2/shader.frag";
 import vertex from "./glsl/bokeh2/shader.vert";
@@ -68,7 +68,6 @@ export class Bokeh2Material extends ShaderMaterial {
 				maxBlur: new Uniform(1.0),
 				luminanceThreshold: new Uniform(0.5),
 				luminanceGain: new Uniform(2.0),
-				luminanceCoefficients: new Uniform(new Vector3(0.2126, 0.7152, 0.0722)),
 				bias: new Uniform(0.5),
 				fringe: new Uniform(0.7),
 				ditherStrength: new Uniform(0.0001),
