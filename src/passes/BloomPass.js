@@ -104,7 +104,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
+	set resolutionScale(value = 0.5) { this.blurPass.resolutionScale = value; }
 
 	/**
 	 * The blur kernel size.
@@ -119,7 +119,7 @@ export class BloomPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
+	set kernelSize(value = KernelSize.LARGE) { this.blurPass.kernelSize = value; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -134,7 +134,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
+	set intensity(value = 1.0) { this.combineMaterial.uniforms.opacity2.value = value; }
 
 	/**
 	 * The luminance distinction factor.
@@ -149,7 +149,7 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set distinction(x = 1.0) { this.luminosityMaterial.uniforms.distinction.value = x; }
+	set distinction(value = 1.0) { this.luminosityMaterial.uniforms.distinction.value = value; }
 
 	/**
 	 * Renders the effect.

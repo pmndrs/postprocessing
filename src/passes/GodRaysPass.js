@@ -236,7 +236,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(x = 0.5) { this.blurPass.resolutionScale = x; }
+	set resolutionScale(value = 0.5) { this.blurPass.resolutionScale = value; }
 
 	/**
 	 * The blur kernel size.
@@ -251,7 +251,7 @@ export class GodRaysPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x = KernelSize.LARGE) { this.blurPass.kernelSize = x; }
+	set kernelSize(value = KernelSize.LARGE) { this.blurPass.kernelSize = value; }
 
 	/**
 	 * The overall intensity of the effect.
@@ -266,7 +266,7 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set intensity(x = 1.0) { this.combineMaterial.uniforms.opacity2.value = x; }
+	set intensity(value = 1.0) { this.combineMaterial.uniforms.opacity2.value = value; }
 
 	/**
 	 * The number of samples per pixel.
@@ -284,12 +284,12 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set samples(x = 60) {
+	set samples(value = 60) {
 
-		x = Math.floor(x);
+		value = Math.floor(value);
 
-		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = x.toFixed(1);
-		this.godRaysMaterial.defines.NUM_SAMPLES_INT = x.toFixed(0);
+		this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = value.toFixed(1);
+		this.godRaysMaterial.defines.NUM_SAMPLES_INT = value.toFixed(0);
 		this.godRaysMaterial.needsUpdate = true;
 
 	}

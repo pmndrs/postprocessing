@@ -166,15 +166,15 @@ export class ToneMappingPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolution(x = 256) {
+	set resolution(value = 256) {
 
-		x = ceil2(x);
+		value = ceil2(value);
 
-		this.renderTargetLuminosity.setSize(x, x);
-		this.renderTargetPrevious.setSize(x, x);
-		this.renderTargetAdapted.setSize(x, x);
+		this.renderTargetLuminosity.setSize(value, value);
+		this.renderTargetPrevious.setSize(value, value);
+		this.renderTargetAdapted.setSize(value, value);
 
-		this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(x)) / Math.log(2)).toFixed(1);
+		this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(value)) / Math.log(2)).toFixed(1);
 		this.adaptiveLuminosityMaterial.needsUpdate = true;
 
 	}
@@ -194,9 +194,9 @@ export class ToneMappingPass extends Pass {
 	 * @type {Boolean}
 	 */
 
-	set adaptive(x = true) {
+	set adaptive(value = true) {
 
-		if(x) {
+		if(value) {
 
 			this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
 			this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;

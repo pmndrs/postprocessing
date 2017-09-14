@@ -55,7 +55,7 @@ export class TexturePass extends Pass {
 	 * @type {Texture}
 	 */
 
-	set texture(x) { this.copyMaterial.uniforms.tDiffuse.value = x; }
+	set texture(value) { this.copyMaterial.uniforms.tDiffuse.value = value; }
 
 	/**
 	 * The opacity.
@@ -70,7 +70,7 @@ export class TexturePass extends Pass {
 	 * @type {Number}
 	 */
 
-	set opacity(x = 1.0) { this.copyMaterial.uniforms.opacity.value = x; }
+	set opacity(value = 1.0) { this.copyMaterial.uniforms.opacity.value = value; }
 
 	/**
 	 * Renders the effect.

@@ -131,10 +131,10 @@ export class GlitchPass extends Pass {
 	 * @type {Texture}
 	 */
 
-	set perturbMap(x) {
+	set perturbMap(value) {
 
-		this.texture = x;
-		this.material.uniforms.tPerturb.value = x;
+		this.texture = value;
+		this.material.uniforms.tPerturb.value = value;
 
 	}
 

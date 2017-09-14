@@ -116,7 +116,7 @@ export class BlurPass extends Pass {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(x = KernelSize.LARGE) { this.convolutionMaterial.kernelSize = x; }
+	set kernelSize(value = KernelSize.LARGE) { this.convolutionMaterial.kernelSize = value; }
 
 	/**
 	 * Blurs the read buffer.
