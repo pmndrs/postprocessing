@@ -193,11 +193,10 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer, depthTexture) {
 
-		const size = this.renderer.getSize();
-		const pixelRatio = this.renderer.getPixelRatio();
+		const drawingBufferSize = this.renderer.getDrawingBufferSize();
 		const alpha = this.renderer.context.getContextAttributes().alpha;
 
-		const renderTarget = new WebGLRenderTarget(size.width * pixelRatio, size.height * pixelRatio, {
+		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			format: alpha ? RGBAFormat : RGBFormat,
@@ -230,10 +229,9 @@ export class EffectComposer {
 	addPass(pass, index) {
 
 		const renderer = this.renderer;
-		const size = renderer.getSize();
-		const pixelRatio = renderer.getPixelRatio();
+		const drawingBufferSize = renderer.getDrawingBufferSize();
 
-		pass.setSize(size.width * pixelRatio, size.height * pixelRatio);
+		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialise(renderer, renderer.context.getContextAttributes().alpha);
 
 		if(index !== undefined) {
@@ -336,29 +334,31 @@ export class EffectComposer {
 	setSize(width, height) {
 
 		const passes = this.passes;
-		const size = this.renderer.getSize();
-		const pixelRatio = this.renderer.getPixelRatio();
+		const renderer = this.renderer;
 
+		let size, drawingBufferSize;
 		let i, l;
 
 		if(width === undefined || height === undefined) {
 
+			size = renderer.getSize();
 			width = size.width;
 			height = size.height;
 
 		}
 
-		this.renderer.setSize(width, height);
+		// Update the logical render size.
+		renderer.setSize(width, height);
 
-		width *= pixelRatio;
-		height *= pixelRatio;
+		// The drawing buffer size takes the device pixel ratio into account.
+		drawingBufferSize = renderer.getDrawingBufferSize();
 
-		this.readBuffer.setSize(width, height);
-		this.writeBuffer.setSize(width, height);
+		this.readBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		this.writeBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		for(i = 0, l = passes.length; i < l; ++i) {
 
-			passes[i].setSize(width, height);
+			passes[i].setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		}
 
