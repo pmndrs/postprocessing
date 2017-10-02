@@ -1,8 +1,5 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import areaImage from "./images/smaa/areaImage.js";
-import searchImage from "./images/smaa/searchImage.js";
-
 import fragment from "./glsl/smaa-weights/shader.frag";
 import vertex from "./glsl/smaa-weights/shader.vert";
 
@@ -57,22 +54,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
-
-		/**
-		 * The area pattern recognition image. Encoded as base64.
-		 *
-		 * @type {String}
-		 */
-
-		this.areaImage = areaImage;
-
-		/**
-		 * The search image. Encoded as base64.
-		 *
-		 * @type {String}
-		 */
-
-		this.searchImage = searchImage;
 
 	}
 

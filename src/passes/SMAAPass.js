@@ -10,6 +10,9 @@ import {
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
+import searchImageDataUrl from "../materials/images/smaa/searchImageDataUrl.js";
+import areaImageDataUrl from "../materials/images/smaa/areaImageDataUrl.js";
+
 /**
  * Subpixel Morphological Antialiasing (SMAA) v2.8.
  *
@@ -22,10 +25,11 @@ export class SMAAPass extends Pass {
 	/**
 	 * Constructs a new SMAA pass.
 	 *
-	 * @param {Image} Image - This pass requires an Image class to create internal textures. Provide window.Image in a browser environment.
+	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataUrl}.
+	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataUrl}.
 	 */
 
-	constructor(Image) {
+	constructor(searchImage, areaImage) {
 
 		super();
 
@@ -88,33 +92,44 @@ export class SMAAPass extends Pass {
 
 		this.weightsMaterial = new SMAAWeightsMaterial();
 
-		const areaImage = new Image();
-		areaImage.src = this.weightsMaterial.areaImage;
-
-		const areaTexture = new Texture();
-		areaTexture.image = areaImage;
-		areaTexture.name = "SMAA.Area";
-		areaTexture.minFilter = LinearFilter;
-		areaTexture.format = RGBFormat;
-		areaTexture.generateMipmaps = false;
-		areaTexture.needsUpdate = true;
-		areaTexture.flipY = false;
-
-		const searchImage = new Image();
-		searchImage.src = this.weightsMaterial.searchImage;
-
-		const searchTexture = new Texture();
-		searchTexture.image = searchImage;
-		searchTexture.name = "SMAA.Search";
-		searchTexture.magFilter = NearestFilter;
-		searchTexture.minFilter = NearestFilter;
-		searchTexture.generateMipmaps = false;
-		searchTexture.needsUpdate = true;
-		searchTexture.flipY = false;
-
 		this.weightsMaterial.uniforms.tDiffuse.value = this.renderTargetColorEdges.texture;
-		this.weightsMaterial.uniforms.tArea.value = areaTexture;
-		this.weightsMaterial.uniforms.tSearch.value = searchTexture;
+
+		/**
+		 * The SMAA search texture.
+		 *
+		 * @type {Texture}
+		 * @private
+		 */
+
+		this.searchTexture = new Texture(searchImage);
+
+		this.searchTexture.name = "SMAA.Search";
+		this.searchTexture.magFilter = NearestFilter;
+		this.searchTexture.minFilter = NearestFilter;
+		this.searchTexture.format = RGBAFormat;
+		this.searchTexture.generateMipmaps = false;
+		this.searchTexture.needsUpdate = true;
+		this.searchTexture.flipY = false;
+
+		this.weightsMaterial.uniforms.tSearch.value = this.searchTexture;
+
+		/**
+		 * The SMAA area texture.
+		 *
+		 * @type {Texture}
+		 * @private
+		 */
+
+		this.areaTexture = new Texture(areaImage);
+
+		this.areaTexture.name = "SMAA.Area";
+		this.areaTexture.minFilter = LinearFilter;
+		this.areaTexture.format = RGBAFormat;
+		this.areaTexture.generateMipmaps = false;
+		this.areaTexture.needsUpdate = true;
+		this.areaTexture.flipY = false;
+
+		this.weightsMaterial.uniforms.tArea.value = this.areaTexture;
 
 		/**
 		 * SMAA blend shader material.
@@ -177,5 +192,35 @@ export class SMAAPass extends Pass {
 		)));
 
 	}
+
+	/**
+	 * The SMAA search image, encoded as a base64 data url.
+	 *
+	 * Use this image data to create an Image instance and use it together with
+	 * the area image to create an SMAAPass.
+	 *
+	 * @type {String}
+	 * @example
+	 * const searchImage = new Image();
+	 * searchImage.addEventListener("load", progress);
+	 * searchImage.src = SMAAPass.searchImageDataUrl;
+	 */
+
+	static get searchImageDataUrl() { return searchImageDataUrl; }
+
+	/**
+	 * The SMAA area image, encoded as a base64 data url.
+	 *
+	 * Use this image data to create an Image instance and use it together with
+	 * the search image to create an SMAAPass.
+	 *
+	 * @type {String}
+	 * @example
+	 * const areaImage = new Image();
+	 * areaImage.addEventListener("load", progress);
+	 * areaImage.src = SMAAPass.areaImageDataUrl;
+	 */
+
+	static get areaImageDataUrl() { return areaImageDataUrl; }
 
 }
