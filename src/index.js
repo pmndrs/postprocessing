@@ -52,3 +52,9 @@ export {
 	SMAAWeightsMaterial,
 	ToneMappingMaterial
 } from "./materials";
+
+export {
+	RawImageData,
+	SMAAAreaImageData,
+	SMAASearchImageData
+} from "./materials/images";
