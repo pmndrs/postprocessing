@@ -23,15 +23,15 @@ void main() {
 
 	} else {
 
-		/* Up to four lines can be crossing a pixel (one through each edge). We favor
-		 * blending by choosing the line with the maximum weight for each direction.
+		/* Up to four lines can be crossing a pixel (one through each edge).
+		 * The line with the maximum weight for each direction is favoured.
 		 */
 
 		vec2 offset;
 		offset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.
 		offset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).
 
-		// Then we go in the direction that has the maximum weight (horizontal vs. vertical).
+		// Go in the direction with the maximum weight (horizontal vs. vertical).
 		if(abs(offset.x) > abs(offset.y)) {
 
 			offset.y = 0.0;

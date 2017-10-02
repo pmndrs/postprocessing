@@ -5,7 +5,7 @@ varying vec4 vOffset[3];
 
 void main() {
 
-	const vec2 THRESHOLD = vec2(EDGE_THRESHOLD);
+	const vec2 threshold = vec2(EDGE_THRESHOLD);
 
 	// Calculate color deltas.
 	vec4 delta;
@@ -20,7 +20,7 @@ void main() {
 	delta.y = max(max(t.r, t.g), t.b);
 
 	// We do the usual threshold.
-	vec2 edges = step(THRESHOLD, delta.xy);
+	vec2 edges = step(threshold, delta.xy);
 
 	// Then discard if there is no edge.
 	if(dot(edges, vec2(1.0)) == 0.0) {
@@ -34,7 +34,7 @@ void main() {
 	t = abs(c - cRight);
 	delta.z = max(max(t.r, t.g), t.b);
 
-	vec3 cBottom  = texture2D(tDiffuse, vOffset[1].zw).rgb;
+	vec3 cBottom = texture2D(tDiffuse, vOffset[1].zw).rgb;
 	t = abs(c - cBottom);
 	delta.w = max(max(t.r, t.g), t.b);
 
@@ -42,7 +42,7 @@ void main() {
 	float maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);
 
 	// Calculate left-left and top-top deltas.
-	vec3 cLeftLeft  = texture2D(tDiffuse, vOffset[2].xy).rgb;
+	vec3 cLeftLeft = texture2D(tDiffuse, vOffset[2].xy).rgb;
 	t = abs(c - cLeftLeft);
 	delta.z = max(max(t.r, t.g), t.b);
 

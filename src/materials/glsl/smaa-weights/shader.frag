@@ -39,7 +39,7 @@ float searchXLeft(vec2 texCoord, float end) {
 
 	vec2 e = vec2(0.0, 1.0);
 
-	for(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
 		e = texture2D(tDiffuse, texCoord, 0.0).rg;
 		texCoord -= vec2(2.0, 0.0) * texelSize;
@@ -66,7 +66,7 @@ float searchXRight(vec2 texCoord, float end) {
 
 	vec2 e = vec2(0.0, 1.0);
 
-	for(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
 		e = texture2D(tDiffuse, texCoord, 0.0).rg;
 		texCoord += vec2(2.0, 0.0) * texelSize;
@@ -88,7 +88,7 @@ float searchYUp(vec2 texCoord, float end) {
 
 	vec2 e = vec2(1.0, 0.0);
 
-	for(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
 		e = texture2D(tDiffuse, texCoord, 0.0).rg;
 		texCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.
@@ -110,7 +110,7 @@ float searchYDown(vec2 texCoord, float end) {
 
 	vec2 e = vec2(1.0, 0.0);
 
-	for(int i = 0; i < SMAA_MAX_SEARCH_STEPS_INT; ++i ) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i ) {
 
 		e = texture2D(tDiffuse, texCoord, 0.0).rg;
 		texCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.
@@ -131,13 +131,13 @@ float searchYDown(vec2 texCoord, float end) {
 vec2 area(vec2 dist, float e1, float e2, float offset) {
 
 	// Rounding prevents precision errors of bilinear filtering.
-	vec2 texCoord = SMAA_AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;
+	vec2 texCoord = AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;
 
 	// Scale and bias for texel space translation.
-	texCoord = SMAA_AREATEX_PIXEL_SIZE * texCoord + (0.5 * SMAA_AREATEX_PIXEL_SIZE);
+	texCoord = AREATEX_PIXEL_SIZE * texCoord + (0.5 * AREATEX_PIXEL_SIZE);
 
 	// Move to proper place, according to the subpixel offset.
-	texCoord.y += SMAA_AREATEX_SUBTEX_SIZE * offset;
+	texCoord.y += AREATEX_SUBTEX_SIZE * offset;
 
 	return texture2D(tArea, texCoord, 0.0).rg;
 
@@ -160,19 +160,20 @@ void main() {
 		coords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)
 		d.x = coords.x;
 
-		/* Now fetch the left crossing edges, two at a time using bilinear filtering.
-		Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what value each edge has. */
-
+		/* Now fetch the left crossing edges, two at a time using bilinear
+		filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what
+		value each edge has. */
 		float e1 = texture2D(tDiffuse, coords, 0.0).r;
 
 		// Find the distance to the right.
 		coords.x = searchXRight(vOffset[0].zw, vOffset[2].y);
 		d.y = coords.x;
 
-		// Translate distances to pixel units for better interleave arithmetic and memory accesses.
+		/* Translate distances to pixel units for better interleave arithmetic and
+		memory accesses. */
 		d = d / texelSize.x - vPixCoord.x;
 
-		// The area below needs a sqrt, as the areas texture is compressed quadratically.
+		// The area texture is compressed quadratically.
 		vec2 sqrtD = sqrt(abs(d));
 
 		// Fetch the right crossing edges.
@@ -191,7 +192,6 @@ void main() {
 
 		// Find the distance to the top.
 		vec2 coords;
-
 		coords.y = searchYUp(vOffset[1].xy, vOffset[2].z);
 		coords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;
 		d.x = coords.y;
@@ -206,7 +206,7 @@ void main() {
 		// Distances in pixel units.
 		d = d / texelSize.y - vPixCoord.y;
 
-		// The area below needs a sqrt, as the areas texture is compressed quadratically.
+		// The area texture is compressed quadratically.
 		vec2 sqrtD = sqrt(abs(d));
 
 		// Fetch the bottom crossing edges.
