@@ -46,4 +46,27 @@ export class SMAAColorEdgesMaterial extends ShaderMaterial {
 
 	}
 
+	/**
+	 * Sets the edge detection sensitivity.
+	 *
+	 * A lower value results in more edges being detected at the expense of
+	 * performance. 
+	 *
+	 * 0.1 is a reasonable value, and allows to catch most visible edges.
+	 * 0.05 is a rather overkill value, that allows to catch 'em all.
+	 *
+	 * If temporal supersampling is used, 0.2 could be a reasonable value,
+	 * as low contrast edges are properly filtered by just 2x.
+	 *
+	 * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].
+	 */
+
+	setEdgeDetectionThreshold(threshold) {
+
+		this.defines.EDGE_THRESHOLD = threshold.toFixed("2");
+
+		this.needsUpdate = true;
+
+	}
+
 }
