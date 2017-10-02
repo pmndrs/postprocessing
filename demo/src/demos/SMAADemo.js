@@ -13,7 +13,7 @@ import {
 	WebGLRenderer
 } from "three";
 
-import { RenderPass, SMAAPass } from "../../../src";
+import { RenderPass, SMAAPass, TexturePass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**
@@ -87,6 +87,15 @@ export class SMAADemo extends Demo {
 		this.smaaPass = null;
 
 		/**
+		 * A texture pass.
+		 *
+		 * @type {TexturePass}
+		 * @private
+		 */
+
+		this.texturePass = null;
+
+		/**
 		 * An object.
 		 *
 		 * @type {Object3D}
@@ -136,6 +145,8 @@ export class SMAADemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
+		let image;
+
 		if(this.assets === null) {
 
 			loadingManager.onProgress = (item, loaded, total) => {
@@ -162,6 +173,29 @@ export class SMAADemo extends Demo {
 				assets.set("crate-color", texture);
 
 			});
+
+			// Preload the SMAA images.
+			image = new Image();
+			image.addEventListener("load", function() {
+
+				loadingManager.itemEnd("smaa-search");
+				assets.set("smaa-search", this);
+
+			});
+
+			loadingManager.itemStart("smaa-search");
+			image.src = SMAAPass.searchImageDataUrl;
+
+			image = new Image();
+			image.addEventListener("load", function() {
+
+				loadingManager.itemEnd("smaa-area");
+				assets.set("smaa-area", this);
+
+			});
+
+			loadingManager.itemStart("smaa-area");
+			image.src = SMAAPass.areaImageDataUrl;
 
 		} else {
 
@@ -299,9 +333,15 @@ export class SMAADemo extends Demo {
 		this.renderPass = pass;
 		composer.addPass(pass);
 
-		pass = new SMAAPass(Image);
+		pass = new SMAAPass(assets.get("smaa-search"), assets.get("smaa-area"));
 		pass.renderToScreen = true;
 		this.smaaPass = pass;
+		composer.addPass(pass);
+
+		pass = new TexturePass(this.smaaPass.renderTargetColorEdges.texture);
+		pass.renderToScreen = true;
+		pass.enabled = false;
+		this.texturePass = pass;
 		composer.addPass(pass);
 
 	}
@@ -345,6 +385,7 @@ export class SMAADemo extends Demo {
 		const composer = this.composer;
 		const renderPass = this.renderPass;
 		const smaaPass = this.smaaPass;
+		const texturePass = this.texturePass;
 
 		const renderer1 = this.renderer;
 		const renderer2 = this.renderer2;
@@ -352,16 +393,24 @@ export class SMAADemo extends Demo {
 		const controls1 = this.controls;
 		const controls2 = this.controls2;
 
-		const params = {
-			"browser AA": false,
-			"SMAA": smaaPass.enabled,
-			"SMAA threshold": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD)
+		const SMAAMode = {
+			disabled: "disabled",
+			edges: "edges",
+			blend: "blend"
 		};
 
-		function toggleSMAA() {
+		const params = {
+			"browser AA": false,
+			"SMAA": SMAAMode.blend,
+			"sensitivity": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD),
+			"search steps": Number.parseFloat(smaaPass.weightsMaterial.defines.MAX_SEARCH_STEPS_INT)
+		};
 
-			renderPass.renderToScreen = !params.SMAA;
-			smaaPass.enabled = params.SMAA;
+		function toggleSMAAMode() {
+
+			renderPass.renderToScreen = (params.SMAA === SMAAMode.disabled);
+			smaaPass.enabled = (params.SMAA !== SMAAMode.disabled);
+			texturePass.enabled = (params.SMAA === SMAAMode.edges);
 
 		}
 
@@ -388,11 +437,18 @@ export class SMAADemo extends Demo {
 		}
 
 		gui.add(params, "browser AA").onChange(swapRenderers);
-		gui.add(params, "SMAA").onChange(toggleSMAA);
+		gui.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
 
-		gui.add(params, "SMAA threshold").min(0.0).max(1.0).step(0.01).onChange(function() {
-			smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD = params["SMAA threshold"].toFixed(2);
-			smaaPass.colorEdgesMaterial.needsUpdate = true;
+		gui.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(function() {
+
+			smaaPass.colorEdgesMaterial.setEdgeDetectionThreshold(params.sensitivity);
+
+		});
+
+		gui.add(params, "search steps").min(8).max(112).step(1).onChange(function() {
+
+			smaaPass.weightsMaterial.setOrthogonalSearchSteps(params["search steps"]);
+
 		});
 
 	}
