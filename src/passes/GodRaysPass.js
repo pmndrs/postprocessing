@@ -17,7 +17,6 @@ import { Pass } from "./Pass.js";
  * Clamps a given value.
  *
  * @private
- * @static
  * @param {Number} value - The value to clamp.
  * @param {Number} min - The lowest possible value.
  * @param {Number} max - The highest possible value.
