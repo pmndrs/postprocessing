@@ -11,7 +11,6 @@ export { Bokeh2Pass } from "./Bokeh2Pass.js";
 export { ClearMaskPass } from "./ClearMaskPass.js";
 export { ClearPass } from "./ClearPass.js";
 export { DotScreenPass } from "./DotScreenPass.js";
-export { DepthPass } from "./DepthPass.js";
 export { FilmPass } from "./FilmPass.js";
 export { GlitchMode, GlitchPass } from "./GlitchPass.js";
 export { GodRaysPass } from "./GodRaysPass.js";
