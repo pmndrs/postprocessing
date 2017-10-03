@@ -7,7 +7,8 @@
 A post processing library that provides the means to implement 2D filter effects for [three.js](https://threejs.org/).
 
 *[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo) &there4;
-[API Reference](https://vanruesc.github.io/postprocessing/public/docs)*
+[API Reference](https://vanruesc.github.io/postprocessing/public/docs) &there4;
+[Wiki](https://github.com/vanruesc/postprocessing/wiki)*
 
 
 ## Installation
@@ -75,8 +76,7 @@ export class MyPass extends Pass {
 
 ```
 
-Passes don't have to use the buffers that are provided in the render method.
-Writing self-contained render-to-texture passes is also a feasible option.
+See the [Wiki](https://github.com/vanruesc/postprocessing/wiki/Custom-Passes) for more information.
 
 
 ## Included Filters
