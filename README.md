@@ -60,7 +60,8 @@ export class MyPass extends Pass {
 
 		this.name = "MyPass";
 		this.needsSwap = true;
-		this.quad.material = new MyMaterial();
+		this.material = new MyMaterial();
+		this.quad.material = this.material;
 
 	}
 
