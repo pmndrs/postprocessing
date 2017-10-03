@@ -17,14 +17,16 @@ export class BokehMaterial extends ShaderMaterial {
 	 *
 	 * @param {PerspectiveCamera} [camera] - A camera.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.focus=1.0] - Focus distance.
-	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
+	 * @param {Number} [options.focus=1.0] - The focus distance, corresponds directly with the scene depth.
+	 * @param {Number} [options.dof=0.02] - Depth of field. An area in front of and behind the focus point that still appears sharp.
+	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for stronger blur and shallower depth of field.
 	 * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
 	 */
 
 	constructor(camera = null, options = {}) {
 
 		if(options.focus === undefined) { options.focus = 1.0; }
+		if(options.dof === undefined) { options.dof = 0.02; }
 		if(options.aperture === undefined) { options.aperture = 0.025; }
 		if(options.maxBlur === undefined) { options.maxBlur = 1.0; }
 
@@ -42,6 +44,7 @@ export class BokehMaterial extends ShaderMaterial {
 				tDepth: new Uniform(null),
 
 				focus: new Uniform(options.focus),
+				dof: new Uniform(options.dof),
 				aperture: new Uniform(options.aperture),
 				maxBlur: new Uniform(options.maxBlur)
 

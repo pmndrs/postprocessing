@@ -2,6 +2,7 @@ uniform sampler2D tDiffuse;
 uniform sampler2D tDepth;
 
 uniform float focus;
+uniform float dof;
 uniform float aspect;
 uniform float aperture;
 uniform float maxBlur;
@@ -40,7 +41,14 @@ void main() {
 
 	#endif
 
-	float factor = depth - focus;
+	float focusNear = clamp(focus - dof, 0.0, 1.0);
+	float focusFar = clamp(focus + dof, 0.0, 1.0);
+
+	// Calculate a DoF mask.
+	float low = step(depth, focusNear);
+	float high = step(focusFar, depth);
+
+	float factor = (depth - focusNear) * low + (depth - focusFar) * high;
 
 	vec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));
 
