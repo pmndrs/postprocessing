@@ -239,7 +239,7 @@ module.exports = {
 
 		"can be created and destroyed": function(test) {
 
-			const pass = new lib.SMAAPass(function Image() {});
+			const pass = new lib.SMAAPass(null, null);
 			test.ok(pass);
 			pass.dispose();
 			test.done();
