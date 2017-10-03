@@ -84,7 +84,7 @@ function deltaLeft(left, top) {
 	let d = 0;
 
 	// If there is an edge, continue.
-  if(top[3] === 1) {
+	if(top[3] === 1) {
 
 		d += 1;
 
@@ -116,7 +116,7 @@ function deltaRight(left, top) {
 	let d = 0;
 
 	// If there is an edge, and no crossing edges, continue.
-  if(top[3] === 1 && left[1] !== 1 && left[3] !== 1) {
+	if(top[3] === 1 && left[1] !== 1 && left[3] !== 1) {
 
 		d += 1;
 
