@@ -1,11 +1,12 @@
 import {
-	BoxBufferGeometry,
+	DodecahedronBufferGeometry,
 	Mesh,
 	MeshBasicMaterial,
+	MeshDepthMaterial,
 	OrbitControls
 } from "three";
 
-import { DepthPass, RenderPass, TexturePass } from "../../../src";
+import { RenderPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**
@@ -42,24 +43,6 @@ export class DepthDemo extends Demo {
 
 		this.object = null;
 
-		/**
-		 * A texture pass.
-		 *
-		 * @type {TexturePass}
-		 * @private
-		 */
-
-		this.texturePass = null;
-
-		/**
-		 * A depth pass.
-		 *
-		 * @type {DepthPass}
-		 * @private
-		 */
-
-		this.depthPass = null;
-
 	}
 
 	/**
@@ -76,19 +59,21 @@ export class DepthDemo extends Demo {
 
 		this.controls = new OrbitControls(camera, composer.renderer.domElement);
 		this.controls.enablePan = false;
-		this.controls.maxDistance = 40;
+		this.controls.minDistance = 3;
+		this.controls.maxDistance = 9;
 
 		// Camera.
 
-		camera.near = 0.01;
-		camera.far = 50;
+		camera.near = 2;
+		camera.far = 10;
+		camera.updateProjectionMatrix();
 		camera.position.set(2, 1, 2);
 		camera.lookAt(this.controls.target);
 
 		// Objects.
 
 		const mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
+			new DodecahedronBufferGeometry(1),
 			new MeshBasicMaterial()
 		);
 
@@ -99,16 +84,11 @@ export class DepthDemo extends Demo {
 
 		composer.addPass(new RenderPass(scene, camera));
 
-		let pass = new TexturePass(composer.depthTexture);
-		pass.enabled = false;
+		const pass = new RenderPass(scene, camera, {
+			overrideMaterial: new MeshDepthMaterial()
+		});
 
-		this.texturePass = pass;
-		composer.addPass(pass);
-
-		pass = new DepthPass(camera);
 		pass.renderToScreen = true;
-
-		this.depthPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -133,32 +113,6 @@ export class DepthDemo extends Demo {
 			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
 
 		}
-
-	}
-
-	/**
-	 * Registers configuration options.
-	 *
-	 * @param {GUI} gui - A GUI.
-	 */
-
-	configure(gui) {
-
-		const texturePass = this.texturePass;
-		const depthPass = this.depthPass;
-
-		const params = {
-			"raw": false
-		};
-
-		gui.add(params, "raw").onChange(function() {
-
-			texturePass.enabled = params.raw;
-			depthPass.enabled = !params.raw;
-			texturePass.renderToScreen = params.raw;
-			depthPass.renderToScreen = !params.raw;
-
-		});
 
 	}
 
