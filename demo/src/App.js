@@ -214,6 +214,9 @@ export class App {
 			demo = demos.get(app.effect);
 			demo.load(activateDemo);
 
+			// Update the url.
+			window.location.hash = app.effect;
+
 		}
 
 		loadDemo();
