@@ -99,7 +99,7 @@ Writing self-contained render-to-texture passes is also a feasible option.
 
 ## Contributing
 
-Maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code.
+Please refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/CONTRIBUTING.md) for details.
 
 
 ## License
