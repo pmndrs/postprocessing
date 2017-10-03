@@ -72,18 +72,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "postprocessing/src/materials/depthmaterial.js~depthmaterial",
-    "class/src/materials/DepthMaterial.js~DepthMaterial.html",
-    "<span>DepthMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DepthMaterial.js</span>",
-    "class"
-  ],
-  [
-    "postprocessing/src/passes/depthpass.js~depthpass",
-    "class/src/passes/DepthPass.js~DepthPass.html",
-    "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/DepthPass.js</span>",
-    "class"
-  ],
-  [
     "postprocessing/src/materials/dotscreenmaterial.js~dotscreenmaterial",
     "class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html",
     "<span>DotScreenMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DotScreenMaterial.js</span>",
@@ -180,9 +168,21 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/materials/images/rawimagedata.js~rawimagedata",
+    "class/src/materials/images/RawImageData.js~RawImageData.html",
+    "<span>RawImageData</span> <span class=\"search-result-import-path\">postprocessing/src/materials/images/RawImageData.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/passes/renderpass.js~renderpass",
     "class/src/passes/RenderPass.js~RenderPass.html",
     "<span>RenderPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/RenderPass.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/materials/images/smaa/utils/smaaareaimagedata.js~smaaareaimagedata",
+    "class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html",
+    "<span>SMAAAreaImageData</span> <span class=\"search-result-import-path\">postprocessing/src/materials/images/smaa/utils/SMAAAreaImageData.js</span>",
     "class"
   ],
   [
@@ -201,6 +201,12 @@ window.esdocSearchIndex = [
     "postprocessing/src/passes/smaapass.js~smaapass",
     "class/src/passes/SMAAPass.js~SMAAPass.html",
     "<span>SMAAPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/SMAAPass.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/materials/images/smaa/utils/smaasearchimagedata.js~smaasearchimagedata",
+    "class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html",
+    "<span>SMAASearchImageData</span> <span class=\"search-result-import-path\">postprocessing/src/materials/images/smaa/utils/SMAASearchImageData.js</span>",
     "class"
   ],
   [
@@ -607,13 +613,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
@@ -780,24 +786,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/materials/depthmaterial.js",
-    "file/src/materials/DepthMaterial.js.html",
-    "src/materials/DepthMaterial.js",
-    "file"
-  ],
-  [
-    "src/materials/depthmaterial.js~depthmaterial#adoptcamerasettings",
-    "class/src/materials/DepthMaterial.js~DepthMaterial.html#instance-method-adoptCameraSettings",
-    "src/materials/DepthMaterial.js~DepthMaterial#adoptCameraSettings",
-    "method"
-  ],
-  [
-    "src/materials/depthmaterial.js~depthmaterial#constructor",
-    "class/src/materials/DepthMaterial.js~DepthMaterial.html#instance-constructor-constructor",
-    "src/materials/DepthMaterial.js~DepthMaterial#constructor",
-    "method"
-  ],
-  [
     "src/materials/dotscreenmaterial.js",
     "file/src/materials/DotScreenMaterial.js.html",
     "src/materials/DotScreenMaterial.js",
@@ -871,13 +859,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
@@ -912,16 +900,22 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial#needsupdate",
+    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html#instance-member-needsUpdate",
+    "src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial#setedgedetectionthreshold",
+    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html#instance-method-setEdgeDetectionThreshold",
+    "src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial#setEdgeDetectionThreshold",
+    "method"
+  ],
+  [
     "src/materials/smaaweightsmaterial.js",
     "file/src/materials/SMAAWeightsMaterial.js.html",
     "src/materials/SMAAWeightsMaterial.js",
     "file"
-  ],
-  [
-    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#areaimage",
-    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-member-areaImage",
-    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#areaImage",
-    "member"
   ],
   [
     "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#constructor",
@@ -930,10 +924,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#searchimage",
-    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-member-searchImage",
-    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#searchImage",
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#needsupdate",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-member-needsUpdate",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#needsUpdate",
     "member"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#setorthogonalsearchsteps",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-method-setOrthogonalSearchSteps",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#setOrthogonalSearchSteps",
+    "method"
   ],
   [
     "src/materials/shockwavematerial.js",
@@ -960,16 +960,88 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/materials/images/smaa/areaimage.js",
-    "file/src/materials/images/smaa/areaImage.js.html",
-    "src/materials/images/smaa/areaImage.js",
+    "src/materials/images/rawimagedata.js",
+    "file/src/materials/images/RawImageData.js.html",
+    "src/materials/images/RawImageData.js",
     "file"
   ],
   [
-    "src/materials/images/smaa/searchimage.js",
-    "file/src/materials/images/smaa/searchImage.js.html",
-    "src/materials/images/smaa/searchImage.js",
+    "src/materials/images/rawimagedata.js~rawimagedata#channels",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-member-channels",
+    "src/materials/images/RawImageData.js~RawImageData#channels",
+    "member"
+  ],
+  [
+    "src/materials/images/rawimagedata.js~rawimagedata#constructor",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-constructor-constructor",
+    "src/materials/images/RawImageData.js~RawImageData#constructor",
+    "method"
+  ],
+  [
+    "src/materials/images/rawimagedata.js~rawimagedata#data",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-member-data",
+    "src/materials/images/RawImageData.js~RawImageData#data",
+    "member"
+  ],
+  [
+    "src/materials/images/rawimagedata.js~rawimagedata#height",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-member-height",
+    "src/materials/images/RawImageData.js~RawImageData#height",
+    "member"
+  ],
+  [
+    "src/materials/images/rawimagedata.js~rawimagedata#tocanvas",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-method-toCanvas",
+    "src/materials/images/RawImageData.js~RawImageData#toCanvas",
+    "method"
+  ],
+  [
+    "src/materials/images/rawimagedata.js~rawimagedata#width",
+    "class/src/materials/images/RawImageData.js~RawImageData.html#instance-member-width",
+    "src/materials/images/RawImageData.js~RawImageData#width",
+    "member"
+  ],
+  [
+    "src/materials/images/index.js",
+    "file/src/materials/images/index.js.html",
+    "src/materials/images/index.js",
     "file"
+  ],
+  [
+    "src/materials/images/smaa/areaimagedataurl.js",
+    "file/src/materials/images/smaa/areaImageDataUrl.js.html",
+    "src/materials/images/smaa/areaImageDataUrl.js",
+    "file"
+  ],
+  [
+    "src/materials/images/smaa/searchimagedataurl.js",
+    "file/src/materials/images/smaa/searchImageDataUrl.js.html",
+    "src/materials/images/smaa/searchImageDataUrl.js",
+    "file"
+  ],
+  [
+    "src/materials/images/smaa/utils/smaaareaimagedata.js",
+    "file/src/materials/images/smaa/utils/SMAAAreaImageData.js.html",
+    "src/materials/images/smaa/utils/SMAAAreaImageData.js",
+    "file"
+  ],
+  [
+    "src/materials/images/smaa/utils/smaaareaimagedata.js~smaaareaimagedata.generate",
+    "class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html#static-method-generate",
+    "src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.generate",
+    "method"
+  ],
+  [
+    "src/materials/images/smaa/utils/smaasearchimagedata.js",
+    "file/src/materials/images/smaa/utils/SMAASearchImageData.js.html",
+    "src/materials/images/smaa/utils/SMAASearchImageData.js",
+    "file"
+  ],
+  [
+    "src/materials/images/smaa/utils/smaasearchimagedata.js~smaasearchimagedata.generate",
+    "class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html#static-method-generate",
+    "src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.generate",
+    "method"
   ],
   [
     "src/materials/index.js",
@@ -1021,13 +1093,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
     "member"
   ],
@@ -1051,13 +1123,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
@@ -1272,36 +1344,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/depthpass.js",
-    "file/src/passes/DepthPass.js.html",
-    "src/passes/DepthPass.js",
-    "file"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#constructor",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-constructor-constructor",
-    "src/passes/DepthPass.js~DepthPass#constructor",
-    "method"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#name",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-name",
-    "src/passes/DepthPass.js~DepthPass#name",
-    "member"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#needsswap",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-needsSwap",
-    "src/passes/DepthPass.js~DepthPass#needsSwap",
-    "member"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#render",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-method-render",
-    "src/passes/DepthPass.js~DepthPass#render",
-    "method"
-  ],
-  [
     "src/passes/dotscreenpass.js",
     "file/src/passes/DotScreenPass.js.html",
     "src/passes/DotScreenPass.js",
@@ -1417,13 +1459,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
@@ -1453,13 +1495,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
@@ -1513,13 +1555,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
@@ -1776,6 +1818,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/smaapass.js~smaapass.areaimagedataurl",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-areaImageDataUrl",
+    "src/passes/SMAAPass.js~SMAAPass.areaImageDataUrl",
+    "member"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass.searchimagedataurl",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-searchImageDataUrl",
+    "src/passes/SMAAPass.js~SMAAPass.searchImageDataUrl",
+    "member"
+  ],
+  [
     "src/passes/savepass.js",
     "file/src/passes/SavePass.js.html",
     "src/passes/SavePass.js",
@@ -1945,13 +1999,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
@@ -2023,13 +2077,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
     "member"
   ],

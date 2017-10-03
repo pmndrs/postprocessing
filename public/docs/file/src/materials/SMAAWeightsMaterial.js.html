@@ -39,7 +39,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaterial.js~DepthMaterial.html">DepthMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
@@ -52,13 +51,15 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ShockWaveMaterial.js~ShockWaveMaterial.html">ShockWaveMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images/smaa/utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">passes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html">Bokeh2Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DotScreenPass.js~DotScreenPass.html">DotScreenPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/FilmPass.js~FilmPass.html">FilmPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
@@ -80,9 +81,6 @@
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/SMAAWeightsMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
-
-import areaImage from &quot;./images/smaa/areaImage.js&quot;;
-import searchImage from &quot;./images/smaa/searchImage.js&quot;;
 
 import fragment from &quot;./glsl/smaa-weights/shader.frag&quot;;
 import vertex from &quot;./glsl/smaa-weights/shader.vert&quot;;
@@ -109,13 +107,16 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 			defines: {
 
-				SMAA_MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				SMAA_MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
+				// Configurable settings:
+				MAX_SEARCH_STEPS_INT: &quot;8&quot;,
+				MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
 
-				SMAA_AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
-
-				SMAA_AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
-				SMAA_AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;
+				// Non-configurable settings:
+				AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
+				AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
+				AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;,
+				SEARCHTEX_SIZE: &quot;vec2(66.0, 33.0)&quot;,
+				SEARCHTEX_PACKED_SIZE: &quot;vec2(64.0, 16.0)&quot;
 
 			},
 
@@ -136,21 +137,25 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 		});
 
-		/**
-		 * The area pattern recognition image. Encoded as base64.
-		 *
-		 * @type {String}
-		 */
+	}
 
-		this.areaImage = areaImage;
+	/**
+	 * Sets the maximum amount of steps performed in the horizontal/vertical
+	 * pattern searches, at each side of the pixel.
+	 *
+	 * In number of pixels, it&apos;s actually the double. So the maximum line length
+	 * perfectly handled by, for example 16, is 64 (perfectly means that longer
+	 * lines won&apos;t look as good, but are still antialiased).
+	 *
+	 * @param {Number} steps - The search steps. Range: [0, 112].
+	 */
 
-		/**
-		 * The search image. Encoded as base64.
-		 *
-		 * @type {String}
-		 */
+	setOrthogonalSearchSteps(steps) {
 
-		this.searchImage = searchImage;
+		this.defines.MAX_SEARCH_STEPS_INT = steps.toFixed(&quot;0&quot;);
+		this.defines.MAX_SEARCH_STEPS_FLOAT = steps.toFixed(&quot;1&quot;);
+
+		this.needsUpdate = true;
 
 	}
 

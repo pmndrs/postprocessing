@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/passes/DepthPass.js | API Document</title>
+  <base data-ice="baseUrl" href="../../../../../../">
+  <title data-ice="title">src/materials/images/smaa/utils/SMAASearchImageData.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -39,7 +39,6 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaterial.js~DepthMaterial.html">DepthMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
@@ -52,13 +51,15 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ShockWaveMaterial.js~ShockWaveMaterial.html">ShockWaveMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images/smaa/utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">passes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html">Bokeh2Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DotScreenPass.js~DotScreenPass.html">DotScreenPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/FilmPass.js~FilmPass.html">FilmPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
@@ -78,68 +79,211 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/passes/DepthPass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { DepthMaterial } from &quot;../materials&quot;;
-import { Pass } from &quot;./Pass.js&quot;;
+<div class="content" data-ice="content"><h1 data-ice="title">src/materials/images/smaa/utils/SMAASearchImageData.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { RawImageData } from &quot;../../RawImageData.js&quot;;
 
 /**
- * A depth pass.
+ * This dictionary returns which edges are active for a certain bilinear fetch:
+ * it&apos;s the reverse lookup of the bilinear function.
  *
- * Reads the depth from a depth texture and renders it.
- *
- * This pass requires a {@link EffectComposer#depthTexture}.
+ * @type {Map}
+ * @private
  */
 
-export class DepthPass extends Pass {
+const edges = new Map([
 
-	/**
-	 * Constructs a new depth pass.
-	 *
-	 * @param {PerspectiveCamera} camera - The main camera. Used to obtain the near and far plane settings.
-	 */
+	[bilinear([0, 0, 0, 0]), [0, 0, 0, 0]],
+	[bilinear([0, 0, 0, 1]), [0, 0, 0, 1]],
+	[bilinear([0, 0, 1, 0]), [0, 0, 1, 0]],
+	[bilinear([0, 0, 1, 1]), [0, 0, 1, 1]],
 
-	constructor(camera) {
+	[bilinear([0, 1, 0, 0]), [0, 1, 0, 0]],
+	[bilinear([0, 1, 0, 1]), [0, 1, 0, 1]],
+	[bilinear([0, 1, 1, 0]), [0, 1, 1, 0]],
+	[bilinear([0, 1, 1, 1]), [0, 1, 1, 1]],
 
-		super();
+	[bilinear([1, 0, 0, 0]), [1, 0, 0, 0]],
+	[bilinear([1, 0, 0, 1]), [1, 0, 0, 1]],
+	[bilinear([1, 0, 1, 0]), [1, 0, 1, 0]],
+	[bilinear([1, 0, 1, 1]), [1, 0, 1, 1]],
 
-		/**
-		 * The name of this pass.
-		 */
+	[bilinear([1, 1, 0, 0]), [1, 1, 0, 0]],
+	[bilinear([1, 1, 0, 1]), [1, 1, 0, 1]],
+	[bilinear([1, 1, 1, 0]), [1, 1, 1, 0]],
+	[bilinear([1, 1, 1, 1]), [1, 1, 1, 1]]
 
-		this.name = &quot;DepthPass&quot;;
+]);
 
-		/**
-		 * This pass renders to the write buffer.
-		 */
+/**
+ * Linearly interpolates between two values.
+ *
+ * @private
+ * @param {Number} a - The initial value.
+ * @param {Number} b - The target value.
+ * @param {Number} p - The interpolation value.
+ * @return {Number} The interpolated value.
+ */
 
-		this.needsSwap = true;
+function lerp(a, b, p) {
 
-		/**
-		 * A depth shader material.
-		 *
-		 * @type {DepthMaterial}
-		 * @private
-		 */
+	return a + (b - a) * p;
 
-		this.depthMaterial = new DepthMaterial(camera);
+}
 
-		this.quad.material = this.depthMaterial;
+/**
+ * Calculates the bilinear fetch for a certain edge combination.
+ *
+ *     e[0]       e[1]
+ *
+ *              x &lt;-------- Sample Position: (-0.25, -0.125)
+ *     e[2]       e[3] &lt;--- Current Pixel [3]: (0.0, 0.0)
+ *
+ * @private
+ * @param {Number[]} e - The edge combination.
+ * @return {Number} The interpolated value.
+ */
+
+function bilinear(e) {
+
+	const a = lerp(e[0], e[1], 1.0 - 0.25);
+	const b = lerp(e[2], e[3], 1.0 - 0.25);
+
+	return lerp(a, b, 1.0 - 0.125);
+
+}
+
+/**
+ * Computes the delta distance to add in the last step of searches to the left.
+ *
+ * @private
+ * @param {Number[]} left - The left edge combination.
+ * @param {Number[]} top - The top edge combination.
+ * @return {Number} The left delta distance.
+ */
+
+function deltaLeft(left, top) {
+
+	let d = 0;
+
+	// If there is an edge, continue.
+	if(top[3] === 1) {
+
+		d += 1;
 
 	}
 
+	/* If an edge was previously found, there is another edge and there are no
+	crossing edges, continue. */
+	if(d === 1 &amp;&amp; top[2] === 1 &amp;&amp; left[1] !== 1 &amp;&amp; left[3] !== 1) {
+
+		d += 1;
+
+	}
+
+	return d;
+
+}
+
+/**
+ * Computes the delta distance to add in the last step of searches to the right.
+ *
+ * @private
+ * @param {Number[]} left - The left edge combination.
+ * @param {Number[]} top - The top edge combination.
+ * @return {Number} The right delta distance.
+ */
+
+function deltaRight(left, top) {
+
+	let d = 0;
+
+	// If there is an edge, and no crossing edges, continue.
+	if(top[3] === 1 &amp;&amp; left[1] !== 1 &amp;&amp; left[3] !== 1) {
+
+		d += 1;
+
+	}
+
+	/* If an edge was previously found, there is another edge and there are no
+	crossing edges, continue. */
+	if(d === 1 &amp;&amp; top[2] === 1 &amp;&amp; left[0] !== 1 &amp;&amp; left[2] !== 1) {
+
+		d += 1;
+
+	}
+
+	return d;
+
+}
+
+/**
+ * SMAA search image data.
+ *
+ * This image stores information about how many pixels the line search
+ * algorithm must advance in the last step.
+ *
+ * Based on the official python scripts:
+ *  https://github.com/iryoku/smaa/tree/master/Scripts
+ */
+
+export class SMAASearchImageData {
+
 	/**
-	 * Renders the effect.
+	 * Creates a new search image.
 	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @return {RawImageData} The generated image data.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	static generate() {
 
-		this.depthMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
+		const width = 66;
+		const height = 33;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		const croppedWidth = 64;
+		const croppedHeight = 16;
+
+		const data = new Uint8ClampedArray(width * height);
+		const croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight);
+
+		let x, y;
+		let s, t, i;
+		let e1, e2;
+
+		// Calculate delta distances.
+		for(y = 0; y &lt; height; ++y) {
+
+			for(x = 0; x &lt; width; ++x) {
+
+				s = 0.03125 * x;
+				t = 0.03125 * y;
+
+				if(edges.has(s) &amp;&amp; edges.has(t)) {
+
+					e1 = edges.get(s);
+					e2 = edges.get(t);
+
+					// Maximize the dynamic range to help the compression.
+					data[y * width + x] = (127 * deltaLeft(e1, e2));
+					data[y * width + x + (width / 2)] = (127 * deltaRight(e1, e2));
+
+				}
+
+			}
+
+		}
+
+		// Crop the result to powers-of-two to make it BC4-friendly.
+		for(i = 0, y = height - croppedHeight; y &lt; height; ++y) {
+
+			for(x = 0; x &lt; croppedWidth; ++x, ++i) {
+
+				croppedData[i] = data[y * width + x];
+
+			}
+
+		}
+
+		return new RawImageData(croppedWidth, croppedHeight, croppedData, 1);
 
 	}
 

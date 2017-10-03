@@ -1298,12 +1298,472 @@
                   }
                 }
               ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\r\n\t * Sets the edge detection sensitivity.\r\n\t *\r\n\t * A lower value results in more edges being detected at the expense of\r\n\t * performance. \r\n\t *\r\n\t * 0.1 is a reasonable value, and allows to catch most visible edges.\r\n\t * 0.05 is a rather overkill value, that allows to catch 'em all.\r\n\t *\r\n\t * If temporal supersampling is used, 0.2 could be a reasonable value,\r\n\t * as low contrast edges are properly filtered by just 2x.\r\n\t *\r\n\t * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].\r\n\t ",
+                  "range": [
+                    865,
+                    1385
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 49,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 62,
+                      "column": 4
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "setEdgeDetectionThreshold",
+                "range": [
+                  1390,
+                  1415
+                ],
+                "loc": {
+                  "start": {
+                    "line": 64,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 64,
+                    "column": 26
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "threshold",
+                    "range": [
+                      1416,
+                      1425
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 64,
+                        "column": 27
+                      },
+                      "end": {
+                        "line": 64,
+                        "column": 36
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "MemberExpression",
+                            "computed": false,
+                            "object": {
+                              "type": "ThisExpression",
+                              "range": [
+                                1434,
+                                1438
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 66,
+                                  "column": 2
+                                },
+                                "end": {
+                                  "line": 66,
+                                  "column": 6
+                                }
+                              }
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "defines",
+                              "range": [
+                                1439,
+                                1446
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 66,
+                                  "column": 7
+                                },
+                                "end": {
+                                  "line": 66,
+                                  "column": 14
+                                }
+                              }
+                            },
+                            "range": [
+                              1434,
+                              1446
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 2
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 14
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "EDGE_THRESHOLD",
+                            "range": [
+                              1447,
+                              1461
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 15
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 29
+                              }
+                            }
+                          },
+                          "range": [
+                            1434,
+                            1461
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 2
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 29
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "CallExpression",
+                          "callee": {
+                            "type": "MemberExpression",
+                            "computed": false,
+                            "object": {
+                              "type": "Identifier",
+                              "name": "threshold",
+                              "range": [
+                                1464,
+                                1473
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 66,
+                                  "column": 32
+                                },
+                                "end": {
+                                  "line": 66,
+                                  "column": 41
+                                }
+                              }
+                            },
+                            "property": {
+                              "type": "Identifier",
+                              "name": "toFixed",
+                              "range": [
+                                1474,
+                                1481
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 66,
+                                  "column": 42
+                                },
+                                "end": {
+                                  "line": 66,
+                                  "column": 49
+                                }
+                              }
+                            },
+                            "range": [
+                              1464,
+                              1481
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 66,
+                                "column": 32
+                              },
+                              "end": {
+                                "line": 66,
+                                "column": 49
+                              }
+                            }
+                          },
+                          "arguments": [
+                            {
+                              "type": "Literal",
+                              "value": "2",
+                              "raw": "\"2\"",
+                              "range": [
+                                1482,
+                                1485
+                              ],
+                              "loc": {
+                                "start": {
+                                  "line": 66,
+                                  "column": 50
+                                },
+                                "end": {
+                                  "line": 66,
+                                  "column": 53
+                                }
+                              }
+                            }
+                          ],
+                          "range": [
+                            1464,
+                            1486
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 66,
+                              "column": 32
+                            },
+                            "end": {
+                              "line": 66,
+                              "column": 54
+                            }
+                          }
+                        },
+                        "range": [
+                          1434,
+                          1486
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 66,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 66,
+                            "column": 54
+                          }
+                        }
+                      },
+                      "range": [
+                        1434,
+                        1487
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 66,
+                          "column": 2
+                        },
+                        "end": {
+                          "line": 66,
+                          "column": 55
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              1493,
+                              1497
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 68,
+                                "column": 2
+                              },
+                              "end": {
+                                "line": 68,
+                                "column": 6
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "needsUpdate",
+                            "range": [
+                              1498,
+                              1509
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 68,
+                                "column": 7
+                              },
+                              "end": {
+                                "line": 68,
+                                "column": 18
+                              }
+                            }
+                          },
+                          "range": [
+                            1493,
+                            1509
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 68,
+                              "column": 2
+                            },
+                            "end": {
+                              "line": 68,
+                              "column": 18
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Literal",
+                          "value": true,
+                          "raw": "true",
+                          "range": [
+                            1512,
+                            1516
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 68,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 68,
+                              "column": 25
+                            }
+                          }
+                        },
+                        "range": [
+                          1493,
+                          1516
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 68,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 68,
+                            "column": 25
+                          }
+                        }
+                      },
+                      "range": [
+                        1493,
+                        1517
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 68,
+                          "column": 2
+                        },
+                        "end": {
+                          "line": 68,
+                          "column": 26
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1427,
+                    1523
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 64,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 70,
+                      "column": 2
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1415,
+                  1523
+                ],
+                "loc": {
+                  "start": {
+                    "line": 64,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 70,
+                    "column": 2
+                  }
+                }
+              },
+              "kind": "method",
+              "computed": false,
+              "range": [
+                1390,
+                1523
+              ],
+              "loc": {
+                "start": {
+                  "line": 64,
+                  "column": 1
+                },
+                "end": {
+                  "line": 70,
+                  "column": 2
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\r\n\t * Sets the edge detection sensitivity.\r\n\t *\r\n\t * A lower value results in more edges being detected at the expense of\r\n\t * performance. \r\n\t *\r\n\t * 0.1 is a reasonable value, and allows to catch most visible edges.\r\n\t * 0.05 is a rather overkill value, that allows to catch 'em all.\r\n\t *\r\n\t * If temporal supersampling is used, 0.2 could be a reasonable value,\r\n\t * as low contrast edges are properly filtered by just 2x.\r\n\t *\r\n\t * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].\r\n\t ",
+                  "range": [
+                    865,
+                    1385
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 49,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 62,
+                      "column": 4
+                    }
+                  }
+                }
+              ],
               "static": false
             }
           ],
           "range": [
             351,
-            865
+            1528
           ],
           "loc": {
             "start": {
@@ -1311,14 +1771,14 @@
               "column": 59
             },
             "end": {
-              "line": 49,
+              "line": 72,
               "column": 1
             }
           }
         },
         "range": [
           299,
-          865
+          1528
         ],
         "loc": {
           "start": {
@@ -1326,7 +1786,7 @@
             "column": 7
           },
           "end": {
-            "line": 49,
+            "line": 72,
             "column": 1
           }
         },
@@ -1356,7 +1816,7 @@
       "source": null,
       "range": [
         292,
-        865
+        1528
       ],
       "loc": {
         "start": {
@@ -1364,7 +1824,7 @@
           "column": 0
         },
         "end": {
-          "line": 49,
+          "line": 72,
           "column": 1
         }
       },
@@ -1393,7 +1853,7 @@
   "sourceType": "module",
   "range": [
     0,
-    865
+    1528
   ],
   "loc": {
     "start": {
@@ -1401,7 +1861,7 @@
       "column": 0
     },
     "end": {
-      "line": 49,
+      "line": 72,
       "column": 1
     }
   },
@@ -1438,6 +1898,24 @@
         },
         "end": {
           "line": 18,
+          "column": 4
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\r\n\t * Sets the edge detection sensitivity.\r\n\t *\r\n\t * A lower value results in more edges being detected at the expense of\r\n\t * performance. \r\n\t *\r\n\t * 0.1 is a reasonable value, and allows to catch most visible edges.\r\n\t * 0.05 is a rather overkill value, that allows to catch 'em all.\r\n\t *\r\n\t * If temporal supersampling is used, 0.2 could be a reasonable value,\r\n\t * as low contrast edges are properly filtered by just 2x.\r\n\t *\r\n\t * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].\r\n\t ",
+      "range": [
+        865,
+        1385
+      ],
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 1
+        },
+        "end": {
+          "line": 62,
           "column": 4
         }
       }

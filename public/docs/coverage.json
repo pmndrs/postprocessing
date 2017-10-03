@@ -1,7 +1,7 @@
 {
-  "coverage": "100%",
-  "expectCount": 239,
-  "actualCount": 239,
+  "coverage": "99.18%",
+  "expectCount": 246,
+  "actualCount": 244,
   "files": {
     "src/materials/AdaptiveLuminosityMaterial.js": {
       "expectCount": 2,
@@ -61,16 +61,6 @@
     "src/materials/CopyMaterial.js": {
       "expectCount": 2,
       "actualCount": 2,
-      "undocumentLines": []
-    },
-    "src/materials/DepthMaterial.js": {
-      "expectCount": 3,
-      "actualCount": 3,
-      "undocumentLines": []
-    },
-    "src/passes/DepthPass.js": {
-      "expectCount": 5,
-      "actualCount": 5,
       "undocumentLines": []
     },
     "src/materials/DotScreenMaterial.js": {
@@ -143,9 +133,19 @@
       "actualCount": 8,
       "undocumentLines": []
     },
+    "src/materials/images/RawImageData.js": {
+      "expectCount": 7,
+      "actualCount": 7,
+      "undocumentLines": []
+    },
     "src/passes/RenderPass.js": {
       "expectCount": 8,
       "actualCount": 8,
+      "undocumentLines": []
+    },
+    "src/materials/images/smaa/utils/SMAAAreaImageData.js": {
+      "expectCount": 2,
+      "actualCount": 2,
       "undocumentLines": []
     },
     "src/materials/SMAABlendMaterial.js": {
@@ -154,19 +154,28 @@
       "undocumentLines": []
     },
     "src/materials/SMAAColorEdgesMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        68
+      ]
+    },
+    "src/passes/SMAAPass.js": {
+      "expectCount": 8,
+      "actualCount": 8,
+      "undocumentLines": []
+    },
+    "src/materials/images/smaa/utils/SMAASearchImageData.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
-    "src/passes/SMAAPass.js": {
-      "expectCount": 6,
-      "actualCount": 6,
-      "undocumentLines": []
-    },
     "src/materials/SMAAWeightsMaterial.js": {
       "expectCount": 4,
-      "actualCount": 4,
-      "undocumentLines": []
+      "actualCount": 3,
+      "undocumentLines": [
+        76
+      ]
     },
     "src/passes/SavePass.js": {
       "expectCount": 8,
