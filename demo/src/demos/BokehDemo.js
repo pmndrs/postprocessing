@@ -3,9 +3,9 @@ import {
 	CubeTextureLoader,
 	DirectionalLight,
 	Mesh,
-	MeshBasicMaterial,
+	MeshPhongMaterial,
 	OrbitControls,
-	SphereBufferGeometry
+	CylinderBufferGeometry
 } from "three";
 
 import { BokehPass, RenderPass } from "../../../src";
@@ -101,14 +101,16 @@ export class BokehDemo extends Demo {
 
 		this.controls = new OrbitControls(camera, composer.renderer.domElement);
 		this.controls.enablePan = false;
-		this.controls.minDistance = 2.5;
+		this.controls.minDistance = 12;
 		this.controls.maxDistance = 40;
+		this.controls.zoomSpeed = 0.2;
+		this.controls.rotateSpeed = 0.2;
 
 		// Camera.
 
-		camera.near = 0.01;
+		camera.near = 1;
 		camera.far = 50;
-		camera.position.set(3, 1, 3);
+		camera.position.set(12.5, -0.3, 1.7);
 		camera.lookAt(this.controls.target);
 
 		// Sky.
@@ -117,7 +119,7 @@ export class BokehDemo extends Demo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
+		const ambientLight = new AmbientLight(0x404040);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
 		directionalLight.position.set(-1, 1, 1);
@@ -128,13 +130,15 @@ export class BokehDemo extends Demo {
 
 		// Objects.
 
-		const geometry = new SphereBufferGeometry(1, 64, 64);
-		const material = new MeshBasicMaterial({
-			color: 0xffff00,
+		const geometry = new CylinderBufferGeometry(1, 1, 20, 6);
+		const material = new MeshPhongMaterial({
+			color: 0xffaaaa,
+			flatShading: true,
 			envMap: assets.get("sky")
 		});
 
 		const mesh = new Mesh(geometry, material);
+		mesh.rotation.set(0, 0, Math.PI / 2);
 		scene.add(mesh);
 
 		// Passes.
@@ -142,8 +146,9 @@ export class BokehDemo extends Demo {
 		composer.addPass(new RenderPass(scene, camera));
 
 		const pass = new BokehPass(camera, {
-			focus: 0.36,
-			aperture: 0.007,
+			focus: 0.32,
+			dof: 0.02,
+			aperture: 0.015,
 			maxBlur: 0.025
 		});
 
@@ -165,11 +170,13 @@ export class BokehDemo extends Demo {
 
 		const params = {
 			"focus": pass.bokehMaterial.uniforms.focus.value,
+			"dof": pass.bokehMaterial.uniforms.dof.value,
 			"aperture": pass.bokehMaterial.uniforms.aperture.value,
 			"blur": pass.bokehMaterial.uniforms.maxBlur.value
 		};
 
 		gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params.focus; });
+		gui.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.dof.value = params.dof; });
 		gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params.aperture; });
 		gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params.blur; });
 
