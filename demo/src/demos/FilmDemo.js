@@ -173,18 +173,18 @@ export class FilmDemo extends Demo {
 
 		const pass = new FilmPass({
 			grayscale: false,
-			sepia: false,
-			vignette: false,
-			eskil: false,
+			sepia: true,
+			vignette: true,
+			eskil: true,
 			scanlines: true,
 			noise: true,
 			noiseIntensity: 0.5,
 			scanlineIntensity: 0.5,
 			scanlineDensity: 1.5,
 			greyscaleIntensity: 1.0,
-			sepiaIntensity: 1.0,
-			vignetteOffset: 0.0,
-			vignetteDarkness: 0.5
+			sepiaIntensity: 0.5,
+			vignetteOffset: 1.0,
+			vignetteDarkness: 1.0
 		});
 
 		pass.renderToScreen = true;
