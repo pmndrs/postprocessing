@@ -137,7 +137,7 @@ export class ShockWaveDemo extends Demo {
 		composer.addPass(new RenderPass(scene, camera));
 
 		const pass = new ShockWavePass(camera, mesh.position, {
-			speed: 2.0,
+			speed: 1.0,
 			maxRadius: 0.5,
 			waveSize: 0.2,
 			amplitude: 0.05
