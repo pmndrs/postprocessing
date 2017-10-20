@@ -178,8 +178,8 @@ export class SMAADemo extends Demo {
 			image = new Image();
 			image.addEventListener("load", function() {
 
-				loadingManager.itemEnd("smaa-search");
 				assets.set("smaa-search", this);
+				loadingManager.itemEnd("smaa-search");
 
 			});
 
@@ -189,8 +189,8 @@ export class SMAADemo extends Demo {
 			image = new Image();
 			image.addEventListener("load", function() {
 
-				loadingManager.itemEnd("smaa-area");
 				assets.set("smaa-area", this);
+				loadingManager.itemEnd("smaa-area");
 
 			});
 
