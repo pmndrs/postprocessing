@@ -56,7 +56,7 @@ export class RawImageData {
 	 *
 	 * @param {Number} [width=0] - The width of the image.
 	 * @param {Number} [height=0] - The height of the image.
-	 * @param {Uiint8ClampedArray} [data=null] - The image data.
+	 * @param {Uint8ClampedArray} [data=null] - The image data.
 	 * @param {Number} [channels=4] - The amount of color channels used per pixel. Range [1, 4].
 	 */
 
@@ -83,7 +83,7 @@ export class RawImageData {
 		/**
 		 * The image data.
 		 *
-		 * @type {Uiint8ClampedArray}
+		 * @type {Uint8ClampedArray}
 		 * @default null
 		 */
 
