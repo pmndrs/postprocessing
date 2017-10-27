@@ -19,7 +19,6 @@ import { Pass } from "./Pass.js";
  * Rounds the given number up to the next power of two.
  *
  * @private
- * @static
  * @param {Number} n - A number.
  * @return {Number} The next power of two.
  */
