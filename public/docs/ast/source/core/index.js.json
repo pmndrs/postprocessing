@@ -1,142 +1,149 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "EffectComposer",
-            "range": [
-              78,
-              92
-            ],
-            "loc": {
-              "start": {
-                "line": 7,
-                "column": 9
-              },
-              "end": {
-                "line": 7,
-                "column": 23
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "EffectComposer",
-            "range": [
-              78,
-              92
-            ],
-            "loc": {
-              "start": {
-                "line": 7,
-                "column": 9
-              },
-              "end": {
-                "line": 7,
-                "column": 23
-              }
-            }
-          },
-          "range": [
-            78,
-            92
-          ],
-          "loc": {
-            "start": {
-              "line": 7,
-              "column": 9
-            },
-            "end": {
-              "line": 7,
-              "column": 23
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "./EffectComposer.js",
-        "raw": "\"./EffectComposer.js\"",
-        "range": [
-          100,
-          121
-        ],
-        "loc": {
-          "start": {
-            "line": 7,
-            "column": 31
-          },
-          "end": {
-            "line": 7,
-            "column": 52
-          }
-        }
-      },
-      "range": [
-        69,
-        122
-      ],
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 0
-        },
-        "end": {
-          "line": 7,
-          "column": 53
-        }
-      },
-      "leadingComments": [
-        {
-          "type": "Block",
-          "value": "*\r\n * Core components.\r\n *\r\n * @module postprocessing/core\r\n ",
-          "range": [
-            0,
-            65
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 5,
-              "column": 3
-            }
-          }
-        }
-      ]
-    }
-  ],
-  "sourceType": "module",
-  "range": [
-    69,
-    122
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 124,
   "loc": {
     "start": {
-      "line": 7,
+      "line": 1,
       "column": 0
     },
     "end": {
-      "line": 7,
-      "column": 53
+      "line": 8,
+      "column": 0
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 124,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 8,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 69,
+        "end": 122,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 53
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 78,
+            "end": 92,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 9
+              },
+              "end": {
+                "line": 7,
+                "column": 23
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 78,
+              "end": 92,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 9
+                },
+                "end": {
+                  "line": 7,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer",
+              "leadingComments": null
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 78,
+              "end": 92,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 9
+                },
+                "end": {
+                  "line": 7,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer"
+            },
+            "leadingComments": null
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 100,
+          "end": 121,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 31
+            },
+            "end": {
+              "line": 7,
+              "column": 52
+            }
+          },
+          "extra": {
+            "rawValue": "./EffectComposer.js",
+            "raw": "\"./EffectComposer.js\""
+          },
+          "value": "./EffectComposer.js"
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\r\n * Core components.\r\n *\r\n * @module postprocessing/core\r\n ",
+            "start": 0,
+            "end": 65,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 3
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
   },
   "comments": [
     {
-      "type": "Block",
+      "type": "CommentBlock",
       "value": "*\r\n * Core components.\r\n *\r\n * @module postprocessing/core\r\n ",
-      "range": [
-        0,
-        65
-      ],
+      "start": 0,
+      "end": 65,
       "loc": {
         "start": {
           "line": 1,
@@ -145,6 +152,233 @@
         "end": {
           "line": 5,
           "column": 3
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\r\n * Core components.\r\n *\r\n * @module postprocessing/core\r\n ",
+      "start": 0,
+      "end": 65,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 69,
+      "end": 75,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 76,
+      "end": 77,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 7
+        },
+        "end": {
+          "line": 7,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "EffectComposer",
+      "start": 78,
+      "end": 92,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 9
+        },
+        "end": {
+          "line": 7,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 93,
+      "end": 94,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 24
+        },
+        "end": {
+          "line": 7,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 95,
+      "end": 99,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 26
+        },
+        "end": {
+          "line": 7,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./EffectComposer.js",
+      "start": 100,
+      "end": 121,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 31
+        },
+        "end": {
+          "line": 7,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 121,
+      "end": 122,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 52
+        },
+        "end": {
+          "line": 7,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 124,
+      "end": 124,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 0
         }
       }
     }

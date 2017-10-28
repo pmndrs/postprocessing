@@ -1,2485 +1,2321 @@
 {
-  "type": "Program",
-  "body": [
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "EffectComposer",
-            "range": [
-              92,
-              106
-            ],
-            "loc": {
-              "start": {
-                "line": 7,
-                "column": 9
-              },
-              "end": {
-                "line": 7,
-                "column": 23
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "EffectComposer",
-            "range": [
-              92,
-              106
-            ],
-            "loc": {
-              "start": {
-                "line": 7,
-                "column": 9
-              },
-              "end": {
-                "line": 7,
-                "column": 23
-              }
-            }
-          },
-          "range": [
-            92,
-            106
-          ],
-          "loc": {
-            "start": {
-              "line": 7,
-              "column": 9
-            },
-            "end": {
-              "line": 7,
-              "column": 23
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "./core",
-        "raw": "\"./core\"",
-        "range": [
-          114,
-          122
-        ],
-        "loc": {
-          "start": {
-            "line": 7,
-            "column": 31
-          },
-          "end": {
-            "line": 7,
-            "column": 39
-          }
-        }
-      },
-      "range": [
-        83,
-        123
-      ],
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 0
-        },
-        "end": {
-          "line": 7,
-          "column": 40
-        }
-      },
-      "leadingComments": [
-        {
-          "type": "Block",
-          "value": "*\r\n * Exposure of the library components.\r\n *\r\n * @module postprocessing\r\n ",
-          "range": [
-            0,
-            79
-          ],
-          "loc": {
-            "start": {
-              "line": 1,
-              "column": 0
-            },
-            "end": {
-              "line": 5,
-              "column": 3
-            }
-          }
-        }
-      ]
-    },
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "BloomPass",
-            "range": [
-              138,
-              147
-            ],
-            "loc": {
-              "start": {
-                "line": 10,
-                "column": 1
-              },
-              "end": {
-                "line": 10,
-                "column": 10
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "BloomPass",
-            "range": [
-              138,
-              147
-            ],
-            "loc": {
-              "start": {
-                "line": 10,
-                "column": 1
-              },
-              "end": {
-                "line": 10,
-                "column": 10
-              }
-            }
-          },
-          "range": [
-            138,
-            147
-          ],
-          "loc": {
-            "start": {
-              "line": 10,
-              "column": 1
-            },
-            "end": {
-              "line": 10,
-              "column": 10
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "BlurPass",
-            "range": [
-              151,
-              159
-            ],
-            "loc": {
-              "start": {
-                "line": 11,
-                "column": 1
-              },
-              "end": {
-                "line": 11,
-                "column": 9
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "BlurPass",
-            "range": [
-              151,
-              159
-            ],
-            "loc": {
-              "start": {
-                "line": 11,
-                "column": 1
-              },
-              "end": {
-                "line": 11,
-                "column": 9
-              }
-            }
-          },
-          "range": [
-            151,
-            159
-          ],
-          "loc": {
-            "start": {
-              "line": 11,
-              "column": 1
-            },
-            "end": {
-              "line": 11,
-              "column": 9
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "BokehPass",
-            "range": [
-              163,
-              172
-            ],
-            "loc": {
-              "start": {
-                "line": 12,
-                "column": 1
-              },
-              "end": {
-                "line": 12,
-                "column": 10
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "BokehPass",
-            "range": [
-              163,
-              172
-            ],
-            "loc": {
-              "start": {
-                "line": 12,
-                "column": 1
-              },
-              "end": {
-                "line": 12,
-                "column": 10
-              }
-            }
-          },
-          "range": [
-            163,
-            172
-          ],
-          "loc": {
-            "start": {
-              "line": 12,
-              "column": 1
-            },
-            "end": {
-              "line": 12,
-              "column": 10
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "Bokeh2Pass",
-            "range": [
-              176,
-              186
-            ],
-            "loc": {
-              "start": {
-                "line": 13,
-                "column": 1
-              },
-              "end": {
-                "line": 13,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "Bokeh2Pass",
-            "range": [
-              176,
-              186
-            ],
-            "loc": {
-              "start": {
-                "line": 13,
-                "column": 1
-              },
-              "end": {
-                "line": 13,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            176,
-            186
-          ],
-          "loc": {
-            "start": {
-              "line": 13,
-              "column": 1
-            },
-            "end": {
-              "line": 13,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ClearPass",
-            "range": [
-              190,
-              199
-            ],
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 1
-              },
-              "end": {
-                "line": 14,
-                "column": 10
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ClearPass",
-            "range": [
-              190,
-              199
-            ],
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 1
-              },
-              "end": {
-                "line": 14,
-                "column": 10
-              }
-            }
-          },
-          "range": [
-            190,
-            199
-          ],
-          "loc": {
-            "start": {
-              "line": 14,
-              "column": 1
-            },
-            "end": {
-              "line": 14,
-              "column": 10
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ClearMaskPass",
-            "range": [
-              203,
-              216
-            ],
-            "loc": {
-              "start": {
-                "line": 15,
-                "column": 1
-              },
-              "end": {
-                "line": 15,
-                "column": 14
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ClearMaskPass",
-            "range": [
-              203,
-              216
-            ],
-            "loc": {
-              "start": {
-                "line": 15,
-                "column": 1
-              },
-              "end": {
-                "line": 15,
-                "column": 14
-              }
-            }
-          },
-          "range": [
-            203,
-            216
-          ],
-          "loc": {
-            "start": {
-              "line": 15,
-              "column": 1
-            },
-            "end": {
-              "line": 15,
-              "column": 14
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "DotScreenPass",
-            "range": [
-              220,
-              233
-            ],
-            "loc": {
-              "start": {
-                "line": 16,
-                "column": 1
-              },
-              "end": {
-                "line": 16,
-                "column": 14
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "DotScreenPass",
-            "range": [
-              220,
-              233
-            ],
-            "loc": {
-              "start": {
-                "line": 16,
-                "column": 1
-              },
-              "end": {
-                "line": 16,
-                "column": 14
-              }
-            }
-          },
-          "range": [
-            220,
-            233
-          ],
-          "loc": {
-            "start": {
-              "line": 16,
-              "column": 1
-            },
-            "end": {
-              "line": 16,
-              "column": 14
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "FilmPass",
-            "range": [
-              237,
-              245
-            ],
-            "loc": {
-              "start": {
-                "line": 17,
-                "column": 1
-              },
-              "end": {
-                "line": 17,
-                "column": 9
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "FilmPass",
-            "range": [
-              237,
-              245
-            ],
-            "loc": {
-              "start": {
-                "line": 17,
-                "column": 1
-              },
-              "end": {
-                "line": 17,
-                "column": 9
-              }
-            }
-          },
-          "range": [
-            237,
-            245
-          ],
-          "loc": {
-            "start": {
-              "line": 17,
-              "column": 1
-            },
-            "end": {
-              "line": 17,
-              "column": 9
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "GlitchMode",
-            "range": [
-              249,
-              259
-            ],
-            "loc": {
-              "start": {
-                "line": 18,
-                "column": 1
-              },
-              "end": {
-                "line": 18,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "GlitchMode",
-            "range": [
-              249,
-              259
-            ],
-            "loc": {
-              "start": {
-                "line": 18,
-                "column": 1
-              },
-              "end": {
-                "line": 18,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            249,
-            259
-          ],
-          "loc": {
-            "start": {
-              "line": 18,
-              "column": 1
-            },
-            "end": {
-              "line": 18,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "GlitchPass",
-            "range": [
-              263,
-              273
-            ],
-            "loc": {
-              "start": {
-                "line": 19,
-                "column": 1
-              },
-              "end": {
-                "line": 19,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "GlitchPass",
-            "range": [
-              263,
-              273
-            ],
-            "loc": {
-              "start": {
-                "line": 19,
-                "column": 1
-              },
-              "end": {
-                "line": 19,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            263,
-            273
-          ],
-          "loc": {
-            "start": {
-              "line": 19,
-              "column": 1
-            },
-            "end": {
-              "line": 19,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "GodRaysPass",
-            "range": [
-              277,
-              288
-            ],
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 1
-              },
-              "end": {
-                "line": 20,
-                "column": 12
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "GodRaysPass",
-            "range": [
-              277,
-              288
-            ],
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 1
-              },
-              "end": {
-                "line": 20,
-                "column": 12
-              }
-            }
-          },
-          "range": [
-            277,
-            288
-          ],
-          "loc": {
-            "start": {
-              "line": 20,
-              "column": 1
-            },
-            "end": {
-              "line": 20,
-              "column": 12
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "MaskPass",
-            "range": [
-              292,
-              300
-            ],
-            "loc": {
-              "start": {
-                "line": 21,
-                "column": 1
-              },
-              "end": {
-                "line": 21,
-                "column": 9
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "MaskPass",
-            "range": [
-              292,
-              300
-            ],
-            "loc": {
-              "start": {
-                "line": 21,
-                "column": 1
-              },
-              "end": {
-                "line": 21,
-                "column": 9
-              }
-            }
-          },
-          "range": [
-            292,
-            300
-          ],
-          "loc": {
-            "start": {
-              "line": 21,
-              "column": 1
-            },
-            "end": {
-              "line": 21,
-              "column": 9
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "Pass",
-            "range": [
-              304,
-              308
-            ],
-            "loc": {
-              "start": {
-                "line": 22,
-                "column": 1
-              },
-              "end": {
-                "line": 22,
-                "column": 5
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "Pass",
-            "range": [
-              304,
-              308
-            ],
-            "loc": {
-              "start": {
-                "line": 22,
-                "column": 1
-              },
-              "end": {
-                "line": 22,
-                "column": 5
-              }
-            }
-          },
-          "range": [
-            304,
-            308
-          ],
-          "loc": {
-            "start": {
-              "line": 22,
-              "column": 1
-            },
-            "end": {
-              "line": 22,
-              "column": 5
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "PixelationPass",
-            "range": [
-              312,
-              326
-            ],
-            "loc": {
-              "start": {
-                "line": 23,
-                "column": 1
-              },
-              "end": {
-                "line": 23,
-                "column": 15
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "PixelationPass",
-            "range": [
-              312,
-              326
-            ],
-            "loc": {
-              "start": {
-                "line": 23,
-                "column": 1
-              },
-              "end": {
-                "line": 23,
-                "column": 15
-              }
-            }
-          },
-          "range": [
-            312,
-            326
-          ],
-          "loc": {
-            "start": {
-              "line": 23,
-              "column": 1
-            },
-            "end": {
-              "line": 23,
-              "column": 15
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "RenderPass",
-            "range": [
-              330,
-              340
-            ],
-            "loc": {
-              "start": {
-                "line": 24,
-                "column": 1
-              },
-              "end": {
-                "line": 24,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "RenderPass",
-            "range": [
-              330,
-              340
-            ],
-            "loc": {
-              "start": {
-                "line": 24,
-                "column": 1
-              },
-              "end": {
-                "line": 24,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            330,
-            340
-          ],
-          "loc": {
-            "start": {
-              "line": 24,
-              "column": 1
-            },
-            "end": {
-              "line": 24,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SavePass",
-            "range": [
-              344,
-              352
-            ],
-            "loc": {
-              "start": {
-                "line": 25,
-                "column": 1
-              },
-              "end": {
-                "line": 25,
-                "column": 9
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SavePass",
-            "range": [
-              344,
-              352
-            ],
-            "loc": {
-              "start": {
-                "line": 25,
-                "column": 1
-              },
-              "end": {
-                "line": 25,
-                "column": 9
-              }
-            }
-          },
-          "range": [
-            344,
-            352
-          ],
-          "loc": {
-            "start": {
-              "line": 25,
-              "column": 1
-            },
-            "end": {
-              "line": 25,
-              "column": 9
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ShaderPass",
-            "range": [
-              356,
-              366
-            ],
-            "loc": {
-              "start": {
-                "line": 26,
-                "column": 1
-              },
-              "end": {
-                "line": 26,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ShaderPass",
-            "range": [
-              356,
-              366
-            ],
-            "loc": {
-              "start": {
-                "line": 26,
-                "column": 1
-              },
-              "end": {
-                "line": 26,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            356,
-            366
-          ],
-          "loc": {
-            "start": {
-              "line": 26,
-              "column": 1
-            },
-            "end": {
-              "line": 26,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ShockWavePass",
-            "range": [
-              370,
-              383
-            ],
-            "loc": {
-              "start": {
-                "line": 27,
-                "column": 1
-              },
-              "end": {
-                "line": 27,
-                "column": 14
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ShockWavePass",
-            "range": [
-              370,
-              383
-            ],
-            "loc": {
-              "start": {
-                "line": 27,
-                "column": 1
-              },
-              "end": {
-                "line": 27,
-                "column": 14
-              }
-            }
-          },
-          "range": [
-            370,
-            383
-          ],
-          "loc": {
-            "start": {
-              "line": 27,
-              "column": 1
-            },
-            "end": {
-              "line": 27,
-              "column": 14
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAAPass",
-            "range": [
-              387,
-              395
-            ],
-            "loc": {
-              "start": {
-                "line": 28,
-                "column": 1
-              },
-              "end": {
-                "line": 28,
-                "column": 9
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAAPass",
-            "range": [
-              387,
-              395
-            ],
-            "loc": {
-              "start": {
-                "line": 28,
-                "column": 1
-              },
-              "end": {
-                "line": 28,
-                "column": 9
-              }
-            }
-          },
-          "range": [
-            387,
-            395
-          ],
-          "loc": {
-            "start": {
-              "line": 28,
-              "column": 1
-            },
-            "end": {
-              "line": 28,
-              "column": 9
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "TexturePass",
-            "range": [
-              399,
-              410
-            ],
-            "loc": {
-              "start": {
-                "line": 29,
-                "column": 1
-              },
-              "end": {
-                "line": 29,
-                "column": 12
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "TexturePass",
-            "range": [
-              399,
-              410
-            ],
-            "loc": {
-              "start": {
-                "line": 29,
-                "column": 1
-              },
-              "end": {
-                "line": 29,
-                "column": 12
-              }
-            }
-          },
-          "range": [
-            399,
-            410
-          ],
-          "loc": {
-            "start": {
-              "line": 29,
-              "column": 1
-            },
-            "end": {
-              "line": 29,
-              "column": 12
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ToneMappingPass",
-            "range": [
-              414,
-              429
-            ],
-            "loc": {
-              "start": {
-                "line": 30,
-                "column": 1
-              },
-              "end": {
-                "line": 30,
-                "column": 16
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ToneMappingPass",
-            "range": [
-              414,
-              429
-            ],
-            "loc": {
-              "start": {
-                "line": 30,
-                "column": 1
-              },
-              "end": {
-                "line": 30,
-                "column": 16
-              }
-            }
-          },
-          "range": [
-            414,
-            429
-          ],
-          "loc": {
-            "start": {
-              "line": 30,
-              "column": 1
-            },
-            "end": {
-              "line": 30,
-              "column": 16
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "./passes",
-        "raw": "\"./passes\"",
-        "range": [
-          438,
-          448
-        ],
-        "loc": {
-          "start": {
-            "line": 31,
-            "column": 7
-          },
-          "end": {
-            "line": 31,
-            "column": 17
-          }
-        }
-      },
-      "range": [
-        127,
-        449
-      ],
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 0
-        },
-        "end": {
-          "line": 31,
-          "column": 18
-        }
-      }
-    },
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "AdaptiveLuminosityMaterial",
-            "range": [
-              464,
-              490
-            ],
-            "loc": {
-              "start": {
-                "line": 34,
-                "column": 1
-              },
-              "end": {
-                "line": 34,
-                "column": 27
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "AdaptiveLuminosityMaterial",
-            "range": [
-              464,
-              490
-            ],
-            "loc": {
-              "start": {
-                "line": 34,
-                "column": 1
-              },
-              "end": {
-                "line": 34,
-                "column": 27
-              }
-            }
-          },
-          "range": [
-            464,
-            490
-          ],
-          "loc": {
-            "start": {
-              "line": 34,
-              "column": 1
-            },
-            "end": {
-              "line": 34,
-              "column": 27
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "BokehMaterial",
-            "range": [
-              494,
-              507
-            ],
-            "loc": {
-              "start": {
-                "line": 35,
-                "column": 1
-              },
-              "end": {
-                "line": 35,
-                "column": 14
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "BokehMaterial",
-            "range": [
-              494,
-              507
-            ],
-            "loc": {
-              "start": {
-                "line": 35,
-                "column": 1
-              },
-              "end": {
-                "line": 35,
-                "column": 14
-              }
-            }
-          },
-          "range": [
-            494,
-            507
-          ],
-          "loc": {
-            "start": {
-              "line": 35,
-              "column": 1
-            },
-            "end": {
-              "line": 35,
-              "column": 14
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "Bokeh2Material",
-            "range": [
-              511,
-              525
-            ],
-            "loc": {
-              "start": {
-                "line": 36,
-                "column": 1
-              },
-              "end": {
-                "line": 36,
-                "column": 15
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "Bokeh2Material",
-            "range": [
-              511,
-              525
-            ],
-            "loc": {
-              "start": {
-                "line": 36,
-                "column": 1
-              },
-              "end": {
-                "line": 36,
-                "column": 15
-              }
-            }
-          },
-          "range": [
-            511,
-            525
-          ],
-          "loc": {
-            "start": {
-              "line": 36,
-              "column": 1
-            },
-            "end": {
-              "line": 36,
-              "column": 15
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "CombineMaterial",
-            "range": [
-              529,
-              544
-            ],
-            "loc": {
-              "start": {
-                "line": 37,
-                "column": 1
-              },
-              "end": {
-                "line": 37,
-                "column": 16
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "CombineMaterial",
-            "range": [
-              529,
-              544
-            ],
-            "loc": {
-              "start": {
-                "line": 37,
-                "column": 1
-              },
-              "end": {
-                "line": 37,
-                "column": 16
-              }
-            }
-          },
-          "range": [
-            529,
-            544
-          ],
-          "loc": {
-            "start": {
-              "line": 37,
-              "column": 1
-            },
-            "end": {
-              "line": 37,
-              "column": 16
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ConvolutionMaterial",
-            "range": [
-              548,
-              567
-            ],
-            "loc": {
-              "start": {
-                "line": 38,
-                "column": 1
-              },
-              "end": {
-                "line": 38,
-                "column": 20
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ConvolutionMaterial",
-            "range": [
-              548,
-              567
-            ],
-            "loc": {
-              "start": {
-                "line": 38,
-                "column": 1
-              },
-              "end": {
-                "line": 38,
-                "column": 20
-              }
-            }
-          },
-          "range": [
-            548,
-            567
-          ],
-          "loc": {
-            "start": {
-              "line": 38,
-              "column": 1
-            },
-            "end": {
-              "line": 38,
-              "column": 20
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "CopyMaterial",
-            "range": [
-              571,
-              583
-            ],
-            "loc": {
-              "start": {
-                "line": 39,
-                "column": 1
-              },
-              "end": {
-                "line": 39,
-                "column": 13
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "CopyMaterial",
-            "range": [
-              571,
-              583
-            ],
-            "loc": {
-              "start": {
-                "line": 39,
-                "column": 1
-              },
-              "end": {
-                "line": 39,
-                "column": 13
-              }
-            }
-          },
-          "range": [
-            571,
-            583
-          ],
-          "loc": {
-            "start": {
-              "line": 39,
-              "column": 1
-            },
-            "end": {
-              "line": 39,
-              "column": 13
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "DotScreenMaterial",
-            "range": [
-              587,
-              604
-            ],
-            "loc": {
-              "start": {
-                "line": 40,
-                "column": 1
-              },
-              "end": {
-                "line": 40,
-                "column": 18
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "DotScreenMaterial",
-            "range": [
-              587,
-              604
-            ],
-            "loc": {
-              "start": {
-                "line": 40,
-                "column": 1
-              },
-              "end": {
-                "line": 40,
-                "column": 18
-              }
-            }
-          },
-          "range": [
-            587,
-            604
-          ],
-          "loc": {
-            "start": {
-              "line": 40,
-              "column": 1
-            },
-            "end": {
-              "line": 40,
-              "column": 18
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "FilmMaterial",
-            "range": [
-              608,
-              620
-            ],
-            "loc": {
-              "start": {
-                "line": 41,
-                "column": 1
-              },
-              "end": {
-                "line": 41,
-                "column": 13
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "FilmMaterial",
-            "range": [
-              608,
-              620
-            ],
-            "loc": {
-              "start": {
-                "line": 41,
-                "column": 1
-              },
-              "end": {
-                "line": 41,
-                "column": 13
-              }
-            }
-          },
-          "range": [
-            608,
-            620
-          ],
-          "loc": {
-            "start": {
-              "line": 41,
-              "column": 1
-            },
-            "end": {
-              "line": 41,
-              "column": 13
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "GlitchMaterial",
-            "range": [
-              624,
-              638
-            ],
-            "loc": {
-              "start": {
-                "line": 42,
-                "column": 1
-              },
-              "end": {
-                "line": 42,
-                "column": 15
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "GlitchMaterial",
-            "range": [
-              624,
-              638
-            ],
-            "loc": {
-              "start": {
-                "line": 42,
-                "column": 1
-              },
-              "end": {
-                "line": 42,
-                "column": 15
-              }
-            }
-          },
-          "range": [
-            624,
-            638
-          ],
-          "loc": {
-            "start": {
-              "line": 42,
-              "column": 1
-            },
-            "end": {
-              "line": 42,
-              "column": 15
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "GodRaysMaterial",
-            "range": [
-              642,
-              657
-            ],
-            "loc": {
-              "start": {
-                "line": 43,
-                "column": 1
-              },
-              "end": {
-                "line": 43,
-                "column": 16
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "GodRaysMaterial",
-            "range": [
-              642,
-              657
-            ],
-            "loc": {
-              "start": {
-                "line": 43,
-                "column": 1
-              },
-              "end": {
-                "line": 43,
-                "column": 16
-              }
-            }
-          },
-          "range": [
-            642,
-            657
-          ],
-          "loc": {
-            "start": {
-              "line": 43,
-              "column": 1
-            },
-            "end": {
-              "line": 43,
-              "column": 16
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "KernelSize",
-            "range": [
-              661,
-              671
-            ],
-            "loc": {
-              "start": {
-                "line": 44,
-                "column": 1
-              },
-              "end": {
-                "line": 44,
-                "column": 11
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "KernelSize",
-            "range": [
-              661,
-              671
-            ],
-            "loc": {
-              "start": {
-                "line": 44,
-                "column": 1
-              },
-              "end": {
-                "line": 44,
-                "column": 11
-              }
-            }
-          },
-          "range": [
-            661,
-            671
-          ],
-          "loc": {
-            "start": {
-              "line": 44,
-              "column": 1
-            },
-            "end": {
-              "line": 44,
-              "column": 11
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "LuminosityMaterial",
-            "range": [
-              675,
-              693
-            ],
-            "loc": {
-              "start": {
-                "line": 45,
-                "column": 1
-              },
-              "end": {
-                "line": 45,
-                "column": 19
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "LuminosityMaterial",
-            "range": [
-              675,
-              693
-            ],
-            "loc": {
-              "start": {
-                "line": 45,
-                "column": 1
-              },
-              "end": {
-                "line": 45,
-                "column": 19
-              }
-            }
-          },
-          "range": [
-            675,
-            693
-          ],
-          "loc": {
-            "start": {
-              "line": 45,
-              "column": 1
-            },
-            "end": {
-              "line": 45,
-              "column": 19
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "PixelationMaterial",
-            "range": [
-              697,
-              715
-            ],
-            "loc": {
-              "start": {
-                "line": 46,
-                "column": 1
-              },
-              "end": {
-                "line": 46,
-                "column": 19
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "PixelationMaterial",
-            "range": [
-              697,
-              715
-            ],
-            "loc": {
-              "start": {
-                "line": 46,
-                "column": 1
-              },
-              "end": {
-                "line": 46,
-                "column": 19
-              }
-            }
-          },
-          "range": [
-            697,
-            715
-          ],
-          "loc": {
-            "start": {
-              "line": 46,
-              "column": 1
-            },
-            "end": {
-              "line": 46,
-              "column": 19
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ShockWaveMaterial",
-            "range": [
-              719,
-              736
-            ],
-            "loc": {
-              "start": {
-                "line": 47,
-                "column": 1
-              },
-              "end": {
-                "line": 47,
-                "column": 18
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ShockWaveMaterial",
-            "range": [
-              719,
-              736
-            ],
-            "loc": {
-              "start": {
-                "line": 47,
-                "column": 1
-              },
-              "end": {
-                "line": 47,
-                "column": 18
-              }
-            }
-          },
-          "range": [
-            719,
-            736
-          ],
-          "loc": {
-            "start": {
-              "line": 47,
-              "column": 1
-            },
-            "end": {
-              "line": 47,
-              "column": 18
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAABlendMaterial",
-            "range": [
-              740,
-              757
-            ],
-            "loc": {
-              "start": {
-                "line": 48,
-                "column": 1
-              },
-              "end": {
-                "line": 48,
-                "column": 18
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAABlendMaterial",
-            "range": [
-              740,
-              757
-            ],
-            "loc": {
-              "start": {
-                "line": 48,
-                "column": 1
-              },
-              "end": {
-                "line": 48,
-                "column": 18
-              }
-            }
-          },
-          "range": [
-            740,
-            757
-          ],
-          "loc": {
-            "start": {
-              "line": 48,
-              "column": 1
-            },
-            "end": {
-              "line": 48,
-              "column": 18
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAAColorEdgesMaterial",
-            "range": [
-              761,
-              783
-            ],
-            "loc": {
-              "start": {
-                "line": 49,
-                "column": 1
-              },
-              "end": {
-                "line": 49,
-                "column": 23
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAAColorEdgesMaterial",
-            "range": [
-              761,
-              783
-            ],
-            "loc": {
-              "start": {
-                "line": 49,
-                "column": 1
-              },
-              "end": {
-                "line": 49,
-                "column": 23
-              }
-            }
-          },
-          "range": [
-            761,
-            783
-          ],
-          "loc": {
-            "start": {
-              "line": 49,
-              "column": 1
-            },
-            "end": {
-              "line": 49,
-              "column": 23
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAAWeightsMaterial",
-            "range": [
-              787,
-              806
-            ],
-            "loc": {
-              "start": {
-                "line": 50,
-                "column": 1
-              },
-              "end": {
-                "line": 50,
-                "column": 20
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAAWeightsMaterial",
-            "range": [
-              787,
-              806
-            ],
-            "loc": {
-              "start": {
-                "line": 50,
-                "column": 1
-              },
-              "end": {
-                "line": 50,
-                "column": 20
-              }
-            }
-          },
-          "range": [
-            787,
-            806
-          ],
-          "loc": {
-            "start": {
-              "line": 50,
-              "column": 1
-            },
-            "end": {
-              "line": 50,
-              "column": 20
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "ToneMappingMaterial",
-            "range": [
-              810,
-              829
-            ],
-            "loc": {
-              "start": {
-                "line": 51,
-                "column": 1
-              },
-              "end": {
-                "line": 51,
-                "column": 20
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "ToneMappingMaterial",
-            "range": [
-              810,
-              829
-            ],
-            "loc": {
-              "start": {
-                "line": 51,
-                "column": 1
-              },
-              "end": {
-                "line": 51,
-                "column": 20
-              }
-            }
-          },
-          "range": [
-            810,
-            829
-          ],
-          "loc": {
-            "start": {
-              "line": 51,
-              "column": 1
-            },
-            "end": {
-              "line": 51,
-              "column": 20
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "./materials",
-        "raw": "\"./materials\"",
-        "range": [
-          838,
-          851
-        ],
-        "loc": {
-          "start": {
-            "line": 52,
-            "column": 7
-          },
-          "end": {
-            "line": 52,
-            "column": 20
-          }
-        }
-      },
-      "range": [
-        453,
-        852
-      ],
-      "loc": {
-        "start": {
-          "line": 33,
-          "column": 0
-        },
-        "end": {
-          "line": 52,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": "ExportNamedDeclaration",
-      "declaration": null,
-      "specifiers": [
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "RawImageData",
-            "range": [
-              867,
-              879
-            ],
-            "loc": {
-              "start": {
-                "line": 55,
-                "column": 1
-              },
-              "end": {
-                "line": 55,
-                "column": 13
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "RawImageData",
-            "range": [
-              867,
-              879
-            ],
-            "loc": {
-              "start": {
-                "line": 55,
-                "column": 1
-              },
-              "end": {
-                "line": 55,
-                "column": 13
-              }
-            }
-          },
-          "range": [
-            867,
-            879
-          ],
-          "loc": {
-            "start": {
-              "line": 55,
-              "column": 1
-            },
-            "end": {
-              "line": 55,
-              "column": 13
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAAAreaImageData",
-            "range": [
-              883,
-              900
-            ],
-            "loc": {
-              "start": {
-                "line": 56,
-                "column": 1
-              },
-              "end": {
-                "line": 56,
-                "column": 18
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAAAreaImageData",
-            "range": [
-              883,
-              900
-            ],
-            "loc": {
-              "start": {
-                "line": 56,
-                "column": 1
-              },
-              "end": {
-                "line": 56,
-                "column": 18
-              }
-            }
-          },
-          "range": [
-            883,
-            900
-          ],
-          "loc": {
-            "start": {
-              "line": 56,
-              "column": 1
-            },
-            "end": {
-              "line": 56,
-              "column": 18
-            }
-          }
-        },
-        {
-          "type": "ExportSpecifier",
-          "exported": {
-            "type": "Identifier",
-            "name": "SMAASearchImageData",
-            "range": [
-              904,
-              923
-            ],
-            "loc": {
-              "start": {
-                "line": 57,
-                "column": 1
-              },
-              "end": {
-                "line": 57,
-                "column": 20
-              }
-            }
-          },
-          "local": {
-            "type": "Identifier",
-            "name": "SMAASearchImageData",
-            "range": [
-              904,
-              923
-            ],
-            "loc": {
-              "start": {
-                "line": 57,
-                "column": 1
-              },
-              "end": {
-                "line": 57,
-                "column": 20
-              }
-            }
-          },
-          "range": [
-            904,
-            923
-          ],
-          "loc": {
-            "start": {
-              "line": 57,
-              "column": 1
-            },
-            "end": {
-              "line": 57,
-              "column": 20
-            }
-          }
-        }
-      ],
-      "source": {
-        "type": "Literal",
-        "value": "./materials/images",
-        "raw": "\"./materials/images\"",
-        "range": [
-          932,
-          952
-        ],
-        "loc": {
-          "start": {
-            "line": 58,
-            "column": 7
-          },
-          "end": {
-            "line": 58,
-            "column": 27
-          }
-        }
-      },
-      "range": [
-        856,
-        953
-      ],
-      "loc": {
-        "start": {
-          "line": 54,
-          "column": 0
-        },
-        "end": {
-          "line": 58,
-          "column": 28
-        }
-      }
-    }
-  ],
-  "sourceType": "module",
-  "range": [
-    83,
-    953
-  ],
+  "type": "File",
+  "start": 0,
+  "end": 955,
   "loc": {
     "start": {
-      "line": 7,
+      "line": 1,
       "column": 0
     },
     "end": {
-      "line": 58,
-      "column": 28
+      "line": 59,
+      "column": 0
     }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 955,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 59,
+        "column": 0
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 83,
+        "end": 123,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 40
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 92,
+            "end": 106,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 9
+              },
+              "end": {
+                "line": 7,
+                "column": 23
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 92,
+              "end": 106,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 9
+                },
+                "end": {
+                  "line": 7,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer",
+              "leadingComments": null
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 92,
+              "end": 106,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 9
+                },
+                "end": {
+                  "line": 7,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer"
+            },
+            "leadingComments": null
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 114,
+          "end": 122,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 31
+            },
+            "end": {
+              "line": 7,
+              "column": 39
+            }
+          },
+          "extra": {
+            "rawValue": "./core",
+            "raw": "\"./core\""
+          },
+          "value": "./core"
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\r\n * Exposure of the library components.\r\n *\r\n * @module postprocessing\r\n ",
+            "start": 0,
+            "end": 79,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 3
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 127,
+        "end": 449,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 31,
+            "column": 18
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 138,
+            "end": 147,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 1
+              },
+              "end": {
+                "line": 10,
+                "column": 10
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 138,
+              "end": 147,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 1
+                },
+                "end": {
+                  "line": 10,
+                  "column": 10
+                },
+                "identifierName": "BloomPass"
+              },
+              "name": "BloomPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 138,
+              "end": 147,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 1
+                },
+                "end": {
+                  "line": 10,
+                  "column": 10
+                },
+                "identifierName": "BloomPass"
+              },
+              "name": "BloomPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 151,
+            "end": 159,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 1
+              },
+              "end": {
+                "line": 11,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 151,
+              "end": 159,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 1
+                },
+                "end": {
+                  "line": 11,
+                  "column": 9
+                },
+                "identifierName": "BlurPass"
+              },
+              "name": "BlurPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 151,
+              "end": 159,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 1
+                },
+                "end": {
+                  "line": 11,
+                  "column": 9
+                },
+                "identifierName": "BlurPass"
+              },
+              "name": "BlurPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 163,
+            "end": 172,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 1
+              },
+              "end": {
+                "line": 12,
+                "column": 10
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 163,
+              "end": 172,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 1
+                },
+                "end": {
+                  "line": 12,
+                  "column": 10
+                },
+                "identifierName": "BokehPass"
+              },
+              "name": "BokehPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 163,
+              "end": 172,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 1
+                },
+                "end": {
+                  "line": 12,
+                  "column": 10
+                },
+                "identifierName": "BokehPass"
+              },
+              "name": "BokehPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 176,
+            "end": 186,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 1
+              },
+              "end": {
+                "line": 13,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 176,
+              "end": 186,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 1
+                },
+                "end": {
+                  "line": 13,
+                  "column": 11
+                },
+                "identifierName": "Bokeh2Pass"
+              },
+              "name": "Bokeh2Pass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 176,
+              "end": 186,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 1
+                },
+                "end": {
+                  "line": 13,
+                  "column": 11
+                },
+                "identifierName": "Bokeh2Pass"
+              },
+              "name": "Bokeh2Pass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 190,
+            "end": 199,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 1
+              },
+              "end": {
+                "line": 14,
+                "column": 10
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 190,
+              "end": 199,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 1
+                },
+                "end": {
+                  "line": 14,
+                  "column": 10
+                },
+                "identifierName": "ClearPass"
+              },
+              "name": "ClearPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 190,
+              "end": 199,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 1
+                },
+                "end": {
+                  "line": 14,
+                  "column": 10
+                },
+                "identifierName": "ClearPass"
+              },
+              "name": "ClearPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 203,
+            "end": 216,
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 1
+              },
+              "end": {
+                "line": 15,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 203,
+              "end": 216,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 1
+                },
+                "end": {
+                  "line": 15,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 203,
+              "end": 216,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 1
+                },
+                "end": {
+                  "line": 15,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 220,
+            "end": 233,
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 1
+              },
+              "end": {
+                "line": 16,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 220,
+              "end": 233,
+              "loc": {
+                "start": {
+                  "line": 16,
+                  "column": 1
+                },
+                "end": {
+                  "line": 16,
+                  "column": 14
+                },
+                "identifierName": "DotScreenPass"
+              },
+              "name": "DotScreenPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 220,
+              "end": 233,
+              "loc": {
+                "start": {
+                  "line": 16,
+                  "column": 1
+                },
+                "end": {
+                  "line": 16,
+                  "column": 14
+                },
+                "identifierName": "DotScreenPass"
+              },
+              "name": "DotScreenPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 237,
+            "end": 245,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 1
+              },
+              "end": {
+                "line": 17,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 237,
+              "end": 245,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 1
+                },
+                "end": {
+                  "line": 17,
+                  "column": 9
+                },
+                "identifierName": "FilmPass"
+              },
+              "name": "FilmPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 237,
+              "end": 245,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 1
+                },
+                "end": {
+                  "line": 17,
+                  "column": 9
+                },
+                "identifierName": "FilmPass"
+              },
+              "name": "FilmPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 249,
+            "end": 259,
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 1
+              },
+              "end": {
+                "line": 18,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 249,
+              "end": 259,
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 1
+                },
+                "end": {
+                  "line": 18,
+                  "column": 11
+                },
+                "identifierName": "GlitchMode"
+              },
+              "name": "GlitchMode"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 249,
+              "end": 259,
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 1
+                },
+                "end": {
+                  "line": 18,
+                  "column": 11
+                },
+                "identifierName": "GlitchMode"
+              },
+              "name": "GlitchMode"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 263,
+            "end": 273,
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 1
+              },
+              "end": {
+                "line": 19,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 263,
+              "end": 273,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 1
+                },
+                "end": {
+                  "line": 19,
+                  "column": 11
+                },
+                "identifierName": "GlitchPass"
+              },
+              "name": "GlitchPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 263,
+              "end": 273,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 1
+                },
+                "end": {
+                  "line": 19,
+                  "column": 11
+                },
+                "identifierName": "GlitchPass"
+              },
+              "name": "GlitchPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 277,
+            "end": 288,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 1
+              },
+              "end": {
+                "line": 20,
+                "column": 12
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 277,
+              "end": 288,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 1
+                },
+                "end": {
+                  "line": 20,
+                  "column": 12
+                },
+                "identifierName": "GodRaysPass"
+              },
+              "name": "GodRaysPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 277,
+              "end": 288,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 1
+                },
+                "end": {
+                  "line": 20,
+                  "column": 12
+                },
+                "identifierName": "GodRaysPass"
+              },
+              "name": "GodRaysPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 292,
+            "end": 300,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 1
+              },
+              "end": {
+                "line": 21,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 292,
+              "end": 300,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 1
+                },
+                "end": {
+                  "line": 21,
+                  "column": 9
+                },
+                "identifierName": "MaskPass"
+              },
+              "name": "MaskPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 292,
+              "end": 300,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 1
+                },
+                "end": {
+                  "line": 21,
+                  "column": 9
+                },
+                "identifierName": "MaskPass"
+              },
+              "name": "MaskPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 304,
+            "end": 308,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 1
+              },
+              "end": {
+                "line": 22,
+                "column": 5
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 304,
+              "end": 308,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 5
+                },
+                "identifierName": "Pass"
+              },
+              "name": "Pass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 304,
+              "end": 308,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 5
+                },
+                "identifierName": "Pass"
+              },
+              "name": "Pass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 312,
+            "end": 326,
+            "loc": {
+              "start": {
+                "line": 23,
+                "column": 1
+              },
+              "end": {
+                "line": 23,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 312,
+              "end": 326,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 1
+                },
+                "end": {
+                  "line": 23,
+                  "column": 15
+                },
+                "identifierName": "PixelationPass"
+              },
+              "name": "PixelationPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 312,
+              "end": 326,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 1
+                },
+                "end": {
+                  "line": 23,
+                  "column": 15
+                },
+                "identifierName": "PixelationPass"
+              },
+              "name": "PixelationPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 330,
+            "end": 340,
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 1
+              },
+              "end": {
+                "line": 24,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 330,
+              "end": 340,
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 1
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                },
+                "identifierName": "RenderPass"
+              },
+              "name": "RenderPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 330,
+              "end": 340,
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 1
+                },
+                "end": {
+                  "line": 24,
+                  "column": 11
+                },
+                "identifierName": "RenderPass"
+              },
+              "name": "RenderPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 344,
+            "end": 352,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 1
+              },
+              "end": {
+                "line": 25,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 344,
+              "end": 352,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 1
+                },
+                "end": {
+                  "line": 25,
+                  "column": 9
+                },
+                "identifierName": "SavePass"
+              },
+              "name": "SavePass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 344,
+              "end": 352,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 1
+                },
+                "end": {
+                  "line": 25,
+                  "column": 9
+                },
+                "identifierName": "SavePass"
+              },
+              "name": "SavePass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 356,
+            "end": 366,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 1
+              },
+              "end": {
+                "line": 26,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 356,
+              "end": 366,
+              "loc": {
+                "start": {
+                  "line": 26,
+                  "column": 1
+                },
+                "end": {
+                  "line": 26,
+                  "column": 11
+                },
+                "identifierName": "ShaderPass"
+              },
+              "name": "ShaderPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 356,
+              "end": 366,
+              "loc": {
+                "start": {
+                  "line": 26,
+                  "column": 1
+                },
+                "end": {
+                  "line": 26,
+                  "column": 11
+                },
+                "identifierName": "ShaderPass"
+              },
+              "name": "ShaderPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 370,
+            "end": 383,
+            "loc": {
+              "start": {
+                "line": 27,
+                "column": 1
+              },
+              "end": {
+                "line": 27,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 370,
+              "end": 383,
+              "loc": {
+                "start": {
+                  "line": 27,
+                  "column": 1
+                },
+                "end": {
+                  "line": 27,
+                  "column": 14
+                },
+                "identifierName": "ShockWavePass"
+              },
+              "name": "ShockWavePass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 370,
+              "end": 383,
+              "loc": {
+                "start": {
+                  "line": 27,
+                  "column": 1
+                },
+                "end": {
+                  "line": 27,
+                  "column": 14
+                },
+                "identifierName": "ShockWavePass"
+              },
+              "name": "ShockWavePass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 387,
+            "end": 395,
+            "loc": {
+              "start": {
+                "line": 28,
+                "column": 1
+              },
+              "end": {
+                "line": 28,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 387,
+              "end": 395,
+              "loc": {
+                "start": {
+                  "line": 28,
+                  "column": 1
+                },
+                "end": {
+                  "line": 28,
+                  "column": 9
+                },
+                "identifierName": "SMAAPass"
+              },
+              "name": "SMAAPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 387,
+              "end": 395,
+              "loc": {
+                "start": {
+                  "line": 28,
+                  "column": 1
+                },
+                "end": {
+                  "line": 28,
+                  "column": 9
+                },
+                "identifierName": "SMAAPass"
+              },
+              "name": "SMAAPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 399,
+            "end": 410,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 1
+              },
+              "end": {
+                "line": 29,
+                "column": 12
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 399,
+              "end": 410,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 1
+                },
+                "end": {
+                  "line": 29,
+                  "column": 12
+                },
+                "identifierName": "TexturePass"
+              },
+              "name": "TexturePass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 399,
+              "end": 410,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 1
+                },
+                "end": {
+                  "line": 29,
+                  "column": 12
+                },
+                "identifierName": "TexturePass"
+              },
+              "name": "TexturePass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 414,
+            "end": 429,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 1
+              },
+              "end": {
+                "line": 30,
+                "column": 16
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 414,
+              "end": 429,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 1
+                },
+                "end": {
+                  "line": 30,
+                  "column": 16
+                },
+                "identifierName": "ToneMappingPass"
+              },
+              "name": "ToneMappingPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 414,
+              "end": 429,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 1
+                },
+                "end": {
+                  "line": 30,
+                  "column": 16
+                },
+                "identifierName": "ToneMappingPass"
+              },
+              "name": "ToneMappingPass"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 438,
+          "end": 448,
+          "loc": {
+            "start": {
+              "line": 31,
+              "column": 7
+            },
+            "end": {
+              "line": 31,
+              "column": 17
+            }
+          },
+          "extra": {
+            "rawValue": "./passes",
+            "raw": "\"./passes\""
+          },
+          "value": "./passes"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 453,
+        "end": 852,
+        "loc": {
+          "start": {
+            "line": 33,
+            "column": 0
+          },
+          "end": {
+            "line": 52,
+            "column": 21
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 464,
+            "end": 490,
+            "loc": {
+              "start": {
+                "line": 34,
+                "column": 1
+              },
+              "end": {
+                "line": 34,
+                "column": 27
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 464,
+              "end": 490,
+              "loc": {
+                "start": {
+                  "line": 34,
+                  "column": 1
+                },
+                "end": {
+                  "line": 34,
+                  "column": 27
+                },
+                "identifierName": "AdaptiveLuminosityMaterial"
+              },
+              "name": "AdaptiveLuminosityMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 464,
+              "end": 490,
+              "loc": {
+                "start": {
+                  "line": 34,
+                  "column": 1
+                },
+                "end": {
+                  "line": 34,
+                  "column": 27
+                },
+                "identifierName": "AdaptiveLuminosityMaterial"
+              },
+              "name": "AdaptiveLuminosityMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 494,
+            "end": 507,
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 1
+              },
+              "end": {
+                "line": 35,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 494,
+              "end": 507,
+              "loc": {
+                "start": {
+                  "line": 35,
+                  "column": 1
+                },
+                "end": {
+                  "line": 35,
+                  "column": 14
+                },
+                "identifierName": "BokehMaterial"
+              },
+              "name": "BokehMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 494,
+              "end": 507,
+              "loc": {
+                "start": {
+                  "line": 35,
+                  "column": 1
+                },
+                "end": {
+                  "line": 35,
+                  "column": 14
+                },
+                "identifierName": "BokehMaterial"
+              },
+              "name": "BokehMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 511,
+            "end": 525,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 1
+              },
+              "end": {
+                "line": 36,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 511,
+              "end": 525,
+              "loc": {
+                "start": {
+                  "line": 36,
+                  "column": 1
+                },
+                "end": {
+                  "line": 36,
+                  "column": 15
+                },
+                "identifierName": "Bokeh2Material"
+              },
+              "name": "Bokeh2Material"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 511,
+              "end": 525,
+              "loc": {
+                "start": {
+                  "line": 36,
+                  "column": 1
+                },
+                "end": {
+                  "line": 36,
+                  "column": 15
+                },
+                "identifierName": "Bokeh2Material"
+              },
+              "name": "Bokeh2Material"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 529,
+            "end": 544,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 1
+              },
+              "end": {
+                "line": 37,
+                "column": 16
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 529,
+              "end": 544,
+              "loc": {
+                "start": {
+                  "line": 37,
+                  "column": 1
+                },
+                "end": {
+                  "line": 37,
+                  "column": 16
+                },
+                "identifierName": "CombineMaterial"
+              },
+              "name": "CombineMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 529,
+              "end": 544,
+              "loc": {
+                "start": {
+                  "line": 37,
+                  "column": 1
+                },
+                "end": {
+                  "line": 37,
+                  "column": 16
+                },
+                "identifierName": "CombineMaterial"
+              },
+              "name": "CombineMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 548,
+            "end": 567,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 1
+              },
+              "end": {
+                "line": 38,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 548,
+              "end": 567,
+              "loc": {
+                "start": {
+                  "line": 38,
+                  "column": 1
+                },
+                "end": {
+                  "line": 38,
+                  "column": 20
+                },
+                "identifierName": "ConvolutionMaterial"
+              },
+              "name": "ConvolutionMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 548,
+              "end": 567,
+              "loc": {
+                "start": {
+                  "line": 38,
+                  "column": 1
+                },
+                "end": {
+                  "line": 38,
+                  "column": 20
+                },
+                "identifierName": "ConvolutionMaterial"
+              },
+              "name": "ConvolutionMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 571,
+            "end": 583,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 1
+              },
+              "end": {
+                "line": 39,
+                "column": 13
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 571,
+              "end": 583,
+              "loc": {
+                "start": {
+                  "line": 39,
+                  "column": 1
+                },
+                "end": {
+                  "line": 39,
+                  "column": 13
+                },
+                "identifierName": "CopyMaterial"
+              },
+              "name": "CopyMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 571,
+              "end": 583,
+              "loc": {
+                "start": {
+                  "line": 39,
+                  "column": 1
+                },
+                "end": {
+                  "line": 39,
+                  "column": 13
+                },
+                "identifierName": "CopyMaterial"
+              },
+              "name": "CopyMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 587,
+            "end": 604,
+            "loc": {
+              "start": {
+                "line": 40,
+                "column": 1
+              },
+              "end": {
+                "line": 40,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 587,
+              "end": 604,
+              "loc": {
+                "start": {
+                  "line": 40,
+                  "column": 1
+                },
+                "end": {
+                  "line": 40,
+                  "column": 18
+                },
+                "identifierName": "DotScreenMaterial"
+              },
+              "name": "DotScreenMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 587,
+              "end": 604,
+              "loc": {
+                "start": {
+                  "line": 40,
+                  "column": 1
+                },
+                "end": {
+                  "line": 40,
+                  "column": 18
+                },
+                "identifierName": "DotScreenMaterial"
+              },
+              "name": "DotScreenMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 608,
+            "end": 620,
+            "loc": {
+              "start": {
+                "line": 41,
+                "column": 1
+              },
+              "end": {
+                "line": 41,
+                "column": 13
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 608,
+              "end": 620,
+              "loc": {
+                "start": {
+                  "line": 41,
+                  "column": 1
+                },
+                "end": {
+                  "line": 41,
+                  "column": 13
+                },
+                "identifierName": "FilmMaterial"
+              },
+              "name": "FilmMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 608,
+              "end": 620,
+              "loc": {
+                "start": {
+                  "line": 41,
+                  "column": 1
+                },
+                "end": {
+                  "line": 41,
+                  "column": 13
+                },
+                "identifierName": "FilmMaterial"
+              },
+              "name": "FilmMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 624,
+            "end": 638,
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 1
+              },
+              "end": {
+                "line": 42,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 624,
+              "end": 638,
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 1
+                },
+                "end": {
+                  "line": 42,
+                  "column": 15
+                },
+                "identifierName": "GlitchMaterial"
+              },
+              "name": "GlitchMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 624,
+              "end": 638,
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 1
+                },
+                "end": {
+                  "line": 42,
+                  "column": 15
+                },
+                "identifierName": "GlitchMaterial"
+              },
+              "name": "GlitchMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 642,
+            "end": 657,
+            "loc": {
+              "start": {
+                "line": 43,
+                "column": 1
+              },
+              "end": {
+                "line": 43,
+                "column": 16
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 642,
+              "end": 657,
+              "loc": {
+                "start": {
+                  "line": 43,
+                  "column": 1
+                },
+                "end": {
+                  "line": 43,
+                  "column": 16
+                },
+                "identifierName": "GodRaysMaterial"
+              },
+              "name": "GodRaysMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 642,
+              "end": 657,
+              "loc": {
+                "start": {
+                  "line": 43,
+                  "column": 1
+                },
+                "end": {
+                  "line": 43,
+                  "column": 16
+                },
+                "identifierName": "GodRaysMaterial"
+              },
+              "name": "GodRaysMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 661,
+            "end": 671,
+            "loc": {
+              "start": {
+                "line": 44,
+                "column": 1
+              },
+              "end": {
+                "line": 44,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 661,
+              "end": 671,
+              "loc": {
+                "start": {
+                  "line": 44,
+                  "column": 1
+                },
+                "end": {
+                  "line": 44,
+                  "column": 11
+                },
+                "identifierName": "KernelSize"
+              },
+              "name": "KernelSize"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 661,
+              "end": 671,
+              "loc": {
+                "start": {
+                  "line": 44,
+                  "column": 1
+                },
+                "end": {
+                  "line": 44,
+                  "column": 11
+                },
+                "identifierName": "KernelSize"
+              },
+              "name": "KernelSize"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 675,
+            "end": 693,
+            "loc": {
+              "start": {
+                "line": 45,
+                "column": 1
+              },
+              "end": {
+                "line": 45,
+                "column": 19
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 675,
+              "end": 693,
+              "loc": {
+                "start": {
+                  "line": 45,
+                  "column": 1
+                },
+                "end": {
+                  "line": 45,
+                  "column": 19
+                },
+                "identifierName": "LuminosityMaterial"
+              },
+              "name": "LuminosityMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 675,
+              "end": 693,
+              "loc": {
+                "start": {
+                  "line": 45,
+                  "column": 1
+                },
+                "end": {
+                  "line": 45,
+                  "column": 19
+                },
+                "identifierName": "LuminosityMaterial"
+              },
+              "name": "LuminosityMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 697,
+            "end": 715,
+            "loc": {
+              "start": {
+                "line": 46,
+                "column": 1
+              },
+              "end": {
+                "line": 46,
+                "column": 19
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 697,
+              "end": 715,
+              "loc": {
+                "start": {
+                  "line": 46,
+                  "column": 1
+                },
+                "end": {
+                  "line": 46,
+                  "column": 19
+                },
+                "identifierName": "PixelationMaterial"
+              },
+              "name": "PixelationMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 697,
+              "end": 715,
+              "loc": {
+                "start": {
+                  "line": 46,
+                  "column": 1
+                },
+                "end": {
+                  "line": 46,
+                  "column": 19
+                },
+                "identifierName": "PixelationMaterial"
+              },
+              "name": "PixelationMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 719,
+            "end": 736,
+            "loc": {
+              "start": {
+                "line": 47,
+                "column": 1
+              },
+              "end": {
+                "line": 47,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 719,
+              "end": 736,
+              "loc": {
+                "start": {
+                  "line": 47,
+                  "column": 1
+                },
+                "end": {
+                  "line": 47,
+                  "column": 18
+                },
+                "identifierName": "ShockWaveMaterial"
+              },
+              "name": "ShockWaveMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 719,
+              "end": 736,
+              "loc": {
+                "start": {
+                  "line": 47,
+                  "column": 1
+                },
+                "end": {
+                  "line": 47,
+                  "column": 18
+                },
+                "identifierName": "ShockWaveMaterial"
+              },
+              "name": "ShockWaveMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 740,
+            "end": 757,
+            "loc": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 48,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 740,
+              "end": 757,
+              "loc": {
+                "start": {
+                  "line": 48,
+                  "column": 1
+                },
+                "end": {
+                  "line": 48,
+                  "column": 18
+                },
+                "identifierName": "SMAABlendMaterial"
+              },
+              "name": "SMAABlendMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 740,
+              "end": 757,
+              "loc": {
+                "start": {
+                  "line": 48,
+                  "column": 1
+                },
+                "end": {
+                  "line": 48,
+                  "column": 18
+                },
+                "identifierName": "SMAABlendMaterial"
+              },
+              "name": "SMAABlendMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 761,
+            "end": 783,
+            "loc": {
+              "start": {
+                "line": 49,
+                "column": 1
+              },
+              "end": {
+                "line": 49,
+                "column": 23
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 761,
+              "end": 783,
+              "loc": {
+                "start": {
+                  "line": 49,
+                  "column": 1
+                },
+                "end": {
+                  "line": 49,
+                  "column": 23
+                },
+                "identifierName": "SMAAColorEdgesMaterial"
+              },
+              "name": "SMAAColorEdgesMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 761,
+              "end": 783,
+              "loc": {
+                "start": {
+                  "line": 49,
+                  "column": 1
+                },
+                "end": {
+                  "line": 49,
+                  "column": 23
+                },
+                "identifierName": "SMAAColorEdgesMaterial"
+              },
+              "name": "SMAAColorEdgesMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 787,
+            "end": 806,
+            "loc": {
+              "start": {
+                "line": 50,
+                "column": 1
+              },
+              "end": {
+                "line": 50,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 787,
+              "end": 806,
+              "loc": {
+                "start": {
+                  "line": 50,
+                  "column": 1
+                },
+                "end": {
+                  "line": 50,
+                  "column": 20
+                },
+                "identifierName": "SMAAWeightsMaterial"
+              },
+              "name": "SMAAWeightsMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 787,
+              "end": 806,
+              "loc": {
+                "start": {
+                  "line": 50,
+                  "column": 1
+                },
+                "end": {
+                  "line": 50,
+                  "column": 20
+                },
+                "identifierName": "SMAAWeightsMaterial"
+              },
+              "name": "SMAAWeightsMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 810,
+            "end": 829,
+            "loc": {
+              "start": {
+                "line": 51,
+                "column": 1
+              },
+              "end": {
+                "line": 51,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 810,
+              "end": 829,
+              "loc": {
+                "start": {
+                  "line": 51,
+                  "column": 1
+                },
+                "end": {
+                  "line": 51,
+                  "column": 20
+                },
+                "identifierName": "ToneMappingMaterial"
+              },
+              "name": "ToneMappingMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 810,
+              "end": 829,
+              "loc": {
+                "start": {
+                  "line": 51,
+                  "column": 1
+                },
+                "end": {
+                  "line": 51,
+                  "column": 20
+                },
+                "identifierName": "ToneMappingMaterial"
+              },
+              "name": "ToneMappingMaterial"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 838,
+          "end": 851,
+          "loc": {
+            "start": {
+              "line": 52,
+              "column": 7
+            },
+            "end": {
+              "line": 52,
+              "column": 20
+            }
+          },
+          "extra": {
+            "rawValue": "./materials",
+            "raw": "\"./materials\""
+          },
+          "value": "./materials"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 856,
+        "end": 953,
+        "loc": {
+          "start": {
+            "line": 54,
+            "column": 0
+          },
+          "end": {
+            "line": 58,
+            "column": 28
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 867,
+            "end": 879,
+            "loc": {
+              "start": {
+                "line": 55,
+                "column": 1
+              },
+              "end": {
+                "line": 55,
+                "column": 13
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 867,
+              "end": 879,
+              "loc": {
+                "start": {
+                  "line": 55,
+                  "column": 1
+                },
+                "end": {
+                  "line": 55,
+                  "column": 13
+                },
+                "identifierName": "RawImageData"
+              },
+              "name": "RawImageData"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 867,
+              "end": 879,
+              "loc": {
+                "start": {
+                  "line": 55,
+                  "column": 1
+                },
+                "end": {
+                  "line": 55,
+                  "column": 13
+                },
+                "identifierName": "RawImageData"
+              },
+              "name": "RawImageData"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 883,
+            "end": 900,
+            "loc": {
+              "start": {
+                "line": 56,
+                "column": 1
+              },
+              "end": {
+                "line": 56,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 883,
+              "end": 900,
+              "loc": {
+                "start": {
+                  "line": 56,
+                  "column": 1
+                },
+                "end": {
+                  "line": 56,
+                  "column": 18
+                },
+                "identifierName": "SMAAAreaImageData"
+              },
+              "name": "SMAAAreaImageData"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 883,
+              "end": 900,
+              "loc": {
+                "start": {
+                  "line": 56,
+                  "column": 1
+                },
+                "end": {
+                  "line": 56,
+                  "column": 18
+                },
+                "identifierName": "SMAAAreaImageData"
+              },
+              "name": "SMAAAreaImageData"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 904,
+            "end": 923,
+            "loc": {
+              "start": {
+                "line": 57,
+                "column": 1
+              },
+              "end": {
+                "line": 57,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 904,
+              "end": 923,
+              "loc": {
+                "start": {
+                  "line": 57,
+                  "column": 1
+                },
+                "end": {
+                  "line": 57,
+                  "column": 20
+                },
+                "identifierName": "SMAASearchImageData"
+              },
+              "name": "SMAASearchImageData"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 904,
+              "end": 923,
+              "loc": {
+                "start": {
+                  "line": 57,
+                  "column": 1
+                },
+                "end": {
+                  "line": 57,
+                  "column": 20
+                },
+                "identifierName": "SMAASearchImageData"
+              },
+              "name": "SMAASearchImageData"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 932,
+          "end": 952,
+          "loc": {
+            "start": {
+              "line": 58,
+              "column": 7
+            },
+            "end": {
+              "line": 58,
+              "column": 27
+            }
+          },
+          "extra": {
+            "rawValue": "./materials/images",
+            "raw": "\"./materials/images\""
+          },
+          "value": "./materials/images"
+        }
+      }
+    ],
+    "directives": []
   },
   "comments": [
     {
-      "type": "Block",
+      "type": "CommentBlock",
       "value": "*\r\n * Exposure of the library components.\r\n *\r\n * @module postprocessing\r\n ",
-      "range": [
-        0,
-        79
-      ],
+      "start": 0,
+      "end": 79,
       "loc": {
         "start": {
           "line": 1,
@@ -2488,6 +2324,2810 @@
         "end": {
           "line": 5,
           "column": 3
+        }
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "type": "CommentBlock",
+      "value": "*\r\n * Exposure of the library components.\r\n *\r\n * @module postprocessing\r\n ",
+      "start": 0,
+      "end": 79,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 83,
+      "end": 89,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 7,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 90,
+      "end": 91,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 7
+        },
+        "end": {
+          "line": 7,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "EffectComposer",
+      "start": 92,
+      "end": 106,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 9
+        },
+        "end": {
+          "line": 7,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 107,
+      "end": 108,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 24
+        },
+        "end": {
+          "line": 7,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 109,
+      "end": 113,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 26
+        },
+        "end": {
+          "line": 7,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./core",
+      "start": 114,
+      "end": 122,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 31
+        },
+        "end": {
+          "line": 7,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 122,
+      "end": 123,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 39
+        },
+        "end": {
+          "line": 7,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 127,
+      "end": 133,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 134,
+      "end": 135,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 7
+        },
+        "end": {
+          "line": 9,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "BloomPass",
+      "start": 138,
+      "end": 147,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 1
+        },
+        "end": {
+          "line": 10,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 147,
+      "end": 148,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 10
+        },
+        "end": {
+          "line": 10,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "BlurPass",
+      "start": 151,
+      "end": 159,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 1
+        },
+        "end": {
+          "line": 11,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 159,
+      "end": 160,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 9
+        },
+        "end": {
+          "line": 11,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "BokehPass",
+      "start": 163,
+      "end": 172,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 1
+        },
+        "end": {
+          "line": 12,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 172,
+      "end": 173,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 10
+        },
+        "end": {
+          "line": 12,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Bokeh2Pass",
+      "start": 176,
+      "end": 186,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 1
+        },
+        "end": {
+          "line": 13,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 186,
+      "end": 187,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 11
+        },
+        "end": {
+          "line": 13,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ClearPass",
+      "start": 190,
+      "end": 199,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 1
+        },
+        "end": {
+          "line": 14,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 199,
+      "end": 200,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 10
+        },
+        "end": {
+          "line": 14,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ClearMaskPass",
+      "start": 203,
+      "end": 216,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 1
+        },
+        "end": {
+          "line": 15,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 216,
+      "end": 217,
+      "loc": {
+        "start": {
+          "line": 15,
+          "column": 14
+        },
+        "end": {
+          "line": 15,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "DotScreenPass",
+      "start": 220,
+      "end": 233,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 233,
+      "end": 234,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 14
+        },
+        "end": {
+          "line": 16,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "FilmPass",
+      "start": 237,
+      "end": 245,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 245,
+      "end": 246,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 9
+        },
+        "end": {
+          "line": 17,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GlitchMode",
+      "start": 249,
+      "end": 259,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 259,
+      "end": 260,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 11
+        },
+        "end": {
+          "line": 18,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GlitchPass",
+      "start": 263,
+      "end": 273,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 1
+        },
+        "end": {
+          "line": 19,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 273,
+      "end": 274,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 11
+        },
+        "end": {
+          "line": 19,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GodRaysPass",
+      "start": 277,
+      "end": 288,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 1
+        },
+        "end": {
+          "line": 20,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 288,
+      "end": 289,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 12
+        },
+        "end": {
+          "line": 20,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "MaskPass",
+      "start": 292,
+      "end": 300,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 1
+        },
+        "end": {
+          "line": 21,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 300,
+      "end": 301,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 9
+        },
+        "end": {
+          "line": 21,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Pass",
+      "start": 304,
+      "end": 308,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 1
+        },
+        "end": {
+          "line": 22,
+          "column": 5
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 308,
+      "end": 309,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 5
+        },
+        "end": {
+          "line": 22,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "PixelationPass",
+      "start": 312,
+      "end": 326,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 326,
+      "end": 327,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 15
+        },
+        "end": {
+          "line": 23,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "RenderPass",
+      "start": 330,
+      "end": 340,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 1
+        },
+        "end": {
+          "line": 24,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 340,
+      "end": 341,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 11
+        },
+        "end": {
+          "line": 24,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SavePass",
+      "start": 344,
+      "end": 352,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 1
+        },
+        "end": {
+          "line": 25,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 352,
+      "end": 353,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 9
+        },
+        "end": {
+          "line": 25,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ShaderPass",
+      "start": 356,
+      "end": 366,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 1
+        },
+        "end": {
+          "line": 26,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 366,
+      "end": 367,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 11
+        },
+        "end": {
+          "line": 26,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ShockWavePass",
+      "start": 370,
+      "end": 383,
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 1
+        },
+        "end": {
+          "line": 27,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 383,
+      "end": 384,
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 14
+        },
+        "end": {
+          "line": 27,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAPass",
+      "start": 387,
+      "end": 395,
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 1
+        },
+        "end": {
+          "line": 28,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 395,
+      "end": 396,
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 9
+        },
+        "end": {
+          "line": 28,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "TexturePass",
+      "start": 399,
+      "end": 410,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 1
+        },
+        "end": {
+          "line": 29,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 410,
+      "end": 411,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 12
+        },
+        "end": {
+          "line": 29,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ToneMappingPass",
+      "start": 414,
+      "end": 429,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 1
+        },
+        "end": {
+          "line": 30,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 431,
+      "end": 432,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 433,
+      "end": 437,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 2
+        },
+        "end": {
+          "line": 31,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./passes",
+      "start": 438,
+      "end": 448,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 7
+        },
+        "end": {
+          "line": 31,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 448,
+      "end": 449,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 17
+        },
+        "end": {
+          "line": 31,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 453,
+      "end": 459,
+      "loc": {
+        "start": {
+          "line": 33,
+          "column": 0
+        },
+        "end": {
+          "line": 33,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 460,
+      "end": 461,
+      "loc": {
+        "start": {
+          "line": 33,
+          "column": 7
+        },
+        "end": {
+          "line": 33,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "AdaptiveLuminosityMaterial",
+      "start": 464,
+      "end": 490,
+      "loc": {
+        "start": {
+          "line": 34,
+          "column": 1
+        },
+        "end": {
+          "line": 34,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 490,
+      "end": 491,
+      "loc": {
+        "start": {
+          "line": 34,
+          "column": 27
+        },
+        "end": {
+          "line": 34,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "BokehMaterial",
+      "start": 494,
+      "end": 507,
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 1
+        },
+        "end": {
+          "line": 35,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 507,
+      "end": 508,
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 14
+        },
+        "end": {
+          "line": 35,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Bokeh2Material",
+      "start": 511,
+      "end": 525,
+      "loc": {
+        "start": {
+          "line": 36,
+          "column": 1
+        },
+        "end": {
+          "line": 36,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 525,
+      "end": 526,
+      "loc": {
+        "start": {
+          "line": 36,
+          "column": 15
+        },
+        "end": {
+          "line": 36,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "CombineMaterial",
+      "start": 529,
+      "end": 544,
+      "loc": {
+        "start": {
+          "line": 37,
+          "column": 1
+        },
+        "end": {
+          "line": 37,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 544,
+      "end": 545,
+      "loc": {
+        "start": {
+          "line": 37,
+          "column": 16
+        },
+        "end": {
+          "line": 37,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ConvolutionMaterial",
+      "start": 548,
+      "end": 567,
+      "loc": {
+        "start": {
+          "line": 38,
+          "column": 1
+        },
+        "end": {
+          "line": 38,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 567,
+      "end": 568,
+      "loc": {
+        "start": {
+          "line": 38,
+          "column": 20
+        },
+        "end": {
+          "line": 38,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "CopyMaterial",
+      "start": 571,
+      "end": 583,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 1
+        },
+        "end": {
+          "line": 39,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 583,
+      "end": 584,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 13
+        },
+        "end": {
+          "line": 39,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "DotScreenMaterial",
+      "start": 587,
+      "end": 604,
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 1
+        },
+        "end": {
+          "line": 40,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 604,
+      "end": 605,
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 18
+        },
+        "end": {
+          "line": 40,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "FilmMaterial",
+      "start": 608,
+      "end": 620,
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 1
+        },
+        "end": {
+          "line": 41,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 620,
+      "end": 621,
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 13
+        },
+        "end": {
+          "line": 41,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GlitchMaterial",
+      "start": 624,
+      "end": 638,
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 1
+        },
+        "end": {
+          "line": 42,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 638,
+      "end": 639,
+      "loc": {
+        "start": {
+          "line": 42,
+          "column": 15
+        },
+        "end": {
+          "line": 42,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GodRaysMaterial",
+      "start": 642,
+      "end": 657,
+      "loc": {
+        "start": {
+          "line": 43,
+          "column": 1
+        },
+        "end": {
+          "line": 43,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 657,
+      "end": 658,
+      "loc": {
+        "start": {
+          "line": 43,
+          "column": 16
+        },
+        "end": {
+          "line": 43,
+          "column": 17
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "KernelSize",
+      "start": 661,
+      "end": 671,
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 1
+        },
+        "end": {
+          "line": 44,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 671,
+      "end": 672,
+      "loc": {
+        "start": {
+          "line": 44,
+          "column": 11
+        },
+        "end": {
+          "line": 44,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "LuminosityMaterial",
+      "start": 675,
+      "end": 693,
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 1
+        },
+        "end": {
+          "line": 45,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 693,
+      "end": 694,
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 19
+        },
+        "end": {
+          "line": 45,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "PixelationMaterial",
+      "start": 697,
+      "end": 715,
+      "loc": {
+        "start": {
+          "line": 46,
+          "column": 1
+        },
+        "end": {
+          "line": 46,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 715,
+      "end": 716,
+      "loc": {
+        "start": {
+          "line": 46,
+          "column": 19
+        },
+        "end": {
+          "line": 46,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ShockWaveMaterial",
+      "start": 719,
+      "end": 736,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 1
+        },
+        "end": {
+          "line": 47,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 736,
+      "end": 737,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 18
+        },
+        "end": {
+          "line": 47,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAABlendMaterial",
+      "start": 740,
+      "end": 757,
+      "loc": {
+        "start": {
+          "line": 48,
+          "column": 1
+        },
+        "end": {
+          "line": 48,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 757,
+      "end": 758,
+      "loc": {
+        "start": {
+          "line": 48,
+          "column": 18
+        },
+        "end": {
+          "line": 48,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAColorEdgesMaterial",
+      "start": 761,
+      "end": 783,
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 1
+        },
+        "end": {
+          "line": 49,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 783,
+      "end": 784,
+      "loc": {
+        "start": {
+          "line": 49,
+          "column": 23
+        },
+        "end": {
+          "line": 49,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAWeightsMaterial",
+      "start": 787,
+      "end": 806,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 1
+        },
+        "end": {
+          "line": 50,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 806,
+      "end": 807,
+      "loc": {
+        "start": {
+          "line": 50,
+          "column": 20
+        },
+        "end": {
+          "line": 50,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ToneMappingMaterial",
+      "start": 810,
+      "end": 829,
+      "loc": {
+        "start": {
+          "line": 51,
+          "column": 1
+        },
+        "end": {
+          "line": 51,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 831,
+      "end": 832,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 0
+        },
+        "end": {
+          "line": 52,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 833,
+      "end": 837,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 2
+        },
+        "end": {
+          "line": 52,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./materials",
+      "start": 838,
+      "end": 851,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 7
+        },
+        "end": {
+          "line": 52,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 851,
+      "end": 852,
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 20
+        },
+        "end": {
+          "line": 52,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 856,
+      "end": 862,
+      "loc": {
+        "start": {
+          "line": 54,
+          "column": 0
+        },
+        "end": {
+          "line": 54,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 863,
+      "end": 864,
+      "loc": {
+        "start": {
+          "line": 54,
+          "column": 7
+        },
+        "end": {
+          "line": 54,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "RawImageData",
+      "start": 867,
+      "end": 879,
+      "loc": {
+        "start": {
+          "line": 55,
+          "column": 1
+        },
+        "end": {
+          "line": 55,
+          "column": 13
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 879,
+      "end": 880,
+      "loc": {
+        "start": {
+          "line": 55,
+          "column": 13
+        },
+        "end": {
+          "line": 55,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAAreaImageData",
+      "start": 883,
+      "end": 900,
+      "loc": {
+        "start": {
+          "line": 56,
+          "column": 1
+        },
+        "end": {
+          "line": 56,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 900,
+      "end": 901,
+      "loc": {
+        "start": {
+          "line": 56,
+          "column": 18
+        },
+        "end": {
+          "line": 56,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAASearchImageData",
+      "start": 904,
+      "end": 923,
+      "loc": {
+        "start": {
+          "line": 57,
+          "column": 1
+        },
+        "end": {
+          "line": 57,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 925,
+      "end": 926,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 0
+        },
+        "end": {
+          "line": 58,
+          "column": 1
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 927,
+      "end": 931,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 2
+        },
+        "end": {
+          "line": 58,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./materials/images",
+      "start": 932,
+      "end": 952,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 7
+        },
+        "end": {
+          "line": 58,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 952,
+      "end": 953,
+      "loc": {
+        "start": {
+          "line": 58,
+          "column": 27
+        },
+        "end": {
+          "line": 58,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "eof",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 955,
+      "end": 955,
+      "loc": {
+        "start": {
+          "line": 59,
+          "column": 0
+        },
+        "end": {
+          "line": 59,
+          "column": 0
         }
       }
     }

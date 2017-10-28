@@ -258,333 +258,285 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "src/.external-ecmascript.js~array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "src/.external-ecmascript.js~Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~arraybuffer",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "src/.external-ecmascript.js~arraybuffer",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "src/.external-ecmascript.js~ArrayBuffer",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~boolean",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "src/.external-ecmascript.js~boolean",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "src/.external-ecmascript.js~Boolean",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~dataview",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "src/.external-ecmascript.js~dataview",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "src/.external-ecmascript.js~DataView",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~date",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "src/.external-ecmascript.js~date",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "src/.external-ecmascript.js~Date",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~error",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "src/.external-ecmascript.js~error",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "src/.external-ecmascript.js~Error",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~evalerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "src/.external-ecmascript.js~evalerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "src/.external-ecmascript.js~EvalError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~float32array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "src/.external-ecmascript.js~float32array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "src/.external-ecmascript.js~Float32Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~float64array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "src/.external-ecmascript.js~float64array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "src/.external-ecmascript.js~Float64Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~function",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "src/.external-ecmascript.js~function",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "src/.external-ecmascript.js~Function",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~generator",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "src/.external-ecmascript.js~generator",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "src/.external-ecmascript.js~Generator",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~generatorfunction",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "src/.external-ecmascript.js~generatorfunction",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "src/.external-ecmascript.js~GeneratorFunction",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~infinity",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "src/.external-ecmascript.js~infinity",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "src/.external-ecmascript.js~Infinity",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~int16array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "src/.external-ecmascript.js~int16array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "src/.external-ecmascript.js~Int16Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~int32array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "src/.external-ecmascript.js~int32array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "src/.external-ecmascript.js~Int32Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~int8array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "src/.external-ecmascript.js~int8array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "src/.external-ecmascript.js~Int8Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~internalerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "src/.external-ecmascript.js~internalerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "src/.external-ecmascript.js~InternalError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~json",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "src/.external-ecmascript.js~json",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "src/.external-ecmascript.js~JSON",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~map",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "src/.external-ecmascript.js~map",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "src/.external-ecmascript.js~Map",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~nan",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "src/.external-ecmascript.js~nan",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "src/.external-ecmascript.js~NaN",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~number",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "src/.external-ecmascript.js~number",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "src/.external-ecmascript.js~Number",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~object",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "src/.external-ecmascript.js~object",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "src/.external-ecmascript.js~Object",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~promise",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "src/.external-ecmascript.js~promise",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "src/.external-ecmascript.js~Promise",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~proxy",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "src/.external-ecmascript.js~proxy",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "src/.external-ecmascript.js~Proxy",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~rangeerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "src/.external-ecmascript.js~rangeerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "src/.external-ecmascript.js~RangeError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~referenceerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "src/.external-ecmascript.js~referenceerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "src/.external-ecmascript.js~ReferenceError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~reflect",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "src/.external-ecmascript.js~reflect",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "src/.external-ecmascript.js~Reflect",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~regexp",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "src/.external-ecmascript.js~regexp",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "src/.external-ecmascript.js~RegExp",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~set",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "src/.external-ecmascript.js~set",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "src/.external-ecmascript.js~Set",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~string",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~String",
+    "src/.external-ecmascript.js~string",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "src/.external-ecmascript.js~String",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~symbol",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "src/.external-ecmascript.js~symbol",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "src/.external-ecmascript.js~Symbol",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~syntaxerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "src/.external-ecmascript.js~syntaxerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "src/.external-ecmascript.js~SyntaxError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~typeerror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "src/.external-ecmascript.js~typeerror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "src/.external-ecmascript.js~TypeError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~urierror",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "src/.external-ecmascript.js~urierror",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "src/.external-ecmascript.js~URIError",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~uint16array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "src/.external-ecmascript.js~uint16array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "src/.external-ecmascript.js~Uint16Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~uint32array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "src/.external-ecmascript.js~uint32array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "src/.external-ecmascript.js~Uint32Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~uint8array",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "src/.external-ecmascript.js~uint8array",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "src/.external-ecmascript.js~Uint8Array",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~uint8clampedarray",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "src/.external-ecmascript.js~uint8clampedarray",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "src/.external-ecmascript.js~Uint8ClampedArray",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~weakmap",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "src/.external-ecmascript.js~weakmap",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "src/.external-ecmascript.js~WeakMap",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~weakset",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "src/.external-ecmascript.js~weakset",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "src/.external-ecmascript.js~WeakSet",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~boolean",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "src/.external-ecmascript.js~boolean",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "src/.external-ecmascript.js~boolean",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~function",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~function",
+    "src/.external-ecmascript.js~function",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "src/.external-ecmascript.js~function",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~null",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~null",
+    "src/.external-ecmascript.js~null",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "src/.external-ecmascript.js~null",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~number",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~number",
+    "src/.external-ecmascript.js~number",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "src/.external-ecmascript.js~number",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~object",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~object",
+    "src/.external-ecmascript.js~object",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "src/.external-ecmascript.js~object",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~string",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~string",
+    "src/.external-ecmascript.js~string",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "src/.external-ecmascript.js~string",
     "external"
   ],
   [
-    "builtinexternal/ecmascriptexternal.js~undefined",
-    "external/index.html",
-    "BuiltinExternal/ECMAScriptExternal.js~undefined",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~audiocontext",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~AudioContext",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~canvasrenderingcontext2d",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~documentfragment",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~element",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~Element",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~event",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~Event",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~node",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~Node",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~nodelist",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~NodeList",
-    "external"
-  ],
-  [
-    "builtinexternal/webapiexternal.js~xmlhttprequest",
-    "external/index.html",
-    "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "src/.external-ecmascript.js~undefined",
+    "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "src/.external-ecmascript.js~undefined",
     "external"
   ],
   [
@@ -606,16 +558,16 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#copypass",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-copyPass",
+    "src/core/EffectComposer.js~EffectComposer#copyPass",
+    "member"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#createbuffer",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createBuffer",
     "src/core/EffectComposer.js~EffectComposer#createBuffer",
     "method"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
-    "src/core/EffectComposer.js~EffectComposer#depthTexture",
-    "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
@@ -624,10 +576,28 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#depthtexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
+    "src/core/EffectComposer.js~EffectComposer#depthTexture",
+    "member"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#dispose",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-dispose",
     "src/core/EffectComposer.js~EffectComposer#dispose",
     "method"
+  ],
+  [
+    "src/core/effectcomposer.js~effectcomposer#passes",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-passes",
+    "src/core/EffectComposer.js~EffectComposer#passes",
+    "member"
+  ],
+  [
+    "src/core/effectcomposer.js~effectcomposer#readbuffer",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-readBuffer",
+    "src/core/EffectComposer.js~EffectComposer#readBuffer",
+    "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#removepass",
@@ -664,6 +634,12 @@ window.esdocSearchIndex = [
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-setSize",
     "src/core/EffectComposer.js~EffectComposer#setSize",
     "method"
+  ],
+  [
+    "src/core/effectcomposer.js~effectcomposer#writebuffer",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-writeBuffer",
+    "src/core/EffectComposer.js~EffectComposer#writeBuffer",
+    "member"
   ],
   [
     "src/core/index.js",
@@ -859,13 +835,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
@@ -1056,6 +1032,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/passes/bloompass.js~bloompass#blurpass",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-member-blurPass",
+    "src/passes/BloomPass.js~BloomPass#blurPass",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#combinematerial",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-member-combineMaterial",
+    "src/passes/BloomPass.js~BloomPass#combineMaterial",
+    "member"
+  ],
+  [
     "src/passes/bloompass.js~bloompass#constructor",
     "class/src/passes/BloomPass.js~BloomPass.html#instance-constructor-constructor",
     "src/passes/BloomPass.js~BloomPass#constructor",
@@ -1063,13 +1051,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#distinction",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-distinction",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-distinction",
     "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#distinction",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-distinction",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-distinction",
     "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
@@ -1093,14 +1081,20 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#luminositymaterial",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-member-luminosityMaterial",
+    "src/passes/BloomPass.js~BloomPass#luminosityMaterial",
     "member"
   ],
   [
@@ -1120,6 +1114,12 @@ window.esdocSearchIndex = [
     "class/src/passes/BloomPass.js~BloomPass.html#instance-method-render",
     "src/passes/BloomPass.js~BloomPass#render",
     "method"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#rendertarget",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-member-renderTarget",
+    "src/passes/BloomPass.js~BloomPass#renderTarget",
+    "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
@@ -1152,6 +1152,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/blurpass.js~blurpass#convolutionmaterial",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-convolutionMaterial",
+    "src/passes/BlurPass.js~BlurPass#convolutionMaterial",
+    "member"
+  ],
+  [
     "src/passes/blurpass.js~blurpass#height",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-get-height",
     "src/passes/BlurPass.js~BlurPass#height",
@@ -1165,13 +1171,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
@@ -1192,6 +1198,18 @@ window.esdocSearchIndex = [
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-render",
     "src/passes/BlurPass.js~BlurPass#render",
     "method"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#rendertargetx",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-renderTargetX",
+    "src/passes/BlurPass.js~BlurPass#renderTargetX",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#rendertargety",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-renderTargetY",
+    "src/passes/BlurPass.js~BlurPass#renderTargetY",
+    "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#resolutionscale",
@@ -1216,6 +1234,12 @@ window.esdocSearchIndex = [
     "file/src/passes/Bokeh2Pass.js.html",
     "src/passes/Bokeh2Pass.js",
     "file"
+  ],
+  [
+    "src/passes/bokeh2pass.js~bokeh2pass#bokehmaterial",
+    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-member-bokehMaterial",
+    "src/passes/Bokeh2Pass.js~Bokeh2Pass#bokehMaterial",
+    "member"
   ],
   [
     "src/passes/bokeh2pass.js~bokeh2pass#constructor",
@@ -1252,6 +1276,12 @@ window.esdocSearchIndex = [
     "file/src/passes/BokehPass.js.html",
     "src/passes/BokehPass.js",
     "file"
+  ],
+  [
+    "src/passes/bokehpass.js~bokehpass#bokehmaterial",
+    "class/src/passes/BokehPass.js~BokehPass.html#instance-member-bokehMaterial",
+    "src/passes/BokehPass.js~BokehPass#bokehMaterial",
+    "member"
   ],
   [
     "src/passes/bokehpass.js~bokehpass#constructor",
@@ -1356,6 +1386,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/dotscreenpass.js~dotscreenpass#material",
+    "class/src/passes/DotScreenPass.js~DotScreenPass.html#instance-member-material",
+    "src/passes/DotScreenPass.js~DotScreenPass#material",
+    "member"
+  ],
+  [
     "src/passes/dotscreenpass.js~dotscreenpass#name",
     "class/src/passes/DotScreenPass.js~DotScreenPass.html#instance-member-name",
     "src/passes/DotScreenPass.js~DotScreenPass#name",
@@ -1390,6 +1426,12 @@ window.esdocSearchIndex = [
     "class/src/passes/FilmPass.js~FilmPass.html#instance-constructor-constructor",
     "src/passes/FilmPass.js~FilmPass#constructor",
     "method"
+  ],
+  [
+    "src/passes/filmpass.js~filmpass#material",
+    "class/src/passes/FilmPass.js~FilmPass.html#instance-member-material",
+    "src/passes/FilmPass.js~FilmPass#material",
+    "member"
   ],
   [
     "src/passes/filmpass.js~filmpass#name",
@@ -1428,16 +1470,34 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/passes/glitchpass.js~glitchpass#breakpoint",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-member-breakPoint",
+    "src/passes/GlitchPass.js~GlitchPass#breakPoint",
+    "member"
+  ],
+  [
     "src/passes/glitchpass.js~glitchpass#constructor",
     "class/src/passes/GlitchPass.js~GlitchPass.html#instance-constructor-constructor",
     "src/passes/GlitchPass.js~GlitchPass#constructor",
     "method"
   ],
   [
+    "src/passes/glitchpass.js~glitchpass#counter",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-member-counter",
+    "src/passes/GlitchPass.js~GlitchPass#counter",
+    "member"
+  ],
+  [
     "src/passes/glitchpass.js~glitchpass#generateperturbmap",
     "class/src/passes/GlitchPass.js~GlitchPass.html#instance-method-generatePerturbMap",
     "src/passes/GlitchPass.js~GlitchPass#generatePerturbMap",
     "method"
+  ],
+  [
+    "src/passes/glitchpass.js~glitchpass#material",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-member-material",
+    "src/passes/GlitchPass.js~GlitchPass#material",
+    "member"
   ],
   [
     "src/passes/glitchpass.js~glitchpass#mode",
@@ -1476,16 +1536,40 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/glitchpass.js~glitchpass#texture",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-member-texture",
+    "src/passes/GlitchPass.js~GlitchPass#texture",
+    "member"
+  ],
+  [
     "src/passes/godrayspass.js",
     "file/src/passes/GodRaysPass.js.html",
     "src/passes/GodRaysPass.js",
     "file"
   ],
   [
+    "src/passes/godrayspass.js~godrayspass#blurpass",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-blurPass",
+    "src/passes/GodRaysPass.js~GodRaysPass#blurPass",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#combinematerial",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-combineMaterial",
+    "src/passes/GodRaysPass.js~GodRaysPass#combineMaterial",
+    "member"
+  ],
+  [
     "src/passes/godrayspass.js~godrayspass#constructor",
     "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-constructor-constructor",
     "src/passes/GodRaysPass.js~GodRaysPass#constructor",
     "method"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#godraysmaterial",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-godRaysMaterial",
+    "src/passes/GodRaysPass.js~GodRaysPass#godRaysMaterial",
+    "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#initialise",
@@ -1507,20 +1591,38 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#kernelsize",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-kernelSize",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-kernelSize",
     "src/passes/GodRaysPass.js~GodRaysPass#kernelSize",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#kernelsize",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-kernelSize",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-kernelSize",
     "src/passes/GodRaysPass.js~GodRaysPass#kernelSize",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#lightscene",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-lightScene",
+    "src/passes/GodRaysPass.js~GodRaysPass#lightScene",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#lightsource",
     "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-lightSource",
     "src/passes/GodRaysPass.js~GodRaysPass#lightSource",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#maincamera",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-mainCamera",
+    "src/passes/GodRaysPass.js~GodRaysPass#mainCamera",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#mainscene",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-mainScene",
+    "src/passes/GodRaysPass.js~GodRaysPass#mainScene",
     "member"
   ],
   [
@@ -1542,14 +1644,44 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/godrayspass.js~godrayspass#resolutionscale",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-resolutionScale",
-    "src/passes/GodRaysPass.js~GodRaysPass#resolutionScale",
+    "src/passes/godrayspass.js~godrayspass#renderpasslight",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-renderPassLight",
+    "src/passes/GodRaysPass.js~GodRaysPass#renderPassLight",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#renderpassmask",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-renderPassMask",
+    "src/passes/GodRaysPass.js~GodRaysPass#renderPassMask",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#rendertargetmask",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-renderTargetMask",
+    "src/passes/GodRaysPass.js~GodRaysPass#renderTargetMask",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#rendertargetx",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-renderTargetX",
+    "src/passes/GodRaysPass.js~GodRaysPass#renderTargetX",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#rendertargety",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-renderTargetY",
+    "src/passes/GodRaysPass.js~GodRaysPass#renderTargetY",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#resolutionscale",
     "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-resolutionScale",
+    "src/passes/GodRaysPass.js~GodRaysPass#resolutionScale",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#resolutionscale",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-resolutionScale",
     "src/passes/GodRaysPass.js~GodRaysPass#resolutionScale",
     "member"
   ],
@@ -1563,6 +1695,12 @@ window.esdocSearchIndex = [
     "src/passes/godrayspass.js~godrayspass#samples",
     "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#screenposition",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-screenPosition",
+    "src/passes/GodRaysPass.js~GodRaysPass#screenPosition",
     "member"
   ],
   [
@@ -1612,6 +1750,12 @@ window.esdocSearchIndex = [
     "file/src/passes/Pass.js.html",
     "src/passes/Pass.js",
     "file"
+  ],
+  [
+    "src/passes/pass.js~pass#[key]",
+    "class/src/passes/Pass.js~Pass.html#instance-member-[key]",
+    "src/passes/Pass.js~Pass#[key]",
+    "member"
   ],
   [
     "src/passes/pass.js~pass#camera",
@@ -1699,13 +1843,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
@@ -1719,6 +1863,12 @@ window.esdocSearchIndex = [
     "src/passes/pixelationpass.js~pixelationpass#needsswap",
     "class/src/passes/PixelationPass.js~PixelationPass.html#instance-member-needsSwap",
     "src/passes/PixelationPass.js~PixelationPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/pixelationpass.js~pixelationpass#pixelationmaterial",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-member-pixelationMaterial",
+    "src/passes/PixelationPass.js~PixelationPass#pixelationMaterial",
     "member"
   ],
   [
@@ -1788,6 +1938,24 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/passes/smaapass.js~smaapass#areatexture",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-areaTexture",
+    "src/passes/SMAAPass.js~SMAAPass#areaTexture",
+    "member"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass#blendmaterial",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-blendMaterial",
+    "src/passes/SMAAPass.js~SMAAPass#blendMaterial",
+    "member"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass#coloredgesmaterial",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-colorEdgesMaterial",
+    "src/passes/SMAAPass.js~SMAAPass#colorEdgesMaterial",
+    "member"
+  ],
+  [
     "src/passes/smaapass.js~smaapass#constructor",
     "class/src/passes/SMAAPass.js~SMAAPass.html#instance-constructor-constructor",
     "src/passes/SMAAPass.js~SMAAPass#constructor",
@@ -1812,10 +1980,34 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/smaapass.js~smaapass#rendertargetcoloredges",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-renderTargetColorEdges",
+    "src/passes/SMAAPass.js~SMAAPass#renderTargetColorEdges",
+    "member"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass#rendertargetweights",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-renderTargetWeights",
+    "src/passes/SMAAPass.js~SMAAPass#renderTargetWeights",
+    "member"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass#searchtexture",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-searchTexture",
+    "src/passes/SMAAPass.js~SMAAPass#searchTexture",
+    "member"
+  ],
+  [
     "src/passes/smaapass.js~smaapass#setsize",
     "class/src/passes/SMAAPass.js~SMAAPass.html#instance-method-setSize",
     "src/passes/SMAAPass.js~SMAAPass#setSize",
     "method"
+  ],
+  [
+    "src/passes/smaapass.js~smaapass#weightsmaterial",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-weightsMaterial",
+    "src/passes/SMAAPass.js~SMAAPass#weightsMaterial",
+    "member"
   ],
   [
     "src/passes/smaapass.js~smaapass.areaimagedataurl",
@@ -1846,6 +2038,12 @@ window.esdocSearchIndex = [
     "class/src/passes/SavePass.js~SavePass.html#instance-method-initialise",
     "src/passes/SavePass.js~SavePass#initialise",
     "method"
+  ],
+  [
+    "src/passes/savepass.js~savepass#material",
+    "class/src/passes/SavePass.js~SavePass.html#instance-member-material",
+    "src/passes/SavePass.js~SavePass#material",
+    "member"
   ],
   [
     "src/passes/savepass.js~savepass#name",
@@ -1926,10 +2124,22 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/passes/shockwavepass.js~shockwavepass#active",
+    "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-active",
+    "src/passes/ShockWavePass.js~ShockWavePass#active",
+    "member"
+  ],
+  [
     "src/passes/shockwavepass.js~shockwavepass#constructor",
     "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-constructor-constructor",
     "src/passes/ShockWavePass.js~ShockWavePass#constructor",
     "method"
+  ],
+  [
+    "src/passes/shockwavepass.js~shockwavepass#copymaterial",
+    "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-copyMaterial",
+    "src/passes/ShockWavePass.js~ShockWavePass#copyMaterial",
+    "member"
   ],
   [
     "src/passes/shockwavepass.js~shockwavepass#epicenter",
@@ -1968,15 +2178,33 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/shockwavepass.js~shockwavepass#screenposition",
+    "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-screenPosition",
+    "src/passes/ShockWavePass.js~ShockWavePass#screenPosition",
+    "member"
+  ],
+  [
     "src/passes/shockwavepass.js~shockwavepass#setsize",
     "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-method-setSize",
     "src/passes/ShockWavePass.js~ShockWavePass#setSize",
     "method"
   ],
   [
+    "src/passes/shockwavepass.js~shockwavepass#shockwavematerial",
+    "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-shockWaveMaterial",
+    "src/passes/ShockWavePass.js~ShockWavePass#shockWaveMaterial",
+    "member"
+  ],
+  [
     "src/passes/shockwavepass.js~shockwavepass#speed",
     "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-speed",
     "src/passes/ShockWavePass.js~ShockWavePass#speed",
+    "member"
+  ],
+  [
+    "src/passes/shockwavepass.js~shockwavepass#time",
+    "class/src/passes/ShockWavePass.js~ShockWavePass.html#instance-member-time",
+    "src/passes/ShockWavePass.js~ShockWavePass#time",
     "member"
   ],
   [
@@ -1990,6 +2218,12 @@ window.esdocSearchIndex = [
     "class/src/passes/TexturePass.js~TexturePass.html#instance-constructor-constructor",
     "src/passes/TexturePass.js~TexturePass#constructor",
     "method"
+  ],
+  [
+    "src/passes/texturepass.js~texturepass#copymaterial",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-member-copyMaterial",
+    "src/passes/TexturePass.js~TexturePass#copyMaterial",
+    "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#name",
@@ -2046,16 +2280,34 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/tonemappingpass.js~tonemappingpass#adaptiveluminositymaterial",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-adaptiveLuminosityMaterial",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#adaptiveLuminosityMaterial",
+    "member"
+  ],
+  [
     "src/passes/tonemappingpass.js~tonemappingpass#constructor",
     "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-constructor-constructor",
     "src/passes/ToneMappingPass.js~ToneMappingPass#constructor",
     "method"
   ],
   [
+    "src/passes/tonemappingpass.js~tonemappingpass#copymaterial",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-copyMaterial",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#copyMaterial",
+    "member"
+  ],
+  [
     "src/passes/tonemappingpass.js~tonemappingpass#initialise",
     "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-initialise",
     "src/passes/ToneMappingPass.js~ToneMappingPass#initialise",
     "method"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#luminositymaterial",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-luminosityMaterial",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#luminosityMaterial",
+    "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#name",
@@ -2076,6 +2328,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/tonemappingpass.js~tonemappingpass#rendertargetadapted",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetAdapted",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#renderTargetAdapted",
+    "member"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#rendertargetluminosity",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetLuminosity",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#renderTargetLuminosity",
+    "member"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#rendertargetprevious",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetPrevious",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#renderTargetPrevious",
+    "member"
+  ],
+  [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
     "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
@@ -2085,6 +2355,12 @@ window.esdocSearchIndex = [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
     "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#tonemappingmaterial",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-toneMappingMaterial",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#toneMappingMaterial",
     "member"
   ],
   [

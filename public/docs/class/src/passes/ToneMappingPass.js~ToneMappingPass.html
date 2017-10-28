@@ -3,14 +3,12 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">ToneMappingPass | API Document</title>
+  <title data-ice="title">ToneMappingPass | postprocessing</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
-  
-  
   <script src="script/manual.js"></script>
-</head>
+<meta name="description" content="A post processing library that provides the means to implement 2D filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement 2D filter effects for three.js."></head>
 <body class="layout-container" data-ice="rootContainer">
 
 <header>
@@ -19,7 +17,6 @@
   <a href="identifiers.html">Reference</a>
   <a href="source.html">Source</a>
   
-  <a data-ice="repoURL" href="https://github.com/vanruesc/postprocessing.git" class="repo-url-github">Repository</a>
   <div class="search-box">
   <span>
     <img src="./image/search.png">
@@ -27,13 +24,13 @@
   </span>
     <ul class="search-result"></ul>
   </div>
-</header>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
 
 <nav class="navigation" data-ice="nav"><div>
   <ul>
     
-  <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/Bokeh2Material.js~Bokeh2Material.html">Bokeh2Material</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
@@ -51,10 +48,10 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ShockWaveMaterial.js~ShockWaveMaterial.html">ShockWaveMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">materials/images/smaa/utils</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials-images">materials/images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials-images-smaa-utils">materials/images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
-<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">passes</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html">Bokeh2Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></span></li>
@@ -80,13 +77,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ToneMappingPass} from &apos;<span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber41">postprocessing/src/passes/ToneMappingPass.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ToneMappingPass} from &apos;<span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber40">postprocessing/src/passes/ToneMappingPass.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber41">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber40">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -114,6 +111,7 @@ optic nerve responding to the amount of light it is receiving.</p>
  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
  <a href="http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf">http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf</a></p>
 </div>
+  
 
   
 
@@ -141,7 +139,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -174,7 +175,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive">adaptive</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive">adaptive</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -200,7 +204,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive">adaptive</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive">adaptive</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -226,7 +233,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-name">name</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
         </p>
       </div>
       <div>
@@ -252,7 +262,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-needsSwap">needsSwap</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -278,7 +291,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution">resolution</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
@@ -304,13 +320,225 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution">resolution</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
         
         
         <div data-ice="description"><p>The resolution of the render targets.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Private Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-adaptiveLuminosityMaterial">adaptiveLuminosityMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>An adaptive luminance shader material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-copyMaterial">copyMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Copy shader material used for saving the luminance map.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-luminosityMaterial">luminosityMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A luminosity shader material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetAdapted">renderTargetAdapted</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The render target for adapted luminosity.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetLuminosity">renderTargetLuminosity</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The render target for the current luminosity.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-renderTargetPrevious">renderTargetPrevious</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A render target that holds a copy of the adapted limonosity.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-member-toneMappingMaterial">toneMappingMaterial</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A tone mapping shader material.</p>
 </div>
       </div>
     </td>
@@ -337,7 +565,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-initialise">initialise</a></span></span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-initialise">initialise</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>)</span>
         </p>
       </div>
       <div>
@@ -363,7 +594,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-render">render</a></span></span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -397,7 +631,38 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-enabled">enabled</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-[key]">[key]</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-enabled">enabled</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -423,7 +688,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-name">name</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
@@ -449,7 +717,10 @@ optic nerve responding to the amount of light it is receiving.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">needsSwap</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -476,7 +747,10 @@ pass has finished rendering.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-renderToScreen">renderToScreen</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-renderToScreen">renderToScreen</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
@@ -502,7 +776,10 @@ pass has finished rendering.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-camera">camera</a></span></span><span data-ice="signature">: <span>Camera</span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-camera">camera</a></span></span><span class="code" data-ice="signature">: <span>Camera</span></span>
         </p>
       </div>
       <div>
@@ -528,7 +805,10 @@ pass has finished rendering.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span data-ice="signature">: <span>Mesh</span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span></span>
         </p>
       </div>
       <div>
@@ -554,7 +834,10 @@ pass has finished rendering.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span data-ice="signature">: <span>Scene</span></span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
         </p>
       </div>
       <div>
@@ -580,7 +863,10 @@ pass has finished rendering.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-dispose">dispose</a></span></span><span data-ice="signature">()</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-dispose">dispose</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
@@ -607,7 +893,10 @@ deletes them.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-initialise">initialise</a></span></span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>, alpha: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-initialise">initialise</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, alpha: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -633,7 +922,10 @@ deletes them.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, maskActive: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, maskActive: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -659,7 +951,10 @@ deletes them.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setSize">setSize</a></span></span><span data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setSize">setSize</a></span></span><span class="code" data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -693,11 +988,12 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
@@ -718,31 +1014,31 @@ initialised and every time its own size is updated.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">options</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The options.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" data-depth="1">options.adaptive</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">options.adaptive</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Whether the tone mapping should use an adaptive luminance map.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" data-depth="1">options.resolution</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">options.resolution</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 256</li></ul></td>
       <td data-ice="description"><p>The render texture resolution.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" data-depth="1">options.distinction</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">options.distinction</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 1.0</li></ul></td>
       <td data-ice="description"><p>A luminance distinction factor.</p>
@@ -752,6 +1048,8 @@ initialised and every time its own size is updated.</p>
   </table>
 </div>
 </div>
+
+  
 
   
 
@@ -778,11 +1076,12 @@ initialised and every time its own size is updated.</p>
     <span class="kind" data-ice="kind">get</span>
     
     
-    <span data-ice="name">adaptive</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    
+    <span class="code" data-ice="name">adaptive</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber188">source</a></span></span>
     </span>
   </h3>
 
@@ -810,6 +1109,8 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 <div class="detail" data-ice="detail">
@@ -819,11 +1120,12 @@ initialised and every time its own size is updated.</p>
     <span class="kind" data-ice="kind">set</span>
     
     
-    <span data-ice="name">adaptive</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    
+    <span class="code" data-ice="name">adaptive</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -851,6 +1153,8 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 <div class="detail" data-ice="detail">
@@ -860,11 +1164,12 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span data-ice="name">name</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    
+    <span class="code" data-ice="name">name</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber60">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
@@ -892,6 +1197,8 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 <div class="detail" data-ice="detail">
@@ -901,11 +1208,12 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span data-ice="name">needsSwap</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    
+    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -933,6 +1241,8 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 <div class="detail" data-ice="detail">
@@ -942,11 +1252,12 @@ initialised and every time its own size is updated.</p>
     <span class="kind" data-ice="kind">get</span>
     
     
-    <span data-ice="name">resolution</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber161">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber160">source</a></span></span>
     </span>
   </h3>
 
@@ -974,6 +1285,8 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 <div class="detail" data-ice="detail">
@@ -983,11 +1296,12 @@ initialised and every time its own size is updated.</p>
     <span class="kind" data-ice="kind">set</span>
     
     
-    <span data-ice="name">resolution</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber168">source</a></span></span>
     </span>
   </h3>
 
@@ -1015,6 +1329,318 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
+  
+</div>
+<h2 data-ice="title">Private Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-adaptiveLuminosityMaterial">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">adaptiveLuminosityMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber136">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>An adaptive luminance shader material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-copyMaterial">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">copyMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber116">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Copy shader material used for saving the luminance map.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-luminosityMaterial">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">luminosityMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber125">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A luminosity shader material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-renderTargetAdapted">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">renderTargetAdapted</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber92">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The render target for adapted luminosity.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-renderTargetLuminosity">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">renderTargetLuminosity</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber75">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The render target for the current luminosity.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <div data-ice="todo"><h4>TODO:</h4><ul><li><span>Use RED format in WebGL 2.0.</span></li></ul></div>
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-renderTargetPrevious">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">renderTargetPrevious</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber105">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A render target that holds a copy of the adapted limonosity.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-toneMappingMaterial">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">toneMappingMaterial</span><span class="code" data-ice="signature">: <span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber147">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A tone mapping shader material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
   
 </div>
 </div>
@@ -1027,11 +1653,12 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span data-ice="name">initialise</span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>)</span>
+    
+    <span class="code" data-ice="name">initialise</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -1052,8 +1679,8 @@ initialised and every time its own size is updated.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">renderer</td>
-      <td data-ice="type"><span>WebGLRenderer</span></td>
+      <td data-ice="name" class="code" data-depth="0">renderer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderer</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The renderer.</p>
 </td>
@@ -1062,6 +1689,8 @@ initialised and every time its own size is updated.</p>
   </table>
 </div>
 </div>
+
+  
 
   
 
@@ -1085,11 +1714,12 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span data-ice="name">render</span><span data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber224">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ToneMappingPass.js.html#lineNumber223">source</a></span></span>
     </span>
   </h3>
 
@@ -1110,29 +1740,29 @@ initialised and every time its own size is updated.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">renderer</td>
-      <td data-ice="type"><span>WebGLRenderer</span></td>
+      <td data-ice="name" class="code" data-depth="0">renderer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderer</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The renderer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">readBuffer</td>
-      <td data-ice="type"><span>WebGLRenderTarget</span></td>
+      <td data-ice="name" class="code" data-depth="0">readBuffer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The read buffer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">writeBuffer</td>
-      <td data-ice="type"><span>WebGLRenderTarget</span></td>
+      <td data-ice="name" class="code" data-depth="0">writeBuffer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The write buffer.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">delta</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The render delta time.</p>
 </td>
@@ -1155,13 +1785,15 @@ initialised and every time its own size is updated.</p>
   
 
   
+
+  
   
 </div>
 </div>
 </div>
 
 <footer class="footer">
-  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.8)</span></a>
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.3)</span><img src="./image/esdoc-logo-mini-black.png"></a>
 </footer>
 
 <script src="script/search_index.js"></script>

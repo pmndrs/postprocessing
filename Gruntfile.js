@@ -13,7 +13,10 @@ module.exports = function(grunt) {
 		configPath: path.join(process.cwd(), "grunt/config"),
 
 		jitGrunt: {
-			customTasksDir: "grunt/tasks"
+			customTasksDir: "grunt/tasks",
+			staticMappings: {
+				esdoc: "@vanruesc/grunt-esdoc"
+			}
 		},
 
 		data: {
