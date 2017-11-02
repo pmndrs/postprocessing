@@ -1,6 +1,6 @@
 "use strict";
 
-const lib = require("../build/postprocessing.js");
+const EffectComposer = require("../../build/postprocessing.js").EffectComposer;
 
 module.exports = {
 
@@ -8,7 +8,7 @@ module.exports = {
 
 		"can be instantiated and disposed": function(test) {
 
-			const composer = new lib.EffectComposer();
+			const composer = new EffectComposer();
 			test.ok(composer);
 			composer.dispose();
 
