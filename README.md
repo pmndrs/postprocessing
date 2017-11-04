@@ -23,7 +23,7 @@ npm install postprocessing
 Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information
 about how to setup the renderer, scene and camera.
 
-##### Basics
+#### Basics
 
 ```javascript
 import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
@@ -46,7 +46,7 @@ const clock = new Clock();
 }());
 ```
 
-##### Custom Passes
+#### Custom Passes
 
 ```javascript
 import { Pass } from "postprocessing";
