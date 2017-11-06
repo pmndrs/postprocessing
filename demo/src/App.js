@@ -258,8 +258,7 @@ export class App {
 				const height = event.target.innerHeight;
 
 				composer.setSize(width, height);
-				demo.camera.aspect = width / height;
-				demo.camera.updateProjectionMatrix();
+				demo.setSize(width, height);
 
 				id = 0;
 

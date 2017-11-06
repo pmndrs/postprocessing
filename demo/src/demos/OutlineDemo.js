@@ -15,7 +15,7 @@ import {
   Raycaster
 } from "three";
 
-import { RenderPass, OutlinePass, ShaderPass, CopyMaterial } from "../../../src";
+import { RenderPass, OutlinePass, ShaderPass, FXAAMaterial } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**
@@ -177,21 +177,19 @@ export class OutlineDemo extends Demo {
 
     // Passes.
 
+    const resolution = { x: window.innerWidth, y: window.innerHeight };
+
     const renderPass = new RenderPass(scene, camera);
     composer.addPass(renderPass);
 
-    this.outlinePass = new OutlinePass(
-      { x: window.innerWidth, y: window.innerHeight },
-      scene,
-      camera
-    );
+    this.outlinePass = new OutlinePass(resolution, scene, camera);
     this.outlinePass.patternTexture = this.patternTexture;
     composer.addPass(this.outlinePass);
 
-    const copyPass = new ShaderPass(new CopyMaterial());
-    copyPass.renderToScreen = true;
-    composer.addPass(copyPass);
-
+    this.fxaaMaterial = new FXAAMaterial(resolution);
+    const fxaaPass = new ShaderPass(this.fxaaMaterial);
+    fxaaPass.renderToScreen = true;
+    composer.addPass(fxaaPass);
   }
 
   /**
@@ -212,6 +210,12 @@ export class OutlineDemo extends Demo {
 
     }
   }
+
+  /**
+   * Configure the dat.gui display
+   *
+   * @param {GUI} gui The passed in dat.gui instance
+   */
 
   configure(gui) {
 
@@ -241,6 +245,25 @@ export class OutlineDemo extends Demo {
     });
 
   }
+
+  /**
+   * Update the size for the fxaa pass on a browser resize
+   *
+   * @param {Number} width  The new screen width (in pixels)
+   * @param {Number} height The new screen height (in pixels)
+   */
+
+  setSize(width, height) {
+    super.setSize(width, height);
+
+    this.fxaaMaterial.setResolution({ x: width, y: height });
+  }
+
+  /**
+   * Respond to mouse move and touch events
+   *
+   * @param {Event} e The event object
+   */
 
   onTouchMove(e) {
     let x, y;

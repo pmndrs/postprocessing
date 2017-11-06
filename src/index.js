@@ -40,6 +40,7 @@ export {
 	CopyMaterial,
 	DotScreenMaterial,
 	FilmMaterial,
+	FXAAMaterial,
 	GlitchMaterial,
 	GodRaysMaterial,
 	KernelSize,

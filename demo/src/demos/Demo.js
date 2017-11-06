@@ -96,6 +96,17 @@ export class Demo {
 	configure(gui) {}
 
 	/**
+	 * Allow the demo to respond to browser resize events
+	 * @param {Number} width  The new screen width (in pixels)
+	 * @param {Number} height The new screen height (in pixels)
+	 */
+
+	setSize(width, height) {
+		this.camera.aspect = width / height;
+		this.camera.updateProjectionMatrix();
+	}
+
+	/**
 	 * Resets this demo.
 	 *
 	 * @return {Demo} This demo.
