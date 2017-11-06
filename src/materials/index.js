@@ -15,6 +15,12 @@ export { FilmMaterial } from "./FilmMaterial.js";
 export { GlitchMaterial } from "./GlitchMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminosityMaterial } from "./LuminosityMaterial.js";
+export {
+  PrepareMaskMaterial,
+  EdgeDetectionMaterial,
+  SeperableBlurMaterial,
+  OverlayMaterial
+} from "./OutlineMaterials.js";
 export { PixelationMaterial } from "./PixelationMaterial.js";
 export { ShockWaveMaterial } from "./ShockWaveMaterial.js";
 export { SMAABlendMaterial } from "./SMAABlendMaterial.js";
