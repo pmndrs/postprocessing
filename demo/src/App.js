@@ -18,6 +18,7 @@ import { RenderDemo } from "./demos/RenderDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
+import { OutlineDemo } from "./demos/OutlineDemo.js";
 
 /**
  * A demo application.
@@ -107,6 +108,7 @@ export class App {
 			demos.set("shock-wave", new ShockWaveDemo(composer));
 			demos.set("smaa", new SMAADemo(composer));
 			demos.set("tone-mapping", new ToneMappingDemo(composer));
+			demos.set("outline", new OutlineDemo(composer));
 
 			return demos;
 
