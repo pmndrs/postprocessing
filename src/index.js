@@ -19,6 +19,7 @@ export {
 	GlitchPass,
 	GodRaysPass,
 	MaskPass,
+	OutlinePass,
 	Pass,
 	PixelationPass,
 	RenderPass,
