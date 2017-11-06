@@ -12,6 +12,7 @@ export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
 export { CopyMaterial } from "./CopyMaterial.js";
 export { DotScreenMaterial } from "./DotScreenMaterial.js";
 export { FilmMaterial } from "./FilmMaterial.js";
+export { FXAAMaterial } from "./FXAAMaterial.js";
 export { GlitchMaterial } from "./GlitchMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminosityMaterial } from "./LuminosityMaterial.js";
