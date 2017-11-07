@@ -293,7 +293,7 @@ export class OutlinePass extends Pass {
 
   changeVisibilityOfSelectedObjects(bVisible) {
     function gatherSelectedMeshesCallback(object) {
-      if(object instanceof Mesh) { object.visible = bVisible; }
+      if(object.type === "Mesh") { object.visible = bVisible; }
     }
 
     for(let i = 0; i < this.selectedObjects.length; i++) {
@@ -312,7 +312,7 @@ export class OutlinePass extends Pass {
     const selectedMeshes = [];
 
     function gatherSelectedMeshesCallback(object) {
-      if(object instanceof Mesh) { selectedMeshes.push(object); }
+      if(object.type === "Mesh") { selectedMeshes.push(object); }
     }
 
     for(let i = 0; i < this.selectedObjects.length; i++) {
@@ -320,7 +320,7 @@ export class OutlinePass extends Pass {
     }
 
     function VisibilityChangeCallback(object) {
-      if(object instanceof Mesh || object instanceof Line || object instanceof Sprite) {
+      if(object.type === "Mesh" || object.type === "Line" || object.type === "Sprite") {
         let bFound = false;
 
         for(let i = 0; i < selectedMeshes.length; i++) {
@@ -410,6 +410,7 @@ export class OutlinePass extends Pass {
     this.prepareMaskMaterial.uniforms.depthTexture.value = this.renderTargetDepthBuffer.texture;
     this.prepareMaskMaterial.uniforms.textureMatrix.value = this.textureMatrix;
     renderer.render(this.renderScene, this.renderCamera, this.renderTargetMaskBuffer, true);
+
     this.renderScene.overrideMaterial = null;
     this.changeVisibilityOfNonSelectedObjects(true);
 
