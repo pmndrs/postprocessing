@@ -49,6 +49,10 @@
 		"npm": ">=5.0.0"
 	},
 
+	"eslintConfig": {
+		"extends": "delta"
+	},
+
 	"dependencies": {
 		"dat.gui": "0.6.x",
 		"stats.js": "0.17.x",
@@ -60,6 +64,7 @@
 		"babel-core": "6.x.x",
 		"babel-preset-es2015-rollup": "3.x.x",
 		"esdoc-standard-plugin": "1.x.x",
+		"eslint-config-delta": "0.x.x",
 		"grunt": "1.x.x",
 		"grunt-cli": "1.x.x",
 		"grunt-contrib-clean": "1.x.x",
