@@ -96,7 +96,11 @@ export class BloomPass extends Pass {
 	 * @default 0.5
 	 */
 
-	get resolutionScale() { return this.blurPass.resolutionScale; }
+	get resolutionScale() {
+
+		return this.blurPass.resolutionScale;
+
+	}
 
 	/**
 	 * You need to call {@link EffectComposer#setSize} after changing this value.
@@ -104,7 +108,11 @@ export class BloomPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(value = 0.5) { this.blurPass.resolutionScale = value; }
+	set resolutionScale(value = 0.5) {
+
+		this.blurPass.resolutionScale = value;
+
+	}
 
 	/**
 	 * The blur kernel size.
@@ -113,13 +121,21 @@ export class BloomPass extends Pass {
 	 * @default KernelSize.LARGE
 	 */
 
-	get kernelSize() { return this.blurPass.kernelSize; }
+	get kernelSize() {
+
+		return this.blurPass.kernelSize;
+
+	}
 
 	/**
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) { this.blurPass.kernelSize = value; }
+	set kernelSize(value = KernelSize.LARGE) {
+
+		this.blurPass.kernelSize = value;
+
+	}
 
 	/**
 	 * The overall intensity of the effect.
@@ -128,13 +144,21 @@ export class BloomPass extends Pass {
 	 * @default 1.0
 	 */
 
-	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
+	get intensity() {
+
+		return this.combineMaterial.uniforms.opacity2.value;
+
+	}
 
 	/**
 	 * @type {Number}
 	 */
 
-	set intensity(value = 1.0) { this.combineMaterial.uniforms.opacity2.value = value; }
+	set intensity(value = 1.0) {
+
+		this.combineMaterial.uniforms.opacity2.value = value;
+
+	}
 
 	/**
 	 * The luminance distinction factor.
@@ -143,13 +167,21 @@ export class BloomPass extends Pass {
 	 * @default 1.0
 	 */
 
-	get distinction() { return this.luminosityMaterial.uniforms.distinction.value; }
+	get distinction() {
+
+		return this.luminosityMaterial.uniforms.distinction.value;
+
+	}
 
 	/**
 	 * @type {Number}
 	 */
 
-	set distinction(value = 1.0) { this.luminosityMaterial.uniforms.distinction.value = value; }
+	set distinction(value = 1.0) {
+
+		this.luminosityMaterial.uniforms.distinction.value = value;
+
+	}
 
 	/**
 	 * Renders the effect.
@@ -201,7 +233,11 @@ export class BloomPass extends Pass {
 
 		this.blurPass.initialise(renderer, alpha);
 
-		if(!alpha) { this.renderTarget.texture.format = RGBFormat; }
+		if(!alpha) {
+
+			this.renderTarget.texture.format = RGBFormat;
+
+		}
 
 	}
 

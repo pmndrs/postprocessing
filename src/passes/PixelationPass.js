@@ -51,7 +51,11 @@ export class PixelationPass extends Pass {
 	 * @default 30.0
 	 */
 
-	get granularity() { return this.pixelationMaterial.granularity; }
+	get granularity() {
+
+		return this.pixelationMaterial.granularity;
+
+	}
 
 	/**
 	 * A higher value yields coarser visuals.

@@ -175,10 +175,29 @@ export class BokehDemo extends Demo {
 			"blur": pass.bokehMaterial.uniforms.maxBlur.value
 		};
 
-		gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.focus.value = params.focus; });
-		gui.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.dof.value = params.dof; });
-		gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.aperture.value = params.aperture; });
-		gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params.blur; });
+		gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() {
+
+			pass.bokehMaterial.uniforms.focus.value = params.focus;
+
+		});
+
+		gui.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() {
+
+			pass.bokehMaterial.uniforms.dof.value = params.dof;
+
+		});
+
+		gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() {
+
+			pass.bokehMaterial.uniforms.aperture.value = params.aperture;
+
+		});
+
+		gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() {
+
+			pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
+
+		});
 
 	}
 

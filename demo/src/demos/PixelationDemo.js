@@ -243,8 +243,17 @@ export class PixelationDemo extends Demo {
 			object.rotation.y += 0.005;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 			time = performance.now() * 0.001;
 
@@ -272,7 +281,12 @@ export class PixelationDemo extends Demo {
 		};
 
 		gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
-		gui.add(params, "use mask").onChange(function() { maskPass.enabled = params["use mask"]; });
+
+		gui.add(params, "use mask").onChange(function() {
+
+			maskPass.enabled = params["use mask"];
+
+		});
 
 	}
 

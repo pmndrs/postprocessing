@@ -367,8 +367,17 @@ export class SMAADemo extends Demo {
 			objectC.rotation.copy(objectA.rotation);
 
 			// Prevent overflow.
-			if(objectA.rotation.x >= TWO_PI) { objectA.rotation.x -= TWO_PI; }
-			if(objectA.rotation.y >= TWO_PI) { objectA.rotation.y -= TWO_PI; }
+			if(objectA.rotation.x >= TWO_PI) {
+
+				objectA.rotation.x -= TWO_PI;
+
+			}
+
+			if(objectA.rotation.y >= TWO_PI) {
+
+				objectA.rotation.y -= TWO_PI;
+
+			}
 
 		}
 

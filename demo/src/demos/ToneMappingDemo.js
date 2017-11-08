@@ -193,8 +193,17 @@ export class ToneMappingDemo extends Demo {
 			object.rotation.y += 0.001;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 		}
 
@@ -221,16 +230,56 @@ export class ToneMappingDemo extends Demo {
 			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
 		};
 
-		gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() { pass.resolution = Math.pow(2, params.resolution); });
-		gui.add(params, "adaptive").onChange(function() { pass.adaptive = params.adaptive; });
+		gui.add(params, "resolution").min(6).max(11).step(1).onChange(function() {
+
+			pass.resolution = Math.pow(2, params.resolution);
+
+		});
+
+		gui.add(params, "adaptive").onChange(function() {
+
+			pass.adaptive = params.adaptive;
+
+		});
 
 		let f = gui.addFolder("Luminance");
-		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() { pass.luminosityMaterial.uniforms.distinction.value = params.distinction; });
-		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"]; });
-		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"]; });
-		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function() { pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"]; });
-		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function() { pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"]; });
-		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() { pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"]; });
+
+		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() {
+
+			pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
+
+		});
+
+		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function() {
+
+			pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
+
+		});
+
+		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() {
+
+			pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
+
+		});
+
+		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"];
+
+		});
+
+		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function() {
+
+			pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
+
+		});
+
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
+
+		});
+
 		f.open();
 
 	}

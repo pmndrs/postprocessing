@@ -207,8 +207,17 @@ export class GlitchDemo extends Demo {
 			object.rotation.y += 0.01;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 		}
 
@@ -231,7 +240,9 @@ export class GlitchDemo extends Demo {
 		};
 
 		gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function() {
+
 			pass.mode = params.mode;
+
 		});
 
 		gui.add(params, "custom noise").onChange(function() {
@@ -242,8 +253,6 @@ export class GlitchDemo extends Demo {
 
 			} else {
 
-				// Prevent the custom perturbation map from getting deleted.
-				pass.perturbMap = null;
 				pass.generatePerturbMap(64);
 
 			}

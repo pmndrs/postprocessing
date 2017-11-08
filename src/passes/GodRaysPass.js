@@ -196,14 +196,8 @@ export class GodRaysPass extends Pass {
 		 * @private
 		 */
 
-		this.godRaysMaterial = new GodRaysMaterial();
+		this.godRaysMaterial = new GodRaysMaterial(options);
 		this.godRaysMaterial.uniforms.lightPosition.value = this.screenPosition;
-
-		if(options.exposure !== undefined) { this.godRaysMaterial.uniforms.exposure.value = options.exposure; }
-		if(options.density !== undefined) { this.godRaysMaterial.uniforms.density.value = options.density; }
-		if(options.decay !== undefined) { this.godRaysMaterial.uniforms.decay.value = options.decay; }
-		if(options.weight !== undefined) { this.godRaysMaterial.uniforms.weight.value = options.weight; }
-		if(options.clampMax !== undefined) { this.godRaysMaterial.uniforms.clampMax.value = options.clampMax; }
 
 		this.samples = options.samples;
 
@@ -227,7 +221,11 @@ export class GodRaysPass extends Pass {
 	 * @default 0.5
 	 */
 
-	get resolutionScale() { return this.blurPass.resolutionScale; }
+	get resolutionScale() {
+
+		return this.blurPass.resolutionScale;
+
+	}
 
 	/**
 	 * You need to call {@link EffectComposer#setSize} after changing this value.
@@ -235,7 +233,11 @@ export class GodRaysPass extends Pass {
 	 * @type {Number}
 	 */
 
-	set resolutionScale(value = 0.5) { this.blurPass.resolutionScale = value; }
+	set resolutionScale(value = 0.5) {
+
+		this.blurPass.resolutionScale = value;
+
+	}
 
 	/**
 	 * The blur kernel size.
@@ -244,13 +246,21 @@ export class GodRaysPass extends Pass {
 	 * @default KernelSize.LARGE
 	 */
 
-	get kernelSize() { return this.blurPass.kernelSize; }
+	get kernelSize() {
+
+		return this.blurPass.kernelSize;
+
+	}
 
 	/**
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) { this.blurPass.kernelSize = value; }
+	set kernelSize(value = KernelSize.LARGE) {
+
+		this.blurPass.kernelSize = value;
+
+	}
 
 	/**
 	 * The overall intensity of the effect.
@@ -259,13 +269,21 @@ export class GodRaysPass extends Pass {
 	 * @default 1.0
 	 */
 
-	get intensity() { return this.combineMaterial.uniforms.opacity2.value; }
+	get intensity() {
+
+		return this.combineMaterial.uniforms.opacity2.value;
+
+	}
 
 	/**
 	 * @type {Number}
 	 */
 
-	set intensity(value = 1.0) { this.combineMaterial.uniforms.opacity2.value = value; }
+	set intensity(value = 1.0) {
+
+		this.combineMaterial.uniforms.opacity2.value = value;
+
+	}
 
 	/**
 	 * The number of samples per pixel.
@@ -274,7 +292,11 @@ export class GodRaysPass extends Pass {
 	 * @default 60
 	 */
 
-	get samples() { return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT); }
+	get samples() {
+
+		return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT);
+
+	}
 
 	/**
 	 * This value must be carefully chosen. A higher value directly increases the

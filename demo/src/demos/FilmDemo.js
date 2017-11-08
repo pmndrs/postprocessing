@@ -209,8 +209,17 @@ export class FilmDemo extends Demo {
 			object.rotation.y += 0.005;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 		}
 
@@ -228,7 +237,7 @@ export class FilmDemo extends Demo {
 		const pass = this.filmPass;
 
 		const params = {
-			"grayscale": pass.material.defines.GREYSCALE !== undefined,
+			"greyscale": pass.material.defines.GREYSCALE !== undefined,
 			"sepia": pass.material.defines.SEPIA !== undefined,
 			"vignette": pass.material.defines.VIGNETTE !== undefined,
 			"eskil": pass.material.defines.ESKIL !== undefined,
@@ -246,13 +255,16 @@ export class FilmDemo extends Demo {
 
 		let f = gui.addFolder("Greyscale");
 
-		f.add(params, "grayscale").onChange(function() {
-			params.grayscale ? pass.material.defines.GREYSCALE = "1" : delete pass.material.defines.GREYSCALE;
-			pass.material.needsUpdate = true;
+		f.add(params, "greyscale").onChange(function() {
+
+			pass.material.setGreyscaleEnabled(params.greyscale);
+
 		});
 
 		f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.greyscaleIntensity.value = params["greyscale intensity"];
+
 		});
 
 		f.open();
@@ -261,40 +273,38 @@ export class FilmDemo extends Demo {
 
 		f.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
-			if(params["blend mode"] === "add") {
-
-				delete pass.material.defines.SCREEN_MODE;
-
-			} else {
-
-				pass.material.defines.SCREEN_MODE = "1";
-
-			}
-
-			pass.material.needsUpdate = true;
+			pass.material.setScreenModeEnabled(params["blend mode"] !== "add");
 
 		});
 
 		f.add(params, "noise").onChange(function() {
-			params.noise ? pass.material.defines.NOISE = "1" : delete pass.material.defines.NOISE;
-			pass.material.needsUpdate = true;
+
+			pass.material.setNoiseEnabled(params.noise);
+
 		});
 
 		f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.noiseIntensity.value = params["noise intensity"];
+
 		});
 
 		f.add(params, "scanlines").onChange(function() {
-			params.scanlines ? pass.material.defines.SCANLINES = "1" : delete pass.material.defines.SCANLINES;
-			pass.material.needsUpdate = true;
+
+			pass.material.setScanlinesEnabled(params.scanlines);
+
 		});
 
 		f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.scanlineIntensity.value = params["scanlines intensity"];
+
 		});
 
 		f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function() {
+
 			pass.scanlineDensity = params["scanlines count"]; composer.setSize();
+
 		});
 
 		f.open();
@@ -302,12 +312,15 @@ export class FilmDemo extends Demo {
 		f = gui.addFolder("Sepia");
 
 		f.add(params, "sepia").onChange(function() {
-			params.sepia ? pass.material.defines.SEPIA = "1" : delete pass.material.defines.SEPIA;
-			pass.material.needsUpdate = true;
+
+			pass.material.setSepiaEnabled(params.sepia);
+
 		});
 
 		f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.sepiaIntensity.value = params["sepia intensity"];
+
 		});
 
 		f.open();
@@ -315,21 +328,27 @@ export class FilmDemo extends Demo {
 		f = gui.addFolder("Vignette");
 
 		f.add(params, "vignette").onChange(function() {
-			params.vignette ? pass.material.defines.VIGNETTE = "1" : delete pass.material.defines.VIGNETTE;
-			pass.material.needsUpdate = true;
+
+			pass.material.setVignetteEnabled(params.vignette);
+
 		});
 
 		f.add(params, "eskil").onChange(function() {
-			params.eskil ? pass.material.defines.ESKIL = "1" : delete pass.material.defines.ESKIL;
-			pass.material.needsUpdate = true;
+
+			pass.material.setEskilEnabled(params.eskil);
+
 		});
 
 		f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.vignetteOffset.value = params["vignette offset"];
+
 		});
 
 		f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function() {
+
 			pass.material.uniforms.vignetteDarkness.value = params["vignette darkness"];
+
 		});
 
 		f.open();

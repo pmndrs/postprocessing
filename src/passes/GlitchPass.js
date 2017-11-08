@@ -123,7 +123,11 @@ export class GlitchPass extends Pass {
 	 * @type {Texture}
 	 */
 
-	get perturbMap() { return this.texture; }
+	get perturbMap() {
+
+		return this.texture;
+
+	}
 
 	/**
 	 * Assigning a new perturbation map does not destroy the current one!

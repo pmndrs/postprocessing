@@ -266,30 +266,70 @@ export class GodRaysDemo extends Demo {
 			"blend mode": "screen"
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { pass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { pass.kernelSize = params.blurriness; });
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.intensity = params.intensity; });
-		gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.density.value = params.density; });
-		gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.decay.value = params.decay; });
-		gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.weight.value = params.weight; });
-		gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.exposure.value = params.exposure; });
-		gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() { pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax; });
-		gui.add(params, "samples").min(15).max(200).step(1).onChange(function() { pass.samples = params.samples; });
-		gui.addColor(params, "color").onChange(function() { sun.material.color.setHex(params.color); directionalLight.color.setHex(params.color); });
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.resolutionScale = params.resolution;
+			composer.setSize();
+
+		});
+
+		gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+
+			pass.kernelSize = params.blurriness;
+
+		});
+
+		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.intensity = params.intensity;
+
+		});
+
+		gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.godRaysMaterial.uniforms.density.value = params.density;
+
+		});
+
+		gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.godRaysMaterial.uniforms.decay.value = params.decay;
+
+		});
+
+		gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.godRaysMaterial.uniforms.weight.value = params.weight;
+
+		});
+
+		gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
+
+		});
+
+		gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
+
+		});
+
+		gui.add(params, "samples").min(15).max(200).step(1).onChange(function() {
+
+			pass.samples = params.samples;
+
+		});
+
+		gui.addColor(params, "color").onChange(function() {
+
+			sun.material.color.setHex(params.color); directionalLight.color.setHex(params.color);
+
+		});
 
 		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
-			if(params["blend mode"] === "add") {
-
-				delete pass.combineMaterial.defines.SCREEN_MODE;
-
-			} else {
-
-				pass.combineMaterial.defines.SCREEN_MODE = "1";
-
-			}
-
-			pass.combineMaterial.needsUpdate = true;
+			pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
 
 		});
 

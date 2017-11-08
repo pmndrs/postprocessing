@@ -109,7 +109,11 @@ export class EffectComposer {
 	 * @default null
 	 */
 
-	get depthTexture() { return this.readBuffer.depthTexture; }
+	get depthTexture() {
+
+		return this.readBuffer.depthTexture;
+
+	}
 
 	/**
 	 * The read and write buffers share a single depth texture. Depth will be

@@ -49,13 +49,21 @@ export class TexturePass extends Pass {
 	 * @type {Texture}
 	 */
 
-	get texture() { return this.copyMaterial.uniforms.tDiffuse.value; }
+	get texture() {
+
+		return this.copyMaterial.uniforms.tDiffuse.value;
+
+	}
 
 	/**
 	 * @type {Texture}
 	 */
 
-	set texture(value) { this.copyMaterial.uniforms.tDiffuse.value = value; }
+	set texture(value) {
+
+		this.copyMaterial.uniforms.tDiffuse.value = value;
+
+	}
 
 	/**
 	 * The opacity.
@@ -64,13 +72,21 @@ export class TexturePass extends Pass {
 	 * @default 1.0
 	 */
 
-	get opacity() { return this.copyMaterial.uniforms.opacity.value; }
+	get opacity() {
+
+		return this.copyMaterial.uniforms.opacity.value;
+
+	}
 
 	/**
 	 * @type {Number}
 	 */
 
-	set opacity(value = 1.0) { this.copyMaterial.uniforms.opacity.value = value; }
+	set opacity(value = 1.0) {
+
+		this.copyMaterial.uniforms.opacity.value = value;
+
+	}
 
 	/**
 	 * Renders the effect.

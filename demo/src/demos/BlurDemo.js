@@ -243,8 +243,17 @@ export class BlurDemo extends Demo {
 			object.rotation.y += 0.005;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 		}
 
@@ -270,8 +279,17 @@ export class BlurDemo extends Demo {
 			"strength": combinePass.material.uniforms.opacity1.value
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() { blurPass.resolutionScale = params.resolution; composer.setSize(); });
-		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() { blurPass.kernelSize = params["kernel size"]; });
+		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			blurPass.resolutionScale = params.resolution; composer.setSize();
+
+		});
+
+		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+
+			blurPass.kernelSize = params["kernel size"];
+
+		});
 
 		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
 

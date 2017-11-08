@@ -199,8 +199,17 @@ export class DotScreenDemo extends Demo {
 			object.rotation.y += 0.001;
 
 			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) { object.rotation.x -= TWO_PI; }
-			if(object.rotation.y >= TWO_PI) { object.rotation.y -= TWO_PI; }
+			if(object.rotation.x >= TWO_PI) {
+
+				object.rotation.x -= TWO_PI;
+
+			}
+
+			if(object.rotation.y >= TWO_PI) {
+
+				object.rotation.y -= TWO_PI;
+
+			}
 
 		}
 
@@ -227,18 +236,41 @@ export class DotScreenDemo extends Demo {
 
 		gui.add(params, "average").onChange(function() {
 
-			params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
-			pass.material.needsUpdate = true;
+			pass.material.setAverageEnabled(params.average);
 
 		});
 
-		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.scale.value = params.scale; });
-		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() { pass.material.uniforms.angle.value = params.angle; });
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.intensity.value = params.intensity; });
+		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-		let f = gui.addFolder("Center");
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.x = params["center X"]; });
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() { pass.material.uniforms.offsetRepeat.value.y = params["center Y"]; });
+			pass.material.uniforms.scale.value = params.scale;
+
+		});
+
+		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() {
+
+			pass.material.uniforms.angle.value = params.angle;
+
+		});
+
+		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.material.uniforms.intensity.value = params.intensity;
+
+		});
+
+		const f = gui.addFolder("Center");
+
+		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.material.uniforms.offsetRepeat.value.x = params["center X"];
+
+		});
+
+		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.material.uniforms.offsetRepeat.value.y = params["center Y"];
+
+		});
 
 	}
 

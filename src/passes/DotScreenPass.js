@@ -11,10 +11,10 @@ export class DotScreenPass extends Pass {
 	 * Constructs a new dot screen pass.
 	 *
 	 * @param {Object} [options] - The options.
+	 * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
 	 * @param {Number} [options.angle=1.57] - The angle of the pattern.
 	 * @param {Number} [options.scale=1.0] - The scale of the overall effect.
 	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
-	 * @param {Boolean} [options.average=false] - Whether the shader should output a colour average (black and white).
 	 */
 
 	constructor(options = {}) {
@@ -40,11 +40,7 @@ export class DotScreenPass extends Pass {
 		 * @private
 		 */
 
-		this.material = new DotScreenMaterial(options.average);
-
-		if(options.angle !== undefined) { this.material.uniforms.angle.value = options.angle; }
-		if(options.scale !== undefined) { this.material.uniforms.scale.value = options.scale; }
-		if(options.intensity !== undefined) { this.material.uniforms.intensity.value = options.intensity; }
+		this.material = new DotScreenMaterial(options);
 
 		this.quad.material = this.material;
 

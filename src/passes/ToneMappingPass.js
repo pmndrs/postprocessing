@@ -23,7 +23,11 @@ import { Pass } from "./Pass.js";
  * @return {Number} The next power of two.
  */
 
-function ceil2(n) { return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n)))); }
+function ceil2(n) {
+
+	return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n))));
+
+}
 
 /**
  * A tone mapping pass that supports adaptive luminosity.
@@ -157,7 +161,11 @@ export class ToneMappingPass extends Pass {
 	 * @default 256
 	 */
 
-	get resolution() { return this.renderTargetLuminosity.width; }
+	get resolution() {
+
+		return this.renderTargetLuminosity.width;
+
+	}
 
 	/**
 	 * The resolution of the render targets. Must be a power of two for mipmaps.
@@ -185,7 +193,11 @@ export class ToneMappingPass extends Pass {
 	 * @default true
 	 */
 
-	get adaptive() { return (this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined); }
+	get adaptive() {
+
+		return (this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined);
+
+	}
 
 	/**
 	 * Whether this pass should use adaptive luminosity.

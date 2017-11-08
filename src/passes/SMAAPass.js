@@ -188,8 +188,7 @@ export class SMAAPass extends Pass {
 		this.colorEdgesMaterial.uniforms.texelSize.value.copy(
 			this.weightsMaterial.uniforms.texelSize.value.copy(
 				this.blendMaterial.uniforms.texelSize.value.set(
-					1.0 / width, 1.0 / height
-		)));
+					1.0 / width, 1.0 / height)));
 
 	}
 
@@ -206,7 +205,11 @@ export class SMAAPass extends Pass {
 	 * searchImage.src = SMAAPass.searchImageDataUrl;
 	 */
 
-	static get searchImageDataUrl() { return searchImageDataUrl; }
+	static get searchImageDataUrl() {
+
+		return searchImageDataUrl;
+
+	}
 
 	/**
 	 * The SMAA area image, encoded as a base64 data url.
@@ -221,6 +224,10 @@ export class SMAAPass extends Pass {
 	 * areaImage.src = SMAAPass.areaImageDataUrl;
 	 */
 
-	static get areaImageDataUrl() { return areaImageDataUrl; }
+	static get areaImageDataUrl() {
+
+		return areaImageDataUrl;
+
+	}
 
 }

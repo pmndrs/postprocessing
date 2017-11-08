@@ -71,7 +71,11 @@ export class Demo {
 	 * @param {Function} callback - Call this function when all assets have been loaded.
 	 */
 
-	load(callback) { callback(); }
+	load(callback) {
+
+		callback();
+
+	}
 
 	/**
 	 * Creates the scene.

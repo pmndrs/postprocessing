@@ -164,16 +164,40 @@ export class ShockWaveDemo extends Demo {
 			"size": pass.shockWaveMaterial.uniforms.size.value,
 			"extent": pass.shockWaveMaterial.uniforms.maxRadius.value,
 			"waveSize": pass.shockWaveMaterial.uniforms.waveSize.value,
-			"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value,
-			"explode": function() { pass.explode(); }
+			"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value
 		};
 
-		gui.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function() { pass.speed = params.speed; });
-		gui.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function() { pass.shockWaveMaterial.uniforms.size.value = params.size; });
-		gui.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function() { pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent; });
-		gui.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function() { pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize; });
-		gui.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function() { pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude; });
-		gui.add(params, "explode");
+		gui.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function() {
+
+			pass.speed = params.speed;
+
+		});
+
+		gui.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function() {
+
+			pass.shockWaveMaterial.uniforms.size.value = params.size;
+
+		});
+
+		gui.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function() {
+
+			pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent;
+
+		});
+
+		gui.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function() {
+
+			pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize;
+
+		});
+
+		gui.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function() {
+
+			pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude;
+
+		});
+
+		gui.add(pass, "explode");
 
 	}
 

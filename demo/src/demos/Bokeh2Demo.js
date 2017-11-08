@@ -145,14 +145,13 @@ export class Bokeh2Demo extends Demo {
 			rings: 3,
 			samples: 2,
 			showFocus: false,
-			manualDoF: false,
+			manualDoF: true,
 			vignette: false,
 			pentagon: false,
 			shaderFocus: true,
 			noise: true
 		});
 
-		pass.bokehMaterial.uniforms.focalStop.value = 64;
 		pass.renderToScreen = true;
 		this.bokehPass = pass;
 		composer.addPass(pass);
@@ -194,69 +193,125 @@ export class Bokeh2Demo extends Demo {
 		let f = gui.addFolder("Focus");
 
 		f.add(params, "show focus").onChange(function() {
-			params["show focus"] ? pass.bokehMaterial.defines.SHOW_FOCUS = "1" : delete pass.bokehMaterial.defines.SHOW_FOCUS;
-			pass.bokehMaterial.needsUpdate = true;
+
+			pass.bokehMaterial.setShowFocusEnabled(params["show focus"]);
+
 		});
 
 		f.add(params, "shader focus").onChange(function() {
-			params["shader focus"] ? pass.bokehMaterial.defines.SHADER_FOCUS = "1" : delete pass.bokehMaterial.defines.SHADER_FOCUS;
-			pass.bokehMaterial.needsUpdate = true;
+
+			pass.bokehMaterial.setShaderFocusEnabled(params["shader focus"]);
+
 		});
 
 		f.add(params, "manual DoF").onChange(function() {
-			params["manual DoF"] ? pass.bokehMaterial.defines.MANUAL_DOF = "1" : delete pass.bokehMaterial.defines.MANUAL_DOF;
-			pass.bokehMaterial.needsUpdate = true;
+
+			pass.bokehMaterial.setManualDepthOfFieldEnabled(params["manual DoF"]);
+
 		});
 
-		f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function() { pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"]; });
-		f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function() { pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"]; });
-		f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"]; });
-		f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"]; });
+		f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function() {
+
+			pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"];
+
+		});
+
+		f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function() {
+
+			pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"];
+
+		});
+
+		f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"];
+
+		});
+
+		f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"];
+
+		});
 
 		f.open();
 
 		f = gui.addFolder("Sampling");
 
 		f.add(params, "rings").min(1).max(6).step(1).onChange(function() {
+
 			pass.bokehMaterial.defines.RINGS_INT = params.rings.toFixed(0);
 			pass.bokehMaterial.defines.RINGS_FLOAT = params.rings.toFixed(1);
 			pass.bokehMaterial.needsUpdate = true;
+
 		});
 
 		f.add(params, "samples").min(1).max(6).step(1).onChange(function() {
+
 			pass.bokehMaterial.defines.SAMPLES_INT = params.samples.toFixed(0);
 			pass.bokehMaterial.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
 			pass.bokehMaterial.needsUpdate = true;
+
 		});
 
 		f = gui.addFolder("Blur");
 
-		f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function() { pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"]; });
-		f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.bias.value = params.bias; });
-		f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function() { pass.bokehMaterial.uniforms.fringe.value = params.fringe; });
+		f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(function() {
 
-		f.add(params, "noise").onChange(function() {
-			params.noise ? pass.bokehMaterial.defines.NOISE = "1" : delete pass.bokehMaterial.defines.NOISE;
-			pass.bokehMaterial.needsUpdate = true;
+			pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"];
+
 		});
 
-		f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function() { pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering; });
+		f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function() {
+
+			pass.bokehMaterial.uniforms.bias.value = params.bias;
+
+		});
+
+		f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function() {
+
+			pass.bokehMaterial.uniforms.fringe.value = params.fringe;
+
+		});
+
+		f.add(params, "noise").onChange(function() {
+
+			pass.bokehMaterial.setNoiseEnabled(params.noise);
+
+		});
+
+		f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function() {
+
+			pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering;
+
+		});
 
 		f.add(params, "pentagon").onChange(function() {
-			params.pentagon ? pass.bokehMaterial.defines.PENTAGON = "1" : delete pass.bokehMaterial.defines.PENTAGON;
-			pass.bokehMaterial.needsUpdate = true;
+
+			pass.bokehMaterial.setPentagonEnabled(params.pentagon);
+
 		});
 
 		f.open();
 
 		f = gui.addFolder("Luminosity");
 
-		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"]; });
-		f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function() { pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"]; });
+		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"];
+
+		});
+
+		f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function() {
+
+			pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"];
+
+		});
 
 		gui.add(params, "vignette").onChange(function() {
-			params.vignette ? pass.bokehMaterial.defines.VIGNETTE = "1" : delete pass.bokehMaterial.defines.VIGNETTE;
-			pass.bokehMaterial.needsUpdate = true;
+
+			pass.bokehMaterial.setVignetteEnabled(params.vignette);
+
 		});
 
 	}

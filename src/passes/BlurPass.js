@@ -93,7 +93,11 @@ export class BlurPass extends Pass {
 	 * @type {Number}
 	 */
 
-	get width() { return this.renderTargetX.width; }
+	get width() {
+
+		return this.renderTargetX.width;
+
+	}
 
 	/**
 	 * The absolute height of the internal render targets.
@@ -101,7 +105,11 @@ export class BlurPass extends Pass {
 	 * @type {Number}
 	 */
 
-	get height() { return this.renderTargetX.height; }
+	get height() {
+
+		return this.renderTargetX.height;
+
+	}
 
 	/**
 	 * The kernel size.
@@ -110,13 +118,21 @@ export class BlurPass extends Pass {
 	 * @default KernelSize.LARGE
 	 */
 
-	get kernelSize() { return this.convolutionMaterial.kernelSize; }
+	get kernelSize() {
+
+		return this.convolutionMaterial.kernelSize;
+
+	}
 
 	/**
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) { this.convolutionMaterial.kernelSize = value; }
+	set kernelSize(value = KernelSize.LARGE) {
+
+		this.convolutionMaterial.kernelSize = value;
+
+	}
 
 	/**
 	 * Blurs the read buffer.
