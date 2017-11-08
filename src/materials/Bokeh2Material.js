@@ -18,6 +18,8 @@ export class Bokeh2Material extends ShaderMaterial {
 	 * @param {PerspectiveCamera} [camera] - The main camera.
 	 * @param {Object} [options] - Additional options.
 	 * @param {Vector2} [options.texelSize] - The absolute screen texel size.
+	 * @param {Boolean} [options.rings=3] - The number of blurring iterations.
+	 * @param {Boolean} [options.samples=2] - The amount of samples taken per ring.
 	 * @param {Boolean} [options.showFocus=false] - Whether the focus point should be highlighted.
 	 * @param {Boolean} [options.manualDoF=false] - Enables manual depth of field blur.
 	 * @param {Boolean} [options.vignette=false] - Enables a vignette effect.
@@ -28,15 +30,17 @@ export class Bokeh2Material extends ShaderMaterial {
 
 	constructor(camera = null, options = {}) {
 
-		if(options.rings === undefined) { options.rings = 3; }
-		if(options.samples === undefined) { options.samples = 2; }
-		if(options.showFocus === undefined) { options.showFocus = false; }
-		if(options.showFocus === undefined) { options.showFocus = false; }
-		if(options.manualDoF === undefined) { options.manualDoF = false; }
-		if(options.vignette === undefined) { options.vignette = false; }
-		if(options.pentagon === undefined) { options.pentagon = false; }
-		if(options.shaderFocus === undefined) { options.shaderFocus = true; }
-		if(options.noise === undefined) { options.noise = true; }
+		const settings = Object.assign({
+			texelSize: null,
+			rings: 3,
+			samples: 2,
+			showFocus: false,
+			manualDoF: false,
+			vignette: false,
+			pentagon: false,
+			shaderFocus: true,
+			noise: true
+		}, options);
 
 		super({
 
@@ -44,10 +48,10 @@ export class Bokeh2Material extends ShaderMaterial {
 
 			defines: {
 
-				RINGS_INT: options.rings.toFixed(0),
-				RINGS_FLOAT: options.rings.toFixed(1),
-				SAMPLES_INT: options.samples.toFixed(0),
-				SAMPLES_FLOAT: options.samples.toFixed(1)
+				RINGS_INT: settings.rings.toFixed(0),
+				RINGS_FLOAT: settings.rings.toFixed(1),
+				SAMPLES_INT: settings.samples.toFixed(0),
+				SAMPLES_FLOAT: settings.samples.toFixed(1)
 
 			},
 
@@ -85,15 +89,152 @@ export class Bokeh2Material extends ShaderMaterial {
 
 		});
 
-		if(options.showFocus) { this.defines.SHOW_FOCUS = "1"; }
-		if(options.manualDoF) { this.defines.MANUAL_DOF = "1"; }
-		if(options.vignette) { this.defines.VIGNETTE = "1"; }
-		if(options.pentagon) { this.defines.PENTAGON = "1"; }
-		if(options.shaderFocus) { this.defines.SHADER_FOCUS = "1"; }
-		if(options.noise) { this.defines.NOISE = "1"; }
+		this.setShowFocusEnabled(settings.showFocus);
+		this.setManualDepthOfFieldEnabled(settings.manualDoF);
+		this.setVignetteEnabled(settings.vignette);
+		this.setPentagonEnabled(settings.pentagon);
+		this.setShaderFocusEnabled(settings.shaderFocus);
+		this.setNoiseEnabled(settings.noise);
 
-		if(options.texelSize !== undefined) { this.setTexelSize(options.texelSize.x, options.texelSize.y); }
-		if(camera !== null) { this.adoptCameraSettings(camera); }
+		if(settings.texelSize !== null) {
+
+			this.setTexelSize(settings.texelSize.x, settings.texelSize.y);
+
+		}
+
+		this.adoptCameraSettings(camera);
+
+	}
+
+	/**
+	 * Defines whether the focus should be shown.
+	 *
+	 * @param {Boolean} enabled - True if the focus should be shown, false otherwise.
+	 */
+
+	setShowFocusEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SHOW_FOCUS = "1";
+
+		} else {
+
+			delete this.defines.SHOW_FOCUS;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Defines whether manual Depth of Field should be enabled.
+	 *
+	 * @param {Boolean} enabled - Whether manual DoF should be enabled.
+	 */
+
+	setManualDepthOfFieldEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.MANUAL_DOF = "1";
+
+		} else {
+
+			delete this.defines.MANUAL_DOF;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Defines whether the Vignette effect should be enabled.
+	 *
+	 * @param {Boolean} enabled - Whether the Vignette effect should be enabled.
+	 */
+
+	setVignetteEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.VIGNETTE = "1";
+
+		} else {
+
+			delete this.defines.VIGNETTE;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Defines whether the pentagonal blur effect should be enabled.
+	 *
+	 * @param {Boolean} enabled - Whether the pentagonal blur effect should be enabled.
+	 */
+
+	setPentagonEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.PENTAGON = "1";
+
+		} else {
+
+			delete this.defines.PENTAGON;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the automatic shader focus.
+	 *
+	 * @param {Boolean} enabled - Whether the shader focus should be enabled.
+	 */
+
+	setShaderFocusEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SHADER_FOCUS = "1";
+
+		} else {
+
+			delete this.defines.SHADER_FOCUS;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Defines whether the dithering should compute noise.
+	 *
+	 * @param {Boolean} enabled - Whether noise-based dithering should be enabled.
+	 */
+
+	setNoiseEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.NOISE = "1";
+
+		} else {
+
+			delete this.defines.NOISE;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 
@@ -119,9 +260,13 @@ export class Bokeh2Material extends ShaderMaterial {
 
 	adoptCameraSettings(camera) {
 
-		this.uniforms.cameraNear.value = camera.near;
-		this.uniforms.cameraFar.value = camera.far;
-		this.uniforms.focalLength.value = camera.getFocalLength(); // unit: mm.
+		if(camera !== null) {
+
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.focalLength.value = camera.getFocalLength(); // unit: mm.
+
+		}
 
 	}
 

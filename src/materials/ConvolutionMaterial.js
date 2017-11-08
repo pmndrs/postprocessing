@@ -65,7 +65,11 @@ export class ConvolutionMaterial extends ShaderMaterial {
 	 * @return {Float32Array} The kernel.
 	 */
 
-	getKernel() { return kernelPresets[this.kernelSize]; }
+	getKernel() {
+
+		return kernelPresets[this.kernelSize];
+
+	}
 
 	/**
 	 * Sets the texel size.

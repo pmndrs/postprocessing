@@ -45,7 +45,29 @@ export class CombineMaterial extends ShaderMaterial {
 
 		});
 
-		if(screenMode) { this.defines.SCREEN_MODE = "1"; }
+		this.setScreenModeEnabled(screenMode);
+
+	}
+
+	/**
+	 * Enables or disables the Screen blend mode.
+	 *
+	 * @param {Boolean} enabled - Whether the Screen blend mode should be enabled.
+	 */
+
+	setScreenModeEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SCREEN_MODE = "1";
+
+		} else {
+
+			delete this.defines.SCREEN_MODE;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 

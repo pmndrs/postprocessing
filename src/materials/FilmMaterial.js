@@ -48,22 +48,26 @@ export class FilmMaterial extends ShaderMaterial {
 
 	constructor(options = {}) {
 
-		if(options.screenMode === undefined) { options.screenMode = true; }
-		if(options.noise === undefined) { options.noise = true; }
-		if(options.scanlines === undefined) { options.scanlines = true; }
+		const settings = Object.assign({
 
-		if(options.greyscale === undefined) { options.greyscale = false; }
-		if(options.sepia === undefined) { options.sepia = false; }
-		if(options.vignette === undefined) { options.vignette = false; }
-		if(options.eskil === undefined) { options.eskil = false; }
+			screenMode: true,
+			noise: true,
+			scanlines: true,
 
-		if(options.noiseIntensity === undefined) { options.noiseIntensity = 0.5; }
-		if(options.scanlineIntensity === undefined) { options.scanlineIntensity = 0.05; }
-		if(options.greyscaleIntensity === undefined) { options.greyscaleIntensity = 1.0; }
-		if(options.sepiaIntensity === undefined) { options.sepiaIntensity = 1.0; }
+			greyscale: false,
+			sepia: false,
+			vignette: false,
+			eskil: false,
 
-		if(options.vignetteOffset === undefined) { options.vignetteOffset = 1.0; }
-		if(options.vignetteDarkness === undefined) { options.vignetteDarkness = 1.0; }
+			noiseIntensity: 0.5,
+			scanlineIntensity: 0.05,
+			greyscaleIntensity: 1.0,
+			sepiaIntensity: 1.0,
+
+			vignetteOffset: 1.0,
+			vignetteDarkness: 1.0
+
+		}, options);
 
 		super({
 
@@ -74,15 +78,15 @@ export class FilmMaterial extends ShaderMaterial {
 				tDiffuse: new Uniform(null),
 				time: new Uniform(0.0),
 
-				noiseIntensity: new Uniform(options.noiseIntensity),
-				scanlineIntensity: new Uniform(options.scanlineIntensity),
+				noiseIntensity: new Uniform(settings.noiseIntensity),
+				scanlineIntensity: new Uniform(settings.scanlineIntensity),
 				scanlineCount: new Uniform(0.0),
 
-				greyscaleIntensity: new Uniform(options.greyscaleIntensity),
-				sepiaIntensity: new Uniform(options.sepiaIntensity),
+				greyscaleIntensity: new Uniform(settings.greyscaleIntensity),
+				sepiaIntensity: new Uniform(settings.sepiaIntensity),
 
-				vignetteOffset: new Uniform(options.vignetteOffset),
-				vignetteDarkness: new Uniform(options.vignetteDarkness)
+				vignetteOffset: new Uniform(settings.vignetteOffset),
+				vignetteDarkness: new Uniform(settings.vignetteDarkness)
 
 			},
 
@@ -94,14 +98,169 @@ export class FilmMaterial extends ShaderMaterial {
 
 		});
 
-		if(options.greyscale) { this.defines.GREYSCALE = "1"; }
-		if(options.sepia) { this.defines.SEPIA = "1"; }
-		if(options.vignette) { this.defines.VIGNETTE = "1"; }
-		if(options.eskil) { this.defines.ESKIL = "1"; }
+		this.setScreenModeEnabled(settings.screenMode);
+		this.setNoiseEnabled(settings.noise);
+		this.setScanlinesEnabled(settings.scanlines);
+		this.setGreyscaleEnabled(settings.greyscale);
+		this.setSepiaEnabled(settings.sepia);
+		this.setVignetteEnabled(settings.vignette);
+		this.setEskilEnabled(settings.eskil);
 
-		if(options.screenMode) { this.defines.SCREEN_MODE = "1"; }
-		if(options.noise) { this.defines.NOISE = "1"; }
-		if(options.scanlines) { this.defines.SCANLINES = "1"; }
+	}
+
+	/**
+	 * Enables or disables the Screen blend mode.
+	 *
+	 * @param {Boolean} enabled - Whether the Screen blend mode should be enabled.
+	 */
+
+	setScreenModeEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SCREEN_MODE = "1";
+
+		} else {
+
+			delete this.defines.SCREEN_MODE;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the noise effect.
+	 *
+	 * @param {Boolean} enabled - Whether the noise effect should be enabled.
+	 */
+
+	setNoiseEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.NOISE = "1";
+
+		} else {
+
+			delete this.defines.NOISE;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the scanlines effect.
+	 *
+	 * @param {Boolean} enabled - Whether the scanlines effect should be enabled.
+	 */
+
+	setScanlinesEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SCANLINES = "1";
+
+		} else {
+
+			delete this.defines.SCANLINES;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the greyscale effect.
+	 *
+	 * @param {Boolean} enabled - Whether the greyscale effect should be enabled.
+	 */
+
+	setGreyscaleEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.GREYSCALE = "1";
+
+		} else {
+
+			delete this.defines.GREYSCALE;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the sepia effect.
+	 *
+	 * @param {Boolean} enabled - Whether the sepia effect should be enabled.
+	 */
+
+	setSepiaEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.SEPIA = "1";
+
+		} else {
+
+			delete this.defines.SEPIA;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the Vignette effect.
+	 *
+	 * @param {Boolean} enabled - Whether the Vignette effect should be enabled.
+	 */
+
+	setVignetteEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.VIGNETTE = "1";
+
+		} else {
+
+			delete this.defines.VIGNETTE;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the Eskil Vignette effect.
+	 *
+	 * Has no effect if Vignette is disabled.
+	 *
+	 * @param {Boolean} enabled - Whether the Eskil Vignette effect should be enabled.
+	 */
+
+	setEskilEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.ESKIL = "1";
+
+		} else {
+
+			delete this.defines.ESKIL;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 

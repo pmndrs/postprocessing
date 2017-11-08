@@ -28,11 +28,13 @@ export class LuminosityMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new luminosity material.
 	 *
-	 * @param {Boolean} [color=false] - Defines whether the shader should output colours scaled with their luminance value.
-	 * @param {Vector2} [range] - If provided, the shader will mask out texels that aren't in the specified luminance range.
+	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colours scaled with their luminance value.
+	 * @param {Vector2} [luminanceRange] - If provided, the shader will mask out texels that aren't in the specified luminance range.
 	 */
 
-	constructor(color = false, range = null) {
+	constructor(colorOutput = false, luminanceRange = null) {
+
+		const maskLuminance = (luminanceRange !== null);
 
 		super({
 
@@ -42,7 +44,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 				tDiffuse: new Uniform(null),
 				distinction: new Uniform(1.0),
-				range: new Uniform((range !== null) ? range : new Vector2())
+				range: new Uniform(maskLuminance ? luminanceRange : new Vector2())
 
 			},
 
@@ -51,8 +53,52 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 		});
 
-		if(color) { this.defines.COLOR = "1"; }
-		if(range !== null) { this.defines.RANGE = "1"; }
+		this.setColorOutputEnabled(colorOutput);
+		this.setLuminanceRangeEnabled(maskLuminance);
+
+	}
+
+	/**
+	 * Enables or disables color output.
+	 *
+	 * @param {Boolean} enabled - Whether color output should be enabled.
+	 */
+
+	setColorOutputEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.COLOR = "1";
+
+		} else {
+
+			delete this.defines.COLOR;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the luminance mask.
+	 *
+	 * @param {Boolean} enabled - Whether the luminance mask should be enabled.
+	 */
+
+	setLuminanceRangeEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.RANGE = "1";
+
+		} else {
+
+			delete this.defines.RANGE;
+
+		}
+
+		this.needsUpdate = true;
 
 	}
 

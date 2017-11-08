@@ -25,10 +25,12 @@ export class BokehMaterial extends ShaderMaterial {
 
 	constructor(camera = null, options = {}) {
 
-		if(options.focus === undefined) { options.focus = 1.0; }
-		if(options.dof === undefined) { options.dof = 0.02; }
-		if(options.aperture === undefined) { options.aperture = 0.025; }
-		if(options.maxBlur === undefined) { options.maxBlur = 1.0; }
+		const settings = Object.assign({
+			focus: 1.0,
+			dof: 0.02,
+			aperture: 0.025,
+			maxBlur: 1.0
+		}, options);
 
 		super({
 
@@ -43,10 +45,10 @@ export class BokehMaterial extends ShaderMaterial {
 				tDiffuse: new Uniform(null),
 				tDepth: new Uniform(null),
 
-				focus: new Uniform(options.focus),
-				dof: new Uniform(options.dof),
-				aperture: new Uniform(options.aperture),
-				maxBlur: new Uniform(options.maxBlur)
+				focus: new Uniform(settings.focus),
+				dof: new Uniform(settings.dof),
+				aperture: new Uniform(settings.aperture),
+				maxBlur: new Uniform(settings.maxBlur)
 
 			},
 
@@ -58,7 +60,7 @@ export class BokehMaterial extends ShaderMaterial {
 
 		});
 
-		if(camera !== null) { this.adoptCameraSettings(camera); }
+		this.adoptCameraSettings(camera);
 
 	}
 
@@ -70,9 +72,13 @@ export class BokehMaterial extends ShaderMaterial {
 
 	adoptCameraSettings(camera) {
 
-		this.uniforms.cameraNear.value = camera.near;
-		this.uniforms.cameraFar.value = camera.far;
-		this.uniforms.aspect.value = camera.aspect;
+		if(camera !== null) {
+
+			this.uniforms.cameraNear.value = camera.near;
+			this.uniforms.cameraFar.value = camera.far;
+			this.uniforms.aspect.value = camera.aspect;
+
+		}
 
 	}
 

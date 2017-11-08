@@ -48,7 +48,11 @@ export class PixelationMaterial extends ShaderMaterial {
 	 * @type {Number}
 	 */
 
-	get granularity() { return this.uniforms.granularity.value; }
+	get granularity() {
+
+		return this.uniforms.granularity.value;
+
+	}
 
 	/**
 	 * A higher value yields coarser visuals.

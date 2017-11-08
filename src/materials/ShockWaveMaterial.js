@@ -22,9 +22,11 @@ export class ShockWaveMaterial extends ShaderMaterial {
 
 	constructor(options = {}) {
 
-		if(options.maxRadius === undefined) { options.maxRadius = 1.0; }
-		if(options.waveSize === undefined) { options.waveSize = 0.2; }
-		if(options.amplitude === undefined) { options.amplitude = 0.05; }
+		const settings = Object.assign({
+			maxRadius: 1.0,
+			waveSize: 0.2,
+			amplitude: 0.05
+		}, options);
 
 		super({
 
@@ -39,10 +41,10 @@ export class ShockWaveMaterial extends ShaderMaterial {
 				cameraDistance: new Uniform(1.0),
 
 				size: new Uniform(1.0),
-				radius: new Uniform(-options.waveSize),
-				maxRadius: new Uniform(options.maxRadius),
-				waveSize: new Uniform(options.waveSize),
-				amplitude: new Uniform(options.amplitude)
+				radius: new Uniform(-settings.waveSize),
+				maxRadius: new Uniform(settings.maxRadius),
+				waveSize: new Uniform(settings.waveSize),
+				amplitude: new Uniform(settings.amplitude)
 
 			},
 

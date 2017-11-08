@@ -21,9 +21,24 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 	/**
 	 * Constructs a new god rays material.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {Number} [options.density=0.96] - The density of the light rays.
+	 * @param {Number} [options.decay=0.93] - An illumination decay factor.
+	 * @param {Number} [options.weight=0.4] - A light ray weight factor.
+	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
+	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
 	 */
 
-	constructor() {
+	constructor(options = {}) {
+
+		const settings = Object.assign({
+			exposure: 0.6,
+			density: 0.93,
+			decay: 0.96,
+			weight: 0.4,
+			clampMax: 1.0
+		}, options);
 
 		super({
 
@@ -41,11 +56,11 @@ export class GodRaysMaterial extends ShaderMaterial {
 				tDiffuse: new Uniform(null),
 				lightPosition: new Uniform(null),
 
-				exposure: new Uniform(0.6),
-				decay: new Uniform(0.93),
-				density: new Uniform(0.96),
-				weight: new Uniform(0.4),
-				clampMax: new Uniform(1.0)
+				exposure: new Uniform(settings.exposure),
+				decay: new Uniform(settings.decay),
+				density: new Uniform(settings.density),
+				weight: new Uniform(settings.weight),
+				clampMax: new Uniform(settings.clampMax)
 
 			},
 
