@@ -264,18 +264,12 @@
   		classCallCheck(this, BokehMaterial);
 
 
-  		if (options.focus === undefined) {
-  			options.focus = 1.0;
-  		}
-  		if (options.dof === undefined) {
-  			options.dof = 0.02;
-  		}
-  		if (options.aperture === undefined) {
-  			options.aperture = 0.025;
-  		}
-  		if (options.maxBlur === undefined) {
-  			options.maxBlur = 1.0;
-  		}
+  		var settings = Object.assign({
+  			focus: 1.0,
+  			dof: 0.02,
+  			aperture: 0.025,
+  			maxBlur: 1.0
+  		}, options);
 
   		var _this = possibleConstructorReturn(this, (BokehMaterial.__proto__ || Object.getPrototypeOf(BokehMaterial)).call(this, {
 
@@ -290,10 +284,10 @@
   				tDiffuse: new three.Uniform(null),
   				tDepth: new three.Uniform(null),
 
-  				focus: new three.Uniform(options.focus),
-  				dof: new three.Uniform(options.dof),
-  				aperture: new three.Uniform(options.aperture),
-  				maxBlur: new three.Uniform(options.maxBlur)
+  				focus: new three.Uniform(settings.focus),
+  				dof: new three.Uniform(settings.dof),
+  				aperture: new three.Uniform(settings.aperture),
+  				maxBlur: new three.Uniform(settings.maxBlur)
 
   			},
 
@@ -305,9 +299,7 @@
 
   		}));
 
-  		if (camera !== null) {
-  			_this.adoptCameraSettings(camera);
-  		}
+  		_this.adoptCameraSettings(camera);
 
   		return _this;
   	}
@@ -316,9 +308,12 @@
   		key: "adoptCameraSettings",
   		value: function adoptCameraSettings(camera) {
 
-  			this.uniforms.cameraNear.value = camera.near;
-  			this.uniforms.cameraFar.value = camera.far;
-  			this.uniforms.aspect.value = camera.aspect;
+  			if (camera !== null) {
+
+  				this.uniforms.cameraNear.value = camera.near;
+  				this.uniforms.cameraFar.value = camera.far;
+  				this.uniforms.aspect.value = camera.aspect;
+  			}
   		}
   	}]);
   	return BokehMaterial;
@@ -329,135 +324,194 @@
   var vertex$2 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var Bokeh2Material = function (_ShaderMaterial) {
-  	inherits(Bokeh2Material, _ShaderMaterial);
+  		inherits(Bokeh2Material, _ShaderMaterial);
 
-  	function Bokeh2Material() {
-  		var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  		classCallCheck(this, Bokeh2Material);
+  		function Bokeh2Material() {
+  				var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  				var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  				classCallCheck(this, Bokeh2Material);
 
 
-  		if (options.rings === undefined) {
-  			options.rings = 3;
-  		}
-  		if (options.samples === undefined) {
-  			options.samples = 2;
-  		}
-  		if (options.showFocus === undefined) {
-  			options.showFocus = false;
-  		}
-  		if (options.showFocus === undefined) {
-  			options.showFocus = false;
-  		}
-  		if (options.manualDoF === undefined) {
-  			options.manualDoF = false;
-  		}
-  		if (options.vignette === undefined) {
-  			options.vignette = false;
-  		}
-  		if (options.pentagon === undefined) {
-  			options.pentagon = false;
-  		}
-  		if (options.shaderFocus === undefined) {
-  			options.shaderFocus = true;
-  		}
-  		if (options.noise === undefined) {
-  			options.noise = true;
-  		}
+  				var settings = Object.assign({
+  						texelSize: null,
+  						rings: 3,
+  						samples: 2,
+  						showFocus: false,
+  						manualDoF: false,
+  						vignette: false,
+  						pentagon: false,
+  						shaderFocus: true,
+  						noise: true
+  				}, options);
 
-  		var _this = possibleConstructorReturn(this, (Bokeh2Material.__proto__ || Object.getPrototypeOf(Bokeh2Material)).call(this, {
+  				var _this = possibleConstructorReturn(this, (Bokeh2Material.__proto__ || Object.getPrototypeOf(Bokeh2Material)).call(this, {
 
-  			type: "Bokeh2Material",
+  						type: "Bokeh2Material",
 
-  			defines: {
+  						defines: {
 
-  				RINGS_INT: options.rings.toFixed(0),
-  				RINGS_FLOAT: options.rings.toFixed(1),
-  				SAMPLES_INT: options.samples.toFixed(0),
-  				SAMPLES_FLOAT: options.samples.toFixed(1)
+  								RINGS_INT: settings.rings.toFixed(0),
+  								RINGS_FLOAT: settings.rings.toFixed(1),
+  								SAMPLES_INT: settings.samples.toFixed(0),
+  								SAMPLES_FLOAT: settings.samples.toFixed(1)
 
-  			},
+  						},
 
-  			uniforms: {
+  						uniforms: {
 
-  				tDiffuse: new three.Uniform(null),
-  				tDepth: new three.Uniform(null),
+  								tDiffuse: new three.Uniform(null),
+  								tDepth: new three.Uniform(null),
 
-  				texelSize: new three.Uniform(new three.Vector2()),
-  				halfTexelSize: new three.Uniform(new three.Vector2()),
+  								texelSize: new three.Uniform(new three.Vector2()),
+  								halfTexelSize: new three.Uniform(new three.Vector2()),
 
-  				cameraNear: new three.Uniform(0.1),
-  				cameraFar: new three.Uniform(2000),
+  								cameraNear: new three.Uniform(0.1),
+  								cameraFar: new three.Uniform(2000),
 
-  				focalLength: new three.Uniform(24.0),
-  				focalStop: new three.Uniform(0.9),
+  								focalLength: new three.Uniform(24.0),
+  								focalStop: new three.Uniform(0.9),
 
-  				maxBlur: new three.Uniform(1.0),
-  				luminanceThreshold: new three.Uniform(0.5),
-  				luminanceGain: new three.Uniform(2.0),
-  				bias: new three.Uniform(0.5),
-  				fringe: new three.Uniform(0.7),
-  				ditherStrength: new three.Uniform(0.0001),
+  								maxBlur: new three.Uniform(1.0),
+  								luminanceThreshold: new three.Uniform(0.5),
+  								luminanceGain: new three.Uniform(2.0),
+  								bias: new three.Uniform(0.5),
+  								fringe: new three.Uniform(0.7),
+  								ditherStrength: new three.Uniform(0.0001),
 
-  				focusCoords: new three.Uniform(new three.Vector2(0.5, 0.5)),
-  				focalDepth: new three.Uniform(1.0)
+  								focusCoords: new three.Uniform(new three.Vector2(0.5, 0.5)),
+  								focalDepth: new three.Uniform(1.0)
 
-  			},
+  						},
 
-  			fragmentShader: fragment$2,
-  			vertexShader: vertex$2,
+  						fragmentShader: fragment$2,
+  						vertexShader: vertex$2,
 
-  			depthWrite: false,
-  			depthTest: false
+  						depthWrite: false,
+  						depthTest: false
 
-  		}));
+  				}));
 
-  		if (options.showFocus) {
-  			_this.defines.SHOW_FOCUS = "1";
-  		}
-  		if (options.manualDoF) {
-  			_this.defines.MANUAL_DOF = "1";
-  		}
-  		if (options.vignette) {
-  			_this.defines.VIGNETTE = "1";
-  		}
-  		if (options.pentagon) {
-  			_this.defines.PENTAGON = "1";
-  		}
-  		if (options.shaderFocus) {
-  			_this.defines.SHADER_FOCUS = "1";
-  		}
-  		if (options.noise) {
-  			_this.defines.NOISE = "1";
+  				_this.setShowFocusEnabled(settings.showFocus);
+  				_this.setManualDepthOfFieldEnabled(settings.manualDoF);
+  				_this.setVignetteEnabled(settings.vignette);
+  				_this.setPentagonEnabled(settings.pentagon);
+  				_this.setShaderFocusEnabled(settings.shaderFocus);
+  				_this.setNoiseEnabled(settings.noise);
+
+  				if (settings.texelSize !== null) {
+
+  						_this.setTexelSize(settings.texelSize.x, settings.texelSize.y);
+  				}
+
+  				_this.adoptCameraSettings(camera);
+
+  				return _this;
   		}
 
-  		if (options.texelSize !== undefined) {
-  			_this.setTexelSize(options.texelSize.x, options.texelSize.y);
-  		}
-  		if (camera !== null) {
-  			_this.adoptCameraSettings(camera);
-  		}
+  		createClass(Bokeh2Material, [{
+  				key: "setShowFocusEnabled",
+  				value: function setShowFocusEnabled(enabled) {
 
-  		return _this;
-  	}
+  						if (enabled) {
 
-  	createClass(Bokeh2Material, [{
-  		key: "setTexelSize",
-  		value: function setTexelSize(x, y) {
+  								this.defines.SHOW_FOCUS = "1";
+  						} else {
 
-  			this.uniforms.texelSize.value.set(x, y);
-  			this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
-  		}
-  	}, {
-  		key: "adoptCameraSettings",
-  		value: function adoptCameraSettings(camera) {
+  								delete this.defines.SHOW_FOCUS;
+  						}
 
-  			this.uniforms.cameraNear.value = camera.near;
-  			this.uniforms.cameraFar.value = camera.far;
-  			this.uniforms.focalLength.value = camera.getFocalLength();
-  		}
-  	}]);
-  	return Bokeh2Material;
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setManualDepthOfFieldEnabled",
+  				value: function setManualDepthOfFieldEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.MANUAL_DOF = "1";
+  						} else {
+
+  								delete this.defines.MANUAL_DOF;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setVignetteEnabled",
+  				value: function setVignetteEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.VIGNETTE = "1";
+  						} else {
+
+  								delete this.defines.VIGNETTE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setPentagonEnabled",
+  				value: function setPentagonEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.PENTAGON = "1";
+  						} else {
+
+  								delete this.defines.PENTAGON;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setShaderFocusEnabled",
+  				value: function setShaderFocusEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.SHADER_FOCUS = "1";
+  						} else {
+
+  								delete this.defines.SHADER_FOCUS;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setNoiseEnabled",
+  				value: function setNoiseEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.NOISE = "1";
+  						} else {
+
+  								delete this.defines.NOISE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setTexelSize",
+  				value: function setTexelSize(x, y) {
+
+  						this.uniforms.texelSize.value.set(x, y);
+  						this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
+  				}
+  		}, {
+  				key: "adoptCameraSettings",
+  				value: function adoptCameraSettings(camera) {
+
+  						if (camera !== null) {
+
+  								this.uniforms.cameraNear.value = camera.near;
+  								this.uniforms.cameraFar.value = camera.far;
+  								this.uniforms.focalLength.value = camera.getFocalLength();
+  						}
+  				}
+  		}]);
+  		return Bokeh2Material;
   }(three.ShaderMaterial);
 
   var fragment$3 = "uniform sampler2D texture1;\r\nuniform sampler2D texture2;\r\n\r\nuniform float opacity1;\r\nuniform float opacity2;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel1 = opacity1 * texture2D(texture1, vUv);\r\n\tvec4 texel2 = opacity2 * texture2D(texture2, vUv);\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invTexel1 = vec3(1.0) - texel1.rgb;\r\n\t\tvec3 invTexel2 = vec3(1.0) - texel2.rgb;\r\n\r\n\t\tvec4 color = vec4(\r\n\t\t\tvec3(1.0) - invTexel1 * invTexel2,\r\n\t\t\ttexel1.a + texel2.a\r\n\t\t);\r\n\r\n\t#else\r\n\r\n\t\tvec4 color = texel1 + texel2;\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
@@ -465,42 +519,55 @@
   var vertex$3 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var CombineMaterial = function (_ShaderMaterial) {
-  			inherits(CombineMaterial, _ShaderMaterial);
+  	inherits(CombineMaterial, _ShaderMaterial);
 
-  			function CombineMaterial() {
-  						var screenMode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-  						classCallCheck(this, CombineMaterial);
+  	function CombineMaterial() {
+  		var screenMode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  		classCallCheck(this, CombineMaterial);
 
-  						var _this = possibleConstructorReturn(this, (CombineMaterial.__proto__ || Object.getPrototypeOf(CombineMaterial)).call(this, {
+  		var _this = possibleConstructorReturn(this, (CombineMaterial.__proto__ || Object.getPrototypeOf(CombineMaterial)).call(this, {
 
-  									type: "CombineMaterial",
+  			type: "CombineMaterial",
 
-  									uniforms: {
+  			uniforms: {
 
-  												texture1: new three.Uniform(null),
-  												texture2: new three.Uniform(null),
+  				texture1: new three.Uniform(null),
+  				texture2: new three.Uniform(null),
 
-  												opacity1: new three.Uniform(1.0),
-  												opacity2: new three.Uniform(1.0)
+  				opacity1: new three.Uniform(1.0),
+  				opacity2: new three.Uniform(1.0)
 
-  									},
+  			},
 
-  									fragmentShader: fragment$3,
-  									vertexShader: vertex$3,
+  			fragmentShader: fragment$3,
+  			vertexShader: vertex$3,
 
-  									depthWrite: false,
-  									depthTest: false
+  			depthWrite: false,
+  			depthTest: false
 
-  						}));
+  		}));
 
-  						if (screenMode) {
-  									_this.defines.SCREEN_MODE = "1";
-  						}
+  		_this.setScreenModeEnabled(screenMode);
 
-  						return _this;
+  		return _this;
+  	}
+
+  	createClass(CombineMaterial, [{
+  		key: "setScreenModeEnabled",
+  		value: function setScreenModeEnabled(enabled) {
+
+  			if (enabled) {
+
+  				this.defines.SCREEN_MODE = "1";
+  			} else {
+
+  				delete this.defines.SCREEN_MODE;
   			}
 
-  			return CombineMaterial;
+  			this.needsUpdate = true;
+  		}
+  	}]);
+  	return CombineMaterial;
   }(three.ShaderMaterial);
 
   var fragment$4 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\t// Sample top left texel.\r\n\tvec4 sum = texture2D(tDiffuse, vUv0);\r\n\r\n\t// Sample top right texel.\r\n\tsum += texture2D(tDiffuse, vUv1);\r\n\r\n\t// Sample bottom right texel.\r\n\tsum += texture2D(tDiffuse, vUv2);\r\n\r\n\t// Sample bottom left texel.\r\n\tsum += texture2D(tDiffuse, vUv3);\r\n\r\n\t// Compute the average.\r\n\tgl_FragColor = sum * 0.25;\r\n\r\n}\r\n";
@@ -545,6 +612,7 @@
   	createClass(ConvolutionMaterial, [{
   		key: "getKernel",
   		value: function getKernel() {
+
   			return kernelPresets[this.kernelSize];
   		}
   	}, {
@@ -608,44 +676,65 @@
   var vertex$6 = "uniform vec4 offsetRepeat;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvUvPattern = uv * offsetRepeat.zw + offsetRepeat.xy;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var DotScreenMaterial = function (_ShaderMaterial) {
-  			inherits(DotScreenMaterial, _ShaderMaterial);
+  	inherits(DotScreenMaterial, _ShaderMaterial);
 
-  			function DotScreenMaterial() {
-  						var average = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-  						classCallCheck(this, DotScreenMaterial);
+  	function DotScreenMaterial() {
+  		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  		classCallCheck(this, DotScreenMaterial);
 
-  						var _this = possibleConstructorReturn(this, (DotScreenMaterial.__proto__ || Object.getPrototypeOf(DotScreenMaterial)).call(this, {
 
-  									type: "DotScreenMaterial",
+  		var settings = Object.assign({
+  			average: false,
+  			angle: 1.57,
+  			scale: 1.0,
+  			intensity: 1.0
+  		}, options);
 
-  									uniforms: {
+  		var _this = possibleConstructorReturn(this, (DotScreenMaterial.__proto__ || Object.getPrototypeOf(DotScreenMaterial)).call(this, {
 
-  												tDiffuse: new three.Uniform(null),
+  			type: "DotScreenMaterial",
 
-  												angle: new three.Uniform(1.57),
-  												scale: new three.Uniform(1.0),
-  												intensity: new three.Uniform(1.0),
+  			uniforms: {
 
-  												offsetRepeat: new three.Uniform(new three.Vector4(0.5, 0.5, 1.0, 1.0))
+  				tDiffuse: new three.Uniform(null),
 
-  									},
+  				angle: new three.Uniform(settings.angle),
+  				scale: new three.Uniform(settings.scale),
+  				intensity: new three.Uniform(settings.intensity),
 
-  									fragmentShader: fragment$6,
-  									vertexShader: vertex$6,
+  				offsetRepeat: new three.Uniform(new three.Vector4(0.5, 0.5, 1.0, 1.0))
 
-  									depthWrite: false,
-  									depthTest: false
+  			},
 
-  						}));
+  			fragmentShader: fragment$6,
+  			vertexShader: vertex$6,
 
-  						if (average) {
-  									_this.defines.AVERAGE = "1";
-  						}
+  			depthWrite: false,
+  			depthTest: false
 
-  						return _this;
+  		}));
+
+  		_this.setAverageEnabled(settings.average);
+
+  		return _this;
+  	}
+
+  	createClass(DotScreenMaterial, [{
+  		key: "setAverageEnabled",
+  		value: function setAverageEnabled(enabled) {
+
+  			if (enabled) {
+
+  				this.defines.AVERAGE = "1";
+  			} else {
+
+  				delete this.defines.AVERAGE;
   			}
 
-  			return DotScreenMaterial;
+  			this.needsUpdate = true;
+  		}
+  	}]);
+  	return DotScreenMaterial;
   }(three.ShaderMaterial);
 
   var fragment$7 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\t#include <common>\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tvec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invNoise = vec3(1.0) - noise;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invNoise;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += noise;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tvec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invScanlines = vec3(1.0) - scanlines;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invScanlines;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += scanlines;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(linearToRelativeLuminance(color)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 center = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - center) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, center);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
@@ -660,48 +749,26 @@
   				classCallCheck(this, FilmMaterial);
 
 
-  				if (options.screenMode === undefined) {
-  						options.screenMode = true;
-  				}
-  				if (options.noise === undefined) {
-  						options.noise = true;
-  				}
-  				if (options.scanlines === undefined) {
-  						options.scanlines = true;
-  				}
+  				var settings = Object.assign({
 
-  				if (options.greyscale === undefined) {
-  						options.greyscale = false;
-  				}
-  				if (options.sepia === undefined) {
-  						options.sepia = false;
-  				}
-  				if (options.vignette === undefined) {
-  						options.vignette = false;
-  				}
-  				if (options.eskil === undefined) {
-  						options.eskil = false;
-  				}
+  						screenMode: true,
+  						noise: true,
+  						scanlines: true,
 
-  				if (options.noiseIntensity === undefined) {
-  						options.noiseIntensity = 0.5;
-  				}
-  				if (options.scanlineIntensity === undefined) {
-  						options.scanlineIntensity = 0.05;
-  				}
-  				if (options.greyscaleIntensity === undefined) {
-  						options.greyscaleIntensity = 1.0;
-  				}
-  				if (options.sepiaIntensity === undefined) {
-  						options.sepiaIntensity = 1.0;
-  				}
+  						greyscale: false,
+  						sepia: false,
+  						vignette: false,
+  						eskil: false,
 
-  				if (options.vignetteOffset === undefined) {
-  						options.vignetteOffset = 1.0;
-  				}
-  				if (options.vignetteDarkness === undefined) {
-  						options.vignetteDarkness = 1.0;
-  				}
+  						noiseIntensity: 0.5,
+  						scanlineIntensity: 0.05,
+  						greyscaleIntensity: 1.0,
+  						sepiaIntensity: 1.0,
+
+  						vignetteOffset: 1.0,
+  						vignetteDarkness: 1.0
+
+  				}, options);
 
   				var _this = possibleConstructorReturn(this, (FilmMaterial.__proto__ || Object.getPrototypeOf(FilmMaterial)).call(this, {
 
@@ -712,15 +779,15 @@
   								tDiffuse: new three.Uniform(null),
   								time: new three.Uniform(0.0),
 
-  								noiseIntensity: new three.Uniform(options.noiseIntensity),
-  								scanlineIntensity: new three.Uniform(options.scanlineIntensity),
+  								noiseIntensity: new three.Uniform(settings.noiseIntensity),
+  								scanlineIntensity: new three.Uniform(settings.scanlineIntensity),
   								scanlineCount: new three.Uniform(0.0),
 
-  								greyscaleIntensity: new three.Uniform(options.greyscaleIntensity),
-  								sepiaIntensity: new three.Uniform(options.sepiaIntensity),
+  								greyscaleIntensity: new three.Uniform(settings.greyscaleIntensity),
+  								sepiaIntensity: new three.Uniform(settings.sepiaIntensity),
 
-  								vignetteOffset: new three.Uniform(options.vignetteOffset),
-  								vignetteDarkness: new three.Uniform(options.vignetteDarkness)
+  								vignetteOffset: new three.Uniform(settings.vignetteOffset),
+  								vignetteDarkness: new three.Uniform(settings.vignetteDarkness)
 
   						},
 
@@ -732,32 +799,116 @@
 
   				}));
 
-  				if (options.greyscale) {
-  						_this.defines.GREYSCALE = "1";
-  				}
-  				if (options.sepia) {
-  						_this.defines.SEPIA = "1";
-  				}
-  				if (options.vignette) {
-  						_this.defines.VIGNETTE = "1";
-  				}
-  				if (options.eskil) {
-  						_this.defines.ESKIL = "1";
-  				}
-
-  				if (options.screenMode) {
-  						_this.defines.SCREEN_MODE = "1";
-  				}
-  				if (options.noise) {
-  						_this.defines.NOISE = "1";
-  				}
-  				if (options.scanlines) {
-  						_this.defines.SCANLINES = "1";
-  				}
+  				_this.setScreenModeEnabled(settings.screenMode);
+  				_this.setNoiseEnabled(settings.noise);
+  				_this.setScanlinesEnabled(settings.scanlines);
+  				_this.setGreyscaleEnabled(settings.greyscale);
+  				_this.setSepiaEnabled(settings.sepia);
+  				_this.setVignetteEnabled(settings.vignette);
+  				_this.setEskilEnabled(settings.eskil);
 
   				return _this;
   		}
 
+  		createClass(FilmMaterial, [{
+  				key: "setScreenModeEnabled",
+  				value: function setScreenModeEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.SCREEN_MODE = "1";
+  						} else {
+
+  								delete this.defines.SCREEN_MODE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setNoiseEnabled",
+  				value: function setNoiseEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.NOISE = "1";
+  						} else {
+
+  								delete this.defines.NOISE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setScanlinesEnabled",
+  				value: function setScanlinesEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.SCANLINES = "1";
+  						} else {
+
+  								delete this.defines.SCANLINES;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setGreyscaleEnabled",
+  				value: function setGreyscaleEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.GREYSCALE = "1";
+  						} else {
+
+  								delete this.defines.GREYSCALE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setSepiaEnabled",
+  				value: function setSepiaEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.SEPIA = "1";
+  						} else {
+
+  								delete this.defines.SEPIA;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setVignetteEnabled",
+  				value: function setVignetteEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.VIGNETTE = "1";
+  						} else {
+
+  								delete this.defines.VIGNETTE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setEskilEnabled",
+  				value: function setEskilEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.ESKIL = "1";
+  						} else {
+
+  								delete this.defines.ESKIL;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}]);
   		return FilmMaterial;
   }(three.ShaderMaterial);
 
@@ -812,7 +963,18 @@
   			inherits(GodRaysMaterial, _ShaderMaterial);
 
   			function GodRaysMaterial() {
+  						var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   						classCallCheck(this, GodRaysMaterial);
+
+
+  						var settings = Object.assign({
+  									exposure: 0.6,
+  									density: 0.93,
+  									decay: 0.96,
+  									weight: 0.4,
+  									clampMax: 1.0
+  						}, options);
+
   						return possibleConstructorReturn(this, (GodRaysMaterial.__proto__ || Object.getPrototypeOf(GodRaysMaterial)).call(this, {
 
   									type: "GodRaysMaterial",
@@ -829,11 +991,11 @@
   												tDiffuse: new three.Uniform(null),
   												lightPosition: new three.Uniform(null),
 
-  												exposure: new three.Uniform(0.6),
-  												decay: new three.Uniform(0.93),
-  												density: new three.Uniform(0.96),
-  												weight: new three.Uniform(0.4),
-  												clampMax: new three.Uniform(1.0)
+  												exposure: new three.Uniform(settings.exposure),
+  												decay: new three.Uniform(settings.decay),
+  												density: new three.Uniform(settings.density),
+  												weight: new three.Uniform(settings.weight),
+  												clampMax: new three.Uniform(settings.clampMax)
 
   									},
 
@@ -854,41 +1016,69 @@
   var vertex$10 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var LuminosityMaterial = function (_ShaderMaterial) {
-  	inherits(LuminosityMaterial, _ShaderMaterial);
+  		inherits(LuminosityMaterial, _ShaderMaterial);
 
-  	function LuminosityMaterial() {
-  		var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-  		var range = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  		classCallCheck(this, LuminosityMaterial);
+  		function LuminosityMaterial() {
+  				var colorOutput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+  				var luminanceRange = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  				classCallCheck(this, LuminosityMaterial);
 
-  		var _this = possibleConstructorReturn(this, (LuminosityMaterial.__proto__ || Object.getPrototypeOf(LuminosityMaterial)).call(this, {
 
-  			type: "LuminosityMaterial",
+  				var maskLuminance = luminanceRange !== null;
 
-  			uniforms: {
+  				var _this = possibleConstructorReturn(this, (LuminosityMaterial.__proto__ || Object.getPrototypeOf(LuminosityMaterial)).call(this, {
 
-  				tDiffuse: new three.Uniform(null),
-  				distinction: new three.Uniform(1.0),
-  				range: new three.Uniform(range !== null ? range : new three.Vector2())
+  						type: "LuminosityMaterial",
 
-  			},
+  						uniforms: {
 
-  			fragmentShader: fragment$10,
-  			vertexShader: vertex$10
+  								tDiffuse: new three.Uniform(null),
+  								distinction: new three.Uniform(1.0),
+  								range: new three.Uniform(maskLuminance ? luminanceRange : new three.Vector2())
 
-  		}));
+  						},
 
-  		if (color) {
-  			_this.defines.COLOR = "1";
+  						fragmentShader: fragment$10,
+  						vertexShader: vertex$10
+
+  				}));
+
+  				_this.setColorOutputEnabled(colorOutput);
+  				_this.setLuminanceRangeEnabled(maskLuminance);
+
+  				return _this;
   		}
-  		if (range !== null) {
-  			_this.defines.RANGE = "1";
-  		}
 
-  		return _this;
-  	}
+  		createClass(LuminosityMaterial, [{
+  				key: "setColorOutputEnabled",
+  				value: function setColorOutputEnabled(enabled) {
 
-  	return LuminosityMaterial;
+  						if (enabled) {
+
+  								this.defines.COLOR = "1";
+  						} else {
+
+  								delete this.defines.COLOR;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setLuminanceRangeEnabled",
+  				value: function setLuminanceRangeEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.RANGE = "1";
+  						} else {
+
+  								delete this.defines.RANGE;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}]);
+  		return LuminosityMaterial;
   }(three.ShaderMaterial);
 
   var fragment$11 = "uniform sampler2D tDiffuse;\r\nuniform float granularity;\r\nuniform float dx;\r\nuniform float dy;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel;\r\n\r\n\tif(granularity > 0.0) {\r\n\r\n\t\tvec2 coord = vec2(\r\n\t\t\tdx * (floor(vUv.x / dx) + 0.5),\r\n\t\t\tdy * (floor(vUv.y / dy) + 0.5)\r\n\t\t);\r\n\r\n\t\ttexel = texture2D(tDiffuse, coord);\r\n\r\n\t} else {\r\n\r\n\t\ttexel = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texel;\r\n\r\n}\r\n";
@@ -933,6 +1123,7 @@
   	}, {
   		key: "granularity",
   		get: function get$$1() {
+
   			return this.uniforms.granularity.value;
   		},
   		set: function set$$1(x) {
@@ -953,53 +1144,49 @@
   var vertex$12 = "uniform float size;\r\nuniform float scale;\r\nuniform float cameraDistance;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvSize = (0.1 * cameraDistance) / size;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var ShockWaveMaterial = function (_ShaderMaterial) {
-  			inherits(ShockWaveMaterial, _ShaderMaterial);
+  	inherits(ShockWaveMaterial, _ShaderMaterial);
 
-  			function ShockWaveMaterial() {
-  						var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  						classCallCheck(this, ShockWaveMaterial);
+  	function ShockWaveMaterial() {
+  		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  		classCallCheck(this, ShockWaveMaterial);
 
 
-  						if (options.maxRadius === undefined) {
-  									options.maxRadius = 1.0;
-  						}
-  						if (options.waveSize === undefined) {
-  									options.waveSize = 0.2;
-  						}
-  						if (options.amplitude === undefined) {
-  									options.amplitude = 0.05;
-  						}
+  		var settings = Object.assign({
+  			maxRadius: 1.0,
+  			waveSize: 0.2,
+  			amplitude: 0.05
+  		}, options);
 
-  						return possibleConstructorReturn(this, (ShockWaveMaterial.__proto__ || Object.getPrototypeOf(ShockWaveMaterial)).call(this, {
+  		return possibleConstructorReturn(this, (ShockWaveMaterial.__proto__ || Object.getPrototypeOf(ShockWaveMaterial)).call(this, {
 
-  									type: "ShockWaveMaterial",
+  			type: "ShockWaveMaterial",
 
-  									uniforms: {
+  			uniforms: {
 
-  												tDiffuse: new three.Uniform(null),
+  				tDiffuse: new three.Uniform(null),
 
-  												center: new three.Uniform(new three.Vector2(0.5, 0.5)),
-  												aspect: new three.Uniform(1.0),
-  												cameraDistance: new three.Uniform(1.0),
+  				center: new three.Uniform(new three.Vector2(0.5, 0.5)),
+  				aspect: new three.Uniform(1.0),
+  				cameraDistance: new three.Uniform(1.0),
 
-  												size: new three.Uniform(1.0),
-  												radius: new three.Uniform(-options.waveSize),
-  												maxRadius: new three.Uniform(options.maxRadius),
-  												waveSize: new three.Uniform(options.waveSize),
-  												amplitude: new three.Uniform(options.amplitude)
+  				size: new three.Uniform(1.0),
+  				radius: new three.Uniform(-settings.waveSize),
+  				maxRadius: new three.Uniform(settings.maxRadius),
+  				waveSize: new three.Uniform(settings.waveSize),
+  				amplitude: new three.Uniform(settings.amplitude)
 
-  									},
+  			},
 
-  									fragmentShader: fragment$12,
-  									vertexShader: vertex$12,
+  			fragmentShader: fragment$12,
+  			vertexShader: vertex$12,
 
-  									depthWrite: false,
-  									depthTest: false
+  			depthWrite: false,
+  			depthTest: false
 
-  						}));
-  			}
+  		}));
+  	}
 
-  			return ShockWaveMaterial;
+  	return ShockWaveMaterial;
   }(three.ShaderMaterial);
 
   var fragment$13 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tWeights;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\t// Fetch the blending weights for current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(tWeights, vUv).xz;\r\n\ta.y = texture2D(tWeights, vOffset.zw).g;\r\n\ta.w = texture2D(tWeights, vOffset.xy).a;\r\n\r\n\tvec4 color;\r\n\r\n\t// Check if there is any blending weight with a value greater than 0.0.\r\n\tif(dot(a, vec4(1.0)) < 1e-5) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\r\n\t} else {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge).\r\n\t\t * The line with the maximum weight for each direction is favoured.\r\n\t\t */\r\n\r\n\t\tvec2 offset;\r\n\t\toffset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.\r\n\t\toffset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).\r\n\r\n\t\t// Go in the direction with the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\t\tvec2 coord = vUv + sign(offset) * texelSize;\r\n\t\tvec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
@@ -1359,20 +1546,25 @@
   		}, {
   				key: "width",
   				get: function get$$1() {
+
   						return this.renderTargetX.width;
   				}
   		}, {
   				key: "height",
   				get: function get$$1() {
+
   						return this.renderTargetX.height;
   				}
   		}, {
   				key: "kernelSize",
   				get: function get$$1() {
+
   						return this.convolutionMaterial.kernelSize;
   				},
   				set: function set$$1() {
   						var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
+
+
   						this.convolutionMaterial.kernelSize = value;
   				}
   		}]);
@@ -1447,6 +1639,7 @@
   			this.blurPass.initialise(renderer, alpha);
 
   			if (!alpha) {
+
   				this.renderTarget.texture.format = three.RGBFormat;
   			}
   		}
@@ -1464,37 +1657,49 @@
   	}, {
   		key: "resolutionScale",
   		get: function get$$1() {
+
   			return this.blurPass.resolutionScale;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
+
+
   			this.blurPass.resolutionScale = value;
   		}
   	}, {
   		key: "kernelSize",
   		get: function get$$1() {
+
   			return this.blurPass.kernelSize;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
+
+
   			this.blurPass.kernelSize = value;
   		}
   	}, {
   		key: "intensity",
   		get: function get$$1() {
+
   			return this.combineMaterial.uniforms.opacity2.value;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+
+
   			this.combineMaterial.uniforms.opacity2.value = value;
   		}
   	}, {
   		key: "distinction",
   		get: function get$$1() {
+
   			return this.luminosityMaterial.uniforms.distinction.value;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+
+
   			this.luminosityMaterial.uniforms.distinction.value = value;
   		}
   	}]);
@@ -1662,17 +1867,7 @@
 
   				_this.needsSwap = true;
 
-  				_this.material = new DotScreenMaterial(options.average);
-
-  				if (options.angle !== undefined) {
-  						_this.material.uniforms.angle.value = options.angle;
-  				}
-  				if (options.scale !== undefined) {
-  						_this.material.uniforms.scale.value = options.scale;
-  				}
-  				if (options.intensity !== undefined) {
-  						_this.material.uniforms.intensity.value = options.intensity;
-  				}
+  				_this.material = new DotScreenMaterial(options);
 
   				_this.quad.material = _this.material;
 
@@ -1864,6 +2059,7 @@
   		}, {
   				key: "perturbMap",
   				get: function get$$1() {
+
   						return this.texture;
   				},
   				set: function set$$1(value) {
@@ -1990,24 +2186,8 @@
 
   				_this.screenPosition = new three.Vector3();
 
-  				_this.godRaysMaterial = new GodRaysMaterial();
+  				_this.godRaysMaterial = new GodRaysMaterial(options);
   				_this.godRaysMaterial.uniforms.lightPosition.value = _this.screenPosition;
-
-  				if (options.exposure !== undefined) {
-  						_this.godRaysMaterial.uniforms.exposure.value = options.exposure;
-  				}
-  				if (options.density !== undefined) {
-  						_this.godRaysMaterial.uniforms.density.value = options.density;
-  				}
-  				if (options.decay !== undefined) {
-  						_this.godRaysMaterial.uniforms.decay.value = options.decay;
-  				}
-  				if (options.weight !== undefined) {
-  						_this.godRaysMaterial.uniforms.weight.value = options.weight;
-  				}
-  				if (options.clampMax !== undefined) {
-  						_this.godRaysMaterial.uniforms.clampMax.value = options.clampMax;
-  				}
 
   				_this.samples = options.samples;
 
@@ -2104,33 +2284,43 @@
   		}, {
   				key: "resolutionScale",
   				get: function get$$1() {
+
   						return this.blurPass.resolutionScale;
   				},
   				set: function set$$1() {
   						var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0.5;
+
+
   						this.blurPass.resolutionScale = value;
   				}
   		}, {
   				key: "kernelSize",
   				get: function get$$1() {
+
   						return this.blurPass.kernelSize;
   				},
   				set: function set$$1() {
   						var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
+
+
   						this.blurPass.kernelSize = value;
   				}
   		}, {
   				key: "intensity",
   				get: function get$$1() {
+
   						return this.combineMaterial.uniforms.opacity2.value;
   				},
   				set: function set$$1() {
   						var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+
+
   						this.combineMaterial.uniforms.opacity2.value = value;
   				}
   		}, {
   				key: "samples",
   				get: function get$$1() {
+
   						return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT);
   				},
   				set: function set$$1() {
@@ -2249,6 +2439,7 @@
   		}, {
   				key: "granularity",
   				get: function get$$1() {
+
   						return this.pixelationMaterial.granularity;
   				},
   				set: function set$$1() {
@@ -2566,11 +2757,13 @@
   		}], [{
   				key: "searchImageDataUrl",
   				get: function get$$1() {
+
   						return searchImageDataUrl;
   				}
   		}, {
   				key: "areaImageDataUrl",
   				get: function get$$1() {
+
   						return areaImageDataUrl;
   				}
   		}]);
@@ -2609,18 +2802,23 @@
   	}, {
   		key: "texture",
   		get: function get$$1() {
+
   			return this.copyMaterial.uniforms.tDiffuse.value;
   		},
   		set: function set$$1(value) {
+
   			this.copyMaterial.uniforms.tDiffuse.value = value;
   		}
   	}, {
   		key: "opacity",
   		get: function get$$1() {
+
   			return this.copyMaterial.uniforms.opacity.value;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+
+
   			this.copyMaterial.uniforms.opacity.value = value;
   		}
   	}]);
@@ -2628,6 +2826,7 @@
   }(Pass);
 
   function ceil2(n) {
+
   		return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n))));
   }
 
@@ -2730,6 +2929,7 @@
   		}, {
   				key: "resolution",
   				get: function get$$1() {
+
   						return this.renderTargetLuminosity.width;
   				},
   				set: function set$$1() {
@@ -2748,6 +2948,7 @@
   		}, {
   				key: "adaptive",
   				get: function get$$1() {
+
   						return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined;
   				},
   				set: function set$$1() {
@@ -3004,6 +3205,7 @@
   		}, {
   				key: "depthTexture",
   				get: function get$$1() {
+
   						return this.readBuffer.depthTexture;
   				},
   				set: function set$$1(x) {
@@ -3902,6 +4104,7 @@
   		createClass(Demo, [{
   				key: "load",
   				value: function load(callback) {
+
   						callback();
   				}
   		}, {
@@ -4095,9 +4298,12 @@
   								object.rotation.y += 0.005;
 
   								if (object.rotation.x >= TWO_PI) {
+
   										object.rotation.x -= TWO_PI;
   								}
+
   								if (object.rotation.y >= TWO_PI) {
+
   										object.rotation.y -= TWO_PI;
   								}
   						}
@@ -4119,19 +4325,28 @@
   						};
 
   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.resolutionScale = params.resolution;composer.setSize();
+
+  								pass.resolutionScale = params.resolution;
+  								composer.setSize();
   						});
+
   						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+
   								pass.kernelSize = params["kernel size"];
   						});
+
   						gui.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
+
   								pass.intensity = params.intensity;
   						});
 
   						var folder = gui.addFolder("Luminance");
+
   						folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
+
   								pass.distinction = params.distinction;
   						});
+
   						folder.open();
 
   						gui.add(params, "blend").onChange(function () {
@@ -4141,15 +4356,7 @@
 
   						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
 
-  								if (params["blend mode"] === "add") {
-
-  										delete pass.combineMaterial.defines.SCREEN_MODE;
-  								} else {
-
-  										pass.combineMaterial.defines.SCREEN_MODE = "1";
-  								}
-
-  								pass.combineMaterial.needsUpdate = true;
+  								pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
   						});
   				}
   		}]);
@@ -4273,15 +4480,22 @@
   						};
 
   						gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.focus.value = params.focus;
   						});
+
   						gui.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.dof.value = params.dof;
   						});
+
   						gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.aperture.value = params.aperture;
   						});
+
   						gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
   						});
   				}
@@ -4381,14 +4595,13 @@
   								rings: 3,
   								samples: 2,
   								showFocus: false,
-  								manualDoF: false,
+  								manualDoF: true,
   								vignette: false,
   								pentagon: false,
   								shaderFocus: true,
   								noise: true
   						});
 
-  						pass.bokehMaterial.uniforms.focalStop.value = 64;
   						pass.renderToScreen = true;
   						this.bokehPass = pass;
   						composer.addPass(pass);
@@ -4424,30 +4637,37 @@
   						var f = gui.addFolder("Focus");
 
   						f.add(params, "show focus").onChange(function () {
-  								params["show focus"] ? pass.bokehMaterial.defines.SHOW_FOCUS = "1" : delete pass.bokehMaterial.defines.SHOW_FOCUS;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setShowFocusEnabled(params["show focus"]);
   						});
 
   						f.add(params, "shader focus").onChange(function () {
-  								params["shader focus"] ? pass.bokehMaterial.defines.SHADER_FOCUS = "1" : delete pass.bokehMaterial.defines.SHADER_FOCUS;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setShaderFocusEnabled(params["shader focus"]);
   						});
 
   						f.add(params, "manual DoF").onChange(function () {
-  								params["manual DoF"] ? pass.bokehMaterial.defines.MANUAL_DOF = "1" : delete pass.bokehMaterial.defines.MANUAL_DOF;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setManualDepthOfFieldEnabled(params["manual DoF"]);
   						});
 
   						f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function () {
+
   								pass.bokehMaterial.uniforms.focalStop.value = params["focal stop"];
   						});
+
   						f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function () {
+
   								pass.bokehMaterial.uniforms.focalDepth.value = params["focal depth"];
   						});
+
   						f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.bokehMaterial.uniforms.focusCoords.value.x = params["focus coord X"];
   						});
+
   						f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.bokehMaterial.uniforms.focusCoords.value.y = params["focus coord Y"];
   						});
 
@@ -4456,12 +4676,14 @@
   						f = gui.addFolder("Sampling");
 
   						f.add(params, "rings").min(1).max(6).step(1).onChange(function () {
+
   								pass.bokehMaterial.defines.RINGS_INT = params.rings.toFixed(0);
   								pass.bokehMaterial.defines.RINGS_FLOAT = params.rings.toFixed(1);
   								pass.bokehMaterial.needsUpdate = true;
   						});
 
   						f.add(params, "samples").min(1).max(6).step(1).onChange(function () {
+
   								pass.bokehMaterial.defines.SAMPLES_INT = params.samples.toFixed(0);
   								pass.bokehMaterial.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
   								pass.bokehMaterial.needsUpdate = true;
@@ -4469,28 +4691,34 @@
 
   						f = gui.addFolder("Blur");
 
-  						f.add(params, "max blur").min(0.0).max(1.0).step(0.001).onChange(function () {
+  						f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.maxBlur.value = params["max blur"];
   						});
+
   						f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function () {
+
   								pass.bokehMaterial.uniforms.bias.value = params.bias;
   						});
+
   						f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function () {
+
   								pass.bokehMaterial.uniforms.fringe.value = params.fringe;
   						});
 
   						f.add(params, "noise").onChange(function () {
-  								params.noise ? pass.bokehMaterial.defines.NOISE = "1" : delete pass.bokehMaterial.defines.NOISE;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setNoiseEnabled(params.noise);
   						});
 
   						f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function () {
+
   								pass.bokehMaterial.uniforms.ditherStrength.value = params.dithering;
   						});
 
   						f.add(params, "pentagon").onChange(function () {
-  								params.pentagon ? pass.bokehMaterial.defines.PENTAGON = "1" : delete pass.bokehMaterial.defines.PENTAGON;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setPentagonEnabled(params.pentagon);
   						});
 
   						f.open();
@@ -4498,15 +4726,18 @@
   						f = gui.addFolder("Luminosity");
 
   						f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.bokehMaterial.uniforms.luminanceThreshold.value = params["lum threshold"];
   						});
+
   						f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function () {
+
   								pass.bokehMaterial.uniforms.luminanceGain.value = params["lum gain"];
   						});
 
   						gui.add(params, "vignette").onChange(function () {
-  								params.vignette ? pass.bokehMaterial.defines.VIGNETTE = "1" : delete pass.bokehMaterial.defines.VIGNETTE;
-  								pass.bokehMaterial.needsUpdate = true;
+
+  								pass.bokehMaterial.setVignetteEnabled(params.vignette);
   						});
   				}
   		}]);
@@ -4653,9 +4884,12 @@
   								object.rotation.y += 0.005;
 
   								if (object.rotation.x >= TWO_PI$1) {
+
   										object.rotation.x -= TWO_PI$1;
   								}
+
   								if (object.rotation.y >= TWO_PI$1) {
+
   										object.rotation.y -= TWO_PI$1;
   								}
   						}
@@ -4677,9 +4911,12 @@
   						};
 
   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								blurPass.resolutionScale = params.resolution;composer.setSize();
   						});
+
   						gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+
   								blurPass.kernelSize = params["kernel size"];
   						});
 
@@ -4760,9 +4997,12 @@
   								object.rotation.y += 0.005;
 
   								if (object.rotation.x >= TWO_PI$2) {
+
   										object.rotation.x -= TWO_PI$2;
   								}
+
   								if (object.rotation.y >= TWO_PI$2) {
+
   										object.rotation.y -= TWO_PI$2;
   								}
   						}
@@ -4896,9 +5136,12 @@
   								object.rotation.y += 0.001;
 
   								if (object.rotation.x >= TWO_PI$3) {
+
   										object.rotation.x -= TWO_PI$3;
   								}
+
   								if (object.rotation.y >= TWO_PI$3) {
+
   										object.rotation.y -= TWO_PI$3;
   								}
   						}
@@ -4920,25 +5163,33 @@
 
   						gui.add(params, "average").onChange(function () {
 
-  								params.average ? pass.material.defines.AVERAGE = "1" : delete pass.material.defines.AVERAGE;
-  								pass.material.needsUpdate = true;
+  								pass.material.setAverageEnabled(params.average);
   						});
 
   						gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.scale.value = params.scale;
   						});
+
   						gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
+
   								pass.material.uniforms.angle.value = params.angle;
   						});
+
   						gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.intensity.value = params.intensity;
   						});
 
   						var f = gui.addFolder("Center");
+
   						f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.offsetRepeat.value.x = params["center X"];
   						});
+
   						f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.offsetRepeat.value.y = params["center Y"];
   						});
   				}
@@ -5081,9 +5332,12 @@
   								object.rotation.y += 0.005;
 
   								if (object.rotation.x >= TWO_PI$4) {
+
   										object.rotation.x -= TWO_PI$4;
   								}
+
   								if (object.rotation.y >= TWO_PI$4) {
+
   										object.rotation.y -= TWO_PI$4;
   								}
   						}
@@ -5096,7 +5350,7 @@
   						var pass = this.filmPass;
 
   						var params = {
-  								"grayscale": pass.material.defines.GREYSCALE !== undefined,
+  								"greyscale": pass.material.defines.GREYSCALE !== undefined,
   								"sepia": pass.material.defines.SEPIA !== undefined,
   								"vignette": pass.material.defines.VIGNETTE !== undefined,
   								"eskil": pass.material.defines.ESKIL !== undefined,
@@ -5114,12 +5368,13 @@
 
   						var f = gui.addFolder("Greyscale");
 
-  						f.add(params, "grayscale").onChange(function () {
-  								params.grayscale ? pass.material.defines.GREYSCALE = "1" : delete pass.material.defines.GREYSCALE;
-  								pass.material.needsUpdate = true;
+  						f.add(params, "greyscale").onChange(function () {
+
+  								pass.material.setGreyscaleEnabled(params.greyscale);
   						});
 
   						f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.greyscaleIntensity.value = params["greyscale intensity"];
   						});
 
@@ -5129,36 +5384,31 @@
 
   						f.add(params, "blend mode", ["add", "screen"]).onChange(function () {
 
-  								if (params["blend mode"] === "add") {
-
-  										delete pass.material.defines.SCREEN_MODE;
-  								} else {
-
-  										pass.material.defines.SCREEN_MODE = "1";
-  								}
-
-  								pass.material.needsUpdate = true;
+  								pass.material.setScreenModeEnabled(params["blend mode"] !== "add");
   						});
 
   						f.add(params, "noise").onChange(function () {
-  								params.noise ? pass.material.defines.NOISE = "1" : delete pass.material.defines.NOISE;
-  								pass.material.needsUpdate = true;
+
+  								pass.material.setNoiseEnabled(params.noise);
   						});
 
   						f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.noiseIntensity.value = params["noise intensity"];
   						});
 
   						f.add(params, "scanlines").onChange(function () {
-  								params.scanlines ? pass.material.defines.SCANLINES = "1" : delete pass.material.defines.SCANLINES;
-  								pass.material.needsUpdate = true;
+
+  								pass.material.setScanlinesEnabled(params.scanlines);
   						});
 
   						f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.scanlineIntensity.value = params["scanlines intensity"];
   						});
 
   						f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function () {
+
   								pass.scanlineDensity = params["scanlines count"];composer.setSize();
   						});
 
@@ -5167,11 +5417,12 @@
   						f = gui.addFolder("Sepia");
 
   						f.add(params, "sepia").onChange(function () {
-  								params.sepia ? pass.material.defines.SEPIA = "1" : delete pass.material.defines.SEPIA;
-  								pass.material.needsUpdate = true;
+
+  								pass.material.setSepiaEnabled(params.sepia);
   						});
 
   						f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.sepiaIntensity.value = params["sepia intensity"];
   						});
 
@@ -5180,20 +5431,22 @@
   						f = gui.addFolder("Vignette");
 
   						f.add(params, "vignette").onChange(function () {
-  								params.vignette ? pass.material.defines.VIGNETTE = "1" : delete pass.material.defines.VIGNETTE;
-  								pass.material.needsUpdate = true;
+
+  								pass.material.setVignetteEnabled(params.vignette);
   						});
 
   						f.add(params, "eskil").onChange(function () {
-  								params.eskil ? pass.material.defines.ESKIL = "1" : delete pass.material.defines.ESKIL;
-  								pass.material.needsUpdate = true;
+
+  								pass.material.setEskilEnabled(params.eskil);
   						});
 
   						f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.vignetteOffset.value = params["vignette offset"];
   						});
 
   						f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.material.uniforms.vignetteDarkness.value = params["vignette darkness"];
   						});
 
@@ -5333,9 +5586,12 @@
   								object.rotation.y += 0.01;
 
   								if (object.rotation.x >= TWO_PI$5) {
+
   										object.rotation.x -= TWO_PI$5;
   								}
+
   								if (object.rotation.y >= TWO_PI$5) {
+
   										object.rotation.y -= TWO_PI$5;
   								}
   						}
@@ -5353,6 +5609,7 @@
   						};
 
   						gui.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function () {
+
   								pass.mode = params.mode;
   						});
 
@@ -5362,7 +5619,7 @@
 
   										pass.perturbMap = perturbMap;
   								} else {
-  										pass.perturbMap = null;
+
   										pass.generatePerturbMap(64);
   								}
   						});
@@ -5514,9 +5771,12 @@
   								object.rotation.y += 0.005;
 
   								if (object.rotation.x >= TWO_PI$6) {
+
   										object.rotation.x -= TWO_PI$6;
   								}
+
   								if (object.rotation.y >= TWO_PI$6) {
+
   										object.rotation.y -= TWO_PI$6;
   								}
 
@@ -5539,7 +5799,9 @@
   						};
 
   						gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+
   						gui.add(params, "use mask").onChange(function () {
+
   								maskPass.enabled = params["use mask"];
   						});
   				}
@@ -5729,47 +5991,59 @@
   						};
 
   						gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-  								pass.resolutionScale = params.resolution;composer.setSize();
+
+  								pass.resolutionScale = params.resolution;
+  								composer.setSize();
   						});
+
   						gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
+
   								pass.kernelSize = params.blurriness;
   						});
+
   						gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.intensity = params.intensity;
   						});
+
   						gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.godRaysMaterial.uniforms.density.value = params.density;
   						});
+
   						gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.godRaysMaterial.uniforms.decay.value = params.decay;
   						});
+
   						gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.godRaysMaterial.uniforms.weight.value = params.weight;
   						});
+
   						gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
   						});
+
   						gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
   						});
+
   						gui.add(params, "samples").min(15).max(200).step(1).onChange(function () {
+
   								pass.samples = params.samples;
   						});
+
   						gui.addColor(params, "color").onChange(function () {
+
   								sun.material.color.setHex(params.color);directionalLight.color.setHex(params.color);
   						});
 
   						gui.add(params, "blend mode", ["add", "screen"]).onChange(function () {
 
-  								if (params["blend mode"] === "add") {
-
-  										delete pass.combineMaterial.defines.SCREEN_MODE;
-  								} else {
-
-  										pass.combineMaterial.defines.SCREEN_MODE = "1";
-  								}
-
-  								pass.combineMaterial.needsUpdate = true;
+  								pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
   						});
   				}
   		}]);
@@ -5882,9 +6156,12 @@
   								object.rotation.y += 0.001;
 
   								if (object.rotation.x >= TWO_PI$7) {
+
   										object.rotation.x -= TWO_PI$7;
   								}
+
   								if (object.rotation.y >= TWO_PI$7) {
+
   										object.rotation.y -= TWO_PI$7;
   								}
   						}
@@ -5998,28 +6275,35 @@
   								"size": pass.shockWaveMaterial.uniforms.size.value,
   								"extent": pass.shockWaveMaterial.uniforms.maxRadius.value,
   								"waveSize": pass.shockWaveMaterial.uniforms.waveSize.value,
-  								"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value,
-  								"explode": function explode() {
-  										pass.explode();
-  								}
+  								"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value
   						};
 
   						gui.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function () {
+
   								pass.speed = params.speed;
   						});
+
   						gui.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function () {
+
   								pass.shockWaveMaterial.uniforms.size.value = params.size;
   						});
+
   						gui.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function () {
+
   								pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent;
   						});
+
   						gui.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function () {
+
   								pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize;
   						});
+
   						gui.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function () {
+
   								pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude;
   						});
-  						gui.add(params, "explode");
+
+  						gui.add(pass, "explode");
   				}
   		}]);
   		return ShockWaveDemo;
@@ -6251,9 +6535,12 @@
   								objectC.rotation.copy(objectA.rotation);
 
   								if (objectA.rotation.x >= TWO_PI$8) {
+
   										objectA.rotation.x -= TWO_PI$8;
   								}
+
   								if (objectA.rotation.y >= TWO_PI$8) {
+
   										objectA.rotation.y -= TWO_PI$8;
   								}
   						}
@@ -6455,9 +6742,12 @@
   								object.rotation.y += 0.001;
 
   								if (object.rotation.x >= TWO_PI$9) {
+
   										object.rotation.x -= TWO_PI$9;
   								}
+
   								if (object.rotation.y >= TWO_PI$9) {
+
   										object.rotation.y -= TWO_PI$9;
   								}
   						}
@@ -6480,31 +6770,47 @@
   						};
 
   						gui.add(params, "resolution").min(6).max(11).step(1).onChange(function () {
+
   								pass.resolution = Math.pow(2, params.resolution);
   						});
+
   						gui.add(params, "adaptive").onChange(function () {
+
   								pass.adaptive = params.adaptive;
   						});
 
   						var f = gui.addFolder("Luminance");
+
   						f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
+
   								pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
   						});
+
   						f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function () {
+
   								pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
   						});
+
   						f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function () {
+
   								pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
   						});
+
   						f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"];
   						});
+
   						f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function () {
+
   								pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
   						});
+
   						f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function () {
+
   								pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
   						});
+
   						f.open();
   				}
   		}]);
