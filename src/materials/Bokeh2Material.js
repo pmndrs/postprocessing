@@ -26,6 +26,12 @@ export class Bokeh2Material extends ShaderMaterial {
 	 * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.
 	 * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).
 	 * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.
+	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
+	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
+	 * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.
+	 * @param {Number} [options.bias=0.5] - A blur bias.
+	 * @param {Number} [options.fringe=0.7] - A blur offset.
+	 * @param {Number} [options.ditherStrength=0.0001] - The dither strength.
 	 */
 
 	constructor(camera = null, options = {}) {
@@ -39,7 +45,13 @@ export class Bokeh2Material extends ShaderMaterial {
 			vignette: false,
 			pentagon: false,
 			shaderFocus: true,
-			noise: true
+			noise: true,
+			maxBlur: 1.0,
+			luminanceThreshold: 0.5,
+			luminanceGain: 2.0,
+			bias: 0.5,
+			fringe: 0.7,
+			ditherStrength: 0.0001
 		}, options);
 
 		super({
@@ -69,12 +81,12 @@ export class Bokeh2Material extends ShaderMaterial {
 				focalLength: new Uniform(24.0),
 				focalStop: new Uniform(0.9),
 
-				maxBlur: new Uniform(1.0),
-				luminanceThreshold: new Uniform(0.5),
-				luminanceGain: new Uniform(2.0),
-				bias: new Uniform(0.5),
-				fringe: new Uniform(0.7),
-				ditherStrength: new Uniform(0.0001),
+				maxBlur: new Uniform(settings.maxBlur),
+				luminanceThreshold: new Uniform(settings.luminanceThreshold),
+				luminanceGain: new Uniform(settings.luminanceGain),
+				bias: new Uniform(settings.bias),
+				fringe: new Uniform(settings.fringe),
+				ditherStrength: new Uniform(settings.ditherStrength),
 
 				focusCoords: new Uniform(new Vector2(0.5, 0.5)),
 				focalDepth: new Uniform(1.0)

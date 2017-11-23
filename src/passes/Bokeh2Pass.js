@@ -24,6 +24,12 @@ export class Bokeh2Pass extends Pass {
 	 * @param {Boolean} [options.pentagon=false] - Enable to use a pentagonal shape to scale gathered texels.
 	 * @param {Boolean} [options.shaderFocus=true] - Disable if you compute your own focalDepth (in metres!).
 	 * @param {Boolean} [options.noise=true] - Disable if you don't want noise patterns for dithering.
+	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
+	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
+	 * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.
+	 * @param {Number} [options.bias=0.5] - A blur bias.
+	 * @param {Number} [options.fringe=0.7] - A blur offset.
+	 * @param {Number} [options.ditherStrength=0.0001] - The dither strength.
 	 */
 
 	constructor(camera, options = {}) {
