@@ -142,14 +142,19 @@ export class Bokeh2Demo extends Demo {
 		composer.addPass(new RenderPass(scene, camera));
 
 		const pass = new Bokeh2Pass(camera, {
-			rings: 3,
-			samples: 2,
+			rings: 5,
+			samples: 5,
 			showFocus: false,
 			manualDoF: true,
-			vignette: false,
-			pentagon: false,
+			vignette: true,
+			pentagon: true,
 			shaderFocus: true,
-			noise: true
+			noise: false,
+			maxBlur: 2.0,
+			luminanceThreshold: 0.15,
+			luminanceGain: 3.5,
+			bias: 0.25,
+			fringe: 0.33
 		});
 
 		pass.renderToScreen = true;
