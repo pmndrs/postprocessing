@@ -184,7 +184,7 @@ export class SMAADemo extends Demo {
 			});
 
 			loadingManager.itemStart("smaa-search");
-			image.src = SMAAPass.searchImageDataUrl;
+			image.src = SMAAPass.searchImageDataURL;
 
 			image = new Image();
 			image.addEventListener("load", function() {
@@ -195,7 +195,7 @@ export class SMAADemo extends Demo {
 			});
 
 			loadingManager.itemStart("smaa-area");
-			image.src = SMAAPass.areaImageDataUrl;
+			image.src = SMAAPass.areaImageDataURL;
 
 		} else {
 

@@ -10,8 +10,8 @@ import {
 import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
-import searchImageDataUrl from "../materials/images/smaa/searchImageDataUrl.js";
-import areaImageDataUrl from "../materials/images/smaa/areaImageDataUrl.js";
+import searchImageDataURL from "../materials/images/smaa/searchImageDataURL.js";
+import areaImageDataURL from "../materials/images/smaa/areaImageDataURL.js";
 
 /**
  * Subpixel Morphological Antialiasing (SMAA) v2.8.
@@ -25,8 +25,8 @@ export class SMAAPass extends Pass {
 	/**
 	 * Constructs a new SMAA pass.
 	 *
-	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataUrl}.
-	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataUrl}.
+	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
+	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
 	 */
 
 	constructor(searchImage, areaImage) {
@@ -193,7 +193,7 @@ export class SMAAPass extends Pass {
 	}
 
 	/**
-	 * The SMAA search image, encoded as a base64 data url.
+	 * The SMAA search image, encoded as a base64 data URL.
 	 *
 	 * Use this image data to create an Image instance and use it together with
 	 * the area image to create an SMAAPass.
@@ -202,17 +202,17 @@ export class SMAAPass extends Pass {
 	 * @example
 	 * const searchImage = new Image();
 	 * searchImage.addEventListener("load", progress);
-	 * searchImage.src = SMAAPass.searchImageDataUrl;
+	 * searchImage.src = SMAAPass.searchImageDataURL;
 	 */
 
-	static get searchImageDataUrl() {
+	static get searchImageDataURL() {
 
-		return searchImageDataUrl;
+		return searchImageDataURL;
 
 	}
 
 	/**
-	 * The SMAA area image, encoded as a base64 data url.
+	 * The SMAA area image, encoded as a base64 data URL.
 	 *
 	 * Use this image data to create an Image instance and use it together with
 	 * the search image to create an SMAAPass.
@@ -221,12 +221,12 @@ export class SMAAPass extends Pass {
 	 * @example
 	 * const areaImage = new Image();
 	 * areaImage.addEventListener("load", progress);
-	 * areaImage.src = SMAAPass.areaImageDataUrl;
+	 * areaImage.src = SMAAPass.areaImageDataURL;
 	 */
 
-	static get areaImageDataUrl() {
+	static get areaImageDataURL() {
 
-		return areaImageDataUrl;
+		return areaImageDataURL;
 
 	}
 
