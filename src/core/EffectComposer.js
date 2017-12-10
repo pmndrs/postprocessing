@@ -106,7 +106,6 @@ export class EffectComposer {
 	 * The depth texture of the read and write buffers.
 	 *
 	 * @type {DepthTexture}
-	 * @default null
 	 */
 
 	get depthTexture() {

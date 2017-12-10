@@ -6,7 +6,6 @@ import { Pass } from "./Pass.js";
  *
  * @type Color
  * @private
- * @static
  */
 
 const color = new Color();
@@ -43,7 +42,6 @@ export class ClearPass extends Pass {
 		 * Clear color.
 		 *
 		 * @type {Color}
-		 * @default null
 		 */
 
 		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
@@ -52,7 +50,6 @@ export class ClearPass extends Pass {
 		 * Clear alpha.
 		 *
 		 * @type {Number}
-		 * @default 0.0
 		 */
 
 		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 0.0;

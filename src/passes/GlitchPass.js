@@ -6,7 +6,6 @@ import { Pass } from "./Pass.js";
  * Returns a random integer in the specified range.
  *
  * @private
- * @static
  * @param {Number} low - The lowest possible value.
  * @param {Number} high - The highest possible value.
  * @return {Number} The random value.
@@ -22,7 +21,6 @@ function randomInt(low, high) {
  * Returns a random float in the specified range.
  *
  * @private
- * @static
  * @param {Number} low - The lowest possible value.
  * @param {Number} high - The highest possible value.
  * @return {Number} The random value.
@@ -92,7 +90,6 @@ export class GlitchPass extends Pass {
 		 * The effect mode.
 		 *
 		 * @type {GlitchMode}
-		 * @default GlitchMode.SPORADIC
 		 */
 
 		this.mode = GlitchMode.SPORADIC;

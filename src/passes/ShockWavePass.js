@@ -7,8 +7,6 @@ import { Pass } from "./Pass.js";
  *
  * @type {Number}
  * @private
- * @static
- * @final
  */
 
 const HALF_PI = Math.PI * 0.5;
@@ -18,8 +16,6 @@ const HALF_PI = Math.PI * 0.5;
  *
  * @type {Vector3}
  * @private
- * @static
- * @final
  */
 
 const v = new Vector3();
@@ -29,8 +25,6 @@ const v = new Vector3();
  *
  * @type {Vector3}
  * @private
- * @static
- * @final
  */
 
 const ab = new Vector3();
@@ -99,7 +93,6 @@ export class ShockWavePass extends Pass {
 		 * The speed of the shock wave animation.
 		 *
 		 * @type {Number}
-		 * @default 2.0
 		 */
 
 		this.speed = (options.speed !== undefined) ? options.speed : 2.0;

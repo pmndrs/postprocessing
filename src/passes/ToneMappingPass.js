@@ -144,7 +144,6 @@ export class ToneMappingPass extends Pass {
 	 * The resolution of the render targets.
 	 *
 	 * @type {Number}
-	 * @default 256
 	 */
 
 	get resolution() {

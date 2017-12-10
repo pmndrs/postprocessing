@@ -93,7 +93,6 @@ export class BloomPass extends Pass {
 	 * The resolution scale.
 	 *
 	 * @type {Number}
-	 * @default 0.5
 	 */
 
 	get resolutionScale() {
@@ -118,7 +117,6 @@ export class BloomPass extends Pass {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() {
@@ -141,7 +139,6 @@ export class BloomPass extends Pass {
 	 * The overall intensity of the effect.
 	 *
 	 * @type {Number}
-	 * @default 1.0
 	 */
 
 	get intensity() {
@@ -164,7 +161,6 @@ export class BloomPass extends Pass {
 	 * The luminance distinction factor.
 	 *
 	 * @type {Number}
-	 * @default 1.0
 	 */
 
 	get distinction() {

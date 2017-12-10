@@ -69,7 +69,6 @@ export class TexturePass extends Pass {
 	 * The opacity.
 	 *
 	 * @type {Number}
-	 * @default 1.0
 	 */
 
 	get opacity() {

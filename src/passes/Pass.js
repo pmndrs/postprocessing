@@ -39,7 +39,6 @@ export class Pass {
 		 *
 		 * @type {Scene}
 		 * @protected
-		 * @default new Scene()
 		 */
 
 		this.scene = scene;
@@ -49,7 +48,6 @@ export class Pass {
 		 *
 		 * @type {Camera}
 		 * @protected
-		 * @default new OrthographicCamera(-1, 1, 1, -1, 0, 1)
 		 */
 
 		this.camera = camera;
@@ -61,7 +59,6 @@ export class Pass {
 		 *
 		 * @type {Mesh}
 		 * @protected
-		 * @default new Mesh(new PlaneBufferGeometry(2, 2), null)
 		 * @example this.quad.material = this.myMaterial;
 		 */
 
@@ -87,7 +84,6 @@ export class Pass {
 		 * following pass can find the result in the read buffer.
 		 *
 		 * @type {Boolean}
-		 * @default false
 		 */
 
 		this.needsSwap = false;
@@ -96,7 +92,6 @@ export class Pass {
 		 * Enabled flag.
 		 *
 		 * @type {Boolean}
-		 * @default true
 		 */
 
 		this.enabled = true;
@@ -105,7 +100,6 @@ export class Pass {
 		 * Render to screen flag.
 		 *
 		 * @type {Boolean}
-		 * @default false
 		 */
 
 		this.renderToScreen = false;
@@ -161,7 +155,6 @@ export class Pass {
 	 * The {@link EffectComposer} calls this method when this pass is added to its
 	 * queue.
 	 *
-	 * @method initialise
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }

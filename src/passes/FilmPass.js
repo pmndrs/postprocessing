@@ -63,7 +63,6 @@ export class FilmPass extends Pass {
 		 * value.
 		 *
 		 * @type {Number}
-		 * @default 1.25
 		 */
 
 		this.scanlineDensity = (options.scanlineDensity === undefined) ? 1.25 : options.scanlineDensity;

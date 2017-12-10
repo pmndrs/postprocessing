@@ -57,7 +57,6 @@ export class SavePass extends Pass {
 		 * the composer's read/write buffer changes.
 		 *
 		 * @type {Boolean}
-		 * @default true
 		 */
 
 		this.resize = resize;

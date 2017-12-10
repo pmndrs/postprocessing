@@ -218,7 +218,6 @@ export class GodRaysPass extends Pass {
 	 * The resolution scale.
 	 *
 	 * @type {Number}
-	 * @default 0.5
 	 */
 
 	get resolutionScale() {
@@ -243,7 +242,6 @@ export class GodRaysPass extends Pass {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() {
@@ -266,7 +264,6 @@ export class GodRaysPass extends Pass {
 	 * The overall intensity of the effect.
 	 *
 	 * @type {Number}
-	 * @default 1.0
 	 */
 
 	get intensity() {
@@ -289,7 +286,6 @@ export class GodRaysPass extends Pass {
 	 * The number of samples per pixel.
 	 *
 	 * @type {Number}
-	 * @default 60
 	 */
 
 	get samples() {

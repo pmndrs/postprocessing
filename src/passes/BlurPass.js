@@ -67,7 +67,6 @@ export class BlurPass extends Pass {
 		 * value.
 		 *
 		 * @type {Number}
-		 * @default 0.5
 		 */
 
 		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
@@ -131,7 +130,6 @@ export class BlurPass extends Pass {
 	 * The kernel size.
 	 *
 	 * @type {KernelSize}
-	 * @default KernelSize.LARGE
 	 */
 
 	get kernelSize() {

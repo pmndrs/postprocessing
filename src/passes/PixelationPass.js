@@ -48,7 +48,6 @@ export class PixelationPass extends Pass {
 	 * The pixel granularity.
 	 *
 	 * @type {Number}
-	 * @default 30.0
 	 */
 
 	get granularity() {

@@ -45,7 +45,6 @@ export class ShaderPass extends Pass {
 		 * The name of the color sampler uniform of the given material.
 		 *
 		 * @type {String}
-		 * @default "tDiffuse"
 		 */
 
 		this.textureID = textureID;

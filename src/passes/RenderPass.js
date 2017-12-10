@@ -43,7 +43,6 @@ export class RenderPass extends Pass {
 		 * An override material.
 		 *
 		 * @type {Material}
-		 * @default null
 		 */
 
 		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
@@ -52,7 +51,6 @@ export class RenderPass extends Pass {
 		 * Indicates whether the depth buffer should be cleared explicitly.
 		 *
 		 * @type {Boolean}
-		 * @default false
 		 */
 
 		this.clearDepth = (options.clearDepth !== undefined) ? options.clearDepth : false;
@@ -65,7 +63,6 @@ export class RenderPass extends Pass {
 		 * autoClearDepth properties of the renderer to false.
 		 *
 		 * @type {Boolean}
-		 * @default true
 		 */
 
 		this.clear = (options.clear !== undefined) ? options.clear : true;

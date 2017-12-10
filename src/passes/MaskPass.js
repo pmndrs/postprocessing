@@ -27,7 +27,6 @@ export class MaskPass extends Pass {
 		 * Inverse flag.
 		 *
 		 * @type {Boolean}
-		 * @default false
 		 */
 
 		this.inverse = false;
@@ -36,7 +35,6 @@ export class MaskPass extends Pass {
 		 * Stencil buffer clear flag.
 		 *
 		 * @type {Boolean}
-		 * @default true
 		 */
 
 		this.clearStencil = true;
