@@ -84,7 +84,7 @@ See the [Wiki](https://github.com/vanruesc/postprocessing/wiki/Custom-Passes) fo
  - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
  - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
  - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh)
- - [Bokeh v2](http://vanruesc.github.io/postprocessing/public/demo/#bokeh2)
+ - [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)
  - [Depth](http://vanruesc.github.io/postprocessing/public/demo/#depth)
  - [Dot Screen](http://vanruesc.github.io/postprocessing/public/demo/#dot-screen)
  - [Film](http://vanruesc.github.io/postprocessing/public/demo/#film)
