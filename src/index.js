@@ -34,6 +34,7 @@ export {
 	AdaptiveLuminosityMaterial,
 	BokehMaterial,
 	Bokeh2Material,
+	ColorEdgesMaterial,
 	CombineMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,
@@ -46,7 +47,6 @@ export {
 	PixelationMaterial,
 	ShockWaveMaterial,
 	SMAABlendMaterial,
-	SMAAColorEdgesMaterial,
 	SMAAWeightsMaterial,
 	ToneMappingMaterial
 } from "./materials";

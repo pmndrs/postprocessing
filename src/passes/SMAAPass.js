@@ -7,7 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { SMAABlendMaterial, SMAAColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
+import { ColorEdgesMaterial, SMAABlendMaterial, SMAAWeightsMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
 import searchImageDataURL from "../materials/images/smaa/searchImageDataURL.js";
@@ -75,13 +75,13 @@ export class SMAAPass extends Pass {
 		this.renderTargetWeights.texture.format = RGBAFormat;
 
 		/**
-		 * SMAA color edge detection shader material.
+		 * Color edge detection shader material.
 		 *
-		 * @type {SMAAColorEdgesMaterial}
+		 * @type {ColorEdgesMaterial}
 		 * @private
 		 */
 
-		this.colorEdgesMaterial = new SMAAColorEdgesMaterial();
+		this.colorEdgesMaterial = new ColorEdgesMaterial();
 
 		/**
 		 * SMAA weights shader material.

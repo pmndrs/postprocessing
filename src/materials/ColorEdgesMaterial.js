@@ -4,15 +4,15 @@ import fragment from "./glsl/smaa-color-edges/shader.frag";
 import vertex from "./glsl/smaa-color-edges/shader.vert";
 
 /**
- * Subpixel Morphological Antialiasing.
+ * A material that detects edges in a color texture.
  *
- * This material detects edges in a color texture.
+ * Mainly used for Subpixel Morphological Antialiasing.
  */
 
-export class SMAAColorEdgesMaterial extends ShaderMaterial {
+export class ColorEdgesMaterial extends ShaderMaterial {
 
 	/**
-	 * Constructs a new SMAA color edges material.
+	 * Constructs a new color edges material.
 	 *
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
 	 */
@@ -21,7 +21,7 @@ export class SMAAColorEdgesMaterial extends ShaderMaterial {
 
 		super({
 
-			type: "SMAAColorEdgesMaterial",
+			type: "ColorEdgesMaterial",
 
 			defines: {
 
