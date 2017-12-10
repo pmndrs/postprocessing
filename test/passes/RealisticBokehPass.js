@@ -1,14 +1,14 @@
 "use strict";
 
-const Bokeh2Pass = require("../../build/postprocessing").Bokeh2Pass;
+const RealisticBokehPass = require("../../build/postprocessing").RealisticBokehPass;
 
 module.exports = {
 
-	"Bokeh 2": {
+	"RealisticBokeh": {
 
 		"can be created and destroyed": function(test) {
 
-			const pass = new Bokeh2Pass();
+			const pass = new RealisticBokehPass();
 			test.ok(pass);
 			pass.dispose();
 			test.done();
