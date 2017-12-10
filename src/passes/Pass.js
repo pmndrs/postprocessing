@@ -178,11 +178,9 @@ export class Pass {
 
 	dispose() {
 
-		const keys = Object.keys(this);
-
 		let key;
 
-		for(key of keys) {
+		for(key of Object.keys(this)) {
 
 			if(this[key] !== null && typeof this[key].dispose === "function") {
 
