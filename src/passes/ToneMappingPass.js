@@ -16,20 +16,6 @@ import {
 import { Pass } from "./Pass.js";
 
 /**
- * Rounds the given number up to the next power of two.
- *
- * @private
- * @param {Number} n - A number.
- * @return {Number} The next power of two.
- */
-
-function ceil2(n) {
-
-	return Math.pow(2, Math.max(0, Math.ceil(Math.log2(n))));
-
-}
-
-/**
  * A tone mapping pass that supports adaptive luminosity.
  *
  * If adaptivity is enabled, this pass generates a texture that represents the
@@ -175,13 +161,15 @@ export class ToneMappingPass extends Pass {
 
 	set resolution(value = 256) {
 
-		value = ceil2(value);
+		// Round the given value to the next power of two.
+		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
+		value = Math.pow(2, exponent);
 
 		this.renderTargetLuminosity.setSize(value, value);
 		this.renderTargetPrevious.setSize(value, value);
 		this.renderTargetAdapted.setSize(value, value);
 
-		this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = (Math.round(Math.log(value)) / Math.log(2)).toFixed(1);
+		this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
 		this.adaptiveLuminosityMaterial.needsUpdate = true;
 
 	}
