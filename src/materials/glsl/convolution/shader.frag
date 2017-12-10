@@ -1,3 +1,6 @@
+#include <common>
+#include <dithering_pars_fragment>
+
 uniform sampler2D tDiffuse;
 
 varying vec2 vUv0;
@@ -21,5 +24,7 @@ void main() {
 
 	// Compute the average.
 	gl_FragColor = sum * 0.25;
+
+	#include <dithering_fragment>
 
 }

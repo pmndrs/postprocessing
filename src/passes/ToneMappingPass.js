@@ -224,6 +224,35 @@ export class ToneMappingPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.toneMappingMaterial.dithering;
+
+	}
+
+	/**
+	 * If enabled, the result will be dithered to remove banding artifacts.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		if(this.dithering !== value) {
+
+			this.toneMappingMaterial.dithering = value;
+			this.toneMappingMaterial.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.

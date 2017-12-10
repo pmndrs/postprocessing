@@ -298,6 +298,8 @@ export class BlurDemo extends Demo {
 
 		});
 
+		gui.add(blurPass, "dithering");
+
 		gui.add(params, "enabled").onChange(function() {
 
 			renderPass.renderToScreen = !params.enabled;

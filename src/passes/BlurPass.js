@@ -81,9 +81,25 @@ export class BlurPass extends Pass {
 
 		this.convolutionMaterial = new ConvolutionMaterial();
 
-		this.kernelSize = options.kernelSize;
+		/**
+		 * A convolution shader material that uses dithering.
+		 *
+		 * @type {ConvolutionMaterial}
+		 * @private
+		 */
 
-		this.quad.material = this.convolutionMaterial;
+		this.ditheredConvolutionMaterial = new ConvolutionMaterial();
+		this.ditheredConvolutionMaterial.dithering = true;
+
+		/**
+		 * Whether the blurred result should also be dithered using noise.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.dithering = false;
+
+		this.kernelSize = options.kernelSize;
 
 	}
 
@@ -131,6 +147,7 @@ export class BlurPass extends Pass {
 	set kernelSize(value = KernelSize.LARGE) {
 
 		this.convolutionMaterial.kernelSize = value;
+		this.ditheredConvolutionMaterial.kernelSize = value;
 
 	}
 
@@ -150,13 +167,15 @@ export class BlurPass extends Pass {
 		const renderTargetX = this.renderTargetX;
 		const renderTargetY = this.renderTargetY;
 
-		const material = this.convolutionMaterial;
-		const uniforms = material.uniforms;
+		let material = this.convolutionMaterial;
+		let uniforms = material.uniforms;
 		const kernel = material.getKernel();
 
 		let lastRT = readBuffer;
 		let destRT;
 		let i, l;
+
+		this.quad.material = material;
 
 		// Apply the multi-pass blur.
 		for(i = 0, l = kernel.length - 1; i < l; ++i) {
@@ -169,6 +188,14 @@ export class BlurPass extends Pass {
 			renderer.render(scene, camera, destRT);
 
 			lastRT = destRT;
+
+		}
+
+		if(this.dithering) {
+
+			material = this.ditheredConvolutionMaterial;
+			uniforms = material.uniforms;
+			this.quad.material = material;
 
 		}
 
@@ -212,6 +239,7 @@ export class BlurPass extends Pass {
 		this.renderTargetY.setSize(width, height);
 
 		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
+		this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

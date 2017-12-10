@@ -316,6 +316,35 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.godRaysMaterial.dithering;
+
+	}
+
+	/**
+	 * If enabled, the result will be dithered to remove banding artifacts.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		if(this.dithering !== value) {
+
+			this.godRaysMaterial.dithering = value;
+			this.godRaysMaterial.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
 	 * Renders the scene.
 	 *
 	 * The god rays pass has four phases:

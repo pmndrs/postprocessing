@@ -311,6 +311,8 @@ export class BloomDemo extends Demo {
 
 		});
 
+		gui.add(pass, "dithering");
+
 		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
 			pass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));

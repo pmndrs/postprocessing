@@ -1,3 +1,6 @@
+#include <common>
+#include <dithering_pars_fragment>
+
 uniform sampler2D tDiffuse;
 uniform vec3 lightPosition;
 
@@ -40,5 +43,7 @@ void main() {
 	}
 
 	gl_FragColor = clamp(color * exposure, 0.0, clampMax);
+
+	#include <dithering_fragment>
 
 }

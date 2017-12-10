@@ -1,4 +1,5 @@
 #include <common>
+#include <dithering_pars_fragment>
 
 uniform sampler2D tDiffuse;
 uniform float middleGrey;
@@ -45,5 +46,7 @@ void main() {
 
 	vec4 texel = texture2D(tDiffuse, vUv);
 	gl_FragColor = vec4(toneMap(texel.rgb), texel.a);
+
+	#include <dithering_fragment>
 
 }

@@ -184,6 +184,30 @@ export class BloomPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.blurPass.dithering;
+
+	}
+
+	/**
+	 * If enabled, the result will be dithered to remove banding artifacts.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		this.blurPass.dithering = value;
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * Extracts a luminance map from the read buffer, blurs it and combines it

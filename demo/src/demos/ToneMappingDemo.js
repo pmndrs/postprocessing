@@ -220,8 +220,7 @@ export class ToneMappingDemo extends Demo {
 		const pass = this.toneMappingPass;
 
 		const params = {
-			"resolution": Math.round(Math.log(pass.resolution) / Math.log(2)),
-			"adaptive": pass.adaptive,
+			"resolution": Math.log2(pass.resolution),
 			"distinction": pass.luminosityMaterial.uniforms.distinction.value,
 			"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
 			"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
@@ -236,11 +235,8 @@ export class ToneMappingDemo extends Demo {
 
 		});
 
-		gui.add(params, "adaptive").onChange(function() {
-
-			pass.adaptive = params.adaptive;
-
-		});
+		gui.add(pass, "adaptive");
+		gui.add(pass, "dithering");
 
 		let f = gui.addFolder("Luminance");
 

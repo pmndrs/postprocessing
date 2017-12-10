@@ -35,6 +35,15 @@ export class DepthDemo extends Demo {
 		super(composer);
 
 		/**
+		 * A render pass.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPass = null;
+
+		/**
 		 * An object.
 		 *
 		 * @type {Object3D}
@@ -89,6 +98,7 @@ export class DepthDemo extends Demo {
 		});
 
 		pass.renderToScreen = true;
+		this.renderPass = pass;
 		composer.addPass(pass);
 
 	}
@@ -122,6 +132,24 @@ export class DepthDemo extends Demo {
 			}
 
 		}
+
+	}
+
+	/**
+	 * Registers configuration options.
+	 *
+	 * @param {GUI} gui - A GUI.
+	 */
+
+	configure(gui) {
+
+		const pass = this.renderPass;
+
+		gui.add(pass.overrideMaterial, "dithering").onChange(function() {
+
+			pass.overrideMaterial.needsUpdate = true;
+
+		});
 
 	}
 

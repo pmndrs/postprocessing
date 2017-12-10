@@ -273,6 +273,8 @@ export class GodRaysDemo extends Demo {
 
 		});
 
+		gui.add(pass, "dithering");
+
 		gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
 
 			pass.kernelSize = params.blurriness;
@@ -323,7 +325,8 @@ export class GodRaysDemo extends Demo {
 
 		gui.addColor(params, "color").onChange(function() {
 
-			sun.material.color.setHex(params.color); directionalLight.color.setHex(params.color);
+			sun.material.color.setHex(params.color);
+			directionalLight.color.setHex(params.color);
 
 		});
 
