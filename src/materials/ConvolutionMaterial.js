@@ -6,6 +6,8 @@ import vertex from "./glsl/convolution/shader.vert";
 /**
  * An optimised convolution shader material.
  *
+ * This material supports dithering.
+ *
  * Based on the GDC2003 Presentation by Masaki Kawase, Bunkasha Games:
  *  Frame Buffer Postprocessing Effects in DOUBLE-S.T.E.A.L (Wreckless)
  * and an article by Filip Strugar, Intel:

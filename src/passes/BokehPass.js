@@ -13,11 +13,7 @@ export class BokehPass extends Pass {
 	 * Constructs a new bokeh pass.
 	 *
 	 * @param {PerspectiveCamera} camera - The main camera. Used to obtain the aspect ratio and the near and far plane settings.
-	 * @param {Object} [options] - Additional parameters.
-	 * @param {Number} [options.focus=1.0] - Focus distance.
-	 * @param {Number} [options.dof=0.02] - Depth of field. An area in front of and behind the focus point that still appears sharp.
-	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for shallower depth of field.
-	 * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
+	 * @param {Object} [options] - Additional parameters. See {@link BokehMaterial} for details.
 	 */
 
 	constructor(camera, options = {}) {

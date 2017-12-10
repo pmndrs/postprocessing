@@ -6,6 +6,8 @@ import vertex from "./glsl/god-rays/shader.vert";
 /**
  * A crepuscular rays shader material.
  *
+ * This material supports dithering.
+ *
  * References:
  *
  * Thibaut Despoulain, 2012:

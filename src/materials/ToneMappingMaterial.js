@@ -6,6 +6,8 @@ import vertex from "./glsl/tone-mapping/shader.vert";
 /**
  * Full-screen tone-mapping shader material.
  *
+ * This material supports dithering.
+ *
  * Reference:
  *  http://www.cis.rit.edu/people/faculty/ferwerda/publications/sig02_paper.pdf
  */
