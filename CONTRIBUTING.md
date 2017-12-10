@@ -8,7 +8,7 @@ Thank you for considering to contribute! :speech_balloon:
 1. Search the issue tracker for similar bug reports before submitting a new one.
 2. Specify the version of the library where the bug occurred.
 3. Specify your browser version, operating system, and graphics card  
-   (e.g. `Chrome 60.0.3112.113 (64-bit), Windows 10 (64-bit), NVIDIA GTX 1050`).
+   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 10 (64-bit), NVIDIA GTX 0000`).
 4. Describe the problem in detail. Explain what happened, and what you expected would happen.
 5. Provide a minimal test case (http://jsfiddle.net) or a link to a live version of your application.
 6. If helpful, include a screenshot. Annotate the screenshot for clarity.
