@@ -2,7 +2,7 @@ import {
 	LinearFilter,
 	LinearMipMapLinearFilter,
 	MeshBasicMaterial,
-	RGBAFormat,
+	RGBFormat,
 	WebGLRenderTarget
 } from "three";
 
@@ -65,7 +65,7 @@ export class ToneMappingPass extends Pass {
 		this.renderTargetLuminosity = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
-			format: RGBAFormat,
+			format: RGBFormat,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
