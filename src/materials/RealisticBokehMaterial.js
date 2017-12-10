@@ -4,13 +4,13 @@ import fragment from "./glsl/bokeh2/shader.frag";
 import vertex from "./glsl/bokeh2/shader.vert";
 
 /**
- * Depth of Field shader version 2.4.
+ * Depth of Field shader v2.4.
  *
  * Original shader code by Martins Upitis:
  *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
  */
 
-export class Bokeh2Material extends ShaderMaterial {
+export class RealisticBokehMaterial extends ShaderMaterial {
 
 	/**
 	 * Constructs a new bokeh2 material.
@@ -56,7 +56,7 @@ export class Bokeh2Material extends ShaderMaterial {
 
 		super({
 
-			type: "Bokeh2Material",
+			type: "RealisticBokehMaterial",
 
 			defines: {
 

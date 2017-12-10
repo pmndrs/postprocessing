@@ -6,7 +6,6 @@
 
 export { AdaptiveLuminosityMaterial } from "./AdaptiveLuminosityMaterial.js";
 export { BokehMaterial } from "./BokehMaterial.js";
-export { Bokeh2Material } from "./Bokeh2Material.js";
 export { ColorEdgesMaterial } from "./ColorEdgesMaterial.js";
 export { CombineMaterial } from "./CombineMaterial.js";
 export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
@@ -17,6 +16,7 @@ export { GlitchMaterial } from "./GlitchMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminosityMaterial } from "./LuminosityMaterial.js";
 export { PixelationMaterial } from "./PixelationMaterial.js";
+export { RealisticBokehMaterial } from "./RealisticBokehMaterial.js";
 export { ShockWaveMaterial } from "./ShockWaveMaterial.js";
 export { SMAABlendMaterial } from "./SMAABlendMaterial.js";
 export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial.js";

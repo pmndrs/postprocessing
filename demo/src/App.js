@@ -6,7 +6,7 @@ import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
-import { Bokeh2Demo } from "./demos/Bokeh2Demo.js";
+import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { DepthDemo } from "./demos/DepthDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
@@ -97,7 +97,7 @@ export class App {
 			demos.set("bloom", new BloomDemo(composer));
 			demos.set("blur", new BlurDemo(composer));
 			demos.set("bokeh", new BokehDemo(composer));
-			demos.set("bokeh2", new Bokeh2Demo(composer));
+			demos.set("realistic-bokeh", new RealisticBokehDemo(composer));
 			demos.set("depth", new DepthDemo(composer));
 			demos.set("dot-screen", new DotScreenDemo(composer));
 			demos.set("film", new FilmDemo(composer));

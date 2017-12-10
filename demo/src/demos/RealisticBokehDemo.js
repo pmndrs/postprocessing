@@ -8,14 +8,14 @@ import {
 	SphereBufferGeometry
 } from "three";
 
-import { Bokeh2Pass, RenderPass } from "../../../src";
+import { RealisticBokehPass, RenderPass } from "../../../src";
 import { Demo } from "./Demo.js";
 
 /**
  * A high quality bokeh demo setup.
  */
 
-export class Bokeh2Demo extends Demo {
+export class RealisticBokehDemo extends Demo {
 
 	/**
 	 * Constructs a new bokeh2 demo.
@@ -30,7 +30,7 @@ export class Bokeh2Demo extends Demo {
 		/**
 		 * A bokeh pass.
 		 *
-		 * @type {BloomPass}
+		 * @type {RealisticBokehPass}
 		 * @private
 		 */
 
@@ -141,7 +141,7 @@ export class Bokeh2Demo extends Demo {
 
 		composer.addPass(new RenderPass(scene, camera));
 
-		const pass = new Bokeh2Pass(camera, {
+		const pass = new RealisticBokehPass(camera, {
 			rings: 5,
 			samples: 5,
 			showFocus: false,
