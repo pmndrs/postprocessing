@@ -19,7 +19,11 @@ module.exports = function(grunt) {
 							"**/*.vert"
 						]
 					})
-				].concat(grunt.option("production") ? [babel()] : []);
+				].concat(!grunt.option("production") ? [] :
+					[babel({
+						exclude: "node_modules/**"
+					})]
+				);
 
 			}
 		},
