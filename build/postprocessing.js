@@ -1,5 +1,5 @@
 /**
- * postprocessing v3.1.0 build Dec 10 2017
+ * postprocessing v4.0.0 build Dec 14 2017
  * https://github.com/vanruesc/postprocessing
  * Copyright 2017 Raoul van Rüschen, Zlib
  */
@@ -1278,8 +1278,8 @@
   				key: "setSize",
   				value: function setSize(width, height) {}
   		}, {
-  				key: "initialise",
-  				value: function initialise(renderer, alpha) {}
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {}
   		}, {
   				key: "dispose",
   				value: function dispose() {
@@ -1404,8 +1404,8 @@
   						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   				}
   		}, {
-  				key: "initialise",
-  				value: function initialise(renderer, alpha) {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
 
   						if (!alpha) {
 
@@ -1517,10 +1517,10 @@
   			renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   		}
   	}, {
-  		key: "initialise",
-  		value: function initialise(renderer, alpha) {
+  		key: "initialize",
+  		value: function initialize(renderer, alpha) {
 
-  			this.blurPass.initialise(renderer, alpha);
+  			this.blurPass.initialize(renderer, alpha);
 
   			if (!alpha) {
 
@@ -2107,12 +2107,12 @@
   						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
   				}
   		}, {
-  				key: "initialise",
-  				value: function initialise(renderer, alpha) {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
 
-  						this.renderPassLight.initialise(renderer, alpha);
-  						this.renderPassMask.initialise(renderer, alpha);
-  						this.blurPass.initialise(renderer, alpha);
+  						this.renderPassLight.initialize(renderer, alpha);
+  						this.renderPassMask.initialize(renderer, alpha);
+  						this.blurPass.initialize(renderer, alpha);
 
   						if (!alpha) {
 
@@ -2406,8 +2406,8 @@
   						renderer.render(this.scene, this.camera, this.renderTarget);
   				}
   		}, {
-  				key: "initialise",
-  				value: function initialise(renderer, alpha) {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
 
   						if (!alpha) {
 
@@ -2822,8 +2822,8 @@
   						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
   				}
   		}, {
-  				key: "initialise",
-  				value: function initialise(renderer) {
+  				key: "initialize",
+  				value: function initialize(renderer) {
 
   						this.quad.material = new three.MeshBasicMaterial({ color: 0x7fffff });
   						renderer.render(this.scene, this.camera, this.renderTargetPrevious);
@@ -2983,7 +2983,7 @@
   						var drawingBufferSize = renderer.getDrawingBufferSize();
 
   						pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-  						pass.initialise(renderer, renderer.context.getContextAttributes().alpha);
+  						pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
 
   						if (index !== undefined) {
 
