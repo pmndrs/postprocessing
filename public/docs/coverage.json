@@ -1,7 +1,7 @@
 {
-  "coverage": "99.1%",
-  "expectCount": 336,
-  "actualCount": 333,
+  "coverage": "97.8%",
+  "expectCount": 365,
+  "actualCount": 357,
   "files": {
     "src/core/EffectComposer.js": {
       "expectCount": 17,
@@ -13,20 +13,24 @@
       "actualCount": 2,
       "undocumentLines": []
     },
-    "src/materials/Bokeh2Material.js": {
-      "expectCount": 4,
-      "actualCount": 4,
-      "undocumentLines": []
-    },
     "src/materials/BokehMaterial.js": {
       "expectCount": 3,
       "actualCount": 3,
       "undocumentLines": []
     },
+    "src/materials/ColorEdgesMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        68
+      ]
+    },
     "src/materials/CombineMaterial.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        70
+      ]
     },
     "src/materials/ConvolutionMaterial.js": {
       "expectCount": 7,
@@ -39,14 +43,18 @@
       "undocumentLines": []
     },
     "src/materials/DotScreenMaterial.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        77
+      ]
     },
     "src/materials/FilmMaterial.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
+      "expectCount": 10,
+      "actualCount": 9,
+      "undocumentLines": [
+        129
+      ]
     },
     "src/materials/GlitchMaterial.js": {
       "expectCount": 2,
@@ -74,14 +82,23 @@
       "undocumentLines": []
     },
     "src/materials/LuminosityMaterial.js": {
-      "expectCount": 2,
-      "actualCount": 2,
-      "undocumentLines": []
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        79
+      ]
     },
     "src/materials/PixelationMaterial.js": {
       "expectCount": 5,
       "actualCount": 5,
       "undocumentLines": []
+    },
+    "src/materials/RealisticBokehMaterial.js": {
+      "expectCount": 11,
+      "actualCount": 10,
+      "undocumentLines": [
+        139
+      ]
     },
     "src/materials/ShockWaveMaterial.js": {
       "expectCount": 2,
@@ -92,13 +109,6 @@
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
-    },
-    "src/materials/SMAAColorEdgesMaterial.js": {
-      "expectCount": 4,
-      "actualCount": 3,
-      "undocumentLines": [
-        68
-      ]
     },
     "src/materials/SMAAWeightsMaterial.js": {
       "expectCount": 4,
@@ -113,18 +123,13 @@
       "undocumentLines": []
     },
     "src/passes/BloomPass.js": {
-      "expectCount": 19,
-      "actualCount": 19,
+      "expectCount": 21,
+      "actualCount": 21,
       "undocumentLines": []
     },
     "src/passes/BlurPass.js": {
-      "expectCount": 15,
-      "actualCount": 15,
-      "undocumentLines": []
-    },
-    "src/passes/Bokeh2Pass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
+      "expectCount": 17,
+      "actualCount": 17,
       "undocumentLines": []
     },
     "src/passes/BokehPass.js": {
@@ -158,8 +163,8 @@
       "undocumentLines": []
     },
     "src/passes/GodRaysPass.js": {
-      "expectCount": 29,
-      "actualCount": 29,
+      "expectCount": 31,
+      "actualCount": 31,
       "undocumentLines": []
     },
     "src/passes/MaskPass.js": {
@@ -171,12 +176,17 @@
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        197
+        188
       ]
     },
     "src/passes/PixelationPass.js": {
       "expectCount": 9,
       "actualCount": 9,
+      "undocumentLines": []
+    },
+    "src/passes/RealisticBokehPass.js": {
+      "expectCount": 7,
+      "actualCount": 7,
       "undocumentLines": []
     },
     "src/passes/RenderPass.js": {
@@ -210,8 +220,8 @@
       "undocumentLines": []
     },
     "src/passes/ToneMappingPass.js": {
-      "expectCount": 18,
-      "actualCount": 18,
+      "expectCount": 19,
+      "actualCount": 19,
       "undocumentLines": []
     }
   }

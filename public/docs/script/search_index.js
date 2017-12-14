@@ -18,18 +18,6 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
-    "postprocessing/src/materials/bokeh2material.js~bokeh2material",
-    "class/src/materials/Bokeh2Material.js~Bokeh2Material.html",
-    "<span>Bokeh2Material</span> <span class=\"search-result-import-path\">postprocessing/src/materials/Bokeh2Material.js</span>",
-    "class"
-  ],
-  [
-    "postprocessing/src/passes/bokeh2pass.js~bokeh2pass",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html",
-    "<span>Bokeh2Pass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/Bokeh2Pass.js</span>",
-    "class"
-  ],
-  [
     "postprocessing/src/materials/bokehmaterial.js~bokehmaterial",
     "class/src/materials/BokehMaterial.js~BokehMaterial.html",
     "<span>BokehMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/BokehMaterial.js</span>",
@@ -51,6 +39,12 @@ window.esdocSearchIndex = [
     "postprocessing/src/passes/clearpass.js~clearpass",
     "class/src/passes/ClearPass.js~ClearPass.html",
     "<span>ClearPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/ClearPass.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/materials/coloredgesmaterial.js~coloredgesmaterial",
+    "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html",
+    "<span>ColorEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ColorEdgesMaterial.js</span>",
     "class"
   ],
   [
@@ -174,6 +168,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/materials/realisticbokehmaterial.js~realisticbokehmaterial",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html",
+    "<span>RealisticBokehMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/RealisticBokehMaterial.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/passes/realisticbokehpass.js~realisticbokehpass",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html",
+    "<span>RealisticBokehPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/RealisticBokehPass.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/passes/renderpass.js~renderpass",
     "class/src/passes/RenderPass.js~RenderPass.html",
     "<span>RenderPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/RenderPass.js</span>",
@@ -189,12 +195,6 @@ window.esdocSearchIndex = [
     "postprocessing/src/materials/smaablendmaterial.js~smaablendmaterial",
     "class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html",
     "<span>SMAABlendMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/SMAABlendMaterial.js</span>",
-    "class"
-  ],
-  [
-    "postprocessing/src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial",
-    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html",
-    "<span>SMAAColorEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/SMAAColorEdgesMaterial.js</span>",
     "class"
   ],
   [
@@ -571,13 +571,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
@@ -666,30 +666,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/materials/bokeh2material.js",
-    "file/src/materials/Bokeh2Material.js.html",
-    "src/materials/Bokeh2Material.js",
-    "file"
-  ],
-  [
-    "src/materials/bokeh2material.js~bokeh2material#adoptcamerasettings",
-    "class/src/materials/Bokeh2Material.js~Bokeh2Material.html#instance-method-adoptCameraSettings",
-    "src/materials/Bokeh2Material.js~Bokeh2Material#adoptCameraSettings",
-    "method"
-  ],
-  [
-    "src/materials/bokeh2material.js~bokeh2material#constructor",
-    "class/src/materials/Bokeh2Material.js~Bokeh2Material.html#instance-constructor-constructor",
-    "src/materials/Bokeh2Material.js~Bokeh2Material#constructor",
-    "method"
-  ],
-  [
-    "src/materials/bokeh2material.js~bokeh2material#settexelsize",
-    "class/src/materials/Bokeh2Material.js~Bokeh2Material.html#instance-method-setTexelSize",
-    "src/materials/Bokeh2Material.js~Bokeh2Material#setTexelSize",
-    "method"
-  ],
-  [
     "src/materials/bokehmaterial.js",
     "file/src/materials/BokehMaterial.js.html",
     "src/materials/BokehMaterial.js",
@@ -708,6 +684,30 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/coloredgesmaterial.js",
+    "file/src/materials/ColorEdgesMaterial.js.html",
+    "src/materials/ColorEdgesMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/coloredgesmaterial.js~coloredgesmaterial#constructor",
+    "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html#instance-constructor-constructor",
+    "src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/coloredgesmaterial.js~coloredgesmaterial#needsupdate",
+    "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html#instance-member-needsUpdate",
+    "src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/coloredgesmaterial.js~coloredgesmaterial#setedgedetectionthreshold",
+    "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html#instance-method-setEdgeDetectionThreshold",
+    "src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial#setEdgeDetectionThreshold",
+    "method"
+  ],
+  [
     "src/materials/combinematerial.js",
     "file/src/materials/CombineMaterial.js.html",
     "src/materials/CombineMaterial.js",
@@ -717,6 +717,18 @@ window.esdocSearchIndex = [
     "src/materials/combinematerial.js~combinematerial#constructor",
     "class/src/materials/CombineMaterial.js~CombineMaterial.html#instance-constructor-constructor",
     "src/materials/CombineMaterial.js~CombineMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/combinematerial.js~combinematerial#needsupdate",
+    "class/src/materials/CombineMaterial.js~CombineMaterial.html#instance-member-needsUpdate",
+    "src/materials/CombineMaterial.js~CombineMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/combinematerial.js~combinematerial#setscreenmodeenabled",
+    "class/src/materials/CombineMaterial.js~CombineMaterial.html#instance-method-setScreenModeEnabled",
+    "src/materials/CombineMaterial.js~CombineMaterial#setScreenModeEnabled",
     "method"
   ],
   [
@@ -774,6 +786,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/dotscreenmaterial.js~dotscreenmaterial#needsupdate",
+    "class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html#instance-member-needsUpdate",
+    "src/materials/DotScreenMaterial.js~DotScreenMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/dotscreenmaterial.js~dotscreenmaterial#setaverageenabled",
+    "class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html#instance-method-setAverageEnabled",
+    "src/materials/DotScreenMaterial.js~DotScreenMaterial#setAverageEnabled",
+    "method"
+  ],
+  [
     "src/materials/filmmaterial.js",
     "file/src/materials/FilmMaterial.js.html",
     "src/materials/FilmMaterial.js",
@@ -783,6 +807,54 @@ window.esdocSearchIndex = [
     "src/materials/filmmaterial.js~filmmaterial#constructor",
     "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-constructor-constructor",
     "src/materials/FilmMaterial.js~FilmMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#needsupdate",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-member-needsUpdate",
+    "src/materials/FilmMaterial.js~FilmMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#seteskilenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setEskilEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setEskilEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setgreyscaleenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setGreyscaleEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setGreyscaleEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setnoiseenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setNoiseEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setNoiseEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setscanlinesenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setScanlinesEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setScanlinesEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setscreenmodeenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setScreenModeEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setScreenModeEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setsepiaenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setSepiaEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setSepiaEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setvignetteenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setVignetteEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setVignetteEnabled",
     "method"
   ],
   [
@@ -822,6 +894,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/luminositymaterial.js~luminositymaterial#needsupdate",
+    "class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html#instance-member-needsUpdate",
+    "src/materials/LuminosityMaterial.js~LuminosityMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/luminositymaterial.js~luminositymaterial#setcoloroutputenabled",
+    "class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html#instance-method-setColorOutputEnabled",
+    "src/materials/LuminosityMaterial.js~LuminosityMaterial#setColorOutputEnabled",
+    "method"
+  ],
+  [
+    "src/materials/luminositymaterial.js~luminositymaterial#setluminancerangeenabled",
+    "class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html#instance-method-setLuminanceRangeEnabled",
+    "src/materials/LuminosityMaterial.js~LuminosityMaterial#setLuminanceRangeEnabled",
+    "method"
+  ],
+  [
     "src/materials/pixelationmaterial.js",
     "file/src/materials/PixelationMaterial.js.html",
     "src/materials/PixelationMaterial.js",
@@ -852,6 +942,72 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/realisticbokehmaterial.js",
+    "file/src/materials/RealisticBokehMaterial.js.html",
+    "src/materials/RealisticBokehMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#adoptcamerasettings",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-adoptCameraSettings",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#adoptCameraSettings",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#constructor",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-constructor-constructor",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#needsupdate",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-member-needsUpdate",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setmanualdepthoffieldenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setManualDepthOfFieldEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setManualDepthOfFieldEnabled",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setnoiseenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setNoiseEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setNoiseEnabled",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setpentagonenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setPentagonEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setPentagonEnabled",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setshaderfocusenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setShaderFocusEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setShaderFocusEnabled",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setshowfocusenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setShowFocusEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setShowFocusEnabled",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#settexelsize",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setTexelSize",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setTexelSize",
+    "method"
+  ],
+  [
+    "src/materials/realisticbokehmaterial.js~realisticbokehmaterial#setvignetteenabled",
+    "class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html#instance-method-setVignetteEnabled",
+    "src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial#setVignetteEnabled",
+    "method"
+  ],
+  [
     "src/materials/smaablendmaterial.js",
     "file/src/materials/SMAABlendMaterial.js.html",
     "src/materials/SMAABlendMaterial.js",
@@ -861,30 +1017,6 @@ window.esdocSearchIndex = [
     "src/materials/smaablendmaterial.js~smaablendmaterial#constructor",
     "class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html#instance-constructor-constructor",
     "src/materials/SMAABlendMaterial.js~SMAABlendMaterial#constructor",
-    "method"
-  ],
-  [
-    "src/materials/smaacoloredgesmaterial.js",
-    "file/src/materials/SMAAColorEdgesMaterial.js.html",
-    "src/materials/SMAAColorEdgesMaterial.js",
-    "file"
-  ],
-  [
-    "src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial#constructor",
-    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html#instance-constructor-constructor",
-    "src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial#constructor",
-    "method"
-  ],
-  [
-    "src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial#needsupdate",
-    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html#instance-member-needsUpdate",
-    "src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial#needsUpdate",
-    "member"
-  ],
-  [
-    "src/materials/smaacoloredgesmaterial.js~smaacoloredgesmaterial#setedgedetectionthreshold",
-    "class/src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial.html#instance-method-setEdgeDetectionThreshold",
-    "src/materials/SMAAColorEdgesMaterial.js~SMAAColorEdgesMaterial#setEdgeDetectionThreshold",
     "method"
   ],
   [
@@ -985,14 +1117,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/images/smaa/areaimagedataurl.js",
-    "file/src/materials/images/smaa/areaImageDataUrl.js.html",
-    "src/materials/images/smaa/areaImageDataUrl.js",
+    "file/src/materials/images/smaa/areaImageDataURL.js.html",
+    "src/materials/images/smaa/areaImageDataURL.js",
     "file"
   ],
   [
     "src/materials/images/smaa/searchimagedataurl.js",
-    "file/src/materials/images/smaa/searchImageDataUrl.js.html",
-    "src/materials/images/smaa/searchImageDataUrl.js",
+    "file/src/materials/images/smaa/searchImageDataURL.js.html",
+    "src/materials/images/smaa/searchImageDataURL.js",
     "file"
   ],
   [
@@ -1062,9 +1194,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/bloompass.js~bloompass#initialise",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-method-initialise",
-    "src/passes/BloomPass.js~BloomPass#initialise",
+    "src/passes/bloompass.js~bloompass#dithering",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-dithering",
+    "src/passes/BloomPass.js~BloomPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#dithering",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-dithering",
+    "src/passes/BloomPass.js~BloomPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#initialize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-method-initialize",
+    "src/passes/BloomPass.js~BloomPass#initialize",
     "method"
   ],
   [
@@ -1081,13 +1225,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#kernelsize",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-kernelSize",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-kernelSize",
     "src/passes/BloomPass.js~BloomPass#kernelSize",
     "member"
   ],
@@ -1123,13 +1267,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
@@ -1158,26 +1302,38 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/blurpass.js~blurpass#ditheredconvolutionmaterial",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-ditheredConvolutionMaterial",
+    "src/passes/BlurPass.js~BlurPass#ditheredConvolutionMaterial",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#dithering",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-dithering",
+    "src/passes/BlurPass.js~BlurPass#dithering",
+    "member"
+  ],
+  [
     "src/passes/blurpass.js~blurpass#height",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-get-height",
     "src/passes/BlurPass.js~BlurPass#height",
     "member"
   ],
   [
-    "src/passes/blurpass.js~blurpass#initialise",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-method-initialise",
-    "src/passes/BlurPass.js~BlurPass#initialise",
+    "src/passes/blurpass.js~blurpass#initialize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-method-initialize",
+    "src/passes/BlurPass.js~BlurPass#initialize",
     "method"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
@@ -1228,48 +1384,6 @@ window.esdocSearchIndex = [
     "class/src/passes/BlurPass.js~BlurPass.html#instance-get-width",
     "src/passes/BlurPass.js~BlurPass#width",
     "member"
-  ],
-  [
-    "src/passes/bokeh2pass.js",
-    "file/src/passes/Bokeh2Pass.js.html",
-    "src/passes/Bokeh2Pass.js",
-    "file"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#bokehmaterial",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-member-bokehMaterial",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#bokehMaterial",
-    "member"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#constructor",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-constructor-constructor",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#constructor",
-    "method"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#name",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-member-name",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#name",
-    "member"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#needsswap",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-member-needsSwap",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#needsSwap",
-    "member"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#render",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-method-render",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#render",
-    "method"
-  ],
-  [
-    "src/passes/bokeh2pass.js~bokeh2pass#setsize",
-    "class/src/passes/Bokeh2Pass.js~Bokeh2Pass.html#instance-method-setSize",
-    "src/passes/Bokeh2Pass.js~Bokeh2Pass#setSize",
-    "method"
   ],
   [
     "src/passes/bokehpass.js",
@@ -1566,26 +1680,38 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/godrayspass.js~godrayspass#dithering",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-dithering",
+    "src/passes/GodRaysPass.js~GodRaysPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/godrayspass.js~godrayspass#dithering",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-dithering",
+    "src/passes/GodRaysPass.js~GodRaysPass#dithering",
+    "member"
+  ],
+  [
     "src/passes/godrayspass.js~godrayspass#godraysmaterial",
     "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-member-godRaysMaterial",
     "src/passes/GodRaysPass.js~GodRaysPass#godRaysMaterial",
     "member"
   ],
   [
-    "src/passes/godrayspass.js~godrayspass#initialise",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-method-initialise",
-    "src/passes/GodRaysPass.js~GodRaysPass#initialise",
+    "src/passes/godrayspass.js~godrayspass#initialize",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-method-initialize",
+    "src/passes/GodRaysPass.js~GodRaysPass#initialize",
     "method"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
@@ -1782,9 +1908,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/pass.js~pass#initialise",
-    "class/src/passes/Pass.js~Pass.html#instance-method-initialise",
-    "src/passes/Pass.js~Pass#initialise",
+    "src/passes/pass.js~pass#initialize",
+    "class/src/passes/Pass.js~Pass.html#instance-method-initialize",
+    "src/passes/Pass.js~Pass#initialize",
     "method"
   ],
   [
@@ -1843,13 +1969,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
@@ -1881,6 +2007,48 @@ window.esdocSearchIndex = [
     "src/passes/pixelationpass.js~pixelationpass#setsize",
     "class/src/passes/PixelationPass.js~PixelationPass.html#instance-method-setSize",
     "src/passes/PixelationPass.js~PixelationPass#setSize",
+    "method"
+  ],
+  [
+    "src/passes/realisticbokehpass.js",
+    "file/src/passes/RealisticBokehPass.js.html",
+    "src/passes/RealisticBokehPass.js",
+    "file"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#bokehmaterial",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-member-bokehMaterial",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#bokehMaterial",
+    "member"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#constructor",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-constructor-constructor",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#name",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-member-name",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#name",
+    "member"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#needsswap",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-member-needsSwap",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#render",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-method-render",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#render",
+    "method"
+  ],
+  [
+    "src/passes/realisticbokehpass.js~realisticbokehpass#setsize",
+    "class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html#instance-method-setSize",
+    "src/passes/RealisticBokehPass.js~RealisticBokehPass#setSize",
     "method"
   ],
   [
@@ -2011,14 +2179,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/smaapass.js~smaapass.areaimagedataurl",
-    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-areaImageDataUrl",
-    "src/passes/SMAAPass.js~SMAAPass.areaImageDataUrl",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-areaImageDataURL",
+    "src/passes/SMAAPass.js~SMAAPass.areaImageDataURL",
     "member"
   ],
   [
     "src/passes/smaapass.js~smaapass.searchimagedataurl",
-    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-searchImageDataUrl",
-    "src/passes/SMAAPass.js~SMAAPass.searchImageDataUrl",
+    "class/src/passes/SMAAPass.js~SMAAPass.html#static-get-searchImageDataURL",
+    "src/passes/SMAAPass.js~SMAAPass.searchImageDataURL",
     "member"
   ],
   [
@@ -2034,9 +2202,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/savepass.js~savepass#initialise",
-    "class/src/passes/SavePass.js~SavePass.html#instance-method-initialise",
-    "src/passes/SavePass.js~SavePass#initialise",
+    "src/passes/savepass.js~savepass#initialize",
+    "class/src/passes/SavePass.js~SavePass.html#instance-method-initialize",
+    "src/passes/SavePass.js~SavePass#initialize",
     "method"
   ],
   [
@@ -2269,13 +2437,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],
@@ -2298,9 +2466,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/tonemappingpass.js~tonemappingpass#initialise",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-initialise",
-    "src/passes/ToneMappingPass.js~ToneMappingPass#initialise",
+    "src/passes/tonemappingpass.js~tonemappingpass#dithering",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-dithering",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#dithering",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-dithering",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/tonemappingpass.js~tonemappingpass#initialize",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-method-initialize",
+    "src/passes/ToneMappingPass.js~ToneMappingPass#initialize",
     "method"
   ],
   [

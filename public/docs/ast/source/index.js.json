@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 955,
+  "end": 967,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 955,
+    "end": 967,
     "loc": {
       "start": {
         "line": 1,
@@ -138,7 +138,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 127,
-        "end": 449,
+        "end": 457,
         "loc": {
           "start": {
             "line": 9,
@@ -301,7 +301,7 @@
           {
             "type": "ExportSpecifier",
             "start": 176,
-            "end": 186,
+            "end": 185,
             "loc": {
               "start": {
                 "line": 13,
@@ -309,69 +309,20 @@
               },
               "end": {
                 "line": 13,
-                "column": 11
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 176,
-              "end": 186,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 1
-                },
-                "end": {
-                  "line": 13,
-                  "column": 11
-                },
-                "identifierName": "Bokeh2Pass"
-              },
-              "name": "Bokeh2Pass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 176,
-              "end": 186,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 1
-                },
-                "end": {
-                  "line": 13,
-                  "column": 11
-                },
-                "identifierName": "Bokeh2Pass"
-              },
-              "name": "Bokeh2Pass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 190,
-            "end": 199,
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 1
-              },
-              "end": {
-                "line": 14,
                 "column": 10
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 190,
-              "end": 199,
+              "start": 176,
+              "end": 185,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 13,
                   "column": 1
                 },
                 "end": {
-                  "line": 14,
+                  "line": 13,
                   "column": 10
                 },
                 "identifierName": "ClearPass"
@@ -380,15 +331,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 190,
-              "end": 199,
+              "start": 176,
+              "end": 185,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 13,
                   "column": 1
                 },
                 "end": {
-                  "line": 14,
+                  "line": 13,
                   "column": 10
                 },
                 "identifierName": "ClearPass"
@@ -398,8 +349,57 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 203,
-            "end": 216,
+            "start": 189,
+            "end": 202,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 1
+              },
+              "end": {
+                "line": 14,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 189,
+              "end": 202,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 1
+                },
+                "end": {
+                  "line": 14,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 189,
+              "end": 202,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 1
+                },
+                "end": {
+                  "line": 14,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 206,
+            "end": 219,
             "loc": {
               "start": {
                 "line": 15,
@@ -412,8 +412,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 203,
-              "end": 216,
+              "start": 206,
+              "end": 219,
               "loc": {
                 "start": {
                   "line": 15,
@@ -423,14 +423,14 @@
                   "line": 15,
                   "column": 14
                 },
-                "identifierName": "ClearMaskPass"
+                "identifierName": "DotScreenPass"
               },
-              "name": "ClearMaskPass"
+              "name": "DotScreenPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 203,
-              "end": 216,
+              "start": 206,
+              "end": 219,
               "loc": {
                 "start": {
                   "line": 15,
@@ -440,15 +440,15 @@
                   "line": 15,
                   "column": 14
                 },
-                "identifierName": "ClearMaskPass"
+                "identifierName": "DotScreenPass"
               },
-              "name": "ClearMaskPass"
+              "name": "DotScreenPass"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 220,
-            "end": 233,
+            "start": 223,
+            "end": 231,
             "loc": {
               "start": {
                 "line": 16,
@@ -456,13 +456,13 @@
               },
               "end": {
                 "line": 16,
-                "column": 14
+                "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 220,
-              "end": 233,
+              "start": 223,
+              "end": 231,
               "loc": {
                 "start": {
                   "line": 16,
@@ -470,16 +470,16 @@
                 },
                 "end": {
                   "line": 16,
-                  "column": 14
+                  "column": 9
                 },
-                "identifierName": "DotScreenPass"
+                "identifierName": "FilmPass"
               },
-              "name": "DotScreenPass"
+              "name": "FilmPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 220,
-              "end": 233,
+              "start": 223,
+              "end": 231,
               "loc": {
                 "start": {
                   "line": 16,
@@ -487,16 +487,16 @@
                 },
                 "end": {
                   "line": 16,
-                  "column": 14
+                  "column": 9
                 },
-                "identifierName": "DotScreenPass"
+                "identifierName": "FilmPass"
               },
-              "name": "DotScreenPass"
+              "name": "FilmPass"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 237,
+            "start": 235,
             "end": 245,
             "loc": {
               "start": {
@@ -505,12 +505,12 @@
               },
               "end": {
                 "line": 17,
-                "column": 9
+                "column": 11
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 237,
+              "start": 235,
               "end": 245,
               "loc": {
                 "start": {
@@ -519,15 +519,15 @@
                 },
                 "end": {
                   "line": 17,
-                  "column": 9
+                  "column": 11
                 },
-                "identifierName": "FilmPass"
+                "identifierName": "GlitchMode"
               },
-              "name": "FilmPass"
+              "name": "GlitchMode"
             },
             "exported": {
               "type": "Identifier",
-              "start": 237,
+              "start": 235,
               "end": 245,
               "loc": {
                 "start": {
@@ -536,11 +536,11 @@
                 },
                 "end": {
                   "line": 17,
-                  "column": 9
+                  "column": 11
                 },
-                "identifierName": "FilmPass"
+                "identifierName": "GlitchMode"
               },
-              "name": "FilmPass"
+              "name": "GlitchMode"
             }
           },
           {
@@ -570,9 +570,9 @@
                   "line": 18,
                   "column": 11
                 },
-                "identifierName": "GlitchMode"
+                "identifierName": "GlitchPass"
               },
-              "name": "GlitchMode"
+              "name": "GlitchPass"
             },
             "exported": {
               "type": "Identifier",
@@ -587,15 +587,15 @@
                   "line": 18,
                   "column": 11
                 },
-                "identifierName": "GlitchMode"
+                "identifierName": "GlitchPass"
               },
-              "name": "GlitchMode"
+              "name": "GlitchPass"
             }
           },
           {
             "type": "ExportSpecifier",
             "start": 263,
-            "end": 273,
+            "end": 274,
             "loc": {
               "start": {
                 "line": 19,
@@ -603,69 +603,20 @@
               },
               "end": {
                 "line": 19,
-                "column": 11
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 263,
-              "end": 273,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 1
-                },
-                "end": {
-                  "line": 19,
-                  "column": 11
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 263,
-              "end": 273,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 1
-                },
-                "end": {
-                  "line": 19,
-                  "column": 11
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 277,
-            "end": 288,
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 1
-              },
-              "end": {
-                "line": 20,
                 "column": 12
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 277,
-              "end": 288,
+              "start": 263,
+              "end": 274,
               "loc": {
                 "start": {
-                  "line": 20,
+                  "line": 19,
                   "column": 1
                 },
                 "end": {
-                  "line": 20,
+                  "line": 19,
                   "column": 12
                 },
                 "identifierName": "GodRaysPass"
@@ -674,15 +625,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 277,
-              "end": 288,
+              "start": 263,
+              "end": 274,
               "loc": {
                 "start": {
-                  "line": 20,
+                  "line": 19,
                   "column": 1
                 },
                 "end": {
-                  "line": 20,
+                  "line": 19,
                   "column": 12
                 },
                 "identifierName": "GodRaysPass"
@@ -692,29 +643,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 292,
-            "end": 300,
+            "start": 278,
+            "end": 286,
             "loc": {
               "start": {
-                "line": 21,
+                "line": 20,
                 "column": 1
               },
               "end": {
-                "line": 21,
+                "line": 20,
                 "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 292,
-              "end": 300,
+              "start": 278,
+              "end": 286,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 20,
                   "column": 1
                 },
                 "end": {
-                  "line": 21,
+                  "line": 20,
                   "column": 9
                 },
                 "identifierName": "MaskPass"
@@ -723,15 +674,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 292,
-              "end": 300,
+              "start": 278,
+              "end": 286,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 20,
                   "column": 1
                 },
                 "end": {
-                  "line": 21,
+                  "line": 20,
                   "column": 9
                 },
                 "identifierName": "MaskPass"
@@ -741,29 +692,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 304,
-            "end": 308,
+            "start": 290,
+            "end": 294,
             "loc": {
               "start": {
-                "line": 22,
+                "line": 21,
                 "column": 1
               },
               "end": {
-                "line": 22,
+                "line": 21,
                 "column": 5
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 304,
-              "end": 308,
+              "start": 290,
+              "end": 294,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 21,
                   "column": 1
                 },
                 "end": {
-                  "line": 22,
+                  "line": 21,
                   "column": 5
                 },
                 "identifierName": "Pass"
@@ -772,15 +723,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 304,
-              "end": 308,
+              "start": 290,
+              "end": 294,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 21,
                   "column": 1
                 },
                 "end": {
-                  "line": 22,
+                  "line": 21,
                   "column": 5
                 },
                 "identifierName": "Pass"
@@ -790,8 +741,57 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 312,
-            "end": 326,
+            "start": 298,
+            "end": 312,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 1
+              },
+              "end": {
+                "line": 22,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 298,
+              "end": 312,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 15
+                },
+                "identifierName": "PixelationPass"
+              },
+              "name": "PixelationPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 298,
+              "end": 312,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 15
+                },
+                "identifierName": "PixelationPass"
+              },
+              "name": "PixelationPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 316,
+            "end": 334,
             "loc": {
               "start": {
                 "line": 23,
@@ -799,13 +799,13 @@
               },
               "end": {
                 "line": 23,
-                "column": 15
+                "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 312,
-              "end": 326,
+              "start": 316,
+              "end": 334,
               "loc": {
                 "start": {
                   "line": 23,
@@ -813,16 +813,16 @@
                 },
                 "end": {
                   "line": 23,
-                  "column": 15
+                  "column": 19
                 },
-                "identifierName": "PixelationPass"
+                "identifierName": "RealisticBokehPass"
               },
-              "name": "PixelationPass"
+              "name": "RealisticBokehPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 312,
-              "end": 326,
+              "start": 316,
+              "end": 334,
               "loc": {
                 "start": {
                   "line": 23,
@@ -830,17 +830,17 @@
                 },
                 "end": {
                   "line": 23,
-                  "column": 15
+                  "column": 19
                 },
-                "identifierName": "PixelationPass"
+                "identifierName": "RealisticBokehPass"
               },
-              "name": "PixelationPass"
+              "name": "RealisticBokehPass"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 330,
-            "end": 340,
+            "start": 338,
+            "end": 348,
             "loc": {
               "start": {
                 "line": 24,
@@ -853,8 +853,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 330,
-              "end": 340,
+              "start": 338,
+              "end": 348,
               "loc": {
                 "start": {
                   "line": 24,
@@ -870,8 +870,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 330,
-              "end": 340,
+              "start": 338,
+              "end": 348,
               "loc": {
                 "start": {
                   "line": 24,
@@ -888,8 +888,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 344,
-            "end": 352,
+            "start": 352,
+            "end": 360,
             "loc": {
               "start": {
                 "line": 25,
@@ -902,8 +902,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 344,
-              "end": 352,
+              "start": 352,
+              "end": 360,
               "loc": {
                 "start": {
                   "line": 25,
@@ -919,8 +919,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 344,
-              "end": 352,
+              "start": 352,
+              "end": 360,
               "loc": {
                 "start": {
                   "line": 25,
@@ -937,8 +937,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 356,
-            "end": 366,
+            "start": 364,
+            "end": 374,
             "loc": {
               "start": {
                 "line": 26,
@@ -951,8 +951,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 356,
-              "end": 366,
+              "start": 364,
+              "end": 374,
               "loc": {
                 "start": {
                   "line": 26,
@@ -968,8 +968,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 356,
-              "end": 366,
+              "start": 364,
+              "end": 374,
               "loc": {
                 "start": {
                   "line": 26,
@@ -986,8 +986,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 370,
-            "end": 383,
+            "start": 378,
+            "end": 391,
             "loc": {
               "start": {
                 "line": 27,
@@ -1000,8 +1000,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 370,
-              "end": 383,
+              "start": 378,
+              "end": 391,
               "loc": {
                 "start": {
                   "line": 27,
@@ -1017,8 +1017,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 370,
-              "end": 383,
+              "start": 378,
+              "end": 391,
               "loc": {
                 "start": {
                   "line": 27,
@@ -1035,8 +1035,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 387,
-            "end": 395,
+            "start": 395,
+            "end": 403,
             "loc": {
               "start": {
                 "line": 28,
@@ -1049,8 +1049,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 387,
-              "end": 395,
+              "start": 395,
+              "end": 403,
               "loc": {
                 "start": {
                   "line": 28,
@@ -1066,8 +1066,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 387,
-              "end": 395,
+              "start": 395,
+              "end": 403,
               "loc": {
                 "start": {
                   "line": 28,
@@ -1084,8 +1084,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 399,
-            "end": 410,
+            "start": 407,
+            "end": 418,
             "loc": {
               "start": {
                 "line": 29,
@@ -1098,8 +1098,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 399,
-              "end": 410,
+              "start": 407,
+              "end": 418,
               "loc": {
                 "start": {
                   "line": 29,
@@ -1115,8 +1115,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 399,
-              "end": 410,
+              "start": 407,
+              "end": 418,
               "loc": {
                 "start": {
                   "line": 29,
@@ -1133,8 +1133,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 414,
-            "end": 429,
+            "start": 422,
+            "end": 437,
             "loc": {
               "start": {
                 "line": 30,
@@ -1147,8 +1147,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 414,
-              "end": 429,
+              "start": 422,
+              "end": 437,
               "loc": {
                 "start": {
                   "line": 30,
@@ -1164,8 +1164,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 414,
-              "end": 429,
+              "start": 422,
+              "end": 437,
               "loc": {
                 "start": {
                   "line": 30,
@@ -1183,8 +1183,8 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 438,
-          "end": 448,
+          "start": 446,
+          "end": 456,
           "loc": {
             "start": {
               "line": 31,
@@ -1204,8 +1204,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 453,
-        "end": 852,
+        "start": 461,
+        "end": 864,
         "loc": {
           "start": {
             "line": 33,
@@ -1220,8 +1220,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 464,
-            "end": 490,
+            "start": 472,
+            "end": 498,
             "loc": {
               "start": {
                 "line": 34,
@@ -1234,8 +1234,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 464,
-              "end": 490,
+              "start": 472,
+              "end": 498,
               "loc": {
                 "start": {
                   "line": 34,
@@ -1251,8 +1251,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 464,
-              "end": 490,
+              "start": 472,
+              "end": 498,
               "loc": {
                 "start": {
                   "line": 34,
@@ -1269,8 +1269,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 494,
-            "end": 507,
+            "start": 502,
+            "end": 515,
             "loc": {
               "start": {
                 "line": 35,
@@ -1283,8 +1283,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 494,
-              "end": 507,
+              "start": 502,
+              "end": 515,
               "loc": {
                 "start": {
                   "line": 35,
@@ -1300,8 +1300,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 494,
-              "end": 507,
+              "start": 502,
+              "end": 515,
               "loc": {
                 "start": {
                   "line": 35,
@@ -1318,8 +1318,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 511,
-            "end": 525,
+            "start": 519,
+            "end": 537,
             "loc": {
               "start": {
                 "line": 36,
@@ -1327,13 +1327,13 @@
               },
               "end": {
                 "line": 36,
-                "column": 15
+                "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 511,
-              "end": 525,
+              "start": 519,
+              "end": 537,
               "loc": {
                 "start": {
                   "line": 36,
@@ -1341,16 +1341,16 @@
                 },
                 "end": {
                   "line": 36,
-                  "column": 15
+                  "column": 19
                 },
-                "identifierName": "Bokeh2Material"
+                "identifierName": "ColorEdgesMaterial"
               },
-              "name": "Bokeh2Material"
+              "name": "ColorEdgesMaterial"
             },
             "exported": {
               "type": "Identifier",
-              "start": 511,
-              "end": 525,
+              "start": 519,
+              "end": 537,
               "loc": {
                 "start": {
                   "line": 36,
@@ -1358,17 +1358,17 @@
                 },
                 "end": {
                   "line": 36,
-                  "column": 15
+                  "column": 19
                 },
-                "identifierName": "Bokeh2Material"
+                "identifierName": "ColorEdgesMaterial"
               },
-              "name": "Bokeh2Material"
+              "name": "ColorEdgesMaterial"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 529,
-            "end": 544,
+            "start": 541,
+            "end": 556,
             "loc": {
               "start": {
                 "line": 37,
@@ -1381,8 +1381,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 529,
-              "end": 544,
+              "start": 541,
+              "end": 556,
               "loc": {
                 "start": {
                   "line": 37,
@@ -1398,8 +1398,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 529,
-              "end": 544,
+              "start": 541,
+              "end": 556,
               "loc": {
                 "start": {
                   "line": 37,
@@ -1416,8 +1416,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 548,
-            "end": 567,
+            "start": 560,
+            "end": 579,
             "loc": {
               "start": {
                 "line": 38,
@@ -1430,8 +1430,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 548,
-              "end": 567,
+              "start": 560,
+              "end": 579,
               "loc": {
                 "start": {
                   "line": 38,
@@ -1447,8 +1447,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 548,
-              "end": 567,
+              "start": 560,
+              "end": 579,
               "loc": {
                 "start": {
                   "line": 38,
@@ -1465,8 +1465,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 571,
-            "end": 583,
+            "start": 583,
+            "end": 595,
             "loc": {
               "start": {
                 "line": 39,
@@ -1479,8 +1479,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 571,
-              "end": 583,
+              "start": 583,
+              "end": 595,
               "loc": {
                 "start": {
                   "line": 39,
@@ -1496,8 +1496,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 571,
-              "end": 583,
+              "start": 583,
+              "end": 595,
               "loc": {
                 "start": {
                   "line": 39,
@@ -1514,8 +1514,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 587,
-            "end": 604,
+            "start": 599,
+            "end": 616,
             "loc": {
               "start": {
                 "line": 40,
@@ -1528,8 +1528,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 587,
-              "end": 604,
+              "start": 599,
+              "end": 616,
               "loc": {
                 "start": {
                   "line": 40,
@@ -1545,8 +1545,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 587,
-              "end": 604,
+              "start": 599,
+              "end": 616,
               "loc": {
                 "start": {
                   "line": 40,
@@ -1563,8 +1563,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 608,
-            "end": 620,
+            "start": 620,
+            "end": 632,
             "loc": {
               "start": {
                 "line": 41,
@@ -1577,8 +1577,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 608,
-              "end": 620,
+              "start": 620,
+              "end": 632,
               "loc": {
                 "start": {
                   "line": 41,
@@ -1594,8 +1594,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 608,
-              "end": 620,
+              "start": 620,
+              "end": 632,
               "loc": {
                 "start": {
                   "line": 41,
@@ -1612,8 +1612,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 624,
-            "end": 638,
+            "start": 636,
+            "end": 650,
             "loc": {
               "start": {
                 "line": 42,
@@ -1626,8 +1626,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 624,
-              "end": 638,
+              "start": 636,
+              "end": 650,
               "loc": {
                 "start": {
                   "line": 42,
@@ -1643,8 +1643,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 624,
-              "end": 638,
+              "start": 636,
+              "end": 650,
               "loc": {
                 "start": {
                   "line": 42,
@@ -1661,8 +1661,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 642,
-            "end": 657,
+            "start": 654,
+            "end": 669,
             "loc": {
               "start": {
                 "line": 43,
@@ -1675,8 +1675,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 642,
-              "end": 657,
+              "start": 654,
+              "end": 669,
               "loc": {
                 "start": {
                   "line": 43,
@@ -1692,8 +1692,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 642,
-              "end": 657,
+              "start": 654,
+              "end": 669,
               "loc": {
                 "start": {
                   "line": 43,
@@ -1710,8 +1710,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 661,
-            "end": 671,
+            "start": 673,
+            "end": 683,
             "loc": {
               "start": {
                 "line": 44,
@@ -1724,8 +1724,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 661,
-              "end": 671,
+              "start": 673,
+              "end": 683,
               "loc": {
                 "start": {
                   "line": 44,
@@ -1741,8 +1741,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 661,
-              "end": 671,
+              "start": 673,
+              "end": 683,
               "loc": {
                 "start": {
                   "line": 44,
@@ -1759,8 +1759,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 675,
-            "end": 693,
+            "start": 687,
+            "end": 705,
             "loc": {
               "start": {
                 "line": 45,
@@ -1773,8 +1773,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 675,
-              "end": 693,
+              "start": 687,
+              "end": 705,
               "loc": {
                 "start": {
                   "line": 45,
@@ -1790,8 +1790,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 675,
-              "end": 693,
+              "start": 687,
+              "end": 705,
               "loc": {
                 "start": {
                   "line": 45,
@@ -1808,8 +1808,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 697,
-            "end": 715,
+            "start": 709,
+            "end": 727,
             "loc": {
               "start": {
                 "line": 46,
@@ -1822,8 +1822,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 697,
-              "end": 715,
+              "start": 709,
+              "end": 727,
               "loc": {
                 "start": {
                   "line": 46,
@@ -1839,8 +1839,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 697,
-              "end": 715,
+              "start": 709,
+              "end": 727,
               "loc": {
                 "start": {
                   "line": 46,
@@ -1857,8 +1857,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 719,
-            "end": 736,
+            "start": 731,
+            "end": 753,
             "loc": {
               "start": {
                 "line": 47,
@@ -1866,146 +1866,146 @@
               },
               "end": {
                 "line": 47,
-                "column": 18
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 719,
-              "end": 736,
-              "loc": {
-                "start": {
-                  "line": 47,
-                  "column": 1
-                },
-                "end": {
-                  "line": 47,
-                  "column": 18
-                },
-                "identifierName": "ShockWaveMaterial"
-              },
-              "name": "ShockWaveMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 719,
-              "end": 736,
-              "loc": {
-                "start": {
-                  "line": 47,
-                  "column": 1
-                },
-                "end": {
-                  "line": 47,
-                  "column": 18
-                },
-                "identifierName": "ShockWaveMaterial"
-              },
-              "name": "ShockWaveMaterial"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 740,
-            "end": 757,
-            "loc": {
-              "start": {
-                "line": 48,
-                "column": 1
-              },
-              "end": {
-                "line": 48,
-                "column": 18
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 740,
-              "end": 757,
-              "loc": {
-                "start": {
-                  "line": 48,
-                  "column": 1
-                },
-                "end": {
-                  "line": 48,
-                  "column": 18
-                },
-                "identifierName": "SMAABlendMaterial"
-              },
-              "name": "SMAABlendMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 740,
-              "end": 757,
-              "loc": {
-                "start": {
-                  "line": 48,
-                  "column": 1
-                },
-                "end": {
-                  "line": 48,
-                  "column": 18
-                },
-                "identifierName": "SMAABlendMaterial"
-              },
-              "name": "SMAABlendMaterial"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 761,
-            "end": 783,
-            "loc": {
-              "start": {
-                "line": 49,
-                "column": 1
-              },
-              "end": {
-                "line": 49,
                 "column": 23
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 761,
-              "end": 783,
+              "start": 731,
+              "end": 753,
               "loc": {
                 "start": {
-                  "line": 49,
+                  "line": 47,
                   "column": 1
                 },
                 "end": {
-                  "line": 49,
+                  "line": 47,
                   "column": 23
                 },
-                "identifierName": "SMAAColorEdgesMaterial"
+                "identifierName": "RealisticBokehMaterial"
               },
-              "name": "SMAAColorEdgesMaterial"
+              "name": "RealisticBokehMaterial"
             },
             "exported": {
               "type": "Identifier",
-              "start": 761,
-              "end": 783,
+              "start": 731,
+              "end": 753,
               "loc": {
                 "start": {
-                  "line": 49,
+                  "line": 47,
                   "column": 1
                 },
                 "end": {
-                  "line": 49,
+                  "line": 47,
                   "column": 23
                 },
-                "identifierName": "SMAAColorEdgesMaterial"
+                "identifierName": "RealisticBokehMaterial"
               },
-              "name": "SMAAColorEdgesMaterial"
+              "name": "RealisticBokehMaterial"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 787,
-            "end": 806,
+            "start": 757,
+            "end": 774,
+            "loc": {
+              "start": {
+                "line": 48,
+                "column": 1
+              },
+              "end": {
+                "line": 48,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 757,
+              "end": 774,
+              "loc": {
+                "start": {
+                  "line": 48,
+                  "column": 1
+                },
+                "end": {
+                  "line": 48,
+                  "column": 18
+                },
+                "identifierName": "ShockWaveMaterial"
+              },
+              "name": "ShockWaveMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 757,
+              "end": 774,
+              "loc": {
+                "start": {
+                  "line": 48,
+                  "column": 1
+                },
+                "end": {
+                  "line": 48,
+                  "column": 18
+                },
+                "identifierName": "ShockWaveMaterial"
+              },
+              "name": "ShockWaveMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 778,
+            "end": 795,
+            "loc": {
+              "start": {
+                "line": 49,
+                "column": 1
+              },
+              "end": {
+                "line": 49,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 778,
+              "end": 795,
+              "loc": {
+                "start": {
+                  "line": 49,
+                  "column": 1
+                },
+                "end": {
+                  "line": 49,
+                  "column": 18
+                },
+                "identifierName": "SMAABlendMaterial"
+              },
+              "name": "SMAABlendMaterial"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 778,
+              "end": 795,
+              "loc": {
+                "start": {
+                  "line": 49,
+                  "column": 1
+                },
+                "end": {
+                  "line": 49,
+                  "column": 18
+                },
+                "identifierName": "SMAABlendMaterial"
+              },
+              "name": "SMAABlendMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 799,
+            "end": 818,
             "loc": {
               "start": {
                 "line": 50,
@@ -2018,8 +2018,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 787,
-              "end": 806,
+              "start": 799,
+              "end": 818,
               "loc": {
                 "start": {
                   "line": 50,
@@ -2035,8 +2035,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 787,
-              "end": 806,
+              "start": 799,
+              "end": 818,
               "loc": {
                 "start": {
                   "line": 50,
@@ -2053,8 +2053,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 810,
-            "end": 829,
+            "start": 822,
+            "end": 841,
             "loc": {
               "start": {
                 "line": 51,
@@ -2067,8 +2067,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 810,
-              "end": 829,
+              "start": 822,
+              "end": 841,
               "loc": {
                 "start": {
                   "line": 51,
@@ -2084,8 +2084,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 810,
-              "end": 829,
+              "start": 822,
+              "end": 841,
               "loc": {
                 "start": {
                   "line": 51,
@@ -2103,8 +2103,8 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 838,
-          "end": 851,
+          "start": 850,
+          "end": 863,
           "loc": {
             "start": {
               "line": 52,
@@ -2124,8 +2124,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 856,
-        "end": 953,
+        "start": 868,
+        "end": 965,
         "loc": {
           "start": {
             "line": 54,
@@ -2140,8 +2140,8 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 867,
-            "end": 879,
+            "start": 879,
+            "end": 891,
             "loc": {
               "start": {
                 "line": 55,
@@ -2154,8 +2154,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 867,
-              "end": 879,
+              "start": 879,
+              "end": 891,
               "loc": {
                 "start": {
                   "line": 55,
@@ -2171,8 +2171,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 867,
-              "end": 879,
+              "start": 879,
+              "end": 891,
               "loc": {
                 "start": {
                   "line": 55,
@@ -2189,8 +2189,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 883,
-            "end": 900,
+            "start": 895,
+            "end": 912,
             "loc": {
               "start": {
                 "line": 56,
@@ -2203,8 +2203,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 883,
-              "end": 900,
+              "start": 895,
+              "end": 912,
               "loc": {
                 "start": {
                   "line": 56,
@@ -2220,8 +2220,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 883,
-              "end": 900,
+              "start": 895,
+              "end": 912,
               "loc": {
                 "start": {
                   "line": 56,
@@ -2238,8 +2238,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 904,
-            "end": 923,
+            "start": 916,
+            "end": 935,
             "loc": {
               "start": {
                 "line": 57,
@@ -2252,8 +2252,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 904,
-              "end": 923,
+              "start": 916,
+              "end": 935,
               "loc": {
                 "start": {
                   "line": 57,
@@ -2269,8 +2269,8 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 904,
-              "end": 923,
+              "start": 916,
+              "end": 935,
               "loc": {
                 "start": {
                   "line": 57,
@@ -2288,8 +2288,8 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 932,
-          "end": 952,
+          "start": 944,
+          "end": 964,
           "loc": {
             "start": {
               "line": 58,
@@ -2749,94 +2749,42 @@
         "postfix": false,
         "binop": null
       },
-      "value": "Bokeh2Pass",
+      "value": "ClearPass",
       "start": 176,
+      "end": 185,
+      "loc": {
+        "start": {
+          "line": 13,
+          "column": 1
+        },
+        "end": {
+          "line": 13,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 185,
       "end": 186,
       "loc": {
         "start": {
           "line": 13,
-          "column": 1
-        },
-        "end": {
-          "line": 13,
-          "column": 11
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 186,
-      "end": 187,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 11
-        },
-        "end": {
-          "line": 13,
-          "column": 12
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ClearPass",
-      "start": 190,
-      "end": 199,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 1
-        },
-        "end": {
-          "line": 14,
-          "column": 10
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 199,
-      "end": 200,
-      "loc": {
-        "start": {
-          "line": 14,
           "column": 10
         },
         "end": {
-          "line": 14,
+          "line": 13,
           "column": 11
         }
       }
@@ -2854,15 +2802,15 @@
         "binop": null
       },
       "value": "ClearMaskPass",
-      "start": 203,
-      "end": 216,
+      "start": 189,
+      "end": 202,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 14,
           "column": 1
         },
         "end": {
-          "line": 15,
+          "line": 14,
           "column": 14
         }
       }
@@ -2880,15 +2828,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 216,
-      "end": 217,
+      "start": 202,
+      "end": 203,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 14,
           "column": 14
         },
         "end": {
-          "line": 15,
+          "line": 14,
           "column": 15
         }
       }
@@ -2906,15 +2854,15 @@
         "binop": null
       },
       "value": "DotScreenPass",
-      "start": 220,
-      "end": 233,
+      "start": 206,
+      "end": 219,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 15,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 15,
           "column": 14
         }
       }
@@ -2932,15 +2880,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 233,
-      "end": 234,
+      "start": 219,
+      "end": 220,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 15,
           "column": 14
         },
         "end": {
-          "line": 16,
+          "line": 15,
           "column": 15
         }
       }
@@ -2958,7 +2906,59 @@
         "binop": null
       },
       "value": "FilmPass",
-      "start": 237,
+      "start": 223,
+      "end": 231,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 1
+        },
+        "end": {
+          "line": 16,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 231,
+      "end": 232,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 9
+        },
+        "end": {
+          "line": 16,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "GlitchMode",
+      "start": 235,
       "end": 245,
       "loc": {
         "start": {
@@ -2967,7 +2967,7 @@
         },
         "end": {
           "line": 17,
-          "column": 9
+          "column": 11
         }
       }
     },
@@ -2989,11 +2989,11 @@
       "loc": {
         "start": {
           "line": 17,
-          "column": 9
+          "column": 11
         },
         "end": {
           "line": 17,
-          "column": 10
+          "column": 12
         }
       }
     },
@@ -3009,7 +3009,7 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GlitchMode",
+      "value": "GlitchPass",
       "start": 249,
       "end": 259,
       "loc": {
@@ -3061,68 +3061,16 @@
         "postfix": false,
         "binop": null
       },
-      "value": "GlitchPass",
+      "value": "GodRaysPass",
       "start": 263,
-      "end": 273,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 1
-        },
-        "end": {
-          "line": 19,
-          "column": 11
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 273,
       "end": 274,
       "loc": {
         "start": {
           "line": 19,
-          "column": 11
-        },
-        "end": {
-          "line": 19,
-          "column": 12
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "GodRaysPass",
-      "start": 277,
-      "end": 288,
-      "loc": {
-        "start": {
-          "line": 20,
           "column": 1
         },
         "end": {
-          "line": 20,
+          "line": 19,
           "column": 12
         }
       }
@@ -3140,15 +3088,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 288,
-      "end": 289,
+      "start": 274,
+      "end": 275,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 19,
           "column": 12
         },
         "end": {
-          "line": 20,
+          "line": 19,
           "column": 13
         }
       }
@@ -3166,15 +3114,15 @@
         "binop": null
       },
       "value": "MaskPass",
-      "start": 292,
-      "end": 300,
+      "start": 278,
+      "end": 286,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 20,
           "column": 1
         },
         "end": {
-          "line": 21,
+          "line": 20,
           "column": 9
         }
       }
@@ -3192,15 +3140,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 300,
-      "end": 301,
+      "start": 286,
+      "end": 287,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 20,
           "column": 9
         },
         "end": {
-          "line": 21,
+          "line": 20,
           "column": 10
         }
       }
@@ -3218,15 +3166,15 @@
         "binop": null
       },
       "value": "Pass",
-      "start": 304,
-      "end": 308,
+      "start": 290,
+      "end": 294,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 21,
           "column": 1
         },
         "end": {
-          "line": 22,
+          "line": 21,
           "column": 5
         }
       }
@@ -3244,15 +3192,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 308,
-      "end": 309,
+      "start": 294,
+      "end": 295,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 21,
           "column": 5
         },
         "end": {
-          "line": 22,
+          "line": 21,
           "column": 6
         }
       }
@@ -3270,15 +3218,15 @@
         "binop": null
       },
       "value": "PixelationPass",
-      "start": 312,
-      "end": 326,
+      "start": 298,
+      "end": 312,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 22,
           "column": 1
         },
         "end": {
-          "line": 23,
+          "line": 22,
           "column": 15
         }
       }
@@ -3296,15 +3244,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 326,
-      "end": 327,
+      "start": 312,
+      "end": 313,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 22,
           "column": 15
         },
         "end": {
-          "line": 23,
+          "line": 22,
           "column": 16
         }
       }
@@ -3321,9 +3269,61 @@
         "postfix": false,
         "binop": null
       },
+      "value": "RealisticBokehPass",
+      "start": 316,
+      "end": 334,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 1
+        },
+        "end": {
+          "line": 23,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 334,
+      "end": 335,
+      "loc": {
+        "start": {
+          "line": 23,
+          "column": 19
+        },
+        "end": {
+          "line": 23,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
       "value": "RenderPass",
-      "start": 330,
-      "end": 340,
+      "start": 338,
+      "end": 348,
       "loc": {
         "start": {
           "line": 24,
@@ -3348,8 +3348,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 340,
-      "end": 341,
+      "start": 348,
+      "end": 349,
       "loc": {
         "start": {
           "line": 24,
@@ -3374,8 +3374,8 @@
         "binop": null
       },
       "value": "SavePass",
-      "start": 344,
-      "end": 352,
+      "start": 352,
+      "end": 360,
       "loc": {
         "start": {
           "line": 25,
@@ -3400,8 +3400,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 352,
-      "end": 353,
+      "start": 360,
+      "end": 361,
       "loc": {
         "start": {
           "line": 25,
@@ -3426,8 +3426,8 @@
         "binop": null
       },
       "value": "ShaderPass",
-      "start": 356,
-      "end": 366,
+      "start": 364,
+      "end": 374,
       "loc": {
         "start": {
           "line": 26,
@@ -3452,8 +3452,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 366,
-      "end": 367,
+      "start": 374,
+      "end": 375,
       "loc": {
         "start": {
           "line": 26,
@@ -3478,8 +3478,8 @@
         "binop": null
       },
       "value": "ShockWavePass",
-      "start": 370,
-      "end": 383,
+      "start": 378,
+      "end": 391,
       "loc": {
         "start": {
           "line": 27,
@@ -3504,8 +3504,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 383,
-      "end": 384,
+      "start": 391,
+      "end": 392,
       "loc": {
         "start": {
           "line": 27,
@@ -3530,8 +3530,8 @@
         "binop": null
       },
       "value": "SMAAPass",
-      "start": 387,
-      "end": 395,
+      "start": 395,
+      "end": 403,
       "loc": {
         "start": {
           "line": 28,
@@ -3556,8 +3556,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 395,
-      "end": 396,
+      "start": 403,
+      "end": 404,
       "loc": {
         "start": {
           "line": 28,
@@ -3582,8 +3582,8 @@
         "binop": null
       },
       "value": "TexturePass",
-      "start": 399,
-      "end": 410,
+      "start": 407,
+      "end": 418,
       "loc": {
         "start": {
           "line": 29,
@@ -3608,8 +3608,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 410,
-      "end": 411,
+      "start": 418,
+      "end": 419,
       "loc": {
         "start": {
           "line": 29,
@@ -3634,8 +3634,8 @@
         "binop": null
       },
       "value": "ToneMappingPass",
-      "start": 414,
-      "end": 429,
+      "start": 422,
+      "end": 437,
       "loc": {
         "start": {
           "line": 30,
@@ -3659,8 +3659,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 431,
-      "end": 432,
+      "start": 439,
+      "end": 440,
       "loc": {
         "start": {
           "line": 31,
@@ -3685,8 +3685,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 433,
-      "end": 437,
+      "start": 441,
+      "end": 445,
       "loc": {
         "start": {
           "line": 31,
@@ -3712,8 +3712,8 @@
         "updateContext": null
       },
       "value": "./passes",
-      "start": 438,
-      "end": 448,
+      "start": 446,
+      "end": 456,
       "loc": {
         "start": {
           "line": 31,
@@ -3738,8 +3738,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 448,
-      "end": 449,
+      "start": 456,
+      "end": 457,
       "loc": {
         "start": {
           "line": 31,
@@ -3766,8 +3766,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 453,
-      "end": 459,
+      "start": 461,
+      "end": 467,
       "loc": {
         "start": {
           "line": 33,
@@ -3791,8 +3791,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 460,
-      "end": 461,
+      "start": 468,
+      "end": 469,
       "loc": {
         "start": {
           "line": 33,
@@ -3817,8 +3817,8 @@
         "binop": null
       },
       "value": "AdaptiveLuminosityMaterial",
-      "start": 464,
-      "end": 490,
+      "start": 472,
+      "end": 498,
       "loc": {
         "start": {
           "line": 34,
@@ -3843,8 +3843,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 490,
-      "end": 491,
+      "start": 498,
+      "end": 499,
       "loc": {
         "start": {
           "line": 34,
@@ -3869,8 +3869,8 @@
         "binop": null
       },
       "value": "BokehMaterial",
-      "start": 494,
-      "end": 507,
+      "start": 502,
+      "end": 515,
       "loc": {
         "start": {
           "line": 35,
@@ -3895,8 +3895,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 507,
-      "end": 508,
+      "start": 515,
+      "end": 516,
       "loc": {
         "start": {
           "line": 35,
@@ -3920,9 +3920,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "Bokeh2Material",
-      "start": 511,
-      "end": 525,
+      "value": "ColorEdgesMaterial",
+      "start": 519,
+      "end": 537,
       "loc": {
         "start": {
           "line": 36,
@@ -3930,7 +3930,7 @@
         },
         "end": {
           "line": 36,
-          "column": 15
+          "column": 19
         }
       }
     },
@@ -3947,16 +3947,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 525,
-      "end": 526,
+      "start": 537,
+      "end": 538,
       "loc": {
         "start": {
           "line": 36,
-          "column": 15
+          "column": 19
         },
         "end": {
           "line": 36,
-          "column": 16
+          "column": 20
         }
       }
     },
@@ -3973,8 +3973,8 @@
         "binop": null
       },
       "value": "CombineMaterial",
-      "start": 529,
-      "end": 544,
+      "start": 541,
+      "end": 556,
       "loc": {
         "start": {
           "line": 37,
@@ -3999,8 +3999,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 544,
-      "end": 545,
+      "start": 556,
+      "end": 557,
       "loc": {
         "start": {
           "line": 37,
@@ -4025,8 +4025,8 @@
         "binop": null
       },
       "value": "ConvolutionMaterial",
-      "start": 548,
-      "end": 567,
+      "start": 560,
+      "end": 579,
       "loc": {
         "start": {
           "line": 38,
@@ -4051,8 +4051,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 567,
-      "end": 568,
+      "start": 579,
+      "end": 580,
       "loc": {
         "start": {
           "line": 38,
@@ -4077,8 +4077,8 @@
         "binop": null
       },
       "value": "CopyMaterial",
-      "start": 571,
-      "end": 583,
+      "start": 583,
+      "end": 595,
       "loc": {
         "start": {
           "line": 39,
@@ -4103,8 +4103,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 583,
-      "end": 584,
+      "start": 595,
+      "end": 596,
       "loc": {
         "start": {
           "line": 39,
@@ -4129,8 +4129,8 @@
         "binop": null
       },
       "value": "DotScreenMaterial",
-      "start": 587,
-      "end": 604,
+      "start": 599,
+      "end": 616,
       "loc": {
         "start": {
           "line": 40,
@@ -4155,8 +4155,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 604,
-      "end": 605,
+      "start": 616,
+      "end": 617,
       "loc": {
         "start": {
           "line": 40,
@@ -4181,8 +4181,8 @@
         "binop": null
       },
       "value": "FilmMaterial",
-      "start": 608,
-      "end": 620,
+      "start": 620,
+      "end": 632,
       "loc": {
         "start": {
           "line": 41,
@@ -4207,8 +4207,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 620,
-      "end": 621,
+      "start": 632,
+      "end": 633,
       "loc": {
         "start": {
           "line": 41,
@@ -4233,8 +4233,8 @@
         "binop": null
       },
       "value": "GlitchMaterial",
-      "start": 624,
-      "end": 638,
+      "start": 636,
+      "end": 650,
       "loc": {
         "start": {
           "line": 42,
@@ -4259,8 +4259,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 638,
-      "end": 639,
+      "start": 650,
+      "end": 651,
       "loc": {
         "start": {
           "line": 42,
@@ -4285,8 +4285,8 @@
         "binop": null
       },
       "value": "GodRaysMaterial",
-      "start": 642,
-      "end": 657,
+      "start": 654,
+      "end": 669,
       "loc": {
         "start": {
           "line": 43,
@@ -4311,8 +4311,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 657,
-      "end": 658,
+      "start": 669,
+      "end": 670,
       "loc": {
         "start": {
           "line": 43,
@@ -4337,8 +4337,8 @@
         "binop": null
       },
       "value": "KernelSize",
-      "start": 661,
-      "end": 671,
+      "start": 673,
+      "end": 683,
       "loc": {
         "start": {
           "line": 44,
@@ -4363,8 +4363,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 671,
-      "end": 672,
+      "start": 683,
+      "end": 684,
       "loc": {
         "start": {
           "line": 44,
@@ -4389,8 +4389,8 @@
         "binop": null
       },
       "value": "LuminosityMaterial",
-      "start": 675,
-      "end": 693,
+      "start": 687,
+      "end": 705,
       "loc": {
         "start": {
           "line": 45,
@@ -4415,8 +4415,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 693,
-      "end": 694,
+      "start": 705,
+      "end": 706,
       "loc": {
         "start": {
           "line": 45,
@@ -4441,8 +4441,8 @@
         "binop": null
       },
       "value": "PixelationMaterial",
-      "start": 697,
-      "end": 715,
+      "start": 709,
+      "end": 727,
       "loc": {
         "start": {
           "line": 46,
@@ -4467,8 +4467,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 715,
-      "end": 716,
+      "start": 727,
+      "end": 728,
       "loc": {
         "start": {
           "line": 46,
@@ -4492,9 +4492,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ShockWaveMaterial",
-      "start": 719,
-      "end": 736,
+      "value": "RealisticBokehMaterial",
+      "start": 731,
+      "end": 753,
       "loc": {
         "start": {
           "line": 47,
@@ -4502,6 +4502,58 @@
         },
         "end": {
           "line": 47,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 753,
+      "end": 754,
+      "loc": {
+        "start": {
+          "line": 47,
+          "column": 23
+        },
+        "end": {
+          "line": 47,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ShockWaveMaterial",
+      "start": 757,
+      "end": 774,
+      "loc": {
+        "start": {
+          "line": 48,
+          "column": 1
+        },
+        "end": {
+          "line": 48,
           "column": 18
         }
       }
@@ -4519,15 +4571,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 736,
-      "end": 737,
+      "start": 774,
+      "end": 775,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 48,
           "column": 18
         },
         "end": {
-          "line": 47,
+          "line": 48,
           "column": 19
         }
       }
@@ -4545,15 +4597,15 @@
         "binop": null
       },
       "value": "SMAABlendMaterial",
-      "start": 740,
-      "end": 757,
+      "start": 778,
+      "end": 795,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 49,
           "column": 1
         },
         "end": {
-          "line": 48,
+          "line": 49,
           "column": 18
         }
       }
@@ -4571,15 +4623,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 757,
-      "end": 758,
+      "start": 795,
+      "end": 796,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 49,
           "column": 18
         },
         "end": {
-          "line": 48,
+          "line": 49,
           "column": 19
         }
       }
@@ -4596,61 +4648,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "SMAAColorEdgesMaterial",
-      "start": 761,
-      "end": 783,
-      "loc": {
-        "start": {
-          "line": 49,
-          "column": 1
-        },
-        "end": {
-          "line": 49,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 783,
-      "end": 784,
-      "loc": {
-        "start": {
-          "line": 49,
-          "column": 23
-        },
-        "end": {
-          "line": 49,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
       "value": "SMAAWeightsMaterial",
-      "start": 787,
-      "end": 806,
+      "start": 799,
+      "end": 818,
       "loc": {
         "start": {
           "line": 50,
@@ -4675,8 +4675,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 806,
-      "end": 807,
+      "start": 818,
+      "end": 819,
       "loc": {
         "start": {
           "line": 50,
@@ -4701,8 +4701,8 @@
         "binop": null
       },
       "value": "ToneMappingMaterial",
-      "start": 810,
-      "end": 829,
+      "start": 822,
+      "end": 841,
       "loc": {
         "start": {
           "line": 51,
@@ -4726,8 +4726,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 831,
-      "end": 832,
+      "start": 843,
+      "end": 844,
       "loc": {
         "start": {
           "line": 52,
@@ -4752,8 +4752,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 833,
-      "end": 837,
+      "start": 845,
+      "end": 849,
       "loc": {
         "start": {
           "line": 52,
@@ -4779,8 +4779,8 @@
         "updateContext": null
       },
       "value": "./materials",
-      "start": 838,
-      "end": 851,
+      "start": 850,
+      "end": 863,
       "loc": {
         "start": {
           "line": 52,
@@ -4805,8 +4805,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 851,
-      "end": 852,
+      "start": 863,
+      "end": 864,
       "loc": {
         "start": {
           "line": 52,
@@ -4833,8 +4833,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 856,
-      "end": 862,
+      "start": 868,
+      "end": 874,
       "loc": {
         "start": {
           "line": 54,
@@ -4858,8 +4858,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 863,
-      "end": 864,
+      "start": 875,
+      "end": 876,
       "loc": {
         "start": {
           "line": 54,
@@ -4884,8 +4884,8 @@
         "binop": null
       },
       "value": "RawImageData",
-      "start": 867,
-      "end": 879,
+      "start": 879,
+      "end": 891,
       "loc": {
         "start": {
           "line": 55,
@@ -4910,8 +4910,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 879,
-      "end": 880,
+      "start": 891,
+      "end": 892,
       "loc": {
         "start": {
           "line": 55,
@@ -4936,8 +4936,8 @@
         "binop": null
       },
       "value": "SMAAAreaImageData",
-      "start": 883,
-      "end": 900,
+      "start": 895,
+      "end": 912,
       "loc": {
         "start": {
           "line": 56,
@@ -4962,8 +4962,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 900,
-      "end": 901,
+      "start": 912,
+      "end": 913,
       "loc": {
         "start": {
           "line": 56,
@@ -4988,8 +4988,8 @@
         "binop": null
       },
       "value": "SMAASearchImageData",
-      "start": 904,
-      "end": 923,
+      "start": 916,
+      "end": 935,
       "loc": {
         "start": {
           "line": 57,
@@ -5013,8 +5013,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 925,
-      "end": 926,
+      "start": 937,
+      "end": 938,
       "loc": {
         "start": {
           "line": 58,
@@ -5039,8 +5039,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 927,
-      "end": 931,
+      "start": 939,
+      "end": 943,
       "loc": {
         "start": {
           "line": 58,
@@ -5066,8 +5066,8 @@
         "updateContext": null
       },
       "value": "./materials/images",
-      "start": 932,
-      "end": 952,
+      "start": 944,
+      "end": 964,
       "loc": {
         "start": {
           "line": 58,
@@ -5092,8 +5092,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 952,
-      "end": 953,
+      "start": 964,
+      "end": 965,
       "loc": {
         "start": {
           "line": 58,
@@ -5118,8 +5118,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 955,
-      "end": 955,
+      "start": 967,
+      "end": 967,
       "loc": {
         "start": {
           "line": 59,
