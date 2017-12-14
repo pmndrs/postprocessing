@@ -160,7 +160,7 @@ export class Pass {
 	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
-	initialise(renderer, alpha) {}
+	initialize(renderer, alpha) {}
 
 	/**
 	 * Performs a shallow search for properties that define a dispose method and

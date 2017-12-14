@@ -298,7 +298,7 @@ export class ToneMappingPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 */
 
-	initialise(renderer) {
+	initialize(renderer) {
 
 		this.quad.material = new MeshBasicMaterial({ color: 0x7fffff });
 		renderer.render(this.scene, this.camera, this.renderTargetPrevious);

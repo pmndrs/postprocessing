@@ -85,7 +85,7 @@ export class SavePass extends Pass {
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialise(renderer, alpha) {
+	initialize(renderer, alpha) {
 
 		if(!alpha) {
 

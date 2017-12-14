@@ -235,7 +235,7 @@ export class EffectComposer {
 		const drawingBufferSize = renderer.getDrawingBufferSize();
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		pass.initialise(renderer, renderer.context.getContextAttributes().alpha);
+		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
 
 		if(index !== undefined) {
 

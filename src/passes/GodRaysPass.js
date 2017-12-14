@@ -429,11 +429,11 @@ export class GodRaysPass extends Pass {
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialise(renderer, alpha) {
+	initialize(renderer, alpha) {
 
-		this.renderPassLight.initialise(renderer, alpha);
-		this.renderPassMask.initialise(renderer, alpha);
-		this.blurPass.initialise(renderer, alpha);
+		this.renderPassLight.initialize(renderer, alpha);
+		this.renderPassMask.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha);
 
 		if(!alpha) {
 

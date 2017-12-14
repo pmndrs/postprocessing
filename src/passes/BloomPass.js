@@ -249,9 +249,9 @@ export class BloomPass extends Pass {
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialise(renderer, alpha) {
+	initialize(renderer, alpha) {
 
-		this.blurPass.initialise(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha);
 
 		if(!alpha) {
 
