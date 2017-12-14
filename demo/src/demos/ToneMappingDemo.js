@@ -168,9 +168,12 @@ export class ToneMappingDemo extends Demo {
 		const pass = new ToneMappingPass({
 			adaptive: true,
 			resolution: 256,
-			distinction: 1.0
+			distinction: 2.0
 		});
 
+		pass.adaptiveLuminosityMaterial.uniforms.tau.value = 2.0;
+
+		pass.dithering = true;
 		pass.renderToScreen = true;
 		this.toneMappingPass = pass;
 		composer.addPass(pass);
@@ -246,7 +249,7 @@ export class ToneMappingDemo extends Demo {
 
 		});
 
-		f.add(params, "adaption rate").min(0.0).max(2.0).step(0.01).onChange(function() {
+		f.add(params, "adaption rate").min(1.0).max(3.0).step(0.01).onChange(function() {
 
 			pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
 

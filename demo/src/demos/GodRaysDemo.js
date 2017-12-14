@@ -233,6 +233,7 @@ export class GodRaysDemo extends Demo {
 			clampMax: 1.0
 		});
 
+		pass.dithering = true;
 		pass.renderToScreen = true;
 		this.godRaysPass = pass;
 		composer.addPass(pass);
