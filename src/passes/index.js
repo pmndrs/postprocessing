@@ -14,6 +14,7 @@ export { FilmPass } from "./FilmPass.js";
 export { GlitchMode, GlitchPass } from "./GlitchPass.js";
 export { GodRaysPass } from "./GodRaysPass.js";
 export { MaskPass } from "./MaskPass.js";
+export { OutlinePass } from "./OutlinePass.js";
 export { Pass } from "./Pass.js";
 export { PixelationPass } from "./PixelationPass.js";
 export { RealisticBokehPass } from "./RealisticBokehPass.js";
