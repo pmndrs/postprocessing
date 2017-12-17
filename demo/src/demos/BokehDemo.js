@@ -2,14 +2,16 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	OrbitControls,
+	PerspectiveCamera,
 	CylinderBufferGeometry
 } from "three";
 
-import { BokehPass, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
+import { Demo } from "three-demo";
+import { BokehPass } from "../../../src";
 
 /**
  * A bokeh demo setup.
@@ -19,13 +21,11 @@ export class BokehDemo extends Demo {
 
 	/**
 	 * Constructs a new bokeh demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("bokeh");
 
 		/**
 		 * A bokeh pass.
@@ -41,12 +41,12 @@ export class BokehDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -58,31 +58,34 @@ export class BokehDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -90,28 +93,34 @@ export class BokehDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
-		this.controls.enablePan = false;
-		this.controls.minDistance = 12;
-		this.controls.maxDistance = 40;
-		this.controls.zoomSpeed = 0.2;
-		this.controls.rotateSpeed = 0.2;
+		const renderer = composer.renderer;
 
 		// Camera.
 
-		camera.near = 1;
-		camera.far = 50;
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
 		camera.position.set(12.5, -0.3, 1.7);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.enablePan = false;
+		controls.minDistance = 12;
+		controls.maxDistance = 40;
+		controls.zoomSpeed = 0.2;
+		controls.rotateSpeed = 0.2;
+		this.controls = controls;
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -143,8 +152,6 @@ export class BokehDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new BokehPass(camera, {
 			focus: 0.32,
 			dof: 0.02,
@@ -152,6 +159,7 @@ export class BokehDemo extends Demo {
 			maxBlur: 0.025
 		});
 
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.bokehPass = pass;
 		composer.addPass(pass);
@@ -161,10 +169,10 @@ export class BokehDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const pass = this.bokehPass;
 
@@ -175,25 +183,25 @@ export class BokehDemo extends Demo {
 			"blur": pass.bokehMaterial.uniforms.maxBlur.value
 		};
 
-		gui.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() {
+		menu.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() {
 
 			pass.bokehMaterial.uniforms.focus.value = params.focus;
 
 		});
 
-		gui.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() {
+		menu.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() {
 
 			pass.bokehMaterial.uniforms.dof.value = params.dof;
 
 		});
 
-		gui.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() {
+		menu.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() {
 
 			pass.bokehMaterial.uniforms.aperture.value = params.aperture;
 
 		});
 
-		gui.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() {
+		menu.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() {
 
 			pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
 

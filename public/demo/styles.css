@@ -52,6 +52,10 @@ p ul li {
 	padding: 0 5px;
 }
 
+div[role="main"] {
+	height: 100%;
+}
+
 div[role="complementary"] {
 	background-color: transparent;
 	display: flex;
@@ -63,7 +67,6 @@ div[role="complementary"] {
 	position: fixed;
 	right: 0;
 	top: 0;
-	visibility: hidden;
 }
 
 div[role="complementary"] h3 {
@@ -91,14 +94,14 @@ div[role="complementary"] p {
 	transform: translateY(-50%);
 }
 
-#stats {
+#statistics {
 	opacity: 0.9;
 	position: fixed;
 	left: 5px;
 	top: 5px;
 }
 
-#stats canvas {
+#statistics canvas {
 	cursor: pointer;
 }
 

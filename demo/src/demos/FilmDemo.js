@@ -2,24 +2,17 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
+	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
 
-import { FilmPass, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
+import { Demo } from "three-demo";
+import { FilmPass } from "../../../src";
 
 /**
  * A film demo setup.
@@ -29,13 +22,11 @@ export class FilmDemo extends Demo {
 
 	/**
 	 * Constructs a new film demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("film");
 
 		/**
 		 * A film pass.
@@ -60,12 +51,12 @@ export class FilmDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -77,31 +68,34 @@ export class FilmDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -109,21 +103,28 @@ export class FilmDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(10, 1, 10);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -169,8 +170,6 @@ export class FilmDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new FilmPass({
 			grayscale: false,
 			sepia: true,
@@ -187,6 +186,7 @@ export class FilmDemo extends Demo {
 			vignetteDarkness: 1.0
 		});
 
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.filmPass = pass;
 		composer.addPass(pass);
@@ -202,24 +202,20 @@ export class FilmDemo extends Demo {
 	update(delta) {
 
 		const object = this.object;
+		const twoPI = 2.0 * Math.PI;
 
-		if(object !== null) {
+		object.rotation.x += 0.001;
+		object.rotation.y += 0.005;
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+		if(object.rotation.x >= twoPI) {
 
-			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) {
+			object.rotation.x -= twoPI;
 
-				object.rotation.x -= TWO_PI;
+		}
 
-			}
+		if(object.rotation.y >= twoPI) {
 
-			if(object.rotation.y >= TWO_PI) {
-
-				object.rotation.y -= TWO_PI;
-
-			}
+			object.rotation.y -= twoPI;
 
 		}
 
@@ -228,10 +224,10 @@ export class FilmDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const composer = this.composer;
 		const pass = this.filmPass;
@@ -253,7 +249,7 @@ export class FilmDemo extends Demo {
 			"vignette darkness": pass.material.uniforms.vignetteDarkness.value
 		};
 
-		let f = gui.addFolder("Greyscale");
+		let f = menu.addFolder("Greyscale");
 
 		f.add(params, "greyscale").onChange(function() {
 
@@ -269,7 +265,7 @@ export class FilmDemo extends Demo {
 
 		f.open();
 
-		f = gui.addFolder("Noise and scanlines");
+		f = menu.addFolder("Noise and scanlines");
 
 		f.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
@@ -309,7 +305,7 @@ export class FilmDemo extends Demo {
 
 		f.open();
 
-		f = gui.addFolder("Sepia");
+		f = menu.addFolder("Sepia");
 
 		f.add(params, "sepia").onChange(function() {
 
@@ -325,7 +321,7 @@ export class FilmDemo extends Demo {
 
 		f.open();
 
-		f = gui.addFolder("Vignette");
+		f = menu.addFolder("Vignette");
 
 		f.add(params, "vignette").onChange(function() {
 

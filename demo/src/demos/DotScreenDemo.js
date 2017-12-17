@@ -2,24 +2,17 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
+	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
 
-import { DotScreenPass, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
+import { Demo } from "three-demo";
+import { DotScreenPass } from "../../../src";
 
 /**
  * A dot screen demo setup.
@@ -29,13 +22,11 @@ export class DotScreenDemo extends Demo {
 
 	/**
 	 * Constructs a new dot screen demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("dot-screen");
 
 		/**
 		 * A dot screen pass.
@@ -60,12 +51,12 @@ export class DotScreenDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -77,31 +68,34 @@ export class DotScreenDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -109,21 +103,28 @@ export class DotScreenDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(10, 1, 10);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -169,14 +170,13 @@ export class DotScreenDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new DotScreenPass({
 			scale: 0.8,
 			angle: Math.PI * 0.5,
 			intensity: 0.25
 		});
 
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.dotScreenPass = pass;
 		composer.addPass(pass);
@@ -192,24 +192,20 @@ export class DotScreenDemo extends Demo {
 	update(delta) {
 
 		const object = this.object;
+		const twoPI = 2.0 * Math.PI;
 
-		if(object !== null) {
+		object.rotation.x += 0.0005;
+		object.rotation.y += 0.001;
 
-			object.rotation.x += 0.0005;
-			object.rotation.y += 0.001;
+		if(object.rotation.x >= twoPI) {
 
-			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) {
+			object.rotation.x -= twoPI;
 
-				object.rotation.x -= TWO_PI;
+		}
 
-			}
+		if(object.rotation.y >= twoPI) {
 
-			if(object.rotation.y >= TWO_PI) {
-
-				object.rotation.y -= TWO_PI;
-
-			}
+			object.rotation.y -= twoPI;
 
 		}
 
@@ -218,10 +214,10 @@ export class DotScreenDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const pass = this.dotScreenPass;
 
@@ -234,31 +230,31 @@ export class DotScreenDemo extends Demo {
 			"center Y": pass.material.uniforms.offsetRepeat.value.y
 		};
 
-		gui.add(params, "average").onChange(function() {
+		menu.add(params, "average").onChange(function() {
 
 			pass.material.setAverageEnabled(params.average);
 
 		});
 
-		gui.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.material.uniforms.scale.value = params.scale;
 
 		});
 
-		gui.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() {
+		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() {
 
 			pass.material.uniforms.angle.value = params.angle;
 
 		});
 
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.material.uniforms.intensity.value = params.intensity;
 
 		});
 
-		const f = gui.addFolder("Center");
+		const f = menu.addFolder("Center");
 
 		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() {
 

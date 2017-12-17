@@ -2,32 +2,24 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
+	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
+
+import { Demo } from "three-demo";
 
 import {
 	BlurPass,
 	CombineMaterial,
 	KernelSize,
-	RenderPass,
 	SavePass,
 	ShaderPass
 } from "../../../src";
-
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
 
 /**
  * A blur demo setup.
@@ -37,22 +29,11 @@ export class BlurDemo extends Demo {
 
 	/**
 	 * Constructs a new blur demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
-
-		/**
-		 * A render pass.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.renderPass = null;
+		super("blur");
 
 		/**
 		 * A save pass.
@@ -95,12 +76,12 @@ export class BlurDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -112,31 +93,34 @@ export class BlurDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -144,21 +128,28 @@ export class BlurDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(-15, 0, -15);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -205,11 +196,7 @@ export class BlurDemo extends Demo {
 
 		// Passes.
 
-		let pass = new RenderPass(scene, camera);
-		this.renderPass = pass;
-		composer.addPass(pass);
-
-		pass = new SavePass();
+		let pass = new SavePass();
 		this.savePass = pass;
 		composer.addPass(pass);
 
@@ -221,6 +208,8 @@ export class BlurDemo extends Demo {
 		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
 		pass.material.uniforms.opacity1.value = 1.0;
 		pass.material.uniforms.opacity2.value = 0.0;
+
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.combinePass = pass;
 		composer.addPass(pass);
@@ -236,24 +225,20 @@ export class BlurDemo extends Demo {
 	update(delta) {
 
 		const object = this.object;
+		const twoPI = 2.0 * Math.PI;
 
-		if(object !== null) {
+		object.rotation.x += 0.001;
+		object.rotation.y += 0.005;
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+		if(object.rotation.x >= twoPI) {
 
-			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) {
+			object.rotation.x -= twoPI;
 
-				object.rotation.x -= TWO_PI;
+		}
 
-			}
+		if(object.rotation.y >= twoPI) {
 
-			if(object.rotation.y >= TWO_PI) {
-
-				object.rotation.y -= TWO_PI;
-
-			}
+			object.rotation.y -= twoPI;
 
 		}
 
@@ -262,10 +247,10 @@ export class BlurDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const composer = this.composer;
 		const renderPass = this.renderPass;
@@ -279,28 +264,28 @@ export class BlurDemo extends Demo {
 			"strength": combinePass.material.uniforms.opacity1.value
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			blurPass.resolutionScale = params.resolution; composer.setSize();
 
 		});
 
-		gui.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
 
 			blurPass.kernelSize = params["kernel size"];
 
 		});
 
-		gui.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			combinePass.material.uniforms.opacity1.value = params.strength;
 			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
 
 		});
 
-		gui.add(blurPass, "dithering");
+		menu.add(blurPass, "dithering");
 
-		gui.add(params, "enabled").onChange(function() {
+		menu.add(params, "enabled").onChange(function() {
 
 			renderPass.renderToScreen = !params.enabled;
 			blurPass.enabled = params.enabled;

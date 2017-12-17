@@ -3,33 +3,24 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	Object3D,
 	OrbitControls,
+	PerspectiveCamera,
 	Scene,
 	SphereBufferGeometry
 } from "three";
 
+import { Demo } from "three-demo";
 import {
 	ClearMaskPass,
 	CopyMaterial,
 	MaskPass,
 	PixelationPass,
-	RenderPass,
 	ShaderPass
 } from "../../../src";
-
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
 
 /**
  * A pixelation demo setup.
@@ -39,13 +30,11 @@ export class PixelationDemo extends Demo {
 
 	/**
 	 * Constructs a new pixelation demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("pixelation");
 
 		/**
 		 * An object.
@@ -88,12 +77,12 @@ export class PixelationDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -105,31 +94,34 @@ export class PixelationDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -137,21 +129,28 @@ export class PixelationDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(10, 1, 10);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -205,10 +204,9 @@ export class PixelationDemo extends Demo {
 
 		// Passes.
 
-		let pass = new RenderPass(scene, camera);
-		composer.addPass(pass);
+		this.renderPass.renderToScreen = false;
 
-		pass = new MaskPass(maskScene, camera);
+		let pass = new MaskPass(maskScene, camera);
 		this.maskPass = pass;
 		composer.addPass(pass);
 
@@ -234,45 +232,38 @@ export class PixelationDemo extends Demo {
 
 		const object = this.object;
 		const maskObject = this.maskObject;
+		const twoPI = 2.0 * Math.PI;
+		const time = performance.now() * 0.001;
 
-		let time;
+		object.rotation.x += 0.001;
+		object.rotation.y += 0.005;
 
-		if(object !== null && maskObject !== null) {
+		if(object.rotation.x >= twoPI) {
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
-
-			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) {
-
-				object.rotation.x -= TWO_PI;
-
-			}
-
-			if(object.rotation.y >= TWO_PI) {
-
-				object.rotation.y -= TWO_PI;
-
-			}
-
-			time = performance.now() * 0.001;
-
-			maskObject.position.x = Math.cos(time / 1.5) * 4;
-			maskObject.position.y = Math.sin(time) * 4;
-			maskObject.rotation.x = time;
-			maskObject.rotation.y = time * 0.5;
+			object.rotation.x -= twoPI;
 
 		}
+
+		if(object.rotation.y >= twoPI) {
+
+			object.rotation.y -= twoPI;
+
+		}
+
+		maskObject.position.x = Math.cos(time / 1.5) * 4;
+		maskObject.position.y = Math.sin(time) * 4;
+		maskObject.rotation.x = time;
+		maskObject.rotation.y = time * 0.5;
 
 	}
 
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const maskPass = this.maskPass;
 
@@ -280,9 +271,9 @@ export class PixelationDemo extends Demo {
 			"use mask": maskPass.enabled
 		};
 
-		gui.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+		menu.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
 
-		gui.add(params, "use mask").onChange(function() {
+		menu.add(params, "use mask").onChange(function() {
 
 			maskPass.enabled = params["use mask"];
 

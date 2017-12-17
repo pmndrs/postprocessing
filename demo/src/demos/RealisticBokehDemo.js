@@ -2,14 +2,16 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	OrbitControls,
+	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
 
-import { RealisticBokehPass, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
+import { Demo } from "three-demo";
+import { RealisticBokehPass } from "../../../src";
 
 /**
  * A high quality bokeh demo setup.
@@ -19,13 +21,11 @@ export class RealisticBokehDemo extends Demo {
 
 	/**
 	 * Constructs a new bokeh2 demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super(composer);
+		super("realistic-bokeh");
 
 		/**
 		 * A bokeh pass.
@@ -41,12 +41,12 @@ export class RealisticBokehDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -58,31 +58,34 @@ export class RealisticBokehDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -90,26 +93,32 @@ export class RealisticBokehDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
-		this.controls.enablePan = false;
-		this.controls.minDistance = 2.5;
-		this.controls.maxDistance = 40;
+		const renderer = composer.renderer;
 
 		// Camera.
 
-		camera.near = 0.01;
-		camera.far = 50;
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 50);
 		camera.position.set(3, 1, 3);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.enablePan = false;
+		controls.minDistance = 2.5;
+		controls.maxDistance = 40;
+		this.controls = controls;
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -139,8 +148,6 @@ export class RealisticBokehDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new RealisticBokehPass(camera, {
 			rings: 5,
 			samples: 5,
@@ -157,6 +164,7 @@ export class RealisticBokehDemo extends Demo {
 			fringe: 0.33
 		});
 
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.bokehPass = pass;
 		composer.addPass(pass);
@@ -166,10 +174,10 @@ export class RealisticBokehDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const pass = this.bokehPass;
 
@@ -195,7 +203,7 @@ export class RealisticBokehDemo extends Demo {
 			"noise": pass.bokehMaterial.defines.NOISE !== undefined
 		};
 
-		let f = gui.addFolder("Focus");
+		let f = menu.addFolder("Focus");
 
 		f.add(params, "show focus").onChange(function() {
 
@@ -241,7 +249,7 @@ export class RealisticBokehDemo extends Demo {
 
 		f.open();
 
-		f = gui.addFolder("Sampling");
+		f = menu.addFolder("Sampling");
 
 		f.add(params, "rings").min(1).max(6).step(1).onChange(function() {
 
@@ -259,7 +267,7 @@ export class RealisticBokehDemo extends Demo {
 
 		});
 
-		f = gui.addFolder("Blur");
+		f = menu.addFolder("Blur");
 
 		f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(function() {
 
@@ -299,7 +307,7 @@ export class RealisticBokehDemo extends Demo {
 
 		f.open();
 
-		f = gui.addFolder("Luminosity");
+		f = menu.addFolder("Luminosity");
 
 		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() {
 
@@ -313,7 +321,7 @@ export class RealisticBokehDemo extends Demo {
 
 		});
 
-		gui.add(params, "vignette").onChange(function() {
+		menu.add(params, "vignette").onChange(function() {
 
 			pass.bokehMaterial.setVignetteEnabled(params.vignette);
 

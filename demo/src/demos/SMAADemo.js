@@ -3,27 +3,20 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
 	OrbitControls,
 	Object3D,
+	PerspectiveCamera,
 	RepeatWrapping,
 	TextureLoader,
 	WebGLRenderer
 } from "three";
 
-import { RenderPass, SMAAPass, TexturePass } from "../../../src";
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
+import { Demo } from "three-demo";
+import { SMAAPass, TexturePass } from "../../../src";
 
 /**
  * An SMAA demo setup.
@@ -33,13 +26,11 @@ export class SMAADemo extends Demo {
 
 	/**
 	 * Constructs a new SMAA demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("smaa");
 
 		/**
 		 * The main renderer.
@@ -48,7 +39,7 @@ export class SMAADemo extends Demo {
 		 * @private
 		 */
 
-		this.renderer = null;
+		this.originalRenderer = null;
 
 		/**
 		 * A secondary renderer.
@@ -57,7 +48,7 @@ export class SMAADemo extends Demo {
 		 * @private
 		 */
 
-		this.renderer2 = null;
+		this.rendererNoAA = null;
 
 		/**
 		 * Secondary camera controls.
@@ -67,15 +58,6 @@ export class SMAADemo extends Demo {
 		 */
 
 		this.controls2 = null;
-
-		/**
-		 * A render pass.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.renderPass = null;
 
 		/**
 		 * An SMAA pass.
@@ -127,12 +109,12 @@ export class SMAADemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
@@ -147,61 +129,64 @@ export class SMAADemo extends Demo {
 
 		let image;
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-			textureLoader.load("textures/crate.jpg", function(texture) {
+				textureLoader.load("textures/crate.jpg", function(texture) {
 
-				texture.wrapS = texture.wrapT = RepeatWrapping;
-				assets.set("crate-color", texture);
+					texture.wrapS = texture.wrapT = RepeatWrapping;
+					assets.set("crate-color", texture);
 
-			});
+				});
 
-			// Preload the SMAA images.
-			image = new Image();
-			image.addEventListener("load", function() {
+				// Preload the SMAA images.
+				image = new Image();
+				image.addEventListener("load", function() {
 
-				assets.set("smaa-search", this);
-				loadingManager.itemEnd("smaa-search");
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
 
-			});
+				});
 
-			loadingManager.itemStart("smaa-search");
-			image.src = SMAAPass.searchImageDataURL;
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAPass.searchImageDataURL;
 
-			image = new Image();
-			image.addEventListener("load", function() {
+				image = new Image();
+				image.addEventListener("load", function() {
 
-				assets.set("smaa-area", this);
-				loadingManager.itemEnd("smaa-area");
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
 
-			});
+				});
 
-			loadingManager.itemStart("smaa-area");
-			image.src = SMAAPass.areaImageDataURL;
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAPass.areaImageDataURL;
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -209,41 +194,53 @@ export class SMAADemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
+		const renderer = composer.renderer;
 
-		// Renderer without AA.
+		// Camera.
 
-		this.renderer2 = (function() {
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		camera.position.set(-3, 0, -3);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
+
+		// Create a second renderer without AA.
+
+		const rendererNoAA = ((size, clearColor, pixelRatio) => {
 
 			const renderer = new WebGLRenderer({
 				logarithmicDepthBuffer: true,
 				antialias: false
 			});
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			renderer.setClearColor(0x000000);
-			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(size.width, size.height);
+			renderer.setClearColor(clearColor);
+			renderer.setPixelRatio(pixelRatio);
 
 			return renderer;
 
-		}());
+		})(
+			renderer.getSize(),
+			renderer.getClearColor(),
+			renderer.getPixelRatio()
+		);
 
-		this.renderer = composer.replaceRenderer(this.renderer2);
+		this.originalRenderer = composer.replaceRenderer(rendererNoAA);
+		this.rendererNoAA = rendererNoAA;
 
 		// Controls.
 
-		this.controls = new OrbitControls(camera, this.renderer.domElement);
-		this.controls2 = new OrbitControls(camera, this.renderer2.domElement);
-
-		// Camera.
-
-		camera.position.set(-3, 0, -3);
-		camera.lookAt(this.controls.target);
+		this.controls = new OrbitControls(camera, renderer.domElement);
+		this.controls2 = new OrbitControls(camera, rendererNoAA.domElement);
 
 		// Sky.
 
@@ -329,11 +326,9 @@ export class SMAADemo extends Demo {
 
 		// Passes.
 
-		let pass = new RenderPass(scene, camera);
-		this.renderPass = pass;
-		composer.addPass(pass);
+		this.renderPass.renderToScreen = false;
 
-		pass = new SMAAPass(assets.get("smaa-search"), assets.get("smaa-area"));
+		let pass = new SMAAPass(assets.get("smaa-search"), assets.get("smaa-area"));
 		pass.renderToScreen = true;
 		this.smaaPass = pass;
 		composer.addPass(pass);
@@ -357,27 +352,23 @@ export class SMAADemo extends Demo {
 		const objectA = this.objectA;
 		const objectB = this.objectB;
 		const objectC = this.objectC;
+		const twoPI = 2.0 * Math.PI;
 
-		if(objectA !== null) {
+		objectA.rotation.x += 0.0005;
+		objectA.rotation.y += 0.001;
 
-			objectA.rotation.x += 0.0005;
-			objectA.rotation.y += 0.001;
+		objectB.rotation.copy(objectA.rotation);
+		objectC.rotation.copy(objectA.rotation);
 
-			objectB.rotation.copy(objectA.rotation);
-			objectC.rotation.copy(objectA.rotation);
+		if(objectA.rotation.x >= twoPI) {
 
-			// Prevent overflow.
-			if(objectA.rotation.x >= TWO_PI) {
+			objectA.rotation.x -= twoPI;
 
-				objectA.rotation.x -= TWO_PI;
+		}
 
-			}
+		if(objectA.rotation.y >= twoPI) {
 
-			if(objectA.rotation.y >= TWO_PI) {
-
-				objectA.rotation.y -= TWO_PI;
-
-			}
+			objectA.rotation.y -= twoPI;
 
 		}
 
@@ -386,18 +377,18 @@ export class SMAADemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const composer = this.composer;
 		const renderPass = this.renderPass;
 		const smaaPass = this.smaaPass;
 		const texturePass = this.texturePass;
 
-		const renderer1 = this.renderer;
-		const renderer2 = this.renderer2;
+		const renderer1 = this.originalRenderer;
+		const renderer2 = this.rendererNoAA;
 
 		const controls1 = this.controls;
 		const controls2 = this.controls2;
@@ -445,16 +436,16 @@ export class SMAADemo extends Demo {
 
 		}
 
-		gui.add(params, "browser AA").onChange(swapRenderers);
-		gui.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
+		menu.add(params, "browser AA").onChange(swapRenderers);
+		menu.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
 
-		gui.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(function() {
+		menu.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(function() {
 
 			smaaPass.colorEdgesMaterial.setEdgeDetectionThreshold(params.sensitivity);
 
 		});
 
-		gui.add(params, "search steps").min(8).max(112).step(1).onChange(function() {
+		menu.add(params, "search steps").min(8).max(112).step(1).onChange(function() {
 
 			smaaPass.weightsMaterial.setOrthogonalSearchSteps(params["search steps"]);
 
@@ -472,11 +463,19 @@ export class SMAADemo extends Demo {
 
 		super.reset();
 
-		this.renderer.dispose();
-		this.renderer = null;
+		if(this.rendererNoAA !== null) {
 
-		this.controls2.dispose();
-		this.controls2 = null;
+			this.rendererNoAA.dispose();
+			this.rendererNoAA = null;
+
+		}
+
+		if(this.controls2 !== null) {
+
+			this.controls2.dispose();
+			this.controls2 = null;
+
+		}
 
 	}
 

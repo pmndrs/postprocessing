@@ -4,17 +4,19 @@ import {
 	BufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	MeshPhongMaterial,
 	ObjectLoader,
 	OrbitControls,
+	PerspectiveCamera,
 	Points,
 	PointsMaterial,
 	RepeatWrapping,
 	TextureLoader
 } from "three";
 
-import { GodRaysPass, KernelSize, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
+import { Demo } from "three-demo";
+import { GodRaysPass, KernelSize } from "../../../src";
 
 /**
  * A god rays demo setup.
@@ -24,13 +26,11 @@ export class GodRaysDemo extends Demo {
 
 	/**
 	 * Constructs a new god rays demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
+		super("god-rays");
 
 		/**
 		 * A god rays pass.
@@ -64,12 +64,12 @@ export class GodRaysDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const textureLoader = new TextureLoader(loadingManager);
@@ -83,60 +83,63 @@ export class GodRaysDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-			modelLoader.load("models/waggon.json", function(object) {
+				modelLoader.load("models/waggon.json", function(object) {
 
-				object.rotation.x = Math.PI * 0.25;
-				object.rotation.y = Math.PI * 0.75;
+					object.rotation.x = Math.PI * 0.25;
+					object.rotation.y = Math.PI * 0.75;
 
-				assets.set("waggon", object);
+					assets.set("waggon", object);
 
-			});
+				});
 
-			textureLoader.load("textures/wood.jpg", function(texture) {
+				textureLoader.load("textures/wood.jpg", function(texture) {
 
-				texture.wrapS = texture.wrapT = RepeatWrapping;
-				assets.set("wood-diffuse", texture);
+					texture.wrapS = texture.wrapT = RepeatWrapping;
+					assets.set("wood-diffuse", texture);
 
-			});
+				});
 
-			textureLoader.load("textures/woodnormals.jpg", function(texture) {
+				textureLoader.load("textures/woodnormals.jpg", function(texture) {
 
-				texture.wrapS = texture.wrapT = RepeatWrapping;
-				assets.set("wood-normals", texture);
+					texture.wrapS = texture.wrapT = RepeatWrapping;
+					assets.set("wood-normals", texture);
 
-			});
+				});
 
-			textureLoader.load("textures/sun.png", function(texture) {
+				textureLoader.load("textures/sun.png", function(texture) {
 
-				assets.set("sun-diffuse", texture);
+					assets.set("sun-diffuse", texture);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -144,22 +147,29 @@ export class GodRaysDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
-		this.controls.target.set(0, 0.5, 0);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(-5, -1, -4);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+		this.controls.target.set(0, 0.5, 0);
 		camera.lookAt(this.controls.target);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -219,8 +229,6 @@ export class GodRaysDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new GodRaysPass(scene, camera, sun, {
 			resolutionScale: 0.6,
 			kernelSize: KernelSize.SMALL,
@@ -233,8 +241,9 @@ export class GodRaysDemo extends Demo {
 			clampMax: 1.0
 		});
 
-		pass.dithering = true;
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
+		pass.dithering = true;
 		this.godRaysPass = pass;
 		composer.addPass(pass);
 
@@ -243,10 +252,10 @@ export class GodRaysDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const directionalLight = this.directionalLight;
 		const composer = this.composer;
@@ -267,71 +276,71 @@ export class GodRaysDemo extends Demo {
 			"blend mode": "screen"
 		};
 
-		gui.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.resolutionScale = params.resolution;
 			composer.setSize();
 
 		});
 
-		gui.add(pass, "dithering");
+		menu.add(pass, "dithering");
 
-		gui.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
 
 			pass.kernelSize = params.blurriness;
 
 		});
 
-		gui.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.intensity = params.intensity;
 
 		});
 
-		gui.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.godRaysMaterial.uniforms.density.value = params.density;
 
 		});
 
-		gui.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.godRaysMaterial.uniforms.decay.value = params.decay;
 
 		});
 
-		gui.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.godRaysMaterial.uniforms.weight.value = params.weight;
 
 		});
 
-		gui.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
 
 		});
 
-		gui.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function() {
 
 			pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
 
 		});
 
-		gui.add(params, "samples").min(15).max(200).step(1).onChange(function() {
+		menu.add(params, "samples").min(15).max(200).step(1).onChange(function() {
 
 			pass.samples = params.samples;
 
 		});
 
-		gui.addColor(params, "color").onChange(function() {
+		menu.addColor(params, "color").onChange(function() {
 
 			sun.material.color.setHex(params.color);
 			directionalLight.color.setHex(params.color);
 
 		});
 
-		gui.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+		menu.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
 			pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
 

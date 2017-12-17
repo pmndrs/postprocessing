@@ -2,14 +2,16 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
+	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	OrbitControls,
+	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
 
-import { ShockWavePass, RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
+import { Demo } from "three-demo";
+import { ShockWavePass } from "../../../src";
 
 /**
  * A shock wave demo setup.
@@ -19,13 +21,11 @@ export class ShockWaveDemo extends Demo {
 
 	/**
 	 * Constructs a new shock wave demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super(composer);
+		super("shock-wave");
 
 		/**
 		 * A shock wave pass.
@@ -41,12 +41,12 @@ export class ShockWaveDemo extends Demo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @param {Function} callback - A callback function.
+	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
 	 */
 
-	load(callback) {
+	load() {
 
-		const assets = new Map();
+		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 
@@ -58,31 +58,34 @@ export class ShockWaveDemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		if(this.assets === null) {
+		return new Promise((resolve, reject) => {
 
-			loadingManager.onProgress = (item, loaded, total) => {
+			if(assets.size === 0) {
 
-				if(loaded === total) {
+				loadingManager.onError = reject;
+				loadingManager.onProgress = (item, loaded, total) => {
 
-					this.assets = assets;
+					if(loaded === total) {
 
-					callback();
+						resolve();
 
-				}
+					}
 
-			};
+				};
 
-			cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, function(textureCube) {
 
-				assets.set("sky", textureCube);
+					assets.set("sky", textureCube);
 
-			});
+				});
 
-		} else {
+			} else {
 
-			callback();
+				resolve();
 
-		}
+			}
+
+		});
 
 	}
 
@@ -90,21 +93,28 @@ export class ShockWaveDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
+		const renderer = composer.renderer;
 
 		// Camera.
 
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(5, 1, 5);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		this.controls = new OrbitControls(camera, renderer.domElement);
+
+		// Fog.
+
+		scene.fog = new FogExp2(0x000000, 0.0025);
+		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -134,8 +144,6 @@ export class ShockWaveDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
 		const pass = new ShockWavePass(camera, mesh.position, {
 			speed: 1.0,
 			maxRadius: 0.5,
@@ -143,6 +151,7 @@ export class ShockWaveDemo extends Demo {
 			amplitude: 0.05
 		});
 
+		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		this.shockWavePass = pass;
 		composer.addPass(pass);
@@ -152,10 +161,10 @@ export class ShockWaveDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const pass = this.shockWavePass;
 
@@ -167,37 +176,37 @@ export class ShockWaveDemo extends Demo {
 			"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value
 		};
 
-		gui.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function() {
+		menu.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function() {
 
 			pass.speed = params.speed;
 
 		});
 
-		gui.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function() {
+		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function() {
 
 			pass.shockWaveMaterial.uniforms.size.value = params.size;
 
 		});
 
-		gui.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function() {
+		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function() {
 
 			pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent;
 
 		});
 
-		gui.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function() {
+		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function() {
 
 			pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize;
 
 		});
 
-		gui.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function() {
+		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function() {
 
 			pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude;
 
 		});
 
-		gui.add(pass, "explode");
+		menu.add(pass, "explode");
 
 	}
 

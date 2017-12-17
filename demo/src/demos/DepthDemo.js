@@ -3,20 +3,11 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	MeshDepthMaterial,
-	OrbitControls
+	OrbitControls,
+	PerspectiveCamera
 } from "three";
 
-import { RenderPass } from "../../../src";
-import { Demo } from "./Demo.js";
-
-/**
- * PI times two.
- *
- * @type {Number}
- * @private
- */
-
-const TWO_PI = 2.0 * Math.PI;
+import { Demo } from "three-demo";
 
 /**
  * A depth texture demo setup.
@@ -26,22 +17,11 @@ export class DepthDemo extends Demo {
 
 	/**
 	 * Constructs a new depth demo.
-	 *
-	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor(composer) {
+	constructor() {
 
-		super(composer);
-
-		/**
-		 * A render pass.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.renderPass = null;
+		super("depth");
 
 		/**
 		 * An object.
@@ -58,26 +38,30 @@ export class DepthDemo extends Demo {
 	 * Creates the scene.
 	 */
 
-	initialise() {
+	initialize() {
 
 		const scene = this.scene;
-		const camera = this.camera;
 		const composer = this.composer;
-
-		// Controls.
-
-		this.controls = new OrbitControls(camera, composer.renderer.domElement);
-		this.controls.enablePan = false;
-		this.controls.minDistance = 3;
-		this.controls.maxDistance = 9;
+		const renderer = composer.renderer;
 
 		// Camera.
 
-		camera.near = 2;
-		camera.far = 10;
-		camera.updateProjectionMatrix();
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 2, 10);
 		camera.position.set(2, 1, 2);
-		camera.lookAt(this.controls.target);
+		camera.lookAt(scene.position);
+		this.camera = camera;
+
+		// Controls.
+
+		const controls = new OrbitControls(camera, renderer.domElement);
+		controls.enablePan = false;
+		controls.minDistance = 3;
+		controls.maxDistance = 9;
+		this.controls = controls;
+
+		// Fog.
+
+		renderer.setClearColor(0x000000);
 
 		// Objects.
 
@@ -91,15 +75,7 @@ export class DepthDemo extends Demo {
 
 		// Passes.
 
-		composer.addPass(new RenderPass(scene, camera));
-
-		const pass = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshDepthMaterial()
-		});
-
-		pass.renderToScreen = true;
-		this.renderPass = pass;
-		composer.addPass(pass);
+		this.renderPass.overrideMaterial = new MeshDepthMaterial();
 
 	}
 
@@ -112,24 +88,20 @@ export class DepthDemo extends Demo {
 	update(delta) {
 
 		const object = this.object;
+		const twoPI = 2.0 * Math.PI;
 
-		if(object !== null) {
+		object.rotation.x += 0.001;
+		object.rotation.y += 0.005;
 
-			object.rotation.x += 0.001;
-			object.rotation.y += 0.005;
+		if(object.rotation.x >= twoPI) {
 
-			// Prevent overflow.
-			if(object.rotation.x >= TWO_PI) {
+			object.rotation.x -= twoPI;
 
-				object.rotation.x -= TWO_PI;
+		}
 
-			}
+		if(object.rotation.y >= twoPI) {
 
-			if(object.rotation.y >= TWO_PI) {
-
-				object.rotation.y -= TWO_PI;
-
-			}
+			object.rotation.y -= twoPI;
 
 		}
 
@@ -138,14 +110,14 @@ export class DepthDemo extends Demo {
 	/**
 	 * Registers configuration options.
 	 *
-	 * @param {GUI} gui - A GUI.
+	 * @param {GUI} menu - A menu.
 	 */
 
-	configure(gui) {
+	registerOptions(menu) {
 
 		const pass = this.renderPass;
 
-		gui.add(pass.overrideMaterial, "dithering").onChange(function() {
+		menu.add(pass.overrideMaterial, "dithering").onChange(function() {
 
 			pass.overrideMaterial.needsUpdate = true;
 
