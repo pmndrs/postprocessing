@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.0.0 build Dec 14 2017
+ * postprocessing v4.1.0 build Dec 19 2017
  * https://github.com/vanruesc/postprocessing
  * Copyright 2017 Raoul van Rüschen, Zlib
  */
