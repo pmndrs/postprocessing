@@ -8,11 +8,11 @@ import {
 	MeshPhongMaterial,
 	MeshLambertMaterial,
 	Object3D,
-	OrbitControls,
 	PerspectiveCamera,
 	SphereBufferGeometry
 } from "three";
 
+import { DeltaControls } from "delta-controls";
 import { Demo } from "three-demo";
 import { BloomPass, KernelSize } from "../../../src";
 
@@ -121,7 +121,12 @@ export class BloomDemo extends Demo {
 
 		// Controls.
 
-		this.controls = new OrbitControls(camera, renderer.domElement);
+		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		controls.settings.pointer.lock = false;
+		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.zoom = 1.0;
+		controls.lookAt(scene.position);
+		this.controls = controls;
 
 		// Fog.
 

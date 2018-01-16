@@ -5,11 +5,11 @@ import {
 	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
-	OrbitControls,
 	PerspectiveCamera,
 	CylinderBufferGeometry
 } from "three";
 
+import { DeltaControls } from "delta-controls";
 import { Demo } from "three-demo";
 import { BokehPass } from "../../../src";
 
@@ -109,12 +109,14 @@ export class BokehDemo extends Demo {
 
 		// Controls.
 
-		const controls = new OrbitControls(camera, renderer.domElement);
-		controls.enablePan = false;
-		controls.minDistance = 12;
-		controls.maxDistance = 40;
-		controls.zoomSpeed = 0.2;
-		controls.rotateSpeed = 0.2;
+		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		controls.settings.pointer.lock = false;
+		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.rotation = 0.000425;
+		controls.settings.sensitivity.zoom = 0.15;
+		controls.settings.zoom.minDistance = 11.5;
+		controls.settings.zoom.maxDistance = 40.0;
+		controls.lookAt(scene.position);
 		this.controls = controls;
 
 		// Fog.

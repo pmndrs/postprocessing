@@ -7,14 +7,15 @@ import {
 	FogExp2,
 	MeshPhongMaterial,
 	ObjectLoader,
-	OrbitControls,
 	PerspectiveCamera,
 	Points,
 	PointsMaterial,
 	RepeatWrapping,
-	TextureLoader
+	TextureLoader,
+	Vector3
 } from "three";
 
+import { DeltaControls } from "delta-controls";
 import { Demo } from "three-demo";
 import { GodRaysPass, KernelSize } from "../../../src";
 
@@ -162,9 +163,14 @@ export class GodRaysDemo extends Demo {
 
 		// Controls.
 
-		this.controls = new OrbitControls(camera, renderer.domElement);
-		this.controls.target.set(0, 0.5, 0);
-		camera.lookAt(this.controls.target);
+		const target = new Vector3(0, 0.5, 0);
+		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		controls.settings.pointer.lock = false;
+		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.rotation = 0.00125;
+		controls.settings.sensitivity.zoom = 1.0;
+		controls.lookAt(target);
+		this.controls = controls;
 
 		// Fog.
 

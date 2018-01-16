@@ -7,7 +7,6 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
-	OrbitControls,
 	Object3D,
 	PerspectiveCamera,
 	RepeatWrapping,
@@ -15,6 +14,7 @@ import {
 	WebGLRenderer
 } from "three";
 
+import { DeltaControls } from "delta-controls";
 import { Demo } from "three-demo";
 import { SMAAPass, TexturePass } from "../../../src";
 
@@ -239,8 +239,18 @@ export class SMAADemo extends Demo {
 
 		// Controls.
 
-		this.controls = new OrbitControls(camera, renderer.domElement);
-		this.controls2 = new OrbitControls(camera, rendererNoAA.domElement);
+		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		controls.settings.pointer.lock = false;
+		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.zoom = 1.0;
+		controls.lookAt(scene.position);
+		controls.setEnabled(false);
+		this.controls = controls;
+
+		const controls2 = controls.clone();
+		controls2.setDom(rendererNoAA.domElement);
+		controls2.setEnabled(true);
+		this.controls2 = controls2;
 
 		// Sky.
 
@@ -422,15 +432,15 @@ export class SMAADemo extends Demo {
 
 				renderer1.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer1);
-				controls1.enabled = true;
-				controls2.enabled = false;
+				controls1.setEnabled(true).lookAt(controls2.getTarget());
+				controls2.setEnabled(false);
 
 			} else {
 
 				renderer2.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer2);
-				controls1.enabled = false;
-				controls2.enabled = true;
+				controls1.setEnabled(false);
+				controls2.setEnabled(true).lookAt(controls1.getTarget());
 
 			}
 

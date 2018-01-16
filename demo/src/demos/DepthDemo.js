@@ -3,10 +3,10 @@ import {
 	Mesh,
 	MeshBasicMaterial,
 	MeshDepthMaterial,
-	OrbitControls,
 	PerspectiveCamera
 } from "three";
 
+import { DeltaControls } from "delta-controls";
 import { Demo } from "three-demo";
 
 /**
@@ -53,10 +53,13 @@ export class DepthDemo extends Demo {
 
 		// Controls.
 
-		const controls = new OrbitControls(camera, renderer.domElement);
-		controls.enablePan = false;
-		controls.minDistance = 3;
-		controls.maxDistance = 9;
+		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+		controls.settings.pointer.lock = false;
+		controls.settings.translation.enabled = false;
+		controls.settings.sensitivity.zoom = 0.25;
+		controls.settings.zoom.minDistance = 3.0;
+		controls.settings.zoom.maxDistance = 9.0;
+		controls.lookAt(scene.position);
 		this.controls = controls;
 
 		// Fog.
