@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/smaa-color-edges/shader.frag";
-import vertex from "./glsl/smaa-color-edges/shader.vert";
+import fragment from "./glsl/color-edges/shader.frag";
+import vertex from "./glsl/color-edges/shader.vert";
 
 /**
  * A material that detects edges in a color texture.
