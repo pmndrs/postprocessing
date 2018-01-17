@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/bokeh2/shader.frag";
-import vertex from "./glsl/bokeh2/shader.vert";
+import fragment from "./glsl/realistic-bokeh/shader.frag";
+import vertex from "./glsl/realistic-bokeh/shader.vert";
 
 /**
  * Depth of Field shader v2.4.
