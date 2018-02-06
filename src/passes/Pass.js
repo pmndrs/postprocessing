@@ -116,7 +116,7 @@ export class Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
-	 * @param {Number} [delta] - The delta time.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
 
