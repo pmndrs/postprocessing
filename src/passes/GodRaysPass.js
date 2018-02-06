@@ -423,7 +423,7 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
-	 * Adjusts the format of the render targets.
+	 * Adjusts the format of the render targets and initialises internal passes.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.

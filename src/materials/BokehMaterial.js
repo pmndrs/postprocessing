@@ -23,7 +23,7 @@ export class BokehMaterial extends ShaderMaterial {
 	 * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
 	 */
 
-	constructor(camera = null, options = {}) {
+	constructor(camera, options = {}) {
 
 		const settings = Object.assign({
 			focus: 1.0,
@@ -67,10 +67,10 @@ export class BokehMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {PerspectiveCamera} camera - A camera.
+	 * @param {PerspectiveCamera} [camera=null] - A camera.
 	 */
 
-	adoptCameraSettings(camera) {
+	adoptCameraSettings(camera = null) {
 
 		if(camera !== null) {
 
