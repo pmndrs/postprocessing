@@ -80,6 +80,7 @@ export class RenderPass extends Pass {
 
 		const scene = this.scene;
 		const target = this.renderToScreen ? null : readBuffer;
+		const overrideMaterial = scene.overrideMaterial;
 
 		if(this.clear) {
 
@@ -94,7 +95,7 @@ export class RenderPass extends Pass {
 
 		scene.overrideMaterial = this.overrideMaterial;
 		renderer.render(scene, this.camera, target);
-		scene.overrideMaterial = null;
+		scene.overrideMaterial = overrideMaterial;
 
 	}
 
