@@ -37,6 +37,7 @@ export {
 	CombineMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,
+	DepthComparisonMaterial,
 	DotScreenMaterial,
 	FilmMaterial,
 	GlitchMaterial,
