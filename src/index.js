@@ -44,6 +44,7 @@ export {
 	GodRaysMaterial,
 	KernelSize,
 	LuminosityMaterial,
+	OutlineBlendMaterial,
 	PixelationMaterial,
 	RealisticBokehMaterial,
 	ShockWaveMaterial,

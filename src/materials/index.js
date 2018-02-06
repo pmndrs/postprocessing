@@ -16,6 +16,7 @@ export { FilmMaterial } from "./FilmMaterial.js";
 export { GlitchMaterial } from "./GlitchMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminosityMaterial } from "./LuminosityMaterial.js";
+export { OutlineBlendMaterial } from "./OutlineBlendMaterial.js";
 export { PixelationMaterial } from "./PixelationMaterial.js";
 export { RealisticBokehMaterial } from "./RealisticBokehMaterial.js";
 export { ShockWaveMaterial } from "./ShockWaveMaterial.js";
