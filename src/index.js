@@ -45,6 +45,7 @@ export {
 	KernelSize,
 	LuminosityMaterial,
 	OutlineBlendMaterial,
+	OutlineEdgesMaterial,
 	PixelationMaterial,
 	RealisticBokehMaterial,
 	ShockWaveMaterial,
