@@ -53,7 +53,7 @@ export class SMAADemo extends Demo {
 		/**
 		 * Secondary camera controls.
 		 *
-		 * @type {OrbitControls}
+		 * @type {Disposable}
 		 * @private
 		 */
 
