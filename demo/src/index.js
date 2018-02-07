@@ -10,6 +10,7 @@ import { DepthDemo } from "./demos/DepthDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
 import { FilmDemo } from "./demos/FilmDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
+import { OutlineDemo } from "./demos/OutlineDemo.js";
 import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
 import { RenderDemo } from "./demos/RenderDemo.js";
@@ -114,6 +115,7 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new FilmDemo());
 	manager.addDemo(new GlitchDemo());
 	manager.addDemo(new GodRaysDemo());
+	manager.addDemo(new OutlineDemo());
 	manager.addDemo(new PixelationDemo());
 	manager.addDemo(new ShockWaveDemo());
 	manager.addDemo(new SMAADemo());
