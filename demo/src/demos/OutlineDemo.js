@@ -324,7 +324,7 @@ export class OutlineDemo extends Demo {
 
 		const pass = new OutlinePass(scene, camera, {
 			edgeStrength: 2.5,
-			patternScale: 5.0
+			patternScale: 7.5
 		});
 
 		pass.selectObject(mesh);
@@ -386,7 +386,7 @@ export class OutlineDemo extends Demo {
 
 		});
 
-		menu.add(params, "edge strength").min(0.0).max(4.0).step(0.01).onChange(function() {
+		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(function() {
 
 			pass.outlineBlendMaterial.uniforms.edgeStrength.value = params["edge strength"];
 
