@@ -90,6 +90,7 @@ See the [Wiki](https://github.com/vanruesc/postprocessing/wiki/Custom-Passes) fo
  - [Film](http://vanruesc.github.io/postprocessing/public/demo/#film)
  - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
  - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)
+ - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)
  - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)
  - [Render](http://vanruesc.github.io/postprocessing/public/demo/#render)
  - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
