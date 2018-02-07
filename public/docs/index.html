@@ -36,11 +36,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html">OutlineBlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/PixelationMaterial.js~PixelationMaterial.html">PixelationMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html">RealisticBokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html">SMAABlendMaterial</a></span></span></li>
@@ -61,6 +64,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html">OutlinePass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html">RealisticBokehPass</a></span></span></li>
@@ -142,6 +146,7 @@ export class MyPass extends Pass {
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#film">Film</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#god-rays">God Rays</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#outline">Outline</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#render">Render</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#shock-wave">Shock Wave</a></li>
@@ -151,8 +156,8 @@ export class MyPass extends Pass {
 <h2 id="contributing">Contributing</h2><p>Please refer to the <a href="https://github.com/vanruesc/postprocessing/blob/master/CONTRIBUTING.md">contribution guidelines</a> for details.</p>
 <h2 id="license">License</h2><p>This library is licensed under the <a href="https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md">Zlib license</a>.</p>
 <p>The original code that this library is based on, was written by <a href="http://alteredqualia.com">alteredq</a>,
-<a href="https://github.com/MiiBond">miibond</a>, <a href="https://github.com/zz85">zz85</a>,
-<a href="http://airtight.cc">felixturner</a> and <a href="http://huwbowles.com">huwb</a>
+<a href="https://github.com/MiiBond">miibond</a>, <a href="https://github.com/zz85">zz85</a>, <a href="http://airtight.cc">felixturner</a>,
+<a href="http://eduperiment.com">spidersharma</a> and <a href="http://huwbowles.com">huwb</a>
 and is licensed under the <a href="https://github.com/mrdoob/three.js/blob/master/LICENSE">MIT license</a>.</p>
 <p>The film effect incorporates code written by Georg Steinrohder and Pat Shearon which was released under the
 <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a>.</p>

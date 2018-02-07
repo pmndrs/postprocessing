@@ -1,7 +1,7 @@
 {
   "coverage": "97.8%",
-  "expectCount": 365,
-  "actualCount": 357,
+  "expectCount": 410,
+  "actualCount": 401,
   "files": {
     "src/core/EffectComposer.js": {
       "expectCount": 17,
@@ -40,6 +40,11 @@
     "src/materials/CopyMaterial.js": {
       "expectCount": 2,
       "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/materials/DepthComparisonMaterial.js": {
+      "expectCount": 3,
+      "actualCount": 3,
       "undocumentLines": []
     },
     "src/materials/DotScreenMaterial.js": {
@@ -87,6 +92,18 @@
       "undocumentLines": [
         79
       ]
+    },
+    "src/materials/OutlineBlendMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        75
+      ]
+    },
+    "src/materials/OutlineEdgesMaterial.js": {
+      "expectCount": 3,
+      "actualCount": 3,
+      "undocumentLines": []
     },
     "src/materials/PixelationMaterial.js": {
       "expectCount": 5,
@@ -170,6 +187,11 @@
     "src/passes/MaskPass.js": {
       "expectCount": 6,
       "actualCount": 6,
+      "undocumentLines": []
+    },
+    "src/passes/OutlinePass.js": {
+      "expectCount": 35,
+      "actualCount": 35,
       "undocumentLines": []
     },
     "src/passes/Pass.js": {

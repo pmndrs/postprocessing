@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/passes/OutlinePass.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library that provides the means to implement 2D filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement 2D filter effects for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html">OutlineBlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/PixelationMaterial.js~PixelationMaterial.html">PixelationMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html">RealisticBokehMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html">SMAABlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ShockWaveMaterial.js~ShockWaveMaterial.html">ShockWaveMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ToneMappingMaterial.js~ToneMappingMaterial.html">ToneMappingMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials-images">materials/images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials-images-smaa-utils">materials/images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DotScreenPass.js~DotScreenPass.html">DotScreenPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/FilmPass.js~FilmPass.html">FilmPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html">OutlinePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html">RealisticBokehPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html">SMAAPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShockWavePass.js~ShockWavePass.html">ShockWavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/TexturePass.js~TexturePass.html">TexturePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html">ToneMappingPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/passes/OutlinePass.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+	Color,
+	LinearFilter,
+	MeshDepthMaterial,
+	RGBADepthPacking,
+	RGBFormat,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
+import {
+	CopyMaterial,
+	DepthComparisonMaterial,
+	OutlineBlendMaterial,
+	OutlineEdgesMaterial,
+	KernelSize
+} from &quot;../materials&quot;;
+
+import { BlurPass } from &quot;./BlurPass.js&quot;;
+import { Pass } from &quot;./Pass.js&quot;;
+import { RenderPass } from &quot;./RenderPass.js&quot;;
+import { ShaderPass } from &quot;./ShaderPass.js&quot;;
+
+/**
+ * An outline pass.
+ */
+
+export class OutlinePass extends Pass {
+
+	/**
+	 * Constructs a new outline pass.
+	 *
+	 * @param {Scene} scene - The main scene.
+	 * @param {PerspectiveCamera} camera - The main camera.
+	 * @param {Object} [options] - Additional parameters. See {@link BlurPass}, {@link OutlineBlendMaterial} and {@link OutlineEdgesMaterial} for details.
+	 * @param {Object} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
+	 */
+
+	constructor(scene, camera, options = {}) {
+
+		super();
+
+		/**
+		 * The name of this pass.
+		 */
+
+		this.name = &quot;OutlinePass&quot;;
+
+		/**
+		 * This pass renders to the write buffer when there are objects to outline.
+		 */
+
+		this.needsSwap = true;
+
+		/**
+		 * The main scene.
+		 *
+		 * @type {Scene}
+		 * @private
+		 */
+
+		this.mainScene = scene;
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {PerspectiveCamera}
+		 * @private
+		 */
+
+		this.mainCamera = camera;
+
+		/**
+		 * A render target for depth information.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetDepth = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter
+		});
+
+		this.renderTargetDepth.texture.name = &quot;GodRays.Depth&quot;;
+		this.renderTargetDepth.texture.generateMipmaps = false;
+
+		/**
+		 * A render target for the outline mask.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetMask = this.renderTargetDepth.clone();
+
+		this.renderTargetMask.texture.name = &quot;GodRays.Mask&quot;;
+
+		/**
+		 * A render target for the edge detection.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetEdges = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetEdges.texture.name = &quot;GodRays.Edges&quot;;
+		this.renderTargetEdges.texture.generateMipmaps = false;
+
+		/**
+		 * A render target for the blurred outline overlay.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetOutline = this.renderTargetEdges.clone();
+
+		this.renderTargetOutline.texture.name = &quot;GodRays.Outline&quot;;
+
+		/**
+		 * A depth pass.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new MeshDepthMaterial({ depthPacking: RGBADepthPacking }),
+			clearColor: new Color(0xffffff),
+			clearAlpha: 1.0
+		});
+
+		/**
+		 * A depth comparison mask pass.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new DepthComparisonMaterial(this.renderTargetDepth.texture, this.mainCamera),
+			clearColor: new Color(0xffffff),
+			clearAlpha: 1.0
+		});
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
+
+		if(options.kernelSize === undefined) {
+
+			this.blurPass.kernelSize = KernelSize.VERY_SMALL;
+
+		}
+
+		/**
+		 * A copy pass that renders the read buffer to screen if needed.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.copyPass = new ShaderPass(new CopyMaterial());
+		this.copyPass.renderToScreen = true;
+
+		/**
+		 * An outline edge detection material.
+		 *
+		 * @type {OutlineEdgesMaterial}
+		 * @private
+		 */
+
+		this.outlineEdgesMaterial = new OutlineEdgesMaterial(options);
+		this.outlineEdgesMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
+
+		/**
+		 * An outline blend material.
+		 *
+		 * @type {OutlineBlendMaterial}
+		 * @private
+		 */
+
+		this.outlineBlendMaterial = new OutlineBlendMaterial(options);
+		this.outlineBlendMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
+		this.outlineBlendMaterial.uniforms.tEdges.value = this.renderTargetOutline.texture;
+
+		/**
+		 * A list of objects to outline.
+		 *
+		 * @type {Object3D[]}
+		 * @private
+		 */
+
+		this.selection = [];
+
+		/**
+		 * The current animation time.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.time = 0.0;
+
+		/**
+		 * The pulse speed. A value of zero disables the pulse effect.
+		 *
+		 * @type {Number}
+		 */
+
+		this.pulseSpeed = (options.pulseSpeed !== undefined) ? options.pulseSpeed : 0.0;
+
+		/**
+		 * A dedicated render layer for selected objects.
+		 *
+		 * This layer is set to 10 by default. If this collides with your own custom
+		 * layers, please change it to a free layer before rendering!
+		 *
+		 * @type {Number}
+		 */
+
+		this.selectionLayer = 10;
+
+		/**
+		 * The color of visible edges.
+		 *
+		 * @type {Color}
+		 */
+
+		this.visibleEdgeColor = new Color(1.0, 1.0, 1.0);
+
+		/**
+		 * The color of hidden edges.
+		 *
+		 * @type {Color}
+		 */
+
+		this.hiddenEdgeColor = new Color(0.1, 0.04, 0.02);
+
+	}
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get resolutionScale() {
+
+		return this.blurPass.resolutionScale;
+
+	}
+
+	/**
+	 * You need to call {@link EffectComposer#setSize} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set resolutionScale(value = 0.5) {
+
+		this.blurPass.resolutionScale = value;
+
+	}
+
+	/**
+	 * The blur kernel size.
+	 *
+	 * @type {KernelSize}
+	 */
+
+	get kernelSize() {
+
+		return this.blurPass.kernelSize;
+
+	}
+
+	/**
+	 * @type {KernelSize}
+	 */
+
+	set kernelSize(value = KernelSize.VERY_SMALL) {
+
+		this.blurPass.kernelSize = value;
+
+	}
+
+	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.blurPass.dithering;
+
+	}
+
+	/**
+	 * If enabled, the result will be dithered to remove banding artifacts.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		this.blurPass.dithering = value;
+
+	}
+
+	/**
+	 * Sets a pattern texture to use as an overlay for selected objects.
+	 *
+	 * @param {Texture} [texture=null] - A pattern texture. Set to null to disable the pattern.
+	 */
+
+	setPatternTexture(texture = null) {
+
+		this.outlineBlendMaterial.setPatternTexture(texture);
+
+	}
+
+	/**
+	 * Selects an object.
+	 *
+	 * @param {Object3D} object - The object that should be outlined.
+	 */
+
+	selectObject(object) {
+
+		object.layers.enable(this.selectionLayer);
+		this.selection.push(object);
+		this.needsSwap = true;
+
+	}
+
+	/**
+	 * Deselects an object.
+	 *
+	 * @param {Object3D} object - The object that should no longer be outlined.
+	 */
+
+	deselectObject(object) {
+
+		const selection = this.selection;
+		const index = selection.indexOf(object);
+
+		if(index &gt;= 0) {
+
+			selection[index].layers.disable(this.selectionLayer);
+			selection.splice(index, 1);
+
+			if(selection.length === 0) {
+
+				// Nothing is being rendered to the buffers for now.
+				this.needsSwap = false;
+				this.time = 0.0;
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Sets the visibility of all selected objects.
+	 *
+	 * @private
+	 * @param {Boolean} visible - Whether the selected objects should be visible.
+	 */
+
+	setSelectionVisible(visible) {
+
+		const selection = this.selection;
+
+		let i, l;
+
+		for(i = 0, l = selection.length; i &lt; l; ++i) {
+
+			selection[i].visible = visible;
+
+		}
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {Number} delta - The time between the last frame and the current one in seconds.
+	 */
+
+	render(renderer, readBuffer, writeBuffer, delta) {
+
+		const mainScene = this.mainScene;
+		const mainCamera = this.mainCamera;
+
+		const uniforms = this.outlineEdgesMaterial.uniforms;
+		const visibleEdgeColor = uniforms.visibleEdgeColor.value;
+		const hiddenEdgeColor = uniforms.hiddenEdgeColor.value;
+
+		let background, mask, scalar;
+
+		if(this.selection.length &gt; 0) {
+
+			background = mainScene.background;
+			mask = mainCamera.layers.mask;
+			mainScene.background = null;
+
+			visibleEdgeColor.copy(this.visibleEdgeColor);
+			hiddenEdgeColor.copy(this.hiddenEdgeColor);
+
+			if(this.pulseSpeed &gt; 0.0) {
+
+				scalar = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
+				this.time += delta;
+
+				visibleEdgeColor.multiplyScalar(scalar);
+				hiddenEdgeColor.multiplyScalar(scalar);
+
+			}
+
+			// Render a custom depth texture and ignore selected objects.
+			this.setSelectionVisible(false);
+			this.renderPassDepth.render(renderer, this.renderTargetDepth);
+			this.setSelectionVisible(true);
+
+			// Create a mask for the selected objects using the depth information.
+			mainCamera.layers.mask = 1 &lt;&lt; this.selectionLayer;
+			this.renderPassMask.render(renderer, this.renderTargetMask);
+
+			// Restore the camera layer mask and the scene background.
+			mainCamera.layers.mask = mask;
+			mainScene.background = background;
+
+			// Detect the outline.
+			this.quad.material = this.outlineEdgesMaterial;
+			renderer.render(this.scene, this.camera, this.renderTargetEdges);
+
+			// Blur the outline.
+			this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+
+			// Draw the blurred outline onto the scene colours.
+			this.quad.material = this.outlineBlendMaterial;
+			this.outlineBlendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+
+		} else if(this.renderToScreen) {
+
+			// Draw the read buffer to screen.
+			this.copyPass.render(renderer, readBuffer);
+
+		}
+
+	}
+
+	/**
+	 * Adjusts the format of the render targets and initialises internal passes.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		this.renderPassDepth.initialize(renderer, alpha);
+		this.renderPassMask.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha);
+
+		if(!alpha) {
+
+			this.renderTargetMask.texture.format = RGBFormat;
+			this.renderTargetEdges.texture.format = RGBFormat;
+			this.renderTargetOutline.texture.format = RGBFormat;
+
+		}
+
+	}
+
+	/**
+	 * Updates this pass with the renderer&apos;s size.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.renderTargetDepth.setSize(width, height);
+		this.renderTargetMask.setSize(width, height);
+
+		this.renderPassDepth.setSize(width, height);
+		this.renderPassMask.setSize(width, height);
+		this.blurPass.setSize(width, height);
+
+		width = this.blurPass.width;
+		height = this.blurPass.height;
+
+		this.renderTargetEdges.setSize(width, height);
+		this.renderTargetOutline.setSize(width, height);
+
+		this.outlineBlendMaterial.uniforms.aspect.value = width / height;
+		this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.0.4)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

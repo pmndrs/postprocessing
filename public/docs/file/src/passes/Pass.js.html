@@ -36,11 +36,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html">OutlineBlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/PixelationMaterial.js~PixelationMaterial.html">PixelationMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html">RealisticBokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html">SMAABlendMaterial</a></span></span></li>
@@ -61,6 +64,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html">OutlinePass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html">RealisticBokehPass</a></span></span></li>
@@ -195,7 +199,7 @@ export class Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
-	 * @param {Number} [delta] - The delta time.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
 	 */
 

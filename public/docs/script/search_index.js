@@ -66,6 +66,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/materials/depthcomparisonmaterial.js~depthcomparisonmaterial",
+    "class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html",
+    "<span>DepthComparisonMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DepthComparisonMaterial.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/materials/dotscreenmaterial.js~dotscreenmaterial",
     "class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html",
     "<span>DotScreenMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DotScreenMaterial.js</span>",
@@ -141,6 +147,24 @@ window.esdocSearchIndex = [
     "postprocessing/src/passes/maskpass.js~maskpass",
     "class/src/passes/MaskPass.js~MaskPass.html",
     "<span>MaskPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/MaskPass.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/materials/outlineblendmaterial.js~outlineblendmaterial",
+    "class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html",
+    "<span>OutlineBlendMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/OutlineBlendMaterial.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/materials/outlineedgesmaterial.js~outlineedgesmaterial",
+    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html",
+    "<span>OutlineEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/OutlineEdgesMaterial.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/passes/outlinepass.js~outlinepass",
+    "class/src/passes/OutlinePass.js~OutlinePass.html",
+    "<span>OutlinePass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/OutlinePass.js</span>",
     "class"
   ],
   [
@@ -774,6 +798,24 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/depthcomparisonmaterial.js",
+    "file/src/materials/DepthComparisonMaterial.js.html",
+    "src/materials/DepthComparisonMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/depthcomparisonmaterial.js~depthcomparisonmaterial#adoptcamerasettings",
+    "class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-method-adoptCameraSettings",
+    "src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial#adoptCameraSettings",
+    "method"
+  ],
+  [
+    "src/materials/depthcomparisonmaterial.js~depthcomparisonmaterial#constructor",
+    "class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-constructor-constructor",
+    "src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial#constructor",
+    "method"
+  ],
+  [
     "src/materials/dotscreenmaterial.js",
     "file/src/materials/DotScreenMaterial.js.html",
     "src/materials/DotScreenMaterial.js",
@@ -912,6 +954,48 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/outlineblendmaterial.js",
+    "file/src/materials/OutlineBlendMaterial.js.html",
+    "src/materials/OutlineBlendMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/outlineblendmaterial.js~outlineblendmaterial#constructor",
+    "class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html#instance-constructor-constructor",
+    "src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/outlineblendmaterial.js~outlineblendmaterial#needsupdate",
+    "class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html#instance-member-needsUpdate",
+    "src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/outlineblendmaterial.js~outlineblendmaterial#setpatterntexture",
+    "class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html#instance-method-setPatternTexture",
+    "src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial#setPatternTexture",
+    "method"
+  ],
+  [
+    "src/materials/outlineedgesmaterial.js",
+    "file/src/materials/OutlineEdgesMaterial.js.html",
+    "src/materials/OutlineEdgesMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/outlineedgesmaterial.js~outlineedgesmaterial#constructor",
+    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html#instance-constructor-constructor",
+    "src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/outlineedgesmaterial.js~outlineedgesmaterial#settexelsize",
+    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html#instance-method-setTexelSize",
+    "src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial#setTexelSize",
+    "method"
+  ],
+  [
     "src/materials/pixelationmaterial.js",
     "file/src/materials/PixelationMaterial.js.html",
     "src/materials/PixelationMaterial.js",
@@ -925,13 +1009,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
@@ -1183,25 +1267,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#distinction",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-distinction",
-    "src/passes/BloomPass.js~BloomPass#distinction",
-    "member"
-  ],
-  [
-    "src/passes/bloompass.js~bloompass#distinction",
     "class/src/passes/BloomPass.js~BloomPass.html#instance-get-distinction",
     "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
   [
-    "src/passes/bloompass.js~bloompass#dithering",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-dithering",
-    "src/passes/BloomPass.js~BloomPass#dithering",
+    "src/passes/bloompass.js~bloompass#distinction",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-distinction",
+    "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#dithering",
     "class/src/passes/BloomPass.js~BloomPass.html#instance-get-dithering",
+    "src/passes/BloomPass.js~BloomPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#dithering",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-dithering",
     "src/passes/BloomPass.js~BloomPass#dithering",
     "member"
   ],
@@ -1267,13 +1351,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#resolutionscale",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-resolutionScale",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-resolutionScale",
     "src/passes/BloomPass.js~BloomPass#resolutionScale",
     "member"
   ],
@@ -1633,13 +1717,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
@@ -1681,13 +1765,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#dithering",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-dithering",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-dithering",
     "src/passes/GodRaysPass.js~GodRaysPass#dithering",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#dithering",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-dithering",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-dithering",
     "src/passes/GodRaysPass.js~GodRaysPass#dithering",
     "member"
   ],
@@ -1705,13 +1789,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#intensity",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-intensity",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-intensity",
     "src/passes/GodRaysPass.js~GodRaysPass#intensity",
     "member"
   ],
@@ -1870,6 +1954,216 @@ window.esdocSearchIndex = [
     "class/src/passes/MaskPass.js~MaskPass.html#instance-method-render",
     "src/passes/MaskPass.js~MaskPass#render",
     "method"
+  ],
+  [
+    "src/passes/outlinepass.js",
+    "file/src/passes/OutlinePass.js.html",
+    "src/passes/OutlinePass.js",
+    "file"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#blurpass",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-blurPass",
+    "src/passes/OutlinePass.js~OutlinePass#blurPass",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#constructor",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-constructor-constructor",
+    "src/passes/OutlinePass.js~OutlinePass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#copypass",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-copyPass",
+    "src/passes/OutlinePass.js~OutlinePass#copyPass",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#deselectobject",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-deselectObject",
+    "src/passes/OutlinePass.js~OutlinePass#deselectObject",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-dithering",
+    "src/passes/OutlinePass.js~OutlinePass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-dithering",
+    "src/passes/OutlinePass.js~OutlinePass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#hiddenedgecolor",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-hiddenEdgeColor",
+    "src/passes/OutlinePass.js~OutlinePass#hiddenEdgeColor",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#initialize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-initialize",
+    "src/passes/OutlinePass.js~OutlinePass#initialize",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#kernelsize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-kernelSize",
+    "src/passes/OutlinePass.js~OutlinePass#kernelSize",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#kernelsize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-kernelSize",
+    "src/passes/OutlinePass.js~OutlinePass#kernelSize",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#maincamera",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-mainCamera",
+    "src/passes/OutlinePass.js~OutlinePass#mainCamera",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#mainscene",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-mainScene",
+    "src/passes/OutlinePass.js~OutlinePass#mainScene",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#name",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-name",
+    "src/passes/OutlinePass.js~OutlinePass#name",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#needsswap",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-needsSwap",
+    "src/passes/OutlinePass.js~OutlinePass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#outlineblendmaterial",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-outlineBlendMaterial",
+    "src/passes/OutlinePass.js~OutlinePass#outlineBlendMaterial",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#outlineedgesmaterial",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-outlineEdgesMaterial",
+    "src/passes/OutlinePass.js~OutlinePass#outlineEdgesMaterial",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#pulsespeed",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-pulseSpeed",
+    "src/passes/OutlinePass.js~OutlinePass#pulseSpeed",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#render",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-render",
+    "src/passes/OutlinePass.js~OutlinePass#render",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#renderpassdepth",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderPassDepth",
+    "src/passes/OutlinePass.js~OutlinePass#renderPassDepth",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#renderpassmask",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderPassMask",
+    "src/passes/OutlinePass.js~OutlinePass#renderPassMask",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#rendertargetdepth",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetDepth",
+    "src/passes/OutlinePass.js~OutlinePass#renderTargetDepth",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#rendertargetedges",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetEdges",
+    "src/passes/OutlinePass.js~OutlinePass#renderTargetEdges",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#rendertargetmask",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetMask",
+    "src/passes/OutlinePass.js~OutlinePass#renderTargetMask",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#rendertargetoutline",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetOutline",
+    "src/passes/OutlinePass.js~OutlinePass#renderTargetOutline",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#resolutionscale",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-resolutionScale",
+    "src/passes/OutlinePass.js~OutlinePass#resolutionScale",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#resolutionscale",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-resolutionScale",
+    "src/passes/OutlinePass.js~OutlinePass#resolutionScale",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#selectobject",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-selectObject",
+    "src/passes/OutlinePass.js~OutlinePass#selectObject",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#selection",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-selection",
+    "src/passes/OutlinePass.js~OutlinePass#selection",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#selectionlayer",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-selectionLayer",
+    "src/passes/OutlinePass.js~OutlinePass#selectionLayer",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#setpatterntexture",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-setPatternTexture",
+    "src/passes/OutlinePass.js~OutlinePass#setPatternTexture",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#setselectionvisible",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-setSelectionVisible",
+    "src/passes/OutlinePass.js~OutlinePass#setSelectionVisible",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#setsize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-setSize",
+    "src/passes/OutlinePass.js~OutlinePass#setSize",
+    "method"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#time",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-time",
+    "src/passes/OutlinePass.js~OutlinePass#time",
+    "member"
+  ],
+  [
+    "src/passes/outlinepass.js~outlinepass#visibleedgecolor",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-visibleEdgeColor",
+    "src/passes/OutlinePass.js~OutlinePass#visibleEdgeColor",
+    "member"
   ],
   [
     "src/passes/pass.js",
@@ -2419,13 +2713,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texturepass.js~texturepass#texture",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-texture",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-texture",
     "src/passes/TexturePass.js~TexturePass#texture",
     "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#texture",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-texture",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-texture",
     "src/passes/TexturePass.js~TexturePass#texture",
     "member"
   ],
@@ -2437,13 +2731,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],

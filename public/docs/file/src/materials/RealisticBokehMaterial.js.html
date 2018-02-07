@@ -36,11 +36,14 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CombineMaterial.js~CombineMaterial.html">CombineMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DotScreenMaterial.js~DotScreenMaterial.html">DotScreenMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/FilmMaterial.js~FilmMaterial.html">FilmMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GlitchMaterial.js~GlitchMaterial.html">GlitchMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminosityMaterial.js~LuminosityMaterial.html">LuminosityMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineBlendMaterial.js~OutlineBlendMaterial.html">OutlineBlendMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/PixelationMaterial.js~PixelationMaterial.html">PixelationMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/RealisticBokehMaterial.js~RealisticBokehMaterial.html">RealisticBokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAABlendMaterial.js~SMAABlendMaterial.html">SMAABlendMaterial</a></span></span></li>
@@ -61,6 +64,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html">OutlinePass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html">RealisticBokehPass</a></span></span></li>
@@ -79,8 +83,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/RealisticBokehMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/bokeh2/shader.frag&quot;;
-import vertex from &quot;./glsl/bokeh2/shader.vert&quot;;
+import fragment from &quot;./glsl/realistic-bokeh/shader.frag&quot;;
+import vertex from &quot;./glsl/realistic-bokeh/shader.vert&quot;;
 
 /**
  * Depth of Field shader v2.4.
