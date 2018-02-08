@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.2.0 build Feb 07 2018
+ * postprocessing v4.2.1 build Feb 08 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -391,57 +391,65 @@
   			return CopyMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$6 = "#include <packing>\r\n\r\nuniform sampler2D tDepth;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying vec4 vPosition;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));\r\n\tfloat viewZ = -perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\tfloat depthTest = (-vPosition.z > viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor = vec4(0.0, depthTest, 1.0, 1.0);\r\n\r\n}\r\n";
+  var fragment$6 = "#include <packing>\r\n\r\nuniform sampler2D tDepth;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (vViewZ <= viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
 
-  var vertex$6 = "varying vec4 vPosition;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\tvPosition = modelViewMatrix * vec4(position, 1.0);\r\n\tvProjTexCoord = projectionMatrix * vPosition;\r\n\r\n\tgl_Position = vProjTexCoord;\r\n\r\n}\r\n";
+  var vertex$6 = "varying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\tvec4 mvPosition = modelViewMatrix * vec4(position, 1.0);\r\n\tvProjTexCoord = projectionMatrix * mvPosition;\r\n\tvViewZ = mvPosition.z;\r\n\r\n\tgl_Position = vProjTexCoord;\r\n\r\n}\r\n";
 
   var DepthComparisonMaterial = function (_ShaderMaterial) {
-  	inherits(DepthComparisonMaterial, _ShaderMaterial);
+  			inherits(DepthComparisonMaterial, _ShaderMaterial);
 
-  	function DepthComparisonMaterial() {
-  		var depthTexture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  		var camera = arguments[1];
-  		classCallCheck(this, DepthComparisonMaterial);
+  			function DepthComparisonMaterial() {
+  						var depthTexture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  						var camera = arguments[1];
+  						classCallCheck(this, DepthComparisonMaterial);
 
-  		var _this = possibleConstructorReturn(this, (DepthComparisonMaterial.__proto__ || Object.getPrototypeOf(DepthComparisonMaterial)).call(this, {
+  						var _this = possibleConstructorReturn(this, (DepthComparisonMaterial.__proto__ || Object.getPrototypeOf(DepthComparisonMaterial)).call(this, {
 
-  			type: "DepthComparisonMaterial",
+  									type: "DepthComparisonMaterial",
 
-  			uniforms: {
+  									uniforms: {
 
-  				tDepth: new three.Uniform(depthTexture),
-  				cameraNear: new three.Uniform(0.1),
-  				cameraFar: new three.Uniform(2000)
+  												tDepth: new three.Uniform(depthTexture),
+  												cameraNear: new three.Uniform(0.1),
+  												cameraFar: new three.Uniform(2000)
 
-  			},
+  									},
 
-  			fragmentShader: fragment$6,
-  			vertexShader: vertex$6,
+  									fragmentShader: fragment$6,
+  									vertexShader: vertex$6,
 
-  			depthWrite: false,
-  			depthTest: false
+  									depthWrite: false,
+  									depthTest: false
 
-  		}));
+  						}));
 
-  		_this.adoptCameraSettings(camera);
+  						_this.adoptCameraSettings(camera);
 
-  		return _this;
-  	}
-
-  	createClass(DepthComparisonMaterial, [{
-  		key: "adoptCameraSettings",
-  		value: function adoptCameraSettings() {
-  			var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-
-  			if (camera !== null) {
-
-  				this.uniforms.cameraNear.value = camera.near;
-  				this.uniforms.cameraFar.value = camera.far;
+  						return _this;
   			}
-  		}
-  	}]);
-  	return DepthComparisonMaterial;
+
+  			createClass(DepthComparisonMaterial, [{
+  						key: "adoptCameraSettings",
+  						value: function adoptCameraSettings() {
+  									var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+
+  									if (camera !== null) {
+
+  												this.uniforms.cameraNear.value = camera.near;
+  												this.uniforms.cameraFar.value = camera.far;
+
+  												if (camera instanceof three.PerspectiveCamera) {
+
+  															this.defines.PERSPECTIVE_CAMERA = "1";
+  												} else {
+
+  															delete this.defines.PERSPECTIVE_CAMERA;
+  												}
+  									}
+  						}
+  			}]);
+  			return DepthComparisonMaterial;
   }(three.ShaderMaterial);
 
   var fragment$7 = "uniform sampler2D tDiffuse;\r\n\r\nuniform float angle;\r\nuniform float scale;\r\nuniform float intensity;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nfloat pattern() {\r\n\r\n\tfloat s = sin(angle);\r\n\tfloat c = cos(angle);\r\n\r\n\tvec2 point = vec2(c * vUvPattern.x - s * vUvPattern.y, s * vUvPattern.x + c * vUvPattern.y) * scale;\r\n\r\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef AVERAGE\r\n\r\n\t\tcolor = vec3((color.r + color.g + color.b) / 3.0);\r\n\r\n\t#endif\r\n\r\n\tcolor = vec3(color * 10.0 - 5.0 + pattern());\r\n\tcolor = texel.rgb + (color - texel.rgb) * intensity;\r\n\r\n\tgl_FragColor = vec4(color, texel.a);\r\n\r\n}\r\n";
@@ -854,73 +862,113 @@
   		return LuminosityMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tMask;\r\nuniform sampler2D tEdges;\r\n\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D tPattern;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 color = texture2D(tDiffuse, vUv);\r\n\tvec4 edgeColor = texture2D(tEdges, vUv);\r\n\tvec4 maskColor = texture2D(tMask, vUv);\r\n\r\n\tfloat visibilityFactor = ((1.0 - maskColor.g) > 0.0) ? 1.0 : 0.5;\r\n\r\n\tcolor += edgeStrength * maskColor.r * edgeColor;\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec4 patternColor = texture2D(tPattern, vPatternCoord);\r\n\t\tcolor += visibilityFactor * (1.0 - maskColor.r) * (1.0 - patternColor.r);\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tMask;\r\nuniform sampler2D tOutline;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D tPattern;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 color = texture2D(tDiffuse, vUv);\r\n\tvec2 outline = texture2D(tOutline, vUv).rg;\r\n\tvec2 mask = texture2D(tMask, vUv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\toutline.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\toutline *= (edgeStrength * mask.x * pulse);\r\n\tvec3 outlineColor = outline.x * visibleEdgeColor + outline.y * hiddenEdgeColor;\r\n\r\n\t#ifdef ALPHA_BLENDING\r\n\r\n\t\tcolor.rgb = mix(color.rgb, outlineColor, max(outline.x, outline.y));\r\n\r\n\t#else\r\n\r\n\t\tcolor.rgb += outlineColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec3 patternColor = texture2D(tPattern, vPatternCoord).rgb;\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tfloat visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\r\n\t\tcolor.rgb += visibilityFactor * (1.0 - mask.x) * (1.0 - patternColor);\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
 
   var vertex$12 = "#ifdef USE_PATTERN\r\n\r\n\tuniform float aspect;\r\n\tuniform float patternScale;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\t\tvPatternCoord = uv * aspectCorrection * patternScale;\r\n\r\n\t#endif\r\n\r\n\tvUv = uv;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var OutlineBlendMaterial = function (_ShaderMaterial) {
-  	inherits(OutlineBlendMaterial, _ShaderMaterial);
+  		inherits(OutlineBlendMaterial, _ShaderMaterial);
 
-  	function OutlineBlendMaterial() {
-  		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  		classCallCheck(this, OutlineBlendMaterial);
-
-
-  		var settings = Object.assign({
-  			edgeStrength: 1.0,
-  			patternScale: 1.0
-  		}, options);
-
-  		return possibleConstructorReturn(this, (OutlineBlendMaterial.__proto__ || Object.getPrototypeOf(OutlineBlendMaterial)).call(this, {
-
-  			type: "OutlineBlendMaterial",
-
-  			uniforms: {
-
-  				time: new three.Uniform(0.0),
-  				aspect: new three.Uniform(1.0),
-
-  				tDiffuse: new three.Uniform(null),
-  				tMask: new three.Uniform(null),
-  				tEdges: new three.Uniform(null),
-  				tPattern: new three.Uniform(null),
-
-  				edgeStrength: new three.Uniform(settings.edgeStrength),
-  				patternScale: new three.Uniform(settings.patternScale)
-
-  			},
-
-  			fragmentShader: fragment$12,
-  			vertexShader: vertex$12,
-
-  			depthWrite: false,
-  			depthTest: false
-
-  		}));
-  	}
-
-  	createClass(OutlineBlendMaterial, [{
-  		key: "setPatternTexture",
-  		value: function setPatternTexture() {
-  			var texture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  		function OutlineBlendMaterial() {
+  				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  				classCallCheck(this, OutlineBlendMaterial);
 
 
-  			if (texture !== null) {
+  				var settings = Object.assign({
+  						edgeStrength: 1.0,
+  						patternScale: 1.0,
+  						visibleEdgeColor: 0xffffff,
+  						hiddenEdgeColor: 0x22090A,
+  						alphaBlending: false,
+  						xRay: true
+  				}, options);
 
-  				this.defines.USE_PATTERN = "1";
-  			} else {
+  				var _this = possibleConstructorReturn(this, (OutlineBlendMaterial.__proto__ || Object.getPrototypeOf(OutlineBlendMaterial)).call(this, {
 
-  				delete this.defines.USE_PATTERN;
-  			}
+  						type: "OutlineBlendMaterial",
 
-  			this.uniforms.tPattern.value = texture;
-  			this.needsUpdate = true;
+  						uniforms: {
+
+  								pulse: new three.Uniform(1.0),
+  								aspect: new three.Uniform(1.0),
+
+  								tDiffuse: new three.Uniform(null),
+  								tMask: new three.Uniform(null),
+  								tOutline: new three.Uniform(null),
+  								tPattern: new three.Uniform(null),
+
+  								edgeStrength: new three.Uniform(settings.edgeStrength),
+  								patternScale: new three.Uniform(settings.patternScale),
+
+  								visibleEdgeColor: new three.Uniform(new three.Color(settings.visibleEdgeColor)),
+  								hiddenEdgeColor: new three.Uniform(new three.Color(settings.hiddenEdgeColor))
+
+  						},
+
+  						fragmentShader: fragment$12,
+  						vertexShader: vertex$12,
+
+  						depthWrite: false,
+  						depthTest: false
+
+  				}));
+
+  				_this.setAlphaBlendingEnabled(settings.alphaBlending);
+  				_this.setXRayEnabled(settings.xRay);
+
+  				return _this;
   		}
-  	}]);
-  	return OutlineBlendMaterial;
+
+  		createClass(OutlineBlendMaterial, [{
+  				key: "setAlphaBlendingEnabled",
+  				value: function setAlphaBlendingEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.ALPHA_BLENDING = "1";
+  						} else {
+
+  								delete this.defines.ALPHA_BLENDING;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setXRayEnabled",
+  				value: function setXRayEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.X_RAY = "1";
+  						} else {
+
+  								delete this.defines.X_RAY;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setPatternTexture",
+  				value: function setPatternTexture() {
+  						var texture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+
+  						if (texture !== null) {
+
+  								this.defines.USE_PATTERN = "1";
+  						} else {
+
+  								delete this.defines.USE_PATTERN;
+  						}
+
+  						this.uniforms.tPattern.value = texture;
+  						this.needsUpdate = true;
+  				}
+  		}]);
+  		return OutlineBlendMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$13 = "uniform sampler2D tMask;\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec4 c0 = texture2D(tMask, vUv0);\r\n\tvec4 c1 = texture2D(tMask, vUv1);\r\n\tvec4 c2 = texture2D(tMask, vUv2);\r\n\tvec4 c3 = texture2D(tMask, vUv3);\r\n\r\n\tfloat d0 = (c0.r - c1.r) * 0.5;\r\n\tfloat d1 = (c2.r - c3.r) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.g, c1.g);\r\n\tfloat a1 = min(c2.g, c3.g);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tvec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? visibleEdgeColor : hiddenEdgeColor;\r\n\r\n\tgl_FragColor = vec4(edgeColor * d, d);\r\n\r\n}\r\n";
+  var fragment$13 = "uniform sampler2D tMask;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 c0 = texture2D(tMask, vUv0).rg;\r\n\tvec2 c1 = texture2D(tMask, vUv1).rg;\r\n\tvec2 c2 = texture2D(tMask, vUv2).rg;\r\n\tvec2 c3 = texture2D(tMask, vUv3).rg;\r\n\r\n\tfloat d0 = (c0.x - c1.x) * 0.5;\r\n\tfloat d1 = (c2.x - c3.x) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.y, c1.y);\r\n\tfloat a1 = min(c2.y, c3.y);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tvec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);\r\n\r\n\tgl_FragColor = vec4(edgeColor * d, d);\r\n\r\n}\r\n";
 
   var vertex$13 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvUv0 = vec2(uv.x + texelSize.x, uv.y);\r\n\tvUv1 = vec2(uv.x - texelSize.x, uv.y);\r\n\tvUv2 = vec2(uv.x, uv.y + texelSize.y);\r\n\tvUv3 = vec2(uv.x, uv.y - texelSize.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -938,9 +986,7 @@
   			uniforms: {
 
   				tMask: new three.Uniform(null),
-  				texelSize: new three.Uniform(new three.Vector2()),
-  				visibleEdgeColor: new three.Uniform(new three.Color()),
-  				hiddenEdgeColor: new three.Uniform(new three.Color())
+  				texelSize: new three.Uniform(new three.Vector2())
 
   			},
 
@@ -2544,7 +2590,7 @@
 
   				_this.outlineBlendMaterial = new OutlineBlendMaterial(options);
   				_this.outlineBlendMaterial.uniforms.tMask.value = _this.renderTargetMask.texture;
-  				_this.outlineBlendMaterial.uniforms.tEdges.value = _this.renderTargetOutline.texture;
+  				_this.outlineBlendMaterial.uniforms.tOutline.value = _this.renderTargetOutline.texture;
 
   				_this.selection = [];
 
@@ -2553,10 +2599,6 @@
   				_this.pulseSpeed = options.pulseSpeed !== undefined ? options.pulseSpeed : 0.0;
 
   				_this.selectionLayer = 10;
-
-  				_this.visibleEdgeColor = new three.Color(1.0, 1.0, 1.0);
-
-  				_this.hiddenEdgeColor = new three.Color(0.1, 0.04, 0.02);
 
   				return _this;
   		}
@@ -2570,12 +2612,56 @@
   						this.outlineBlendMaterial.setPatternTexture(texture);
   				}
   		}, {
+  				key: "setSelection",
+  				value: function setSelection(objects) {
+
+  						var selection = objects.slice(0);
+  						var selectionLayer = this.selectionLayer;
+
+  						var i = void 0,
+  						    l = void 0;
+
+  						for (i = 0, l = selection.length; i < l; ++i) {
+
+  								selection[i].layers.enable(selectionLayer);
+  						}
+
+  						this.clearSelection();
+  						this.selection = selection;
+  						this.needsSwap = selection.length > 0;
+
+  						return this;
+  				}
+  		}, {
+  				key: "clearSelection",
+  				value: function clearSelection() {
+
+  						var selection = this.selection;
+  						var selectionLayer = this.selectionLayer;
+
+  						var i = void 0,
+  						    l = void 0;
+
+  						for (i = 0, l = selection.length; i < l; ++i) {
+
+  								selection[i].layers.disable(selectionLayer);
+  						}
+
+  						this.selection = [];
+  						this.needsSwap = false;
+  						this.time = 0.0;
+
+  						return this;
+  				}
+  		}, {
   				key: "selectObject",
   				value: function selectObject(object) {
 
   						object.layers.enable(this.selectionLayer);
   						this.selection.push(object);
   						this.needsSwap = true;
+
+  						return this;
   				}
   		}, {
   				key: "deselectObject",
@@ -2590,10 +2676,13 @@
   								selection.splice(index, 1);
 
   								if (selection.length === 0) {
+
   										this.needsSwap = false;
   										this.time = 0.0;
   								}
   						}
+
+  						return this;
   				}
   		}, {
   				key: "setSelectionVisible",
@@ -2615,14 +2704,10 @@
 
   						var mainScene = this.mainScene;
   						var mainCamera = this.mainCamera;
-
-  						var uniforms = this.outlineEdgesMaterial.uniforms;
-  						var visibleEdgeColor = uniforms.visibleEdgeColor.value;
-  						var hiddenEdgeColor = uniforms.hiddenEdgeColor.value;
+  						var pulse = this.outlineBlendMaterial.uniforms.pulse;
 
   						var background = void 0,
-  						    mask = void 0,
-  						    scalar = void 0;
+  						    mask = void 0;
 
   						if (this.selection.length > 0) {
 
@@ -2630,16 +2715,12 @@
   								mask = mainCamera.layers.mask;
   								mainScene.background = null;
 
-  								visibleEdgeColor.copy(this.visibleEdgeColor);
-  								hiddenEdgeColor.copy(this.hiddenEdgeColor);
+  								pulse.value = 1.0;
 
   								if (this.pulseSpeed > 0.0) {
 
-  										scalar = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
+  										pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
   										this.time += delta;
-
-  										visibleEdgeColor.multiplyScalar(scalar);
-  										hiddenEdgeColor.multiplyScalar(scalar);
   								}
 
   								this.setSelectionVisible(false);
@@ -2655,7 +2736,9 @@
   								this.quad.material = this.outlineEdgesMaterial;
   								renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
-  								this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+  								if (this.blurPass.enabled) {
+  										this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+  								}
 
   								this.quad.material = this.outlineBlendMaterial;
   								this.outlineBlendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
@@ -2722,6 +2805,18 @@
 
 
   						this.blurPass.kernelSize = value;
+  				}
+  		}, {
+  				key: "blur",
+  				get: function get$$1() {
+
+  						return this.blurPass.enabled;
+  				},
+  				set: function set$$1(value) {
+
+  						this.blurPass.enabled = value;
+
+  						this.outlineBlendMaterial.uniforms.tOutline.value = value ? this.renderTargetOutline.texture : this.renderTargetEdges.texture;
   				}
   		}, {
   				key: "dithering",
