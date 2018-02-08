@@ -1,4 +1,4 @@
-import { Color, ShaderMaterial, Uniform, Vector2 } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/outline-edges/shader.frag";
 import vertex from "./glsl/outline-edges/shader.vert";
@@ -24,9 +24,7 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 			uniforms: {
 
 				tMask: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
-				visibleEdgeColor: new Uniform(new Color()),
-				hiddenEdgeColor: new Uniform(new Color())
+				texelSize: new Uniform(new Vector2())
 
 			},
 

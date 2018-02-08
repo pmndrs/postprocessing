@@ -1,6 +1,4 @@
 uniform sampler2D tMask;
-uniform vec3 visibleEdgeColor;
-uniform vec3 hiddenEdgeColor;
 
 varying vec2 vUv0;
 varying vec2 vUv1;
@@ -9,20 +7,20 @@ varying vec2 vUv3;
 
 void main() {
 
-	vec4 c0 = texture2D(tMask, vUv0);
-	vec4 c1 = texture2D(tMask, vUv1);
-	vec4 c2 = texture2D(tMask, vUv2);
-	vec4 c3 = texture2D(tMask, vUv3);
+	vec2 c0 = texture2D(tMask, vUv0).rg;
+	vec2 c1 = texture2D(tMask, vUv1).rg;
+	vec2 c2 = texture2D(tMask, vUv2).rg;
+	vec2 c3 = texture2D(tMask, vUv3).rg;
 
-	float d0 = (c0.r - c1.r) * 0.5;
-	float d1 = (c2.r - c3.r) * 0.5;
+	float d0 = (c0.x - c1.x) * 0.5;
+	float d1 = (c2.x - c3.x) * 0.5;
 	float d = length(vec2(d0, d1));
 
-	float a0 = min(c0.g, c1.g);
-	float a1 = min(c2.g, c3.g);
+	float a0 = min(c0.y, c1.y);
+	float a1 = min(c2.y, c3.y);
 	float visibilityFactor = min(a0, a1);
 
-	vec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? visibleEdgeColor : hiddenEdgeColor;
+	vec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);
 
 	gl_FragColor = vec4(edgeColor * d, d);
 

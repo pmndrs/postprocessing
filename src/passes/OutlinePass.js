@@ -193,7 +193,7 @@ export class OutlinePass extends Pass {
 
 		this.outlineBlendMaterial = new OutlineBlendMaterial(options);
 		this.outlineBlendMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
-		this.outlineBlendMaterial.uniforms.tEdges.value = this.renderTargetOutline.texture;
+		this.outlineBlendMaterial.uniforms.tOutline.value = this.renderTargetOutline.texture;
 
 		/**
 		 * A list of objects to outline.
@@ -231,22 +231,6 @@ export class OutlinePass extends Pass {
 		 */
 
 		this.selectionLayer = 10;
-
-		/**
-		 * The color of visible edges.
-		 *
-		 * @type {Color}
-		 */
-
-		this.visibleEdgeColor = new Color(1.0, 1.0, 1.0);
-
-		/**
-		 * The color of hidden edges.
-		 *
-		 * @type {Color}
-		 */
-
-		this.hiddenEdgeColor = new Color(0.1, 0.04, 0.02);
 
 	}
 
@@ -293,6 +277,32 @@ export class OutlinePass extends Pass {
 	set kernelSize(value = KernelSize.VERY_SMALL) {
 
 		this.blurPass.kernelSize = value;
+
+	}
+
+	/**
+	 * Indicates whether the outline overlay should be blurred.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get blur() {
+
+		return this.blurPass.enabled;
+
+	}
+
+	/**
+	 * @type {Boolean}
+	 */
+
+	set blur(value) {
+
+		this.blurPass.enabled = value;
+
+		this.outlineBlendMaterial.uniforms.tOutline.value = value ?
+			this.renderTargetOutline.texture :
+			this.renderTargetEdges.texture;
 
 	}
 
@@ -423,7 +433,6 @@ export class OutlinePass extends Pass {
 
 			if(selection.length === 0) {
 
-				// Nothing is being rendered to the buffers for now.
 				this.needsSwap = false;
 				this.time = 0.0;
 
@@ -469,12 +478,9 @@ export class OutlinePass extends Pass {
 
 		const mainScene = this.mainScene;
 		const mainCamera = this.mainCamera;
+		const pulse = this.outlineBlendMaterial.uniforms.pulse;
 
-		const uniforms = this.outlineEdgesMaterial.uniforms;
-		const visibleEdgeColor = uniforms.visibleEdgeColor.value;
-		const hiddenEdgeColor = uniforms.hiddenEdgeColor.value;
-
-		let background, mask, scalar;
+		let background, mask;
 
 		if(this.selection.length > 0) {
 
@@ -482,16 +488,12 @@ export class OutlinePass extends Pass {
 			mask = mainCamera.layers.mask;
 			mainScene.background = null;
 
-			visibleEdgeColor.copy(this.visibleEdgeColor);
-			hiddenEdgeColor.copy(this.hiddenEdgeColor);
+			pulse.value = 1.0;
 
 			if(this.pulseSpeed > 0.0) {
 
-				scalar = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
+				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
 				this.time += delta;
-
-				visibleEdgeColor.multiplyScalar(scalar);
-				hiddenEdgeColor.multiplyScalar(scalar);
 
 			}
 
@@ -512,10 +514,14 @@ export class OutlinePass extends Pass {
 			this.quad.material = this.outlineEdgesMaterial;
 			renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
-			// Blur the outline.
-			this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+			if(this.blurPass.enabled) {
 
-			// Draw the blurred outline onto the scene colours.
+				// Blur the edges.
+				this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+
+			}
+
+			// Draw the final overlay onto the scene colours.
 			this.quad.material = this.outlineBlendMaterial;
 			this.outlineBlendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
 			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);

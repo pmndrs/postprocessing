@@ -275,16 +275,6 @@ export class OutlineDemo extends Demo {
 		// Objects.
 
 		let mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
-			new MeshPhongMaterial({
-				color: 0x00ffff
-			})
-		);
-
-		mesh.position.set(-2, 0, -2);
-		scene.add(mesh);
-
-		mesh = new Mesh(
 			new SphereBufferGeometry(1, 32, 32),
 			new MeshPhongMaterial({
 				color: 0xffff00
@@ -314,6 +304,16 @@ export class OutlineDemo extends Demo {
 		mesh.position.set(2, 0, 2);
 		scene.add(mesh);
 
+		mesh = new Mesh(
+			new BoxBufferGeometry(1, 1, 1),
+			new MeshPhongMaterial({
+				color: 0x00ffff
+			})
+		);
+
+		mesh.position.set(-2, 0, -2);
+		scene.add(mesh);
+
 		// Raycaster.
 
 		this.raycaster = new Raycaster();
@@ -327,7 +327,8 @@ export class OutlineDemo extends Demo {
 			patternScale: 7.5
 		});
 
-		pass.selectObject(mesh);
+		pass.setSelection(scene.children);
+		pass.deselectObject(mesh);
 
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
@@ -355,8 +356,10 @@ export class OutlineDemo extends Demo {
 			"pattern scale": pass.outlineBlendMaterial.uniforms.patternScale.value,
 			"edge strength": pass.outlineBlendMaterial.uniforms.edgeStrength.value,
 			"pulse speed": pass.pulseSpeed,
-			"visible edge": pass.visibleEdgeColor.getHex(),
-			"hidden edge": pass.hiddenEdgeColor.getHex()
+			"visible edge": pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.getHex(),
+			"hidden edge": pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.getHex(),
+			"alpha blending": false,
+			"x-ray": true
 		};
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
@@ -372,6 +375,7 @@ export class OutlineDemo extends Demo {
 
 		});
 
+		menu.add(pass, "blur");
 		menu.add(pass, "dithering");
 
 		menu.add(params, "use pattern").onChange(function() {
@@ -400,13 +404,25 @@ export class OutlineDemo extends Demo {
 
 		menu.addColor(params, "visible edge").onChange(function() {
 
-			pass.visibleEdgeColor.setHex(params["visible edge"]);
+			pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.setHex(params["visible edge"]);
 
 		});
 
 		menu.addColor(params, "hidden edge").onChange(function() {
 
-			pass.hiddenEdgeColor.setHex(params["hidden edge"]);
+			pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.setHex(params["hidden edge"]);
+
+		});
+
+		menu.add(params, "alpha blending").onChange(function() {
+
+			pass.outlineBlendMaterial.setAlphaBlendingEnabled(params["alpha blending"]);
+
+		});
+
+		menu.add(params, "x-ray").onChange(function() {
+
+			pass.outlineBlendMaterial.setXRayEnabled(params["x-ray"]);
 
 		});
 
