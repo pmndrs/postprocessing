@@ -48,7 +48,7 @@ export class SMAADemo extends Demo {
 		 * @private
 		 */
 
-		this.rendererNoAA = null;
+		this.rendererAA = null;
 
 		/**
 		 * Secondary camera controls.
@@ -127,9 +127,9 @@ export class SMAADemo extends Demo {
 			path + "pz" + format, path + "nz" + format
 		];
 
-		let image;
-
 		return new Promise((resolve, reject) => {
+
+			let image;
 
 			if(assets.size === 0) {
 
@@ -213,13 +213,13 @@ export class SMAADemo extends Demo {
 		scene.fog = new FogExp2(0x000000, 0.0025);
 		renderer.setClearColor(scene.fog.color);
 
-		// Create a second renderer without AA.
+		// Create a second renderer with AA.
 
-		const rendererNoAA = ((size, clearColor, pixelRatio) => {
+		const rendererAA = ((size, clearColor, pixelRatio) => {
 
 			const renderer = new WebGLRenderer({
 				logarithmicDepthBuffer: true,
-				antialias: false
+				antialias: true
 			});
 
 			renderer.setSize(size.width, size.height);
@@ -234,8 +234,8 @@ export class SMAADemo extends Demo {
 			renderer.getPixelRatio()
 		);
 
-		this.originalRenderer = composer.replaceRenderer(rendererNoAA);
-		this.rendererNoAA = rendererNoAA;
+		this.originalRenderer = composer.renderer;
+		this.rendererAA = rendererAA;
 
 		// Controls.
 
@@ -248,8 +248,7 @@ export class SMAADemo extends Demo {
 		this.controls = controls;
 
 		const controls2 = controls.clone();
-		controls2.setDom(rendererNoAA.domElement);
-		controls2.setEnabled(true);
+		controls2.setDom(rendererAA.domElement);
 		this.controls2 = controls2;
 
 		// Sky.
@@ -398,7 +397,7 @@ export class SMAADemo extends Demo {
 		const texturePass = this.texturePass;
 
 		const renderer1 = this.originalRenderer;
-		const renderer2 = this.rendererNoAA;
+		const renderer2 = this.rendererAA;
 
 		const controls1 = this.controls;
 		const controls2 = this.controls2;
@@ -430,17 +429,17 @@ export class SMAADemo extends Demo {
 
 			if(params["browser AA"]) {
 
-				renderer1.setSize(size.width, size.height);
-				composer.replaceRenderer(renderer1);
-				controls1.setEnabled(true).lookAt(controls2.getTarget());
-				controls2.setEnabled(false);
-
-			} else {
-
 				renderer2.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer2);
 				controls1.setEnabled(false);
 				controls2.setEnabled(true).lookAt(controls1.getTarget());
+
+			} else {
+
+				renderer1.setSize(size.width, size.height);
+				composer.replaceRenderer(renderer1);
+				controls1.setEnabled(true).lookAt(controls2.getTarget());
+				controls2.setEnabled(false);
 
 			}
 
@@ -473,10 +472,10 @@ export class SMAADemo extends Demo {
 
 		super.reset();
 
-		if(this.rendererNoAA !== null) {
+		if(this.rendererAA !== null) {
 
-			this.rendererNoAA.dispose();
-			this.rendererNoAA = null;
+			this.rendererAA.dispose();
+			this.rendererAA = null;
 
 		}
 
