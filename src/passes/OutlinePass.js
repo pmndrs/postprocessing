@@ -333,9 +333,65 @@ export class OutlinePass extends Pass {
 	}
 
 	/**
+	 * Clears the current selection and selects a list of objects.
+	 *
+	 * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
+	 * @return {OutlinePass} This pass.
+	 */
+
+	setSelection(objects) {
+
+		const selection = objects.slice(0);
+		const selectionLayer = this.selectionLayer;
+
+		let i, l;
+
+		for(i = 0, l = selection.length; i < l; ++i) {
+
+			selection[i].layers.enable(selectionLayer);
+
+		}
+
+		this.clearSelection();
+		this.selection = selection;
+		this.needsSwap = selection.length > 0;
+
+		return this;
+
+	}
+
+	/**
+	 * Clears the list of selected objects.
+	 *
+	 * @return {OutlinePass} This pass.
+	 */
+
+	clearSelection() {
+
+		const selection = this.selection;
+		const selectionLayer = this.selectionLayer;
+
+		let i, l;
+
+		for(i = 0, l = selection.length; i < l; ++i) {
+
+			selection[i].layers.disable(selectionLayer);
+
+		}
+
+		this.selection = [];
+		this.needsSwap = false;
+		this.time = 0.0;
+
+		return this;
+
+	}
+
+	/**
 	 * Selects an object.
 	 *
 	 * @param {Object3D} object - The object that should be outlined.
+	 * @return {OutlinePass} This pass.
 	 */
 
 	selectObject(object) {
@@ -344,12 +400,15 @@ export class OutlinePass extends Pass {
 		this.selection.push(object);
 		this.needsSwap = true;
 
+		return this;
+
 	}
 
 	/**
 	 * Deselects an object.
 	 *
 	 * @param {Object3D} object - The object that should no longer be outlined.
+	 * @return {OutlinePass} This pass.
 	 */
 
 	deselectObject(object) {
@@ -371,6 +430,8 @@ export class OutlinePass extends Pass {
 			}
 
 		}
+
+		return this;
 
 	}
 
