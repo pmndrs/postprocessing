@@ -81,7 +81,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/DepthComparisonMaterial.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { PerspectiveCamera, ShaderMaterial, Uniform } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/depth-comparison/shader.frag&quot;;
 import vertex from &quot;./glsl/depth-comparison/shader.vert&quot;;
@@ -128,7 +128,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {PerspectiveCamera} [camera=null] - A camera.
+	 * @param {Camera} [camera=null] - A camera.
 	 */
 
 	adoptCameraSettings(camera = null) {
@@ -137,6 +137,16 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
+
+			if(camera instanceof PerspectiveCamera) {
+
+				this.defines.PERSPECTIVE_CAMERA = &quot;1&quot;;
+
+			} else {
+
+				delete this.defines.PERSPECTIVE_CAMERA;
+
+			}
 
 		}
 

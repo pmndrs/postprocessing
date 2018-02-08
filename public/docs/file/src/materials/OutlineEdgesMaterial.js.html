@@ -81,7 +81,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/OutlineEdgesMaterial.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Color, ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
 import fragment from &quot;./glsl/outline-edges/shader.frag&quot;;
 import vertex from &quot;./glsl/outline-edges/shader.vert&quot;;
@@ -107,9 +107,7 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 			uniforms: {
 
 				tMask: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
-				visibleEdgeColor: new Uniform(new Color()),
-				hiddenEdgeColor: new Uniform(new Color())
+				texelSize: new Uniform(new Vector2())
 
 			},
 
