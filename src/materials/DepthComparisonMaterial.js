@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { PerspectiveCamera, ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/depth-comparison/shader.frag";
 import vertex from "./glsl/depth-comparison/shader.vert";
@@ -45,7 +45,7 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 	/**
 	 * Adopts the settings of the given camera.
 	 *
-	 * @param {PerspectiveCamera} [camera=null] - A camera.
+	 * @param {Camera} [camera=null] - A camera.
 	 */
 
 	adoptCameraSettings(camera = null) {
@@ -54,6 +54,16 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 
 			this.uniforms.cameraNear.value = camera.near;
 			this.uniforms.cameraFar.value = camera.far;
+
+			if(camera instanceof PerspectiveCamera) {
+
+				this.defines.PERSPECTIVE_CAMERA = "1";
+
+			} else {
+
+				delete this.defines.PERSPECTIVE_CAMERA;
+
+			}
 
 		}
 

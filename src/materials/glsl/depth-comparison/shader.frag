@@ -4,7 +4,7 @@ uniform sampler2D tDepth;
 uniform float cameraNear;
 uniform float cameraFar;
 
-varying vec4 vPosition;
+varying float vViewZ;
 varying vec4 vProjTexCoord;
 
 void main() {
@@ -14,8 +14,18 @@ void main() {
 	projTexCoord = clamp(projTexCoord, 0.002, 0.998);
 
 	float fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));
-	float viewZ = -perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
-	float depthTest = (-vPosition.z > viewZ) ? 1.0 : 0.0;
+
+	#ifdef PERSPECTIVE_CAMERA
+
+		float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+
+	#else
+
+		float viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+
+	#endif
+
+	float depthTest = (vViewZ <= viewZ) ? 1.0 : 0.0;
 
 	gl_FragColor = vec4(0.0, depthTest, 1.0, 1.0);
 
