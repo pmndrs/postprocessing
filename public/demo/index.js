@@ -7082,7 +7082,13 @@
 
   						for (i = 0, l = selection.length; i < l; ++i) {
 
-  								selection[i].visible = visible;
+  								if (visible) {
+
+  										selection[i].layers.enable(0);
+  								} else {
+
+  										selection[i].layers.disable(0);
+  								}
   						}
   				}
   		}, {

@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.2.1 build Feb 08 2018
+ * postprocessing v4.2.2 build Feb 11 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -2695,7 +2695,13 @@
 
   						for (i = 0, l = selection.length; i < l; ++i) {
 
-  								selection[i].visible = visible;
+  								if (visible) {
+
+  										selection[i].layers.enable(0);
+  								} else {
+
+  										selection[i].layers.disable(0);
+  								}
   						}
   				}
   		}, {
