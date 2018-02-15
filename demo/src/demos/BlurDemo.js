@@ -11,7 +11,7 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlurPass,
@@ -25,15 +25,17 @@ import {
  * A blur demo setup.
  */
 
-export class BlurDemo extends Demo {
+export class BlurDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new blur demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("blur");
+		super("blur", composer);
 
 		/**
 		 * A save pass.
@@ -222,12 +224,12 @@ export class BlurDemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const object = this.object;
 		const twoPI = 2.0 * Math.PI;
@@ -246,6 +248,8 @@ export class BlurDemo extends Demo {
 			object.rotation.y -= twoPI;
 
 		}
+
+		super.render(delta);
 
 	}
 

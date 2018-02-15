@@ -16,22 +16,24 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { GodRaysPass, KernelSize } from "../../../src";
 
 /**
  * A god rays demo setup.
  */
 
-export class GodRaysDemo extends Demo {
+export class GodRaysDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new god rays demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("god-rays");
+		super("god-rays", composer);
 
 		/**
 		 * A god rays pass.

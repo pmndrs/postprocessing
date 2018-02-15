@@ -15,22 +15,24 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { SMAAPass, TexturePass } from "../../../src";
 
 /**
  * An SMAA demo setup.
  */
 
-export class SMAADemo extends Demo {
+export class SMAADemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new SMAA demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("smaa");
+		super("smaa", composer);
 
 		/**
 		 * The main renderer.
@@ -351,12 +353,12 @@ export class SMAADemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const objectA = this.objectA;
 		const objectB = this.objectB;
@@ -380,6 +382,8 @@ export class SMAADemo extends Demo {
 			objectA.rotation.y -= twoPI;
 
 		}
+
+		super.render(delta);
 
 	}
 

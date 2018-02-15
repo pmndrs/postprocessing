@@ -13,7 +13,7 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	ClearMaskPass,
@@ -27,15 +27,17 @@ import {
  * A pixelation demo setup.
  */
 
-export class PixelationDemo extends Demo {
+export class PixelationDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new pixelation demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("pixelation");
+		super("pixelation", composer);
 
 		/**
 		 * An object.
@@ -229,12 +231,12 @@ export class PixelationDemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const object = this.object;
 		const maskObject = this.maskObject;
@@ -260,6 +262,8 @@ export class PixelationDemo extends Demo {
 		maskObject.position.y = Math.sin(time) * 4;
 		maskObject.rotation.x = time;
 		maskObject.rotation.y = time * 0.5;
+
+		super.render(delta);
 
 	}
 

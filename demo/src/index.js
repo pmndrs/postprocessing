@@ -19,6 +19,24 @@ import { SMAADemo } from "./demos/SMAADemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 
 /**
+ * A renderer.
+ *
+ * @type {WebGLRenderer}
+ * @private
+ */
+
+let renderer;
+
+/**
+ * An effect composer.
+ *
+ * @type {EffectComposer}
+ * @private
+ */
+
+let composer;
+
+/**
  * A demo manager.
  *
  * @type {DemoManager}
@@ -50,6 +68,15 @@ function render(now) {
 
 function onChange(event) {
 
+	const demo = event.demo;
+
+	// Make sure that the main renderer is being used and update it just in case.
+	const size = composer.renderer.getSize();
+	renderer.setSize(size.width, size.height);
+	composer.replaceRenderer(renderer);
+	composer.reset();
+	composer.addPass(demo.renderPass);
+
 	document.getElementById("viewport").children[0].style.display = "initial";
 
 }
@@ -62,6 +89,9 @@ function onChange(event) {
  */
 
 function onLoad(event) {
+
+	// Prepare the render pass.
+	event.demo.renderPass.camera = event.demo.camera;
 
 	document.getElementById("viewport").children[0].style.display = "none";
 
@@ -82,7 +112,7 @@ window.addEventListener("load", function main(event) {
 	const viewport = document.getElementById("viewport");
 
 	// Create a custom renderer.
-	const renderer = new WebGLRenderer({
+	renderer = new WebGLRenderer({
 		logarithmicDepthBuffer: true,
 		antialias: false
 	});
@@ -91,13 +121,16 @@ window.addEventListener("load", function main(event) {
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000);
 
+	// Create an effect composer.
+	composer = new EffectComposer(renderer, {
+		stencilBuffer: true,
+		depthTexture: true
+	});
+
 	// Initialise the demo manager.
 	manager = new DemoManager(viewport, {
 		aside: document.getElementById("aside"),
-		composer: new EffectComposer(renderer, {
-			stencilBuffer: true,
-			depthTexture: true
-		})
+		renderer: renderer
 	});
 
 	// Setup demo switch and load event handlers.
@@ -105,21 +138,21 @@ window.addEventListener("load", function main(event) {
 	manager.addEventListener("load", onLoad);
 
 	// Register demos.
-	manager.addDemo(new RenderDemo());
-	manager.addDemo(new BloomDemo());
-	manager.addDemo(new BlurDemo());
-	manager.addDemo(new BokehDemo());
-	manager.addDemo(new RealisticBokehDemo());
-	manager.addDemo(new DepthDemo());
-	manager.addDemo(new DotScreenDemo());
-	manager.addDemo(new FilmDemo());
-	manager.addDemo(new GlitchDemo());
-	manager.addDemo(new GodRaysDemo());
-	manager.addDemo(new OutlineDemo());
-	manager.addDemo(new PixelationDemo());
-	manager.addDemo(new ShockWaveDemo());
-	manager.addDemo(new SMAADemo());
-	manager.addDemo(new ToneMappingDemo());
+	manager.addDemo(new RenderDemo(composer));
+	manager.addDemo(new BloomDemo(composer));
+	manager.addDemo(new BlurDemo(composer));
+	manager.addDemo(new BokehDemo(composer));
+	manager.addDemo(new RealisticBokehDemo(composer));
+	manager.addDemo(new DepthDemo(composer));
+	manager.addDemo(new DotScreenDemo(composer));
+	manager.addDemo(new FilmDemo(composer));
+	manager.addDemo(new GlitchDemo(composer));
+	manager.addDemo(new GodRaysDemo(composer));
+	manager.addDemo(new OutlineDemo(composer));
+	manager.addDemo(new PixelationDemo(composer));
+	manager.addDemo(new ShockWaveDemo(composer));
+	manager.addDemo(new SMAADemo(composer));
+	manager.addDemo(new ToneMappingDemo(composer));
 
 	// Start rendering.
 	render();
@@ -143,6 +176,7 @@ window.addEventListener("resize", (function() {
 		const height = event.target.innerHeight;
 
 		manager.setSize(width, height);
+		composer.setSize(width, height);
 
 		timeoutId = 0;
 

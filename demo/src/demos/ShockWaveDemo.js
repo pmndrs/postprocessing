@@ -10,22 +10,24 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { ShockWavePass } from "../../../src";
 
 /**
  * A shock wave demo setup.
  */
 
-export class ShockWaveDemo extends Demo {
+export class ShockWaveDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new shock wave demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super("shock-wave");
+		super("shock-wave", composer);
 
 		/**
 		 * A shock wave pass.

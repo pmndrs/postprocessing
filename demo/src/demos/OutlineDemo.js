@@ -17,7 +17,7 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { KernelSize, OutlinePass } from "../../../src";
 
 /**
@@ -35,15 +35,17 @@ const mouse = new Vector2();
  * @implements {EventListener}
  */
 
-export class OutlineDemo extends Demo {
+export class OutlineDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new outline demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("outline");
+		super("outline", composer);
 
 		/**
 		 * A raycaster.

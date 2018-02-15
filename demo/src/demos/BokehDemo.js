@@ -10,22 +10,24 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { BokehPass } from "../../../src";
 
 /**
  * A bokeh demo setup.
  */
 
-export class BokehDemo extends Demo {
+export class BokehDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new bokeh demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("bokeh");
+		super("bokeh", composer);
 
 		/**
 		 * A bokeh pass.

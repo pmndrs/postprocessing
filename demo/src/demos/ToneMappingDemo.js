@@ -12,22 +12,24 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import { ToneMappingPass } from "../../../src";
 
 /**
  * A tone mapping demo setup.
  */
 
-export class ToneMappingDemo extends Demo {
+export class ToneMappingDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new tone mapping demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("tone-mapping");
+		super("tone-mapping", composer);
 
 		/**
 		 * A dot screen pass.
@@ -188,12 +190,12 @@ export class ToneMappingDemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const object = this.object;
 		const twoPI = 2.0 * Math.PI;
@@ -212,6 +214,8 @@ export class ToneMappingDemo extends Demo {
 			object.rotation.y -= twoPI;
 
 		}
+
+		super.render(delta);
 
 	}
 

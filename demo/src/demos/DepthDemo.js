@@ -7,21 +7,23 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 /**
  * A depth texture demo setup.
  */
 
-export class DepthDemo extends Demo {
+export class DepthDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new depth demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("depth");
+		super("depth", composer);
 
 		/**
 		 * An object.
@@ -83,12 +85,12 @@ export class DepthDemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const object = this.object;
 		const twoPI = 2.0 * Math.PI;
@@ -107,6 +109,8 @@ export class DepthDemo extends Demo {
 			object.rotation.y -= twoPI;
 
 		}
+
+		super.render(delta);
 
 	}
 

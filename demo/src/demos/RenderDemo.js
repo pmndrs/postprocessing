@@ -12,21 +12,23 @@ import {
 } from "three";
 
 import { DeltaControls } from "delta-controls";
-import { Demo } from "three-demo";
+import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 /**
  * A render demo setup.
  */
 
-export class RenderDemo extends Demo {
+export class RenderDemo extends PostProcessingDemo {
 
 	/**
 	 * Constructs a new render demo.
+	 *
+	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
-	constructor() {
+	constructor(composer) {
 
-		super("render");
+		super("render", composer);
 
 		/**
 		 * An object.
@@ -161,12 +163,12 @@ export class RenderDemo extends Demo {
 	}
 
 	/**
-	 * Updates this demo.
+	 * Renders this demo.
 	 *
 	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
-	update(delta) {
+	render(delta) {
 
 		const object = this.object;
 		const twoPI = 2.0 * Math.PI;
@@ -185,6 +187,8 @@ export class RenderDemo extends Demo {
 			object.rotation.y -= twoPI;
 
 		}
+
+		super.render(delta);
 
 	}
 
