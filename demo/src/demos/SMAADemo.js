@@ -244,11 +244,11 @@ export class SMAADemo extends Demo {
 		controls.settings.translation.enabled = false;
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
-		controls.setEnabled(false);
 		this.controls = controls;
 
 		const controls2 = controls.clone();
 		controls2.setDom(rendererAA.domElement);
+		controls2.setEnabled(false);
 		this.controls2 = controls2;
 
 		// Sky.
