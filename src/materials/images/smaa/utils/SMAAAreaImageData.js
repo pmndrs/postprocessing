@@ -24,7 +24,6 @@ const b1 = new Box2();
  *
  * @type {Number}
  * @private
- * @final
  */
 
 const ORTHOGONAL_SIZE = 16;
@@ -34,7 +33,6 @@ const ORTHOGONAL_SIZE = 16;
  *
  * @type {Number}
  * @private
- * @final
  */
 
 const DIAGONAL_SIZE = 20;
@@ -45,7 +43,6 @@ const DIAGONAL_SIZE = 20;
  *
  * @type {Number}
  * @private
- * @final
  */
 
 const DIAGONAL_SAMPLES = 30;
@@ -55,7 +52,6 @@ const DIAGONAL_SAMPLES = 30;
  *
  * @type {Number}
  * @private
- * @final
  */
 
 const SMOOTH_MAX_DISTANCE = 32;

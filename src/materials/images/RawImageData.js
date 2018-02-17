@@ -66,7 +66,6 @@ export class RawImageData {
 		 * The width of the image.
 		 *
 		 * @type {Number}
-		 * @default 0
 		 */
 
 		this.width = width;
@@ -75,7 +74,6 @@ export class RawImageData {
 		 * The height of the image.
 		 *
 		 * @type {Number}
-		 * @default 0
 		 */
 
 		this.height = height;
@@ -84,7 +82,6 @@ export class RawImageData {
 		 * The image data.
 		 *
 		 * @type {Uint8ClampedArray}
-		 * @default null
 		 */
 
 		this.data = data;
@@ -93,7 +90,6 @@ export class RawImageData {
 		 * The amount of color channels used per pixel. Range [1, 4].
 		 *
 		 * @type {Number}
-		 * @default 4
 		 */
 
 		this.channels = channels;
