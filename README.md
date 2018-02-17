@@ -2,7 +2,7 @@
 
 [![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing)
 [![npm version](https://badge.fury.io/js/postprocessing.svg)](http://badge.fury.io/js/postprocessing)
-[![Dependencies](https://david-dm.org/vanruesc/postprocessing.svg?branch=master)](https://david-dm.org/vanruesc/postprocessing)
+[![Peer dependencies](https://david-dm.org/vanruesc/postprocessing/peer-status.svg)](https://david-dm.org/vanruesc/postprocessing?type=peer)
 
 A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
 
