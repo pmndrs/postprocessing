@@ -53,8 +53,8 @@
 		"extends": "delta"
 	},
 
-	"dependencies": {
-		"three": "0.90.x"
+	"peerDependencies": {
+		"three": ">= 0.89.0 < 0.91.0"
 	},
 
 	"devDependencies": {
@@ -80,6 +80,7 @@
 		"rollup-plugin-node-resolve": "3.x.x",
 		"rollup-plugin-string": "2.x.x",
 		"three-demo": "1.x.x",
+		"three": "0.90.x",
 		"time-grunt": "1.x.x"
 	}
 }
