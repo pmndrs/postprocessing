@@ -1,6 +1,6 @@
 uniform sampler2D tDiffuse;
 uniform sampler2D tMask;
-uniform sampler2D tOutline;
+uniform sampler2D tEdges;
 
 uniform vec3 visibleEdgeColor;
 uniform vec3 hiddenEdgeColor;
@@ -19,7 +19,7 @@ varying vec2 vUv;
 void main() {
 
 	vec4 color = texture2D(tDiffuse, vUv);
-	vec2 outline = texture2D(tOutline, vUv).rg;
+	vec2 edge = texture2D(tEdges, vUv).rg;
 	vec2 mask = texture2D(tMask, vUv).rg;
 
 	#ifndef X_RAY
@@ -28,12 +28,12 @@ void main() {
 
 	#endif
 
-	outline *= (edgeStrength * mask.x * pulse);
-	vec3 outlineColor = outline.x * visibleEdgeColor + outline.y * hiddenEdgeColor;
+	edge *= (edgeStrength * mask.x * pulse);
+	vec3 outlineColor = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;
 
 	#ifdef ALPHA_BLENDING
 
-		color.rgb = mix(color.rgb, outlineColor, max(outline.x, outline.y));
+		color.rgb = mix(color.rgb, outlineColor, max(edge.x, edge.y));
 
 	#else
 

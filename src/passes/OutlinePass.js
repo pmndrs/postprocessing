@@ -33,6 +33,7 @@ export class OutlinePass extends Pass {
 	 * @param {PerspectiveCamera} camera - The main camera.
 	 * @param {Object} [options] - Additional parameters. See {@link BlurPass}, {@link OutlineBlendMaterial} and {@link OutlineEdgesMaterial} for details.
 	 * @param {Object} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
+	 * @param {Object} [options.blur=true] - Whether the outline should be blurry.
 	 */
 
 	constructor(scene, camera, options = {}) {
@@ -78,10 +79,11 @@ export class OutlinePass extends Pass {
 
 		this.renderTargetDepth = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
-			magFilter: LinearFilter
+			magFilter: LinearFilter,
+			format: RGBFormat
 		});
 
-		this.renderTargetDepth.texture.name = "GodRays.Depth";
+		this.renderTargetDepth.texture.name = "Outline.Depth";
 		this.renderTargetDepth.texture.generateMipmaps = false;
 
 		/**
@@ -93,7 +95,7 @@ export class OutlinePass extends Pass {
 
 		this.renderTargetMask = this.renderTargetDepth.clone();
 
-		this.renderTargetMask.texture.name = "GodRays.Mask";
+		this.renderTargetMask.texture.name = "Outline.Mask";
 
 		/**
 		 * A render target for the edge detection.
@@ -106,10 +108,11 @@ export class OutlinePass extends Pass {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
-			depthBuffer: false
+			depthBuffer: false,
+			format: RGBFormat
 		});
 
-		this.renderTargetEdges.texture.name = "GodRays.Edges";
+		this.renderTargetEdges.texture.name = "Outline.Edges";
 		this.renderTargetEdges.texture.generateMipmaps = false;
 
 		/**
@@ -119,9 +122,9 @@ export class OutlinePass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetOutline = this.renderTargetEdges.clone();
+		this.renderTargetBlurredEdges = this.renderTargetEdges.clone();
 
-		this.renderTargetOutline.texture.name = "GodRays.Outline";
+		this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
 
 		/**
 		 * A depth pass.
@@ -193,7 +196,8 @@ export class OutlinePass extends Pass {
 
 		this.outlineBlendMaterial = new OutlineBlendMaterial(options);
 		this.outlineBlendMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
-		this.outlineBlendMaterial.uniforms.tOutline.value = this.renderTargetOutline.texture;
+
+		this.blur = (options.blur !== undefined) ? options.blur : true;
 
 		/**
 		 * A list of objects to outline.
@@ -300,8 +304,8 @@ export class OutlinePass extends Pass {
 
 		this.blurPass.enabled = value;
 
-		this.outlineBlendMaterial.uniforms.tOutline.value = value ?
-			this.renderTargetOutline.texture :
+		this.outlineBlendMaterial.uniforms.tEdges.value = value ?
+			this.renderTargetBlurredEdges.texture :
 			this.renderTargetEdges.texture;
 
 	}
@@ -525,7 +529,7 @@ export class OutlinePass extends Pass {
 			if(this.blurPass.enabled) {
 
 				// Blur the edges.
-				this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+				this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
 
 			}
 
@@ -556,14 +560,6 @@ export class OutlinePass extends Pass {
 		this.renderPassMask.initialize(renderer, alpha);
 		this.blurPass.initialize(renderer, alpha);
 
-		if(!alpha) {
-
-			this.renderTargetMask.texture.format = RGBFormat;
-			this.renderTargetEdges.texture.format = RGBFormat;
-			this.renderTargetOutline.texture.format = RGBFormat;
-
-		}
-
 	}
 
 	/**
@@ -586,7 +582,7 @@ export class OutlinePass extends Pass {
 		height = this.blurPass.height;
 
 		this.renderTargetEdges.setSize(width, height);
-		this.renderTargetOutline.setSize(width, height);
+		this.renderTargetBlurredEdges.setSize(width, height);
 
 		this.outlineBlendMaterial.uniforms.aspect.value = width / height;
 		this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);

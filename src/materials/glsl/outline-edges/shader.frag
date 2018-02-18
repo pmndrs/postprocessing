@@ -20,8 +20,6 @@ void main() {
 	float a1 = min(c2.y, c3.y);
 	float visibilityFactor = min(a0, a1);
 
-	vec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);
-
-	gl_FragColor = vec4(edgeColor * d, d);
+	gl_FragColor.rg = (1.0 - visibilityFactor > 0.001) ? vec2(d, 0.0) : vec2(0.0, d);
 
 }
