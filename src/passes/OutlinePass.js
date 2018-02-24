@@ -134,7 +134,11 @@ export class OutlinePass extends Pass {
 		 */
 
 		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new MeshDepthMaterial({ depthPacking: RGBADepthPacking }),
+			overrideMaterial: new MeshDepthMaterial({
+				depthPacking: RGBADepthPacking,
+				morphTargets: true,
+				skinning: true
+			}),
 			clearColor: new Color(0xffffff),
 			clearAlpha: 1.0
 		});

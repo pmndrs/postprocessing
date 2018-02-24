@@ -34,7 +34,10 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 			vertexShader: vertex,
 
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+
+			morphTargets: true,
+			skinning: true
 
 		});
 

@@ -1,12 +1,23 @@
+#include <common>
+#include <morphtarget_pars_vertex>
+#include <skinning_pars_vertex>
+#include <clipping_planes_pars_vertex>
+
 varying float vViewZ;
 varying vec4 vProjTexCoord;
 
 void main() {
 
-	vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-	vProjTexCoord = projectionMatrix * mvPosition;
-	vViewZ = mvPosition.z;
+	#include <skinbase_vertex>
 
-	gl_Position = vProjTexCoord;
+	#include <begin_vertex>
+	#include <morphtarget_vertex>
+	#include <skinning_vertex>
+	#include <project_vertex>
+
+	vViewZ = mvPosition.z;
+	vProjTexCoord = gl_Position;
+
+	#include <clipping_planes_vertex>
 
 }

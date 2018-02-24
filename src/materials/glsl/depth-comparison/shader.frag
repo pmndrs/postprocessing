@@ -1,4 +1,5 @@
 #include <packing>
+#include <clipping_planes_pars_fragment>
 
 uniform sampler2D tDepth;
 uniform float cameraNear;
@@ -8,6 +9,8 @@ varying float vViewZ;
 varying vec4 vProjTexCoord;
 
 void main() {
+
+	#include <clipping_planes_fragment>
 
 	// Transform into Cartesian coordinate (not mirrored).
 	vec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;
