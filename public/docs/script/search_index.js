@@ -2106,6 +2106,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/outlinepass.js~outlinepass#rendertargetblurrededges",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetBlurredEdges",
+    "src/passes/OutlinePass.js~OutlinePass#renderTargetBlurredEdges",
+    "member"
+  ],
+  [
     "src/passes/outlinepass.js~outlinepass#rendertargetdepth",
     "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetDepth",
     "src/passes/OutlinePass.js~OutlinePass#renderTargetDepth",
@@ -2121,12 +2127,6 @@ window.esdocSearchIndex = [
     "src/passes/outlinepass.js~outlinepass#rendertargetmask",
     "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetMask",
     "src/passes/OutlinePass.js~OutlinePass#renderTargetMask",
-    "member"
-  ],
-  [
-    "src/passes/outlinepass.js~outlinepass#rendertargetoutline",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-renderTargetOutline",
-    "src/passes/OutlinePass.js~OutlinePass#renderTargetOutline",
     "member"
   ],
   [
@@ -2287,13 +2287,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
@@ -2719,13 +2719,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
@@ -2755,13 +2755,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#adaptive",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-adaptive",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-adaptive",
     "src/passes/ToneMappingPass.js~ToneMappingPass#adaptive",
     "member"
   ],

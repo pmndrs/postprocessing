@@ -70,59 +70,59 @@
     "filePath": "src/materials/images/smaa/utils/SMAAAreaImageData.js",
     "lines": [
       {
-        "lineNumber": 645,
+        "lineNumber": 641,
         "line": "/**\r"
       },
       {
-        "lineNumber": 646,
+        "lineNumber": 642,
         "line": " * Calculates the area under the line p1 -> p2 for the pixel p using brute force\r"
       },
       {
-        "lineNumber": 647,
+        "lineNumber": 643,
         "line": " * sampling.\r"
       },
       {
-        "lineNumber": 648,
+        "lineNumber": 644,
         "line": " *\r"
       },
       {
-        "lineNumber": 649,
+        "lineNumber": 645,
         "line": " * @private\r"
       },
       {
-        "lineNumber": 650,
+        "lineNumber": 646,
         "line": " * @param {Vector2} p1 - The lower bounds of the area.\r"
       },
       {
-        "lineNumber": 651,
+        "lineNumber": 647,
         "line": " * @param {Vector2} p2 - The upper bounds of the area.\r"
       },
       {
-        "lineNumber": 652,
+        "lineNumber": 648,
         "line": " * @param {Number} pX - The X-coordinates.\r"
       },
       {
-        "lineNumber": 653,
+        "lineNumber": 649,
         "line": " * @param {Number} pY - The Y-coordinates.\r"
       },
       {
-        "lineNumber": 654,
+        "lineNumber": 650,
         "line": " * @param {Vector2} result - A target vector to store the area in.\r"
       },
       {
-        "lineNumber": 655,
+        "lineNumber": 651,
         "line": " * @return {Number} The amount of pixels inside the area relative to the total amount of sampled pixels.\r"
       },
       {
-        "lineNumber": 656,
+        "lineNumber": 652,
         "line": " */\r"
       },
       {
-        "lineNumber": 657,
+        "lineNumber": 653,
         "line": "\r"
       },
       {
-        "lineNumber": 658,
+        "lineNumber": 654,
         "line": "function calculateDiagonalAreaForPixel(p1, p2, pX, pY) {\r"
       }
     ],
