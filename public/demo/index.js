@@ -860,9 +860,9 @@
   			return CopyMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$6 = "#include <packing>\r\n\r\nuniform sampler2D tDepth;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (vViewZ <= viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
+  var fragment$6 = "#include <packing>\r\n#include <clipping_planes_pars_fragment>\r\n\r\nuniform sampler2D tDepth;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (vViewZ <= viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
 
-  var vertex$6 = "varying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\tvec4 mvPosition = modelViewMatrix * vec4(position, 1.0);\r\n\tvProjTexCoord = projectionMatrix * mvPosition;\r\n\tvViewZ = mvPosition.z;\r\n\r\n\tgl_Position = vProjTexCoord;\r\n\r\n}\r\n";
+  var vertex$6 = "#include <common>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <skinbase_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <project_vertex>\r\n\r\n\tvViewZ = mvPosition.z;\r\n\tvProjTexCoord = gl_Position;\r\n\r\n\t#include <clipping_planes_vertex>\r\n\r\n}\r\n";
 
   var DepthComparisonMaterial = function (_ShaderMaterial) {
   			inherits(DepthComparisonMaterial, _ShaderMaterial);
@@ -888,7 +888,10 @@
   									vertexShader: vertex$6,
 
   									depthWrite: false,
-  									depthTest: false
+  									depthTest: false,
+
+  									morphTargets: true,
+  									skinning: true
 
   						}));
 
@@ -1331,7 +1334,7 @@
   		return LuminosityMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tMask;\r\nuniform sampler2D tOutline;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D tPattern;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 color = texture2D(tDiffuse, vUv);\r\n\tvec2 outline = texture2D(tOutline, vUv).rg;\r\n\tvec2 mask = texture2D(tMask, vUv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\toutline.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\toutline *= (edgeStrength * mask.x * pulse);\r\n\tvec3 outlineColor = outline.x * visibleEdgeColor + outline.y * hiddenEdgeColor;\r\n\r\n\t#ifdef ALPHA_BLENDING\r\n\r\n\t\tcolor.rgb = mix(color.rgb, outlineColor, max(outline.x, outline.y));\r\n\r\n\t#else\r\n\r\n\t\tcolor.rgb += outlineColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec3 patternColor = texture2D(tPattern, vPatternCoord).rgb;\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tfloat visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\r\n\t\tcolor.rgb += visibilityFactor * (1.0 - mask.x) * (1.0 - patternColor);\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+  var fragment$12 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tMask;\r\nuniform sampler2D tEdges;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D tPattern;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 color = texture2D(tDiffuse, vUv);\r\n\tvec2 edge = texture2D(tEdges, vUv).rg;\r\n\tvec2 mask = texture2D(tMask, vUv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\toutline.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\tedge *= (edgeStrength * mask.x * pulse);\r\n\tvec3 outlineColor = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;\r\n\r\n\t#ifdef ALPHA_BLENDING\r\n\r\n\t\tcolor.rgb = mix(color.rgb, outlineColor, max(edge.x, edge.y));\r\n\r\n\t#else\r\n\r\n\t\tcolor.rgb += outlineColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec3 patternColor = texture2D(tPattern, vPatternCoord).rgb;\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tfloat visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\r\n\t\tcolor.rgb += visibilityFactor * (1.0 - mask.x) * (1.0 - patternColor);\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
 
   var vertex$12 = "#ifdef USE_PATTERN\r\n\r\n\tuniform float aspect;\r\n\tuniform float patternScale;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\t\tvPatternCoord = uv * aspectCorrection * patternScale;\r\n\r\n\t#endif\r\n\r\n\tvUv = uv;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -1363,7 +1366,7 @@
 
   								tDiffuse: new three.Uniform(null),
   								tMask: new three.Uniform(null),
-  								tOutline: new three.Uniform(null),
+  								tEdges: new three.Uniform(null),
   								tPattern: new three.Uniform(null),
 
   								edgeStrength: new three.Uniform(settings.edgeStrength),
@@ -1437,7 +1440,7 @@
   		return OutlineBlendMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$13 = "uniform sampler2D tMask;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 c0 = texture2D(tMask, vUv0).rg;\r\n\tvec2 c1 = texture2D(tMask, vUv1).rg;\r\n\tvec2 c2 = texture2D(tMask, vUv2).rg;\r\n\tvec2 c3 = texture2D(tMask, vUv3).rg;\r\n\r\n\tfloat d0 = (c0.x - c1.x) * 0.5;\r\n\tfloat d1 = (c2.x - c3.x) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.y, c1.y);\r\n\tfloat a1 = min(c2.y, c3.y);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tvec3 edgeColor = (1.0 - visibilityFactor > 0.001) ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0);\r\n\r\n\tgl_FragColor = vec4(edgeColor * d, d);\r\n\r\n}\r\n";
+  var fragment$13 = "uniform sampler2D tMask;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 c0 = texture2D(tMask, vUv0).rg;\r\n\tvec2 c1 = texture2D(tMask, vUv1).rg;\r\n\tvec2 c2 = texture2D(tMask, vUv2).rg;\r\n\tvec2 c3 = texture2D(tMask, vUv3).rg;\r\n\r\n\tfloat d0 = (c0.x - c1.x) * 0.5;\r\n\tfloat d1 = (c2.x - c3.x) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.y, c1.y);\r\n\tfloat a1 = min(c2.y, c3.y);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tgl_FragColor.rg = (1.0 - visibilityFactor > 0.001) ? vec2(d, 0.0) : vec2(0.0, d);\r\n\r\n}\r\n";
 
   var vertex$13 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvUv0 = vec2(uv.x + texelSize.x, uv.y);\r\n\tvUv1 = vec2(uv.x - texelSize.x, uv.y);\r\n\tvUv2 = vec2(uv.x, uv.y + texelSize.y);\r\n\tvUv3 = vec2(uv.x, uv.y - texelSize.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -3008,32 +3011,38 @@
 
   				_this.renderTargetDepth = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
-  						magFilter: three.LinearFilter
+  						magFilter: three.LinearFilter,
+  						format: three.RGBFormat
   				});
 
-  				_this.renderTargetDepth.texture.name = "GodRays.Depth";
+  				_this.renderTargetDepth.texture.name = "Outline.Depth";
   				_this.renderTargetDepth.texture.generateMipmaps = false;
 
   				_this.renderTargetMask = _this.renderTargetDepth.clone();
 
-  				_this.renderTargetMask.texture.name = "GodRays.Mask";
+  				_this.renderTargetMask.texture.name = "Outline.Mask";
 
   				_this.renderTargetEdges = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
   						magFilter: three.LinearFilter,
   						stencilBuffer: false,
-  						depthBuffer: false
+  						depthBuffer: false,
+  						format: three.RGBFormat
   				});
 
-  				_this.renderTargetEdges.texture.name = "GodRays.Edges";
+  				_this.renderTargetEdges.texture.name = "Outline.Edges";
   				_this.renderTargetEdges.texture.generateMipmaps = false;
 
-  				_this.renderTargetOutline = _this.renderTargetEdges.clone();
+  				_this.renderTargetBlurredEdges = _this.renderTargetEdges.clone();
 
-  				_this.renderTargetOutline.texture.name = "GodRays.Outline";
+  				_this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
 
   				_this.renderPassDepth = new RenderPass(_this.mainScene, _this.mainCamera, {
-  						overrideMaterial: new three.MeshDepthMaterial({ depthPacking: three.RGBADepthPacking }),
+  						overrideMaterial: new three.MeshDepthMaterial({
+  								depthPacking: three.RGBADepthPacking,
+  								morphTargets: true,
+  								skinning: true
+  						}),
   						clearColor: new three.Color(0xffffff),
   						clearAlpha: 1.0
   				});
@@ -3059,7 +3068,8 @@
 
   				_this.outlineBlendMaterial = new OutlineBlendMaterial(options);
   				_this.outlineBlendMaterial.uniforms.tMask.value = _this.renderTargetMask.texture;
-  				_this.outlineBlendMaterial.uniforms.tOutline.value = _this.renderTargetOutline.texture;
+
+  				_this.blur = options.blur !== undefined ? options.blur : true;
 
   				_this.selection = [];
 
@@ -3212,7 +3222,7 @@
   								renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
   								if (this.blurPass.enabled) {
-  										this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetOutline);
+  										this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
   								}
 
   								this.quad.material = this.outlineBlendMaterial;
@@ -3229,13 +3239,6 @@
   						this.renderPassDepth.initialize(renderer, alpha);
   						this.renderPassMask.initialize(renderer, alpha);
   						this.blurPass.initialize(renderer, alpha);
-
-  						if (!alpha) {
-
-  								this.renderTargetMask.texture.format = three.RGBFormat;
-  								this.renderTargetEdges.texture.format = three.RGBFormat;
-  								this.renderTargetOutline.texture.format = three.RGBFormat;
-  						}
   				}
   		}, {
   				key: "setSize",
@@ -3252,7 +3255,7 @@
   						height = this.blurPass.height;
 
   						this.renderTargetEdges.setSize(width, height);
-  						this.renderTargetOutline.setSize(width, height);
+  						this.renderTargetBlurredEdges.setSize(width, height);
 
   						this.outlineBlendMaterial.uniforms.aspect.value = width / height;
   						this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
@@ -3291,7 +3294,7 @@
 
   						this.blurPass.enabled = value;
 
-  						this.outlineBlendMaterial.uniforms.tOutline.value = value ? this.renderTargetOutline.texture : this.renderTargetEdges.texture;
+  						this.outlineBlendMaterial.uniforms.tEdges.value = value ? this.renderTargetBlurredEdges.texture : this.renderTargetEdges.texture;
   				}
   		}, {
   				key: "dithering",
