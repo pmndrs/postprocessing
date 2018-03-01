@@ -24,7 +24,7 @@ void main() {
 
 	#ifndef X_RAY
 
-		outline.y = 0.0;
+		edge.y = 0.0;
 
 	#endif
 
