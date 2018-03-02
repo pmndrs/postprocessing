@@ -28,7 +28,7 @@ void main() {
 
 	#endif
 
-	float depthTest = (vViewZ <= viewZ) ? 1.0 : 0.0;
+	float depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;
 
 	gl_FragColor.rgb = vec3(0.0, depthTest, 1.0);
 
