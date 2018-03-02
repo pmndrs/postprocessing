@@ -79,8 +79,7 @@ export class OutlinePass extends Pass {
 
 		this.renderTargetDepth = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			format: RGBFormat
+			magFilter: LinearFilter
 		});
 
 		this.renderTargetDepth.texture.name = "Outline.Depth";
@@ -95,6 +94,7 @@ export class OutlinePass extends Pass {
 
 		this.renderTargetMask = this.renderTargetDepth.clone();
 
+		this.renderTargetMask.texture.format = RGBFormat;
 		this.renderTargetMask.texture.name = "Outline.Mask";
 
 		/**
