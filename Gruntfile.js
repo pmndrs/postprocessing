@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 		jitGrunt: {
 			customTasksDir: "grunt/tasks",
 			staticMappings: {
-				esdoc: "@vanruesc/grunt-esdoc"
+				esdoc: "grunt-plugin-esdoc"
 			}
 		},
 
