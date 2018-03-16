@@ -106,7 +106,6 @@ export class BokehDemo extends PostProcessingDemo {
 
 		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
 		camera.position.set(12.5, -0.3, 1.7);
-		camera.lookAt(scene.position);
 		this.camera = camera;
 
 		// Controls.
