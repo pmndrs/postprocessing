@@ -16,6 +16,14 @@ varying vec2 vUv;
 
 #endif
 
+#ifdef GRID
+
+	uniform float gridIntensity;
+	uniform vec2 gridScale;
+	uniform float gridLineWidth;
+
+#endif
+
 #ifdef GREYSCALE
 
 	#include <common>
@@ -86,6 +94,13 @@ void main() {
 			color += scanlines;
 
 		#endif
+
+	#endif
+
+	#ifdef GRID
+
+		float grid = 0.5 - max(abs(mod(vUv.x * gridScale.x, 1.0) - 0.5), abs(mod(vUv.y * gridScale.y, 1.0) - 0.5));
+		color *= (1.0 - gridIntensity) + vec3(smoothstep(0.0, gridLineWidth, grid)) * gridIntensity;
 
 	#endif
 

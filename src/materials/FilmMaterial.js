@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/film/shader.frag";
 import vertex from "./glsl/film/shader.vert";
@@ -38,8 +38,10 @@ export class FilmMaterial extends ShaderMaterial {
 	 * @param {Boolean} [options.screenMode=true] - Whether the screen blend mode should be used for noise and scanlines. Both of these effects are computed independently.
 	 * @param {Boolean} [options.noise=true] - Show noise-based film grain.
 	 * @param {Boolean} [options.scanlines=true] - Show scanlines.
-	 * @param {Number} [options.noiseIntensity=0.5] - The noise intensity. 0.0 to 1.0.
-	 * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity. 0.0 to 1.0.
+	 * @param {Boolean} [options.grid=true] - Show a grid.
+	 * @param {Number} [options.noiseIntensity=0.5] - The noise intensity.
+	 * @param {Number} [options.scanlineIntensity=0.05] - The scanline intensity.
+	 * @param {Number} [options.gridIntensity=1.0] - The grid strength. 0.0 to 1.0.
 	 * @param {Number} [options.greyscaleIntensity=1.0] - The intensity of the greyscale effect. 0.0 to 1.0.
 	 * @param {Number} [options.sepiaIntensity=1.0] - The intensity of the sepia effect. 0.0 to 1.0.
 	 * @param {Number} [options.vignetteOffset=1.0] - The offset of the vignette effect. 0.0 to 1.0.
@@ -53,6 +55,7 @@ export class FilmMaterial extends ShaderMaterial {
 			screenMode: true,
 			noise: true,
 			scanlines: true,
+			grid: false,
 
 			greyscale: false,
 			sepia: false,
@@ -61,6 +64,7 @@ export class FilmMaterial extends ShaderMaterial {
 
 			noiseIntensity: 0.5,
 			scanlineIntensity: 0.05,
+			gridIntensity: 1.0,
 			greyscaleIntensity: 1.0,
 			sepiaIntensity: 1.0,
 
@@ -80,7 +84,11 @@ export class FilmMaterial extends ShaderMaterial {
 
 				noiseIntensity: new Uniform(settings.noiseIntensity),
 				scanlineIntensity: new Uniform(settings.scanlineIntensity),
+				gridIntensity: new Uniform(settings.gridIntensity),
+
 				scanlineCount: new Uniform(0.0),
+				gridScale: new Uniform(new Vector2()),
+				gridLineWidth: new Uniform(0.0),
 
 				greyscaleIntensity: new Uniform(settings.greyscaleIntensity),
 				sepiaIntensity: new Uniform(settings.sepiaIntensity),
@@ -101,6 +109,7 @@ export class FilmMaterial extends ShaderMaterial {
 		this.setScreenModeEnabled(settings.screenMode);
 		this.setNoiseEnabled(settings.noise);
 		this.setScanlinesEnabled(settings.scanlines);
+		this.setGridEnabled(settings.grid);
 		this.setGreyscaleEnabled(settings.greyscale);
 		this.setSepiaEnabled(settings.sepia);
 		this.setVignetteEnabled(settings.vignette);
@@ -167,6 +176,28 @@ export class FilmMaterial extends ShaderMaterial {
 		} else {
 
 			delete this.defines.SCANLINES;
+
+		}
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables the grid effect.
+	 *
+	 * @param {Boolean} enabled - Whether the grid effect should be enabled.
+	 */
+
+	setGridEnabled(enabled) {
+
+		if(enabled) {
+
+			this.defines.GRID = "1";
+
+		} else {
+
+			delete this.defines.GRID;
 
 		}
 

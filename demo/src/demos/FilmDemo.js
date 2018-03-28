@@ -183,9 +183,11 @@ export class FilmDemo extends PostProcessingDemo {
 			vignette: true,
 			eskil: true,
 			scanlines: true,
+			grid: false,
 			noise: true,
 			noiseIntensity: 0.5,
 			scanlineIntensity: 0.5,
+			gridIntensity: 1.0,
 			scanlineDensity: 1.5,
 			greyscaleIntensity: 1.0,
 			sepiaIntensity: 0.5,
@@ -240,6 +242,7 @@ export class FilmDemo extends PostProcessingDemo {
 
 		const composer = this.composer;
 		const pass = this.filmPass;
+		const uniforms = pass.material.uniforms;
 
 		const params = {
 			"greyscale": pass.material.defines.GREYSCALE !== undefined,
@@ -248,14 +251,18 @@ export class FilmDemo extends PostProcessingDemo {
 			"eskil": pass.material.defines.ESKIL !== undefined,
 			"noise": pass.material.defines.NOISE !== undefined,
 			"scanlines": pass.material.defines.SCANLINES !== undefined,
-			"noise intensity": pass.material.uniforms.noiseIntensity.value,
-			"scanlines intensity": pass.material.uniforms.scanlineIntensity.value,
+			"grid": pass.material.defines.GRID !== undefined,
+			"noise intensity": uniforms.noiseIntensity.value,
+			"scanlines intensity": uniforms.scanlineIntensity.value,
+			"grid intensity": uniforms.gridIntensity.value,
 			"scanlines count": pass.scanlineDensity,
+			"grid scale": pass.gridScale,
+			"grid line width": pass.gridLineWidth,
 			"blend mode": "screen",
-			"greyscale intensity": pass.material.uniforms.greyscaleIntensity.value,
-			"sepia intensity": pass.material.uniforms.sepiaIntensity.value,
-			"vignette offset": pass.material.uniforms.vignetteOffset.value,
-			"vignette darkness": pass.material.uniforms.vignetteDarkness.value
+			"greyscale intensity": uniforms.greyscaleIntensity.value,
+			"sepia intensity": uniforms.sepiaIntensity.value,
+			"vignette offset": uniforms.vignetteOffset.value,
+			"vignette darkness": uniforms.vignetteDarkness.value
 		};
 
 		let f = menu.addFolder("Greyscale");
@@ -268,13 +275,11 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.greyscaleIntensity.value = params["greyscale intensity"];
+			uniforms.greyscaleIntensity.value = params["greyscale intensity"];
 
 		});
 
-		f.open();
-
-		f = menu.addFolder("Noise and scanlines");
+		f = menu.addFolder("Noise, Scanlines and Grid");
 
 		f.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
@@ -290,7 +295,7 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.noiseIntensity.value = params["noise intensity"];
+			uniforms.noiseIntensity.value = params["noise intensity"];
 
 		});
 
@@ -302,7 +307,7 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.scanlineIntensity.value = params["scanlines intensity"];
+			uniforms.scanlineIntensity.value = params["scanlines intensity"];
 
 		});
 
@@ -312,7 +317,29 @@ export class FilmDemo extends PostProcessingDemo {
 
 		});
 
-		f.open();
+		f.add(params, "grid").onChange(function() {
+
+			pass.material.setGridEnabled(params.grid);
+
+		});
+
+		f.add(params, "grid intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+
+			uniforms.gridIntensity.value = params["grid intensity"];
+
+		});
+
+		f.add(params, "grid scale").min(0.01).max(2.0).step(0.01).onChange(function() {
+
+			pass.gridScale = params["grid scale"]; composer.setSize();
+
+		});
+
+		f.add(params, "grid line width").min(0.0).max(1.0).step(0.001).onChange(function() {
+
+			pass.gridLineWidth = params["grid line width"]; composer.setSize();
+
+		});
 
 		f = menu.addFolder("Sepia");
 
@@ -324,11 +351,9 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.sepiaIntensity.value = params["sepia intensity"];
+			uniforms.sepiaIntensity.value = params["sepia intensity"];
 
 		});
-
-		f.open();
 
 		f = menu.addFolder("Vignette");
 
@@ -346,17 +371,15 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.vignetteOffset.value = params["vignette offset"];
+			uniforms.vignetteOffset.value = params["vignette offset"];
 
 		});
 
 		f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.material.uniforms.vignetteDarkness.value = params["vignette darkness"];
+			uniforms.vignetteDarkness.value = params["vignette darkness"];
 
 		});
-
-		f.open();
 
 	}
 
