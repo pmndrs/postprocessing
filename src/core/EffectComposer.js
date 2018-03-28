@@ -294,7 +294,7 @@ export class EffectComposer {
 
 						context = renderer.context;
 						context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, readBuffer, writeBuffer);
+						copyPass.render(renderer, readBuffer, pass.renderToScreen ? null : writeBuffer);
 						context.stencilFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
