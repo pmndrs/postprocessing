@@ -17,10 +17,8 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	ClearMaskPass,
-	CopyMaterial,
 	MaskPass,
-	PixelationPass,
-	ShaderPass
+	PixelationPass
 } from "../../../src";
 
 /**
@@ -215,18 +213,16 @@ export class PixelationDemo extends PostProcessingDemo {
 		this.renderPass.renderToScreen = false;
 
 		let pass = new MaskPass(maskScene, camera);
+		pass.renderToScreen = true;
 		this.maskPass = pass;
 		composer.addPass(pass);
 
 		pass = new PixelationPass(5.0);
+		pass.renderToScreen = true;
 		this.pixelationPass = pass;
 		composer.addPass(pass);
 
 		composer.addPass(new ClearMaskPass());
-
-		pass = new ShaderPass(new CopyMaterial());
-		pass.renderToScreen = true;
-		composer.addPass(pass);
 
 	}
 
