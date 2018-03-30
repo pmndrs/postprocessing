@@ -595,13 +595,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-depthTexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-depthTexture",
     "src/core/EffectComposer.js~EffectComposer#depthTexture",
     "member"
   ],
@@ -867,6 +867,12 @@ window.esdocSearchIndex = [
     "src/materials/filmmaterial.js~filmmaterial#setgreyscaleenabled",
     "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setGreyscaleEnabled",
     "src/materials/FilmMaterial.js~FilmMaterial#setGreyscaleEnabled",
+    "method"
+  ],
+  [
+    "src/materials/filmmaterial.js~filmmaterial#setgridenabled",
+    "class/src/materials/FilmMaterial.js~FilmMaterial.html#instance-method-setGridEnabled",
+    "src/materials/FilmMaterial.js~FilmMaterial#setGridEnabled",
     "method"
   ],
   [
@@ -1279,25 +1285,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#distinction",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-distinction",
-    "src/passes/BloomPass.js~BloomPass#distinction",
-    "member"
-  ],
-  [
-    "src/passes/bloompass.js~bloompass#distinction",
     "class/src/passes/BloomPass.js~BloomPass.html#instance-set-distinction",
     "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
   [
-    "src/passes/bloompass.js~bloompass#dithering",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-dithering",
-    "src/passes/BloomPass.js~BloomPass#dithering",
+    "src/passes/bloompass.js~bloompass#distinction",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-distinction",
+    "src/passes/BloomPass.js~BloomPass#distinction",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#dithering",
     "class/src/passes/BloomPass.js~BloomPass.html#instance-get-dithering",
+    "src/passes/BloomPass.js~BloomPass#dithering",
+    "member"
+  ],
+  [
+    "src/passes/bloompass.js~bloompass#dithering",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-dithering",
     "src/passes/BloomPass.js~BloomPass#dithering",
     "member"
   ],
@@ -1423,13 +1429,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
@@ -1638,6 +1644,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/filmpass.js~filmpass#gridlinewidth",
+    "class/src/passes/FilmPass.js~FilmPass.html#instance-member-gridLineWidth",
+    "src/passes/FilmPass.js~FilmPass#gridLineWidth",
+    "member"
+  ],
+  [
+    "src/passes/filmpass.js~filmpass#gridscale",
+    "class/src/passes/FilmPass.js~FilmPass.html#instance-member-gridScale",
+    "src/passes/FilmPass.js~FilmPass#gridScale",
+    "member"
+  ],
+  [
     "src/passes/filmpass.js~filmpass#material",
     "class/src/passes/FilmPass.js~FilmPass.html#instance-member-material",
     "src/passes/FilmPass.js~FilmPass#material",
@@ -1813,13 +1831,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#kernelsize",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-kernelSize",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-kernelSize",
     "src/passes/GodRaysPass.js~GodRaysPass#kernelSize",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#kernelsize",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-kernelSize",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-kernelSize",
     "src/passes/GodRaysPass.js~GodRaysPass#kernelSize",
     "member"
   ],
@@ -1909,13 +1927,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
@@ -2017,13 +2035,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/outlinepass.js~outlinepass#dithering",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-dithering",
     "src/passes/OutlinePass.js~OutlinePass#dithering",
     "member"
   ],
   [
     "src/passes/outlinepass.js~outlinepass#dithering",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-dithering",
     "src/passes/OutlinePass.js~OutlinePass#dithering",
     "member"
   ],
@@ -2035,13 +2053,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/outlinepass.js~outlinepass#kernelsize",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-kernelSize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-kernelSize",
     "src/passes/OutlinePass.js~OutlinePass#kernelSize",
     "member"
   ],
   [
     "src/passes/outlinepass.js~outlinepass#kernelsize",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-kernelSize",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-kernelSize",
     "src/passes/OutlinePass.js~OutlinePass#kernelSize",
     "member"
   ],
@@ -2287,13 +2305,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
@@ -2719,13 +2737,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#opacity",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacity",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacity",
     "src/passes/TexturePass.js~TexturePass#opacity",
     "member"
   ],
