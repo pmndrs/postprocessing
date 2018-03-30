@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.3.3 build Mar 16 2018
+ * postprocessing v4.4.0 build Mar 30 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -521,7 +521,7 @@
   	return DotScreenMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\t#include <common>\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tvec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invNoise = vec3(1.0) - noise;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invNoise;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += noise;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tvec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invScanlines = vec3(1.0) - scanlines;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invScanlines;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += scanlines;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(linearToRelativeLuminance(color)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 center = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - center) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, center);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
+  var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GRID\r\n\r\n\tuniform float gridIntensity;\r\n\tuniform vec2 gridScale;\r\n\tuniform float gridLineWidth;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\t#include <common>\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tvec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invNoise = vec3(1.0) - noise;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invNoise;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += noise;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tvec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invScanlines = vec3(1.0) - scanlines;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invScanlines;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += scanlines;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef GRID\r\n\r\n\t\tfloat grid = 0.5 - max(abs(mod(vUv.x * gridScale.x, 1.0) - 0.5), abs(mod(vUv.y * gridScale.y, 1.0) - 0.5));\r\n\t\tcolor *= (1.0 - gridIntensity) + vec3(smoothstep(0.0, gridLineWidth, grid)) * gridIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(linearToRelativeLuminance(color)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 center = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - center) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, center);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
 
   var vertex$8 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -538,6 +538,7 @@
   						screenMode: true,
   						noise: true,
   						scanlines: true,
+  						grid: false,
 
   						greyscale: false,
   						sepia: false,
@@ -546,6 +547,7 @@
 
   						noiseIntensity: 0.5,
   						scanlineIntensity: 0.05,
+  						gridIntensity: 1.0,
   						greyscaleIntensity: 1.0,
   						sepiaIntensity: 1.0,
 
@@ -565,7 +567,11 @@
 
   								noiseIntensity: new three.Uniform(settings.noiseIntensity),
   								scanlineIntensity: new three.Uniform(settings.scanlineIntensity),
+  								gridIntensity: new three.Uniform(settings.gridIntensity),
+
   								scanlineCount: new three.Uniform(0.0),
+  								gridScale: new three.Uniform(new three.Vector2()),
+  								gridLineWidth: new three.Uniform(0.0),
 
   								greyscaleIntensity: new three.Uniform(settings.greyscaleIntensity),
   								sepiaIntensity: new three.Uniform(settings.sepiaIntensity),
@@ -586,6 +592,7 @@
   				_this.setScreenModeEnabled(settings.screenMode);
   				_this.setNoiseEnabled(settings.noise);
   				_this.setScanlinesEnabled(settings.scanlines);
+  				_this.setGridEnabled(settings.grid);
   				_this.setGreyscaleEnabled(settings.greyscale);
   				_this.setSepiaEnabled(settings.sepia);
   				_this.setVignetteEnabled(settings.vignette);
@@ -632,6 +639,20 @@
   						} else {
 
   								delete this.defines.SCANLINES;
+  						}
+
+  						this.needsUpdate = true;
+  				}
+  		}, {
+  				key: "setGridEnabled",
+  				value: function setGridEnabled(enabled) {
+
+  						if (enabled) {
+
+  								this.defines.GRID = "1";
+  						} else {
+
+  								delete this.defines.GRID;
   						}
 
   						this.needsUpdate = true;
@@ -1986,6 +2007,10 @@
 
   				_this.scanlineDensity = options.scanlineDensity === undefined ? 1.25 : options.scanlineDensity;
 
+  				_this.gridScale = options.gridScale === undefined ? 1.0 : Math.max(options.gridScale, 1e-6);
+
+  				_this.gridLineWidth = options.gridLineWidth === undefined ? 0.0 : Math.max(options.gridLineWidth, 0.0);
+
   				return _this;
   		}
 
@@ -2002,7 +2027,12 @@
   				key: "setSize",
   				value: function setSize(width, height) {
 
+  						var aspect = width / height;
+  						var gridScale = this.gridScale * (height * 0.125);
+
   						this.material.uniforms.scanlineCount.value = Math.round(height * this.scanlineDensity);
+  						this.material.uniforms.gridScale.value.set(aspect * gridScale, gridScale);
+  						this.material.uniforms.gridLineWidth.value = gridScale / height + this.gridLineWidth;
   				}
   		}]);
   		return FilmPass;
@@ -2469,12 +2499,12 @@
   								renderer.setRenderTarget(readBuffer);
   								renderer.clearStencil();
 
-  								renderer.setRenderTarget(writeBuffer);
+  								renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
   								renderer.clearStencil();
   						}
 
   						renderer.render(scene, camera, readBuffer);
-  						renderer.render(scene, camera, writeBuffer);
+  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
 
   						state.buffers.color.setLocked(false);
   						state.buffers.depth.setLocked(false);
@@ -3566,7 +3596,7 @@
 
   														context = renderer.context;
   														context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
-  														copyPass.render(renderer, readBuffer, writeBuffer);
+  														copyPass.render(renderer, readBuffer, pass.renderToScreen ? null : writeBuffer);
   														context.stencilFunc(context.EQUAL, 1, 0xffffffff);
   												}
 
