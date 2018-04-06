@@ -77,17 +77,34 @@ export class MaskPass extends Pass {
 		// Clear the stencil.
 		if(this.clearStencil) {
 
-			renderer.setRenderTarget(readBuffer);
-			renderer.clearStencil();
+			if(this.renderToScreen) {
 
-			renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
-			renderer.clearStencil();
+				renderer.setRenderTarget(null);
+				renderer.clearStencil();
+
+			} else {
+
+				renderer.setRenderTarget(readBuffer);
+				renderer.clearStencil();
+
+				renderer.setRenderTarget(writeBuffer);
+				renderer.clearStencil();
+
+			}
 
 		}
 
 		// Draw the mask.
-		renderer.render(scene, camera, readBuffer);
-		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
+		if(this.renderToScreen) {
+
+			renderer.render(scene, camera, null);
+
+		} else {
+
+			renderer.render(scene, camera, readBuffer);
+			renderer.render(scene, camera, writeBuffer);
+
+		}
 
 		// Unlock the buffers.
 		state.buffers.color.setLocked(false);
