@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.4.0 build Mar 30 2018
+ * postprocessing v4.4.1 build Apr 06 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -2496,15 +2496,28 @@
 
   						if (this.clearStencil) {
 
-  								renderer.setRenderTarget(readBuffer);
-  								renderer.clearStencil();
+  								if (this.renderToScreen) {
 
-  								renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
-  								renderer.clearStencil();
+  										renderer.setRenderTarget(null);
+  										renderer.clearStencil();
+  								} else {
+
+  										renderer.setRenderTarget(readBuffer);
+  										renderer.clearStencil();
+
+  										renderer.setRenderTarget(writeBuffer);
+  										renderer.clearStencil();
+  								}
   						}
 
-  						renderer.render(scene, camera, readBuffer);
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
+  						if (this.renderToScreen) {
+
+  								renderer.render(scene, camera, null);
+  						} else {
+
+  								renderer.render(scene, camera, readBuffer);
+  								renderer.render(scene, camera, writeBuffer);
+  						}
 
   						state.buffers.color.setLocked(false);
   						state.buffers.depth.setLocked(false);
@@ -2661,12 +2674,13 @@
   						var i = void 0,
   						    l = void 0;
 
+  						this.clearSelection();
+
   						for (i = 0, l = selection.length; i < l; ++i) {
 
   								selection[i].layers.enable(selectionLayer);
   						}
 
-  						this.clearSelection();
   						this.selection = selection;
   						this.needsSwap = selection.length > 0;
 
