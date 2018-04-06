@@ -364,13 +364,14 @@ export class OutlinePass extends Pass {
 
 		let i, l;
 
+		this.clearSelection();
+
 		for(i = 0, l = selection.length; i < l; ++i) {
 
 			selection[i].layers.enable(selectionLayer);
 
 		}
 
-		this.clearSelection();
 		this.selection = selection;
 		this.needsSwap = selection.length > 0;
 
