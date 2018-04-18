@@ -4,7 +4,11 @@
  * @module postprocessing
  */
 
-export { EffectComposer } from "./core";
+export {
+	Disposable,
+	EffectComposer,
+	Resizable
+} from "./core";
 
 export {
 	BloomPass,

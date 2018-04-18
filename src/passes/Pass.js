@@ -6,8 +6,8 @@ import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
  * Passes that do not rely on the depth buffer should explicitly disable the
  * depth test and depth write in their respective shader materials.
  *
- * This class implements a {@link Pass#dispose} method that frees memory on
- * demand.
+ * @implements Resizable
+ * @implements Disposable
  */
 
 export class Pass {

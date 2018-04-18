@@ -20,6 +20,9 @@ import { CopyMaterial } from "../materials";
  * It is common practice to use a {@link RenderPass} as the first pass to
  * automatically clear the screen and render the scene to a texture for further
  * processing.
+ *
+ * @implements Resizable
+ * @implements Disposable
  */
 
 export class EffectComposer {
