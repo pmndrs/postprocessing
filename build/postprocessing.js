@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.4.1 build Apr 06 2018
+ * postprocessing v4.4.2 build Apr 19 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -9,10 +9,6 @@
   typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
   (factory((global.POSTPROCESSING = {}),global.THREE));
 }(this, (function (exports,three) { 'use strict';
-
-  var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
-
-  var vertex = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var classCallCheck = function (instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -79,6 +75,22 @@
 
     return call && (typeof call === "object" || typeof call === "function") ? call : self;
   };
+
+  var Disposable = function () {
+    function Disposable() {
+      classCallCheck(this, Disposable);
+    }
+
+    createClass(Disposable, [{
+      key: "dispose",
+      value: function dispose() {}
+    }]);
+    return Disposable;
+  }();
+
+  var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
+
+  var vertex = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var AdaptiveLuminosityMaterial = function (_ShaderMaterial) {
   			inherits(AdaptiveLuminosityMaterial, _ShaderMaterial);
@@ -3662,41 +3674,45 @@
   				}
   		}, {
   				key: "reset",
-  				value: function reset(renderTarget) {
+  				value: function reset() {
 
-  						var depthBuffer = this.readBuffer.depthBuffer;
-  						var stencilBuffer = this.readBuffer.stencilBuffer;
-  						var depthTexture = this.readBuffer.depthTexture !== null;
+  						var renderTarget = this.createBuffer(this.readBuffer.depthBuffer, this.readBuffer.stencilBuffer, this.readBuffer.depthTexture !== null);
 
-  						this.dispose(renderTarget === undefined ? this.createBuffer(depthBuffer, stencilBuffer, depthTexture) : renderTarget);
+  						this.dispose();
+
+  						this.readBuffer = renderTarget;
+  						this.writeBuffer = this.readBuffer.clone();
+  						this.copyPass = new ShaderPass(new CopyMaterial());
   				}
   		}, {
   				key: "dispose",
-  				value: function dispose(renderTarget) {
+  				value: function dispose() {
 
   						var passes = this.passes;
 
-  						if (this.readBuffer !== null && this.writeBuffer !== null) {
+  						var i = void 0,
+  						    l = void 0;
+
+  						for (i = 0, l = passes.length; i < l; ++i) {
+
+  								passes[i].dispose();
+  						}
+
+  						this.passes = [];
+
+  						if (this.readBuffer !== null) {
 
   								this.readBuffer.dispose();
-  								this.writeBuffer.dispose();
-
   								this.readBuffer = null;
+  						}
+
+  						if (this.writeBuffer !== null) {
+
+  								this.writeBuffer.dispose();
   								this.writeBuffer = null;
   						}
 
-  						while (passes.length > 0) {
-
-  								passes.pop().dispose();
-  						}
-
-  						if (renderTarget !== undefined) {
-  								this.readBuffer = renderTarget;
-  								this.writeBuffer = this.readBuffer.clone();
-  						} else {
-
-  								this.copyPass.dispose();
-  						}
+  						this.copyPass.dispose();
   				}
   		}, {
   				key: "depthTexture",
@@ -3711,6 +3727,18 @@
   				}
   		}]);
   		return EffectComposer;
+  }();
+
+  var Resizable = function () {
+  	function Resizable() {
+  		classCallCheck(this, Resizable);
+  	}
+
+  	createClass(Resizable, [{
+  		key: "setSize",
+  		value: function setSize(width, height) {}
+  	}]);
+  	return Resizable;
   }();
 
   function createCanvas(width, height, data, channels) {
@@ -4578,7 +4606,9 @@
   	return SMAASearchImageData;
   }();
 
+  exports.Disposable = Disposable;
   exports.EffectComposer = EffectComposer;
+  exports.Resizable = Resizable;
   exports.BloomPass = BloomPass;
   exports.BlurPass = BlurPass;
   exports.BokehPass = BokehPass;
