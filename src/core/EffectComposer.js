@@ -21,8 +21,8 @@ import { CopyMaterial } from "../materials";
  * automatically clear the screen and render the scene to a texture for further
  * processing.
  *
- * @implements Resizable
- * @implements Disposable
+ * @implements {Resizable}
+ * @implements {Disposable}
  */
 
 export class EffectComposer {
