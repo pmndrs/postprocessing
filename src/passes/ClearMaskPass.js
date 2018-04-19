@@ -14,6 +14,7 @@ export class ClearMaskPass extends Pass {
 
 		super("ClearMaskPass", null, null, null);
 
+		this.needsSwap = false;
 
 	}
 

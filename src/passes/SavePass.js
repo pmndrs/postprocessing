@@ -29,6 +29,7 @@ export class SavePass extends Pass {
 		this.material = new CopyMaterial();
 
 		this.quad.material = this.material;
+		this.needsSwap = false;
 
 		/**
 		 * The render target.
