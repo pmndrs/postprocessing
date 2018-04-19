@@ -58,12 +58,6 @@ export class ShockWavePass extends Pass {
 		this.name = "ShockWavePass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * The main camera.
 		 *
 		 * @type {Object3D}

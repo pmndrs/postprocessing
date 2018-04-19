@@ -47,12 +47,6 @@ export class OutlinePass extends Pass {
 		this.name = "OutlinePass";
 
 		/**
-		 * This pass renders to the write buffer when there are objects to outline.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * The main scene.
 		 *
 		 * @type {Scene}

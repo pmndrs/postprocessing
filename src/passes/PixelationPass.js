@@ -24,12 +24,6 @@ export class PixelationPass extends Pass {
 		this.name = "PixelationPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * A pixelation shader material.
 		 *
 		 * @type {PixelationMaterial}

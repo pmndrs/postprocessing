@@ -28,12 +28,6 @@ export class DotScreenPass extends Pass {
 		this.name = "DotScreenPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * A dot screen shader material.
 		 *
 		 * @type {DotScreenMaterial}

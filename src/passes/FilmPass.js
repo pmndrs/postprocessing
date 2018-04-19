@@ -29,12 +29,6 @@ export class FilmPass extends Pass {
 		this.name = "FilmPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * Film shader material.
 		 *
 		 * @type {FilmMaterial}

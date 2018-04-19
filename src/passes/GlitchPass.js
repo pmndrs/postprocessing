@@ -57,12 +57,6 @@ export class GlitchPass extends Pass {
 		this.name = "GlitchPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * Glitch shader material.
 		 *
 		 * @type {GlitchMaterial}

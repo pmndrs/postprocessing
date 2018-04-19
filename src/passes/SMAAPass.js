@@ -40,12 +40,6 @@ export class SMAAPass extends Pass {
 		this.name = "SMAAPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * A render target for the color edge detection.
 		 *
 		 * @type {WebGLRenderTarget}

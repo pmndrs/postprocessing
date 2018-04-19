@@ -26,12 +26,6 @@ export class ShaderPass extends Pass {
 		this.name = "ShaderPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * The shader material to use for rendering.
 		 *
 		 * @type {ShaderMaterial}

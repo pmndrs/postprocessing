@@ -29,12 +29,6 @@ export class RealisticBokehPass extends Pass {
 		this.name = "RealisticBokehPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * A bokeh shader material.
 		 *
 		 * @type {RealisticBokehMaterial}

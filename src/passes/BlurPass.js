@@ -27,12 +27,6 @@ export class BlurPass extends Pass {
 		this.name = "BlurPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}

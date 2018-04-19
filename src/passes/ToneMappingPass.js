@@ -49,12 +49,6 @@ export class ToneMappingPass extends Pass {
 		this.name = "ToneMappingPass";
 
 		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
 		 * The render target for the current luminosity.
 		 *
 		 * @type {WebGLRenderTarget}

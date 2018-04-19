@@ -77,19 +77,15 @@ export class Pass {
 		}
 
 		/**
-		 * Indicates whether the read and write buffers should be swapped after this
-		 * pass has finished rendering.
-		 *
-		 * Set this to true if this pass renders to the write buffer so that a
-		 * following pass can find the result in the read buffer.
+		 * Indicates whether this pass should render to screen.
 		 *
 		 * @type {Boolean}
 		 */
 
-		this.needsSwap = false;
+		this.renderToScreen = false;
 
 		/**
-		 * Enabled flag.
+		 * Indicates whether this pass should be executed.
 		 *
 		 * @type {Boolean}
 		 */
@@ -97,12 +93,16 @@ export class Pass {
 		this.enabled = true;
 
 		/**
-		 * Render to screen flag.
+		 * Indicates whether the {@link EffectComposer} should swap the frame
+		 * buffers after this pass has finished rendering.
+		 *
+		 * Set this to `false` if this pass doesn't render to the output buffer or
+		 * the screen. Otherwise, the contents of the input buffer will be lost.
 		 *
 		 * @type {Boolean}
 		 */
 
-		this.renderToScreen = false;
+		this.needsSwap = true;
 
 	}
 
