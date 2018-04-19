@@ -372,63 +372,61 @@ export class EffectComposer {
 
 	/**
 	 * Resets this composer by deleting all passes and creating new buffers.
-	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the settings of the renderer will be used.
 	 */
 
-	reset(renderTarget) {
+	reset() {
 
-		const depthBuffer = this.readBuffer.depthBuffer;
-		const stencilBuffer = this.readBuffer.stencilBuffer;
-		const depthTexture = (this.readBuffer.depthTexture !== null);
-
-		this.dispose((renderTarget === undefined) ?
-			this.createBuffer(depthBuffer, stencilBuffer, depthTexture) :
-			renderTarget
+		const renderTarget = this.createBuffer(
+			this.readBuffer.depthBuffer,
+			this.readBuffer.stencilBuffer,
+			(this.readBuffer.depthTexture !== null)
 		);
+
+		this.dispose();
+
+		// Reanimate.
+		this.readBuffer = renderTarget;
+		this.writeBuffer = this.readBuffer.clone();
+		this.copyPass = new ShaderPass(new CopyMaterial());
 
 	}
 
 	/**
-	 * Destroys all passes and render targets.
+	 * Destroys this composer and all passes.
 	 *
-	 * This method deallocates all render targets, textures and materials created
-	 * by the passes. It also deletes this composer's frame buffers.
-	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.
+	 * This method deallocates all disposable objects created by the passes. It
+	 * also deletes the main frame buffers of this composer.
 	 */
 
-	dispose(renderTarget) {
+	dispose() {
 
 		const passes = this.passes;
 
-		if(this.readBuffer !== null && this.writeBuffer !== null) {
+		let i, l;
+
+		for(i = 0, l = passes.length; i < l; ++i) {
+
+			passes[i].dispose();
+
+		}
+
+		this.passes = [];
+
+		if(this.readBuffer !== null) {
 
 			this.readBuffer.dispose();
-			this.writeBuffer.dispose();
-
 			this.readBuffer = null;
+
+		}
+
+		if(this.writeBuffer !== null) {
+
+			this.writeBuffer.dispose();
 			this.writeBuffer = null;
 
 		}
 
-		while(passes.length > 0) {
-
-			passes.pop().dispose();
-
-		}
-
-		if(renderTarget !== undefined) {
-
-			// Reanimate.
-			this.readBuffer = renderTarget;
-			this.writeBuffer = this.readBuffer.clone();
-
-		} else {
-
-			this.copyPass.dispose();
-
-		}
+		this.copyPass.dispose();
 
 	}
 
