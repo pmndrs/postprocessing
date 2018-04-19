@@ -40,13 +40,7 @@ export class ToneMappingPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "ToneMappingPass";
+		super("ToneMappingPass");
 
 		/**
 		 * The render target for the current luminosity.

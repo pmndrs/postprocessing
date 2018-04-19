@@ -18,13 +18,7 @@ export class BlurPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "BlurPass";
+		super("BlurPass");
 
 		/**
 		 * A render target.

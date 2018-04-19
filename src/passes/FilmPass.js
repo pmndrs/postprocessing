@@ -20,13 +20,7 @@ export class FilmPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "FilmPass";
+		super("FilmPass");
 
 		/**
 		 * Film shader material.

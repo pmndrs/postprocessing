@@ -23,13 +23,7 @@ export class RenderPass extends Pass {
 
 	constructor(scene, camera, options = {}) {
 
-		super(scene, camera, null);
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "RenderPass";
+		super("RenderPass", scene, camera, null);
 
 		/**
 		 * A clear pass.

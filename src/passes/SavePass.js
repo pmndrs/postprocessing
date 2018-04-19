@@ -17,13 +17,7 @@ export class SavePass extends Pass {
 
 	constructor(renderTarget, resize = true) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "SavePass";
+		super("SavePass");
 
 		/**
 		 * Copy shader material.

@@ -12,13 +12,8 @@ export class ClearMaskPass extends Pass {
 
 	constructor() {
 
-		super(null, null, null);
+		super("ClearMaskPass", null, null, null);
 
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "ClearMaskPass";
 
 	}
 

@@ -17,13 +17,7 @@ export class TexturePass extends Pass {
 
 	constructor(texture, opacity = 1.0) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "TexturePass";
+		super("TexturePass");
 
 		/**
 		 * A copy shader material used for rendering to texture.

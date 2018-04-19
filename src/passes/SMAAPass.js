@@ -31,13 +31,7 @@ export class SMAAPass extends Pass {
 
 	constructor(searchImage, areaImage) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "SMAAPass";
+		super("SMAAPass");
 
 		/**
 		 * A render target for the color edge detection.

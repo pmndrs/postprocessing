@@ -18,13 +18,7 @@ export class BokehPass extends Pass {
 
 	constructor(camera, options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "BokehPass";
+		super("BokehPass");
 
 		/**
 		 * A bokeh shader material.

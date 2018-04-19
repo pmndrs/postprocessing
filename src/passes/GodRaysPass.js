@@ -56,13 +56,7 @@ export class GodRaysPass extends Pass {
 
 	constructor(scene, camera, lightSource, options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "GodRaysPass";
+		super("GodRaysPass");
 
 		/**
 		 * A scene that only contains the light source.

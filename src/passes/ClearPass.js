@@ -30,13 +30,7 @@ export class ClearPass extends Pass {
 
 	constructor(options = {}) {
 
-		super(null, null, null);
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "ClearPass";
+		super("ClearPass", null, null, null);
 
 		/**
 		 * Clear color.

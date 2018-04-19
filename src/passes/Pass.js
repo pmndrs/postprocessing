@@ -15,12 +15,14 @@ export class Pass {
 	/**
 	 * Constructs a new pass.
 	 *
+	 * @param {String} [name] - The name of this pass.
 	 * @param {Scene} [scene] - The scene to render.
 	 * @param {Camera} [camera] - The camera.
 	 * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {@link RenderPass}).
 	 */
 
 	constructor(
+		name = "Pass",
 		scene = new Scene(),
 		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),
 		quad = new Mesh(new PlaneBufferGeometry(2, 2), null)
@@ -32,7 +34,7 @@ export class Pass {
 		 * @type {String}
 		 */
 
-		this.name = "Pass";
+		this.name = name;
 
 		/**
 		 * The scene to render.

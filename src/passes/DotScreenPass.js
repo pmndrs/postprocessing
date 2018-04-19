@@ -19,13 +19,7 @@ export class DotScreenPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "DotScreenPass";
+		super("DotScreenPass");
 
 		/**
 		 * A dot screen shader material.

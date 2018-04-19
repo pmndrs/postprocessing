@@ -48,13 +48,7 @@ export class GlitchPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "GlitchPass";
+		super("GlitchPass");
 
 		/**
 		 * Glitch shader material.

@@ -17,13 +17,7 @@ export class ShaderPass extends Pass {
 
 	constructor(material, textureID = "tDiffuse") {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "ShaderPass";
+		super("ShaderPass");
 
 		/**
 		 * The shader material to use for rendering.

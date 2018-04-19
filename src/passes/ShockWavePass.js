@@ -49,13 +49,7 @@ export class ShockWavePass extends Pass {
 
 	constructor(camera, epicenter = new Vector3(), options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "ShockWavePass";
+		super("ShockWavePass");
 
 		/**
 		 * The main camera.

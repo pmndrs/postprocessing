@@ -15,13 +15,7 @@ export class PixelationPass extends Pass {
 
 	constructor(granularity = 30.0) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "PixelationPass";
+		super("PixelationPass");
 
 		/**
 		 * A pixelation shader material.

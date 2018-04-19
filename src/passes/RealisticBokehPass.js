@@ -20,13 +20,7 @@ export class RealisticBokehPass extends Pass {
 
 	constructor(camera, options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "RealisticBokehPass";
+		super("RealisticBokehPass");
 
 		/**
 		 * A bokeh shader material.

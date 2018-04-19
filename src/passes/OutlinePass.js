@@ -38,13 +38,7 @@ export class OutlinePass extends Pass {
 
 	constructor(scene, camera, options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "OutlinePass";
+		super("OutlinePass");
 
 		/**
 		 * The main scene.

@@ -25,13 +25,7 @@ export class BloomPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = "BloomPass";
+		super("BloomPass");
 
 		/**
 		 * A blur pass.
