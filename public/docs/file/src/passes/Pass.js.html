@@ -30,6 +30,8 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
@@ -89,8 +91,8 @@
  * Passes that do not rely on the depth buffer should explicitly disable the
  * depth test and depth write in their respective shader materials.
  *
- * This class implements a {@link Pass#dispose} method that frees memory on
- * demand.
+ * @implements {Resizable}
+ * @implements {Disposable}
  */
 
 export class Pass {

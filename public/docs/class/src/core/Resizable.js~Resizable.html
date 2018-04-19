@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/materials/BokehMaterial.js | postprocessing</title>
+  <title data-ice="title">Resizable | postprocessing</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -82,94 +82,165 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/materials/BokehMaterial.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform } from &quot;three&quot;;
+<div class="content" data-ice="content"><div class="header-notice">
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Resizable} from &apos;<span><a href="file/src/core/Resizable.js.html#lineNumber9">postprocessing/src/core/Resizable.js</a></span>&apos;</code></pre></div>
+  <span data-ice="access">public</span>
+  <span data-ice="kind">interface</span>
+  
+  
+  
+  <span data-ice="source">| <span><a href="file/src/core/Resizable.js.html#lineNumber9">source</a></span></span>
+</div>
 
-import fragment from &quot;./glsl/bokeh/shader.frag&quot;;
-import vertex from &quot;./glsl/bokeh/shader.vert&quot;;
+<div class="self-detail detail">
+  <h1 data-ice="name">Resizable</h1>
 
-/**
- * Depth of Field shader (Bokeh).
- *
- * Original shader code by Martins Upitis:
- *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
- */
+  
 
-export class BokehMaterial extends ShaderMaterial {
+  
+  
+  
+  
+  
+  
+  
+  <div class="flat-list" data-ice="directImplemented"><h4>Direct Implemented:</h4><ul><li><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></li>, <li><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></li></ul></div>
+  <div class="flat-list" data-ice="indirectImplemented"><h4>Indirect Implemented:</h4><ul><li><span><a href="class/src/passes/BloomPass.js~BloomPass.html">BloomPass</a></span></li>, <li><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></li>, <li><span><a href="class/src/passes/BokehPass.js~BokehPass.html">BokehPass</a></span></li>, <li><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></li>, <li><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></li>, <li><span><a href="class/src/passes/DotScreenPass.js~DotScreenPass.html">DotScreenPass</a></span></li>, <li><span><a href="class/src/passes/FilmPass.js~FilmPass.html">FilmPass</a></span></li>, <li><span><a href="class/src/passes/GlitchPass.js~GlitchPass.html">GlitchPass</a></span></li>, <li><span><a href="class/src/passes/GodRaysPass.js~GodRaysPass.html">GodRaysPass</a></span></li>, <li><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></li>, <li><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html">OutlinePass</a></span></li>, <li><span><a href="class/src/passes/PixelationPass.js~PixelationPass.html">PixelationPass</a></span></li>, <li><span><a href="class/src/passes/RealisticBokehPass.js~RealisticBokehPass.html">RealisticBokehPass</a></span></li>, <li><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></li>, <li><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html">SMAAPass</a></span></li>, <li><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></li>, <li><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></li>, <li><span><a href="class/src/passes/ShockWavePass.js~ShockWavePass.html">ShockWavePass</a></span></li>, <li><span><a href="class/src/passes/TexturePass.js~TexturePass.html">TexturePass</a></span></li>, <li><span><a href="class/src/passes/ToneMappingPass.js~ToneMappingPass.html">ToneMappingPass</a></span></li></ul></div>
 
-	/**
-	 * Constructs a new bokeh material.
-	 *
-	 * @param {PerspectiveCamera} [camera] - A camera.
-	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.focus=1.0] - The focus distance, corresponds directly with the scene depth.
-	 * @param {Number} [options.dof=0.02] - Depth of field. An area in front of and behind the focus point that still appears sharp.
-	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for stronger blur and shallower depth of field.
-	 * @param {Number} [options.maxBlur=1.0] - Maximum blur strength.
-	 */
+  
+  
+  <div class="description" data-ice="description"><p>The Resizable contract.</p>
+<p>Implemented by objects that can be resized.</p>
+</div>
+  
 
-	constructor(camera, options = {}) {
+  
 
-		const settings = Object.assign({
-			focus: 1.0,
-			dof: 0.02,
-			aperture: 0.025,
-			maxBlur: 1.0
-		}, options);
+  
 
-		super({
+  
 
-			type: &quot;BokehMaterial&quot;,
+  
+</div>
 
-			uniforms: {
 
-				cameraNear: new Uniform(0.1),
-				cameraFar: new Uniform(2000),
-				aspect: new Uniform(1.0),
 
-				tDiffuse: new Uniform(null),
-				tDepth: new Uniform(null),
 
-				focus: new Uniform(settings.focus),
-				dof: new Uniform(settings.dof),
-				aperture: new Uniform(settings.aperture),
-				maxBlur: new Uniform(settings.maxBlur)
 
-			},
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html#instance-method-setSize">setSize</a></span></span><span class="code" data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the size of this object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
 
-			depthWrite: false,
-			depthTest: false
 
-		});
 
-		this.adoptCameraSettings(camera);
 
-	}
 
-	/**
-	 * Adopts the settings of the given camera.
-	 *
-	 * @param {PerspectiveCamera} [camera=null] - A camera.
-	 */
 
-	adoptCameraSettings(camera = null) {
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
-		if(camera !== null) {
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setSize">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setSize</span><span class="code" data-ice="signature">(width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizable.js.html#lineNumber18">source</a></span></span>
+    </span>
+  </h3>
 
-			this.uniforms.cameraNear.value = camera.near;
-			this.uniforms.cameraFar.value = camera.far;
-			this.uniforms.aspect.value = camera.aspect;
+  
+  
+  
+  <div data-ice="description"><p>Sets the size of this object.</p>
+</div>
 
-		}
+  
 
-	}
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">width</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The new width.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The new height.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
 
-}
-</code></pre>
+  
 
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 </div>
 
 <footer class="footer">

@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 124,
+  "end": 216,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 8,
+      "line": 10,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 124,
+    "end": 216,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 8,
+        "line": 10,
         "column": 0
       }
     },
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 69,
-        "end": 122,
+        "end": 114,
         "loc": {
           "start": {
             "line": 7,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 7,
-            "column": 53
+            "column": 45
           }
         },
         "declaration": null,
@@ -47,7 +47,7 @@
           {
             "type": "ExportSpecifier",
             "start": 78,
-            "end": 92,
+            "end": 88,
             "loc": {
               "start": {
                 "line": 7,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 7,
-                "column": 23
+                "column": 19
               }
             },
             "local": {
               "type": "Identifier",
               "start": 78,
-              "end": 92,
+              "end": 88,
               "loc": {
                 "start": {
                   "line": 7,
@@ -69,17 +69,17 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 23
+                  "column": 19
                 },
-                "identifierName": "EffectComposer"
+                "identifierName": "Disposable"
               },
-              "name": "EffectComposer",
+              "name": "Disposable",
               "leadingComments": null
             },
             "exported": {
               "type": "Identifier",
               "start": 78,
-              "end": 92,
+              "end": 88,
               "loc": {
                 "start": {
                   "line": 7,
@@ -87,34 +87,34 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 23
+                  "column": 19
                 },
-                "identifierName": "EffectComposer"
+                "identifierName": "Disposable"
               },
-              "name": "EffectComposer"
+              "name": "Disposable"
             },
             "leadingComments": null
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 100,
-          "end": 121,
+          "start": 96,
+          "end": 113,
           "loc": {
             "start": {
               "line": 7,
-              "column": 31
+              "column": 27
             },
             "end": {
               "line": 7,
-              "column": 52
+              "column": 44
             }
           },
           "extra": {
-            "rawValue": "./EffectComposer.js",
-            "raw": "\"./EffectComposer.js\""
+            "rawValue": "./Disposable.js",
+            "raw": "\"./Disposable.js\""
           },
-          "value": "./EffectComposer.js"
+          "value": "./Disposable.js"
         },
         "leadingComments": [
           {
@@ -134,6 +134,180 @@
             }
           }
         ]
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 116,
+        "end": 169,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 53
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 125,
+            "end": 139,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 9
+              },
+              "end": {
+                "line": 8,
+                "column": 23
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 125,
+              "end": 139,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 9
+                },
+                "end": {
+                  "line": 8,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 125,
+              "end": 139,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 9
+                },
+                "end": {
+                  "line": 8,
+                  "column": 23
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 147,
+          "end": 168,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 31
+            },
+            "end": {
+              "line": 8,
+              "column": 52
+            }
+          },
+          "extra": {
+            "rawValue": "./EffectComposer.js",
+            "raw": "\"./EffectComposer.js\""
+          },
+          "value": "./EffectComposer.js"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 171,
+        "end": 214,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 43
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 180,
+            "end": 189,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 9
+              },
+              "end": {
+                "line": 9,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 180,
+              "end": 189,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 9
+                },
+                "end": {
+                  "line": 9,
+                  "column": 18
+                },
+                "identifierName": "Resizable"
+              },
+              "name": "Resizable"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 180,
+              "end": 189,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 9
+                },
+                "end": {
+                  "line": 9,
+                  "column": 18
+                },
+                "identifierName": "Resizable"
+              },
+              "name": "Resizable"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 197,
+          "end": 213,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 26
+            },
+            "end": {
+              "line": 9,
+              "column": 42
+            }
+          },
+          "extra": {
+            "rawValue": "./Resizable.js",
+            "raw": "\"./Resizable.js\""
+          },
+          "value": "./Resizable.js"
+        }
       }
     ],
     "directives": []
@@ -238,9 +412,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "EffectComposer",
+      "value": "Disposable",
       "start": 78,
-      "end": 92,
+      "end": 88,
       "loc": {
         "start": {
           "line": 7,
@@ -248,6 +422,189 @@
         },
         "end": {
           "line": 7,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 89,
+      "end": 90,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 20
+        },
+        "end": {
+          "line": 7,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 91,
+      "end": 95,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 22
+        },
+        "end": {
+          "line": 7,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./Disposable.js",
+      "start": 96,
+      "end": 113,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 27
+        },
+        "end": {
+          "line": 7,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 113,
+      "end": 114,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 44
+        },
+        "end": {
+          "line": 7,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 116,
+      "end": 122,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 123,
+      "end": 124,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 7
+        },
+        "end": {
+          "line": 8,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "EffectComposer",
+      "start": 125,
+      "end": 139,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 9
+        },
+        "end": {
+          "line": 8,
           "column": 23
         }
       }
@@ -264,15 +621,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 93,
-      "end": 94,
+      "start": 140,
+      "end": 141,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 24
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 25
         }
       }
@@ -290,15 +647,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 95,
-      "end": 99,
+      "start": 142,
+      "end": 146,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 26
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 30
         }
       }
@@ -317,15 +674,15 @@
         "updateContext": null
       },
       "value": "./EffectComposer.js",
-      "start": 100,
-      "end": 121,
+      "start": 147,
+      "end": 168,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 31
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 52
         }
       }
@@ -343,16 +700,199 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 121,
-      "end": 122,
+      "start": 168,
+      "end": 169,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 8,
           "column": 52
         },
         "end": {
-          "line": 7,
+          "line": 8,
           "column": 53
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 171,
+      "end": 177,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 178,
+      "end": 179,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 7
+        },
+        "end": {
+          "line": 9,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Resizable",
+      "start": 180,
+      "end": 189,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 9
+        },
+        "end": {
+          "line": 9,
+          "column": 18
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 190,
+      "end": 191,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 19
+        },
+        "end": {
+          "line": 9,
+          "column": 20
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 192,
+      "end": 196,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 21
+        },
+        "end": {
+          "line": 9,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./Resizable.js",
+      "start": 197,
+      "end": 213,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 26
+        },
+        "end": {
+          "line": 9,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 213,
+      "end": 214,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 42
+        },
+        "end": {
+          "line": 9,
+          "column": 43
         }
       }
     },
@@ -369,15 +909,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 124,
-      "end": 124,
+      "start": 216,
+      "end": 216,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 10,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 10,
           "column": 0
         }
       }

@@ -30,6 +30,8 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminosityMaterial.js~AdaptiveLuminosityMaterial.html">AdaptiveLuminosityMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html">BokehMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
@@ -103,6 +105,9 @@ import { CopyMaterial } from &quot;../materials&quot;;
  * It is common practice to use a {@link RenderPass} as the first pass to
  * automatically clear the screen and render the scene to a texture for further
  * processing.
+ *
+ * @implements {Resizable}
+ * @implements {Disposable}
  */
 
 export class EffectComposer {
@@ -452,63 +457,61 @@ export class EffectComposer {
 
 	/**
 	 * Resets this composer by deleting all passes and creating new buffers.
-	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the settings of the renderer will be used.
 	 */
 
-	reset(renderTarget) {
+	reset() {
 
-		const depthBuffer = this.readBuffer.depthBuffer;
-		const stencilBuffer = this.readBuffer.stencilBuffer;
-		const depthTexture = (this.readBuffer.depthTexture !== null);
-
-		this.dispose((renderTarget === undefined) ?
-			this.createBuffer(depthBuffer, stencilBuffer, depthTexture) :
-			renderTarget
+		const renderTarget = this.createBuffer(
+			this.readBuffer.depthBuffer,
+			this.readBuffer.stencilBuffer,
+			(this.readBuffer.depthTexture !== null)
 		);
+
+		this.dispose();
+
+		// Reanimate.
+		this.readBuffer = renderTarget;
+		this.writeBuffer = this.readBuffer.clone();
+		this.copyPass = new ShaderPass(new CopyMaterial());
 
 	}
 
 	/**
-	 * Destroys all passes and render targets.
+	 * Destroys this composer and all passes.
 	 *
-	 * This method deallocates all render targets, textures and materials created
-	 * by the passes. It also deletes this composer&apos;s frame buffers.
-	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - A new render target. If none is provided, the composer will become inoperative.
+	 * This method deallocates all disposable objects created by the passes. It
+	 * also deletes the main frame buffers of this composer.
 	 */
 
-	dispose(renderTarget) {
+	dispose() {
 
 		const passes = this.passes;
 
-		if(this.readBuffer !== null &amp;&amp; this.writeBuffer !== null) {
+		let i, l;
+
+		for(i = 0, l = passes.length; i &lt; l; ++i) {
+
+			passes[i].dispose();
+
+		}
+
+		this.passes = [];
+
+		if(this.readBuffer !== null) {
 
 			this.readBuffer.dispose();
-			this.writeBuffer.dispose();
-
 			this.readBuffer = null;
+
+		}
+
+		if(this.writeBuffer !== null) {
+
+			this.writeBuffer.dispose();
 			this.writeBuffer = null;
 
 		}
 
-		while(passes.length &gt; 0) {
-
-			passes.pop().dispose();
-
-		}
-
-		if(renderTarget !== undefined) {
-
-			// Reanimate.
-			this.readBuffer = renderTarget;
-			this.writeBuffer = this.readBuffer.clone();
-
-		} else {
-
-			this.copyPass.dispose();
-
-		}
+		this.copyPass.dispose();
 
 	}
 

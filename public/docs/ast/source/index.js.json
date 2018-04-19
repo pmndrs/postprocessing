@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1057,
+  "end": 1087,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 63,
+      "line": 67,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1057,
+    "end": 1087,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 63,
+        "line": 67,
         "column": 0
       }
     },
@@ -31,83 +31,181 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 83,
-        "end": 123,
+        "end": 153,
         "loc": {
           "start": {
             "line": 7,
             "column": 0
           },
           "end": {
-            "line": 7,
-            "column": 40
+            "line": 11,
+            "column": 16
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 92,
-            "end": 106,
+            "start": 94,
+            "end": 104,
             "loc": {
               "start": {
-                "line": 7,
-                "column": 9
+                "line": 8,
+                "column": 1
               },
               "end": {
-                "line": 7,
-                "column": 23
+                "line": 8,
+                "column": 11
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 92,
-              "end": 106,
+              "start": 94,
+              "end": 104,
               "loc": {
                 "start": {
-                  "line": 7,
-                  "column": 9
+                  "line": 8,
+                  "column": 1
                 },
                 "end": {
-                  "line": 7,
-                  "column": 23
+                  "line": 8,
+                  "column": 11
                 },
-                "identifierName": "EffectComposer"
+                "identifierName": "Disposable"
               },
-              "name": "EffectComposer",
+              "name": "Disposable",
               "leadingComments": null
             },
             "exported": {
               "type": "Identifier",
-              "start": 92,
-              "end": 106,
+              "start": 94,
+              "end": 104,
               "loc": {
                 "start": {
-                  "line": 7,
-                  "column": 9
+                  "line": 8,
+                  "column": 1
                 },
                 "end": {
-                  "line": 7,
-                  "column": 23
+                  "line": 8,
+                  "column": 11
+                },
+                "identifierName": "Disposable"
+              },
+              "name": "Disposable"
+            },
+            "leadingComments": null
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 108,
+            "end": 122,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 1
+              },
+              "end": {
+                "line": 9,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 108,
+              "end": 122,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 1
+                },
+                "end": {
+                  "line": 9,
+                  "column": 15
                 },
                 "identifierName": "EffectComposer"
               },
               "name": "EffectComposer"
             },
-            "leadingComments": null
+            "exported": {
+              "type": "Identifier",
+              "start": 108,
+              "end": 122,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 1
+                },
+                "end": {
+                  "line": 9,
+                  "column": 15
+                },
+                "identifierName": "EffectComposer"
+              },
+              "name": "EffectComposer"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 126,
+            "end": 135,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 1
+              },
+              "end": {
+                "line": 10,
+                "column": 10
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 126,
+              "end": 135,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 1
+                },
+                "end": {
+                  "line": 10,
+                  "column": 10
+                },
+                "identifierName": "Resizable"
+              },
+              "name": "Resizable"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 126,
+              "end": 135,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 1
+                },
+                "end": {
+                  "line": 10,
+                  "column": 10
+                },
+                "identifierName": "Resizable"
+              },
+              "name": "Resizable"
+            }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 114,
-          "end": 122,
+          "start": 144,
+          "end": 152,
           "loc": {
             "start": {
-              "line": 7,
-              "column": 31
+              "line": 11,
+              "column": 7
             },
             "end": {
-              "line": 7,
-              "column": 39
+              "line": 11,
+              "column": 15
             }
           },
           "extra": {
@@ -137,15 +235,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 127,
-        "end": 472,
+        "start": 157,
+        "end": 502,
         "loc": {
           "start": {
-            "line": 9,
+            "line": 13,
             "column": 0
           },
           "end": {
-            "line": 32,
+            "line": 36,
             "column": 18
           }
         },
@@ -153,29 +251,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 138,
-            "end": 147,
+            "start": 168,
+            "end": 177,
             "loc": {
               "start": {
-                "line": 10,
+                "line": 14,
                 "column": 1
               },
               "end": {
-                "line": 10,
+                "line": 14,
                 "column": 10
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 138,
-              "end": 147,
+              "start": 168,
+              "end": 177,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 14,
                   "column": 1
                 },
                 "end": {
-                  "line": 10,
+                  "line": 14,
                   "column": 10
                 },
                 "identifierName": "BloomPass"
@@ -184,15 +282,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 138,
-              "end": 147,
+              "start": 168,
+              "end": 177,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 14,
                   "column": 1
                 },
                 "end": {
-                  "line": 10,
+                  "line": 14,
                   "column": 10
                 },
                 "identifierName": "BloomPass"
@@ -202,29 +300,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 151,
-            "end": 159,
+            "start": 181,
+            "end": 189,
             "loc": {
               "start": {
-                "line": 11,
+                "line": 15,
                 "column": 1
               },
               "end": {
-                "line": 11,
+                "line": 15,
                 "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 151,
-              "end": 159,
+              "start": 181,
+              "end": 189,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 15,
                   "column": 1
                 },
                 "end": {
-                  "line": 11,
+                  "line": 15,
                   "column": 9
                 },
                 "identifierName": "BlurPass"
@@ -233,15 +331,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 151,
-              "end": 159,
+              "start": 181,
+              "end": 189,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 15,
                   "column": 1
                 },
                 "end": {
-                  "line": 11,
+                  "line": 15,
                   "column": 9
                 },
                 "identifierName": "BlurPass"
@@ -251,176 +349,176 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 163,
-            "end": 172,
-            "loc": {
-              "start": {
-                "line": 12,
-                "column": 1
-              },
-              "end": {
-                "line": 12,
-                "column": 10
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 163,
-              "end": 172,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 1
-                },
-                "end": {
-                  "line": 12,
-                  "column": 10
-                },
-                "identifierName": "BokehPass"
-              },
-              "name": "BokehPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 163,
-              "end": 172,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 1
-                },
-                "end": {
-                  "line": 12,
-                  "column": 10
-                },
-                "identifierName": "BokehPass"
-              },
-              "name": "BokehPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 176,
-            "end": 185,
-            "loc": {
-              "start": {
-                "line": 13,
-                "column": 1
-              },
-              "end": {
-                "line": 13,
-                "column": 10
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 176,
-              "end": 185,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 1
-                },
-                "end": {
-                  "line": 13,
-                  "column": 10
-                },
-                "identifierName": "ClearPass"
-              },
-              "name": "ClearPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 176,
-              "end": 185,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 1
-                },
-                "end": {
-                  "line": 13,
-                  "column": 10
-                },
-                "identifierName": "ClearPass"
-              },
-              "name": "ClearPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 189,
+            "start": 193,
             "end": 202,
             "loc": {
               "start": {
-                "line": 14,
+                "line": 16,
                 "column": 1
               },
               "end": {
-                "line": 14,
-                "column": 14
+                "line": 16,
+                "column": 10
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 189,
+              "start": 193,
               "end": 202,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 16,
                   "column": 1
                 },
                 "end": {
-                  "line": 14,
-                  "column": 14
+                  "line": 16,
+                  "column": 10
                 },
-                "identifierName": "ClearMaskPass"
+                "identifierName": "BokehPass"
               },
-              "name": "ClearMaskPass"
+              "name": "BokehPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 189,
+              "start": 193,
               "end": 202,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 16,
                   "column": 1
                 },
                 "end": {
-                  "line": 14,
-                  "column": 14
+                  "line": 16,
+                  "column": 10
                 },
-                "identifierName": "ClearMaskPass"
+                "identifierName": "BokehPass"
               },
-              "name": "ClearMaskPass"
+              "name": "BokehPass"
             }
           },
           {
             "type": "ExportSpecifier",
             "start": 206,
-            "end": 219,
+            "end": 215,
             "loc": {
               "start": {
-                "line": 15,
+                "line": 17,
                 "column": 1
               },
               "end": {
-                "line": 15,
+                "line": 17,
+                "column": 10
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 206,
+              "end": 215,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 1
+                },
+                "end": {
+                  "line": 17,
+                  "column": 10
+                },
+                "identifierName": "ClearPass"
+              },
+              "name": "ClearPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 206,
+              "end": 215,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 1
+                },
+                "end": {
+                  "line": 17,
+                  "column": 10
+                },
+                "identifierName": "ClearPass"
+              },
+              "name": "ClearPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 219,
+            "end": 232,
+            "loc": {
+              "start": {
+                "line": 18,
+                "column": 1
+              },
+              "end": {
+                "line": 18,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 206,
-              "end": 219,
+              "start": 219,
+              "end": 232,
               "loc": {
                 "start": {
-                  "line": 15,
+                  "line": 18,
                   "column": 1
                 },
                 "end": {
-                  "line": 15,
+                  "line": 18,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 219,
+              "end": 232,
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 1
+                },
+                "end": {
+                  "line": 18,
+                  "column": 14
+                },
+                "identifierName": "ClearMaskPass"
+              },
+              "name": "ClearMaskPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 236,
+            "end": 249,
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 1
+              },
+              "end": {
+                "line": 19,
+                "column": 14
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 236,
+              "end": 249,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 1
+                },
+                "end": {
+                  "line": 19,
                   "column": 14
                 },
                 "identifierName": "DotScreenPass"
@@ -429,15 +527,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 206,
-              "end": 219,
+              "start": 236,
+              "end": 249,
               "loc": {
                 "start": {
-                  "line": 15,
+                  "line": 19,
                   "column": 1
                 },
                 "end": {
-                  "line": 15,
+                  "line": 19,
                   "column": 14
                 },
                 "identifierName": "DotScreenPass"
@@ -447,204 +545,8 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 223,
-            "end": 231,
-            "loc": {
-              "start": {
-                "line": 16,
-                "column": 1
-              },
-              "end": {
-                "line": 16,
-                "column": 9
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 223,
-              "end": 231,
-              "loc": {
-                "start": {
-                  "line": 16,
-                  "column": 1
-                },
-                "end": {
-                  "line": 16,
-                  "column": 9
-                },
-                "identifierName": "FilmPass"
-              },
-              "name": "FilmPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 223,
-              "end": 231,
-              "loc": {
-                "start": {
-                  "line": 16,
-                  "column": 1
-                },
-                "end": {
-                  "line": 16,
-                  "column": 9
-                },
-                "identifierName": "FilmPass"
-              },
-              "name": "FilmPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 235,
-            "end": 245,
-            "loc": {
-              "start": {
-                "line": 17,
-                "column": 1
-              },
-              "end": {
-                "line": 17,
-                "column": 11
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 235,
-              "end": 245,
-              "loc": {
-                "start": {
-                  "line": 17,
-                  "column": 1
-                },
-                "end": {
-                  "line": 17,
-                  "column": 11
-                },
-                "identifierName": "GlitchMode"
-              },
-              "name": "GlitchMode"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 235,
-              "end": 245,
-              "loc": {
-                "start": {
-                  "line": 17,
-                  "column": 1
-                },
-                "end": {
-                  "line": 17,
-                  "column": 11
-                },
-                "identifierName": "GlitchMode"
-              },
-              "name": "GlitchMode"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 249,
-            "end": 259,
-            "loc": {
-              "start": {
-                "line": 18,
-                "column": 1
-              },
-              "end": {
-                "line": 18,
-                "column": 11
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 249,
-              "end": 259,
-              "loc": {
-                "start": {
-                  "line": 18,
-                  "column": 1
-                },
-                "end": {
-                  "line": 18,
-                  "column": 11
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 249,
-              "end": 259,
-              "loc": {
-                "start": {
-                  "line": 18,
-                  "column": 1
-                },
-                "end": {
-                  "line": 18,
-                  "column": 11
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 263,
-            "end": 274,
-            "loc": {
-              "start": {
-                "line": 19,
-                "column": 1
-              },
-              "end": {
-                "line": 19,
-                "column": 12
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 263,
-              "end": 274,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 1
-                },
-                "end": {
-                  "line": 19,
-                  "column": 12
-                },
-                "identifierName": "GodRaysPass"
-              },
-              "name": "GodRaysPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 263,
-              "end": 274,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 1
-                },
-                "end": {
-                  "line": 19,
-                  "column": 12
-                },
-                "identifierName": "GodRaysPass"
-              },
-              "name": "GodRaysPass"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 278,
-            "end": 286,
+            "start": 253,
+            "end": 261,
             "loc": {
               "start": {
                 "line": 20,
@@ -657,8 +559,8 @@
             },
             "local": {
               "type": "Identifier",
-              "start": 278,
-              "end": 286,
+              "start": 253,
+              "end": 261,
               "loc": {
                 "start": {
                   "line": 20,
@@ -668,14 +570,14 @@
                   "line": 20,
                   "column": 9
                 },
-                "identifierName": "MaskPass"
+                "identifierName": "FilmPass"
               },
-              "name": "MaskPass"
+              "name": "FilmPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 278,
-              "end": 286,
+              "start": 253,
+              "end": 261,
               "loc": {
                 "start": {
                   "line": 20,
@@ -685,15 +587,15 @@
                   "line": 20,
                   "column": 9
                 },
-                "identifierName": "MaskPass"
+                "identifierName": "FilmPass"
               },
-              "name": "MaskPass"
+              "name": "FilmPass"
             }
           },
           {
             "type": "ExportSpecifier",
-            "start": 290,
-            "end": 301,
+            "start": 265,
+            "end": 275,
             "loc": {
               "start": {
                 "line": 21,
@@ -701,20 +603,216 @@
               },
               "end": {
                 "line": 21,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 265,
+              "end": 275,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 1
+                },
+                "end": {
+                  "line": 21,
+                  "column": 11
+                },
+                "identifierName": "GlitchMode"
+              },
+              "name": "GlitchMode"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 265,
+              "end": 275,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 1
+                },
+                "end": {
+                  "line": 21,
+                  "column": 11
+                },
+                "identifierName": "GlitchMode"
+              },
+              "name": "GlitchMode"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 279,
+            "end": 289,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 1
+              },
+              "end": {
+                "line": 22,
+                "column": 11
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 279,
+              "end": 289,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 11
+                },
+                "identifierName": "GlitchPass"
+              },
+              "name": "GlitchPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 279,
+              "end": 289,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 1
+                },
+                "end": {
+                  "line": 22,
+                  "column": 11
+                },
+                "identifierName": "GlitchPass"
+              },
+              "name": "GlitchPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 293,
+            "end": 304,
+            "loc": {
+              "start": {
+                "line": 23,
+                "column": 1
+              },
+              "end": {
+                "line": 23,
                 "column": 12
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 290,
-              "end": 301,
+              "start": 293,
+              "end": 304,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 23,
                   "column": 1
                 },
                 "end": {
-                  "line": 21,
+                  "line": 23,
+                  "column": 12
+                },
+                "identifierName": "GodRaysPass"
+              },
+              "name": "GodRaysPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 293,
+              "end": 304,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 1
+                },
+                "end": {
+                  "line": 23,
+                  "column": 12
+                },
+                "identifierName": "GodRaysPass"
+              },
+              "name": "GodRaysPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 308,
+            "end": 316,
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 1
+              },
+              "end": {
+                "line": 24,
+                "column": 9
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 308,
+              "end": 316,
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 1
+                },
+                "end": {
+                  "line": 24,
+                  "column": 9
+                },
+                "identifierName": "MaskPass"
+              },
+              "name": "MaskPass"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 308,
+              "end": 316,
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 1
+                },
+                "end": {
+                  "line": 24,
+                  "column": 9
+                },
+                "identifierName": "MaskPass"
+              },
+              "name": "MaskPass"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 320,
+            "end": 331,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 1
+              },
+              "end": {
+                "line": 25,
+                "column": 12
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 320,
+              "end": 331,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 1
+                },
+                "end": {
+                  "line": 25,
                   "column": 12
                 },
                 "identifierName": "OutlinePass"
@@ -723,15 +821,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 290,
-              "end": 301,
+              "start": 320,
+              "end": 331,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 25,
                   "column": 1
                 },
                 "end": {
-                  "line": 21,
+                  "line": 25,
                   "column": 12
                 },
                 "identifierName": "OutlinePass"
@@ -741,29 +839,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 305,
-            "end": 309,
+            "start": 335,
+            "end": 339,
             "loc": {
               "start": {
-                "line": 22,
+                "line": 26,
                 "column": 1
               },
               "end": {
-                "line": 22,
+                "line": 26,
                 "column": 5
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 305,
-              "end": 309,
+              "start": 335,
+              "end": 339,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 26,
                   "column": 1
                 },
                 "end": {
-                  "line": 22,
+                  "line": 26,
                   "column": 5
                 },
                 "identifierName": "Pass"
@@ -772,15 +870,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 305,
-              "end": 309,
+              "start": 335,
+              "end": 339,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 26,
                   "column": 1
                 },
                 "end": {
-                  "line": 22,
+                  "line": 26,
                   "column": 5
                 },
                 "identifierName": "Pass"
@@ -790,29 +888,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 313,
-            "end": 327,
+            "start": 343,
+            "end": 357,
             "loc": {
               "start": {
-                "line": 23,
+                "line": 27,
                 "column": 1
               },
               "end": {
-                "line": 23,
+                "line": 27,
                 "column": 15
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 313,
-              "end": 327,
+              "start": 343,
+              "end": 357,
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 27,
                   "column": 1
                 },
                 "end": {
-                  "line": 23,
+                  "line": 27,
                   "column": 15
                 },
                 "identifierName": "PixelationPass"
@@ -821,15 +919,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 313,
-              "end": 327,
+              "start": 343,
+              "end": 357,
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 27,
                   "column": 1
                 },
                 "end": {
-                  "line": 23,
+                  "line": 27,
                   "column": 15
                 },
                 "identifierName": "PixelationPass"
@@ -839,29 +937,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 331,
-            "end": 349,
+            "start": 361,
+            "end": 379,
             "loc": {
               "start": {
-                "line": 24,
+                "line": 28,
                 "column": 1
               },
               "end": {
-                "line": 24,
+                "line": 28,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 331,
-              "end": 349,
+              "start": 361,
+              "end": 379,
               "loc": {
                 "start": {
-                  "line": 24,
+                  "line": 28,
                   "column": 1
                 },
                 "end": {
-                  "line": 24,
+                  "line": 28,
                   "column": 19
                 },
                 "identifierName": "RealisticBokehPass"
@@ -870,15 +968,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 331,
-              "end": 349,
+              "start": 361,
+              "end": 379,
               "loc": {
                 "start": {
-                  "line": 24,
+                  "line": 28,
                   "column": 1
                 },
                 "end": {
-                  "line": 24,
+                  "line": 28,
                   "column": 19
                 },
                 "identifierName": "RealisticBokehPass"
@@ -888,29 +986,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 353,
-            "end": 363,
+            "start": 383,
+            "end": 393,
             "loc": {
               "start": {
-                "line": 25,
+                "line": 29,
                 "column": 1
               },
               "end": {
-                "line": 25,
+                "line": 29,
                 "column": 11
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 353,
-              "end": 363,
+              "start": 383,
+              "end": 393,
               "loc": {
                 "start": {
-                  "line": 25,
+                  "line": 29,
                   "column": 1
                 },
                 "end": {
-                  "line": 25,
+                  "line": 29,
                   "column": 11
                 },
                 "identifierName": "RenderPass"
@@ -919,15 +1017,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 353,
-              "end": 363,
+              "start": 383,
+              "end": 393,
               "loc": {
                 "start": {
-                  "line": 25,
+                  "line": 29,
                   "column": 1
                 },
                 "end": {
-                  "line": 25,
+                  "line": 29,
                   "column": 11
                 },
                 "identifierName": "RenderPass"
@@ -937,29 +1035,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 367,
-            "end": 375,
+            "start": 397,
+            "end": 405,
             "loc": {
               "start": {
-                "line": 26,
+                "line": 30,
                 "column": 1
               },
               "end": {
-                "line": 26,
+                "line": 30,
                 "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 367,
-              "end": 375,
+              "start": 397,
+              "end": 405,
               "loc": {
                 "start": {
-                  "line": 26,
+                  "line": 30,
                   "column": 1
                 },
                 "end": {
-                  "line": 26,
+                  "line": 30,
                   "column": 9
                 },
                 "identifierName": "SavePass"
@@ -968,15 +1066,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 367,
-              "end": 375,
+              "start": 397,
+              "end": 405,
               "loc": {
                 "start": {
-                  "line": 26,
+                  "line": 30,
                   "column": 1
                 },
                 "end": {
-                  "line": 26,
+                  "line": 30,
                   "column": 9
                 },
                 "identifierName": "SavePass"
@@ -986,29 +1084,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 379,
-            "end": 389,
+            "start": 409,
+            "end": 419,
             "loc": {
               "start": {
-                "line": 27,
+                "line": 31,
                 "column": 1
               },
               "end": {
-                "line": 27,
+                "line": 31,
                 "column": 11
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 379,
-              "end": 389,
+              "start": 409,
+              "end": 419,
               "loc": {
                 "start": {
-                  "line": 27,
+                  "line": 31,
                   "column": 1
                 },
                 "end": {
-                  "line": 27,
+                  "line": 31,
                   "column": 11
                 },
                 "identifierName": "ShaderPass"
@@ -1017,15 +1115,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 379,
-              "end": 389,
+              "start": 409,
+              "end": 419,
               "loc": {
                 "start": {
-                  "line": 27,
+                  "line": 31,
                   "column": 1
                 },
                 "end": {
-                  "line": 27,
+                  "line": 31,
                   "column": 11
                 },
                 "identifierName": "ShaderPass"
@@ -1035,29 +1133,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 393,
-            "end": 406,
+            "start": 423,
+            "end": 436,
             "loc": {
               "start": {
-                "line": 28,
+                "line": 32,
                 "column": 1
               },
               "end": {
-                "line": 28,
+                "line": 32,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 393,
-              "end": 406,
+              "start": 423,
+              "end": 436,
               "loc": {
                 "start": {
-                  "line": 28,
+                  "line": 32,
                   "column": 1
                 },
                 "end": {
-                  "line": 28,
+                  "line": 32,
                   "column": 14
                 },
                 "identifierName": "ShockWavePass"
@@ -1066,15 +1164,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 393,
-              "end": 406,
+              "start": 423,
+              "end": 436,
               "loc": {
                 "start": {
-                  "line": 28,
+                  "line": 32,
                   "column": 1
                 },
                 "end": {
-                  "line": 28,
+                  "line": 32,
                   "column": 14
                 },
                 "identifierName": "ShockWavePass"
@@ -1084,29 +1182,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 410,
-            "end": 418,
+            "start": 440,
+            "end": 448,
             "loc": {
               "start": {
-                "line": 29,
+                "line": 33,
                 "column": 1
               },
               "end": {
-                "line": 29,
+                "line": 33,
                 "column": 9
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 410,
-              "end": 418,
+              "start": 440,
+              "end": 448,
               "loc": {
                 "start": {
-                  "line": 29,
+                  "line": 33,
                   "column": 1
                 },
                 "end": {
-                  "line": 29,
+                  "line": 33,
                   "column": 9
                 },
                 "identifierName": "SMAAPass"
@@ -1115,15 +1213,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 410,
-              "end": 418,
+              "start": 440,
+              "end": 448,
               "loc": {
                 "start": {
-                  "line": 29,
+                  "line": 33,
                   "column": 1
                 },
                 "end": {
-                  "line": 29,
+                  "line": 33,
                   "column": 9
                 },
                 "identifierName": "SMAAPass"
@@ -1133,29 +1231,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 422,
-            "end": 433,
+            "start": 452,
+            "end": 463,
             "loc": {
               "start": {
-                "line": 30,
+                "line": 34,
                 "column": 1
               },
               "end": {
-                "line": 30,
+                "line": 34,
                 "column": 12
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 422,
-              "end": 433,
+              "start": 452,
+              "end": 463,
               "loc": {
                 "start": {
-                  "line": 30,
+                  "line": 34,
                   "column": 1
                 },
                 "end": {
-                  "line": 30,
+                  "line": 34,
                   "column": 12
                 },
                 "identifierName": "TexturePass"
@@ -1164,15 +1262,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 422,
-              "end": 433,
+              "start": 452,
+              "end": 463,
               "loc": {
                 "start": {
-                  "line": 30,
+                  "line": 34,
                   "column": 1
                 },
                 "end": {
-                  "line": 30,
+                  "line": 34,
                   "column": 12
                 },
                 "identifierName": "TexturePass"
@@ -1182,29 +1280,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 437,
-            "end": 452,
+            "start": 467,
+            "end": 482,
             "loc": {
               "start": {
-                "line": 31,
+                "line": 35,
                 "column": 1
               },
               "end": {
-                "line": 31,
+                "line": 35,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 437,
-              "end": 452,
+              "start": 467,
+              "end": 482,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 1
                 },
                 "end": {
-                  "line": 31,
+                  "line": 35,
                   "column": 16
                 },
                 "identifierName": "ToneMappingPass"
@@ -1213,15 +1311,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 437,
-              "end": 452,
+              "start": 467,
+              "end": 482,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 35,
                   "column": 1
                 },
                 "end": {
-                  "line": 31,
+                  "line": 35,
                   "column": 16
                 },
                 "identifierName": "ToneMappingPass"
@@ -1232,15 +1330,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 461,
-          "end": 471,
+          "start": 491,
+          "end": 501,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 36,
               "column": 7
             },
             "end": {
-              "line": 32,
+              "line": 36,
               "column": 17
             }
           },
@@ -1253,15 +1351,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 476,
-        "end": 954,
+        "start": 506,
+        "end": 984,
         "loc": {
           "start": {
-            "line": 34,
+            "line": 38,
             "column": 0
           },
           "end": {
-            "line": 56,
+            "line": 60,
             "column": 21
           }
         },
@@ -1269,29 +1367,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 487,
-            "end": 513,
+            "start": 517,
+            "end": 543,
             "loc": {
               "start": {
-                "line": 35,
+                "line": 39,
                 "column": 1
               },
               "end": {
-                "line": 35,
+                "line": 39,
                 "column": 27
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 487,
-              "end": 513,
+              "start": 517,
+              "end": 543,
               "loc": {
                 "start": {
-                  "line": 35,
+                  "line": 39,
                   "column": 1
                 },
                 "end": {
-                  "line": 35,
+                  "line": 39,
                   "column": 27
                 },
                 "identifierName": "AdaptiveLuminosityMaterial"
@@ -1300,15 +1398,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 487,
-              "end": 513,
+              "start": 517,
+              "end": 543,
               "loc": {
                 "start": {
-                  "line": 35,
+                  "line": 39,
                   "column": 1
                 },
                 "end": {
-                  "line": 35,
+                  "line": 39,
                   "column": 27
                 },
                 "identifierName": "AdaptiveLuminosityMaterial"
@@ -1318,29 +1416,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 517,
-            "end": 530,
+            "start": 547,
+            "end": 560,
             "loc": {
               "start": {
-                "line": 36,
+                "line": 40,
                 "column": 1
               },
               "end": {
-                "line": 36,
+                "line": 40,
                 "column": 14
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 517,
-              "end": 530,
+              "start": 547,
+              "end": 560,
               "loc": {
                 "start": {
-                  "line": 36,
+                  "line": 40,
                   "column": 1
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 14
                 },
                 "identifierName": "BokehMaterial"
@@ -1349,15 +1447,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 517,
-              "end": 530,
+              "start": 547,
+              "end": 560,
               "loc": {
                 "start": {
-                  "line": 36,
+                  "line": 40,
                   "column": 1
                 },
                 "end": {
-                  "line": 36,
+                  "line": 40,
                   "column": 14
                 },
                 "identifierName": "BokehMaterial"
@@ -1367,29 +1465,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 534,
-            "end": 552,
+            "start": 564,
+            "end": 582,
             "loc": {
               "start": {
-                "line": 37,
+                "line": 41,
                 "column": 1
               },
               "end": {
-                "line": 37,
+                "line": 41,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 534,
-              "end": 552,
+              "start": 564,
+              "end": 582,
               "loc": {
                 "start": {
-                  "line": 37,
+                  "line": 41,
                   "column": 1
                 },
                 "end": {
-                  "line": 37,
+                  "line": 41,
                   "column": 19
                 },
                 "identifierName": "ColorEdgesMaterial"
@@ -1398,15 +1496,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 534,
-              "end": 552,
+              "start": 564,
+              "end": 582,
               "loc": {
                 "start": {
-                  "line": 37,
+                  "line": 41,
                   "column": 1
                 },
                 "end": {
-                  "line": 37,
+                  "line": 41,
                   "column": 19
                 },
                 "identifierName": "ColorEdgesMaterial"
@@ -1416,29 +1514,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 556,
-            "end": 571,
+            "start": 586,
+            "end": 601,
             "loc": {
               "start": {
-                "line": 38,
+                "line": 42,
                 "column": 1
               },
               "end": {
-                "line": 38,
+                "line": 42,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 556,
-              "end": 571,
+              "start": 586,
+              "end": 601,
               "loc": {
                 "start": {
-                  "line": 38,
+                  "line": 42,
                   "column": 1
                 },
                 "end": {
-                  "line": 38,
+                  "line": 42,
                   "column": 16
                 },
                 "identifierName": "CombineMaterial"
@@ -1447,15 +1545,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 556,
-              "end": 571,
+              "start": 586,
+              "end": 601,
               "loc": {
                 "start": {
-                  "line": 38,
+                  "line": 42,
                   "column": 1
                 },
                 "end": {
-                  "line": 38,
+                  "line": 42,
                   "column": 16
                 },
                 "identifierName": "CombineMaterial"
@@ -1465,29 +1563,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 575,
-            "end": 594,
+            "start": 605,
+            "end": 624,
             "loc": {
               "start": {
-                "line": 39,
+                "line": 43,
                 "column": 1
               },
               "end": {
-                "line": 39,
+                "line": 43,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 575,
-              "end": 594,
+              "start": 605,
+              "end": 624,
               "loc": {
                 "start": {
-                  "line": 39,
+                  "line": 43,
                   "column": 1
                 },
                 "end": {
-                  "line": 39,
+                  "line": 43,
                   "column": 20
                 },
                 "identifierName": "ConvolutionMaterial"
@@ -1496,15 +1594,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 575,
-              "end": 594,
+              "start": 605,
+              "end": 624,
               "loc": {
                 "start": {
-                  "line": 39,
+                  "line": 43,
                   "column": 1
                 },
                 "end": {
-                  "line": 39,
+                  "line": 43,
                   "column": 20
                 },
                 "identifierName": "ConvolutionMaterial"
@@ -1514,29 +1612,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 598,
-            "end": 610,
+            "start": 628,
+            "end": 640,
             "loc": {
               "start": {
-                "line": 40,
+                "line": 44,
                 "column": 1
               },
               "end": {
-                "line": 40,
+                "line": 44,
                 "column": 13
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 598,
-              "end": 610,
+              "start": 628,
+              "end": 640,
               "loc": {
                 "start": {
-                  "line": 40,
+                  "line": 44,
                   "column": 1
                 },
                 "end": {
-                  "line": 40,
+                  "line": 44,
                   "column": 13
                 },
                 "identifierName": "CopyMaterial"
@@ -1545,15 +1643,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 598,
-              "end": 610,
+              "start": 628,
+              "end": 640,
               "loc": {
                 "start": {
-                  "line": 40,
+                  "line": 44,
                   "column": 1
                 },
                 "end": {
-                  "line": 40,
+                  "line": 44,
                   "column": 13
                 },
                 "identifierName": "CopyMaterial"
@@ -1563,29 +1661,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 614,
-            "end": 637,
+            "start": 644,
+            "end": 667,
             "loc": {
               "start": {
-                "line": 41,
+                "line": 45,
                 "column": 1
               },
               "end": {
-                "line": 41,
+                "line": 45,
                 "column": 24
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 614,
-              "end": 637,
+              "start": 644,
+              "end": 667,
               "loc": {
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 1
                 },
                 "end": {
-                  "line": 41,
+                  "line": 45,
                   "column": 24
                 },
                 "identifierName": "DepthComparisonMaterial"
@@ -1594,15 +1692,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 614,
-              "end": 637,
+              "start": 644,
+              "end": 667,
               "loc": {
                 "start": {
-                  "line": 41,
+                  "line": 45,
                   "column": 1
                 },
                 "end": {
-                  "line": 41,
+                  "line": 45,
                   "column": 24
                 },
                 "identifierName": "DepthComparisonMaterial"
@@ -1612,29 +1710,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 641,
-            "end": 658,
+            "start": 671,
+            "end": 688,
             "loc": {
               "start": {
-                "line": 42,
+                "line": 46,
                 "column": 1
               },
               "end": {
-                "line": 42,
+                "line": 46,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 641,
-              "end": 658,
+              "start": 671,
+              "end": 688,
               "loc": {
                 "start": {
-                  "line": 42,
+                  "line": 46,
                   "column": 1
                 },
                 "end": {
-                  "line": 42,
+                  "line": 46,
                   "column": 18
                 },
                 "identifierName": "DotScreenMaterial"
@@ -1643,15 +1741,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 641,
-              "end": 658,
+              "start": 671,
+              "end": 688,
               "loc": {
                 "start": {
-                  "line": 42,
+                  "line": 46,
                   "column": 1
                 },
                 "end": {
-                  "line": 42,
+                  "line": 46,
                   "column": 18
                 },
                 "identifierName": "DotScreenMaterial"
@@ -1661,29 +1759,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 662,
-            "end": 674,
+            "start": 692,
+            "end": 704,
             "loc": {
               "start": {
-                "line": 43,
+                "line": 47,
                 "column": 1
               },
               "end": {
-                "line": 43,
+                "line": 47,
                 "column": 13
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 662,
-              "end": 674,
+              "start": 692,
+              "end": 704,
               "loc": {
                 "start": {
-                  "line": 43,
+                  "line": 47,
                   "column": 1
                 },
                 "end": {
-                  "line": 43,
+                  "line": 47,
                   "column": 13
                 },
                 "identifierName": "FilmMaterial"
@@ -1692,15 +1790,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 662,
-              "end": 674,
+              "start": 692,
+              "end": 704,
               "loc": {
                 "start": {
-                  "line": 43,
+                  "line": 47,
                   "column": 1
                 },
                 "end": {
-                  "line": 43,
+                  "line": 47,
                   "column": 13
                 },
                 "identifierName": "FilmMaterial"
@@ -1710,29 +1808,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 678,
-            "end": 692,
+            "start": 708,
+            "end": 722,
             "loc": {
               "start": {
-                "line": 44,
+                "line": 48,
                 "column": 1
               },
               "end": {
-                "line": 44,
+                "line": 48,
                 "column": 15
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 678,
-              "end": 692,
+              "start": 708,
+              "end": 722,
               "loc": {
                 "start": {
-                  "line": 44,
+                  "line": 48,
                   "column": 1
                 },
                 "end": {
-                  "line": 44,
+                  "line": 48,
                   "column": 15
                 },
                 "identifierName": "GlitchMaterial"
@@ -1741,15 +1839,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 678,
-              "end": 692,
+              "start": 708,
+              "end": 722,
               "loc": {
                 "start": {
-                  "line": 44,
+                  "line": 48,
                   "column": 1
                 },
                 "end": {
-                  "line": 44,
+                  "line": 48,
                   "column": 15
                 },
                 "identifierName": "GlitchMaterial"
@@ -1759,29 +1857,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 696,
-            "end": 711,
+            "start": 726,
+            "end": 741,
             "loc": {
               "start": {
-                "line": 45,
+                "line": 49,
                 "column": 1
               },
               "end": {
-                "line": 45,
+                "line": 49,
                 "column": 16
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 696,
-              "end": 711,
+              "start": 726,
+              "end": 741,
               "loc": {
                 "start": {
-                  "line": 45,
+                  "line": 49,
                   "column": 1
                 },
                 "end": {
-                  "line": 45,
+                  "line": 49,
                   "column": 16
                 },
                 "identifierName": "GodRaysMaterial"
@@ -1790,15 +1888,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 696,
-              "end": 711,
+              "start": 726,
+              "end": 741,
               "loc": {
                 "start": {
-                  "line": 45,
+                  "line": 49,
                   "column": 1
                 },
                 "end": {
-                  "line": 45,
+                  "line": 49,
                   "column": 16
                 },
                 "identifierName": "GodRaysMaterial"
@@ -1808,29 +1906,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 715,
-            "end": 725,
+            "start": 745,
+            "end": 755,
             "loc": {
               "start": {
-                "line": 46,
+                "line": 50,
                 "column": 1
               },
               "end": {
-                "line": 46,
+                "line": 50,
                 "column": 11
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 715,
-              "end": 725,
+              "start": 745,
+              "end": 755,
               "loc": {
                 "start": {
-                  "line": 46,
+                  "line": 50,
                   "column": 1
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 11
                 },
                 "identifierName": "KernelSize"
@@ -1839,15 +1937,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 715,
-              "end": 725,
+              "start": 745,
+              "end": 755,
               "loc": {
                 "start": {
-                  "line": 46,
+                  "line": 50,
                   "column": 1
                 },
                 "end": {
-                  "line": 46,
+                  "line": 50,
                   "column": 11
                 },
                 "identifierName": "KernelSize"
@@ -1857,29 +1955,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 729,
-            "end": 747,
+            "start": 759,
+            "end": 777,
             "loc": {
               "start": {
-                "line": 47,
+                "line": 51,
                 "column": 1
               },
               "end": {
-                "line": 47,
+                "line": 51,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 729,
-              "end": 747,
+              "start": 759,
+              "end": 777,
               "loc": {
                 "start": {
-                  "line": 47,
+                  "line": 51,
                   "column": 1
                 },
                 "end": {
-                  "line": 47,
+                  "line": 51,
                   "column": 19
                 },
                 "identifierName": "LuminosityMaterial"
@@ -1888,15 +1986,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 729,
-              "end": 747,
+              "start": 759,
+              "end": 777,
               "loc": {
                 "start": {
-                  "line": 47,
+                  "line": 51,
                   "column": 1
                 },
                 "end": {
-                  "line": 47,
+                  "line": 51,
                   "column": 19
                 },
                 "identifierName": "LuminosityMaterial"
@@ -1906,29 +2004,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 751,
-            "end": 771,
+            "start": 781,
+            "end": 801,
             "loc": {
               "start": {
-                "line": 48,
+                "line": 52,
                 "column": 1
               },
               "end": {
-                "line": 48,
+                "line": 52,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 751,
-              "end": 771,
+              "start": 781,
+              "end": 801,
               "loc": {
                 "start": {
-                  "line": 48,
+                  "line": 52,
                   "column": 1
                 },
                 "end": {
-                  "line": 48,
+                  "line": 52,
                   "column": 21
                 },
                 "identifierName": "OutlineBlendMaterial"
@@ -1937,15 +2035,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 751,
-              "end": 771,
+              "start": 781,
+              "end": 801,
               "loc": {
                 "start": {
-                  "line": 48,
+                  "line": 52,
                   "column": 1
                 },
                 "end": {
-                  "line": 48,
+                  "line": 52,
                   "column": 21
                 },
                 "identifierName": "OutlineBlendMaterial"
@@ -1955,29 +2053,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 775,
-            "end": 795,
+            "start": 805,
+            "end": 825,
             "loc": {
               "start": {
-                "line": 49,
+                "line": 53,
                 "column": 1
               },
               "end": {
-                "line": 49,
+                "line": 53,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 775,
-              "end": 795,
+              "start": 805,
+              "end": 825,
               "loc": {
                 "start": {
-                  "line": 49,
+                  "line": 53,
                   "column": 1
                 },
                 "end": {
-                  "line": 49,
+                  "line": 53,
                   "column": 21
                 },
                 "identifierName": "OutlineEdgesMaterial"
@@ -1986,15 +2084,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 775,
-              "end": 795,
+              "start": 805,
+              "end": 825,
               "loc": {
                 "start": {
-                  "line": 49,
+                  "line": 53,
                   "column": 1
                 },
                 "end": {
-                  "line": 49,
+                  "line": 53,
                   "column": 21
                 },
                 "identifierName": "OutlineEdgesMaterial"
@@ -2004,29 +2102,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 799,
-            "end": 817,
+            "start": 829,
+            "end": 847,
             "loc": {
               "start": {
-                "line": 50,
+                "line": 54,
                 "column": 1
               },
               "end": {
-                "line": 50,
+                "line": 54,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 799,
-              "end": 817,
+              "start": 829,
+              "end": 847,
               "loc": {
                 "start": {
-                  "line": 50,
+                  "line": 54,
                   "column": 1
                 },
                 "end": {
-                  "line": 50,
+                  "line": 54,
                   "column": 19
                 },
                 "identifierName": "PixelationMaterial"
@@ -2035,15 +2133,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 799,
-              "end": 817,
+              "start": 829,
+              "end": 847,
               "loc": {
                 "start": {
-                  "line": 50,
+                  "line": 54,
                   "column": 1
                 },
                 "end": {
-                  "line": 50,
+                  "line": 54,
                   "column": 19
                 },
                 "identifierName": "PixelationMaterial"
@@ -2053,29 +2151,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 821,
-            "end": 843,
+            "start": 851,
+            "end": 873,
             "loc": {
               "start": {
-                "line": 51,
+                "line": 55,
                 "column": 1
               },
               "end": {
-                "line": 51,
+                "line": 55,
                 "column": 23
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 821,
-              "end": 843,
+              "start": 851,
+              "end": 873,
               "loc": {
                 "start": {
-                  "line": 51,
+                  "line": 55,
                   "column": 1
                 },
                 "end": {
-                  "line": 51,
+                  "line": 55,
                   "column": 23
                 },
                 "identifierName": "RealisticBokehMaterial"
@@ -2084,15 +2182,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 821,
-              "end": 843,
+              "start": 851,
+              "end": 873,
               "loc": {
                 "start": {
-                  "line": 51,
+                  "line": 55,
                   "column": 1
                 },
                 "end": {
-                  "line": 51,
+                  "line": 55,
                   "column": 23
                 },
                 "identifierName": "RealisticBokehMaterial"
@@ -2102,29 +2200,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 847,
-            "end": 864,
+            "start": 877,
+            "end": 894,
             "loc": {
               "start": {
-                "line": 52,
+                "line": 56,
                 "column": 1
               },
               "end": {
-                "line": 52,
+                "line": 56,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 847,
-              "end": 864,
+              "start": 877,
+              "end": 894,
               "loc": {
                 "start": {
-                  "line": 52,
+                  "line": 56,
                   "column": 1
                 },
                 "end": {
-                  "line": 52,
+                  "line": 56,
                   "column": 18
                 },
                 "identifierName": "ShockWaveMaterial"
@@ -2133,15 +2231,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 847,
-              "end": 864,
+              "start": 877,
+              "end": 894,
               "loc": {
                 "start": {
-                  "line": 52,
+                  "line": 56,
                   "column": 1
                 },
                 "end": {
-                  "line": 52,
+                  "line": 56,
                   "column": 18
                 },
                 "identifierName": "ShockWaveMaterial"
@@ -2151,29 +2249,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 868,
-            "end": 885,
+            "start": 898,
+            "end": 915,
             "loc": {
               "start": {
-                "line": 53,
+                "line": 57,
                 "column": 1
               },
               "end": {
-                "line": 53,
+                "line": 57,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 868,
-              "end": 885,
+              "start": 898,
+              "end": 915,
               "loc": {
                 "start": {
-                  "line": 53,
+                  "line": 57,
                   "column": 1
                 },
                 "end": {
-                  "line": 53,
+                  "line": 57,
                   "column": 18
                 },
                 "identifierName": "SMAABlendMaterial"
@@ -2182,15 +2280,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 868,
-              "end": 885,
+              "start": 898,
+              "end": 915,
               "loc": {
                 "start": {
-                  "line": 53,
+                  "line": 57,
                   "column": 1
                 },
                 "end": {
-                  "line": 53,
+                  "line": 57,
                   "column": 18
                 },
                 "identifierName": "SMAABlendMaterial"
@@ -2200,29 +2298,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 889,
-            "end": 908,
+            "start": 919,
+            "end": 938,
             "loc": {
               "start": {
-                "line": 54,
+                "line": 58,
                 "column": 1
               },
               "end": {
-                "line": 54,
+                "line": 58,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 889,
-              "end": 908,
+              "start": 919,
+              "end": 938,
               "loc": {
                 "start": {
-                  "line": 54,
+                  "line": 58,
                   "column": 1
                 },
                 "end": {
-                  "line": 54,
+                  "line": 58,
                   "column": 20
                 },
                 "identifierName": "SMAAWeightsMaterial"
@@ -2231,15 +2329,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 889,
-              "end": 908,
+              "start": 919,
+              "end": 938,
               "loc": {
                 "start": {
-                  "line": 54,
+                  "line": 58,
                   "column": 1
                 },
                 "end": {
-                  "line": 54,
+                  "line": 58,
                   "column": 20
                 },
                 "identifierName": "SMAAWeightsMaterial"
@@ -2249,29 +2347,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 912,
-            "end": 931,
+            "start": 942,
+            "end": 961,
             "loc": {
               "start": {
-                "line": 55,
+                "line": 59,
                 "column": 1
               },
               "end": {
-                "line": 55,
+                "line": 59,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 912,
-              "end": 931,
+              "start": 942,
+              "end": 961,
               "loc": {
                 "start": {
-                  "line": 55,
+                  "line": 59,
                   "column": 1
                 },
                 "end": {
-                  "line": 55,
+                  "line": 59,
                   "column": 20
                 },
                 "identifierName": "ToneMappingMaterial"
@@ -2280,15 +2378,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 912,
-              "end": 931,
+              "start": 942,
+              "end": 961,
               "loc": {
                 "start": {
-                  "line": 55,
+                  "line": 59,
                   "column": 1
                 },
                 "end": {
-                  "line": 55,
+                  "line": 59,
                   "column": 20
                 },
                 "identifierName": "ToneMappingMaterial"
@@ -2299,15 +2397,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 940,
-          "end": 953,
+          "start": 970,
+          "end": 983,
           "loc": {
             "start": {
-              "line": 56,
+              "line": 60,
               "column": 7
             },
             "end": {
-              "line": 56,
+              "line": 60,
               "column": 20
             }
           },
@@ -2320,15 +2418,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 958,
-        "end": 1055,
+        "start": 988,
+        "end": 1085,
         "loc": {
           "start": {
-            "line": 58,
+            "line": 62,
             "column": 0
           },
           "end": {
-            "line": 62,
+            "line": 66,
             "column": 28
           }
         },
@@ -2336,29 +2434,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 969,
-            "end": 981,
+            "start": 999,
+            "end": 1011,
             "loc": {
               "start": {
-                "line": 59,
+                "line": 63,
                 "column": 1
               },
               "end": {
-                "line": 59,
+                "line": 63,
                 "column": 13
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 969,
-              "end": 981,
+              "start": 999,
+              "end": 1011,
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 63,
                   "column": 1
                 },
                 "end": {
-                  "line": 59,
+                  "line": 63,
                   "column": 13
                 },
                 "identifierName": "RawImageData"
@@ -2367,15 +2465,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 969,
-              "end": 981,
+              "start": 999,
+              "end": 1011,
               "loc": {
                 "start": {
-                  "line": 59,
+                  "line": 63,
                   "column": 1
                 },
                 "end": {
-                  "line": 59,
+                  "line": 63,
                   "column": 13
                 },
                 "identifierName": "RawImageData"
@@ -2385,29 +2483,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 985,
-            "end": 1002,
+            "start": 1015,
+            "end": 1032,
             "loc": {
               "start": {
-                "line": 60,
+                "line": 64,
                 "column": 1
               },
               "end": {
-                "line": 60,
+                "line": 64,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 985,
-              "end": 1002,
+              "start": 1015,
+              "end": 1032,
               "loc": {
                 "start": {
-                  "line": 60,
+                  "line": 64,
                   "column": 1
                 },
                 "end": {
-                  "line": 60,
+                  "line": 64,
                   "column": 18
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -2416,15 +2514,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 985,
-              "end": 1002,
+              "start": 1015,
+              "end": 1032,
               "loc": {
                 "start": {
-                  "line": 60,
+                  "line": 64,
                   "column": 1
                 },
                 "end": {
-                  "line": 60,
+                  "line": 64,
                   "column": 18
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -2434,29 +2532,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 1006,
-            "end": 1025,
+            "start": 1036,
+            "end": 1055,
             "loc": {
               "start": {
-                "line": 61,
+                "line": 65,
                 "column": 1
               },
               "end": {
-                "line": 61,
+                "line": 65,
                 "column": 20
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1006,
-              "end": 1025,
+              "start": 1036,
+              "end": 1055,
               "loc": {
                 "start": {
-                  "line": 61,
+                  "line": 65,
                   "column": 1
                 },
                 "end": {
-                  "line": 61,
+                  "line": 65,
                   "column": 20
                 },
                 "identifierName": "SMAASearchImageData"
@@ -2465,15 +2563,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1006,
-              "end": 1025,
+              "start": 1036,
+              "end": 1055,
               "loc": {
                 "start": {
-                  "line": 61,
+                  "line": 65,
                   "column": 1
                 },
                 "end": {
-                  "line": 61,
+                  "line": 65,
                   "column": 20
                 },
                 "identifierName": "SMAASearchImageData"
@@ -2484,15 +2582,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 1034,
-          "end": 1054,
+          "start": 1064,
+          "end": 1084,
           "loc": {
             "start": {
-              "line": 62,
+              "line": 66,
               "column": 7
             },
             "end": {
-              "line": 62,
+              "line": 66,
               "column": 27
             }
           },
@@ -2606,17 +2704,121 @@
         "postfix": false,
         "binop": null
       },
-      "value": "EffectComposer",
-      "start": 92,
-      "end": 106,
+      "value": "Disposable",
+      "start": 94,
+      "end": 104,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 9
+          "line": 8,
+          "column": 1
         },
         "end": {
-          "line": 7,
-          "column": 23
+          "line": 8,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 104,
+      "end": 105,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 11
+        },
+        "end": {
+          "line": 8,
+          "column": 12
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "EffectComposer",
+      "start": 108,
+      "end": 122,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 1
+        },
+        "end": {
+          "line": 9,
+          "column": 15
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 122,
+      "end": 123,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 15
+        },
+        "end": {
+          "line": 9,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Resizable",
+      "start": 126,
+      "end": 135,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 1
+        },
+        "end": {
+          "line": 10,
+          "column": 10
         }
       }
     },
@@ -2632,16 +2834,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 107,
-      "end": 108,
+      "start": 137,
+      "end": 138,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 24
+          "line": 11,
+          "column": 0
         },
         "end": {
-          "line": 7,
-          "column": 25
+          "line": 11,
+          "column": 1
         }
       }
     },
@@ -2658,16 +2860,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 109,
-      "end": 113,
+      "start": 139,
+      "end": 143,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 26
+          "line": 11,
+          "column": 2
         },
         "end": {
-          "line": 7,
-          "column": 30
+          "line": 11,
+          "column": 6
         }
       }
     },
@@ -2685,16 +2887,16 @@
         "updateContext": null
       },
       "value": "./core",
-      "start": 114,
-      "end": 122,
+      "start": 144,
+      "end": 152,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 31
+          "line": 11,
+          "column": 7
         },
         "end": {
-          "line": 7,
-          "column": 39
+          "line": 11,
+          "column": 15
         }
       }
     },
@@ -2711,16 +2913,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 122,
-      "end": 123,
+      "start": 152,
+      "end": 153,
       "loc": {
         "start": {
-          "line": 7,
-          "column": 39
+          "line": 11,
+          "column": 15
         },
         "end": {
-          "line": 7,
-          "column": 40
+          "line": 11,
+          "column": 16
         }
       }
     },
@@ -2739,15 +2941,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 127,
-      "end": 133,
+      "start": 157,
+      "end": 163,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 13,
           "column": 0
         },
         "end": {
-          "line": 9,
+          "line": 13,
           "column": 6
         }
       }
@@ -2764,15 +2966,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 134,
-      "end": 135,
+      "start": 164,
+      "end": 165,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 13,
           "column": 7
         },
         "end": {
-          "line": 9,
+          "line": 13,
           "column": 8
         }
       }
@@ -2790,15 +2992,15 @@
         "binop": null
       },
       "value": "BloomPass",
-      "start": 138,
-      "end": 147,
+      "start": 168,
+      "end": 177,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 14,
           "column": 1
         },
         "end": {
-          "line": 10,
+          "line": 14,
           "column": 10
         }
       }
@@ -2816,15 +3018,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 147,
-      "end": 148,
+      "start": 177,
+      "end": 178,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 14,
           "column": 10
         },
         "end": {
-          "line": 10,
+          "line": 14,
           "column": 11
         }
       }
@@ -2842,15 +3044,15 @@
         "binop": null
       },
       "value": "BlurPass",
-      "start": 151,
-      "end": 159,
+      "start": 181,
+      "end": 189,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 15,
           "column": 1
         },
         "end": {
-          "line": 11,
+          "line": 15,
           "column": 9
         }
       }
@@ -2868,15 +3070,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 159,
-      "end": 160,
+      "start": 189,
+      "end": 190,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 15,
           "column": 9
         },
         "end": {
-          "line": 11,
+          "line": 15,
           "column": 10
         }
       }
@@ -2894,120 +3096,16 @@
         "binop": null
       },
       "value": "BokehPass",
-      "start": 163,
-      "end": 172,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 1
-        },
-        "end": {
-          "line": 12,
-          "column": 10
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 172,
-      "end": 173,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 10
-        },
-        "end": {
-          "line": 12,
-          "column": 11
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ClearPass",
-      "start": 176,
-      "end": 185,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 1
-        },
-        "end": {
-          "line": 13,
-          "column": 10
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 185,
-      "end": 186,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 10
-        },
-        "end": {
-          "line": 13,
-          "column": 11
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ClearMaskPass",
-      "start": 189,
+      "start": 193,
       "end": 202,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 16,
           "column": 1
         },
         "end": {
-          "line": 14,
-          "column": 14
+          "line": 16,
+          "column": 10
         }
       }
     },
@@ -3028,11 +3126,115 @@
       "end": 203,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 16,
+          "column": 10
+        },
+        "end": {
+          "line": 16,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ClearPass",
+      "start": 206,
+      "end": 215,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 1
+        },
+        "end": {
+          "line": 17,
+          "column": 10
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 215,
+      "end": 216,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 10
+        },
+        "end": {
+          "line": 17,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ClearMaskPass",
+      "start": 219,
+      "end": 232,
+      "loc": {
+        "start": {
+          "line": 18,
+          "column": 1
+        },
+        "end": {
+          "line": 18,
+          "column": 14
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 232,
+      "end": 233,
+      "loc": {
+        "start": {
+          "line": 18,
           "column": 14
         },
         "end": {
-          "line": 14,
+          "line": 18,
           "column": 15
         }
       }
@@ -3050,15 +3252,15 @@
         "binop": null
       },
       "value": "DotScreenPass",
-      "start": 206,
-      "end": 219,
+      "start": 236,
+      "end": 249,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 19,
           "column": 1
         },
         "end": {
-          "line": 15,
+          "line": 19,
           "column": 14
         }
       }
@@ -3076,15 +3278,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 219,
-      "end": 220,
+      "start": 249,
+      "end": 250,
       "loc": {
         "start": {
-          "line": 15,
+          "line": 19,
           "column": 14
         },
         "end": {
-          "line": 15,
+          "line": 19,
           "column": 15
         }
       }
@@ -3102,15 +3304,15 @@
         "binop": null
       },
       "value": "FilmPass",
-      "start": 223,
-      "end": 231,
+      "start": 253,
+      "end": 261,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 20,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 20,
           "column": 9
         }
       }
@@ -3128,15 +3330,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 231,
-      "end": 232,
+      "start": 261,
+      "end": 262,
       "loc": {
         "start": {
-          "line": 16,
+          "line": 20,
           "column": 9
         },
         "end": {
-          "line": 16,
+          "line": 20,
           "column": 10
         }
       }
@@ -3154,15 +3356,15 @@
         "binop": null
       },
       "value": "GlitchMode",
-      "start": 235,
-      "end": 245,
+      "start": 265,
+      "end": 275,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 21,
           "column": 1
         },
         "end": {
-          "line": 17,
+          "line": 21,
           "column": 11
         }
       }
@@ -3180,15 +3382,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 245,
-      "end": 246,
+      "start": 275,
+      "end": 276,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 21,
           "column": 11
         },
         "end": {
-          "line": 17,
+          "line": 21,
           "column": 12
         }
       }
@@ -3206,15 +3408,15 @@
         "binop": null
       },
       "value": "GlitchPass",
-      "start": 249,
-      "end": 259,
+      "start": 279,
+      "end": 289,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 22,
           "column": 1
         },
         "end": {
-          "line": 18,
+          "line": 22,
           "column": 11
         }
       }
@@ -3232,15 +3434,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 259,
-      "end": 260,
+      "start": 289,
+      "end": 290,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 22,
           "column": 11
         },
         "end": {
-          "line": 18,
+          "line": 22,
           "column": 12
         }
       }
@@ -3258,15 +3460,15 @@
         "binop": null
       },
       "value": "GodRaysPass",
-      "start": 263,
-      "end": 274,
+      "start": 293,
+      "end": 304,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 23,
           "column": 1
         },
         "end": {
-          "line": 19,
+          "line": 23,
           "column": 12
         }
       }
@@ -3284,15 +3486,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 274,
-      "end": 275,
+      "start": 304,
+      "end": 305,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 23,
           "column": 12
         },
         "end": {
-          "line": 19,
+          "line": 23,
           "column": 13
         }
       }
@@ -3310,15 +3512,15 @@
         "binop": null
       },
       "value": "MaskPass",
-      "start": 278,
-      "end": 286,
+      "start": 308,
+      "end": 316,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 24,
           "column": 1
         },
         "end": {
-          "line": 20,
+          "line": 24,
           "column": 9
         }
       }
@@ -3336,15 +3538,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 286,
-      "end": 287,
+      "start": 316,
+      "end": 317,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 24,
           "column": 9
         },
         "end": {
-          "line": 20,
+          "line": 24,
           "column": 10
         }
       }
@@ -3362,15 +3564,15 @@
         "binop": null
       },
       "value": "OutlinePass",
-      "start": 290,
-      "end": 301,
+      "start": 320,
+      "end": 331,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 25,
           "column": 1
         },
         "end": {
-          "line": 21,
+          "line": 25,
           "column": 12
         }
       }
@@ -3388,15 +3590,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 301,
-      "end": 302,
+      "start": 331,
+      "end": 332,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 25,
           "column": 12
         },
         "end": {
-          "line": 21,
+          "line": 25,
           "column": 13
         }
       }
@@ -3414,15 +3616,15 @@
         "binop": null
       },
       "value": "Pass",
-      "start": 305,
-      "end": 309,
+      "start": 335,
+      "end": 339,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 26,
           "column": 1
         },
         "end": {
-          "line": 22,
+          "line": 26,
           "column": 5
         }
       }
@@ -3440,15 +3642,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 309,
-      "end": 310,
+      "start": 339,
+      "end": 340,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 26,
           "column": 5
         },
         "end": {
-          "line": 22,
+          "line": 26,
           "column": 6
         }
       }
@@ -3466,15 +3668,15 @@
         "binop": null
       },
       "value": "PixelationPass",
-      "start": 313,
-      "end": 327,
+      "start": 343,
+      "end": 357,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 27,
           "column": 1
         },
         "end": {
-          "line": 23,
+          "line": 27,
           "column": 15
         }
       }
@@ -3492,15 +3694,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 327,
-      "end": 328,
+      "start": 357,
+      "end": 358,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 27,
           "column": 15
         },
         "end": {
-          "line": 23,
+          "line": 27,
           "column": 16
         }
       }
@@ -3518,15 +3720,15 @@
         "binop": null
       },
       "value": "RealisticBokehPass",
-      "start": 331,
-      "end": 349,
+      "start": 361,
+      "end": 379,
       "loc": {
         "start": {
-          "line": 24,
+          "line": 28,
           "column": 1
         },
         "end": {
-          "line": 24,
+          "line": 28,
           "column": 19
         }
       }
@@ -3544,15 +3746,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 349,
-      "end": 350,
+      "start": 379,
+      "end": 380,
       "loc": {
         "start": {
-          "line": 24,
+          "line": 28,
           "column": 19
         },
         "end": {
-          "line": 24,
+          "line": 28,
           "column": 20
         }
       }
@@ -3570,15 +3772,15 @@
         "binop": null
       },
       "value": "RenderPass",
-      "start": 353,
-      "end": 363,
+      "start": 383,
+      "end": 393,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 29,
           "column": 1
         },
         "end": {
-          "line": 25,
+          "line": 29,
           "column": 11
         }
       }
@@ -3596,15 +3798,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 363,
-      "end": 364,
+      "start": 393,
+      "end": 394,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 29,
           "column": 11
         },
         "end": {
-          "line": 25,
+          "line": 29,
           "column": 12
         }
       }
@@ -3622,15 +3824,15 @@
         "binop": null
       },
       "value": "SavePass",
-      "start": 367,
-      "end": 375,
+      "start": 397,
+      "end": 405,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 30,
           "column": 1
         },
         "end": {
-          "line": 26,
+          "line": 30,
           "column": 9
         }
       }
@@ -3648,15 +3850,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 375,
-      "end": 376,
+      "start": 405,
+      "end": 406,
       "loc": {
         "start": {
-          "line": 26,
+          "line": 30,
           "column": 9
         },
         "end": {
-          "line": 26,
+          "line": 30,
           "column": 10
         }
       }
@@ -3674,15 +3876,15 @@
         "binop": null
       },
       "value": "ShaderPass",
-      "start": 379,
-      "end": 389,
+      "start": 409,
+      "end": 419,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 31,
           "column": 1
         },
         "end": {
-          "line": 27,
+          "line": 31,
           "column": 11
         }
       }
@@ -3700,15 +3902,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 389,
-      "end": 390,
+      "start": 419,
+      "end": 420,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 31,
           "column": 11
         },
         "end": {
-          "line": 27,
+          "line": 31,
           "column": 12
         }
       }
@@ -3726,15 +3928,15 @@
         "binop": null
       },
       "value": "ShockWavePass",
-      "start": 393,
-      "end": 406,
+      "start": 423,
+      "end": 436,
       "loc": {
         "start": {
-          "line": 28,
+          "line": 32,
           "column": 1
         },
         "end": {
-          "line": 28,
+          "line": 32,
           "column": 14
         }
       }
@@ -3752,15 +3954,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 406,
-      "end": 407,
+      "start": 436,
+      "end": 437,
       "loc": {
         "start": {
-          "line": 28,
+          "line": 32,
           "column": 14
         },
         "end": {
-          "line": 28,
+          "line": 32,
           "column": 15
         }
       }
@@ -3778,15 +3980,15 @@
         "binop": null
       },
       "value": "SMAAPass",
-      "start": 410,
-      "end": 418,
+      "start": 440,
+      "end": 448,
       "loc": {
         "start": {
-          "line": 29,
+          "line": 33,
           "column": 1
         },
         "end": {
-          "line": 29,
+          "line": 33,
           "column": 9
         }
       }
@@ -3804,15 +4006,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 418,
-      "end": 419,
+      "start": 448,
+      "end": 449,
       "loc": {
         "start": {
-          "line": 29,
+          "line": 33,
           "column": 9
         },
         "end": {
-          "line": 29,
+          "line": 33,
           "column": 10
         }
       }
@@ -3830,15 +4032,15 @@
         "binop": null
       },
       "value": "TexturePass",
-      "start": 422,
-      "end": 433,
+      "start": 452,
+      "end": 463,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 34,
           "column": 1
         },
         "end": {
-          "line": 30,
+          "line": 34,
           "column": 12
         }
       }
@@ -3856,15 +4058,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 433,
-      "end": 434,
+      "start": 463,
+      "end": 464,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 34,
           "column": 12
         },
         "end": {
-          "line": 30,
+          "line": 34,
           "column": 13
         }
       }
@@ -3882,15 +4084,15 @@
         "binop": null
       },
       "value": "ToneMappingPass",
-      "start": 437,
-      "end": 452,
+      "start": 467,
+      "end": 482,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 35,
           "column": 1
         },
         "end": {
-          "line": 31,
+          "line": 35,
           "column": 16
         }
       }
@@ -3907,15 +4109,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 454,
-      "end": 455,
+      "start": 484,
+      "end": 485,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 36,
           "column": 0
         },
         "end": {
-          "line": 32,
+          "line": 36,
           "column": 1
         }
       }
@@ -3933,15 +4135,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 456,
-      "end": 460,
+      "start": 486,
+      "end": 490,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 36,
           "column": 2
         },
         "end": {
-          "line": 32,
+          "line": 36,
           "column": 6
         }
       }
@@ -3960,15 +4162,15 @@
         "updateContext": null
       },
       "value": "./passes",
-      "start": 461,
-      "end": 471,
+      "start": 491,
+      "end": 501,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 36,
           "column": 7
         },
         "end": {
-          "line": 32,
+          "line": 36,
           "column": 17
         }
       }
@@ -3986,15 +4188,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 471,
-      "end": 472,
+      "start": 501,
+      "end": 502,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 36,
           "column": 17
         },
         "end": {
-          "line": 32,
+          "line": 36,
           "column": 18
         }
       }
@@ -4014,15 +4216,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 476,
-      "end": 482,
+      "start": 506,
+      "end": 512,
       "loc": {
         "start": {
-          "line": 34,
+          "line": 38,
           "column": 0
         },
         "end": {
-          "line": 34,
+          "line": 38,
           "column": 6
         }
       }
@@ -4039,15 +4241,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 483,
-      "end": 484,
+      "start": 513,
+      "end": 514,
       "loc": {
         "start": {
-          "line": 34,
+          "line": 38,
           "column": 7
         },
         "end": {
-          "line": 34,
+          "line": 38,
           "column": 8
         }
       }
@@ -4065,15 +4267,15 @@
         "binop": null
       },
       "value": "AdaptiveLuminosityMaterial",
-      "start": 487,
-      "end": 513,
+      "start": 517,
+      "end": 543,
       "loc": {
         "start": {
-          "line": 35,
+          "line": 39,
           "column": 1
         },
         "end": {
-          "line": 35,
+          "line": 39,
           "column": 27
         }
       }
@@ -4091,15 +4293,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 513,
-      "end": 514,
+      "start": 543,
+      "end": 544,
       "loc": {
         "start": {
-          "line": 35,
+          "line": 39,
           "column": 27
         },
         "end": {
-          "line": 35,
+          "line": 39,
           "column": 28
         }
       }
@@ -4117,15 +4319,15 @@
         "binop": null
       },
       "value": "BokehMaterial",
-      "start": 517,
-      "end": 530,
+      "start": 547,
+      "end": 560,
       "loc": {
         "start": {
-          "line": 36,
+          "line": 40,
           "column": 1
         },
         "end": {
-          "line": 36,
+          "line": 40,
           "column": 14
         }
       }
@@ -4143,15 +4345,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 530,
-      "end": 531,
+      "start": 560,
+      "end": 561,
       "loc": {
         "start": {
-          "line": 36,
+          "line": 40,
           "column": 14
         },
         "end": {
-          "line": 36,
+          "line": 40,
           "column": 15
         }
       }
@@ -4169,15 +4371,15 @@
         "binop": null
       },
       "value": "ColorEdgesMaterial",
-      "start": 534,
-      "end": 552,
+      "start": 564,
+      "end": 582,
       "loc": {
         "start": {
-          "line": 37,
+          "line": 41,
           "column": 1
         },
         "end": {
-          "line": 37,
+          "line": 41,
           "column": 19
         }
       }
@@ -4195,15 +4397,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 552,
-      "end": 553,
+      "start": 582,
+      "end": 583,
       "loc": {
         "start": {
-          "line": 37,
+          "line": 41,
           "column": 19
         },
         "end": {
-          "line": 37,
+          "line": 41,
           "column": 20
         }
       }
@@ -4221,15 +4423,15 @@
         "binop": null
       },
       "value": "CombineMaterial",
-      "start": 556,
-      "end": 571,
+      "start": 586,
+      "end": 601,
       "loc": {
         "start": {
-          "line": 38,
+          "line": 42,
           "column": 1
         },
         "end": {
-          "line": 38,
+          "line": 42,
           "column": 16
         }
       }
@@ -4247,15 +4449,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 571,
-      "end": 572,
+      "start": 601,
+      "end": 602,
       "loc": {
         "start": {
-          "line": 38,
+          "line": 42,
           "column": 16
         },
         "end": {
-          "line": 38,
+          "line": 42,
           "column": 17
         }
       }
@@ -4273,15 +4475,15 @@
         "binop": null
       },
       "value": "ConvolutionMaterial",
-      "start": 575,
-      "end": 594,
+      "start": 605,
+      "end": 624,
       "loc": {
         "start": {
-          "line": 39,
+          "line": 43,
           "column": 1
         },
         "end": {
-          "line": 39,
+          "line": 43,
           "column": 20
         }
       }
@@ -4299,15 +4501,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 594,
-      "end": 595,
+      "start": 624,
+      "end": 625,
       "loc": {
         "start": {
-          "line": 39,
+          "line": 43,
           "column": 20
         },
         "end": {
-          "line": 39,
+          "line": 43,
           "column": 21
         }
       }
@@ -4325,15 +4527,15 @@
         "binop": null
       },
       "value": "CopyMaterial",
-      "start": 598,
-      "end": 610,
+      "start": 628,
+      "end": 640,
       "loc": {
         "start": {
-          "line": 40,
+          "line": 44,
           "column": 1
         },
         "end": {
-          "line": 40,
+          "line": 44,
           "column": 13
         }
       }
@@ -4351,15 +4553,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 610,
-      "end": 611,
+      "start": 640,
+      "end": 641,
       "loc": {
         "start": {
-          "line": 40,
+          "line": 44,
           "column": 13
         },
         "end": {
-          "line": 40,
+          "line": 44,
           "column": 14
         }
       }
@@ -4377,15 +4579,15 @@
         "binop": null
       },
       "value": "DepthComparisonMaterial",
-      "start": 614,
-      "end": 637,
+      "start": 644,
+      "end": 667,
       "loc": {
         "start": {
-          "line": 41,
+          "line": 45,
           "column": 1
         },
         "end": {
-          "line": 41,
+          "line": 45,
           "column": 24
         }
       }
@@ -4403,15 +4605,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 637,
-      "end": 638,
+      "start": 667,
+      "end": 668,
       "loc": {
         "start": {
-          "line": 41,
+          "line": 45,
           "column": 24
         },
         "end": {
-          "line": 41,
+          "line": 45,
           "column": 25
         }
       }
@@ -4429,15 +4631,15 @@
         "binop": null
       },
       "value": "DotScreenMaterial",
-      "start": 641,
-      "end": 658,
+      "start": 671,
+      "end": 688,
       "loc": {
         "start": {
-          "line": 42,
+          "line": 46,
           "column": 1
         },
         "end": {
-          "line": 42,
+          "line": 46,
           "column": 18
         }
       }
@@ -4455,15 +4657,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 658,
-      "end": 659,
+      "start": 688,
+      "end": 689,
       "loc": {
         "start": {
-          "line": 42,
+          "line": 46,
           "column": 18
         },
         "end": {
-          "line": 42,
+          "line": 46,
           "column": 19
         }
       }
@@ -4481,15 +4683,15 @@
         "binop": null
       },
       "value": "FilmMaterial",
-      "start": 662,
-      "end": 674,
+      "start": 692,
+      "end": 704,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 47,
           "column": 1
         },
         "end": {
-          "line": 43,
+          "line": 47,
           "column": 13
         }
       }
@@ -4507,15 +4709,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 674,
-      "end": 675,
+      "start": 704,
+      "end": 705,
       "loc": {
         "start": {
-          "line": 43,
+          "line": 47,
           "column": 13
         },
         "end": {
-          "line": 43,
+          "line": 47,
           "column": 14
         }
       }
@@ -4533,15 +4735,15 @@
         "binop": null
       },
       "value": "GlitchMaterial",
-      "start": 678,
-      "end": 692,
+      "start": 708,
+      "end": 722,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 48,
           "column": 1
         },
         "end": {
-          "line": 44,
+          "line": 48,
           "column": 15
         }
       }
@@ -4559,15 +4761,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 692,
-      "end": 693,
+      "start": 722,
+      "end": 723,
       "loc": {
         "start": {
-          "line": 44,
+          "line": 48,
           "column": 15
         },
         "end": {
-          "line": 44,
+          "line": 48,
           "column": 16
         }
       }
@@ -4585,15 +4787,15 @@
         "binop": null
       },
       "value": "GodRaysMaterial",
-      "start": 696,
-      "end": 711,
+      "start": 726,
+      "end": 741,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 49,
           "column": 1
         },
         "end": {
-          "line": 45,
+          "line": 49,
           "column": 16
         }
       }
@@ -4611,15 +4813,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 711,
-      "end": 712,
+      "start": 741,
+      "end": 742,
       "loc": {
         "start": {
-          "line": 45,
+          "line": 49,
           "column": 16
         },
         "end": {
-          "line": 45,
+          "line": 49,
           "column": 17
         }
       }
@@ -4637,15 +4839,15 @@
         "binop": null
       },
       "value": "KernelSize",
-      "start": 715,
-      "end": 725,
+      "start": 745,
+      "end": 755,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 50,
           "column": 1
         },
         "end": {
-          "line": 46,
+          "line": 50,
           "column": 11
         }
       }
@@ -4663,15 +4865,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 725,
-      "end": 726,
+      "start": 755,
+      "end": 756,
       "loc": {
         "start": {
-          "line": 46,
+          "line": 50,
           "column": 11
         },
         "end": {
-          "line": 46,
+          "line": 50,
           "column": 12
         }
       }
@@ -4689,15 +4891,15 @@
         "binop": null
       },
       "value": "LuminosityMaterial",
-      "start": 729,
-      "end": 747,
+      "start": 759,
+      "end": 777,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 51,
           "column": 1
         },
         "end": {
-          "line": 47,
+          "line": 51,
           "column": 19
         }
       }
@@ -4715,15 +4917,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 747,
-      "end": 748,
+      "start": 777,
+      "end": 778,
       "loc": {
         "start": {
-          "line": 47,
+          "line": 51,
           "column": 19
         },
         "end": {
-          "line": 47,
+          "line": 51,
           "column": 20
         }
       }
@@ -4741,15 +4943,15 @@
         "binop": null
       },
       "value": "OutlineBlendMaterial",
-      "start": 751,
-      "end": 771,
+      "start": 781,
+      "end": 801,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 52,
           "column": 1
         },
         "end": {
-          "line": 48,
+          "line": 52,
           "column": 21
         }
       }
@@ -4767,15 +4969,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 771,
-      "end": 772,
+      "start": 801,
+      "end": 802,
       "loc": {
         "start": {
-          "line": 48,
+          "line": 52,
           "column": 21
         },
         "end": {
-          "line": 48,
+          "line": 52,
           "column": 22
         }
       }
@@ -4793,15 +4995,15 @@
         "binop": null
       },
       "value": "OutlineEdgesMaterial",
-      "start": 775,
-      "end": 795,
+      "start": 805,
+      "end": 825,
       "loc": {
         "start": {
-          "line": 49,
+          "line": 53,
           "column": 1
         },
         "end": {
-          "line": 49,
+          "line": 53,
           "column": 21
         }
       }
@@ -4819,15 +5021,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 795,
-      "end": 796,
+      "start": 825,
+      "end": 826,
       "loc": {
         "start": {
-          "line": 49,
+          "line": 53,
           "column": 21
         },
         "end": {
-          "line": 49,
+          "line": 53,
           "column": 22
         }
       }
@@ -4845,15 +5047,15 @@
         "binop": null
       },
       "value": "PixelationMaterial",
-      "start": 799,
-      "end": 817,
+      "start": 829,
+      "end": 847,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 54,
           "column": 1
         },
         "end": {
-          "line": 50,
+          "line": 54,
           "column": 19
         }
       }
@@ -4871,15 +5073,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 817,
-      "end": 818,
+      "start": 847,
+      "end": 848,
       "loc": {
         "start": {
-          "line": 50,
+          "line": 54,
           "column": 19
         },
         "end": {
-          "line": 50,
+          "line": 54,
           "column": 20
         }
       }
@@ -4897,15 +5099,15 @@
         "binop": null
       },
       "value": "RealisticBokehMaterial",
-      "start": 821,
-      "end": 843,
+      "start": 851,
+      "end": 873,
       "loc": {
         "start": {
-          "line": 51,
+          "line": 55,
           "column": 1
         },
         "end": {
-          "line": 51,
+          "line": 55,
           "column": 23
         }
       }
@@ -4923,15 +5125,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 843,
-      "end": 844,
+      "start": 873,
+      "end": 874,
       "loc": {
         "start": {
-          "line": 51,
+          "line": 55,
           "column": 23
         },
         "end": {
-          "line": 51,
+          "line": 55,
           "column": 24
         }
       }
@@ -4949,15 +5151,15 @@
         "binop": null
       },
       "value": "ShockWaveMaterial",
-      "start": 847,
-      "end": 864,
+      "start": 877,
+      "end": 894,
       "loc": {
         "start": {
-          "line": 52,
+          "line": 56,
           "column": 1
         },
         "end": {
-          "line": 52,
+          "line": 56,
           "column": 18
         }
       }
@@ -4975,15 +5177,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 864,
-      "end": 865,
+      "start": 894,
+      "end": 895,
       "loc": {
         "start": {
-          "line": 52,
+          "line": 56,
           "column": 18
         },
         "end": {
-          "line": 52,
+          "line": 56,
           "column": 19
         }
       }
@@ -5001,15 +5203,15 @@
         "binop": null
       },
       "value": "SMAABlendMaterial",
-      "start": 868,
-      "end": 885,
+      "start": 898,
+      "end": 915,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 57,
           "column": 1
         },
         "end": {
-          "line": 53,
+          "line": 57,
           "column": 18
         }
       }
@@ -5027,15 +5229,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 885,
-      "end": 886,
+      "start": 915,
+      "end": 916,
       "loc": {
         "start": {
-          "line": 53,
+          "line": 57,
           "column": 18
         },
         "end": {
-          "line": 53,
+          "line": 57,
           "column": 19
         }
       }
@@ -5053,15 +5255,15 @@
         "binop": null
       },
       "value": "SMAAWeightsMaterial",
-      "start": 889,
-      "end": 908,
+      "start": 919,
+      "end": 938,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 58,
           "column": 1
         },
         "end": {
-          "line": 54,
+          "line": 58,
           "column": 20
         }
       }
@@ -5079,15 +5281,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 908,
-      "end": 909,
+      "start": 938,
+      "end": 939,
       "loc": {
         "start": {
-          "line": 54,
+          "line": 58,
           "column": 20
         },
         "end": {
-          "line": 54,
+          "line": 58,
           "column": 21
         }
       }
@@ -5105,15 +5307,15 @@
         "binop": null
       },
       "value": "ToneMappingMaterial",
-      "start": 912,
-      "end": 931,
+      "start": 942,
+      "end": 961,
       "loc": {
         "start": {
-          "line": 55,
+          "line": 59,
           "column": 1
         },
         "end": {
-          "line": 55,
+          "line": 59,
           "column": 20
         }
       }
@@ -5130,15 +5332,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 933,
-      "end": 934,
+      "start": 963,
+      "end": 964,
       "loc": {
         "start": {
-          "line": 56,
+          "line": 60,
           "column": 0
         },
         "end": {
-          "line": 56,
+          "line": 60,
           "column": 1
         }
       }
@@ -5156,15 +5358,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 935,
-      "end": 939,
+      "start": 965,
+      "end": 969,
       "loc": {
         "start": {
-          "line": 56,
+          "line": 60,
           "column": 2
         },
         "end": {
-          "line": 56,
+          "line": 60,
           "column": 6
         }
       }
@@ -5183,15 +5385,15 @@
         "updateContext": null
       },
       "value": "./materials",
-      "start": 940,
-      "end": 953,
+      "start": 970,
+      "end": 983,
       "loc": {
         "start": {
-          "line": 56,
+          "line": 60,
           "column": 7
         },
         "end": {
-          "line": 56,
+          "line": 60,
           "column": 20
         }
       }
@@ -5209,15 +5411,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 953,
-      "end": 954,
+      "start": 983,
+      "end": 984,
       "loc": {
         "start": {
-          "line": 56,
+          "line": 60,
           "column": 20
         },
         "end": {
-          "line": 56,
+          "line": 60,
           "column": 21
         }
       }
@@ -5237,15 +5439,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 958,
-      "end": 964,
+      "start": 988,
+      "end": 994,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 62,
           "column": 0
         },
         "end": {
-          "line": 58,
+          "line": 62,
           "column": 6
         }
       }
@@ -5262,15 +5464,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 965,
-      "end": 966,
+      "start": 995,
+      "end": 996,
       "loc": {
         "start": {
-          "line": 58,
+          "line": 62,
           "column": 7
         },
         "end": {
-          "line": 58,
+          "line": 62,
           "column": 8
         }
       }
@@ -5288,15 +5490,15 @@
         "binop": null
       },
       "value": "RawImageData",
-      "start": 969,
-      "end": 981,
+      "start": 999,
+      "end": 1011,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 63,
           "column": 1
         },
         "end": {
-          "line": 59,
+          "line": 63,
           "column": 13
         }
       }
@@ -5314,15 +5516,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 981,
-      "end": 982,
+      "start": 1011,
+      "end": 1012,
       "loc": {
         "start": {
-          "line": 59,
+          "line": 63,
           "column": 13
         },
         "end": {
-          "line": 59,
+          "line": 63,
           "column": 14
         }
       }
@@ -5340,15 +5542,15 @@
         "binop": null
       },
       "value": "SMAAAreaImageData",
-      "start": 985,
-      "end": 1002,
+      "start": 1015,
+      "end": 1032,
       "loc": {
         "start": {
-          "line": 60,
+          "line": 64,
           "column": 1
         },
         "end": {
-          "line": 60,
+          "line": 64,
           "column": 18
         }
       }
@@ -5366,15 +5568,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1002,
-      "end": 1003,
+      "start": 1032,
+      "end": 1033,
       "loc": {
         "start": {
-          "line": 60,
+          "line": 64,
           "column": 18
         },
         "end": {
-          "line": 60,
+          "line": 64,
           "column": 19
         }
       }
@@ -5392,15 +5594,15 @@
         "binop": null
       },
       "value": "SMAASearchImageData",
-      "start": 1006,
-      "end": 1025,
+      "start": 1036,
+      "end": 1055,
       "loc": {
         "start": {
-          "line": 61,
+          "line": 65,
           "column": 1
         },
         "end": {
-          "line": 61,
+          "line": 65,
           "column": 20
         }
       }
@@ -5417,15 +5619,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1027,
-      "end": 1028,
+      "start": 1057,
+      "end": 1058,
       "loc": {
         "start": {
-          "line": 62,
+          "line": 66,
           "column": 0
         },
         "end": {
-          "line": 62,
+          "line": 66,
           "column": 1
         }
       }
@@ -5443,15 +5645,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 1029,
-      "end": 1033,
+      "start": 1059,
+      "end": 1063,
       "loc": {
         "start": {
-          "line": 62,
+          "line": 66,
           "column": 2
         },
         "end": {
-          "line": 62,
+          "line": 66,
           "column": 6
         }
       }
@@ -5470,15 +5672,15 @@
         "updateContext": null
       },
       "value": "./materials/images",
-      "start": 1034,
-      "end": 1054,
+      "start": 1064,
+      "end": 1084,
       "loc": {
         "start": {
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         "end": {
-          "line": 62,
+          "line": 66,
           "column": 27
         }
       }
@@ -5496,15 +5698,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1054,
-      "end": 1055,
+      "start": 1084,
+      "end": 1085,
       "loc": {
         "start": {
-          "line": 62,
+          "line": 66,
           "column": 27
         },
         "end": {
-          "line": 62,
+          "line": 66,
           "column": 28
         }
       }
@@ -5522,15 +5724,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1057,
-      "end": 1057,
+      "start": 1087,
+      "end": 1087,
       "loc": {
         "start": {
-          "line": 63,
+          "line": 67,
           "column": 0
         },
         "end": {
-          "line": 63,
+          "line": 67,
           "column": 0
         }
       }
