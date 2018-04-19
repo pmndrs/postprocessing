@@ -32,8 +32,8 @@ export class OutlinePass extends Pass {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - Additional parameters. See {@link BlurPass}, {@link OutlineBlendMaterial} and {@link OutlineEdgesMaterial} for details.
-	 * @param {Object} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
-	 * @param {Object} [options.blur=true] - Whether the outline should be blurry.
+	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
+	 * @param {Boolean} [options.blur=true] - Whether the outline should be blurred.
 	 */
 
 	constructor(scene, camera, options = {}) {

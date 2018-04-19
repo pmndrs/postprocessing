@@ -6,7 +6,7 @@ import { Pass } from "./Pass.js";
 /**
  * A bloom pass.
  *
- * This pass renders a scene with superimposed blur by utilising the fast Kawase
+ * This pass renders a scene with superimposed blur by utilizing the fast Kawase
  * convolution approach.
  */
 

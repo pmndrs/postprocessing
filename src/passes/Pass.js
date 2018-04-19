@@ -135,7 +135,7 @@ export class Pass {
 	 * render size.
 	 *
 	 * The {@link EffectComposer} calls this method before this pass is
-	 * initialised and every time its own size is updated.
+	 * initialized and every time its own size is updated.
 	 *
 	 * @param {Number} width - The renderer's width.
 	 * @param {Number} height - The renderer's height.
@@ -145,7 +145,7 @@ export class Pass {
 	setSize(width, height) {}
 
 	/**
-	 * Performs initialisation tasks.
+	 * Performs initialization tasks.
 	 *
 	 * By overriding this method you gain access to the renderer. You'll also be
 	 * able to configure your custom render targets to use the appropriate format
@@ -155,7 +155,7 @@ export class Pass {
 	 * targets by performing a preliminary render operation.
 	 *
 	 * The {@link EffectComposer} calls this method when this pass is added to its
-	 * queue.
+	 * queue, but not before its size has been set.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.

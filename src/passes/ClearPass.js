@@ -4,7 +4,7 @@ import { Pass } from "./Pass.js";
 /**
  * Used for saving the original clear color of the renderer.
  *
- * @type Color
+ * @type {Color}
  * @private
  */
 
@@ -13,7 +13,7 @@ const color = new Color();
 /**
  * A clear pass.
  *
- * You can prevent specific buffers from being cleared by setting either the
+ * You can prevent specific bits from being cleared by setting either the
  * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
  * to false.
  */
@@ -33,7 +33,7 @@ export class ClearPass extends Pass {
 		super("ClearPass", null, null, null);
 
 		/**
-		 * Clear color.
+		 * The clear color.
 		 *
 		 * @type {Color}
 		 */
@@ -41,7 +41,7 @@ export class ClearPass extends Pass {
 		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
 
 		/**
-		 * Clear alpha.
+		 * The clear alpha.
 		 *
 		 * @type {Number}
 		 */

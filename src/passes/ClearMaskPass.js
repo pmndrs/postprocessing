@@ -1,7 +1,7 @@
 import { Pass } from "./Pass.js";
 
 /**
- * A pass that disables the stencil mask.
+ * A pass that disables the stencil test.
  */
 
 export class ClearMaskPass extends Pass {
