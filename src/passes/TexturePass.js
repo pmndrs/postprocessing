@@ -1,5 +1,4 @@
-import { AdditiveBlending } from "three";
-import { CopyMaterial } from "../materials";
+import { CombineMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
 /**
@@ -13,27 +12,17 @@ export class TexturePass extends Pass {
 	 *
 	 * @param {Texture} texture - The texture.
 	 * @param {Number} [opacity=1.0] - The texture opacity.
+	 * @param {Boolean} [screenMode=true] - Whether the screen blend mode should be used for combining the texture with the scene colors.
 	 */
 
-	constructor(texture, opacity = 1.0) {
+	constructor(texture, opacity = 1.0, screenMode = true) {
 
 		super("TexturePass");
 
-		/**
-		 * A copy shader material used for rendering to texture.
-		 *
-		 * @type {CopyMaterial}
-		 * @private
-		 */
-
-		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = AdditiveBlending;
-		this.copyMaterial.transparent = true;
+		this.material = new CombineMaterial(screenMode);
 
 		this.texture = texture;
 		this.opacity = opacity;
-
-		this.quad.material = this.copyMaterial;
 
 	}
 
@@ -45,7 +34,7 @@ export class TexturePass extends Pass {
 
 	get texture() {
 
-		return this.copyMaterial.uniforms.tDiffuse.value;
+		return this.material.uniforms.texture2.value;
 
 	}
 
@@ -55,7 +44,7 @@ export class TexturePass extends Pass {
 
 	set texture(value) {
 
-		this.copyMaterial.uniforms.tDiffuse.value = value;
+		this.material.uniforms.texture2.value = value;
 
 	}
 
@@ -67,7 +56,7 @@ export class TexturePass extends Pass {
 
 	get opacity() {
 
-		return this.copyMaterial.uniforms.opacity.value;
+		return this.material.uniforms.opacity2.value;
 
 	}
 
@@ -77,7 +66,7 @@ export class TexturePass extends Pass {
 
 	set opacity(value = 1.0) {
 
-		this.copyMaterial.uniforms.opacity.value = value;
+		this.material.uniforms.opacity2.value = value;
 
 	}
 
@@ -85,12 +74,16 @@ export class TexturePass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
+		this.material.uniforms.texture1.value = inputBuffer.texture;
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
