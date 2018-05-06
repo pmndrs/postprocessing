@@ -100,7 +100,7 @@ See the [Wiki](https://github.com/vanruesc/postprocessing/wiki/Custom-Passes) fo
 
 ## Contributing
 
-Please refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/CONTRIBUTING.md) for details.
+Please refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md) for details.
 
 
 ## License
