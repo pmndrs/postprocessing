@@ -50,16 +50,7 @@ export class GlitchPass extends Pass {
 
 		super("GlitchPass");
 
-		/**
-		 * Glitch shader material.
-		 *
-		 * @type {GlitchMaterial}
-		 * @private
-		 */
-
 		this.material = new GlitchMaterial();
-
-		this.quad.material = this.material;
 
 		/**
 		 * A perturbation map.
@@ -171,18 +162,20 @@ export class GlitchPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const mode = this.mode;
 		const counter = this.counter;
 		const breakPoint = this.breakPoint;
 		const uniforms = this.material.uniforms;
 
-		uniforms.tDiffuse.value = readBuffer.texture;
+		uniforms.tDiffuse.value = inputBuffer.texture;
 		uniforms.seed.value = Math.random();
 		uniforms.active.value = true;
 
@@ -220,7 +213,7 @@ export class GlitchPass extends Pass {
 
 		++this.counter;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 

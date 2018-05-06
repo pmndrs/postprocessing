@@ -140,12 +140,13 @@ export class ShockWavePass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-	 * @param {Number} delta - The render delta time.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer, delta) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const epicenter = this.epicenter;
 		const mainCamera = this.mainCamera;
@@ -158,8 +159,8 @@ export class ShockWavePass extends Pass {
 		const maxRadius = uniforms.maxRadius;
 		const waveSize = uniforms.waveSize;
 
-		this.copyMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		this.quad.material = this.copyMaterial;
+		this.copyMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.material = this.copyMaterial;
 
 		if(this.active) {
 
@@ -178,8 +179,8 @@ export class ShockWavePass extends Pass {
 				center.value.x = (screenPosition.x + 1.0) * 0.5;
 				center.value.y = (screenPosition.y + 1.0) * 0.5;
 
-				uniforms.tDiffuse.value = readBuffer.texture;
-				this.quad.material = shockWaveMaterial;
+				uniforms.tDiffuse.value = inputBuffer.texture;
+				this.material = shockWaveMaterial;
 
 			}
 
@@ -195,12 +196,12 @@ export class ShockWavePass extends Pass {
 
 		}
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.

@@ -11,7 +11,7 @@ import { Pass } from "./Pass.js";
 const color = new Color();
 
 /**
- * A clear pass.
+ * A pass that clears the output buffer or the screen.
  *
  * You can prevent specific bits from being cleared by setting either the
  * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
@@ -51,13 +51,16 @@ export class ClearPass extends Pass {
 	}
 
 	/**
-	 * Clears the read buffer or the screen.
+	 * Clears the output buffer or the screen.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const clearColor = this.clearColor;
 
@@ -71,7 +74,7 @@ export class ClearPass extends Pass {
 
 		}
 
-		renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
 		renderer.clear();
 
 		if(clearColor !== null) {

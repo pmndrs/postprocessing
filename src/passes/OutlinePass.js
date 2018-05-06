@@ -153,11 +153,7 @@ export class OutlinePass extends Pass {
 
 		this.blurPass = new BlurPass(options);
 
-		if(options.kernelSize === undefined) {
-
-			this.blurPass.kernelSize = KernelSize.VERY_SMALL;
-
-		}
+		this.blurPass.kernelSize = options.kernelSize;
 
 		/**
 		 * A copy pass that renders the read buffer to screen if needed.
@@ -361,7 +357,6 @@ export class OutlinePass extends Pass {
 		}
 
 		this.selection = selection;
-		this.needsSwap = selection.length > 0;
 
 		return this;
 
@@ -387,7 +382,6 @@ export class OutlinePass extends Pass {
 		}
 
 		this.selection = [];
-		this.needsSwap = false;
 		this.time = 0.0;
 
 		return this;
@@ -405,7 +399,6 @@ export class OutlinePass extends Pass {
 
 		object.layers.enable(this.selectionLayer);
 		this.selection.push(object);
-		this.needsSwap = true;
 
 		return this;
 
@@ -430,7 +423,6 @@ export class OutlinePass extends Pass {
 
 			if(selection.length === 0) {
 
-				this.needsSwap = false;
 				this.time = 0.0;
 
 			}
@@ -474,12 +466,13 @@ export class OutlinePass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-	 * @param {Number} delta - The time between the last frame and the current one in seconds.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer, delta) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const mainScene = this.mainScene;
 		const mainCamera = this.mainCamera;
@@ -504,19 +497,19 @@ export class OutlinePass extends Pass {
 
 			// Render a custom depth texture and ignore selected objects.
 			this.setSelectionVisible(false);
-			this.renderPassDepth.render(renderer, this.renderTargetDepth);
+			this.renderPassDepth.render(renderer, null, this.renderTargetDepth);
 			this.setSelectionVisible(true);
 
 			// Create a mask for the selected objects using the depth information.
 			mainCamera.layers.mask = 1 << this.selectionLayer;
-			this.renderPassMask.render(renderer, this.renderTargetMask);
+			this.renderPassMask.render(renderer, null, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
 			mainCamera.layers.mask = mask;
 			mainScene.background = background;
 
 			// Detect the outline.
-			this.quad.material = this.outlineEdgesMaterial;
+			this.material = this.outlineEdgesMaterial;
 			renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
 			if(this.blurPass.enabled) {
@@ -527,36 +520,21 @@ export class OutlinePass extends Pass {
 			}
 
 			// Draw the final overlay onto the scene colours.
-			this.quad.material = this.outlineBlendMaterial;
-			this.outlineBlendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-			renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+			this.material = this.outlineBlendMaterial;
+			this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+			renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
 
 		} else if(this.renderToScreen) {
 
 			// Draw the read buffer to screen.
-			this.copyPass.render(renderer, readBuffer);
+			this.copyPass.render(renderer, inputBuffer);
 
 		}
 
 	}
 
 	/**
-	 * Adjusts the format of the render targets and initialises internal passes.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialize(renderer, alpha) {
-
-		this.renderPassDepth.initialize(renderer, alpha);
-		this.renderPassMask.initialize(renderer, alpha);
-		this.blurPass.initialize(renderer, alpha);
-
-	}
-
-	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -579,6 +557,21 @@ export class OutlinePass extends Pass {
 
 		this.outlineBlendMaterial.uniforms.aspect.value = width / height;
 		this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		this.renderPassDepth.initialize(renderer, alpha);
+		this.renderPassMask.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha);
 
 	}
 

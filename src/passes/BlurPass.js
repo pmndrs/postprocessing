@@ -3,7 +3,9 @@ import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Pass } from "./Pass.js";
 
 /**
- * A blur pass.
+ * An efficient, incremental blur pass.
+ *
+ * Note: This pass allows the input and output buffer to be the same.
  */
 
 export class BlurPass extends Pass {
@@ -138,14 +140,17 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * Blurs the read buffer.
+	 * Blurs the input buffer and writes the result to the output buffer. The
+	 * input buffer remains intact, unless its also the output buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const scene = this.scene;
 		const camera = this.camera;
@@ -157,11 +162,11 @@ export class BlurPass extends Pass {
 		let uniforms = material.uniforms;
 		const kernel = material.getKernel();
 
-		let lastRT = readBuffer;
+		let lastRT = inputBuffer;
 		let destRT;
 		let i, l;
 
-		this.quad.material = material;
+		this.material = material;
 
 		// Apply the multi-pass blur.
 		for(i = 0, l = kernel.length - 1; i < l; ++i) {
@@ -181,36 +186,18 @@ export class BlurPass extends Pass {
 
 			material = this.ditheredConvolutionMaterial;
 			uniforms = material.uniforms;
-			this.quad.material = material;
+			this.material = material;
 
 		}
 
 		uniforms.kernel.value = kernel[i];
 		uniforms.tDiffuse.value = lastRT.texture;
-		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Adjusts the format of the render targets.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialize(renderer, alpha) {
-
-		if(!alpha) {
-
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
-
-		}
-
-	}
-
-	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -226,6 +213,24 @@ export class BlurPass extends Pass {
 
 		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 		this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		if(!alpha) {
+
+			this.renderTargetX.texture.format = RGBFormat;
+			this.renderTargetY.texture.format = RGBFormat;
+
+		}
 
 	}
 

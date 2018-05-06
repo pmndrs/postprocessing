@@ -144,19 +144,19 @@ export class SMAAPass extends Pass {
 
 		this.blendMaterial.uniforms.tWeights.value = this.renderTargetWeights.texture;
 
-		this.quad.material = this.blendMaterial;
-
 	}
 
 	/**
-	 * Antialiases the scene.
+	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		// Detect color edges.
 		this.material = this.colorEdgesMaterial;
@@ -165,19 +165,19 @@ export class SMAAPass extends Pass {
 		renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
 		// Compute edge weights.
-		this.quad.material = this.weightsMaterial;
-		renderer.render(this.scene, this.camera, this.renderTargetWeights, false);
+		this.material = this.weightsMaterial;
+		renderer.render(this.scene, this.camera, this.renderTargetWeights);
 
 		// Apply the antialiasing filter to the colors.
-		this.quad.material = this.blendMaterial;
-		this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.material = this.blendMaterial;
+		this.blendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.

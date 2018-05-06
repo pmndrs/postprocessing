@@ -22,16 +22,7 @@ export class FilmPass extends Pass {
 
 		super("FilmPass");
 
-		/**
-		 * Film shader material.
-		 *
-		 * @type {FilmMaterial}
-		 * @private
-		 */
-
 		this.material = new FilmMaterial(options);
-
-		this.quad.material = this.material;
 
 		/**
 		 * The amount of scanlines, relative to the screen height.
@@ -72,22 +63,23 @@ export class FilmPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-	 * @param {Number} delta - The render delta time.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer, delta) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = readBuffer.texture;
+		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
 		this.material.uniforms.time.value += delta;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Adjusts the scanline count using the renderer's height.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.

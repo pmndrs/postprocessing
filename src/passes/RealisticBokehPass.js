@@ -22,16 +22,7 @@ export class RealisticBokehPass extends Pass {
 
 		super("RealisticBokehPass");
 
-		/**
-		 * A bokeh shader material.
-		 *
-		 * @type {RealisticBokehMaterial}
-		 * @private
-		 */
-
-		this.bokehMaterial = new RealisticBokehMaterial(camera, options);
-
-		this.quad.material = this.bokehMaterial;
+		this.material = new RealisticBokehMaterial(camera, options);
 
 	}
 
@@ -39,21 +30,23 @@ export class RealisticBokehPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
+		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.material.uniforms.tDepth.value = inputBuffer.depthTexture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -61,7 +54,7 @@ export class RealisticBokehPass extends Pass {
 
 	setSize(width, height) {
 
-		this.bokehMaterial.setTexelSize(1.0 / width, 1.0 / height);
+		this.material.setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

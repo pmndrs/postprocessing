@@ -11,24 +11,16 @@ export class SavePass extends Pass {
 	/**
 	 * Constructs a new save pass.
 	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the read buffer.
-	 * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the read/write buffer.
+	 * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the input buffer.
+	 * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the input buffer.
 	 */
 
 	constructor(renderTarget, resize = true) {
 
 		super("SavePass");
 
-		/**
-		 * Copy shader material.
-		 *
-		 * @type {CopyMaterial}
-		 * @private
-		 */
-
 		this.material = new CopyMaterial();
 
-		this.quad.material = this.material;
 		this.needsSwap = false;
 
 		/**
@@ -49,7 +41,7 @@ export class SavePass extends Pass {
 
 		/**
 		 * Indicates whether the render target should be resized when the size of
-		 * the composer's read/write buffer changes.
+		 * the composer's frame buffer changes.
 		 *
 		 * @type {Boolean}
 		 */
@@ -59,39 +51,25 @@ export class SavePass extends Pass {
 	}
 
 	/**
-	 * Saves the read buffer.
+	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = readBuffer.texture;
+		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderTarget);
 
 	}
 
 	/**
-	 * Adjusts the format of the render target.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialize(renderer, alpha) {
-
-		if(!alpha) {
-
-			this.renderTarget.texture.format = RGBFormat;
-
-		}
-
-	}
-
-	/**
-	 * Updates this pass with the renderer's size.
+	 * Updates the size of this pass.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -105,6 +83,23 @@ export class SavePass extends Pass {
 			height = Math.max(1, height);
 
 			this.renderTarget.setSize(width, height);
+
+		}
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		if(!alpha) {
+
+			this.renderTarget.texture.format = RGBFormat;
 
 		}
 

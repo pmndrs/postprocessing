@@ -231,14 +231,14 @@ export class ToneMappingPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
-	 * @param {Number} delta - The render delta time.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer, delta) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
 
@@ -254,43 +254,44 @@ export class ToneMappingPass extends Pass {
 		if(this.adaptive) {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
-			quad.material = luminosityMaterial;
-			luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+			this.material = luminosityMaterial;
+			luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 			renderer.render(scene, camera, renderTargetLuminosity);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
-			quad.material = adaptiveLuminosityMaterial;
+			this.material = adaptiveLuminosityMaterial;
 			adaptiveLuminosityMaterial.uniforms.delta.value = delta;
 			adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;
 			adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;
 			renderer.render(scene, camera, renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
-			quad.material = copyMaterial;
+			this.material = copyMaterial;
 			copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
 			renderer.render(scene, camera, renderTargetPrevious);
 
 		}
 
 		// Apply the tone mapping to the colours.
-		quad.material = toneMappingMaterial;
-		toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.material = toneMappingMaterial;
+		toneMappingMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Renders something into the previous luminosity texture.
+	 * Performs initialization tasks.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialize(renderer) {
+	initialize(renderer, alpha) {
 
-		this.quad.material = new MeshBasicMaterial({ color: 0x7fffff });
+		this.material = new MeshBasicMaterial({ color: 0x7fffff });
 		renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-		this.quad.material.dispose();
+		this.material.dispose();
 
 	}
 

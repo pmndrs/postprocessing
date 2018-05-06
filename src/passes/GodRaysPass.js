@@ -86,38 +86,6 @@ export class GodRaysPass extends Pass {
 		this.mainCamera = camera;
 
 		/**
-		 * A pass that only renders the light source.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.renderPassLight = new RenderPass(this.lightScene, this.mainCamera);
-
-		/**
-		 * A pass that renders the masked scene over the light.
-		 *
-		 * @type {RenderPass}
-		 * @private
-		 */
-
-		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new MeshBasicMaterial({ color: 0x000000 }),
-			clearColor: new Color(0x000000)
-		});
-
-		this.renderPassMask.clear = false;
-
-		/**
-		 * A blur pass.
-		 *
-		 * @type {BlurPass}
-		 * @private
-		 */
-
-		this.blurPass = new BlurPass(options);
-
-		/**
 		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
@@ -159,6 +127,39 @@ export class GodRaysPass extends Pass {
 
 		this.renderTargetMask.texture.name = "GodRays.Mask";
 		this.renderTargetMask.texture.generateMipmaps = false;
+
+		/**
+		 * A pass that only renders the light source.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassLight = new RenderPass(this.lightScene, this.mainCamera, {
+			clearColor: new Color(0x000000)
+		});
+
+		/**
+		 * A pass that renders the masked scene over the light.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new MeshBasicMaterial({ color: 0x000000 })
+		});
+
+		this.renderPassMask.clear = false;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
 
 		/**
 		 * The light source.
@@ -329,32 +330,17 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
-	 * Renders the scene.
-	 *
-	 * The god rays pass has four phases:
-	 *
-	 * Mask Phase:
-	 *  First, the light source is rendered. Then the scene is rendered into the
-	 *  same buffer using a mask override material with depth test enabled.
-	 *
-	 * Preliminary Blur Phase:
-	 *  The masked scene is blurred.
-	 *
-	 * God Rays Phase:
-	 *  The blurred scene is blurred again, but this time along radial lines
-	 *  towards the light source.
-	 *
-	 * Composite Phase:
-	 *  The final result is combined with the read buffer.
+	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		const quad = this.quad;
 		const scene = this.scene;
 		const camera = this.camera;
 		const mainScene = this.mainScene;
@@ -371,19 +357,20 @@ export class GodRaysPass extends Pass {
 
 		let background, parent;
 
-		// Compute the screen light position and translate it to [0, 1].
+		// Compute the screen light position and translate it to [0.0, 1.0].
 		screenPosition.copy(lightSource.position).project(this.mainCamera);
 		screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
 		screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
 
-		// Render the masked scene.
 		parent = lightSource.parent;
 		background = mainScene.background;
 		mainScene.background = null;
 		this.lightScene.add(lightSource);
 
-		this.renderPassLight.render(renderer, renderTargetMask);
-		this.renderPassMask.render(renderer, renderTargetMask);
+		/* First, render the light source. Then render the scene into the same
+		buffer using a mask override material with depth test enabled. */
+		this.renderPassLight.render(renderer, null, renderTargetMask);
+		this.renderPassMask.render(renderer, null, renderTargetMask);
 
 		if(parent !== null) {
 
@@ -393,25 +380,47 @@ export class GodRaysPass extends Pass {
 
 		mainScene.background = background;
 
-		// Convolution phase.
-		this.blurPass.render(renderer, renderTargetMask, renderTargetX);
+		// Blur the masked scene to reduce artifacts.
+		this.blurPass.render(renderer, this.renderTargetMask, renderTargetX);
 
-		// God rays pass.
-		quad.material = godRaysMaterial;
+		// Blur the masked scene along radial lines towards the light source.
+		this.material = godRaysMaterial;
 		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
 		renderer.render(scene, camera, renderTargetY);
 
-		// Final pass - composite god rays onto colours.
-		quad.material = combineMaterial;
-		combineMaterial.uniforms.texture1.value = readBuffer.texture;
+		// Combine the god rays with the scene colors.
+		this.material = combineMaterial;
+		combineMaterial.uniforms.texture1.value = inputBuffer.texture;
 		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
 	/**
-	 * Adjusts the format of the render targets and initialises internal passes.
+	 * Updates the size of this pass.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.renderPassLight.setSize(width, height);
+		this.renderPassMask.setSize(width, height);
+		this.blurPass.setSize(width, height);
+
+		width = this.blurPass.width;
+		height = this.blurPass.height;
+
+		this.renderTargetMask.setSize(width, height);
+		this.renderTargetX.setSize(width, height);
+		this.renderTargetY.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
@@ -430,28 +439,6 @@ export class GodRaysPass extends Pass {
 			this.renderTargetY.texture.format = RGBFormat;
 
 		}
-
-	}
-
-	/**
-	 * Updates this pass with the renderer's size.
-	 *
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 */
-
-	setSize(width, height) {
-
-		this.renderPassLight.setSize(width, height);
-		this.renderPassMask.setSize(width, height);
-		this.blurPass.setSize(width, height);
-
-		width = this.blurPass.width;
-		height = this.blurPass.height;
-
-		this.renderTargetMask.setSize(width, height);
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
 
 	}
 
