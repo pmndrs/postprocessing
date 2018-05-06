@@ -141,13 +141,13 @@ export class Pass {
 	 * @abstract
 	 * @throws {Error} An error is thrown if the method is not overridden.
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - A read buffer. Contains the result of the previous pass.
-	 * @param {WebGLRenderTarget} writeBuffer - A write buffer. Normally used as the render target when the read buffer is used as input.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
 	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
-	 * @param {Boolean} [maskActive] - Indicates whether a stencil test mask is active or not.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer, delta, maskActive) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		throw new Error("Render method not implemented!");
 
