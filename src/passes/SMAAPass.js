@@ -1,4 +1,5 @@
 import {
+	Color,
 	LinearFilter,
 	NearestFilter,
 	RGBAFormat,
@@ -8,6 +9,7 @@ import {
 } from "three";
 
 import { ColorEdgesMaterial, SMAABlendMaterial, SMAAWeightsMaterial } from "../materials";
+import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 
 import searchImageDataURL from "../materials/images/smaa/searchImageDataURL.js";
@@ -32,6 +34,18 @@ export class SMAAPass extends Pass {
 	constructor(searchImage, areaImage) {
 
 		super("SMAAPass");
+
+		/**
+		 * A clear pass for the color edges buffer.
+		 *
+		 * @type {ClearPass}
+		 * @private
+		 */
+
+		this.clearPass = new ClearPass({
+			clearColor: new Color(0x000000),
+			clearAlpha: 1.0
+		});
 
 		/**
 		 * A render target for the color edge detection.
@@ -145,9 +159,10 @@ export class SMAAPass extends Pass {
 	render(renderer, readBuffer, writeBuffer) {
 
 		// Detect color edges.
-		this.quad.material = this.colorEdgesMaterial;
-		this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-		renderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);
+		this.material = this.colorEdgesMaterial;
+		this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.clearPass.render(renderer, null, this.renderTargetColorEdges);
+		renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
 		// Compute edge weights.
 		this.quad.material = this.weightsMaterial;
