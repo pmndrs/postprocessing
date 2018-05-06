@@ -28,15 +28,6 @@ export class BloomPass extends Pass {
 		super("BloomPass");
 
 		/**
-		 * A blur pass.
-		 *
-		 * @type {BlurPass}
-		 * @private
-		 */
-
-		this.blurPass = new BlurPass(options);
-
-		/**
 		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
@@ -52,6 +43,15 @@ export class BloomPass extends Pass {
 
 		this.renderTarget.texture.name = "Bloom.Target";
 		this.renderTarget.texture.generateMipmaps = false;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
 
 		/**
 		 * A combine shader material.
