@@ -57,11 +57,8 @@ export class Pass {
 		/**
 		 * A quad mesh that fills the screen.
 		 *
-		 * Assign your shader material to this mesh!
-		 *
 		 * @type {Mesh}
-		 * @protected
-		 * @example this.quad.material = this.myMaterial;
+		 * @private
 		 */
 
 		this.quad = quad;
@@ -105,6 +102,34 @@ export class Pass {
 		 */
 
 		this.needsSwap = true;
+
+	}
+
+	/**
+	 * The fullscreen material.
+	 *
+	 * @type {Material}
+	 * @protected
+	 */
+
+	get material() {
+
+		return this.quad.material;
+
+	}
+
+	/**
+	 * Sets the fullscreen material.
+	 *
+	 * The material will be assigned to the quad mesh that fills the screen.
+	 *
+	 * @type {Material}
+	 * @protected
+	 */
+
+	set material(material) {
+
+		this.quad.material = material;
 
 	}
 

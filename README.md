@@ -56,12 +56,9 @@ export class MyPass extends Pass {
 
 	constructor() {
 
-		super();
+		super("MyPass");
 
-		this.name = "MyPass";
-		this.needsSwap = true;
 		this.material = new MyMaterial();
-		this.quad.material = this.material;
 
 	}
 
