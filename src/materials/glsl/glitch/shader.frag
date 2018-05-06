@@ -45,7 +45,7 @@ void main() {
 		xs = floor(gl_FragCoord.x / 0.5);
 		ys = floor(gl_FragCoord.y / 0.5);
 
-		normal = texture2D(tPerturb, coord * seed * seed);
+		normal = texture2D(tPerturb, vUv2);
 
 		if(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {
 
