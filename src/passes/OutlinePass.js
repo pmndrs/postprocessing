@@ -153,7 +153,7 @@ export class OutlinePass extends Pass {
 
 		this.blurPass = new BlurPass(options);
 
-		this.blurPass.kernelSize = options.kernelSize;
+		this.kernelSize = options.kernelSize;
 
 		/**
 		 * A copy pass that renders the read buffer to screen if needed.
