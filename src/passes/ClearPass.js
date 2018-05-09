@@ -11,7 +11,7 @@ import { Pass } from "./Pass.js";
 const color = new Color();
 
 /**
- * A pass that clears the output buffer or the screen.
+ * A pass that clears the input buffer or the screen.
  *
  * You can prevent specific bits from being cleared by setting either the
  * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
@@ -32,6 +32,8 @@ export class ClearPass extends Pass {
 
 		super("ClearPass", null, null, null);
 
+		this.needsSwap = false;
+
 		/**
 		 * The clear color.
 		 *
@@ -51,7 +53,7 @@ export class ClearPass extends Pass {
 	}
 
 	/**
-	 * Clears the output buffer or the screen.
+	 * Clears the input buffer or the screen.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
@@ -74,7 +76,7 @@ export class ClearPass extends Pass {
 
 		}
 
-		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
 		renderer.clear();
 
 		if(clearColor !== null) {
