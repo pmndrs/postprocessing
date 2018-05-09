@@ -62,10 +62,10 @@ export class MyPass extends Pass {
 
 	}
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = readBuffer.texture;
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
