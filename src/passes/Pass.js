@@ -113,7 +113,7 @@ export class Pass {
 
 	get material() {
 
-		return this.quad.material;
+		return (this.quad !== null) ? this.quad.material : null;
 
 	}
 
@@ -127,7 +127,11 @@ export class Pass {
 
 	set material(value) {
 
-		this.quad.material = value;
+		if(this.quad !== null) {
+
+			this.quad.material = value;
+
+		}
 
 	}
 
