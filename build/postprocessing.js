@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.4.2 build Apr 19 2018
+ * postprocessing v4.5.0 build May 09 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -1486,13 +1486,14 @@
 
   var Pass = function () {
   		function Pass() {
-  				var scene = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.Scene();
-  				var camera = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  				var quad = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new three.Mesh(new three.PlaneBufferGeometry(2, 2), null);
+  				var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Pass";
+  				var scene = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Scene();
+  				var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new three.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  				var quad = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : new three.Mesh(new three.PlaneBufferGeometry(2, 2), null);
   				classCallCheck(this, Pass);
 
 
-  				this.name = "Pass";
+  				this.name = name;
 
   				this.scene = scene;
 
@@ -1510,16 +1511,16 @@
   						}
   				}
 
-  				this.needsSwap = false;
+  				this.renderToScreen = false;
 
   				this.enabled = true;
 
-  				this.renderToScreen = false;
+  				this.needsSwap = true;
   		}
 
   		createClass(Pass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer, delta, maskActive) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						throw new Error("Render method not implemented!");
   				}
@@ -1564,6 +1565,24 @@
   										}
   								}
   						}
+
+  						if (this.material !== null) {
+
+  								this.material.dispose();
+  						}
+  				}
+  		}, {
+  				key: "material",
+  				get: function get$$1() {
+
+  						return this.quad !== null ? this.quad.material : null;
+  				},
+  				set: function set$$1(value) {
+
+  						if (this.quad !== null) {
+
+  								this.quad.material = value;
+  						}
   				}
   		}]);
   		return Pass;
@@ -1576,11 +1595,7 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, BlurPass);
 
-  				var _this = possibleConstructorReturn(this, (BlurPass.__proto__ || Object.getPrototypeOf(BlurPass)).call(this));
-
-  				_this.name = "BlurPass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (BlurPass.__proto__ || Object.getPrototypeOf(BlurPass)).call(this, "BlurPass"));
 
   				_this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
@@ -1612,7 +1627,7 @@
 
   		createClass(BlurPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var scene = this.scene;
   						var camera = this.camera;
@@ -1624,12 +1639,12 @@
   						var uniforms = material.uniforms;
   						var kernel = material.getKernel();
 
-  						var lastRT = readBuffer;
+  						var lastRT = inputBuffer;
   						var destRT = void 0;
   						var i = void 0,
   						    l = void 0;
 
-  						this.quad.material = material;
+  						this.material = material;
 
   						for (i = 0, l = kernel.length - 1; i < l; ++i) {
   								destRT = i % 2 === 0 ? renderTargetX : renderTargetY;
@@ -1645,22 +1660,12 @@
 
   								material = this.ditheredConvolutionMaterial;
   								uniforms = material.uniforms;
-  								this.quad.material = material;
+  								this.material = material;
   						}
 
   						uniforms.kernel.value = kernel[i];
   						uniforms.tDiffuse.value = lastRT.texture;
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "initialize",
-  				value: function initialize(renderer, alpha) {
-
-  						if (!alpha) {
-
-  								this.renderTargetX.texture.format = three.RGBFormat;
-  								this.renderTargetY.texture.format = three.RGBFormat;
-  						}
+  						renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "setSize",
@@ -1674,6 +1679,16 @@
 
   						this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
   						this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
+  				}
+  		}, {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
+
+  						if (!alpha) {
+
+  								this.renderTargetX.texture.format = three.RGBFormat;
+  								this.renderTargetY.texture.format = three.RGBFormat;
+  						}
   				}
   		}, {
   				key: "width",
@@ -1711,13 +1726,7 @@
   		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   		classCallCheck(this, BloomPass);
 
-  		var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this));
-
-  		_this.name = "BloomPass";
-
-  		_this.needsSwap = true;
-
-  		_this.blurPass = new BlurPass(options);
+  		var _this = possibleConstructorReturn(this, (BloomPass.__proto__ || Object.getPrototypeOf(BloomPass)).call(this, "BloomPass"));
 
   		_this.renderTarget = new three.WebGLRenderTarget(1, 1, {
   			minFilter: three.LinearFilter,
@@ -1728,6 +1737,8 @@
 
   		_this.renderTarget.texture.name = "Bloom.Target";
   		_this.renderTarget.texture.generateMipmaps = false;
+
+  		_this.blurPass = new BlurPass(options);
 
   		_this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
 
@@ -1742,9 +1753,8 @@
 
   	createClass(BloomPass, [{
   		key: "render",
-  		value: function render(renderer, readBuffer, writeBuffer) {
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  			var quad = this.quad;
   			var scene = this.scene;
   			var camera = this.camera;
   			var blurPass = this.blurPass;
@@ -1753,27 +1763,18 @@
   			var combineMaterial = this.combineMaterial;
   			var renderTarget = this.renderTarget;
 
-  			quad.material = luminosityMaterial;
-  			luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  			this.material = luminosityMaterial;
+  			luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
   			renderer.render(scene, camera, renderTarget);
 
   			blurPass.render(renderer, renderTarget, renderTarget);
 
-  			quad.material = combineMaterial;
-  			combineMaterial.uniforms.texture1.value = readBuffer.texture;
-  			combineMaterial.uniforms.texture2.value = renderTarget.texture;
+  			if (this.blend) {
+  				this.material = combineMaterial;
+  				combineMaterial.uniforms.texture1.value = inputBuffer.texture;
+  				combineMaterial.uniforms.texture2.value = renderTarget.texture;
 
-  			renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
-  		}
-  	}, {
-  		key: "initialize",
-  		value: function initialize(renderer, alpha) {
-
-  			this.blurPass.initialize(renderer, alpha);
-
-  			if (!alpha) {
-
-  				this.renderTarget.texture.format = three.RGBFormat;
+  				renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
   			}
   		}
   	}, {
@@ -1786,6 +1787,17 @@
   			height = this.blurPass.height;
 
   			this.renderTarget.setSize(width, height);
+  		}
+  	}, {
+  		key: "initialize",
+  		value: function initialize(renderer, alpha) {
+
+  			this.blurPass.initialize(renderer, alpha);
+
+  			if (!alpha) {
+
+  				this.renderTarget.texture.format = three.RGBFormat;
+  			}
   		}
   	}, {
   		key: "resolutionScale",
@@ -1845,47 +1857,57 @@
 
   			this.blurPass.dithering = value;
   		}
+  	}, {
+  		key: "blend",
+  		get: function get$$1() {
+
+  			return this.needsSwap;
+  		},
+  		set: function set$$1(value) {
+
+  			this.needsSwap = value;
+  		}
+  	}, {
+  		key: "overlay",
+  		get: function get$$1() {
+
+  			return this.renderTarget.texture;
+  		}
   	}]);
   	return BloomPass;
   }(Pass);
 
   var BokehPass = function (_Pass) {
-  		inherits(BokehPass, _Pass);
+  	inherits(BokehPass, _Pass);
 
-  		function BokehPass(camera) {
-  				var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  				classCallCheck(this, BokehPass);
+  	function BokehPass(camera) {
+  		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  		classCallCheck(this, BokehPass);
 
-  				var _this = possibleConstructorReturn(this, (BokehPass.__proto__ || Object.getPrototypeOf(BokehPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (BokehPass.__proto__ || Object.getPrototypeOf(BokehPass)).call(this, "BokehPass"));
 
-  				_this.name = "BokehPass";
+  		_this.material = new BokehMaterial(camera, options);
 
-  				_this.needsSwap = true;
+  		return _this;
+  	}
 
-  				_this.bokehMaterial = new BokehMaterial(camera, options);
+  	createClass(BokehPass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  				_this.quad.material = _this.bokehMaterial;
+  			this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+  			this.material.uniforms.tDepth.value = inputBuffer.depthTexture;
 
-  				return _this;
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  		createClass(BokehPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
-
-  						this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						this.bokehMaterial.uniforms.aspect.value = width / height;
-  				}
-  		}]);
-  		return BokehPass;
+  			this.material.uniforms.aspect.value = width / height;
+  		}
+  	}]);
+  	return BokehPass;
   }(Pass);
 
   var ClearMaskPass = function (_Pass) {
@@ -1894,16 +1916,16 @@
   	function ClearMaskPass() {
   		classCallCheck(this, ClearMaskPass);
 
-  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, null, null, null));
+  		var _this = possibleConstructorReturn(this, (ClearMaskPass.__proto__ || Object.getPrototypeOf(ClearMaskPass)).call(this, "ClearMaskPass", null, null, null));
 
-  		_this.name = "ClearMaskPass";
+  		_this.needsSwap = false;
 
   		return _this;
   	}
 
   	createClass(ClearMaskPass, [{
   		key: "render",
-  		value: function render(renderer) {
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   			renderer.state.buffers.stencil.setTest(false);
   		}
@@ -1920,9 +1942,7 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, ClearPass);
 
-  				var _this = possibleConstructorReturn(this, (ClearPass.__proto__ || Object.getPrototypeOf(ClearPass)).call(this, null, null, null));
-
-  				_this.name = "ClearPass";
+  				var _this = possibleConstructorReturn(this, (ClearPass.__proto__ || Object.getPrototypeOf(ClearPass)).call(this, "ClearPass", null, null, null));
 
   				_this.clearColor = options.clearColor !== undefined ? options.clearColor : null;
 
@@ -1933,7 +1953,7 @@
 
   		createClass(ClearPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var clearColor = this.clearColor;
 
@@ -1946,7 +1966,7 @@
   								renderer.setClearColor(clearColor, this.clearAlpha);
   						}
 
-  						renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+  						renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
   						renderer.clear();
 
   						if (clearColor !== null) {
@@ -1959,45 +1979,39 @@
   }(Pass);
 
   var DotScreenPass = function (_Pass) {
-  		inherits(DotScreenPass, _Pass);
+  	inherits(DotScreenPass, _Pass);
 
-  		function DotScreenPass() {
-  				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  				classCallCheck(this, DotScreenPass);
+  	function DotScreenPass() {
+  		var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  		classCallCheck(this, DotScreenPass);
 
-  				var _this = possibleConstructorReturn(this, (DotScreenPass.__proto__ || Object.getPrototypeOf(DotScreenPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (DotScreenPass.__proto__ || Object.getPrototypeOf(DotScreenPass)).call(this, "DotScreenPass"));
 
-  				_this.name = "DotScreenPass";
+  		_this.material = new DotScreenMaterial(options);
 
-  				_this.needsSwap = true;
+  		return _this;
+  	}
 
-  				_this.material = new DotScreenMaterial(options);
+  	createClass(DotScreenPass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  				_this.quad.material = _this.material;
+  			this.material.uniforms.tDiffuse.value = inputBuffer.texture;
 
-  				return _this;
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  		createClass(DotScreenPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  			width = Math.max(1, width);
+  			height = Math.max(1, height);
 
-  						this.material.uniforms.tDiffuse.value = readBuffer.texture;
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						width = Math.max(1, width);
-  						height = Math.max(1, height);
-
-  						this.material.uniforms.offsetRepeat.value.z = width;
-  						this.material.uniforms.offsetRepeat.value.w = height;
-  				}
-  		}]);
-  		return DotScreenPass;
+  			this.material.uniforms.offsetRepeat.value.z = width;
+  			this.material.uniforms.offsetRepeat.value.w = height;
+  		}
+  	}]);
+  	return DotScreenPass;
   }(Pass);
 
   var FilmPass = function (_Pass) {
@@ -2007,15 +2021,9 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, FilmPass);
 
-  				var _this = possibleConstructorReturn(this, (FilmPass.__proto__ || Object.getPrototypeOf(FilmPass)).call(this));
-
-  				_this.name = "FilmPass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (FilmPass.__proto__ || Object.getPrototypeOf(FilmPass)).call(this, "FilmPass"));
 
   				_this.material = new FilmMaterial(options);
-
-  				_this.quad.material = _this.material;
 
   				_this.scanlineDensity = options.scanlineDensity === undefined ? 1.25 : options.scanlineDensity;
 
@@ -2028,12 +2036,12 @@
 
   		createClass(FilmPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer, delta) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  						this.material.uniforms.tDiffuse.value = readBuffer.texture;
+  						this.material.uniforms.tDiffuse.value = inputBuffer.texture;
   						this.material.uniforms.time.value += delta;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "setSize",
@@ -2067,15 +2075,9 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, GlitchPass);
 
-  				var _this = possibleConstructorReturn(this, (GlitchPass.__proto__ || Object.getPrototypeOf(GlitchPass)).call(this));
-
-  				_this.name = "GlitchPass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (GlitchPass.__proto__ || Object.getPrototypeOf(GlitchPass)).call(this, "GlitchPass"));
 
   				_this.material = new GlitchMaterial();
-
-  				_this.quad.material = _this.material;
 
   				_this.texture = null;
 
@@ -2128,14 +2130,14 @@
   				}
   		}, {
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var mode = this.mode;
   						var counter = this.counter;
   						var breakPoint = this.breakPoint;
   						var uniforms = this.material.uniforms;
 
-  						uniforms.tDiffuse.value = readBuffer.texture;
+  						uniforms.tDiffuse.value = inputBuffer.texture;
   						uniforms.seed.value = Math.random();
   						uniforms.active.value = true;
 
@@ -2167,7 +2169,7 @@
 
   						++this.counter;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "perturbMap",
@@ -2199,9 +2201,7 @@
   				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   				classCallCheck(this, RenderPass);
 
-  				var _this = possibleConstructorReturn(this, (RenderPass.__proto__ || Object.getPrototypeOf(RenderPass)).call(this, scene, camera, null));
-
-  				_this.name = "RenderPass";
+  				var _this = possibleConstructorReturn(this, (RenderPass.__proto__ || Object.getPrototypeOf(RenderPass)).call(this, "RenderPass", scene, camera, null));
 
   				_this.clearPass = new ClearPass(options);
 
@@ -2216,23 +2216,24 @@
 
   		createClass(RenderPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var scene = this.scene;
-  						var target = this.renderToScreen ? null : readBuffer;
+  						var renderTarget = this.renderToScreen ? null : outputBuffer;
   						var overrideMaterial = scene.overrideMaterial;
 
   						if (this.clear) {
 
-  								this.clearPass.render(renderer, target);
+  								this.clearPass.renderToScreen = this.renderToScreen;
+  								this.clearPass.render(renderer, inputBuffer, outputBuffer);
   						} else if (this.clearDepth) {
 
-  								renderer.setRenderTarget(target);
+  								renderer.setRenderTarget(renderTarget);
   								renderer.clearDepth();
   						}
 
   						scene.overrideMaterial = this.overrideMaterial;
-  						renderer.render(scene, this.camera, target);
+  						renderer.render(scene, this.camera, renderTarget);
   						scene.overrideMaterial = overrideMaterial;
   				}
   		}]);
@@ -2251,28 +2252,13 @@
   				var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
   				classCallCheck(this, GodRaysPass);
 
-  				var _this = possibleConstructorReturn(this, (GodRaysPass.__proto__ || Object.getPrototypeOf(GodRaysPass)).call(this));
-
-  				_this.name = "GodRaysPass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (GodRaysPass.__proto__ || Object.getPrototypeOf(GodRaysPass)).call(this, "GodRaysPass"));
 
   				_this.lightScene = new three.Scene();
 
   				_this.mainScene = scene;
 
   				_this.mainCamera = camera;
-
-  				_this.renderPassLight = new RenderPass(_this.lightScene, _this.mainCamera);
-
-  				_this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
-  						overrideMaterial: new three.MeshBasicMaterial({ color: 0x000000 }),
-  						clearColor: new three.Color(0x000000)
-  				});
-
-  				_this.renderPassMask.clear = false;
-
-  				_this.blurPass = new BlurPass(options);
 
   				_this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
@@ -2296,6 +2282,18 @@
   				_this.renderTargetMask.texture.name = "GodRays.Mask";
   				_this.renderTargetMask.texture.generateMipmaps = false;
 
+  				_this.renderPassLight = new RenderPass(_this.lightScene, _this.mainCamera, {
+  						clearColor: new three.Color(0x000000)
+  				});
+
+  				_this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
+  						overrideMaterial: new three.MeshBasicMaterial({ color: 0x000000 })
+  				});
+
+  				_this.renderPassMask.clear = false;
+
+  				_this.blurPass = new BlurPass(options);
+
   				_this.lightSource = lightSource;
 
   				_this.screenPosition = new three.Vector3();
@@ -2314,9 +2312,8 @@
 
   		createClass(GodRaysPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  						var quad = this.quad;
   						var scene = this.scene;
   						var camera = this.camera;
   						var mainScene = this.mainScene;
@@ -2343,8 +2340,8 @@
   						mainScene.background = null;
   						this.lightScene.add(lightSource);
 
-  						this.renderPassLight.render(renderer, renderTargetMask);
-  						this.renderPassMask.render(renderer, renderTargetMask);
+  						this.renderPassLight.render(renderer, null, renderTargetMask);
+  						this.renderPassMask.render(renderer, null, renderTargetMask);
 
   						if (parent !== null) {
 
@@ -2353,31 +2350,18 @@
 
   						mainScene.background = background;
 
-  						this.blurPass.render(renderer, renderTargetMask, renderTargetX);
+  						this.blurPass.render(renderer, this.renderTargetMask, renderTargetX);
 
-  						quad.material = godRaysMaterial;
+  						this.material = godRaysMaterial;
   						godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
   						renderer.render(scene, camera, renderTargetY);
 
-  						quad.material = combineMaterial;
-  						combineMaterial.uniforms.texture1.value = readBuffer.texture;
-  						combineMaterial.uniforms.texture2.value = renderTargetY.texture;
+  						if (this.blend) {
+  								this.material = combineMaterial;
+  								combineMaterial.uniforms.texture1.value = inputBuffer.texture;
+  								combineMaterial.uniforms.texture2.value = renderTargetY.texture;
 
-  						renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "initialize",
-  				value: function initialize(renderer, alpha) {
-
-  						this.renderPassLight.initialize(renderer, alpha);
-  						this.renderPassMask.initialize(renderer, alpha);
-  						this.blurPass.initialize(renderer, alpha);
-
-  						if (!alpha) {
-
-  								this.renderTargetMask.texture.format = three.RGBFormat;
-  								this.renderTargetX.texture.format = three.RGBFormat;
-  								this.renderTargetY.texture.format = three.RGBFormat;
+  								renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
   						}
   				}
   		}, {
@@ -2394,6 +2378,21 @@
   						this.renderTargetMask.setSize(width, height);
   						this.renderTargetX.setSize(width, height);
   						this.renderTargetY.setSize(width, height);
+  				}
+  		}, {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
+
+  						this.renderPassLight.initialize(renderer, alpha);
+  						this.renderPassMask.initialize(renderer, alpha);
+  						this.blurPass.initialize(renderer, alpha);
+
+  						if (!alpha) {
+
+  								this.renderTargetMask.texture.format = three.RGBFormat;
+  								this.renderTargetX.texture.format = three.RGBFormat;
+  								this.renderTargetY.texture.format = three.RGBFormat;
+  						}
   				}
   		}, {
   				key: "resolutionScale",
@@ -2461,6 +2460,22 @@
   								this.godRaysMaterial.needsUpdate = true;
   						}
   				}
+  		}, {
+  				key: "blend",
+  				get: function get$$1() {
+
+  						return this.needsSwap;
+  				},
+  				set: function set$$1(value) {
+
+  						this.needsSwap = value;
+  				}
+  		}, {
+  				key: "overlay",
+  				get: function get$$1() {
+
+  						return this.renderTargetY.texture;
+  				}
   		}]);
   		return GodRaysPass;
   }(Pass);
@@ -2471,9 +2486,9 @@
   		function MaskPass(scene, camera) {
   				classCallCheck(this, MaskPass);
 
-  				var _this = possibleConstructorReturn(this, (MaskPass.__proto__ || Object.getPrototypeOf(MaskPass)).call(this, scene, camera, null));
+  				var _this = possibleConstructorReturn(this, (MaskPass.__proto__ || Object.getPrototypeOf(MaskPass)).call(this, "MaskPass", scene, camera, null));
 
-  				_this.name = "MaskPass";
+  				_this.needsSwap = false;
 
   				_this.inverse = false;
 
@@ -2484,7 +2499,7 @@
 
   		createClass(MaskPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var context = renderer.context;
   						var state = renderer.state;
@@ -2514,10 +2529,10 @@
   										renderer.clearStencil();
   								} else {
 
-  										renderer.setRenderTarget(readBuffer);
+  										renderer.setRenderTarget(inputBuffer);
   										renderer.clearStencil();
 
-  										renderer.setRenderTarget(writeBuffer);
+  										renderer.setRenderTarget(outputBuffer);
   										renderer.clearStencil();
   								}
   						}
@@ -2527,8 +2542,8 @@
   								renderer.render(scene, camera, null);
   						} else {
 
-  								renderer.render(scene, camera, readBuffer);
-  								renderer.render(scene, camera, writeBuffer);
+  								renderer.render(scene, camera, inputBuffer);
+  								renderer.render(scene, camera, outputBuffer);
   						}
 
   						state.buffers.color.setLocked(false);
@@ -2542,40 +2557,34 @@
   }(Pass);
 
   var ShaderPass = function (_Pass) {
-  		inherits(ShaderPass, _Pass);
+  	inherits(ShaderPass, _Pass);
 
-  		function ShaderPass(material) {
-  				var textureID = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "tDiffuse";
-  				classCallCheck(this, ShaderPass);
+  	function ShaderPass(material) {
+  		var textureID = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "tDiffuse";
+  		classCallCheck(this, ShaderPass);
 
-  				var _this = possibleConstructorReturn(this, (ShaderPass.__proto__ || Object.getPrototypeOf(ShaderPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (ShaderPass.__proto__ || Object.getPrototypeOf(ShaderPass)).call(this, "ShaderPass"));
 
-  				_this.name = "ShaderPass";
+  		_this.material = material;
 
-  				_this.needsSwap = true;
+  		_this.textureID = textureID;
 
-  				_this.material = material;
+  		return _this;
+  	}
 
-  				_this.quad.material = _this.material;
+  	createClass(ShaderPass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  				_this.textureID = textureID;
+  			if (this.material.uniforms[this.textureID] !== undefined) {
 
-  				return _this;
+  				this.material.uniforms[this.textureID].value = inputBuffer.texture;
+  			}
+
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
-
-  		createClass(ShaderPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
-
-  						if (this.material.uniforms[this.textureID] !== undefined) {
-
-  								this.material.uniforms[this.textureID].value = readBuffer.texture;
-  						}
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}]);
-  		return ShaderPass;
+  	}]);
+  	return ShaderPass;
   }(Pass);
 
   var OutlinePass = function (_Pass) {
@@ -2585,11 +2594,7 @@
   				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   				classCallCheck(this, OutlinePass);
 
-  				var _this = possibleConstructorReturn(this, (OutlinePass.__proto__ || Object.getPrototypeOf(OutlinePass)).call(this));
-
-  				_this.name = "OutlinePass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (OutlinePass.__proto__ || Object.getPrototypeOf(OutlinePass)).call(this, "OutlinePass"));
 
   				_this.mainScene = scene;
 
@@ -2641,10 +2646,7 @@
 
   				_this.blurPass = new BlurPass(options);
 
-  				if (options.kernelSize === undefined) {
-
-  						_this.blurPass.kernelSize = KernelSize.VERY_SMALL;
-  				}
+  				_this.kernelSize = options.kernelSize;
 
   				_this.copyPass = new ShaderPass(new CopyMaterial());
   				_this.copyPass.renderToScreen = true;
@@ -2694,7 +2696,6 @@
   						}
 
   						this.selection = selection;
-  						this.needsSwap = selection.length > 0;
 
   						return this;
   				}
@@ -2714,7 +2715,6 @@
   						}
 
   						this.selection = [];
-  						this.needsSwap = false;
   						this.time = 0.0;
 
   						return this;
@@ -2725,7 +2725,6 @@
 
   						object.layers.enable(this.selectionLayer);
   						this.selection.push(object);
-  						this.needsSwap = true;
 
   						return this;
   				}
@@ -2743,7 +2742,6 @@
 
   								if (selection.length === 0) {
 
-  										this.needsSwap = false;
   										this.time = 0.0;
   								}
   						}
@@ -2772,7 +2770,7 @@
   				}
   		}, {
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer, delta) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var mainScene = this.mainScene;
   						var mainCamera = this.mainCamera;
@@ -2796,36 +2794,30 @@
   								}
 
   								this.setSelectionVisible(false);
-  								this.renderPassDepth.render(renderer, this.renderTargetDepth);
+  								this.renderPassDepth.render(renderer, null, this.renderTargetDepth);
   								this.setSelectionVisible(true);
 
   								mainCamera.layers.mask = 1 << this.selectionLayer;
-  								this.renderPassMask.render(renderer, this.renderTargetMask);
+  								this.renderPassMask.render(renderer, null, this.renderTargetMask);
 
   								mainCamera.layers.mask = mask;
   								mainScene.background = background;
 
-  								this.quad.material = this.outlineEdgesMaterial;
+  								this.material = this.outlineEdgesMaterial;
   								renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
   								if (this.blurPass.enabled) {
   										this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
   								}
 
-  								this.quad.material = this.outlineBlendMaterial;
-  								this.outlineBlendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  								renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  								if (this.blend) {
+  										this.material = this.outlineBlendMaterial;
+  										this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+  										renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
+  								}
   						} else if (this.renderToScreen) {
-  								this.copyPass.render(renderer, readBuffer);
+  								this.copyPass.render(renderer, inputBuffer);
   						}
-  				}
-  		}, {
-  				key: "initialize",
-  				value: function initialize(renderer, alpha) {
-
-  						this.renderPassDepth.initialize(renderer, alpha);
-  						this.renderPassMask.initialize(renderer, alpha);
-  						this.blurPass.initialize(renderer, alpha);
   				}
   		}, {
   				key: "setSize",
@@ -2846,6 +2838,14 @@
 
   						this.outlineBlendMaterial.uniforms.aspect.value = width / height;
   						this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
+  				}
+  		}, {
+  				key: "initialize",
+  				value: function initialize(renderer, alpha) {
+
+  						this.renderPassDepth.initialize(renderer, alpha);
+  						this.renderPassMask.initialize(renderer, alpha);
+  						this.blurPass.initialize(renderer, alpha);
   				}
   		}, {
   				key: "resolutionScale",
@@ -2893,169 +2893,171 @@
 
   						this.blurPass.dithering = value;
   				}
+  		}, {
+  				key: "blend",
+  				get: function get$$1() {
+
+  						return this.needsSwap;
+  				},
+  				set: function set$$1(value) {
+
+  						this.needsSwap = value;
+  				}
+  		}, {
+  				key: "overlay",
+  				get: function get$$1() {
+
+  						return this.outlineBlendMaterial.uniforms.tEdges.value;
+  				}
   		}]);
   		return OutlinePass;
   }(Pass);
 
   var PixelationPass = function (_Pass) {
-  		inherits(PixelationPass, _Pass);
+  	inherits(PixelationPass, _Pass);
 
-  		function PixelationPass() {
-  				var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
-  				classCallCheck(this, PixelationPass);
+  	function PixelationPass() {
+  		var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
+  		classCallCheck(this, PixelationPass);
 
-  				var _this = possibleConstructorReturn(this, (PixelationPass.__proto__ || Object.getPrototypeOf(PixelationPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (PixelationPass.__proto__ || Object.getPrototypeOf(PixelationPass)).call(this, "PixelationPass"));
 
-  				_this.name = "PixelationPass";
+  		_this.material = new PixelationMaterial();
 
-  				_this.needsSwap = true;
+  		_this.granularity = granularity;
 
-  				_this.pixelationMaterial = new PixelationMaterial();
+  		return _this;
+  	}
 
-  				_this.granularity = granularity;
+  	createClass(PixelationPass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  				_this.quad.material = _this.pixelationMaterial;
+  			this.material.uniforms.tDiffuse.value = inputBuffer.texture;
 
-  				return _this;
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  		createClass(PixelationPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
+  			this.material.setResolution(width, height);
+  		}
+  	}, {
+  		key: "granularity",
+  		get: function get$$1() {
 
-  						this.pixelationMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						this.pixelationMaterial.setResolution(width, height);
-  				}
-  		}, {
-  				key: "granularity",
-  				get: function get$$1() {
-
-  						return this.pixelationMaterial.granularity;
-  				},
-  				set: function set$$1() {
-  						var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
+  			return this.material.granularity;
+  		},
+  		set: function set$$1() {
+  			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
 
 
-  						value = Math.floor(value);
+  			value = Math.floor(value);
 
-  						if (value % 2 > 0) {
+  			if (value % 2 > 0) {
 
-  								value += 1;
-  						}
+  				value += 1;
+  			}
 
-  						this.pixelationMaterial.granularity = value;
-  				}
-  		}]);
-  		return PixelationPass;
+  			this.material.granularity = value;
+  		}
+  	}]);
+  	return PixelationPass;
   }(Pass);
 
   var RealisticBokehPass = function (_Pass) {
-  		inherits(RealisticBokehPass, _Pass);
+  	inherits(RealisticBokehPass, _Pass);
 
-  		function RealisticBokehPass(camera) {
-  				var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  				classCallCheck(this, RealisticBokehPass);
+  	function RealisticBokehPass(camera) {
+  		var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  		classCallCheck(this, RealisticBokehPass);
 
-  				var _this = possibleConstructorReturn(this, (RealisticBokehPass.__proto__ || Object.getPrototypeOf(RealisticBokehPass)).call(this));
+  		var _this = possibleConstructorReturn(this, (RealisticBokehPass.__proto__ || Object.getPrototypeOf(RealisticBokehPass)).call(this, "RealisticBokehPass"));
 
-  				_this.name = "RealisticBokehPass";
+  		_this.material = new RealisticBokehMaterial(camera, options);
 
-  				_this.needsSwap = true;
+  		return _this;
+  	}
 
-  				_this.bokehMaterial = new RealisticBokehMaterial(camera, options);
+  	createClass(RealisticBokehPass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  				_this.quad.material = _this.bokehMaterial;
+  			this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+  			this.material.uniforms.tDepth.value = inputBuffer.depthTexture;
 
-  				return _this;
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  		createClass(RealisticBokehPass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
-
-  						this.bokehMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						this.bokehMaterial.uniforms.tDepth.value = readBuffer.depthTexture;
-
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						this.bokehMaterial.setTexelSize(1.0 / width, 1.0 / height);
-  				}
-  		}]);
-  		return RealisticBokehPass;
+  			this.material.setTexelSize(1.0 / width, 1.0 / height);
+  		}
+  	}]);
+  	return RealisticBokehPass;
   }(Pass);
 
   var SavePass = function (_Pass) {
-  		inherits(SavePass, _Pass);
+  	inherits(SavePass, _Pass);
 
-  		function SavePass(renderTarget) {
-  				var resize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-  				classCallCheck(this, SavePass);
+  	function SavePass(renderTarget) {
+  		var resize = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+  		classCallCheck(this, SavePass);
 
-  				var _this = possibleConstructorReturn(this, (SavePass.__proto__ || Object.getPrototypeOf(SavePass)).call(this));
+  		var _this = possibleConstructorReturn(this, (SavePass.__proto__ || Object.getPrototypeOf(SavePass)).call(this, "SavePass"));
 
-  				_this.name = "SavePass";
+  		_this.material = new CopyMaterial();
 
-  				_this.material = new CopyMaterial();
+  		_this.needsSwap = false;
 
-  				_this.quad.material = _this.material;
+  		_this.renderTarget = renderTarget !== undefined ? renderTarget : new three.WebGLRenderTarget(1, 1, {
+  			minFilter: three.LinearFilter,
+  			magFilter: three.LinearFilter,
+  			stencilBuffer: false,
+  			depthBuffer: false
+  		});
 
-  				_this.renderTarget = renderTarget !== undefined ? renderTarget : new three.WebGLRenderTarget(1, 1, {
-  						minFilter: three.LinearFilter,
-  						magFilter: three.LinearFilter,
-  						stencilBuffer: false,
-  						depthBuffer: false
-  				});
+  		_this.renderTarget.texture.name = "Save.Target";
+  		_this.renderTarget.texture.generateMipmaps = false;
 
-  				_this.renderTarget.texture.name = "Save.Target";
-  				_this.renderTarget.texture.generateMipmaps = false;
+  		_this.resize = resize;
 
-  				_this.resize = resize;
+  		return _this;
+  	}
 
-  				return _this;
+  	createClass(SavePass, [{
+  		key: "render",
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+
+  			this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+
+  			renderer.render(this.scene, this.camera, this.renderTarget);
   		}
+  	}, {
+  		key: "setSize",
+  		value: function setSize(width, height) {
 
-  		createClass(SavePass, [{
-  				key: "render",
-  				value: function render(renderer, readBuffer) {
+  			if (this.resize) {
 
-  						this.material.uniforms.tDiffuse.value = readBuffer.texture;
+  				width = Math.max(1, width);
+  				height = Math.max(1, height);
 
-  						renderer.render(this.scene, this.camera, this.renderTarget);
-  				}
-  		}, {
-  				key: "initialize",
-  				value: function initialize(renderer, alpha) {
+  				this.renderTarget.setSize(width, height);
+  			}
+  		}
+  	}, {
+  		key: "initialize",
+  		value: function initialize(renderer, alpha) {
 
-  						if (!alpha) {
+  			if (!alpha) {
 
-  								this.renderTarget.texture.format = three.RGBFormat;
-  						}
-  				}
-  		}, {
-  				key: "setSize",
-  				value: function setSize(width, height) {
-
-  						if (this.resize) {
-
-  								width = Math.max(1, width);
-  								height = Math.max(1, height);
-
-  								this.renderTarget.setSize(width, height);
-  						}
-  				}
-  		}]);
-  		return SavePass;
+  				this.renderTarget.texture.format = three.RGBFormat;
+  			}
+  		}
+  	}]);
+  	return SavePass;
   }(Pass);
 
   var HALF_PI = Math.PI * 0.5;
@@ -3072,11 +3074,7 @@
   				var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   				classCallCheck(this, ShockWavePass);
 
-  				var _this = possibleConstructorReturn(this, (ShockWavePass.__proto__ || Object.getPrototypeOf(ShockWavePass)).call(this));
-
-  				_this.name = "ShockWavePass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (ShockWavePass.__proto__ || Object.getPrototypeOf(ShockWavePass)).call(this, "ShockWavePass"));
 
   				_this.mainCamera = camera;
 
@@ -3108,7 +3106,7 @@
   				}
   		}, {
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer, delta) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var epicenter = this.epicenter;
   						var mainCamera = this.mainCamera;
@@ -3121,8 +3119,8 @@
   						var maxRadius = uniforms.maxRadius;
   						var waveSize = uniforms.waveSize;
 
-  						this.copyMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						this.quad.material = this.copyMaterial;
+  						this.copyMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+  						this.material = this.copyMaterial;
 
   						if (this.active) {
   								mainCamera.getWorldDirection(v);
@@ -3135,8 +3133,8 @@
   										center.value.x = (screenPosition.x + 1.0) * 0.5;
   										center.value.y = (screenPosition.y + 1.0) * 0.5;
 
-  										uniforms.tDiffuse.value = readBuffer.texture;
-  										this.quad.material = shockWaveMaterial;
+  										uniforms.tDiffuse.value = inputBuffer.texture;
+  										this.material = shockWaveMaterial;
   								}
 
   								this.time += delta * this.speed;
@@ -3148,7 +3146,7 @@
   								}
   						}
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "setSize",
@@ -3170,11 +3168,12 @@
   		function SMAAPass(searchImage, areaImage) {
   				classCallCheck(this, SMAAPass);
 
-  				var _this = possibleConstructorReturn(this, (SMAAPass.__proto__ || Object.getPrototypeOf(SMAAPass)).call(this));
+  				var _this = possibleConstructorReturn(this, (SMAAPass.__proto__ || Object.getPrototypeOf(SMAAPass)).call(this, "SMAAPass"));
 
-  				_this.name = "SMAAPass";
-
-  				_this.needsSwap = true;
+  				_this.clearPass = new ClearPass({
+  						clearColor: new three.Color(0x000000),
+  						clearAlpha: 1.0
+  				});
 
   				_this.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearFilter,
@@ -3224,25 +3223,24 @@
 
   				_this.blendMaterial.uniforms.tWeights.value = _this.renderTargetWeights.texture;
 
-  				_this.quad.material = _this.blendMaterial;
-
   				return _this;
   		}
 
   		createClass(SMAAPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer) {
-  						this.quad.material = this.colorEdgesMaterial;
-  						this.colorEdgesMaterial.uniforms.tDiffuse.value = readBuffer.texture;
-  						renderer.render(this.scene, this.camera, this.renderTargetColorEdges, true);
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+  						this.material = this.colorEdgesMaterial;
+  						this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+  						this.clearPass.render(renderer, null, this.renderTargetColorEdges);
+  						renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
-  						this.quad.material = this.weightsMaterial;
-  						renderer.render(this.scene, this.camera, this.renderTargetWeights, false);
+  						this.material = this.weightsMaterial;
+  						renderer.render(this.scene, this.camera, this.renderTargetWeights);
 
-  						this.quad.material = this.blendMaterial;
-  						this.blendMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  						this.material = this.blendMaterial;
+  						this.blendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "setSize",
@@ -3274,51 +3272,59 @@
 
   	function TexturePass(texture) {
   		var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
+  		var screenMode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   		classCallCheck(this, TexturePass);
 
-  		var _this = possibleConstructorReturn(this, (TexturePass.__proto__ || Object.getPrototypeOf(TexturePass)).call(this));
+  		var _this = possibleConstructorReturn(this, (TexturePass.__proto__ || Object.getPrototypeOf(TexturePass)).call(this, "TexturePass"));
 
-  		_this.name = "TexturePass";
-
-  		_this.copyMaterial = new CopyMaterial();
-  		_this.copyMaterial.blending = three.AdditiveBlending;
-  		_this.copyMaterial.transparent = true;
+  		_this.material = new CombineMaterial(screenMode);
 
   		_this.texture = texture;
-  		_this.opacity = opacity;
-
-  		_this.quad.material = _this.copyMaterial;
+  		_this.opacitySource = opacity;
 
   		return _this;
   	}
 
   	createClass(TexturePass, [{
   		key: "render",
-  		value: function render(renderer, readBuffer) {
+  		value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
+  			this.material.uniforms.texture1.value = inputBuffer.texture;
+  			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   		}
   	}, {
   		key: "texture",
   		get: function get$$1() {
 
-  			return this.copyMaterial.uniforms.tDiffuse.value;
+  			return this.material.uniforms.texture2.value;
   		},
   		set: function set$$1(value) {
 
-  			this.copyMaterial.uniforms.tDiffuse.value = value;
+  			this.material.uniforms.texture2.value = value;
   		}
   	}, {
-  		key: "opacity",
+  		key: "opacityDestination",
   		get: function get$$1() {
 
-  			return this.copyMaterial.uniforms.opacity.value;
+  			return this.material.uniforms.opacity1.value;
   		},
   		set: function set$$1() {
   			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
 
 
-  			this.copyMaterial.uniforms.opacity.value = value;
+  			this.material.uniforms.opacity1.value = value;
+  		}
+  	}, {
+  		key: "opacitySource",
+  		get: function get$$1() {
+
+  			return this.material.uniforms.opacity2.value;
+  		},
+  		set: function set$$1() {
+  			var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+
+
+  			this.material.uniforms.opacity2.value = value;
   		}
   	}]);
   	return TexturePass;
@@ -3331,11 +3337,7 @@
   				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   				classCallCheck(this, ToneMappingPass);
 
-  				var _this = possibleConstructorReturn(this, (ToneMappingPass.__proto__ || Object.getPrototypeOf(ToneMappingPass)).call(this));
-
-  				_this.name = "ToneMappingPass";
-
-  				_this.needsSwap = true;
+  				var _this = possibleConstructorReturn(this, (ToneMappingPass.__proto__ || Object.getPrototypeOf(ToneMappingPass)).call(this, "ToneMappingPass"));
 
   				_this.renderTargetLuminosity = new three.WebGLRenderTarget(1, 1, {
   						minFilter: three.LinearMipMapLinearFilter,
@@ -3376,9 +3378,8 @@
 
   		createClass(ToneMappingPass, [{
   				key: "render",
-  				value: function render(renderer, readBuffer, writeBuffer, delta) {
+  				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-  						var quad = this.quad;
   						var scene = this.scene;
   						var camera = this.camera;
 
@@ -3392,33 +3393,33 @@
   						var renderTargetAdapted = this.renderTargetAdapted;
 
   						if (this.adaptive) {
-  								quad.material = luminosityMaterial;
-  								luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  								this.material = luminosityMaterial;
+  								luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
   								renderer.render(scene, camera, renderTargetLuminosity);
 
-  								quad.material = adaptiveLuminosityMaterial;
+  								this.material = adaptiveLuminosityMaterial;
   								adaptiveLuminosityMaterial.uniforms.delta.value = delta;
   								adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;
   								adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;
   								renderer.render(scene, camera, renderTargetAdapted);
 
-  								quad.material = copyMaterial;
+  								this.material = copyMaterial;
   								copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
   								renderer.render(scene, camera, renderTargetPrevious);
   						}
 
-  						quad.material = toneMappingMaterial;
-  						toneMappingMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+  						this.material = toneMappingMaterial;
+  						toneMappingMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
-  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+  						renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   				}
   		}, {
   				key: "initialize",
-  				value: function initialize(renderer) {
+  				value: function initialize(renderer, alpha) {
 
-  						this.quad.material = new three.MeshBasicMaterial({ color: 0x7fffff });
+  						this.material = new three.MeshBasicMaterial({ color: 0x7fffff });
   						renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-  						this.quad.material.dispose();
+  						this.material.dispose();
   				}
   		}, {
   				key: "resolution",
@@ -3488,17 +3489,17 @@
 
   				this.renderer = renderer;
 
-  				this.readBuffer = null;
+  				this.inputBuffer = null;
 
-  				this.writeBuffer = null;
+  				this.outputBuffer = null;
 
   				if (this.renderer !== null) {
 
   						this.renderer.autoClear = false;
 
-  						this.readBuffer = this.createBuffer(options.depthBuffer !== undefined ? options.depthBuffer : true, options.stencilBuffer !== undefined ? options.stencilBuffer : false, options.depthTexture !== undefined ? options.depthTexture : false);
+  						this.inputBuffer = this.createBuffer(options.depthBuffer !== undefined ? options.depthBuffer : true, options.stencilBuffer !== undefined ? options.stencilBuffer : false, options.depthTexture !== undefined ? options.depthTexture : false);
 
-  						this.writeBuffer = this.readBuffer.clone();
+  						this.outputBuffer = this.inputBuffer.clone();
   				}
 
   				this.copyPass = new ShaderPass(new CopyMaterial());
@@ -3595,15 +3596,16 @@
   				value: function render(delta) {
 
   						var passes = this.passes;
-  						var renderer = this.renderer;
   						var copyPass = this.copyPass;
+  						var renderer = this.renderer;
 
-  						var readBuffer = this.readBuffer;
-  						var writeBuffer = this.writeBuffer;
+  						var inputBuffer = this.inputBuffer;
+  						var outputBuffer = this.outputBuffer;
 
-  						var maskActive = false;
+  						var stencilTest = false;
   						var pass = void 0,
   						    context = void 0,
+  						    state = void 0,
   						    buffer = void 0;
   						var i = void 0,
   						    l = void 0;
@@ -3614,29 +3616,33 @@
 
   								if (pass.enabled) {
 
-  										pass.render(renderer, readBuffer, writeBuffer, delta, maskActive);
+  										pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
 
   										if (pass.needsSwap) {
 
-  												if (maskActive) {
+  												if (stencilTest) {
+
+  														copyPass.renderToScreen = pass.renderToScreen;
 
   														context = renderer.context;
-  														context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
-  														copyPass.render(renderer, readBuffer, pass.renderToScreen ? null : writeBuffer);
-  														context.stencilFunc(context.EQUAL, 1, 0xffffffff);
+  														state = renderer.state;
+
+  														state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+  														copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+  														state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
   												}
 
-  												buffer = readBuffer;
-  												readBuffer = writeBuffer;
-  												writeBuffer = buffer;
+  												buffer = inputBuffer;
+  												inputBuffer = outputBuffer;
+  												outputBuffer = buffer;
   										}
 
   										if (pass instanceof MaskPass) {
 
-  												maskActive = true;
+  												stencilTest = true;
   										} else if (pass instanceof ClearMaskPass) {
 
-  												maskActive = false;
+  												stencilTest = false;
   										}
   								}
   						}
@@ -3664,8 +3670,8 @@
 
   						drawingBufferSize = renderer.getDrawingBufferSize();
 
-  						this.readBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-  						this.writeBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+  						this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+  						this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
   						for (i = 0, l = passes.length; i < l; ++i) {
 
@@ -3676,12 +3682,12 @@
   				key: "reset",
   				value: function reset() {
 
-  						var renderTarget = this.createBuffer(this.readBuffer.depthBuffer, this.readBuffer.stencilBuffer, this.readBuffer.depthTexture !== null);
+  						var renderTarget = this.createBuffer(this.inputBuffer.depthBuffer, this.inputBuffer.stencilBuffer, this.inputBuffer.depthTexture !== null);
 
   						this.dispose();
 
-  						this.readBuffer = renderTarget;
-  						this.writeBuffer = this.readBuffer.clone();
+  						this.inputBuffer = renderTarget;
+  						this.outputBuffer = renderTarget.clone();
   						this.copyPass = new ShaderPass(new CopyMaterial());
   				}
   		}, {
@@ -3700,16 +3706,16 @@
 
   						this.passes = [];
 
-  						if (this.readBuffer !== null) {
+  						if (this.inputBuffer !== null) {
 
-  								this.readBuffer.dispose();
-  								this.readBuffer = null;
+  								this.inputBuffer.dispose();
+  								this.inputBuffer = null;
   						}
 
-  						if (this.writeBuffer !== null) {
+  						if (this.outputBuffer !== null) {
 
-  								this.writeBuffer.dispose();
-  								this.writeBuffer = null;
+  								this.outputBuffer.dispose();
+  								this.outputBuffer = null;
   						}
 
   						this.copyPass.dispose();
@@ -3718,12 +3724,12 @@
   				key: "depthTexture",
   				get: function get$$1() {
 
-  						return this.readBuffer.depthTexture;
+  						return this.inputBuffer.depthTexture;
   				},
   				set: function set$$1(x) {
 
-  						this.readBuffer.depthTexture = x;
-  						this.writeBuffer.depthTexture = x;
+  						this.inputBuffer.depthTexture = x;
+  						this.outputBuffer.depthTexture = x;
   				}
   		}]);
   		return EffectComposer;
