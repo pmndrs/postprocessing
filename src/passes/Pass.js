@@ -220,6 +220,12 @@ export class Pass {
 
 		}
 
+		if(this.material !== null) {
+
+			this.material.dispose();
+
+		}
+
 	}
 
 }
