@@ -109,7 +109,6 @@ export class Pass {
 	 * The fullscreen material.
 	 *
 	 * @type {Material}
-	 * @protected
 	 */
 
 	get material() {
@@ -124,12 +123,11 @@ export class Pass {
 	 * The material will be assigned to the quad mesh that fills the screen.
 	 *
 	 * @type {Material}
-	 * @protected
 	 */
 
-	set material(material) {
+	set material(value) {
 
-		this.quad.material = material;
+		this.quad.material = value;
 
 	}
 
