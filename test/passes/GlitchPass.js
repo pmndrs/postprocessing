@@ -13,31 +13,6 @@ module.exports = {
 			pass.dispose();
 			test.done();
 
-		},
-
-		"should find and destroy all disposable properties": function(test) {
-
-			const pass = new GlitchPass();
-			const keys = Object.keys(pass);
-
-			let c = 0;
-			let key;
-
-			pass.dispose();
-
-			for(key of keys) {
-
-				if(pass[key] === null) {
-
-					++c;
-
-				}
-
-			}
-
-			test.equal(c, 2, "should destroy 2 of its properties");
-			test.done();
-
 		}
 
 	}
