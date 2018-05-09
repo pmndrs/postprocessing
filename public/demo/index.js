@@ -2413,6 +2413,8 @@
 
   				var _this = possibleConstructorReturn(this, (ClearPass.__proto__ || Object.getPrototypeOf(ClearPass)).call(this, "ClearPass", null, null, null));
 
+  				_this.needsSwap = false;
+
   				_this.clearColor = options.clearColor !== undefined ? options.clearColor : null;
 
   				_this.clearAlpha = options.clearAlpha !== undefined ? options.clearAlpha : 0.0;
@@ -2435,7 +2437,7 @@
   								renderer.setClearColor(clearColor, this.clearAlpha);
   						}
 
-  						renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+  						renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
   						renderer.clear();
 
   						if (clearColor !== null) {
@@ -2672,6 +2674,8 @@
 
   				var _this = possibleConstructorReturn(this, (RenderPass.__proto__ || Object.getPrototypeOf(RenderPass)).call(this, "RenderPass", scene, camera, null));
 
+  				_this.needsSwap = false;
+
   				_this.clearPass = new ClearPass(options);
 
   				_this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
@@ -2688,13 +2692,13 @@
   				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
   						var scene = this.scene;
-  						var renderTarget = this.renderToScreen ? null : outputBuffer;
+  						var renderTarget = this.renderToScreen ? null : inputBuffer;
   						var overrideMaterial = scene.overrideMaterial;
 
   						if (this.clear) {
 
   								this.clearPass.renderToScreen = this.renderToScreen;
-  								this.clearPass.render(renderer, inputBuffer, outputBuffer);
+  								this.clearPass.render(renderer, inputBuffer);
   						} else if (this.clearDepth) {
 
   								renderer.setRenderTarget(renderTarget);
@@ -2809,8 +2813,8 @@
   						mainScene.background = null;
   						this.lightScene.add(lightSource);
 
-  						this.renderPassLight.render(renderer, null, renderTargetMask);
-  						this.renderPassMask.render(renderer, null, renderTargetMask);
+  						this.renderPassLight.render(renderer, renderTargetMask);
+  						this.renderPassMask.render(renderer, renderTargetMask);
 
   						if (parent !== null) {
 
@@ -3263,11 +3267,11 @@
   								}
 
   								this.setSelectionVisible(false);
-  								this.renderPassDepth.render(renderer, null, this.renderTargetDepth);
+  								this.renderPassDepth.render(renderer, this.renderTargetDepth);
   								this.setSelectionVisible(true);
 
   								mainCamera.layers.mask = 1 << this.selectionLayer;
-  								this.renderPassMask.render(renderer, null, this.renderTargetMask);
+  								this.renderPassMask.render(renderer, this.renderTargetMask);
 
   								mainCamera.layers.mask = mask;
   								mainScene.background = background;
@@ -3700,7 +3704,7 @@
   				value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
   						this.material = this.colorEdgesMaterial;
   						this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-  						this.clearPass.render(renderer, null, this.renderTargetColorEdges);
+  						this.clearPass.render(renderer, this.renderTargetColorEdges);
   						renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
   						this.material = this.weightsMaterial;
