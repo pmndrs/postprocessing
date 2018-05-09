@@ -493,8 +493,8 @@ export class GodRaysPass extends Pass {
 
 		/* First, render the light source. Then render the scene into the same
 		buffer using a mask override material with depth test enabled. */
-		this.renderPassLight.render(renderer, null, renderTargetMask);
-		this.renderPassMask.render(renderer, null, renderTargetMask);
+		this.renderPassLight.render(renderer, renderTargetMask);
+		this.renderPassMask.render(renderer, renderTargetMask);
 
 		if(parent !== null) {
 

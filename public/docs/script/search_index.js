@@ -1063,13 +1063,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
   [
     "src/materials/pixelationmaterial.js~pixelationmaterial#granularity",
-    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-get-granularity",
+    "class/src/materials/PixelationMaterial.js~PixelationMaterial.html#instance-set-granularity",
     "src/materials/PixelationMaterial.js~PixelationMaterial#granularity",
     "member"
   ],
@@ -1303,13 +1303,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#blend",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-blend",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-blend",
     "src/passes/BloomPass.js~BloomPass#blend",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#blend",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-blend",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-blend",
     "src/passes/BloomPass.js~BloomPass#blend",
     "member"
   ],
@@ -1363,13 +1363,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/bloompass.js~bloompass#intensity",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-intensity",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-intensity",
     "src/passes/BloomPass.js~BloomPass#intensity",
     "member"
   ],
   [
     "src/passes/bloompass.js~bloompass#intensity",
-    "class/src/passes/BloomPass.js~BloomPass.html#instance-get-intensity",
+    "class/src/passes/BloomPass.js~BloomPass.html#instance-set-intensity",
     "src/passes/BloomPass.js~BloomPass#intensity",
     "member"
   ],
@@ -1483,13 +1483,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
@@ -1612,6 +1612,12 @@ window.esdocSearchIndex = [
     "class/src/passes/ClearPass.js~ClearPass.html#instance-constructor-constructor",
     "src/passes/ClearPass.js~ClearPass#constructor",
     "method"
+  ],
+  [
+    "src/passes/clearpass.js~clearpass#needsswap",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-needsSwap",
+    "src/passes/ClearPass.js~ClearPass#needsSwap",
+    "member"
   ],
   [
     "src/passes/clearpass.js~clearpass#render",
@@ -1741,13 +1747,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
   [
     "src/passes/glitchpass.js~glitchpass#perturbmap",
-    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-get-perturbMap",
+    "class/src/passes/GlitchPass.js~GlitchPass.html#instance-set-perturbMap",
     "src/passes/GlitchPass.js~GlitchPass#perturbMap",
     "member"
   ],
@@ -1939,13 +1945,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
   [
     "src/passes/godrayspass.js~godrayspass#samples",
-    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-get-samples",
+    "class/src/passes/GodRaysPass.js~GodRaysPass.html#instance-set-samples",
     "src/passes/GodRaysPass.js~GodRaysPass#samples",
     "member"
   ],
@@ -2059,13 +2065,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/outlinepass.js~outlinepass#dithering",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-dithering",
     "src/passes/OutlinePass.js~OutlinePass#dithering",
     "member"
   ],
   [
     "src/passes/outlinepass.js~outlinepass#dithering",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-dithering",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-dithering",
     "src/passes/OutlinePass.js~OutlinePass#dithering",
     "member"
   ],
@@ -2179,13 +2185,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/outlinepass.js~outlinepass#resolutionscale",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-resolutionScale",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-resolutionScale",
     "src/passes/OutlinePass.js~OutlinePass#resolutionScale",
     "member"
   ],
   [
     "src/passes/outlinepass.js~outlinepass#resolutionscale",
-    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-resolutionScale",
+    "class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-resolutionScale",
     "src/passes/OutlinePass.js~OutlinePass#resolutionScale",
     "member"
   ],
@@ -2281,13 +2287,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pass.js~pass#material",
-    "class/src/passes/Pass.js~Pass.html#instance-set-material",
+    "class/src/passes/Pass.js~Pass.html#instance-get-material",
     "src/passes/Pass.js~Pass#material",
     "member"
   ],
   [
     "src/passes/pass.js~pass#material",
-    "class/src/passes/Pass.js~Pass.html#instance-get-material",
+    "class/src/passes/Pass.js~Pass.html#instance-set-material",
     "src/passes/Pass.js~Pass#material",
     "member"
   ],
@@ -2347,13 +2353,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
   [
     "src/passes/pixelationpass.js~pixelationpass#granularity",
-    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-set-granularity",
+    "class/src/passes/PixelationPass.js~PixelationPass.html#instance-get-granularity",
     "src/passes/PixelationPass.js~PixelationPass#granularity",
     "member"
   ],
@@ -2434,6 +2440,12 @@ window.esdocSearchIndex = [
     "class/src/passes/RenderPass.js~RenderPass.html#instance-constructor-constructor",
     "src/passes/RenderPass.js~RenderPass#constructor",
     "method"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#needsswap",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-needsSwap",
+    "src/passes/RenderPass.js~RenderPass#needsSwap",
+    "member"
   ],
   [
     "src/passes/renderpass.js~renderpass#overridematerial",
@@ -2725,13 +2737,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/texturepass.js~texturepass#opacitydestination",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacityDestination",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacityDestination",
     "src/passes/TexturePass.js~TexturePass#opacityDestination",
     "member"
   ],
   [
     "src/passes/texturepass.js~texturepass#opacitydestination",
-    "class/src/passes/TexturePass.js~TexturePass.html#instance-get-opacityDestination",
+    "class/src/passes/TexturePass.js~TexturePass.html#instance-set-opacityDestination",
     "src/passes/TexturePass.js~TexturePass#opacityDestination",
     "member"
   ],
@@ -2803,13 +2815,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#dithering",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-dithering",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-dithering",
     "src/passes/ToneMappingPass.js~ToneMappingPass#dithering",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#dithering",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-dithering",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-dithering",
     "src/passes/ToneMappingPass.js~ToneMappingPass#dithering",
     "member"
   ],
@@ -2857,13 +2869,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
     "member"
   ],
   [
     "src/passes/tonemappingpass.js~tonemappingpass#resolution",
-    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-set-resolution",
+    "class/src/passes/ToneMappingPass.js~ToneMappingPass.html#instance-get-resolution",
     "src/passes/ToneMappingPass.js~ToneMappingPass#resolution",
     "member"
   ],

@@ -109,7 +109,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>A pass that clears the output buffer or the screen.</p>
+  <div class="description" data-ice="description"><p>A pass that clears the input buffer or the screen.</p>
 <p>You can prevent specific bits from being cleared by setting either the
 autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
 to false.</p>
@@ -225,6 +225,34 @@ to false.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -252,7 +280,7 @@ to false.</p>
       <div>
         
         
-        <div data-ice="description"><p>Clears the output buffer or the screen.</p>
+        <div data-ice="description"><p>Clears the input buffer or the screen.</p>
 </div>
       </div>
     </td>
@@ -780,7 +808,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
@@ -824,7 +852,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
@@ -835,6 +863,53 @@ initialized and every time its own size is updated.</p>
 </div>
 
   
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-needsSwap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber35">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+buffers after this pass has finished rendering.</p>
+<p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
+the screen. Otherwise, the contents of the input buffer will be lost.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
 
   <div data-ice="properties">
 </div>
@@ -871,14 +946,14 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber63">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Clears the output buffer or the screen.</p>
+  <div data-ice="description"><p>Clears the input buffer or the screen.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">Pass#render</a></span></div>

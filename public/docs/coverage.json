@@ -1,6 +1,6 @@
 {
-  "coverage": "92.51%",
-  "expectCount": 414,
+  "coverage": "92.06%",
+  "expectCount": 416,
   "actualCount": 383,
   "files": {
     "src/core/Disposable.js": {
@@ -179,9 +179,11 @@
       ]
     },
     "src/passes/ClearPass.js": {
-      "expectCount": 6,
+      "expectCount": 7,
       "actualCount": 6,
-      "undocumentLines": []
+      "undocumentLines": [
+        35
+      ]
     },
     "src/passes/DotScreenPass.js": {
       "expectCount": 5,
@@ -249,9 +251,11 @@
       ]
     },
     "src/passes/RenderPass.js": {
-      "expectCount": 7,
+      "expectCount": 8,
       "actualCount": 7,
-      "undocumentLines": []
+      "undocumentLines": [
+        28
+      ]
     },
     "src/passes/SavePass.js": {
       "expectCount": 9,
