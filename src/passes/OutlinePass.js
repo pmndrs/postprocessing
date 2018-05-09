@@ -536,12 +536,12 @@ export class OutlinePass extends Pass {
 
 			// Render a custom depth texture and ignore selected objects.
 			this.setSelectionVisible(false);
-			this.renderPassDepth.render(renderer, null, this.renderTargetDepth);
+			this.renderPassDepth.render(renderer, this.renderTargetDepth);
 			this.setSelectionVisible(true);
 
 			// Create a mask for the selected objects using the depth information.
 			mainCamera.layers.mask = 1 << this.selectionLayer;
-			this.renderPassMask.render(renderer, null, this.renderTargetMask);
+			this.renderPassMask.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
 			mainCamera.layers.mask = mask;

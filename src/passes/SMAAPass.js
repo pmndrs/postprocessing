@@ -161,7 +161,7 @@ export class SMAAPass extends Pass {
 		// Detect color edges.
 		this.material = this.colorEdgesMaterial;
 		this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-		this.clearPass.render(renderer, null, this.renderTargetColorEdges);
+		this.clearPass.render(renderer, this.renderTargetColorEdges);
 		renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
 		// Compute edge weights.
