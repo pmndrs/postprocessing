@@ -12,14 +12,7 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-
-import {
-	BlurPass,
-	CombineMaterial,
-	KernelSize,
-	SavePass,
-	ShaderPass
-} from "../../../src";
+import { BlurPass, KernelSize, SavePass, TexturePass } from "../../../src";
 
 /**
  * A blur demo setup.
@@ -56,13 +49,13 @@ export class BlurDemo extends PostProcessingDemo {
 		this.blurPass = null;
 
 		/**
-		 * A combine pass.
+		 * A texture pass.
 		 *
-		 * @type {ShaderPass}
+		 * @type {TexturePass}
 		 * @private
 		 */
 
-		this.combinePass = null;
+		this.texturePass = null;
 
 		/**
 		 * An object.
@@ -211,14 +204,10 @@ export class BlurDemo extends PostProcessingDemo {
 		this.blurPass = pass;
 		composer.addPass(pass);
 
-		pass = new ShaderPass(new CombineMaterial(), "texture1");
-		pass.material.uniforms.texture2.value = this.savePass.renderTarget.texture;
-		pass.material.uniforms.opacity1.value = 1.0;
-		pass.material.uniforms.opacity2.value = 0.0;
-
+		pass = new TexturePass(this.savePass.renderTarget.texture, 0.0, false);
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		this.combinePass = pass;
+		this.texturePass = pass;
 		composer.addPass(pass);
 
 	}
@@ -264,13 +253,13 @@ export class BlurDemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderPass = this.renderPass;
 		const blurPass = this.blurPass;
-		const combinePass = this.combinePass;
+		const texturePass = this.texturePass;
 
 		const params = {
 			"enabled": blurPass.enabled,
 			"resolution": blurPass.resolutionScale,
 			"kernel size": blurPass.kernelSize,
-			"strength": combinePass.material.uniforms.opacity1.value
+			"strength": texturePass.opacityDestination
 		};
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
@@ -287,8 +276,8 @@ export class BlurDemo extends PostProcessingDemo {
 
 		menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			combinePass.material.uniforms.opacity1.value = params.strength;
-			combinePass.material.uniforms.opacity2.value = 1.0 - params.strength;
+			texturePass.opacityDestination = params.strength;
+			texturePass.opacitySource = 1.0 - params.strength;
 
 		});
 
@@ -298,7 +287,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 			renderPass.renderToScreen = !params.enabled;
 			blurPass.enabled = params.enabled;
-			combinePass.enabled = params.enabled;
+			texturePass.enabled = params.enabled;
 
 		});
 

@@ -14,7 +14,7 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BloomPass, KernelSize } from "../../../src";
+import { BloomPass, KernelSize, TexturePass } from "../../../src";
 
 /**
  * A bloom demo setup.
@@ -40,6 +40,15 @@ export class BloomDemo extends PostProcessingDemo {
 		 */
 
 		this.bloomPass = null;
+
+		/**
+		 * A texture pass.
+		 *
+		 * @type {TexturePass}
+		 * @private
+		 */
+
+		this.texturePass = null;
 
 		/**
 		 * An object.
@@ -218,16 +227,24 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new BloomPass({
+		this.renderPass.renderToScreen = false;
+
+		const bloomPass = new BloomPass({
 			resolutionScale: 0.5,
 			intensity: 2.0,
 			distinction: 4.0
 		});
 
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.bloomPass = pass;
-		composer.addPass(pass);
+		bloomPass.renderToScreen = true;
+		this.bloomPass = bloomPass;
+		composer.addPass(bloomPass);
+
+		const texturePass = new TexturePass(bloomPass.overlay);
+		texturePass.renderToScreen = true;
+		texturePass.enabled = false;
+		texturePass.opacityDestination = 0.0;
+		this.texturePass = texturePass;
+		composer.addPass(texturePass);
 
 	}
 
@@ -270,57 +287,50 @@ export class BloomDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const composer = this.composer;
-		const pass = this.bloomPass;
+		const bloomPass = this.bloomPass;
+		const texturePass = this.texturePass;
 
 		const params = {
-			"resolution": pass.resolutionScale,
-			"kernel size": pass.kernelSize,
-			"intensity": pass.intensity,
-			"distinction": pass.distinction,
-			"blend": true,
+			"resolution": bloomPass.resolutionScale,
+			"kernel size": bloomPass.kernelSize,
 			"blend mode": "screen"
 		};
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
 
-			pass.resolutionScale = params.resolution;
+			bloomPass.resolutionScale = params.resolution;
 			composer.setSize();
 
 		});
 
 		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
 
-			pass.kernelSize = params["kernel size"];
+			bloomPass.kernelSize = params["kernel size"];
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function() {
+		menu.add(bloomPass, "intensity").min(0.0).max(4.0).step(0.01).onChange(function() {
 
-			pass.intensity = params.intensity;
+			texturePass.opacitySource = bloomPass.intensity;
 
 		});
 
 		const folder = menu.addFolder("Luminance");
-
-		folder.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() {
-
-			pass.distinction = params.distinction;
-
-		});
-
+		folder.add(bloomPass, "distinction").min(1.0).max(10.0).step(0.1);
 		folder.open();
 
-		menu.add(params, "blend").onChange(function() {
+		menu.add(bloomPass, "blend").onChange(function() {
 
-			pass.combineMaterial.uniforms.opacity1.value = params.blend ? 1.0 : 0.0;
+			bloomPass.renderToScreen = bloomPass.blend;
+			texturePass.enabled = !bloomPass.blend;
 
 		});
 
-		menu.add(pass, "dithering");
+		menu.add(bloomPass, "dithering");
 
 		menu.add(params, "blend mode", ["add", "screen"]).onChange(function() {
 
-			pass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));
+			bloomPass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));
 
 		});
 

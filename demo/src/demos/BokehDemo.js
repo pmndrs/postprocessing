@@ -180,33 +180,33 @@ export class BokehDemo extends PostProcessingDemo {
 		const pass = this.bokehPass;
 
 		const params = {
-			"focus": pass.bokehMaterial.uniforms.focus.value,
-			"dof": pass.bokehMaterial.uniforms.dof.value,
-			"aperture": pass.bokehMaterial.uniforms.aperture.value,
-			"blur": pass.bokehMaterial.uniforms.maxBlur.value
+			"focus": pass.material.uniforms.focus.value,
+			"dof": pass.material.uniforms.dof.value,
+			"aperture": pass.material.uniforms.aperture.value,
+			"blur": pass.material.uniforms.maxBlur.value
 		};
 
 		menu.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function() {
 
-			pass.bokehMaterial.uniforms.focus.value = params.focus;
+			pass.material.uniforms.focus.value = params.focus;
 
 		});
 
 		menu.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function() {
 
-			pass.bokehMaterial.uniforms.dof.value = params.dof;
+			pass.material.uniforms.dof.value = params.dof;
 
 		});
 
 		menu.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function() {
 
-			pass.bokehMaterial.uniforms.aperture.value = params.aperture;
+			pass.material.uniforms.aperture.value = params.aperture;
 
 		});
 
 		menu.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function() {
 
-			pass.bokehMaterial.uniforms.maxBlur.value = params.blur;
+			pass.material.uniforms.maxBlur.value = params.blur;
 
 		});
 

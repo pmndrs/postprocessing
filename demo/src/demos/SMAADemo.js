@@ -344,7 +344,7 @@ export class SMAADemo extends PostProcessingDemo {
 		this.smaaPass = pass;
 		composer.addPass(pass);
 
-		pass = new TexturePass(this.smaaPass.renderTargetColorEdges.texture);
+		pass = new TexturePass(this.smaaPass.renderTargetColorEdges.texture, 1.0, false);
 		pass.renderToScreen = true;
 		pass.enabled = false;
 		this.texturePass = pass;
@@ -422,6 +422,7 @@ export class SMAADemo extends PostProcessingDemo {
 		function toggleSMAAMode() {
 
 			renderPass.renderToScreen = (params.SMAA === SMAAMode.disabled);
+			smaaPass.renderToScreen = (params.SMAA === SMAAMode.blend);
 			smaaPass.enabled = (params.SMAA !== SMAAMode.disabled);
 			texturePass.enabled = (params.SMAA === SMAAMode.edges);
 
