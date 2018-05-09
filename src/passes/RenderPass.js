@@ -25,6 +25,8 @@ export class RenderPass extends Pass {
 
 		super("RenderPass", scene, camera, null);
 
+		this.needsSwap = false;
+
 		/**
 		 * A clear pass.
 		 *
@@ -76,13 +78,13 @@ export class RenderPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const scene = this.scene;
-		const renderTarget = this.renderToScreen ? null : outputBuffer;
+		const renderTarget = this.renderToScreen ? null : inputBuffer;
 		const overrideMaterial = scene.overrideMaterial;
 
 		if(this.clear) {
 
 			this.clearPass.renderToScreen = this.renderToScreen;
-			this.clearPass.render(renderer, inputBuffer, outputBuffer);
+			this.clearPass.render(renderer, inputBuffer);
 
 		} else if(this.clearDepth) {
 
