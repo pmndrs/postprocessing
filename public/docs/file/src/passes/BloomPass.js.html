@@ -91,7 +91,7 @@ import { Pass } from &quot;./Pass.js&quot;;
 /**
  * A bloom pass.
  *
- * This pass renders a scene with superimposed blur by utilising the fast Kawase
+ * This pass renders a scene with superimposed blur by utilizing the fast Kawase
  * convolution approach.
  */
 
@@ -110,28 +110,7 @@ export class BloomPass extends Pass {
 
 	constructor(options = {}) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = &quot;BloomPass&quot;;
-
-		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
-		 * A blur pass.
-		 *
-		 * @type {BlurPass}
-		 * @private
-		 */
-
-		this.blurPass = new BlurPass(options);
+		super(&quot;BloomPass&quot;);
 
 		/**
 		 * A render target.
@@ -149,6 +128,15 @@ export class BloomPass extends Pass {
 
 		this.renderTarget.texture.name = &quot;Bloom.Target&quot;;
 		this.renderTarget.texture.generateMipmaps = false;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(options);
 
 		/**
 		 * A combine shader material.
@@ -289,19 +277,56 @@ export class BloomPass extends Pass {
 	}
 
 	/**
-	 * Renders the effect.
+	 * Indicates whether the effect should be applied to the input buffer.
 	 *
-	 * Extracts a luminance map from the read buffer, blurs it and combines it
-	 * with the read buffer.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @type {Boolean}
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	get blend() {
 
-		const quad = this.quad;
+		return this.needsSwap;
+
+	}
+
+	/**
+	 * If disabled, the input buffer will remain unaffected.
+	 *
+	 * You may use the {@link BloomPass#overlay} texture to apply the effect to
+	 * your scene.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set blend(value) {
+
+		this.needsSwap = value;
+
+	}
+
+	/**
+	 * The effect overlay texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get overlay() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
+	 * Renders the effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
+	 */
+
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+
 		const scene = this.scene;
 		const camera = this.camera;
 		const blurPass = this.blurPass;
@@ -311,24 +336,46 @@ export class BloomPass extends Pass {
 		const renderTarget = this.renderTarget;
 
 		// Luminance filter.
-		quad.material = luminosityMaterial;
-		luminosityMaterial.uniforms.tDiffuse.value = readBuffer.texture;
+		this.material = luminosityMaterial;
+		luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 		renderer.render(scene, camera, renderTarget);
 
 		// Convolution phase.
 		blurPass.render(renderer, renderTarget, renderTarget);
 
-		// Render the original scene with superimposed blur.
-		quad.material = combineMaterial;
-		combineMaterial.uniforms.texture1.value = readBuffer.texture;
-		combineMaterial.uniforms.texture2.value = renderTarget.texture;
+		if(this.blend) {
 
-		renderer.render(scene, camera, this.renderToScreen ? null : writeBuffer);
+			// Render the original scene with superimposed blur.
+			this.material = combineMaterial;
+			combineMaterial.uniforms.texture1.value = inputBuffer.texture;
+			combineMaterial.uniforms.texture2.value = renderTarget.texture;
+
+			renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+
+		}
 
 	}
 
 	/**
-	 * Adjusts the format of the render targets.
+	 * Updates the size of this pass.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.blurPass.setSize(width, height);
+
+		width = this.blurPass.width;
+		height = this.blurPass.height;
+
+		this.renderTarget.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
@@ -343,24 +390,6 @@ export class BloomPass extends Pass {
 			this.renderTarget.texture.format = RGBFormat;
 
 		}
-
-	}
-
-	/**
-	 * Updates this pass with the renderer&apos;s size.
-	 *
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
-	 */
-
-	setSize(width, height) {
-
-		this.blurPass.setSize(width, height);
-
-		width = this.blurPass.width;
-		height = this.blurPass.height;
-
-		this.renderTarget.setSize(width, height);
 
 	}
 

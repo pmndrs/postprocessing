@@ -189,7 +189,7 @@ processing.</p>
       <div>
         
         
-        <div data-ice="description"><p>The depth texture of the read and write buffers.</p>
+        <div data-ice="description"><p>The depth texture of the input and output buffers.</p>
 </div>
       </div>
     </td>
@@ -218,7 +218,7 @@ processing.</p>
       <div>
         
         
-        <div data-ice="description"><p>The read and write buffers share a single depth texture.</p>
+        <div data-ice="description"><p>The input and output buffers share a single depth texture.</p>
 </div>
       </div>
     </td>
@@ -305,6 +305,64 @@ processing.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-inputBuffer">inputBuffer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The input buffer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-outputBuffer">outputBuffer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The output buffer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-passes">passes</a></span></span><span class="code" data-ice="signature">: <span><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span><span>[]</span></span></span>
         </p>
       </div>
@@ -312,64 +370,6 @@ processing.</p>
         
         
         <div data-ice="description"><p>The passes.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-readBuffer">readBuffer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The read buffer.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-writeBuffer">writeBuffer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The write buffer.</p>
 </div>
       </div>
     </td>
@@ -746,7 +746,7 @@ information is used.</p>
   
   
   
-  <div data-ice="description"><p>The depth texture of the read and write buffers.</p>
+  <div data-ice="description"><p>The depth texture of the input and output buffers.</p>
 </div>
 
   
@@ -790,7 +790,7 @@ information is used.</p>
   
   
   
-  <div data-ice="description"><p>The read and write buffers share a single depth texture. Depth will be
+  <div data-ice="description"><p>The input and output buffers share a single depth texture. Depth will be
 written to this texture when something is rendered into one of the buffers
 and the involved materials have depth write enabled.</p>
 <p>You may enable this mechanism during the instantiation of the composer or
@@ -913,58 +913,14 @@ assigning null.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-passes">
+  <h3 data-ice="anchor" id="instance-member-inputBuffer">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">passes</span><span class="code" data-ice="signature">: <span><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span><span>[]</span></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber104">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The passes.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-readBuffer">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">readBuffer</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="code" data-ice="name">inputBuffer</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
     <span class="right-info">
       
       
@@ -975,7 +931,7 @@ assigning null.</p>
   
   
   
-  <div data-ice="description"><p>The read buffer.</p>
+  <div data-ice="description"><p>The input buffer.</p>
 <p>Reading from and writing to the same render target should be avoided.
 Therefore, two seperate yet identical buffers are used.</p>
 </div>
@@ -1003,14 +959,14 @@ Therefore, two seperate yet identical buffers are used.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-writeBuffer">
+  <h3 data-ice="anchor" id="instance-member-outputBuffer">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">writeBuffer</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="code" data-ice="name">outputBuffer</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
     <span class="right-info">
       
       
@@ -1021,7 +977,51 @@ Therefore, two seperate yet identical buffers are used.</p>
   
   
   
-  <div data-ice="description"><p>The write buffer.</p>
+  <div data-ice="description"><p>The output buffer.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-passes">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">passes</span><span class="code" data-ice="signature">: <span><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span><span>[]</span></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber104">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The passes.</p>
 </div>
 
   
@@ -1220,7 +1220,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber401">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber406">source</a></span></span>
     </span>
   </h3>
 
@@ -1467,7 +1467,7 @@ antialiasing.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber377">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -1511,7 +1511,7 @@ antialiasing.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber340">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber345">source</a></span></span>
     </span>
   </h3>
 

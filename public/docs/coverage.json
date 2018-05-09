@@ -1,7 +1,7 @@
 {
-  "coverage": "97.86%",
-  "expectCount": 421,
-  "actualCount": 412,
+  "coverage": "92.51%",
+  "expectCount": 414,
+  "actualCount": 383,
   "files": {
     "src/core/Disposable.js": {
       "expectCount": 2,
@@ -150,111 +150,151 @@
       "undocumentLines": []
     },
     "src/passes/BloomPass.js": {
-      "expectCount": 21,
-      "actualCount": 21,
-      "undocumentLines": []
+      "expectCount": 24,
+      "actualCount": 22,
+      "undocumentLines": [
+        217,
+        254
+      ]
     },
     "src/passes/BlurPass.js": {
-      "expectCount": 17,
-      "actualCount": 17,
-      "undocumentLines": []
+      "expectCount": 16,
+      "actualCount": 15,
+      "undocumentLines": [
+        169
+      ]
     },
     "src/passes/BokehPass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        23
+      ]
     },
     "src/passes/ClearMaskPass.js": {
       "expectCount": 4,
-      "actualCount": 4,
-      "undocumentLines": []
+      "actualCount": 3,
+      "undocumentLines": [
+        17
+      ]
     },
     "src/passes/ClearPass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
-    },
-    "src/passes/DotScreenPass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
-    },
-    "src/passes/FilmPass.js": {
-      "expectCount": 10,
-      "actualCount": 10,
-      "undocumentLines": []
-    },
-    "src/passes/GlitchPass.js": {
-      "expectCount": 16,
-      "actualCount": 16,
-      "undocumentLines": []
-    },
-    "src/passes/GodRaysPass.js": {
-      "expectCount": 31,
-      "actualCount": 31,
-      "undocumentLines": []
-    },
-    "src/passes/MaskPass.js": {
       "expectCount": 6,
       "actualCount": 6,
       "undocumentLines": []
     },
-    "src/passes/OutlinePass.js": {
-      "expectCount": 37,
-      "actualCount": 37,
-      "undocumentLines": []
+    "src/passes/DotScreenPass.js": {
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        24
+      ]
     },
-    "src/passes/Pass.js": {
+    "src/passes/FilmPass.js": {
+      "expectCount": 8,
+      "actualCount": 7,
+      "undocumentLines": [
+        25
+      ]
+    },
+    "src/passes/GlitchPass.js": {
       "expectCount": 14,
       "actualCount": 13,
       "undocumentLines": [
-        188
+        53
+      ]
+    },
+    "src/passes/GodRaysPass.js": {
+      "expectCount": 34,
+      "actualCount": 32,
+      "undocumentLines": [
+        355,
+        426
+      ]
+    },
+    "src/passes/MaskPass.js": {
+      "expectCount": 6,
+      "actualCount": 5,
+      "undocumentLines": [
+        20
+      ]
+    },
+    "src/passes/OutlinePass.js": {
+      "expectCount": 40,
+      "actualCount": 38,
+      "undocumentLines": [
+        348,
+        551
+      ]
+    },
+    "src/passes/Pass.js": {
+      "expectCount": 16,
+      "actualCount": 15,
+      "undocumentLines": [
+        217
       ]
     },
     "src/passes/PixelationPass.js": {
-      "expectCount": 9,
-      "actualCount": 9,
-      "undocumentLines": []
+      "expectCount": 7,
+      "actualCount": 6,
+      "undocumentLines": [
+        20
+      ]
     },
     "src/passes/RealisticBokehPass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        25
+      ]
     },
     "src/passes/RenderPass.js": {
-      "expectCount": 8,
-      "actualCount": 8,
+      "expectCount": 7,
+      "actualCount": 7,
       "undocumentLines": []
     },
     "src/passes/SavePass.js": {
       "expectCount": 9,
-      "actualCount": 9,
-      "undocumentLines": []
+      "actualCount": 7,
+      "undocumentLines": [
+        22,
+        24
+      ]
     },
     "src/passes/ShaderPass.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
+      "expectCount": 5,
+      "actualCount": 4,
+      "undocumentLines": [
+        22
+      ]
     },
     "src/passes/ShockWavePass.js": {
-      "expectCount": 18,
-      "actualCount": 18,
-      "undocumentLines": []
+      "expectCount": 17,
+      "actualCount": 16,
+      "undocumentLines": [
+        163
+      ]
     },
     "src/passes/SMAAPass.js": {
       "expectCount": 15,
-      "actualCount": 15,
-      "undocumentLines": []
+      "actualCount": 14,
+      "undocumentLines": [
+        162
+      ]
     },
     "src/passes/TexturePass.js": {
-      "expectCount": 9,
+      "expectCount": 10,
       "actualCount": 9,
-      "undocumentLines": []
+      "undocumentLines": [
+        22
+      ]
     },
     "src/passes/ToneMappingPass.js": {
-      "expectCount": 19,
-      "actualCount": 19,
-      "undocumentLines": []
+      "expectCount": 18,
+      "actualCount": 17,
+      "undocumentLines": [
+        257
+      ]
     }
   }
 }

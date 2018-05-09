@@ -108,13 +108,7 @@ export class RenderPass extends Pass {
 
 	constructor(scene, camera, options = {}) {
 
-		super(scene, camera, null);
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = &quot;RenderPass&quot;;
+		super(&quot;RenderPass&quot;, scene, camera, null);
 
 		/**
 		 * A clear pass.
@@ -158,28 +152,32 @@ export class RenderPass extends Pass {
 	 * Renders the scene.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const scene = this.scene;
-		const target = this.renderToScreen ? null : readBuffer;
+		const renderTarget = this.renderToScreen ? null : outputBuffer;
 		const overrideMaterial = scene.overrideMaterial;
 
 		if(this.clear) {
 
-			this.clearPass.render(renderer, target);
+			this.clearPass.renderToScreen = this.renderToScreen;
+			this.clearPass.render(renderer, inputBuffer, outputBuffer);
 
 		} else if(this.clearDepth) {
 
-			renderer.setRenderTarget(target);
+			renderer.setRenderTarget(renderTarget);
 			renderer.clearDepth();
 
 		}
 
 		scene.overrideMaterial = this.overrideMaterial;
-		renderer.render(scene, this.camera, target);
+		renderer.render(scene, this.camera, renderTarget);
 		scene.overrideMaterial = overrideMaterial;
 
 	}

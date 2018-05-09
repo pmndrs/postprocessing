@@ -86,7 +86,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Pass } from &quot;./Pass.js&quot;;
 
 /**
- * A pass that disables the stencil mask.
+ * A pass that disables the stencil test.
  */
 
 export class ClearMaskPass extends Pass {
@@ -97,23 +97,23 @@ export class ClearMaskPass extends Pass {
 
 	constructor() {
 
-		super(null, null, null);
+		super(&quot;ClearMaskPass&quot;, null, null, null);
 
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = &quot;ClearMaskPass&quot;;
+		this.needsSwap = false;
 
 	}
 
 	/**
-	 * Disables the stencil test.
+	 * Disables the global stencil test.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		renderer.state.buffers.stencil.setTest(false);
 

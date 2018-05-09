@@ -83,8 +83,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/TexturePass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { AdditiveBlending } from &quot;three&quot;;
-import { CopyMaterial } from &quot;../materials&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { CombineMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./Pass.js&quot;;
 
 /**
@@ -98,33 +97,17 @@ export class TexturePass extends Pass {
 	 *
 	 * @param {Texture} texture - The texture.
 	 * @param {Number} [opacity=1.0] - The texture opacity.
+	 * @param {Boolean} [screenMode=true] - Whether the screen blend mode should be used for combining the texture with the scene colors.
 	 */
 
-	constructor(texture, opacity = 1.0) {
+	constructor(texture, opacity = 1.0, screenMode = true) {
 
-		super();
+		super(&quot;TexturePass&quot;);
 
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = &quot;TexturePass&quot;;
-
-		/**
-		 * A copy shader material used for rendering to texture.
-		 *
-		 * @type {CopyMaterial}
-		 * @private
-		 */
-
-		this.copyMaterial = new CopyMaterial();
-		this.copyMaterial.blending = AdditiveBlending;
-		this.copyMaterial.transparent = true;
+		this.material = new CombineMaterial(screenMode);
 
 		this.texture = texture;
-		this.opacity = opacity;
-
-		this.quad.material = this.copyMaterial;
+		this.opacitySource = opacity;
 
 	}
 
@@ -136,7 +119,7 @@ export class TexturePass extends Pass {
 
 	get texture() {
 
-		return this.copyMaterial.uniforms.tDiffuse.value;
+		return this.material.uniforms.texture2.value;
 
 	}
 
@@ -146,19 +129,21 @@ export class TexturePass extends Pass {
 
 	set texture(value) {
 
-		this.copyMaterial.uniforms.tDiffuse.value = value;
+		this.material.uniforms.texture2.value = value;
 
 	}
 
 	/**
-	 * The opacity.
+	 * The opacity of the input buffer.
+	 *
+	 * The destination color is the color from the image in the input buffer.
 	 *
 	 * @type {Number}
 	 */
 
-	get opacity() {
+	get opacityDestination() {
 
-		return this.copyMaterial.uniforms.opacity.value;
+		return this.material.uniforms.opacity1.value;
 
 	}
 
@@ -166,9 +151,33 @@ export class TexturePass extends Pass {
 	 * @type {Number}
 	 */
 
-	set opacity(value = 1.0) {
+	set opacityDestination(value = 1.0) {
 
-		this.copyMaterial.uniforms.opacity.value = value;
+		this.material.uniforms.opacity1.value = value;
+
+	}
+
+	/**
+	 * The opacity of the texture.
+	 *
+	 * The source color is the color from the texture.
+	 *
+	 * @type {Number}
+	 */
+
+	get opacitySource() {
+
+		return this.material.uniforms.opacity2.value;
+
+	}
+
+	/**
+	 * @type {Number}
+	 */
+
+	set opacitySource(value = 1.0) {
+
+		this.material.uniforms.opacity2.value = value;
 
 	}
 
@@ -176,12 +185,16 @@ export class TexturePass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : readBuffer);
+		this.material.uniforms.texture1.value = inputBuffer.texture;
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 

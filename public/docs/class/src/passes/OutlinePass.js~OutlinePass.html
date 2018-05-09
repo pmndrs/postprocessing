@@ -178,6 +178,64 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-blend">blend</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>If disabled, the input buffer will remain unaffected.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-blend">blend</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether the effect should be applied to the input buffer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-set-blur">blur</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
@@ -350,14 +408,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-material">material</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The name of this pass.</p>
-</div>
+        
       </div>
     </td>
     <td>
@@ -379,13 +436,41 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>This pass renders to the write buffer when there are objects to outline.</p>
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-get-overlay">overlay</a></span></span><span class="code" data-ice="signature">: <span>Texture</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The effect overlay texture.</p>
 </div>
       </div>
     </td>
@@ -1007,7 +1092,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Adjusts the format of the render targets and initialises internal passes.</p>
+        <div data-ice="description"><p>Performs initialization tasks.</p>
 </div>
       </div>
     </td>
@@ -1030,7 +1115,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/OutlinePass.js~OutlinePass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1152,7 +1237,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
+        <div data-ice="description"><p>Updates the size of this pass.</p>
 </div>
       </div>
     </td>
@@ -1208,6 +1293,64 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-get-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The fullscreen material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-set-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fullscreen material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -1252,7 +1395,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Enabled flag.</p>
+        <div data-ice="description"><p>Indicates whether this pass should be executed.</p>
 </div>
       </div>
     </td>
@@ -1310,8 +1453,8 @@
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.</p>
+        <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+buffers after this pass has finished rendering.</p>
 </div>
       </div>
     </td>
@@ -1340,7 +1483,7 @@ pass has finished rendering.</p>
       <div>
         
         
-        <div data-ice="description"><p>Render to screen flag.</p>
+        <div data-ice="description"><p>Indicates whether this pass should render to screen.</p>
 </div>
       </div>
     </td>
@@ -1392,13 +1535,13 @@ pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A quad mesh that fills the screen.</p>
+        <div data-ice="description"><p>The scene to render.</p>
 </div>
       </div>
     </td>
@@ -1409,7 +1552,7 @@ pass has finished rendering.</p>
   </tr>
 <tr data-ice="target">
     <td>
-      <span class="access" data-ice="access">protected</span>
+      <span class="access" data-ice="access">private</span>
       
       
       
@@ -1421,13 +1564,13 @@ pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The scene to render.</p>
+        <div data-ice="description"><p>A quad mesh that fills the screen.</p>
 </div>
       </div>
     </td>
@@ -1486,7 +1629,7 @@ deletes them.</p>
       <div>
         
         
-        <div data-ice="description"><p>Performs initialisation tasks.</p>
+        <div data-ice="description"><p>Performs initialization tasks.</p>
 </div>
       </div>
     </td>
@@ -1509,7 +1652,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, maskActive: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1548,7 +1691,7 @@ deletes them.</p>
 <p>You may override this method in case you want to be informed about the main
 render size.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
-initialised and every time its own size is updated.</p>
+initialized and every time its own size is updated.</p>
 </div>
       </div>
     </td>
@@ -1620,7 +1763,7 @@ initialised and every time its own size is updated.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.pulseSpeed</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 0.0</li></ul></td>
       <td data-ice="description"><p>The pulse speed. A value of zero disables the pulse effect.</p>
@@ -1628,10 +1771,10 @@ initialised and every time its own size is updated.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.blur</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether the outline should be blurry.</p>
+      <td data-ice="description"><p>Whether the outline should be blurred.</p>
 </td>
     </tr>
 </tbody>
@@ -1660,6 +1803,96 @@ initialised and every time its own size is updated.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-blend">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">blend</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber346">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>If disabled, the input buffer will remain unaffected.</p>
+<p>You may use the <span><a href="class/src/passes/BloomPass.js~BloomPass.html#instance-get-overlay">BloomPass#overlay</a></span> texture to apply the effect to
+your scene.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-blend">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">blend</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber331">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the effect should be applied to the input buffer.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-set-blur">
     <span class="access" data-ice="access">public</span>
     
@@ -1671,7 +1904,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber291">source</a></span></span>
     </span>
   </h3>
 
@@ -1714,7 +1947,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber281">source</a></span></span>
     </span>
   </h3>
 
@@ -1758,7 +1991,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -1802,7 +2035,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber323">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -1846,7 +2079,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber275">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -1890,7 +2123,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber269">source</a></span></span>
     </span>
   </h3>
 
@@ -1922,28 +2155,28 @@ initialised and every time its own size is updated.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-name">
+  <h3 data-ice="anchor" id="instance-member-material">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">name</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="code" data-ice="name">material</span><span class="code" data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber551">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The name of this pass.</p>
+  <div data-ice="description"><p>The fullscreen material.</p>
 </div>
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-name">Pass#name</a></span></div>
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-get-material">Pass#material</a></span></div>
 
   <div data-ice="properties">
 </div>
@@ -1973,21 +2206,68 @@ initialised and every time its own size is updated.</p>
     
     
     
-    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber53">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber348">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>This pass renders to the write buffer when there are objects to outline.</p>
+  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+buffers after this pass has finished rendering.</p>
+<p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
+the screen. Otherwise, the contents of the input buffer will be lost.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-overlay">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">overlay</span><span class="code" data-ice="signature">: <span>Texture</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber358">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The effect overlay texture.</p>
+</div>
+
+  
 
   <div data-ice="properties">
 </div>
@@ -2021,7 +2301,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber230">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber214">source</a></span></span>
     </span>
   </h3>
 
@@ -2065,7 +2345,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -2109,7 +2389,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber251">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
@@ -2153,7 +2433,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -2201,7 +2481,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber166">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber154">source</a></span></span>
     </span>
   </h3>
 
@@ -2245,7 +2525,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber181">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -2289,7 +2569,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
@@ -2333,7 +2613,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber62">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
@@ -2377,7 +2657,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -2421,7 +2701,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber191">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -2465,7 +2745,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber124">source</a></span></span>
     </span>
   </h3>
 
@@ -2509,7 +2789,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber153">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
@@ -2553,7 +2833,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -2597,7 +2877,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -2641,7 +2921,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -2685,7 +2965,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -2729,7 +3009,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber197">source</a></span></span>
     </span>
   </h3>
 
@@ -2773,7 +3053,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -2820,7 +3100,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber388">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
@@ -2877,7 +3157,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber433">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber453">source</a></span></span>
     </span>
   </h3>
 
@@ -2951,14 +3231,14 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber562">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber613">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Adjusts the format of the render targets and initialises internal passes.</p>
+  <div data-ice="description"><p>Performs initialization tasks.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-initialize">Pass#initialize</a></span></div>
@@ -3015,11 +3295,11 @@ layers, please change it to a free layer before rendering!</p>
     
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber494">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 
@@ -3047,24 +3327,31 @@ layers, please change it to a free layer before rendering!</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">readBuffer</td>
+      <td data-ice="name" class="code" data-depth="0">inputBuffer</td>
       <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The read buffer.</p>
+      <td data-ice="description"><p>A frame buffer that contains the result of the previous pass.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">writeBuffer</td>
+      <td data-ice="name" class="code" data-depth="0">outputBuffer</td>
       <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The write buffer.</p>
+      <td data-ice="description"><p>A frame buffer that serves as the output render target unless this pass renders to screen.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">delta</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">stencilTest</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Indicates whether a stencil mask is active.</p>
 </td>
     </tr>
 </tbody>
@@ -3101,7 +3388,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -3175,7 +3462,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber347">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -3237,7 +3524,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber360">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -3311,14 +3598,14 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber577">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber586">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
+  <div data-ice="description"><p>Updates the size of this pass.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setSize">Pass#setSize</a></span></div>
@@ -3381,7 +3668,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber463">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/OutlinePass.js.html#lineNumber482">source</a></span></span>
     </span>
   </h3>
 

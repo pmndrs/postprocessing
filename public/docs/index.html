@@ -119,12 +119,9 @@ export class MyPass extends Pass {
 
     constructor() {
 
-        super();
+        super(&quot;MyPass&quot;);
 
-        this.name = &quot;MyPass&quot;;
-        this.needsSwap = true;
         this.material = new MyMaterial();
-        this.quad.material = this.material;
 
     }
 
@@ -155,7 +152,7 @@ export class MyPass extends Pass {
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#smaa">SMAA</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping">Tone Mapping</a></li>
 </ul>
-<h2 id="contributing">Contributing</h2><p>Please refer to the <a href="https://github.com/vanruesc/postprocessing/blob/master/CONTRIBUTING.md">contribution guidelines</a> for details.</p>
+<h2 id="contributing">Contributing</h2><p>Please refer to the <a href="https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md">contribution guidelines</a> for details.</p>
 <h2 id="license">License</h2><p>This library is licensed under the <a href="https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md">Zlib license</a>.</p>
 <p>The original code that this library is based on, was written by <a href="http://alteredqualia.com">alteredq</a>,
 <a href="https://github.com/MiiBond">miibond</a>, <a href="https://github.com/zz85">zz85</a>, <a href="http://airtight.cc">felixturner</a>,

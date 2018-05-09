@@ -136,7 +136,7 @@ export class EffectComposer {
 		this.renderer = renderer;
 
 		/**
-		 * The read buffer.
+		 * The input buffer.
 		 *
 		 * Reading from and writing to the same render target should be avoided.
 		 * Therefore, two seperate yet identical buffers are used.
@@ -145,28 +145,28 @@ export class EffectComposer {
 		 * @private
 		 */
 
-		this.readBuffer = null;
+		this.inputBuffer = null;
 
 		/**
-		 * The write buffer.
+		 * The output buffer.
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
 		 */
 
-		this.writeBuffer = null;
+		this.outputBuffer = null;
 
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
 
-			this.readBuffer = this.createBuffer(
+			this.inputBuffer = this.createBuffer(
 				(options.depthBuffer !== undefined) ? options.depthBuffer : true,
 				(options.stencilBuffer !== undefined) ? options.stencilBuffer : false,
 				(options.depthTexture !== undefined) ? options.depthTexture : false
 			);
 
-			this.writeBuffer = this.readBuffer.clone();
+			this.outputBuffer = this.inputBuffer.clone();
 
 		}
 
@@ -191,19 +191,19 @@ export class EffectComposer {
 	}
 
 	/**
-	 * The depth texture of the read and write buffers.
+	 * The depth texture of the input and output buffers.
 	 *
 	 * @type {DepthTexture}
 	 */
 
 	get depthTexture() {
 
-		return this.readBuffer.depthTexture;
+		return this.inputBuffer.depthTexture;
 
 	}
 
 	/**
-	 * The read and write buffers share a single depth texture. Depth will be
+	 * The input and output buffers share a single depth texture. Depth will be
 	 * written to this texture when something is rendered into one of the buffers
 	 * and the involved materials have depth write enabled.
 	 *
@@ -216,8 +216,8 @@ export class EffectComposer {
 
 	set depthTexture(x) {
 
-		this.readBuffer.depthTexture = x;
-		this.writeBuffer.depthTexture = x;
+		this.inputBuffer.depthTexture = x;
+		this.outputBuffer.depthTexture = x;
 
 	}
 
@@ -358,14 +358,14 @@ export class EffectComposer {
 	render(delta) {
 
 		const passes = this.passes;
-		const renderer = this.renderer;
 		const copyPass = this.copyPass;
+		const renderer = this.renderer;
 
-		let readBuffer = this.readBuffer;
-		let writeBuffer = this.writeBuffer;
+		let inputBuffer = this.inputBuffer;
+		let outputBuffer = this.outputBuffer;
 
-		let maskActive = false;
-		let pass, context, buffer;
+		let stencilTest = false;
+		let pass, context, state, buffer;
 		let i, l;
 
 		for(i = 0, l = passes.length; i &lt; l; ++i) {
@@ -374,32 +374,37 @@ export class EffectComposer {
 
 			if(pass.enabled) {
 
-				pass.render(renderer, readBuffer, writeBuffer, delta, maskActive);
+				pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
 
 				if(pass.needsSwap) {
 
-					if(maskActive) {
+					if(stencilTest) {
+
+						copyPass.renderToScreen = pass.renderToScreen;
 
 						context = renderer.context;
-						context.stencilFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, readBuffer, pass.renderToScreen ? null : writeBuffer);
-						context.stencilFunc(context.EQUAL, 1, 0xffffffff);
+						state = renderer.state;
+
+						// Preserve the unaffected pixels.
+						state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+						copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
 
-					buffer = readBuffer;
-					readBuffer = writeBuffer;
-					writeBuffer = buffer;
+					buffer = inputBuffer;
+					inputBuffer = outputBuffer;
+					outputBuffer = buffer;
 
 				}
 
 				if(pass instanceof MaskPass) {
 
-					maskActive = true;
+					stencilTest = true;
 
 				} else if(pass instanceof ClearMaskPass) {
 
-					maskActive = false;
+					stencilTest = false;
 
 				}
 
@@ -444,8 +449,8 @@ export class EffectComposer {
 		// The drawing buffer size takes the device pixel ratio into account.
 		drawingBufferSize = renderer.getDrawingBufferSize();
 
-		this.readBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		this.writeBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		for(i = 0, l = passes.length; i &lt; l; ++i) {
 
@@ -462,16 +467,16 @@ export class EffectComposer {
 	reset() {
 
 		const renderTarget = this.createBuffer(
-			this.readBuffer.depthBuffer,
-			this.readBuffer.stencilBuffer,
-			(this.readBuffer.depthTexture !== null)
+			this.inputBuffer.depthBuffer,
+			this.inputBuffer.stencilBuffer,
+			(this.inputBuffer.depthTexture !== null)
 		);
 
 		this.dispose();
 
 		// Reanimate.
-		this.readBuffer = renderTarget;
-		this.writeBuffer = this.readBuffer.clone();
+		this.inputBuffer = renderTarget;
+		this.outputBuffer = renderTarget.clone();
 		this.copyPass = new ShaderPass(new CopyMaterial());
 
 	}
@@ -497,17 +502,17 @@ export class EffectComposer {
 
 		this.passes = [];
 
-		if(this.readBuffer !== null) {
+		if(this.inputBuffer !== null) {
 
-			this.readBuffer.dispose();
-			this.readBuffer = null;
+			this.inputBuffer.dispose();
+			this.inputBuffer = null;
 
 		}
 
-		if(this.writeBuffer !== null) {
+		if(this.outputBuffer !== null) {
 
-			this.writeBuffer.dispose();
-			this.writeBuffer = null;
+			this.outputBuffer.dispose();
+			this.outputBuffer = null;
 
 		}
 

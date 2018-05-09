@@ -83,13 +83,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SMAAPass} from &apos;<span><a href="file/src/passes/SMAAPass.js.html#lineNumber23">postprocessing/src/passes/SMAAPass.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SMAAPass} from &apos;<span><a href="file/src/passes/SMAAPass.js.html#lineNumber25">postprocessing/src/passes/SMAAPass.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/passes/SMAAPass.js.html#lineNumber23">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/passes/SMAAPass.js.html#lineNumber25">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -244,43 +244,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-material">material</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The name of this pass.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-        </p>
-      </div>
-      <div>
         
-        
-        <div data-ice="description"><p>This pass renders to the write buffer.</p>
-</div>
       </div>
     </td>
     <td>
@@ -344,6 +314,35 @@
         
         
         <div data-ice="description"><p>SMAA blend shader material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-member-clearPass">clearPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A clear pass for the color edges buffer.</p>
 </div>
       </div>
     </td>
@@ -518,13 +517,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/SMAAPass.js~SMAAPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Antialiases the scene.</p>
+        <div data-ice="description"><p>Renders the effect.</p>
 </div>
       </div>
     </td>
@@ -553,7 +552,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
+        <div data-ice="description"><p>Updates the size of this pass.</p>
 </div>
       </div>
     </td>
@@ -571,6 +570,64 @@
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-get-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The fullscreen material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-set-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fullscreen material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -618,7 +675,7 @@
       <div>
         
         
-        <div data-ice="description"><p>Enabled flag.</p>
+        <div data-ice="description"><p>Indicates whether this pass should be executed.</p>
 </div>
       </div>
     </td>
@@ -676,8 +733,8 @@
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the read and write buffers should be swapped after this
-pass has finished rendering.</p>
+        <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+buffers after this pass has finished rendering.</p>
 </div>
       </div>
     </td>
@@ -706,7 +763,7 @@ pass has finished rendering.</p>
       <div>
         
         
-        <div data-ice="description"><p>Render to screen flag.</p>
+        <div data-ice="description"><p>Indicates whether this pass should render to screen.</p>
 </div>
       </div>
     </td>
@@ -758,13 +815,13 @@ pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A quad mesh that fills the screen.</p>
+        <div data-ice="description"><p>The scene to render.</p>
 </div>
       </div>
     </td>
@@ -775,7 +832,7 @@ pass has finished rendering.</p>
   </tr>
 <tr data-ice="target">
     <td>
-      <span class="access" data-ice="access">protected</span>
+      <span class="access" data-ice="access">private</span>
       
       
       
@@ -787,13 +844,13 @@ pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-quad">quad</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The scene to render.</p>
+        <div data-ice="description"><p>A quad mesh that fills the screen.</p>
 </div>
       </div>
     </td>
@@ -852,7 +909,7 @@ deletes them.</p>
       <div>
         
         
-        <div data-ice="description"><p>Performs initialisation tasks.</p>
+        <div data-ice="description"><p>Performs initialization tasks.</p>
 </div>
       </div>
     </td>
@@ -875,7 +932,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, maskActive: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -914,7 +971,7 @@ deletes them.</p>
 <p>You may override this method in case you want to be informed about the main
 render size.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
-initialised and every time its own size is updated.</p>
+initialized and every time its own size is updated.</p>
 </div>
       </div>
     </td>
@@ -941,7 +998,7 @@ initialised and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber227">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -996,7 +1053,7 @@ areaImage.src = SMAAPass.areaImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber208">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 
@@ -1055,7 +1112,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber32">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber34">source</a></span></span>
     </span>
   </h3>
 
@@ -1115,72 +1172,28 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-name">
+  <h3 data-ice="anchor" id="instance-member-material">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">name</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span class="code" data-ice="name">material</span><span class="code" data-ice="signature">: <span>*</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber162">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The name of this pass.</p>
+  <div data-ice="description"><p>The fullscreen material.</p>
 </div>
 
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-name">Pass#name</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-needsSwap">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber46">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>This pass renders to the write buffer.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-get-material">Pass#material</a></span></div>
 
   <div data-ice="properties">
 </div>
@@ -1216,7 +1229,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1260,7 +1273,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber143">source</a></span></span>
     </span>
   </h3>
 
@@ -1268,6 +1281,50 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
   
   
   <div data-ice="description"><p>SMAA blend shader material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-clearPass">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">clearPass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber45">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A clear pass for the color edges buffer.</p>
 </div>
 
   
@@ -1304,7 +1361,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber86">source</a></span></span>
     </span>
   </h3>
 
@@ -1348,7 +1405,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber57">source</a></span></span>
     </span>
   </h3>
 
@@ -1392,7 +1449,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -1436,7 +1493,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -1480,7 +1537,7 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1523,18 +1580,18 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, readBuffer: <span>WebGLRenderTarget</span>, writeBuffer: <span>WebGLRenderTarget</span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber159">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Antialiases the scene.</p>
+  <div data-ice="description"><p>Renders the effect.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">Pass#render</a></span></div>
@@ -1555,17 +1612,31 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">readBuffer</td>
+      <td data-ice="name" class="code" data-depth="0">inputBuffer</td>
       <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The read buffer.</p>
+      <td data-ice="description"><p>A frame buffer that contains the result of the previous pass.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">writeBuffer</td>
+      <td data-ice="name" class="code" data-depth="0">outputBuffer</td>
       <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The write buffer.</p>
+      <td data-ice="description"><p>A frame buffer that serves as the output render target unless this pass renders to screen.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">stencilTest</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>Indicates whether a stencil mask is active.</p>
 </td>
     </tr>
 </tbody>
@@ -1602,14 +1673,14 @@ searchImage.src = SMAAPass.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber183">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/SMAAPass.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
+  <div data-ice="description"><p>Updates the size of this pass.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setSize">Pass#setSize</a></span></div>

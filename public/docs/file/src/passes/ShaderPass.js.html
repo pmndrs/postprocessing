@@ -102,29 +102,9 @@ export class ShaderPass extends Pass {
 
 	constructor(material, textureID = &quot;tDiffuse&quot;) {
 
-		super();
-
-		/**
-		 * The name of this pass.
-		 */
-
-		this.name = &quot;ShaderPass&quot;;
-
-		/**
-		 * This pass renders to the write buffer.
-		 */
-
-		this.needsSwap = true;
-
-		/**
-		 * The shader material to use for rendering.
-		 *
-		 * @type {ShaderMaterial}
-		 */
+		super(&quot;ShaderPass&quot;);
 
 		this.material = material;
-
-		this.quad.material = this.material;
 
 		/**
 		 * The name of the color sampler uniform of the given material.
@@ -140,19 +120,21 @@ export class ShaderPass extends Pass {
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {WebGLRenderTarget} readBuffer - The read buffer.
-	 * @param {WebGLRenderTarget} writeBuffer - The write buffer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, readBuffer, writeBuffer) {
+	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		if(this.material.uniforms[this.textureID] !== undefined) {
 
-			this.material.uniforms[this.textureID].value = readBuffer.texture;
+			this.material.uniforms[this.textureID].value = inputBuffer.texture;
 
 		}
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : writeBuffer);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
 
