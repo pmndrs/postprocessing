@@ -22,7 +22,7 @@ export class TexturePass extends Pass {
 		this.material = new CombineMaterial(screenMode);
 
 		this.texture = texture;
-		this.opacity = opacity;
+		this.opacitySource = opacity;
 
 	}
 
@@ -49,12 +49,38 @@ export class TexturePass extends Pass {
 	}
 
 	/**
-	 * The opacity.
+	 * The opacity of the input buffer.
+	 *
+	 * The destination color is the color from the image in the input buffer.
 	 *
 	 * @type {Number}
 	 */
 
-	get opacity() {
+	get opacityDestination() {
+
+		return this.material.uniforms.opacity1.value;
+
+	}
+
+	/**
+	 * @type {Number}
+	 */
+
+	set opacityDestination(value = 1.0) {
+
+		this.material.uniforms.opacity1.value = value;
+
+	}
+
+	/**
+	 * The opacity of the texture.
+	 *
+	 * The source color is the color from the texture.
+	 *
+	 * @type {Number}
+	 */
+
+	get opacitySource() {
 
 		return this.material.uniforms.opacity2.value;
 
@@ -64,7 +90,7 @@ export class TexturePass extends Pass {
 	 * @type {Number}
 	 */
 
-	set opacity(value = 1.0) {
+	set opacitySource(value = 1.0) {
 
 		this.material.uniforms.opacity2.value = value;
 
