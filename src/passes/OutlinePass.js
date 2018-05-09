@@ -323,6 +323,45 @@ export class OutlinePass extends Pass {
 	}
 
 	/**
+	 * Indicates whether the effect should be applied to the input buffer.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get blend() {
+
+		return this.needsSwap;
+
+	}
+
+	/**
+	 * If disabled, the input buffer will remain unaffected.
+	 *
+	 * You may use the {@link BloomPass#overlay} texture to apply the effect to
+	 * your scene.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set blend(value) {
+
+		this.needsSwap = value;
+
+	}
+
+	/**
+	 * The effect overlay texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get overlay() {
+
+		return this.outlineBlendMaterial.uniforms.tEdges.value;
+
+	}
+
+	/**
 	 * Sets a pattern texture to use as an overlay for selected objects.
 	 *
 	 * @param {Texture} [texture=null] - A pattern texture. Set to null to disable the pattern.
@@ -519,10 +558,14 @@ export class OutlinePass extends Pass {
 
 			}
 
-			// Draw the final overlay onto the scene colours.
-			this.material = this.outlineBlendMaterial;
-			this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-			renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
+			if(this.blend) {
+
+				// Draw the final overlay onto the scene colours.
+				this.material = this.outlineBlendMaterial;
+				this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+				renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
+
+			}
 
 		} else if(this.renderToScreen) {
 

@@ -330,6 +330,45 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether the effect should be applied to the input buffer.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get blend() {
+
+		return this.needsSwap;
+
+	}
+
+	/**
+	 * If disabled, the input buffer will remain unaffected.
+	 *
+	 * You may use the {@link BloomPass#overlay} texture to apply the effect to
+	 * your scene.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set blend(value) {
+
+		this.needsSwap = value;
+
+	}
+
+	/**
+	 * The effect overlay texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get overlay() {
+
+		return this.renderTargetY.texture;
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -388,12 +427,16 @@ export class GodRaysPass extends Pass {
 		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
 		renderer.render(scene, camera, renderTargetY);
 
-		// Combine the god rays with the scene colors.
-		this.material = combineMaterial;
-		combineMaterial.uniforms.texture1.value = inputBuffer.texture;
-		combineMaterial.uniforms.texture2.value = renderTargetY.texture;
+		if(this.blend) {
 
-		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+			// Combine the god rays with the scene colors.
+			this.material = combineMaterial;
+			combineMaterial.uniforms.texture1.value = inputBuffer.texture;
+			combineMaterial.uniforms.texture2.value = renderTargetY.texture;
+
+			renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+
+		}
 
 	}
 

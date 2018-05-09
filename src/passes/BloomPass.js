@@ -192,6 +192,45 @@ export class BloomPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether the effect should be applied to the input buffer.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get blend() {
+
+		return this.needsSwap;
+
+	}
+
+	/**
+	 * If disabled, the input buffer will remain unaffected.
+	 *
+	 * You may use the {@link BloomPass#overlay} texture to apply the effect to
+	 * your scene.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set blend(value) {
+
+		this.needsSwap = value;
+
+	}
+
+	/**
+	 * The effect overlay texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get overlay() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -219,12 +258,16 @@ export class BloomPass extends Pass {
 		// Convolution phase.
 		blurPass.render(renderer, renderTarget, renderTarget);
 
-		// Render the original scene with superimposed blur.
-		this.material = combineMaterial;
-		combineMaterial.uniforms.texture1.value = inputBuffer.texture;
-		combineMaterial.uniforms.texture2.value = renderTarget.texture;
+		if(this.blend) {
 
-		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+			// Render the original scene with superimposed blur.
+			this.material = combineMaterial;
+			combineMaterial.uniforms.texture1.value = inputBuffer.texture;
+			combineMaterial.uniforms.texture2.value = renderTarget.texture;
+
+			renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+
+		}
 
 	}
 
