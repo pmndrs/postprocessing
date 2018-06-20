@@ -47,7 +47,6 @@ export class BlurPass extends Pass {
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-
 		this.renderTargetY.texture.name = "Blur.TargetY";
 
 		/**
