@@ -12,8 +12,8 @@ import { ColorEdgesMaterial, SMAABlendMaterial, SMAAWeightsMaterial } from "../m
 import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 
-import searchImageDataURL from "../materials/images/smaa/searchImageDataURL.js";
-import areaImageDataURL from "../materials/images/smaa/areaImageDataURL.js";
+import searchImageDataURL from "../images/smaa/searchImageDataURL.js";
+import areaImageDataURL from "../images/smaa/areaImageDataURL.js";
 
 /**
  * Subpixel Morphological Antialiasing (SMAA) v2.8.

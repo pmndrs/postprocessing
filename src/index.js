@@ -63,4 +63,4 @@ export {
 	RawImageData,
 	SMAAAreaImageData,
 	SMAASearchImageData
-} from "./materials/images";
+} from "./images";
