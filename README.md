@@ -13,9 +13,11 @@ A post processing library that provides the means to implement image filter effe
 
 ## Installation
 
+This library requires the peer dependency [three](https://github.com/mrdoob/three.js/).
+
 ```sh
-npm install postprocessing
-``` 
+npm install three postprocessing
+```
 
 
 ## Usage
