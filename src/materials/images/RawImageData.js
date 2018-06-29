@@ -3,7 +3,7 @@
  *
  * @private
  * @param {Number} width - The image width.
- * @param {Number} width - The image height.
+ * @param {Number} height - The image height.
  * @param {Uint8ClampedArray} data - The image data.
  * @param {Number} channels - The color channels used for a single pixel.
  * @return {Canvas} The canvas.

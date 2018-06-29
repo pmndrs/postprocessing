@@ -648,7 +648,6 @@ function isInsideArea(p1, p2, x, y) {
  * @param {Vector2} p2 - The upper bounds of the area.
  * @param {Number} pX - The X-coordinates.
  * @param {Number} pY - The Y-coordinates.
- * @param {Vector2} result - A target vector to store the area in.
  * @return {Number} The amount of pixels inside the area relative to the total amount of sampled pixels.
  */
 
