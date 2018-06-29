@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { OutlineBlendMaterial } from "../../build/bundle.js";
 
-const OutlineBlendMaterial = require("../../build/postprocessing").OutlineBlendMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new OutlineBlendMaterial();
 
-	"Outline Blend": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new OutlineBlendMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

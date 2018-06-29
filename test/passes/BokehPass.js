@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { BokehPass } from "../../build/bundle.js";
 
-const BokehPass = require("../../build/postprocessing").BokehPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new BokehPass();
+	object.dispose();
 
-	"Bokeh": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new BokehPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

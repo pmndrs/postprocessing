@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { ClearPass } from "../../build/bundle.js";
 
-const ClearPass = require("../../build/postprocessing").ClearPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new ClearPass();
+	object.dispose();
 
-	"Clear": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new ClearPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

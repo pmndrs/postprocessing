@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { ShaderPass } from "../../build/bundle.js";
 
-const ShaderPass = require("../../build/postprocessing").ShaderPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new ShaderPass(null);
+	object.dispose();
 
-	"Shader": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new ShaderPass(null);
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

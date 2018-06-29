@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { CopyMaterial } from "../../build/bundle.js";
 
-const CopyMaterial = require("../../build/postprocessing").CopyMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new CopyMaterial();
 
-	"Copy": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new CopyMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

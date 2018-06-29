@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { BokehMaterial } from "../../build/bundle.js";
 
-const BokehMaterial = require("../../build/postprocessing").BokehMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new BokehMaterial();
 
-	"Bokeh": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new BokehMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

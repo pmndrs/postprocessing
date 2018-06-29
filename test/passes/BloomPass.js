@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { BloomPass } from "../../build/bundle.js";
 
-const BloomPass = require("../../build/postprocessing").BloomPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new BloomPass();
+	object.dispose();
 
-	"Bloom": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new BloomPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

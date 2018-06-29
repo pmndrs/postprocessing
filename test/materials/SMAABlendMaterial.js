@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { SMAABlendMaterial } from "../../build/bundle.js";
 
-const SMAABlendMaterial = require("../../build/postprocessing").SMAABlendMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new SMAABlendMaterial();
 
-	"SMAABlend": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new SMAABlendMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { AdaptiveLuminosityMaterial } from "../../build/bundle.js";
 
-const AdaptiveLuminosityMaterial = require("../../build/postprocessing").AdaptiveLuminosityMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new AdaptiveLuminosityMaterial();
 
-	"Adaptive Luminosity": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new AdaptiveLuminosityMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

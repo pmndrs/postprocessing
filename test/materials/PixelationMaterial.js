@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { PixelationMaterial } from "../../build/bundle.js";
 
-const PixelationMaterial = require("../../build/postprocessing").PixelationMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new PixelationMaterial();
 
-	"Pixelation": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new PixelationMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

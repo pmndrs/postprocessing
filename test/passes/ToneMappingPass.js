@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { ToneMappingPass } from "../../build/bundle.js";
 
-const ToneMappingPass = require("../../build/postprocessing").ToneMappingPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new ToneMappingPass();
+	object.dispose();
 
-	"Tone Mapping": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new ToneMappingPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

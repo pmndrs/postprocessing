@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { CombineMaterial } from "../../build/bundle.js";
 
-const CombineMaterial = require("../../build/postprocessing").CombineMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new CombineMaterial();
 
-	"Combine": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new CombineMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

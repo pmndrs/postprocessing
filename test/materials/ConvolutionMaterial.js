@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { ConvolutionMaterial } from "../../build/bundle.js";
 
-const ConvolutionMaterial = require("../../build/postprocessing").ConvolutionMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new ConvolutionMaterial();
 
-	"Convolution": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new ConvolutionMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

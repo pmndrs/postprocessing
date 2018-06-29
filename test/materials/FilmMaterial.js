@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { FilmMaterial } from "../../build/bundle.js";
 
-const FilmMaterial = require("../../build/postprocessing").FilmMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new FilmMaterial();
 
-	"Film": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new FilmMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

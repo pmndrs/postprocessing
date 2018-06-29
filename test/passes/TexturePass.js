@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { TexturePass } from "../../build/bundle.js";
 
-const TexturePass = require("../../build/postprocessing").TexturePass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new TexturePass();
+	object.dispose();
 
-	"Texture": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new TexturePass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

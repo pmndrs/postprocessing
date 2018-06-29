@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { PixelationPass } from "../../build/bundle.js";
 
-const PixelationPass = require("../../build/postprocessing").PixelationPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new PixelationPass();
+	object.dispose();
 
-	"Pixelation": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new PixelationPass(null, null, null);
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

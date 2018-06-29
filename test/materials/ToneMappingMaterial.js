@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { ToneMappingMaterial } from "../../build/bundle.js";
 
-const ToneMappingMaterial = require("../../build/postprocessing").ToneMappingMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new ToneMappingMaterial();
 
-	"ToneMapping": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new ToneMappingMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

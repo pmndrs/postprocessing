@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { DotScreenMaterial } from "../../build/bundle.js";
 
-const DotScreenMaterial = require("../../build/postprocessing").DotScreenMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new DotScreenMaterial();
 
-	"DotScreen": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new DotScreenMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

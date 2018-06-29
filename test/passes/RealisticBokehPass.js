@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { RealisticBokehPass } from "../../build/bundle.js";
 
-const RealisticBokehPass = require("../../build/postprocessing").RealisticBokehPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new RealisticBokehPass();
+	object.dispose();
 
-	"RealisticBokeh": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new RealisticBokehPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

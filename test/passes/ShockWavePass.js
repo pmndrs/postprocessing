@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { ShockWavePass } from "../../build/bundle.js";
 
-const ShockWavePass = require("../../build/postprocessing").ShockWavePass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new ShockWavePass(null);
+	object.dispose();
 
-	"Shock Wave": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new ShockWavePass(null);
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

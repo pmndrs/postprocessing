@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { GlitchMaterial } from "../../build/bundle.js";
 
-const GlitchMaterial = require("../../build/postprocessing").GlitchMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new GlitchMaterial();
 
-	"Glitch": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new GlitchMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

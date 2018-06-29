@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { GlitchPass } from "../../build/bundle.js";
 
-const GlitchPass = require("../../build/postprocessing").GlitchPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new GlitchPass();
+	object.dispose();
 
-	"Glitch": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new GlitchPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

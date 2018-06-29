@@ -29,26 +29,16 @@ A proposed change should be focused and concise. Do not include generated build 
 
 ### Development :wrench:
 
-This project contains Grunt tasks that will help you during development. You have two options that allow you to use them:
+This project contains scripts that will help you during development. All scripts can be executed with `npm run [script]`.
+The following table provides an overview of the most important scripts:
 
-1. Install the [Grunt CLI](https://github.com/gruntjs/grunt-cli) globally. Grunt tasks can then be executed with `grunt [task]`.
-2. Use a copy of [this grunt runner](https://gist.github.com/vanruesc/b9e8d8a5b749ab83958aecce890297b3#file-grunt-cli-js).
-   Grunt tasks can then be executed with `node grunt-cli.js [task]`.
+| Task  | Description                           |
+|-------|---------------------------------------|
+| lint  | Checks source files for syntax errors |
+| build | Generates the final bundle            |
+| test  | Runs unit tests                       |
 
-The following table provides an overview of the relevant tasks:
-
-| Task       | Description                           |
-|------------|---------------------------------------|
-|            | The default task `build, nodeunit`    |
-| build      | Alias for `eslint, rollup`            |
-| build:lib  | Alias for `eslint:lib, rollup:lib`    |
-| build:demo | Alias for `eslint:demo, rollup:demo`  |
-| test       | Alias for `eslint, nodeunit`          |
-| eslint     | Checks source files for syntax errors |
-| nodeunit   | Runs unit tests                       |
-| rollup     | Builds the library and demo bundle    |
-
-__Note__: Using the `--production` flag enables source code transpilation and bundle minification which considerably slows down the build process.
+__Note__: Setting `BABEL_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process.
 
 
 ### Testing :heavy_check_mark:

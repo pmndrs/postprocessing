@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { RenderPass } from "../../build/bundle.js";
 
-const RenderPass = require("../../build/postprocessing").RenderPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new RenderPass();
+	object.dispose();
 
-	"Render": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new RenderPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

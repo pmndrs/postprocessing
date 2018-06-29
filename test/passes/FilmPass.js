@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { FilmPass } from "../../build/bundle.js";
 
-const FilmPass = require("../../build/postprocessing").FilmPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new FilmPass();
+	object.dispose();
 
-	"Film": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new FilmPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

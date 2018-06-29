@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { ShockWaveMaterial } from "../../build/bundle.js";
 
-const ShockWaveMaterial = require("../../build/postprocessing").ShockWaveMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new ShockWaveMaterial();
 
-	"ShockWave": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new ShockWaveMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

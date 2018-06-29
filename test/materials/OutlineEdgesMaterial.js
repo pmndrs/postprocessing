@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { OutlineEdgesMaterial } from "../../build/bundle.js";
 
-const OutlineEdgesMaterial = require("../../build/postprocessing").OutlineEdgesMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new OutlineEdgesMaterial();
 
-	"Outline Edges": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new OutlineEdgesMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

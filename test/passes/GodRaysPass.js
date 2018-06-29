@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { GodRaysPass } from "../../build/bundle.js";
 
-const GodRaysPass = require("../../build/postprocessing").GodRaysPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new GodRaysPass(null, null, null);
+	object.dispose();
 
-	"God Rays": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new GodRaysPass(null, null, null);
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

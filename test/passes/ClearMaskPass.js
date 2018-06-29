@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { ClearMaskPass } from "../../build/bundle.js";
 
-const ClearMaskPass = require("../../build/postprocessing").ClearMaskPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new ClearMaskPass();
+	object.dispose();
 
-	"Clear Mask": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new ClearMaskPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

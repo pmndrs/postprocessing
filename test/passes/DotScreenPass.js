@@ -1,20 +1,11 @@
-"use strict";
+import test from "ava";
+import { DotScreenPass } from "../../build/bundle.js";
 
-const DotScreenPass = require("../../build/postprocessing").DotScreenPass;
+test("can be created and destroyed", t => {
 
-module.exports = {
+	const object = new DotScreenPass();
+	object.dispose();
 
-	"Dot Screen": {
+	t.truthy(object);
 
-		"can be created and destroyed": function(test) {
-
-			const pass = new DotScreenPass();
-			test.ok(pass);
-			pass.dispose();
-			test.done();
-
-		}
-
-	}
-
-};
+});

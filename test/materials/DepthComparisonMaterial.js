@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { DepthComparisonMaterial } from "../../build/bundle.js";
 
-const DepthComparisonMaterial = require("../../build/postprocessing").DepthComparisonMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new DepthComparisonMaterial();
 
-	"Depth Comparison": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new DepthComparisonMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});

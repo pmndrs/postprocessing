@@ -1,19 +1,10 @@
-"use strict";
+import test from "ava";
+import { ColorEdgesMaterial } from "../../build/bundle.js";
 
-const ColorEdgesMaterial = require("../../build/postprocessing").ColorEdgesMaterial;
+test("can be created", t => {
 
-module.exports = {
+	const object = new ColorEdgesMaterial();
 
-	"ColorEdges": {
+	t.truthy(object);
 
-		"can be created": function(test) {
-
-			const material = new ColorEdgesMaterial();
-			test.ok(material);
-			test.done();
-
-		}
-
-	}
-
-};
+});
