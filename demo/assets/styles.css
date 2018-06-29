@@ -1,0 +1,101 @@
+html {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: black;
+	color: rgb(175, 170, 160);
+	font-family: sans-serif;
+	font-weight: 100;
+	font-size: 100%;
+	line-height: 150%;
+	margin: 0;
+	width: 100%;
+	height: 100%;
+}
+
+a {
+	color: grey;
+	transition: color 0.2s;
+}
+
+a:hover,
+a:active,
+.active {
+	color: white;
+}
+
+h1, h2, h3, h4 {
+	font-size: 150%;
+	font-weight: normal;
+	padding: 0;
+	margin: 20px 0 10px 0px;
+}
+
+h2 {
+	font-size: 100%;
+	margin: 0 0 20px 0px;
+}
+
+p {
+	margin: 0;
+}
+
+p ul {
+	padding: 0;
+}
+
+p ul li {
+	color: rgb(255, 100, 80);
+	padding: 0 5px;
+}
+
+div[role="main"] {
+	height: 100%;
+}
+
+div[role="complementary"] {
+	background-color: transparent;
+	display: flex;
+	-webkit-justify-content: space-between;
+	justify-content: space-between;
+	-webkit-align-items: center;
+	align-items: center;
+	padding: 0 5px;
+	position: fixed;
+	right: 0;
+	top: 0;
+}
+
+div[role="complementary"] h3 {
+	font-size: 90%;
+	margin: 0;
+}
+
+div[role="complementary"] p,
+div[role="complementary"] h4 {
+	font-size: 75%;
+	margin: 0;
+}
+
+div[role="complementary"] p {
+	color: rgb(90, 95, 90);
+}
+
+#viewport p {
+	left: 0;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+#info {
+	position: fixed;
+	left: 5px;
+	top: 5px;
+}
