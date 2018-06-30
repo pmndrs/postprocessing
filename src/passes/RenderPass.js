@@ -23,7 +23,7 @@ export class RenderPass extends Pass {
 
 	constructor(scene, camera, options = {}) {
 
-		super("RenderPass", scene, camera, null);
+		super("RenderPass", scene, camera);
 
 		this.needsSwap = false;
 

@@ -50,7 +50,7 @@ export class GlitchPass extends Pass {
 
 		super("GlitchPass");
 
-		this.material = new GlitchMaterial();
+		this.setFullscreenMaterial(new GlitchMaterial());
 
 		/**
 		 * A perturbation map.
@@ -114,7 +114,7 @@ export class GlitchPass extends Pass {
 	set perturbMap(value) {
 
 		this.texture = value;
-		this.material.uniforms.tPerturb.value = value;
+		this.getFullscreenMaterial().uniforms.tPerturb.value = value;
 
 	}
 
@@ -173,7 +173,7 @@ export class GlitchPass extends Pass {
 		const mode = this.mode;
 		const counter = this.counter;
 		const breakPoint = this.breakPoint;
-		const uniforms = this.material.uniforms;
+		const uniforms = this.getFullscreenMaterial().uniforms;
 
 		uniforms.tDiffuse.value = inputBuffer.texture;
 		uniforms.seed.value = Math.random();

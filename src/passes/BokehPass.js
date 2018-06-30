@@ -20,7 +20,7 @@ export class BokehPass extends Pass {
 
 		super("BokehPass");
 
-		this.material = new BokehMaterial(camera, options);
+		this.setFullscreenMaterial(new BokehMaterial(camera, options));
 
 	}
 
@@ -36,8 +36,10 @@ export class BokehPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
-		this.material.uniforms.tDepth.value = inputBuffer.depthTexture;
+		const uniforms = this.getFullscreenMaterial().uniforms;
+
+		uniforms.tDiffuse.value = inputBuffer.texture;
+		uniforms.tDepth.value = inputBuffer.depthTexture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
@@ -52,7 +54,7 @@ export class BokehPass extends Pass {
 
 	setSize(width, height) {
 
-		this.material.uniforms.aspect.value = width / height;
+		this.getFullscreenMaterial().uniforms.aspect.value = width / height;
 
 	}
 

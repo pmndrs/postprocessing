@@ -30,7 +30,7 @@ export class ClearPass extends Pass {
 
 	constructor(options = {}) {
 
-		super("ClearPass", null, null, null);
+		super("ClearPass", null, null);
 
 		this.needsSwap = false;
 

@@ -15,7 +15,7 @@ export class MaskPass extends Pass {
 
 	constructor(scene, camera) {
 
-		super("MaskPass", scene, camera, null);
+		super("MaskPass", scene, camera);
 
 		this.needsSwap = false;
 

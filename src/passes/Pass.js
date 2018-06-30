@@ -15,18 +15,12 @@ export class Pass {
 	/**
 	 * Constructs a new pass.
 	 *
-	 * @param {String} [name] - The name of this pass.
-	 * @param {Scene} [scene] - The scene to render.
-	 * @param {Camera} [camera] - The camera.
-	 * @param {Mesh} [quad] - A quad that fills the screen to render 2D filter effects. Set this to null, if you don't need it (see {@link RenderPass}).
+	 * @param {String} [name] - The name of this pass. Does not have to be unique.
+	 * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.
+	 * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.
 	 */
 
-	constructor(
-		name = "Pass",
-		scene = new Scene(),
-		camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1),
-		quad = new Mesh(new PlaneBufferGeometry(2, 2), null)
-	) {
+	constructor(name = "Pass", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {
 
 		/**
 		 * The name of this pass.
@@ -61,19 +55,7 @@ export class Pass {
 		 * @private
 		 */
 
-		this.quad = quad;
-
-		if(this.quad !== null) {
-
-			this.quad.frustumCulled = false;
-
-			if(this.scene !== null) {
-
-				this.scene.add(this.quad);
-
-			}
-
-		}
+		this.quad = null;
 
 		/**
 		 * Indicates whether this pass should render to screen.
@@ -109,9 +91,40 @@ export class Pass {
 	 * The fullscreen material.
 	 *
 	 * @type {Material}
+	 * @deprecated Use {@link Pass#getFullscreenMaterial} instead.
 	 */
 
 	get material() {
+
+		console.warn("Pass.material has been deprecated, please use Pass.getFullscreenMaterial()");
+
+		return this.getFullscreenMaterial();
+
+	}
+
+	/**
+	 * Sets the fullscreen material.
+	 *
+	 * @protected
+	 * @type {Material}
+	 * @deprecated Use {@link Pass#setFullscreenMaterial} instead.
+	 */
+
+	set material(value) {
+
+		console.warn("Pass.material has been deprecated, please use Pass.setFullscreenMaterial(Material)");
+
+		this.setFullscreenMaterial(value);
+
+	}
+
+	/**
+	 * Returns the current fullscreen material.
+	 *
+	 * @return {Material} The current fullscreen material, or null if there is none.
+	 */
+
+	getFullscreenMaterial() {
 
 		return (this.quad !== null) ? this.quad.material : null;
 
@@ -120,16 +133,32 @@ export class Pass {
 	/**
 	 * Sets the fullscreen material.
 	 *
-	 * The material will be assigned to the quad mesh that fills the screen.
+	 * The material will be assigned to the quad mesh that fills the screen. The
+	 * screen quad will be created once a material is assigned via this method.
 	 *
-	 * @type {Material}
+	 * @protected
+	 * @param {Material} material - A fullscreen material.
 	 */
 
-	set material(value) {
+	setFullscreenMaterial(material) {
 
-		if(this.quad !== null) {
+		let quad = this.quad;
 
-			this.quad.material = value;
+		if(quad !== null) {
+
+			quad.material = material;
+
+		} else {
+
+			quad = new Mesh(new PlaneBufferGeometry(2, 2), material);
+			quad.frustumCulled = false;
+
+			if(this.scene !== null) {
+
+				this.scene.add(quad);
+				this.quad = quad;
+
+			}
 
 		}
 
@@ -192,13 +221,13 @@ export class Pass {
 	initialize(renderer, alpha) {}
 
 	/**
-	 * Performs a shallow search for properties that define a dispose method and
-	 * deletes them. The pass will be inoperative after this method was called!
+	 * Performs a shallow search for disposable properties and deletes them. The
+	 * pass will be inoperative after this method was called!
 	 *
 	 * Disposable objects:
-	 *  - render targets
-	 *  - materials
-	 *  - textures
+	 *  - WebGLRenderTarget
+	 *  - Material
+	 *  - Texture
 	 *
 	 * The {@link EffectComposer} calls this method when it is being destroyed.
 	 * You may, however, use it independently to free memory when you are certain
@@ -207,9 +236,15 @@ export class Pass {
 
 	dispose() {
 
-		let key;
+		const material = this.getFullscreenMaterial();
 
-		for(key of Object.keys(this)) {
+		if(material !== null) {
+
+			material.dispose();
+
+		}
+
+		for(const key of Object.keys(this)) {
 
 			if(this[key] !== null && typeof this[key].dispose === "function") {
 
@@ -217,12 +252,6 @@ export class Pass {
 				this[key] = null;
 
 			}
-
-		}
-
-		if(this.material !== null) {
-
-			this.material.dispose();
 
 		}
 

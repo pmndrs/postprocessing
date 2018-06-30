@@ -160,7 +160,7 @@ export class ShockWavePass extends Pass {
 		const waveSize = uniforms.waveSize;
 
 		this.copyMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-		this.material = this.copyMaterial;
+		this.setFullscreenMaterial(this.copyMaterial);
 
 		if(this.active) {
 
@@ -180,7 +180,7 @@ export class ShockWavePass extends Pass {
 				center.value.y = (screenPosition.y + 1.0) * 0.5;
 
 				uniforms.tDiffuse.value = inputBuffer.texture;
-				this.material = shockWaveMaterial;
+				this.setFullscreenMaterial(shockWaveMaterial);
 
 			}
 

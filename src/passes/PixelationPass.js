@@ -17,7 +17,7 @@ export class PixelationPass extends Pass {
 
 		super("PixelationPass");
 
-		this.material = new PixelationMaterial();
+		this.setFullscreenMaterial(new PixelationMaterial());
 
 		this.granularity = granularity;
 
@@ -31,7 +31,7 @@ export class PixelationPass extends Pass {
 
 	get granularity() {
 
-		return this.material.granularity;
+		return this.getFullscreenMaterial().granularity;
 
 	}
 
@@ -51,7 +51,7 @@ export class PixelationPass extends Pass {
 
 		}
 
-		this.material.granularity = value;
+		this.getFullscreenMaterial().granularity = value;
 
 	}
 
@@ -67,7 +67,7 @@ export class PixelationPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
@@ -82,7 +82,7 @@ export class PixelationPass extends Pass {
 
 	setSize(width, height) {
 
-		this.material.setResolution(width, height);
+		this.getFullscreenMaterial().setResolution(width, height);
 
 	}
 

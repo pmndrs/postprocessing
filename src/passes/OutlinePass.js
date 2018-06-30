@@ -119,6 +119,7 @@ export class OutlinePass extends Pass {
 		 *
 		 * @type {RenderPass}
 		 * @private
+		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
@@ -136,6 +137,7 @@ export class OutlinePass extends Pass {
 		 *
 		 * @type {RenderPass}
 		 * @private
+		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
@@ -548,7 +550,7 @@ export class OutlinePass extends Pass {
 			mainScene.background = background;
 
 			// Detect the outline.
-			this.material = this.outlineEdgesMaterial;
+			this.setFullscreenMaterial(this.outlineEdgesMaterial);
 			renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
 			if(this.blurPass.enabled) {
@@ -561,7 +563,7 @@ export class OutlinePass extends Pass {
 			if(this.blend) {
 
 				// Draw the final overlay onto the scene colours.
-				this.material = this.outlineBlendMaterial;
+				this.setFullscreenMaterial(this.outlineBlendMaterial);
 				this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 				renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
 

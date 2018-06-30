@@ -159,17 +159,17 @@ export class SMAAPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		// Detect color edges.
-		this.material = this.colorEdgesMaterial;
+		this.setFullscreenMaterial(this.colorEdgesMaterial);
 		this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 		this.clearPass.render(renderer, this.renderTargetColorEdges);
 		renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
 		// Compute edge weights.
-		this.material = this.weightsMaterial;
+		this.setFullscreenMaterial(this.weightsMaterial);
 		renderer.render(this.scene, this.camera, this.renderTargetWeights);
 
 		// Apply the antialiasing filter to the colors.
-		this.material = this.blendMaterial;
+		this.setFullscreenMaterial(this.blendMaterial);
 		this.blendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);

@@ -22,7 +22,7 @@ export class FilmPass extends Pass {
 
 		super("FilmPass");
 
-		this.material = new FilmMaterial(options);
+		this.setFullscreenMaterial(new FilmMaterial(options));
 
 		/**
 		 * The amount of scanlines, relative to the screen height.
@@ -71,8 +71,10 @@ export class FilmPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
-		this.material.uniforms.time.value += delta;
+		const uniforms = this.getFullscreenMaterial().uniforms;
+
+		uniforms.tDiffuse.value = inputBuffer.texture;
+		uniforms.time.value += delta;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
@@ -90,9 +92,10 @@ export class FilmPass extends Pass {
 		const aspect = width / height;
 		const gridScale = this.gridScale * (height * 0.125);
 
-		this.material.uniforms.scanlineCount.value = Math.round(height * this.scanlineDensity);
-		this.material.uniforms.gridScale.value.set(aspect * gridScale, gridScale);
-		this.material.uniforms.gridLineWidth.value = (gridScale / height) + this.gridLineWidth;
+		const uniforms = this.getFullscreenMaterial().uniforms;
+		uniforms.scanlineCount.value = Math.round(height * this.scanlineDensity);
+		uniforms.gridScale.value.set(aspect * gridScale, gridScale);
+		uniforms.gridLineWidth.value = (gridScale / height) + this.gridLineWidth;
 
 	}
 

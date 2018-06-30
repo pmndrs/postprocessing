@@ -22,7 +22,7 @@ export class RealisticBokehPass extends Pass {
 
 		super("RealisticBokehPass");
 
-		this.material = new RealisticBokehMaterial(camera, options);
+		this.setFullscreenMaterial(new RealisticBokehMaterial(camera, options));
 
 	}
 
@@ -38,8 +38,10 @@ export class RealisticBokehPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
-		this.material.uniforms.tDepth.value = inputBuffer.depthTexture;
+		const uniforms = this.getFullscreenMaterial().uniforms;
+
+		uniforms.tDiffuse.value = inputBuffer.texture;
+		uniforms.tDepth.value = inputBuffer.depthTexture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
@@ -54,7 +56,7 @@ export class RealisticBokehPass extends Pass {
 
 	setSize(width, height) {
 
-		this.material.setTexelSize(1.0 / width, 1.0 / height);
+		this.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

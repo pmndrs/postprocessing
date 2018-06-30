@@ -12,7 +12,7 @@ export class ClearMaskPass extends Pass {
 
 	constructor() {
 
-		super("ClearMaskPass", null, null, null);
+		super("ClearMaskPass", null, null);
 
 		this.needsSwap = false;
 

@@ -19,7 +19,7 @@ export class ShaderPass extends Pass {
 
 		super("ShaderPass");
 
-		this.material = material;
+		this.setFullscreenMaterial(material);
 
 		/**
 		 * The name of the color sampler uniform of the given material.
@@ -43,9 +43,11 @@ export class ShaderPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		if(this.material.uniforms[this.textureID] !== undefined) {
+		const uniforms = this.getFullscreenMaterial().uniforms;
 
-			this.material.uniforms[this.textureID].value = inputBuffer.texture;
+		if(uniforms[this.textureID] !== undefined) {
+
+			uniforms[this.textureID].value = inputBuffer.texture;
 
 		}
 

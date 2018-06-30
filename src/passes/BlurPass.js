@@ -165,7 +165,7 @@ export class BlurPass extends Pass {
 		let destRT;
 		let i, l;
 
-		this.material = material;
+		this.setFullscreenMaterial(material);
 
 		// Apply the multi-pass blur.
 		for(i = 0, l = kernel.length - 1; i < l; ++i) {
@@ -185,7 +185,7 @@ export class BlurPass extends Pass {
 
 			material = this.ditheredConvolutionMaterial;
 			uniforms = material.uniforms;
-			this.material = material;
+			this.setFullscreenMaterial(material);
 
 		}
 

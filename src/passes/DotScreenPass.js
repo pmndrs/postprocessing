@@ -21,7 +21,7 @@ export class DotScreenPass extends Pass {
 
 		super("DotScreenPass");
 
-		this.material = new DotScreenMaterial(options);
+		this.setFullscreenMaterial(new DotScreenMaterial(options));
 
 	}
 
@@ -37,7 +37,7 @@ export class DotScreenPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
@@ -55,8 +55,9 @@ export class DotScreenPass extends Pass {
 		width = Math.max(1, width);
 		height = Math.max(1, height);
 
-		this.material.uniforms.offsetRepeat.value.z = width;
-		this.material.uniforms.offsetRepeat.value.w = height;
+		const uniforms = this.getFullscreenMaterial().uniforms;
+		uniforms.offsetRepeat.value.z = width;
+		uniforms.offsetRepeat.value.w = height;
 
 	}
 

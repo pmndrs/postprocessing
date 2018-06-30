@@ -19,7 +19,7 @@ export class TexturePass extends Pass {
 
 		super("TexturePass");
 
-		this.material = new CombineMaterial(screenMode);
+		this.setFullscreenMaterial(new CombineMaterial(screenMode));
 
 		this.texture = texture;
 		this.opacitySource = opacity;
@@ -34,7 +34,7 @@ export class TexturePass extends Pass {
 
 	get texture() {
 
-		return this.material.uniforms.texture2.value;
+		return this.getFullscreenMaterial().uniforms.texture2.value;
 
 	}
 
@@ -44,7 +44,7 @@ export class TexturePass extends Pass {
 
 	set texture(value) {
 
-		this.material.uniforms.texture2.value = value;
+		this.getFullscreenMaterial().uniforms.texture2.value = value;
 
 	}
 
@@ -58,7 +58,7 @@ export class TexturePass extends Pass {
 
 	get opacityDestination() {
 
-		return this.material.uniforms.opacity1.value;
+		return this.getFullscreenMaterial().uniforms.opacity1.value;
 
 	}
 
@@ -68,7 +68,7 @@ export class TexturePass extends Pass {
 
 	set opacityDestination(value = 1.0) {
 
-		this.material.uniforms.opacity1.value = value;
+		this.getFullscreenMaterial().uniforms.opacity1.value = value;
 
 	}
 
@@ -82,7 +82,7 @@ export class TexturePass extends Pass {
 
 	get opacitySource() {
 
-		return this.material.uniforms.opacity2.value;
+		return this.getFullscreenMaterial().uniforms.opacity2.value;
 
 	}
 
@@ -92,7 +92,7 @@ export class TexturePass extends Pass {
 
 	set opacitySource(value = 1.0) {
 
-		this.material.uniforms.opacity2.value = value;
+		this.getFullscreenMaterial().uniforms.opacity2.value = value;
 
 	}
 
@@ -108,7 +108,8 @@ export class TexturePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.texture1.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.texture1.value = inputBuffer.texture;
+
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}

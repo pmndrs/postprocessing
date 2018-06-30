@@ -251,7 +251,7 @@ export class BloomPass extends Pass {
 		const renderTarget = this.renderTarget;
 
 		// Luminance filter.
-		this.material = luminosityMaterial;
+		this.setFullscreenMaterial(luminosityMaterial);
 		luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 		renderer.render(scene, camera, renderTarget);
 
@@ -261,7 +261,7 @@ export class BloomPass extends Pass {
 		if(this.blend) {
 
 			// Render the original scene with superimposed blur.
-			this.material = combineMaterial;
+			this.setFullscreenMaterial(combineMaterial);
 			combineMaterial.uniforms.texture1.value = inputBuffer.texture;
 			combineMaterial.uniforms.texture2.value = renderTarget.texture;
 

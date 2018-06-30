@@ -19,7 +19,7 @@ export class SavePass extends Pass {
 
 		super("SavePass");
 
-		this.material = new CopyMaterial();
+		this.setFullscreenMaterial(new CopyMaterial());
 
 		this.needsSwap = false;
 
@@ -62,7 +62,7 @@ export class SavePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderTarget);
 
