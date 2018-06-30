@@ -339,26 +339,26 @@ export class ToneMappingPass extends Pass {
 		if(this.adaptive) {
 
 			// Render the luminance of the current scene into a render target with mipmapping enabled.
-			this.material = luminosityMaterial;
+			this.setFullscreenMaterial(luminosityMaterial);
 			luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 			renderer.render(scene, camera, renderTargetLuminosity);
 
 			// Use the new luminance values, the previous luminance and the frame delta to adapt the luminance over time.
-			this.material = adaptiveLuminosityMaterial;
+			this.setFullscreenMaterial(adaptiveLuminosityMaterial);
 			adaptiveLuminosityMaterial.uniforms.delta.value = delta;
 			adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;
 			adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;
 			renderer.render(scene, camera, renderTargetAdapted);
 
 			// Copy the new adapted luminance value so that it can be used by the next frame.
-			this.material = copyMaterial;
+			this.setFullscreenMaterial(copyMaterial);
 			copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
 			renderer.render(scene, camera, renderTargetPrevious);
 
 		}
 
 		// Apply the tone mapping to the colours.
-		this.material = toneMappingMaterial;
+		this.setFullscreenMaterial(toneMappingMaterial);
 		toneMappingMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
@@ -374,9 +374,9 @@ export class ToneMappingPass extends Pass {
 
 	initialize(renderer, alpha) {
 
-		this.material = new MeshBasicMaterial({ color: 0x7fffff });
+		this.setFullscreenMaterial(new MeshBasicMaterial({ color: 0x7fffff }));
 		renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-		this.material.dispose();
+		this.getFullscreenMaterial().dispose();
 
 	}
 

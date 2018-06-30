@@ -83,7 +83,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/BloomPass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Vector2, WebGLRenderTarget } from &quot;three&quot;;
 import { CombineMaterial, KernelSize, LuminosityMaterial } from &quot;../materials&quot;;
 import { BlurPass } from &quot;./BlurPass.js&quot;;
 import { Pass } from &quot;./Pass.js&quot;;
@@ -139,6 +139,15 @@ export class BloomPass extends Pass {
 		this.blurPass = new BlurPass(options);
 
 		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
 		 * A combine shader material.
 		 *
 		 * @type {CombineMaterial}
@@ -159,30 +168,6 @@ export class BloomPass extends Pass {
 		this.luminosityMaterial = new LuminosityMaterial(true);
 
 		this.distinction = options.distinction;
-
-	}
-
-	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 */
-
-	get resolutionScale() {
-
-		return this.blurPass.resolutionScale;
-
-	}
-
-	/**
-	 * You need to call {@link EffectComposer#setSize} after changing this value.
-	 *
-	 * @type {Number}
-	 */
-
-	set resolutionScale(value = 0.5) {
-
-		this.blurPass.resolutionScale = value;
 
 	}
 
@@ -316,6 +301,59 @@ export class BloomPass extends Pass {
 	}
 
 	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @deprecated Use {@link getResolutionScale} instead.
+	 */
+
+	get resolutionScale() {
+
+		console.warn(&quot;BloomPass.resolutionScale has been deprecated, please use BloomPass.getResolutionScale()&quot;);
+
+		return this.getResolutionScale();
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use {@link setResolutionScale} instead.
+	 */
+
+	set resolutionScale(value) {
+
+		console.warn(&quot;BloomPass.resolutionScale has been deprecated, please use BloomPass.setResolutionScale(Number)&quot;);
+
+		this.setResolutionScale(value);
+
+	}
+
+	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.blurPass.getResolutionScale();
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.blurPass.setResolutionScale(scale);
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -336,7 +374,7 @@ export class BloomPass extends Pass {
 		const renderTarget = this.renderTarget;
 
 		// Luminance filter.
-		this.material = luminosityMaterial;
+		this.setFullscreenMaterial(luminosityMaterial);
 		luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 		renderer.render(scene, camera, renderTarget);
 
@@ -346,7 +384,7 @@ export class BloomPass extends Pass {
 		if(this.blend) {
 
 			// Render the original scene with superimposed blur.
-			this.material = combineMaterial;
+			this.setFullscreenMaterial(combineMaterial);
 			combineMaterial.uniforms.texture1.value = inputBuffer.texture;
 			combineMaterial.uniforms.texture2.value = renderTarget.texture;
 
@@ -365,8 +403,12 @@ export class BloomPass extends Pass {
 
 	setSize(width, height) {
 
+		// Remember the original resolution.
+		this.resolution.set(width, height);
+
 		this.blurPass.setSize(width, height);
 
+		// The blur pass applies the resolution scale.
 		width = this.blurPass.width;
 		height = this.blurPass.height;
 

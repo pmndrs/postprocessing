@@ -89,6 +89,7 @@
 	MeshDepthMaterial,
 	RGBADepthPacking,
 	RGBFormat,
+	Vector2,
 	WebGLRenderTarget
 } from &quot;three&quot;;
 
@@ -204,6 +205,7 @@ export class OutlinePass extends Pass {
 		 *
 		 * @type {RenderPass}
 		 * @private
+		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
@@ -221,6 +223,7 @@ export class OutlinePass extends Pass {
 		 *
 		 * @type {RenderPass}
 		 * @private
+		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
@@ -239,6 +242,15 @@ export class OutlinePass extends Pass {
 		this.blurPass = new BlurPass(options);
 
 		this.kernelSize = options.kernelSize;
+
+		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
 
 		/**
 		 * A copy pass that renders the read buffer to screen if needed.
@@ -308,30 +320,6 @@ export class OutlinePass extends Pass {
 		 */
 
 		this.selectionLayer = 10;
-
-	}
-
-	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 */
-
-	get resolutionScale() {
-
-		return this.blurPass.resolutionScale;
-
-	}
-
-	/**
-	 * You need to call {@link EffectComposer#setSize} after changing this value.
-	 *
-	 * @type {Number}
-	 */
-
-	set resolutionScale(value = 0.5) {
-
-		this.blurPass.resolutionScale = value;
 
 	}
 
@@ -443,6 +431,59 @@ export class OutlinePass extends Pass {
 	get overlay() {
 
 		return this.outlineBlendMaterial.uniforms.tEdges.value;
+
+	}
+
+	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @deprecated Use {@link getResolutionScale} instead.
+	 */
+
+	get resolutionScale() {
+
+		console.warn(&quot;OutlinePass.resolutionScale has been deprecated, please use OutlinePass.getResolutionScale()&quot;);
+
+		return this.getResolutionScale();
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use {@link setResolutionScale} instead.
+	 */
+
+	set resolutionScale(value) {
+
+		console.warn(&quot;OutlinePass.resolutionScale has been deprecated, please use OutlinePass.setResolutionScale(Number)&quot;);
+
+		this.setResolutionScale(value);
+
+	}
+
+	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.blurPass.getResolutionScale();
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.blurPass.setResolutionScale(scale);
+		this.setSize(this.resolution.x, this.resolution.y);
 
 	}
 
@@ -633,7 +674,7 @@ export class OutlinePass extends Pass {
 			mainScene.background = background;
 
 			// Detect the outline.
-			this.material = this.outlineEdgesMaterial;
+			this.setFullscreenMaterial(this.outlineEdgesMaterial);
 			renderer.render(this.scene, this.camera, this.renderTargetEdges);
 
 			if(this.blurPass.enabled) {
@@ -646,7 +687,7 @@ export class OutlinePass extends Pass {
 			if(this.blend) {
 
 				// Draw the final overlay onto the scene colours.
-				this.material = this.outlineBlendMaterial;
+				this.setFullscreenMaterial(this.outlineBlendMaterial);
 				this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
 				renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
 
@@ -670,6 +711,9 @@ export class OutlinePass extends Pass {
 
 	setSize(width, height) {
 
+		// Remember the original resolution.
+		this.resolution.set(width, height);
+
 		this.renderTargetDepth.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
@@ -677,6 +721,7 @@ export class OutlinePass extends Pass {
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
+		// The blur pass applies the resolution scale.
 		width = this.blurPass.width;
 		height = this.blurPass.height;
 

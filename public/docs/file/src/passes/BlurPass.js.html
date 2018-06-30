@@ -83,7 +83,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/BlurPass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Vector2, WebGLRenderTarget } from &quot;three&quot;;
 import { ConvolutionMaterial, KernelSize } from &quot;../materials&quot;;
 import { Pass } from &quot;./Pass.js&quot;;
 
@@ -135,12 +135,19 @@ export class BlurPass extends Pass {
 		this.renderTargetY.texture.name = &quot;Blur.TargetY&quot;;
 
 		/**
-		 * The resolution scale.
+		 * The original resolution.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this
-		 * value.
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
+		 * The current resolution scale.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
@@ -224,6 +231,31 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.resolutionScale;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.resolutionScale = scale;
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
 	 * Blurs the input buffer and writes the result to the output buffer. The
 	 * input buffer remains intact, unless its also the output buffer.
 	 *
@@ -250,7 +282,7 @@ export class BlurPass extends Pass {
 		let destRT;
 		let i, l;
 
-		this.material = material;
+		this.setFullscreenMaterial(material);
 
 		// Apply the multi-pass blur.
 		for(i = 0, l = kernel.length - 1; i &lt; l; ++i) {
@@ -270,7 +302,7 @@ export class BlurPass extends Pass {
 
 			material = this.ditheredConvolutionMaterial;
 			uniforms = material.uniforms;
-			this.material = material;
+			this.setFullscreenMaterial(material);
 
 		}
 
@@ -288,6 +320,9 @@ export class BlurPass extends Pass {
 	 */
 
 	setSize(width, height) {
+
+		// Remember the original resolution.
+		this.resolution.set(width, height);
 
 		width = Math.max(1, Math.floor(width * this.resolutionScale));
 		height = Math.max(1, Math.floor(height * this.resolutionScale));

@@ -144,7 +144,7 @@ depth test and depth write in their respective shader materials.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, scene: <span>Scene</span>, camera: <span>Camera</span>, quad: <span>Mesh</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, scene: <span>Scene</span>, camera: <span>Camera</span>)</span>
         </p>
       </div>
       <div>
@@ -241,38 +241,9 @@ depth test and depth write in their respective shader materials.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use {@link getFullscreenMaterial} instead.</div>
         
         <div data-ice="description"><p>The fullscreen material.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-set-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the fullscreen material.</p>
 </div>
       </div>
     </td>
@@ -408,6 +379,34 @@ buffers after this pass has finished rendering.</p>
     <td>
       <span class="access" data-ice="access">protected</span>
       
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-set-material">material</a></span></span><span class="code" data-ice="signature">: <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use {@link setFullscreenMaterial} instead.</div>
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -495,8 +494,36 @@ buffers after this pass has finished rendering.</p>
       <div>
         
         
-        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
-deletes them.</p>
+        <div data-ice="description"><p>Performs a shallow search for disposable properties and deletes them.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-getFullscreenMaterial">getFullscreenMaterial</a></span></span><span class="code" data-ice="signature">(): <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current fullscreen material.</p>
 </div>
       </div>
     </td>
@@ -598,6 +625,41 @@ initialized and every time its own size is updated.</p>
   </tr>
 </tbody>
 </table>
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Protected Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setFullscreenMaterial">setFullscreenMaterial</a></span></span><span class="code" data-ice="signature">(material: <span>Material</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fullscreen material.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
 </div>
 
 
@@ -614,11 +676,11 @@ initialized and every time its own size is updated.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, scene: <span>Scene</span>, camera: <span>Camera</span>, quad: <span>Mesh</span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(name: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, scene: <span>Scene</span>, camera: <span>Camera</span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber23">source</a></span></span>
     </span>
   </h3>
 
@@ -642,28 +704,21 @@ initialized and every time its own size is updated.</p>
       <td data-ice="name" class="code" data-depth="0">name</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The name of this pass.</p>
+      <td data-ice="description"><p>The name of this pass. Does not have to be unique.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">scene</td>
       <td data-ice="type" class="code"><span>Scene</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The scene to render.</p>
+      <td data-ice="description"><p>The scene to render. The default scene contains a single mesh that fills the screen.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">camera</td>
       <td data-ice="type" class="code"><span>Camera</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The camera.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">quad</td>
-      <td data-ice="type" class="code"><span>Mesh</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>A quad that fills the screen to render 2D filter effects. Set this to null, if you don&apos;t need it (see <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span>).</p>
+      <td data-ice="description"><p>The camera. The default camera perfectly captures the screen mesh.</p>
 </td>
     </tr>
 </tbody>
@@ -703,7 +758,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber250">source</a></span></span>
     </span>
   </h3>
 
@@ -746,7 +801,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -790,59 +845,14 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber97">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use {@link getFullscreenMaterial} instead.</div>
   
   <div data-ice="description"><p>The fullscreen material.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-material">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">material</span><span class="code" data-ice="signature">: <span>Material</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber128">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the fullscreen material.</p>
-<p>The material will be assigned to the quad mesh that fills the screen.</p>
 </div>
 
   
@@ -879,7 +889,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -923,7 +933,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber86">source</a></span></span>
     </span>
   </h3>
 
@@ -970,7 +980,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -1016,7 +1026,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber55">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -1025,6 +1035,49 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
   
   <div data-ice="description"><p>The camera.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-material">
+    <span class="access" data-ice="access">protected</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">material</span><span class="code" data-ice="signature">: <span>Material</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber111">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use {@link setFullscreenMaterial} instead.</div>
+  
+  
 
   
 
@@ -1060,7 +1113,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -1106,7 +1159,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
@@ -1153,20 +1206,20 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber208">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
-deletes them. The pass will be inoperative after this method was called!</p>
+  <div data-ice="description"><p>Performs a shallow search for disposable properties and deletes them. The
+pass will be inoperative after this method was called!</p>
 <p>Disposable objects:</p>
 <ul>
-<li>render targets</li>
-<li>materials</li>
-<li>textures</li>
+<li>WebGLRenderTarget</li>
+<li>Material</li>
+<li>Texture</li>
 </ul>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method when it is being destroyed.
 You may, however, use it independently to free memory when you are certain
@@ -1196,6 +1249,63 @@ that you don&apos;t need this pass anymore.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getFullscreenMaterial">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getFullscreenMaterial</span><span class="code" data-ice="signature">(): <span>Material</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber125">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the current fullscreen material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>Material</span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The current fullscreen material, or null if there is none.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-initialize">
     <span class="access" data-ice="access">public</span>
     
@@ -1207,7 +1317,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1289,7 +1399,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber152">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
@@ -1391,7 +1501,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber199">source</a></span></span>
     </span>
   </h3>
 
@@ -1452,6 +1562,71 @@ initialized and every time its own size is updated.</p>
       <pre class="prettyprint source-code"><code data-ice="exampleCode">this.myRenderTarget.setSize(width, height);</code></pre>
     </div>
 </div>
+
+  
+
+  
+  
+</div>
+<h2 data-ice="title">Protected Methods</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setFullscreenMaterial">
+    <span class="access" data-ice="access">protected</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setFullscreenMaterial</span><span class="code" data-ice="signature">(material: <span>Material</span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber141">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the fullscreen material.</p>
+<p>The material will be assigned to the quad mesh that fills the screen. The
+screen quad will be created once a material is assigned via this method.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">material</td>
+      <td data-ice="type" class="code"><span>Material</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A fullscreen material.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
 
   
 

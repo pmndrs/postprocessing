@@ -371,7 +371,7 @@ for further processing.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use {@link getFullscreenMaterial} instead.</div>
         
         <div data-ice="description"><p>The fullscreen material.</p>
 </div>
@@ -384,7 +384,7 @@ for further processing.</p>
   </tr>
 <tr data-ice="target">
     <td>
-      <span class="access" data-ice="access">public</span>
+      <span class="access" data-ice="access">protected</span>
       
       <span class="kind" data-ice="kind">set</span>
       
@@ -400,10 +400,9 @@ for further processing.</p>
         </p>
       </div>
       <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use {@link setFullscreenMaterial} instead.</div>
         
         
-        <div data-ice="description"><p>Sets the fullscreen material.</p>
-</div>
       </div>
     </td>
     <td>
@@ -663,8 +662,36 @@ buffers after this pass has finished rendering.</p>
       <div>
         
         
-        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
-deletes them.</p>
+        <div data-ice="description"><p>Performs a shallow search for disposable properties and deletes them.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-getFullscreenMaterial">getFullscreenMaterial</a></span></span><span class="code" data-ice="signature">(): <span>Material</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the current fullscreen material.</p>
 </div>
       </div>
     </td>
@@ -756,6 +783,35 @@ deletes them.</p>
 render size.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
 initialized and every time its own size is updated.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-setFullscreenMaterial">setFullscreenMaterial</a></span></span><span class="code" data-ice="signature">(material: <span>Material</span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fullscreen material.</p>
 </div>
       </div>
     </td>
