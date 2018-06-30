@@ -124,7 +124,7 @@ export class DepthDemo extends PostProcessingDemo {
 
 		const pass = this.renderPass;
 
-		menu.add(pass.overrideMaterial, "dithering").onChange(function() {
+		menu.add(pass.overrideMaterial, "dithering").onChange(() => {
 
 			pass.overrideMaterial.needsUpdate = true;
 

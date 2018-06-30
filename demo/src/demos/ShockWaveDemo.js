@@ -174,42 +174,38 @@ export class ShockWaveDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const pass = this.shockWavePass;
+		const material = pass.shockWaveMaterial;
 
 		const params = {
-			"speed": pass.speed,
-			"size": pass.shockWaveMaterial.uniforms.size.value,
-			"extent": pass.shockWaveMaterial.uniforms.maxRadius.value,
-			"waveSize": pass.shockWaveMaterial.uniforms.waveSize.value,
-			"amplitude": pass.shockWaveMaterial.uniforms.amplitude.value
+			"size": material.uniforms.size.value,
+			"extent": material.uniforms.maxRadius.value,
+			"waveSize": material.uniforms.waveSize.value,
+			"amplitude": material.uniforms.amplitude.value
 		};
 
-		menu.add(params, "speed").min(0.0).max(10.0).step(0.001).onChange(function() {
+		menu.add(pass, "speed").min(0.0).max(10.0).step(0.001);
 
-			pass.speed = params.speed;
+		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(() => {
 
-		});
-
-		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function() {
-
-			pass.shockWaveMaterial.uniforms.size.value = params.size;
+			material.uniforms.size.value = params.size;
 
 		});
 
-		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function() {
+		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(() => {
 
-			pass.shockWaveMaterial.uniforms.maxRadius.value = params.extent;
-
-		});
-
-		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function() {
-
-			pass.shockWaveMaterial.uniforms.waveSize.value = params.waveSize;
+			material.uniforms.maxRadius.value = params.extent;
 
 		});
 
-		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function() {
+		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(() => {
 
-			pass.shockWaveMaterial.uniforms.amplitude.value = params.amplitude;
+			material.uniforms.waveSize.value = params.waveSize;
+
+		});
+
+		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(() => {
+
+			material.uniforms.amplitude.value = params.amplitude;
 
 		});
 

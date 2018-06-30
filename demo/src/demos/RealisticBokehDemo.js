@@ -184,71 +184,71 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.bokehPass;
+		const material = this.bokehPass.getFullscreenMaterial();
 
 		const params = {
-			"rings": Number.parseInt(pass.material.defines.RINGS_INT),
-			"samples": Number.parseInt(pass.material.defines.SAMPLES_INT),
-			"focal stop": pass.material.uniforms.focalStop.value,
-			"focal length": pass.material.uniforms.focalLength.value,
-			"shader focus": pass.material.defines.SHADER_FOCUS !== undefined,
-			"focal depth": pass.material.uniforms.focalDepth.value,
-			"focus coord X": pass.material.uniforms.focusCoords.value.x,
-			"focus coord Y": pass.material.uniforms.focusCoords.value.y,
-			"max blur": pass.material.uniforms.maxBlur.value,
-			"lum threshold": pass.material.uniforms.luminanceThreshold.value,
-			"lum gain": pass.material.uniforms.luminanceGain.value,
-			"bias": pass.material.uniforms.bias.value,
-			"fringe": pass.material.uniforms.fringe.value,
-			"dithering": pass.material.uniforms.ditherStrength.value,
-			"vignette": pass.material.defines.VIGNETTE !== undefined,
-			"pentagon": pass.material.defines.PENTAGON !== undefined,
-			"manual DoF": pass.material.defines.MANUAL_DOF !== undefined,
-			"show focus": pass.material.defines.SHOW_FOCUS !== undefined,
-			"noise": pass.material.defines.NOISE !== undefined
+			"rings": Number.parseInt(material.defines.RINGS_INT),
+			"samples": Number.parseInt(material.defines.SAMPLES_INT),
+			"focal stop": material.uniforms.focalStop.value,
+			"focal length": material.uniforms.focalLength.value,
+			"shader focus": material.defines.SHADER_FOCUS !== undefined,
+			"focal depth": material.uniforms.focalDepth.value,
+			"focus coord X": material.uniforms.focusCoords.value.x,
+			"focus coord Y": material.uniforms.focusCoords.value.y,
+			"max blur": material.uniforms.maxBlur.value,
+			"lum threshold": material.uniforms.luminanceThreshold.value,
+			"lum gain": material.uniforms.luminanceGain.value,
+			"bias": material.uniforms.bias.value,
+			"fringe": material.uniforms.fringe.value,
+			"dithering": material.uniforms.ditherStrength.value,
+			"vignette": material.defines.VIGNETTE !== undefined,
+			"pentagon": material.defines.PENTAGON !== undefined,
+			"manual DoF": material.defines.MANUAL_DOF !== undefined,
+			"show focus": material.defines.SHOW_FOCUS !== undefined,
+			"noise": material.defines.NOISE !== undefined
 		};
 
 		let f = menu.addFolder("Focus");
 
-		f.add(params, "show focus").onChange(function() {
+		f.add(params, "show focus").onChange(() => {
 
-			pass.material.setShowFocusEnabled(params["show focus"]);
-
-		});
-
-		f.add(params, "shader focus").onChange(function() {
-
-			pass.material.setShaderFocusEnabled(params["shader focus"]);
+			material.setShowFocusEnabled(params["show focus"]);
 
 		});
 
-		f.add(params, "manual DoF").onChange(function() {
+		f.add(params, "shader focus").onChange(() => {
 
-			pass.material.setManualDepthOfFieldEnabled(params["manual DoF"]);
-
-		});
-
-		f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function() {
-
-			pass.material.uniforms.focalStop.value = params["focal stop"];
+			material.setShaderFocusEnabled(params["shader focus"]);
 
 		});
 
-		f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function() {
+		f.add(params, "manual DoF").onChange(() => {
 
-			pass.material.uniforms.focalDepth.value = params["focal depth"];
-
-		});
-
-		f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function() {
-
-			pass.material.uniforms.focusCoords.value.x = params["focus coord X"];
+			material.setManualDepthOfFieldEnabled(params["manual DoF"]);
 
 		});
 
-		f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(() => {
 
-			pass.material.uniforms.focusCoords.value.y = params["focus coord Y"];
+			material.uniforms.focalStop.value = params["focal stop"];
+
+		});
+
+		f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(() => {
+
+			material.uniforms.focalDepth.value = params["focal depth"];
+
+		});
+
+		f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			material.uniforms.focusCoords.value.x = params["focus coord X"];
+
+		});
+
+		f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			material.uniforms.focusCoords.value.y = params["focus coord Y"];
 
 		});
 
@@ -256,57 +256,57 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Sampling");
 
-		f.add(params, "rings").min(1).max(6).step(1).onChange(function() {
+		f.add(params, "rings").min(1).max(6).step(1).onChange(() => {
 
-			pass.material.defines.RINGS_INT = params.rings.toFixed(0);
-			pass.material.defines.RINGS_FLOAT = params.rings.toFixed(1);
-			pass.material.needsUpdate = true;
+			material.defines.RINGS_INT = params.rings.toFixed(0);
+			material.defines.RINGS_FLOAT = params.rings.toFixed(1);
+			material.needsUpdate = true;
 
 		});
 
-		f.add(params, "samples").min(1).max(6).step(1).onChange(function() {
+		f.add(params, "samples").min(1).max(6).step(1).onChange(() => {
 
-			pass.material.defines.SAMPLES_INT = params.samples.toFixed(0);
-			pass.material.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
-			pass.material.needsUpdate = true;
+			material.defines.SAMPLES_INT = params.samples.toFixed(0);
+			material.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
+			material.needsUpdate = true;
 
 		});
 
 		f = menu.addFolder("Blur");
 
-		f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(function() {
+		f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(() => {
 
-			pass.material.uniforms.maxBlur.value = params["max blur"];
-
-		});
-
-		f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function() {
-
-			pass.material.uniforms.bias.value = params.bias;
+			material.uniforms.maxBlur.value = params["max blur"];
 
 		});
 
-		f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function() {
+		f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(() => {
 
-			pass.material.uniforms.fringe.value = params.fringe;
-
-		});
-
-		f.add(params, "noise").onChange(function() {
-
-			pass.material.setNoiseEnabled(params.noise);
+			material.uniforms.bias.value = params.bias;
 
 		});
 
-		f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function() {
+		f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(() => {
 
-			pass.material.uniforms.ditherStrength.value = params.dithering;
+			material.uniforms.fringe.value = params.fringe;
 
 		});
 
-		f.add(params, "pentagon").onChange(function() {
+		f.add(params, "noise").onChange(() => {
 
-			pass.material.setPentagonEnabled(params.pentagon);
+			material.setNoiseEnabled(params.noise);
+
+		});
+
+		f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(() => {
+
+			material.uniforms.ditherStrength.value = params.dithering;
+
+		});
+
+		f.add(params, "pentagon").onChange(() => {
+
+			material.setPentagonEnabled(params.pentagon);
 
 		});
 
@@ -314,21 +314,21 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Luminosity");
 
-		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.material.uniforms.luminanceThreshold.value = params["lum threshold"];
-
-		});
-
-		f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function() {
-
-			pass.material.uniforms.luminanceGain.value = params["lum gain"];
+			material.uniforms.luminanceThreshold.value = params["lum threshold"];
 
 		});
 
-		menu.add(params, "vignette").onChange(function() {
+		f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(() => {
 
-			pass.material.setVignetteEnabled(params.vignette);
+			material.uniforms.luminanceGain.value = params["lum gain"];
+
+		});
+
+		menu.add(params, "vignette").onChange(() => {
+
+			material.setVignetteEnabled(params.vignette);
 
 		});
 

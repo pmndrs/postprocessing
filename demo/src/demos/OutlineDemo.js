@@ -364,14 +364,14 @@ export class OutlineDemo extends PostProcessingDemo {
 			"x-ray": true
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			pass.resolutionScale = params.resolution;
 			composer.setSize();
 
 		});
 
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
 
 			pass.kernelSize = params["kernel size"];
 
@@ -380,49 +380,49 @@ export class OutlineDemo extends PostProcessingDemo {
 		menu.add(pass, "blur");
 		menu.add(pass, "dithering");
 
-		menu.add(params, "use pattern").onChange(function() {
+		menu.add(params, "use pattern").onChange(() => {
 
 			pass.setPatternTexture(params["use pattern"] ? assets.get("pattern-color") : null);
 
 		});
 
-		menu.add(params, "pattern scale").min(1.0).max(10.0).step(0.01).onChange(function() {
+		menu.add(params, "pattern scale").min(1.0).max(10.0).step(0.01).onChange(() => {
 
 			pass.outlineBlendMaterial.uniforms.patternScale.value = params["pattern scale"];
 
 		});
 
-		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(function() {
+		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(() => {
 
 			pass.outlineBlendMaterial.uniforms.edgeStrength.value = params["edge strength"];
 
 		});
 
-		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(function() {
+		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(() => {
 
 			pass.pulseSpeed = params["pulse speed"];
 
 		});
 
-		menu.addColor(params, "visible edge").onChange(function() {
+		menu.addColor(params, "visible edge").onChange(() => {
 
 			pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.setHex(params["visible edge"]);
 
 		});
 
-		menu.addColor(params, "hidden edge").onChange(function() {
+		menu.addColor(params, "hidden edge").onChange(() => {
 
 			pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.setHex(params["hidden edge"]);
 
 		});
 
-		menu.add(params, "alpha blending").onChange(function() {
+		menu.add(params, "alpha blending").onChange(() => {
 
 			pass.outlineBlendMaterial.setAlphaBlendingEnabled(params["alpha blending"]);
 
 		});
 
-		menu.add(params, "x-ray").onChange(function() {
+		menu.add(params, "x-ray").onChange(() => {
 
 			pass.outlineBlendMaterial.setXRayEnabled(params["x-ray"]);
 

@@ -244,13 +244,13 @@ export class GlitchDemo extends PostProcessingDemo {
 			"custom noise": true
 		};
 
-		menu.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function() {
+		menu.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(() => {
 
 			pass.mode = params.mode;
 
 		});
 
-		menu.add(params, "custom noise").onChange(function() {
+		menu.add(params, "custom noise").onChange(() => {
 
 			if(params["custom noise"]) {
 

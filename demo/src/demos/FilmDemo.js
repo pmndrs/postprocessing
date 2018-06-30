@@ -243,16 +243,17 @@ export class FilmDemo extends PostProcessingDemo {
 
 		const composer = this.composer;
 		const pass = this.filmPass;
-		const uniforms = pass.material.uniforms;
+		const material = pass.getFullscreenMaterial();
+		const uniforms = material.uniforms;
 
 		const params = {
-			"greyscale": pass.material.defines.GREYSCALE !== undefined,
-			"sepia": pass.material.defines.SEPIA !== undefined,
-			"vignette": pass.material.defines.VIGNETTE !== undefined,
-			"eskil": pass.material.defines.ESKIL !== undefined,
-			"noise": pass.material.defines.NOISE !== undefined,
-			"scanlines": pass.material.defines.SCANLINES !== undefined,
-			"grid": pass.material.defines.GRID !== undefined,
+			"greyscale": material.defines.GREYSCALE !== undefined,
+			"sepia": material.defines.SEPIA !== undefined,
+			"vignette": material.defines.VIGNETTE !== undefined,
+			"eskil": material.defines.ESKIL !== undefined,
+			"noise": material.defines.NOISE !== undefined,
+			"scanlines": material.defines.SCANLINES !== undefined,
+			"grid": material.defines.GRID !== undefined,
 			"noise intensity": uniforms.noiseIntensity.value,
 			"scanlines intensity": uniforms.scanlineIntensity.value,
 			"grid intensity": uniforms.gridIntensity.value,
@@ -268,13 +269,13 @@ export class FilmDemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Greyscale");
 
-		f.add(params, "greyscale").onChange(function() {
+		f.add(params, "greyscale").onChange(() => {
 
-			pass.material.setGreyscaleEnabled(params.greyscale);
+			material.setGreyscaleEnabled(params.greyscale);
 
 		});
 
-		f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.greyscaleIntensity.value = params["greyscale intensity"];
 
@@ -282,61 +283,61 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Noise, Scanlines and Grid");
 
-		f.add(params, "blend mode", ["add", "screen"]).onChange(function() {
+		f.add(params, "blend mode", ["add", "screen"]).onChange(() => {
 
-			pass.material.setScreenModeEnabled(params["blend mode"] !== "add");
-
-		});
-
-		f.add(params, "noise").onChange(function() {
-
-			pass.material.setNoiseEnabled(params.noise);
+			material.setScreenModeEnabled(params["blend mode"] !== "add");
 
 		});
 
-		f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "noise").onChange(() => {
+
+			material.setNoiseEnabled(params.noise);
+
+		});
+
+		f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.noiseIntensity.value = params["noise intensity"];
 
 		});
 
-		f.add(params, "scanlines").onChange(function() {
+		f.add(params, "scanlines").onChange(() => {
 
-			pass.material.setScanlinesEnabled(params.scanlines);
+			material.setScanlinesEnabled(params.scanlines);
 
 		});
 
-		f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.scanlineIntensity.value = params["scanlines intensity"];
 
 		});
 
-		f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function() {
+		f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(() => {
 
 			pass.scanlineDensity = params["scanlines count"]; composer.setSize();
 
 		});
 
-		f.add(params, "grid").onChange(function() {
+		f.add(params, "grid").onChange(() => {
 
-			pass.material.setGridEnabled(params.grid);
+			material.setGridEnabled(params.grid);
 
 		});
 
-		f.add(params, "grid intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "grid intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.gridIntensity.value = params["grid intensity"];
 
 		});
 
-		f.add(params, "grid scale").min(0.01).max(2.0).step(0.01).onChange(function() {
+		f.add(params, "grid scale").min(0.01).max(2.0).step(0.01).onChange(() => {
 
 			pass.gridScale = params["grid scale"]; composer.setSize();
 
 		});
 
-		f.add(params, "grid line width").min(0.0).max(1.0).step(0.001).onChange(function() {
+		f.add(params, "grid line width").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			pass.gridLineWidth = params["grid line width"]; composer.setSize();
 
@@ -344,13 +345,13 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Sepia");
 
-		f.add(params, "sepia").onChange(function() {
+		f.add(params, "sepia").onChange(() => {
 
-			pass.material.setSepiaEnabled(params.sepia);
+			material.setSepiaEnabled(params.sepia);
 
 		});
 
-		f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.sepiaIntensity.value = params["sepia intensity"];
 
@@ -358,25 +359,25 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Vignette");
 
-		f.add(params, "vignette").onChange(function() {
+		f.add(params, "vignette").onChange(() => {
 
-			pass.material.setVignetteEnabled(params.vignette);
-
-		});
-
-		f.add(params, "eskil").onChange(function() {
-
-			pass.material.setEskilEnabled(params.eskil);
+			material.setVignetteEnabled(params.vignette);
 
 		});
 
-		f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "eskil").onChange(() => {
+
+			material.setEskilEnabled(params.eskil);
+
+		});
+
+		f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.vignetteOffset.value = params["vignette offset"];
 
 		});
 
-		f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			uniforms.vignetteDarkness.value = params["vignette darkness"];
 

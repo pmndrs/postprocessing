@@ -262,19 +262,19 @@ export class BlurDemo extends PostProcessingDemo {
 			"strength": texturePass.opacityDestination
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			blurPass.resolutionScale = params.resolution; composer.setSize();
 
 		});
 
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function() {
+		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
 
 			blurPass.kernelSize = params["kernel size"];
 
 		});
 
-		menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			texturePass.opacityDestination = params.strength;
 			texturePass.opacitySource = 1.0 - params.strength;
@@ -283,7 +283,7 @@ export class BlurDemo extends PostProcessingDemo {
 
 		menu.add(blurPass, "dithering");
 
-		menu.add(params, "enabled").onChange(function() {
+		menu.add(params, "enabled").onChange(() => {
 
 			renderPass.renderToScreen = !params.enabled;
 			blurPass.enabled = params.enabled;

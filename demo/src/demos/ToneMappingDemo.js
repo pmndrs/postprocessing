@@ -239,7 +239,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
 		};
 
-		menu.add(params, "resolution").min(6).max(11).step(1).onChange(function() {
+		menu.add(params, "resolution").min(6).max(11).step(1).onChange(() => {
 
 			pass.resolution = Math.pow(2, params.resolution);
 
@@ -250,37 +250,37 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Luminance");
 
-		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function() {
+		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(() => {
 
 			pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
 
 		});
 
-		f.add(params, "adaption rate").min(1.0).max(3.0).step(0.01).onChange(function() {
+		f.add(params, "adaption rate").min(1.0).max(3.0).step(0.01).onChange(() => {
 
 			pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
 
 		});
 
-		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(() => {
 
 			pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
 
 		});
 
-		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"];
 
 		});
 
-		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function() {
+		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(() => {
 
 			pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
 
 		});
 
-		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
 

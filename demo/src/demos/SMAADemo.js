@@ -453,13 +453,13 @@ export class SMAADemo extends PostProcessingDemo {
 		menu.add(params, "browser AA").onChange(swapRenderers);
 		menu.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
 
-		menu.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(function() {
+		menu.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(() => {
 
 			smaaPass.colorEdgesMaterial.setEdgeDetectionThreshold(params.sensitivity);
 
 		});
 
-		menu.add(params, "search steps").min(8).max(112).step(1).onChange(function() {
+		menu.add(params, "search steps").min(8).max(112).step(1).onChange(() => {
 
 			smaaPass.weightsMaterial.setOrthogonalSearchSteps(params["search steps"]);
 

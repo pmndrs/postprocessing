@@ -279,7 +279,7 @@ export class PixelationDemo extends PostProcessingDemo {
 
 		menu.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
 
-		menu.add(params, "use mask").onChange(function() {
+		menu.add(params, "use mask").onChange(() => {
 
 			maskPass.enabled = params["use mask"];
 

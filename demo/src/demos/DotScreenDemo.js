@@ -228,52 +228,52 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.dotScreenPass;
+		const material = this.dotScreenPass.getFullscreenMaterial();
 
 		const params = {
-			"average": pass.material.defines.AVERAGE !== undefined,
-			"scale": pass.material.uniforms.scale.value,
-			"angle": pass.material.uniforms.angle.value,
-			"intensity": pass.material.uniforms.intensity.value,
-			"center X": pass.material.uniforms.offsetRepeat.value.x,
-			"center Y": pass.material.uniforms.offsetRepeat.value.y
+			"average": material.defines.AVERAGE !== undefined,
+			"scale": material.uniforms.scale.value,
+			"angle": material.uniforms.angle.value,
+			"intensity": material.uniforms.intensity.value,
+			"center X": material.uniforms.offsetRepeat.value.x,
+			"center Y": material.uniforms.offsetRepeat.value.y
 		};
 
-		menu.add(params, "average").onChange(function() {
+		menu.add(params, "average").onChange(() => {
 
-			pass.material.setAverageEnabled(params.average);
-
-		});
-
-		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function() {
-
-			pass.material.uniforms.scale.value = params.scale;
+			material.setAverageEnabled(params.average);
 
 		});
 
-		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function() {
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.material.uniforms.angle.value = params.angle;
+			material.uniforms.scale.value = params.scale;
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function() {
+		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
 
-			pass.material.uniforms.intensity.value = params.intensity;
+			material.uniforms.angle.value = params.angle;
+
+		});
+
+		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			material.uniforms.intensity.value = params.intensity;
 
 		});
 
 		const f = menu.addFolder("Center");
 
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.material.uniforms.offsetRepeat.value.x = params["center X"];
+			material.uniforms.offsetRepeat.value.x = params["center X"];
 
 		});
 
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function() {
+		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.material.uniforms.offsetRepeat.value.y = params["center Y"];
+			material.uniforms.offsetRepeat.value.y = params["center Y"];
 
 		});
 
