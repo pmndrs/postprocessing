@@ -1,5 +1,5 @@
 import test from "ava";
-import { TexturePass } from "../../build/bundle.js";
+import { TexturePass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

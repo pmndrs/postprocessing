@@ -1,5 +1,5 @@
 import test from "ava";
-import { PixelationPass } from "../../build/bundle.js";
+import { PixelationPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

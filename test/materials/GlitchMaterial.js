@@ -1,5 +1,5 @@
 import test from "ava";
-import { GlitchMaterial } from "../../build/bundle.js";
+import { GlitchMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { RealisticBokehPass } from "../../build/bundle.js";
+import { RealisticBokehPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

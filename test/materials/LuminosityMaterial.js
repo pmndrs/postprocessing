@@ -1,5 +1,5 @@
 import test from "ava";
-import { LuminosityMaterial } from "../../build/bundle.js";
+import { LuminosityMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

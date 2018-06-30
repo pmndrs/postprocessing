@@ -1,5 +1,5 @@
 import test from "ava";
-import { OutlineBlendMaterial } from "../../build/bundle.js";
+import { OutlineBlendMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

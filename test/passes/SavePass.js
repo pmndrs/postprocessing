@@ -1,5 +1,5 @@
 import test from "ava";
-import { SavePass } from "../../build/bundle.js";
+import { SavePass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

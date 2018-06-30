@@ -1,5 +1,5 @@
 import test from "ava";
-import { PixelationMaterial } from "../../build/bundle.js";
+import { PixelationMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

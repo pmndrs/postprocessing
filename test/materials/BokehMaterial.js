@@ -1,5 +1,5 @@
 import test from "ava";
-import { BokehMaterial } from "../../build/bundle.js";
+import { BokehMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

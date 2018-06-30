@@ -1,5 +1,5 @@
 import test from "ava";
-import { CombineMaterial } from "../../build/bundle.js";
+import { CombineMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

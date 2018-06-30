@@ -1,5 +1,5 @@
 import test from "ava";
-import { BloomPass } from "../../build/bundle.js";
+import { BloomPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

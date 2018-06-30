@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAPass } from "../../build/bundle.js";
+import { SMAAPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

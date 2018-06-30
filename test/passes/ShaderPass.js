@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShaderPass } from "../../build/bundle.js";
+import { ShaderPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

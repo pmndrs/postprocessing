@@ -1,5 +1,5 @@
 import test from "ava";
-import { ConvolutionMaterial } from "../../build/bundle.js";
+import { ConvolutionMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

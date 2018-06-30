@@ -1,5 +1,5 @@
 import test from "ava";
-import { GodRaysPass } from "../../build/bundle.js";
+import { GodRaysPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

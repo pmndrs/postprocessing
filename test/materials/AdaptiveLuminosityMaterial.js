@@ -1,5 +1,5 @@
 import test from "ava";
-import { AdaptiveLuminosityMaterial } from "../../build/bundle.js";
+import { AdaptiveLuminosityMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

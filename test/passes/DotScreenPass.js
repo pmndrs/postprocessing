@@ -1,5 +1,5 @@
 import test from "ava";
-import { DotScreenPass } from "../../build/bundle.js";
+import { DotScreenPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShockWaveMaterial } from "../../build/bundle.js";
+import { ShockWaveMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

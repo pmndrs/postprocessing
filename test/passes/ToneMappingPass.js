@@ -1,5 +1,5 @@
 import test from "ava";
-import { ToneMappingPass } from "../../build/bundle.js";
+import { ToneMappingPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

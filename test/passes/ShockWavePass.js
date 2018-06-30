@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShockWavePass } from "../../build/bundle.js";
+import { ShockWavePass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

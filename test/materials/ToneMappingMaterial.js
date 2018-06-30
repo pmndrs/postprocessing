@@ -1,5 +1,5 @@
 import test from "ava";
-import { ToneMappingMaterial } from "../../build/bundle.js";
+import { ToneMappingMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

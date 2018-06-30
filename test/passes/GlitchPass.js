@@ -1,5 +1,5 @@
 import test from "ava";
-import { GlitchPass } from "../../build/bundle.js";
+import { GlitchPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

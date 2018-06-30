@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAABlendMaterial } from "../../build/bundle.js";
+import { SMAABlendMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

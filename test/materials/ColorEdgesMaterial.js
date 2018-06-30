@@ -1,5 +1,5 @@
 import test from "ava";
-import { ColorEdgesMaterial } from "../../build/bundle.js";
+import { ColorEdgesMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 

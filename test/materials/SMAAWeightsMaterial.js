@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAWeightsMaterial } from "../../build/bundle.js";
+import { SMAAWeightsMaterial } from "../../build/postprocessing.js";
 
 test("can be created", t => {
 
