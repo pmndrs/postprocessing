@@ -5247,7 +5247,7 @@
 		 * The fullscreen material.
 		 *
 		 * @type {Material}
-		 * @deprecated Use {@link getFullscreenMaterial} instead.
+		 * @deprecated Use getFullscreenMaterial() instead.
 		 */
 
 		get material() {
@@ -5261,7 +5261,7 @@
 		/**
 		 * @protected
 		 * @type {Material}
-		 * @deprecated Use {@link setFullscreenMaterial} instead.
+		 * @deprecated Use setFullscreenMaterial(Material) instead.
 		 */
 
 		set material(value) {
@@ -5897,7 +5897,7 @@
 		 * The resolution scale.
 		 *
 		 * @type {Number}
-		 * @deprecated Use {@link getResolutionScale} instead.
+		 * @deprecated Use getResolutionScale() instead.
 		 */
 
 		get resolutionScale() {
@@ -5910,7 +5910,7 @@
 
 		/**
 		 * @type {Number}
-		 * @deprecated Use {@link setResolutionScale} instead.
+		 * @deprecated Use setResolutionScale(Number) instead.
 		 */
 
 		set resolutionScale(value) {
@@ -7134,7 +7134,7 @@
 		 * The resolution scale.
 		 *
 		 * @type {Number}
-		 * @deprecated Use {@link getResolutionScale} instead.
+		 * @deprecated Use getResolutionScale() instead.
 		 */
 
 		get resolutionScale() {
@@ -7147,7 +7147,7 @@
 
 		/**
 		 * @type {Number}
-		 * @deprecated Use {@link setResolutionScale} instead.
+		 * @deprecated Use setResolutionScale(Number) instead.
 		 */
 
 		set resolutionScale(value) {
@@ -7811,7 +7811,7 @@
 		 * The resolution scale.
 		 *
 		 * @type {Number}
-		 * @deprecated Use {@link getResolutionScale} instead.
+		 * @deprecated Use getResolutionScale() instead.
 		 */
 
 		get resolutionScale() {
@@ -7824,7 +7824,7 @@
 
 		/**
 		 * @type {Number}
-		 * @deprecated Use {@link setResolutionScale} instead.
+		 * @deprecated Use setResolutionScale(Number) instead.
 		 */
 
 		set resolutionScale(value) {
