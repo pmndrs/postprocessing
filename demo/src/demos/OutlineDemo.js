@@ -348,11 +348,10 @@ export class OutlineDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const assets = this.assets;
-		const composer = this.composer;
 		const pass = this.outlinePass;
 
 		const params = {
-			"resolution": pass.resolutionScale,
+			"resolution": pass.getResolutionScale(),
 			"kernel size": pass.kernelSize,
 			"use pattern": false,
 			"pattern scale": pass.outlineBlendMaterial.uniforms.patternScale.value,
@@ -366,8 +365,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.resolutionScale = params.resolution;
-			composer.setSize();
+			pass.setResolutionScale(params.resolution);
 
 		});
 

@@ -4,6 +4,7 @@ import {
 	MeshBasicMaterial,
 	RGBFormat,
 	Scene,
+	Vector2,
 	Vector3,
 	WebGLRenderTarget
 } from "three";
@@ -162,6 +163,15 @@ export class GodRaysPass extends Pass {
 		this.blurPass = new BlurPass(options);
 
 		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
 		 * The light source.
 		 *
 		 * @type {Object3D}
@@ -200,30 +210,6 @@ export class GodRaysPass extends Pass {
 		this.combineMaterial = new CombineMaterial((options.screenMode !== undefined) ? options.screenMode : true);
 
 		this.intensity = options.intensity;
-
-	}
-
-	/**
-	 * The resolution scale.
-	 *
-	 * @type {Number}
-	 */
-
-	get resolutionScale() {
-
-		return this.blurPass.resolutionScale;
-
-	}
-
-	/**
-	 * You need to call {@link EffectComposer#setSize} after changing this value.
-	 *
-	 * @type {Number}
-	 */
-
-	set resolutionScale(value = 0.5) {
-
-		this.blurPass.resolutionScale = value;
 
 	}
 
@@ -369,6 +355,59 @@ export class GodRaysPass extends Pass {
 	}
 
 	/**
+	 * The resolution scale.
+	 *
+	 * @type {Number}
+	 * @deprecated Use {@link getResolutionScale} instead.
+	 */
+
+	get resolutionScale() {
+
+		console.warn("GodRaysPass.resolutionScale has been deprecated, please use GodRaysPass.getResolutionScale()");
+
+		return this.getResolutionScale();
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use {@link setResolutionScale} instead.
+	 */
+
+	set resolutionScale(value) {
+
+		console.warn("GodRaysPass.resolutionScale has been deprecated, please use GodRaysPass.setResolutionScale(Number)");
+
+		this.setResolutionScale(value);
+
+	}
+
+	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.blurPass.getResolutionScale();
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.blurPass.setResolutionScale(scale);
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -449,10 +488,14 @@ export class GodRaysPass extends Pass {
 
 	setSize(width, height) {
 
+		// Remember the original resolution.
+		this.resolution.set(width, height);
+
 		this.renderPassLight.setSize(width, height);
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
+		// The blur pass applies the resolution scale.
 		width = this.blurPass.width;
 		height = this.blurPass.height;
 

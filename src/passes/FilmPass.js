@@ -1,3 +1,4 @@
+import { Vector2 } from "three";
 import { FilmMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -25,12 +26,19 @@ export class FilmPass extends Pass {
 		this.setFullscreenMaterial(new FilmMaterial(options));
 
 		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
 		 * The amount of scanlines, relative to the screen height.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this
-		 * value.
-		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.scanlineDensity = (options.scanlineDensity === undefined) ? 1.25 : options.scanlineDensity;
@@ -38,10 +46,8 @@ export class FilmPass extends Pass {
 		/**
 		 * The grid scale, relative to the screen height.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this
-		 * value.
-		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.gridScale = (options.gridScale === undefined) ? 1.0 : Math.max(options.gridScale, 1e-6);
@@ -49,13 +55,86 @@ export class FilmPass extends Pass {
 		/**
 		 * The grid line width.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this
-		 * value.
-		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.gridLineWidth = (options.gridLineWidth === undefined) ? 0.0 : Math.max(options.gridLineWidth, 0.0);
+
+	}
+
+	/**
+	 * Returns the current scanline density.
+	 *
+	 * @return {Number} The scanline density.
+	 */
+
+	getScanlineDensity() {
+
+		return this.scanlineDensity;
+
+	}
+
+	/**
+	 * Sets the scanline density.
+	 *
+	 * @param {Number} density - The new scanline density.
+	 */
+
+	setScanlineDensity(density) {
+
+		this.scanlineDensity = density;
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
+	 * Returns the current grid scale.
+	 *
+	 * @return {Number} The grid scale.
+	 */
+
+	getGridScale() {
+
+		return this.gridScale;
+
+	}
+
+	/**
+	 * Sets the grid scale.
+	 *
+	 * @param {Number} scale - The new grid scale.
+	 */
+
+	setGridScale(scale) {
+
+		this.gridScale = scale;
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
+	 * Returns the current grid line width.
+	 *
+	 * @return {Number} The grid line width.
+	 */
+
+	getGridLineWidth() {
+
+		return this.gridLineWidth;
+
+	}
+
+	/**
+	 * Sets the grid line width.
+	 *
+	 * @param {Number} lineWidth - The new grid line width.
+	 */
+
+	setGridLineWidth(lineWidth) {
+
+		this.gridLineWidth = lineWidth;
+		this.setSize(this.resolution.x, this.resolution.y);
 
 	}
 
@@ -88,6 +167,9 @@ export class FilmPass extends Pass {
 	 */
 
 	setSize(width, height) {
+
+		// Remember the original resolution.
+		this.resolution.set(width, height);
 
 		const aspect = width / height;
 		const gridScale = this.gridScale * (height * 0.125);

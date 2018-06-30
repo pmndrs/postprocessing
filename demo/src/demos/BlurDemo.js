@@ -250,21 +250,20 @@ export class BlurDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const composer = this.composer;
 		const renderPass = this.renderPass;
 		const blurPass = this.blurPass;
 		const texturePass = this.texturePass;
 
 		const params = {
 			"enabled": blurPass.enabled,
-			"resolution": blurPass.resolutionScale,
+			"resolution": blurPass.getResolutionScale(),
 			"kernel size": blurPass.kernelSize,
 			"strength": texturePass.opacityDestination
 		};
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			blurPass.resolutionScale = params.resolution; composer.setSize();
+			blurPass.setResolutionScale(params.resolution);
 
 		});
 

@@ -266,12 +266,11 @@ export class GodRaysDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const directionalLight = this.directionalLight;
-		const composer = this.composer;
 		const pass = this.godRaysPass;
 		const sun = this.sun;
 
 		const params = {
-			"resolution": pass.resolutionScale,
+			"resolution": pass.getResolutionScale(),
 			"blurriness": pass.kernelSize,
 			"intensity": pass.intensity,
 			"density": pass.godRaysMaterial.uniforms.density.value,
@@ -286,8 +285,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.resolutionScale = params.resolution;
-			composer.setSize();
+			pass.setResolutionScale(params.resolution);
 
 		});
 

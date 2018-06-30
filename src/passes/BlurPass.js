@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, Vector2, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -50,12 +50,19 @@ export class BlurPass extends Pass {
 		this.renderTargetY.texture.name = "Blur.TargetY";
 
 		/**
-		 * The resolution scale.
+		 * The original resolution.
 		 *
-		 * You need to call {@link EffectComposer#setSize} after changing this
-		 * value.
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
+		 * The current resolution scale.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
@@ -139,6 +146,31 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.resolutionScale;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.resolutionScale = scale;
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
 	 * Blurs the input buffer and writes the result to the output buffer. The
 	 * input buffer remains intact, unless its also the output buffer.
 	 *
@@ -203,6 +235,9 @@ export class BlurPass extends Pass {
 	 */
 
 	setSize(width, height) {
+
+		// Remember the original resolution.
+		this.resolution.set(width, height);
 
 		width = Math.max(1, Math.floor(width * this.resolutionScale));
 		height = Math.max(1, Math.floor(height * this.resolutionScale));

@@ -241,7 +241,6 @@ export class FilmDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const composer = this.composer;
 		const pass = this.filmPass;
 		const material = pass.getFullscreenMaterial();
 		const uniforms = material.uniforms;
@@ -257,9 +256,9 @@ export class FilmDemo extends PostProcessingDemo {
 			"noise intensity": uniforms.noiseIntensity.value,
 			"scanlines intensity": uniforms.scanlineIntensity.value,
 			"grid intensity": uniforms.gridIntensity.value,
-			"scanlines count": pass.scanlineDensity,
-			"grid scale": pass.gridScale,
-			"grid line width": pass.gridLineWidth,
+			"scanlines count": pass.getScanlineDensity(),
+			"grid scale": pass.getGridScale(),
+			"grid line width": pass.getGridLineWidth(),
 			"blend mode": "screen",
 			"greyscale intensity": uniforms.greyscaleIntensity.value,
 			"sepia intensity": uniforms.sepiaIntensity.value,
@@ -315,7 +314,7 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(() => {
 
-			pass.scanlineDensity = params["scanlines count"]; composer.setSize();
+			pass.setScanlineDensity(params["scanlines count"]);
 
 		});
 
@@ -333,13 +332,13 @@ export class FilmDemo extends PostProcessingDemo {
 
 		f.add(params, "grid scale").min(0.01).max(2.0).step(0.01).onChange(() => {
 
-			pass.gridScale = params["grid scale"]; composer.setSize();
+			pass.setGridScale(params["grid scale"]);
 
 		});
 
 		f.add(params, "grid line width").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			pass.gridLineWidth = params["grid line width"]; composer.setSize();
+			pass.setGridLineWidth(params["grid line width"]);
 
 		});
 
