@@ -91,7 +91,7 @@ export class Pass {
 	 * The fullscreen material.
 	 *
 	 * @type {Material}
-	 * @deprecated Use {@link getFullscreenMaterial} instead.
+	 * @deprecated Use getFullscreenMaterial() instead.
 	 */
 
 	get material() {
@@ -105,7 +105,7 @@ export class Pass {
 	/**
 	 * @protected
 	 * @type {Material}
-	 * @deprecated Use {@link setFullscreenMaterial} instead.
+	 * @deprecated Use setFullscreenMaterial(Material) instead.
 	 */
 
 	set material(value) {

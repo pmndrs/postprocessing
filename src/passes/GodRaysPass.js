@@ -358,7 +358,7 @@ export class GodRaysPass extends Pass {
 	 * The resolution scale.
 	 *
 	 * @type {Number}
-	 * @deprecated Use {@link getResolutionScale} instead.
+	 * @deprecated Use getResolutionScale() instead.
 	 */
 
 	get resolutionScale() {
@@ -371,7 +371,7 @@ export class GodRaysPass extends Pass {
 
 	/**
 	 * @type {Number}
-	 * @deprecated Use {@link setResolutionScale} instead.
+	 * @deprecated Use setResolutionScale(Number) instead.
 	 */
 
 	set resolutionScale(value) {
