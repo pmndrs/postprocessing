@@ -38,7 +38,7 @@ The following table provides an overview of the most important scripts:
 | build | Generates the final bundle            |
 | test  | Runs unit tests                       |
 
-__Note__: Setting `BABEL_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process.
+__Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process.
 
 
 ### Testing :heavy_check_mark:
