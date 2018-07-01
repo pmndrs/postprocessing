@@ -41,7 +41,7 @@
 
 	"scripts": {
 		"lint": " npm run lint:lib && npm run lint:demo && npm run lint:test",
-		"lint:config": "eslint rollup.config.js",
+		"lint:config": "eslint *.js",
 		"lint:lib": "eslint src",
 		"lint:demo": "eslint demo/src",
 		"lint:test": "eslint test",
