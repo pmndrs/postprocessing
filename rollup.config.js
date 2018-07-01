@@ -26,7 +26,7 @@ const lib = {
 	external: ["three"],
 	plugins: [resolve(), string({
 		include: ["**/*.frag", "**/*.vert"]
-	})]
+	})].concat(process.env.NODE_ENV === "production" ? [babel()] : [])
 
 };
 
@@ -40,7 +40,9 @@ const demo = {
 	},
 
 	external: ["three"],
-	plugins: lib.plugins
+	plugins: [resolve(), string({
+		include: ["**/*.frag", "**/*.vert"]
+	})].concat(process.env.NODE_ENV === "production" ? [babel()] : [])
 
 };
 
@@ -52,7 +54,9 @@ export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
 			file: "build/" + pkg.name + ".min.js"
 		}),
 
-		plugins: lib.plugins.concat([babel(), minify({
+		plugins: [resolve(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})].concat([babel(), minify({
 			bannerNewLine: true,
 			sourceMap: false,
 			comments: false
@@ -66,7 +70,9 @@ export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
 			file: "public/demo/index.min.js"
 		}),
 
-		plugins: demo.plugins.concat([babel(), minify({
+		plugins: [resolve(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})].concat([babel(), minify({
 			sourceMap: false,
 			comments: false
 		})])
