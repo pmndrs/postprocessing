@@ -60,13 +60,13 @@ export class MyPass extends Pass {
 
 		super("MyPass");
 
-		this.material = new MyMaterial();
+		this.setFullscreenMaterial(new MyMaterial());
 
 	}
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.material.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}
