@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.8.1 build Sun Jul 01 2018
+ * postprocessing v4.8.2 build Wed Jul 18 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -2931,7 +2931,7 @@
   								if (this.blend) {
   										this.setFullscreenMaterial(this.outlineBlendMaterial);
   										this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-  										renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
+  										renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
   								}
   						} else if (this.renderToScreen) {
   								this.copyPass.render(renderer, inputBuffer);
