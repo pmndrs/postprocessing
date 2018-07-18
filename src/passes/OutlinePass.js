@@ -604,7 +604,7 @@ export class OutlinePass extends Pass {
 				// Draw the final overlay onto the scene colours.
 				this.setFullscreenMaterial(this.outlineBlendMaterial);
 				this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-				renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.outputBuffer);
+				renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 			}
 
