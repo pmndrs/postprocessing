@@ -46,7 +46,7 @@
 		"lint:demo": "eslint demo/src",
 		"lint:test": "eslint test",
 		"build": "rollup -c",
-		"build:production": "cross-env NODE_ENV=production rollup -c",
+		"build:production": "cross-env NODE_ENV=production npm run build",
 		"doc": "esdoc",
 		"deploy": "cpx demo/assets/** public/demo",
 		"test": "ava",
