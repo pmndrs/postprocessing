@@ -54,11 +54,6 @@
 		"postpublish": "inline-import -r"
 	},
 
-	"engines": {
-		"node": ">=4.0.0",
-		"npm": ">=5.0.0"
-	},
-
 	"ava": {
 		"failFast": true,
 		"files": ["test/**/*.js"]
