@@ -272,20 +272,16 @@ export class EffectComposer {
 
 	render(delta) {
 
-		const passes = this.passes;
-		const copyPass = this.copyPass;
 		const renderer = this.renderer;
+		const copyPass = this.copyPass;
 
 		let inputBuffer = this.inputBuffer;
 		let outputBuffer = this.outputBuffer;
 
 		let stencilTest = false;
-		let pass, context, state, buffer;
-		let i, l;
+		let context, state, buffer;
 
-		for(i = 0, l = passes.length; i < l; ++i) {
-
-			pass = passes[i];
+		for(const pass of this.passes) {
 
 			if(pass.enabled) {
 
@@ -344,11 +340,9 @@ export class EffectComposer {
 
 	setSize(width, height) {
 
-		const passes = this.passes;
 		const renderer = this.renderer;
 
 		let size, drawingBufferSize;
-		let i, l;
 
 		if(width === undefined || height === undefined) {
 
@@ -367,9 +361,9 @@ export class EffectComposer {
 		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
-		for(i = 0, l = passes.length; i < l; ++i) {
+		for(const pass of this.passes) {
 
-			passes[i].setSize(drawingBufferSize.width, drawingBufferSize.height);
+			pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
 		}
 
@@ -405,13 +399,9 @@ export class EffectComposer {
 
 	dispose() {
 
-		const passes = this.passes;
+		for(const pass of this.passes) {
 
-		let i, l;
-
-		for(i = 0, l = passes.length; i < l; ++i) {
-
-			passes[i].dispose();
+			pass.dispose();
 
 		}
 
