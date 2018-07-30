@@ -11,6 +11,12 @@ export {
 } from "./core";
 
 export {
+	BlendFunction,
+	BlendMode,
+	Effect
+} from "./effects";
+
+export {
 	BloomPass,
 	BlurPass,
 	BokehPass,
