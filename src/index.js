@@ -50,6 +50,7 @@ export {
 	CopyMaterial,
 	DepthComparisonMaterial,
 	DotScreenMaterial,
+	EffectMaterial,
 	FilmMaterial,
 	GlitchMaterial,
 	GodRaysMaterial,
