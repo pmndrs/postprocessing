@@ -106,9 +106,8 @@ Please refer to the [contribution guidelines](https://github.com/vanruesc/postpr
 
 This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).
 
-The original code that this library is based on, was written by [alteredq](http://alteredqualia.com),
-[miibond](https://github.com/MiiBond), [zz85](https://github.com/zz85), [felixturner](http://airtight.cc),
-[spidersharma](http://eduperiment.com) and [huwb](http://huwbowles.com)
+The original code that this library is based on, was written by [mrdoob](http://mrdoob.com) and the
+[three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors)
 and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
 
 The film effect incorporates code written by Georg Steinrohder and Pat Shearon which was released under the
