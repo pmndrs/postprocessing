@@ -6611,54 +6611,69 @@
   				key: "render",
   				value: function render(delta) {
 
-  						var passes = this.passes;
-  						var copyPass = this.copyPass;
   						var renderer = this.renderer;
+  						var copyPass = this.copyPass;
 
   						var inputBuffer = this.inputBuffer;
   						var outputBuffer = this.outputBuffer;
 
   						var stencilTest = false;
-  						var pass = void 0,
-  						    context = void 0,
+  						var context = void 0,
   						    state = void 0,
   						    buffer = void 0;
-  						var i = void 0,
-  						    l = void 0;
 
-  						for (i = 0, l = passes.length; i < l; ++i) {
+  						var _iteratorNormalCompletion = true;
+  						var _didIteratorError = false;
+  						var _iteratorError = undefined;
 
-  								pass = passes[i];
+  						try {
+  								for (var _iterator = this.passes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+  										var pass = _step.value;
 
-  								if (pass.enabled) {
 
-  										pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+  										if (pass.enabled) {
 
-  										if (pass.needsSwap) {
+  												pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
 
-  												if (stencilTest) {
+  												if (pass.needsSwap) {
 
-  														copyPass.renderToScreen = pass.renderToScreen;
+  														if (stencilTest) {
 
-  														context = renderer.context;
-  														state = renderer.state;
+  																copyPass.renderToScreen = pass.renderToScreen;
 
-  														state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-  														copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
-  														state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+  																context = renderer.context;
+  																state = renderer.state;
+
+  																state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+  																copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+  																state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+  														}
+
+  														buffer = inputBuffer;
+  														inputBuffer = outputBuffer;
+  														outputBuffer = buffer;
   												}
 
-  												buffer = inputBuffer;
-  												inputBuffer = outputBuffer;
-  												outputBuffer = buffer;
+  												if (pass instanceof MaskPass) {
+
+  														stencilTest = true;
+  												} else if (pass instanceof ClearMaskPass) {
+
+  														stencilTest = false;
+  												}
   										}
-
-  										if (pass instanceof MaskPass) {
-
-  												stencilTest = true;
-  										} else if (pass instanceof ClearMaskPass) {
-
-  												stencilTest = false;
+  								}
+  						} catch (err) {
+  								_didIteratorError = true;
+  								_iteratorError = err;
+  						} finally {
+  								try {
+  										if (!_iteratorNormalCompletion && _iterator.return) {
+  												_iterator.return();
+  										}
+  								} finally {
+  										if (_didIteratorError) {
+  												throw _iteratorError;
   										}
   								}
   						}
@@ -6667,13 +6682,10 @@
   				key: "setSize",
   				value: function setSize(width, height) {
 
-  						var passes = this.passes;
   						var renderer = this.renderer;
 
   						var size = void 0,
   						    drawingBufferSize = void 0;
-  						var i = void 0,
-  						    l = void 0;
 
   						if (width === undefined || height === undefined) {
 
@@ -6689,9 +6701,30 @@
   						this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
   						this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 
-  						for (i = 0, l = passes.length; i < l; ++i) {
+  						var _iteratorNormalCompletion2 = true;
+  						var _didIteratorError2 = false;
+  						var _iteratorError2 = undefined;
 
-  								passes[i].setSize(drawingBufferSize.width, drawingBufferSize.height);
+  						try {
+  								for (var _iterator2 = this.passes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+  										var pass = _step2.value;
+
+
+  										pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
+  								}
+  						} catch (err) {
+  								_didIteratorError2 = true;
+  								_iteratorError2 = err;
+  						} finally {
+  								try {
+  										if (!_iteratorNormalCompletion2 && _iterator2.return) {
+  												_iterator2.return();
+  										}
+  								} finally {
+  										if (_didIteratorError2) {
+  												throw _iteratorError2;
+  										}
+  								}
   						}
   				}
   		}, {
@@ -6709,15 +6742,31 @@
   		}, {
   				key: "dispose",
   				value: function dispose() {
+  						var _iteratorNormalCompletion3 = true;
+  						var _didIteratorError3 = false;
+  						var _iteratorError3 = undefined;
 
-  						var passes = this.passes;
+  						try {
 
-  						var i = void 0,
-  						    l = void 0;
+  								for (var _iterator3 = this.passes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+  										var pass = _step3.value;
 
-  						for (i = 0, l = passes.length; i < l; ++i) {
 
-  								passes[i].dispose();
+  										pass.dispose();
+  								}
+  						} catch (err) {
+  								_didIteratorError3 = true;
+  								_iteratorError3 = err;
+  						} finally {
+  								try {
+  										if (!_iteratorNormalCompletion3 && _iterator3.return) {
+  												_iterator3.return();
+  										}
+  								} finally {
+  										if (_didIteratorError3) {
+  												throw _iteratorError3;
+  										}
+  								}
   						}
 
   						this.passes = [];
@@ -8781,6 +8830,12 @@
   			return this.x * v.x + this.y * v.y;
   		}
   	}, {
+  		key: "cross",
+  		value: function cross(v) {
+
+  			return this.x * v.y - this.y * v.x;
+  		}
+  	}, {
   		key: "manhattanLength",
   		value: function manhattanLength() {
 
@@ -9799,6 +9854,25 @@
   			this.w = r;
 
   			return this.normalize();
+  		}
+  	}, {
+  		key: "angleTo",
+  		value: function angleTo(q) {
+
+  			return 2.0 * Math.acos(Math.abs(Math.min(Math.max(this.dot(q), -1.0), 1.0)));
+  		}
+  	}, {
+  		key: "rotateTowards",
+  		value: function rotateTowards(q, step) {
+
+  			var angle = this.angleTo(q);
+
+  			if (angle !== 0.0) {
+
+  				this.slerp(q, Math.min(1.0, step / angle));
+  			}
+
+  			return this;
   		}
   	}, {
   		key: "invert",
