@@ -4,6 +4,9 @@ import { Pass } from "./Pass.js";
  * A shader pass.
  *
  * Used to render any shader material as a 2D filter.
+ *
+ * This pass should not be used to create multiple chained effects. For a more
+ * efficient solution, please refer to the {@link EffectPass}.
  */
 
 export class ShaderPass extends Pass {
