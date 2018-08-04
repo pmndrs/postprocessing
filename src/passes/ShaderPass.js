@@ -12,10 +12,10 @@ export class ShaderPass extends Pass {
 	 * Constructs a new shader pass.
 	 *
 	 * @param {ShaderMaterial} material - The shader material to use.
-	 * @param {String} [textureID="tDiffuse"] - The texture uniform identifier.
+	 * @param {String} [textureID="inputBuffer"] - The texture uniform identifier.
 	 */
 
-	constructor(material, textureID = "tDiffuse") {
+	constructor(material, textureID = "inputBuffer") {
 
 		super("ShaderPass");
 

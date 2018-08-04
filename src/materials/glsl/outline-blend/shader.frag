@@ -1,6 +1,6 @@
-uniform sampler2D tDiffuse;
-uniform sampler2D tMask;
-uniform sampler2D tEdges;
+uniform sampler2D inputBuffer;
+uniform sampler2D maskTexture;
+uniform sampler2D edgeTexture;
 
 uniform vec3 visibleEdgeColor;
 uniform vec3 hiddenEdgeColor;
@@ -9,7 +9,7 @@ uniform float edgeStrength;
 
 #ifdef USE_PATTERN
 
-	uniform sampler2D tPattern;
+	uniform sampler2D patternTexture;
 	varying vec2 vPatternCoord;
 
 #endif
@@ -18,9 +18,9 @@ varying vec2 vUv;
 
 void main() {
 
-	vec4 color = texture2D(tDiffuse, vUv);
-	vec2 edge = texture2D(tEdges, vUv).rg;
-	vec2 mask = texture2D(tMask, vUv).rg;
+	vec4 color = texture2D(inputBuffer, vUv);
+	vec2 edge = texture2D(edgeTexture, vUv).rg;
+	vec2 mask = texture2D(maskTexture, vUv).rg;
 
 	#ifndef X_RAY
 
@@ -43,7 +43,7 @@ void main() {
 
 	#ifdef USE_PATTERN
 
-		vec3 patternColor = texture2D(tPattern, vPatternCoord).rgb;
+		vec3 patternColor = texture2D(patternTexture, vPatternCoord).rgb;
 
 		#ifdef X_RAY
 

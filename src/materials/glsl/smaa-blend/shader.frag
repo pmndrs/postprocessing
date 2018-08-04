@@ -1,5 +1,5 @@
-uniform sampler2D tDiffuse;
-uniform sampler2D tWeights;
+uniform sampler2D inputBuffer;
+uniform sampler2D weightMap;
 
 uniform vec2 texelSize;
 
@@ -10,16 +10,16 @@ void main() {
 
 	// Fetch the blending weights for current pixel.
 	vec4 a;
-	a.xz = texture2D(tWeights, vUv).xz;
-	a.y = texture2D(tWeights, vOffset.zw).g;
-	a.w = texture2D(tWeights, vOffset.xy).a;
+	a.xz = texture2D(weightMap, vUv).xz;
+	a.y = texture2D(weightMap, vOffset.zw).g;
+	a.w = texture2D(weightMap, vOffset.xy).a;
 
 	vec4 color;
 
 	// Check if there is any blending weight with a value greater than 0.0.
 	if(dot(a, vec4(1.0)) < 1e-5) {
 
-		color = texture2D(tDiffuse, vUv, 0.0);
+		color = texture2D(inputBuffer, vUv, 0.0);
 
 	} else {
 
@@ -43,9 +43,9 @@ void main() {
 		}
 
 		// Fetch the opposite color and lerp by hand.
-		color = texture2D(tDiffuse, vUv, 0.0);
+		color = texture2D(inputBuffer, vUv, 0.0);
 		vec2 coord = vUv + sign(offset) * texelSize;
-		vec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);
+		vec4 oppositeColor = texture2D(inputBuffer, coord, 0.0);
 		float s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);
 
 		// Gamma correction.

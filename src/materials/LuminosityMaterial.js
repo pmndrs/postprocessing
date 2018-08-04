@@ -42,7 +42,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				distinction: new Uniform(1.0),
 				range: new Uniform(maskLuminance ? luminanceRange : new Vector2())
 

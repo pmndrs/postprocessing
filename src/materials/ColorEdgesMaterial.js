@@ -31,7 +31,7 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 
 			},

@@ -1,6 +1,6 @@
 #include <common>
 
-uniform sampler2D tDiffuse;
+uniform sampler2D inputBuffer;
 uniform float distinction;
 uniform vec2 range;
 
@@ -8,7 +8,7 @@ varying vec2 vUv;
 
 void main() {
 
-	vec4 texel = texture2D(tDiffuse, vUv);
+	vec4 texel = texture2D(inputBuffer, vUv);
 	float l = linearToRelativeLuminance(texel.rgb);
 
 	#ifdef RANGE

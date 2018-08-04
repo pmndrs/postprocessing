@@ -25,8 +25,8 @@ export class SMAABlendMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
-				tWeights: new Uniform(null),
+				inputBuffer: new Uniform(null),
+				weightMap: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 
 			},

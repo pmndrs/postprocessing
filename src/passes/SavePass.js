@@ -62,7 +62,7 @@ export class SavePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderTarget);
 

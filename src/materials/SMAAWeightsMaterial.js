@@ -40,9 +40,9 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
-				tArea: new Uniform(null),
-				tSearch: new Uniform(null),
+				inputBuffer: new Uniform(null),
+				areaTexture: new Uniform(null),
+				searchTexture: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 
 			},
