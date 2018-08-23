@@ -245,7 +245,7 @@ export class EffectPass extends Pass {
 
 					}
 
-					// Prefix macros, uniforms and functions.
+					// Prefix macros and uniforms.
 					this.prefixVariables(prefix, effect.defines, defines, src);
 					this.prefixVariables(prefix, effect.uniforms, uniforms, src);
 
