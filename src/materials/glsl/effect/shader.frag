@@ -59,7 +59,7 @@ void main() {
 
 	FRAGMENT_MAIN_UV
 
-	inputColor = texture2D(inputBuffer, UV);
+	vec4 inputColor = texture2D(inputBuffer, UV);
 	vec4 outputColor = vec4(0.0);
 
 	FRAGMENT_MAIN_IMAGE
