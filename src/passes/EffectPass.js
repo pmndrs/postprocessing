@@ -77,8 +77,14 @@ export class EffectPass extends Pass {
 		if(this.quantize !== value) {
 
 			const material = this.getFullscreenMaterial();
-			material.dithering = value;
-			material.needsUpdate = true;
+
+			if(material !== null) {
+
+				material.dithering = value;
+				material.needsUpdate = true;
+
+			}
+
 			this.quantize = value;
 
 		}
