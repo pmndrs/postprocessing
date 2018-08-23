@@ -365,7 +365,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.material.setResolution(width, height);
+		this.getFullscreenMaterial().setResolution(width, height);
 
 		for(const effect of this.effects) {
 
