@@ -252,7 +252,7 @@ export class EffectPass extends Pass {
 					// Collect unique blend modes.
 					blendModes.set(blendMode.blendFunction, blendMode);
 
-					// Create a blend opacity uniform for this effect.
+					// Include the blend opacity uniform of this effect.
 					blendOpacity = prefix + "BlendOpacity";
 					uniforms.set(blendOpacity, blendMode.opacity);
 
