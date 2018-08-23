@@ -17,9 +17,10 @@ export class EffectMaterial extends ShaderMaterial {
 	 * @param {Camera} camera - A camera.
 	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
 	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(camera, defines, uniforms) {
+	constructor(camera, defines, uniforms, dithering = false) {
 
 		super({
 
@@ -42,6 +43,8 @@ export class EffectMaterial extends ShaderMaterial {
 
 			fragmentShader: fragment,
 			vertexShader: vertex,
+
+			dithering: dithering,
 
 			depthWrite: false,
 			depthTest: false
