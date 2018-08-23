@@ -170,6 +170,7 @@ export class EffectPass extends Pass {
 	createMaterial() {
 
 		const blendModes = new Map();
+		const shaderParts = new Map();
 		const defines = new Map();
 		const uniforms = new Map();
 
@@ -277,23 +278,24 @@ export class EffectPass extends Pass {
 		}
 
 		// Register the final shader code snippets.
-		defines.set("VERTEX_HEAD", vertexHead);
-		defines.set("VERTEX_MAIN_SUPPORT", vertexMainSupport);
-		defines.set("FRAGMENT_HEAD", fragmentHead);
-		defines.set("FRAGMENT_MAIN_IMAGE", fragmentMainImage);
+		shaderParts.set("VERTEX_HEAD", vertexHead.trim());
+		shaderParts.set("VERTEX_MAIN_SUPPORT", vertexMainSupport.trim());
+		shaderParts.set("FRAGMENT_HEAD", fragmentHead.trim());
+		shaderParts.set("FRAGMENT_MAIN_IMAGE", fragmentMainImage.trim());
 
 		if(transformedUv) {
 
-			defines.set("FRAGMENT_MAIN_UV", "vec2 transformedUv = vUv;\n" + fragmentMainUv);
+			shaderParts.set("FRAGMENT_MAIN_UV", "vec2 transformedUv = vUv;\n\t" + fragmentMainUv.trim());
 			defines.set("UV", "transformedUv");
 
 		} else {
 
+			shaderParts.set("FRAGMENT_MAIN_UV", fragmentMainUv.trim());
 			defines.set("UV", "vUv");
 
 		}
 
-		return new EffectMaterial(this.mainCamera, defines, uniforms, this.dithering);
+		return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
 
 	}
 

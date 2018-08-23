@@ -1,7 +1,7 @@
 import { PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/effect/shader.frag";
-import vertex from "./glsl/effect/shader.vert";
+import fragmentTemplate from "./glsl/effect/shader.frag";
+import vertexTemplate from "./glsl/effect/shader.vert";
 
 /**
  * An effect material for compound shaders.
@@ -14,13 +14,14 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new effect material.
 	 *
-	 * @param {Camera} camera - A camera.
+	 * @param {Map<String, String>} shaderParts - A collection of shader snippets.
 	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
 	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @param {Camera} [camera=null] - A camera.
 	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(camera, defines, uniforms, dithering = false) {
+	constructor(shaderParts, defines, uniforms, camera = null, dithering = false) {
 
 		super({
 
@@ -41,11 +42,14 @@ export class EffectMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader: fragmentTemplate.replace("FRAGMENT_HEAD", shaderParts.get("FRAGMENT_HEAD"))
+				.replace("FRAGMENT_MAIN_UV", shaderParts.get("FRAGMENT_MAIN_UV"))
+				.replace("FRAGMENT_MAIN_IMAGE", shaderParts.get("FRAGMENT_MAIN_IMAGE")),
+
+			vertexShader: vertexTemplate.replace("VERTEX_HEAD", shaderParts.get("VERTEX_HEAD"))
+				.replace("VERTEX_MAIN_SUPPORT", shaderParts.get("VERTEX_MAIN_SUPPORT")),
 
 			dithering: dithering,
-
 			depthWrite: false,
 			depthTest: false
 
