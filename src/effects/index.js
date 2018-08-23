@@ -5,4 +5,5 @@
  */
 
 export { BlendFunction, BlendMode } from "./blending";
+export { DotScreenEffect } from "./DotScreenEffect.js";
 export { Effect } from "./Effect.js";

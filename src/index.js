@@ -13,6 +13,7 @@ export {
 export {
 	BlendFunction,
 	BlendMode,
+	DotScreenEffect,
 	Effect
 } from "./effects";
 
