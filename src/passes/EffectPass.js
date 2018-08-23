@@ -95,6 +95,40 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Prefixes substrings that match the given regular expression.
+	 *
+	 * @private
+	 * @param {String} prefix - A prefix.
+	 * @param {RegExp} regExp - A regular expression.
+	 * @param {String} string - The string to modify.
+	 * @return {Object} The modified string and the number of matches.
+	 * @property {String} string - The modified string.
+	 * @property {Number} occurrences - The number of matches.
+	 */
+
+	prefix(prefix, regExp, string) {
+
+		let occurrences = 0;
+		let result, name;
+
+		while((result = regExp.exec(string)) !== null) {
+
+			name = result[1];
+
+			string = string.replace(
+				new RegExp(name, "g"),
+				prefix + name.charAt(0).toUpperCase() + name.slice(1)
+			);
+
+			++occurrences;
+
+		}
+
+		return { string, occurrences };
+
+	}
+
+	/**
 	 * Prefixes variables and updates affected code.
 	 *
 	 * @private
@@ -132,38 +166,6 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Prefixes function names.
-	 *
-	 * @private
-	 * @param {String} prefix - A prefix.
-	 * @param {String[]} src - The source code to modify.
-	 */
-
-	prefixFunctions(prefix, src) {
-
-		const regExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
-		const l = src.length;
-
-		let i, result, name;
-
-		for(i = 0; i < l; ++i) {
-
-			while((result = regExp.exec(src[i])) !== null) {
-
-				name = result[1];
-
-				src[i] = src[i].replace(
-					new RegExp(name, "g"),
-					prefix + name.charAt(0).toUpperCase() + name.slice(1)
-				);
-
-			}
-
-		}
-
-	}
-
-	/**
 	 * Creates a compound shader material.
 	 *
 	 * @private
@@ -171,6 +173,9 @@ export class EffectPass extends Pass {
 	 */
 
 	createMaterial() {
+
+		const functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
+		const varyingRegExp = /(?:varying\s+\w+\s+(\w*))/g;
 
 		const blendModes = new Map();
 		const shaderParts = new Map();
@@ -218,20 +223,10 @@ export class EffectPass extends Pass {
 
 					}
 
-					src = [effect.fragmentShader];
+					// Prefix functions in the fragment code.
+					src = [this.prefix(prefix, functionRegExp, effect.fragmentShader).string];
 
 					if(effect.vertexShader !== null) {
-
-						src.push(effect.vertexShader);
-
-						// Count varyings.
-						result = effect.vertexShader.match(/varying/g);
-
-						if(result !== null) {
-
-							varyingCount += result.length;
-
-						}
 
 						if(effect.vertexShader.indexOf("mainSupport") >= 0) {
 
@@ -240,12 +235,18 @@ export class EffectPass extends Pass {
 
 						}
 
+						// Prefix varyings and functions in the vertex code.
+						result = this.prefix(prefix, varyingRegExp, this.prefix(
+							prefix, functionRegExp, effect.vertexShader).string);
+
+						varyingCount += result.occurrences;
+						src.push(result.string);
+
 					}
 
-					// Prefix macros, uniforms and functions to prevent name collisions.
+					// Prefix macros, uniforms and functions.
 					this.prefixVariables(prefix, effect.defines, defines, src);
 					this.prefixVariables(prefix, effect.uniforms, uniforms, src);
-					this.prefixFunctions(prefix, src);
 
 					// Collect unique blend modes.
 					blendModes.set(blendMode.blendFunction, blendMode);
