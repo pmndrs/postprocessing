@@ -14,7 +14,7 @@ export class DotScreenEffect extends Effect {
 	 * Constructs a new dot screen effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.angle=1.57] - The angle of the dot pattern.
 	 * @param {Number} [options.scale=1.0] - The scale of the dot pattern.
 	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
