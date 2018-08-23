@@ -96,7 +96,7 @@ export class EffectPass extends Pass {
 	 *
 	 * @private
 	 * @param {String} prefix - A prefix.
-	 * @param {Iterable} input - An input map of variables.
+	 * @param {Map} input - An input map of variables.
 	 * @param {Map} output - An output map.
 	 * @param {String[]} src - Source code that uses the given variables.
 	 */
