@@ -15,7 +15,7 @@ float pattern(const in vec2 uv) {
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
-	vec3 color = vec3(inputColor.rgb * 10.0 - 5.0 + pattern());
+	vec3 color = vec3(inputColor.rgb * 10.0 - 5.0 + pattern(uv * resolution));
 	color = inputColor.rgb + (color - inputColor.rgb) * intensity;
 
 	outputColor = vec4(color, inputColor.a);
