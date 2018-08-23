@@ -50,6 +50,9 @@ export class EffectPass extends Pass {
 
 		this.quantize = false;
 
+		// Create the compound shader material.
+		this.setFullscreenMaterial(this.createMaterial());
+
 	}
 
 	/**
@@ -382,8 +385,6 @@ export class EffectPass extends Pass {
 	initialize(renderer, alpha) {
 
 		// const capabilities = renderer.capabilities;
-
-		this.setFullscreenMaterial(this.createMaterial());
 
 		for(const effect of this.effects) {
 
