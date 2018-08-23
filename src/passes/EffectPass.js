@@ -223,8 +223,9 @@ export class EffectPass extends Pass {
 
 					}
 
-					// Prefix functions in the fragment code.
-					src = [this.prefix(prefix, functionRegExp, effect.fragmentShader).string];
+					// Prefix varyings and functions in the fragment code.
+					src = [this.prefix(prefix, varyingRegExp, this.prefix(
+						prefix, functionRegExp, effect.fragmentShader).string).string];
 
 					if(effect.vertexShader !== null) {
 
