@@ -24,6 +24,7 @@ export {
 	ClearPass,
 	ClearMaskPass,
 	DotScreenPass,
+	EffectPass,
 	FilmPass,
 	GlitchMode,
 	GlitchPass,
