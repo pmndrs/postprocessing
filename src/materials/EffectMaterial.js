@@ -5,6 +5,8 @@ import vertex from "./glsl/effect/shader.vert";
 
 /**
  * An effect material for compound shaders.
+ *
+ * This material supports dithering.
  */
 
 export class EffectMaterial extends ShaderMaterial {

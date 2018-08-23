@@ -4,10 +4,17 @@ import { BlendMode } from "./blending/BlendMode.js";
 /**
  * An abstract effect.
  *
- * The fragment shader must implement the following function: `void
- * mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)`.
- * It may also implement `void mainUv(const inout vec2 uv)` to manipulate the
- * screen UV coordinates.
+ * Effects can be combined using the {@link EffectPass}.
+ *
+ * Just like passes, effects may perform initialization tasks, react to render
+ * size changes and execute supporting render operations if needed but they
+ * don't have access to an output buffer and are not supposed to render to
+ * screen by themselves.
+ *
+ * An Effect must specify a fragment shader and a vertex shader. The fragment
+ * shader must implement the following function: `void mainImage(const in vec4
+ * inputColor, const in vec2 uv, out vec4 outputColor)`. It may also implement
+ * `void mainUv(const inout vec2 uv)` to manipulate the screen UV coordinates.
  *
  * The vertex shader is optional. If defined, it must implement the following
  * function: `void mainSupport()`.
@@ -26,13 +33,11 @@ import { BlendMode } from "./blending/BlendMode.js";
  *  - sampler2D depthBuffer
  *
  * Effects may define custom uniforms, varyings, functions and preprocessor
- * macros.
+ * macros as usual.
  *
  * Furthermore, the shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl)
  * and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl)
  * are included in the fragment shader.
- *
- * Every effect supports dithering by default.
  *
  * @implements {Resizable}
  * @implements {Disposable}
@@ -43,7 +48,7 @@ export class Effect {
 	/**
 	 * Constructs a new effect.
 	 *
-	 * @param {String} name - The name of this effect.
+	 * @param {String} name - The name of this effect. Doesn't have to be unique.
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
 	 * @param {Priority} [options.priority=Priority.NORMAL] - The execution priority. Most effects should use the default priority.
