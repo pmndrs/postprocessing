@@ -4,7 +4,10 @@ uniform float intensity;
 
 float pattern(const in vec2 uv) {
 
-	vec2 point = vec2(dot(angle.yx, vec2(uv.x, -uv.y)), dot(angle, uv)) * scale;
+	vec2 point = scale * vec2(
+		dot(angle.yx, vec2(uv.x, -uv.y)),
+		dot(angle, uv)
+	);
 
 	return (sin(point.x) * sin(point.y)) * 4.0;
 
