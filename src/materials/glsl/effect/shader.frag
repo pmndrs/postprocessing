@@ -59,12 +59,12 @@ void main() {
 
 	FRAGMENT_MAIN_UV
 
-	vec4 inputColor = texture2D(inputBuffer, UV);
-	vec4 outputColor = vec4(0.0);
+	vec4 color0 = texture2D(inputBuffer, UV);
+	vec4 color1 = vec4(0.0);
 
 	FRAGMENT_MAIN_IMAGE
 
-	gl_FragColor = outputColor;
+	gl_FragColor = color0;
 
 	#include <dithering_fragment>
 

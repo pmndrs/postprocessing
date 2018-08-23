@@ -208,7 +208,7 @@ export class EffectPass extends Pass {
 					prefix = "e" + id++;
 
 					// Integrate the mainImage function call.
-					fragmentMainImage += "\t" + prefix + "MainImage(inputColor, UV, outputColor);\n";
+					fragmentMainImage += "\t" + prefix + "MainImage(color0, UV, color1);\n";
 
 					if(effect.fragmentShader.indexOf("mainUv") >= 0) {
 
@@ -255,8 +255,8 @@ export class EffectPass extends Pass {
 					uniforms.set(blendOpacity, blendMode.opacity);
 
 					// Blend the result of this effect with the input color.
-					fragmentMainImage += "\tinputColor.rgb = blend" + blendMode.blendFunction +
-						"(inputColor.rgb, outputColor.rgb, " + blendOpacity + ");\n\n";
+					fragmentMainImage += "\tcolor0 = vec4(blend" + blendMode.blendFunction +
+						"(color0.rgb, color1.rgb, " + blendOpacity + "), color1.a);\n";
 
 					// Include the modified code in the final shader.
 					fragmentHead += "uniform float " + blendOpacity + ";\n" + src[0] + "\n";
