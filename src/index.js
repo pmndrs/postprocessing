@@ -14,7 +14,8 @@ export {
 	BlendFunction,
 	BlendMode,
 	DotScreenEffect,
-	Effect
+	Effect,
+	SMAAEffect
 } from "./effects";
 
 export {
