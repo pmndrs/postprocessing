@@ -50,6 +50,22 @@ export class EffectPass extends Pass {
 
 		this.quantize = false;
 
+		/**
+		 * The amount of shader uniforms that this pass uses.
+		 *
+		 * @type {Number}
+		 */
+
+		this.uniforms = 0;
+
+		/**
+		 * The amount of shader varyings that this pass uses.
+		 *
+		 * @type {Number}
+		 */
+
+		this.varyings = 0;
+
 		// Create the compound shader material.
 		this.setFullscreenMaterial(this.createMaterial());
 
@@ -188,11 +204,13 @@ export class EffectPass extends Pass {
 		let vertexHead = "";
 		let vertexMainSupport = "";
 
-		let transformedUv;
-		let varyingCount = 0;
-
 		let id = 0, prefix, src, result;
+		let fragmentShader, vertexShader;
 		let blendOpacity, blendMode;
+		let transformedUv;
+
+		this.uniforms = 0;
+		this.varyings = 0;
 
 		for(const effect of this.effects) {
 
@@ -200,11 +218,14 @@ export class EffectPass extends Pass {
 
 			if(blendMode.blendFunction !== BlendFunction.SKIP) {
 
-				if(effect.fragmentShader === undefined) {
+				fragmentShader = effect.fragmentShader;
+				vertexShader = effect.vertexShader;
+
+				if(fragmentShader === undefined) {
 
 					console.error("Missing fragment shader", effect);
 
-				} else if(effect.fragmentShader.indexOf("mainImage") < 0) {
+				} else if(fragmentShader.indexOf("mainImage") < 0) {
 
 					console.error("Missing mainImage function", effect);
 
@@ -215,7 +236,7 @@ export class EffectPass extends Pass {
 					// Integrate the mainImage function call.
 					fragmentMainImage += "\t" + prefix + "MainImage(color0, UV, color1);\n";
 
-					if(effect.fragmentShader.indexOf("mainUv") >= 0) {
+					if(fragmentShader.indexOf("mainUv") >= 0) {
 
 						// Integrate the mainUv function call.
 						fragmentMainUv += "\t" + prefix + "MainUv(UV);\n";
@@ -225,11 +246,11 @@ export class EffectPass extends Pass {
 
 					// Prefix varyings and functions in the fragment code.
 					src = [this.prefix(prefix, varyingRegExp, this.prefix(
-						prefix, functionRegExp, effect.fragmentShader).string).string];
+						prefix, functionRegExp, fragmentShader).string).string];
 
-					if(effect.vertexShader !== null) {
+					if(vertexShader !== null) {
 
-						if(effect.vertexShader.indexOf("mainSupport") >= 0) {
+						if(vertexShader.indexOf("mainSupport") >= 0) {
 
 							// Integrate the mainSupport function call.
 							vertexMainSupport += "\t" + prefix + "MainSupport();\n";
@@ -238,9 +259,9 @@ export class EffectPass extends Pass {
 
 						// Prefix varyings and functions in the vertex code.
 						result = this.prefix(prefix, varyingRegExp, this.prefix(
-							prefix, functionRegExp, effect.vertexShader).string);
+							prefix, functionRegExp, vertexShader).string);
 
-						varyingCount += result.occurrences;
+						this.varyings += result.occurrences;
 						src.push(result.string);
 
 					}
@@ -299,6 +320,8 @@ export class EffectPass extends Pass {
 			defines.set("UV", "vUv");
 
 		}
+
+		this.uniforms = uniforms.size;
 
 		return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
 
@@ -386,7 +409,23 @@ export class EffectPass extends Pass {
 
 	initialize(renderer, alpha) {
 
-		// const capabilities = renderer.capabilities;
+		const capabilities = renderer.capabilities;
+
+		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+
+		if(this.uniforms > max) {
+
+			console.warn("The current rendering context can't use more than " + max + " uniforms, but " + this.uniforms + " were defined");
+
+		}
+
+		max = capabilities.maxVaryings;
+
+		if(this.varyings > max) {
+
+			console.warn("The current rendering context can't use more than " + max + " varyings, but " + this.varyings + " were defined");
+
+		}
 
 		for(const effect of this.effects) {
 
