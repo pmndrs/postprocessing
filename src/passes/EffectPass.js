@@ -1,4 +1,4 @@
-import { BlendFunction } from "../effects";
+import { BlendFunction } from "../effects/blending";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
