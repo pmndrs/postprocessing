@@ -31,15 +31,47 @@ export class NoiseEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
+			defines: new Map(),
+
 			uniforms: new Map([
 				["intensity", new Uniform(settings.intensity)]
 			])
 
 		});
 
-		if(settings.snow) {
+		this.snow = settings.snow;
+
+	}
+
+	/**
+	 * Indicates whether white noise is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get snow() {
+
+		return this.defines.has("SNOW");
+
+	}
+
+	/**
+	 * Enables or disables white noise.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set snow(value) {
+
+		if(value) {
 
 			this.defines.set("SNOW", "1");
+
+		} else {
+
+			this.defines.delete("SNOW");
 
 		}
 
