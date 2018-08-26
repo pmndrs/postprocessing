@@ -168,7 +168,7 @@ export class EffectPass extends Pass {
 			for(const entry of input.entries()) {
 
 				key = prefix + entry[0].charAt(0).toUpperCase() + entry[0].slice(1);
-				regExp = new RegExp(entry[0], "g");
+				regExp = new RegExp("\\b" + entry[0] + "\\b", "g");
 
 				output.set(key, entry[1]);
 
