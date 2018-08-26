@@ -1,0 +1,102 @@
+import { Uniform, Vector2 } from "three";
+import { BlendFunction } from "./blending/BlendFunction.js";
+import { Effect } from "./Effect.js";
+
+import fragment from "./glsl/scanlines/shader.frag";
+
+/**
+ * A scanline effect.
+ */
+
+export class ScanlineEffect extends Effect {
+
+	/**
+	 * Constructs a new scanline effect.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Number} [options.density=1.25] - The scanline density.
+	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
+	 */
+
+	constructor(options = {}) {
+
+		const settings = Object.assign({
+			blendFunction: BlendFunction.NORMAL,
+			density: 1.25,
+			intensity: 1.0
+		}, options);
+
+		super("ScanlineEffect", fragment, {
+
+			blendFunction: settings.blendFunction,
+
+			uniforms: new Map([
+				["count", new Uniform(0.0)],
+				["intensity", new Uniform(settings.intensity)]
+			])
+
+		});
+
+		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
+		 * The amount of scanlines, relative to the screen height.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.density = settings.density;
+
+	}
+
+	/**
+	 * Returns the current scanline density.
+	 *
+	 * @return {Number} The scanline density.
+	 */
+
+	getDensity() {
+
+		return this.density;
+
+	}
+
+	/**
+	 * Sets the scanline density.
+	 *
+	 * @param {Number} density - The new scanline density.
+	 */
+
+	setDensity(density) {
+
+		this.density = density;
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
+	 * Updates the size of this pass.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		// Remember the original resolution.
+		this.resolution.set(width, height);
+
+		this.uniforms.get("count").value = Math.round(height * this.density);
+
+	}
+
+}

@@ -13,9 +13,24 @@ export {
 export {
 	BlendFunction,
 	BlendMode,
+	BloomEffect,
+	BokehEffect,
+	ColorAverageEffect,
 	DotScreenEffect,
 	Effect,
-	SMAAEffect
+	EffectType,
+	GlitchEffect,
+	GreyscaleEffect,
+	GridEffect,
+	NoiseEffect,
+	OutlineEffect,
+	PixelationEffect,
+	ScanlineEffect,
+	SepiaEffect,
+	SMAAEffect,
+	TextureEffect,
+	ToneMappingEffect,
+	VignetteEffect
 } from "./effects";
 
 export {
