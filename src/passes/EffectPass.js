@@ -208,10 +208,11 @@ export class EffectPass extends Pass {
 		let vertexMainSupport = "";
 
 		let id = 0, prefix, src, result;
+		let blendMode, blendOpacity;
 		let fragmentShader, vertexShader;
-		let blendOpacity, blendMode;
-		let transformedUv;
 		let mainImageExists, mainUvExists;
+
+		let transformedUv = false;
 
 		this.uniforms = 0;
 		this.varyings = 0;
@@ -244,12 +245,8 @@ export class EffectPass extends Pass {
 
 					prefix = "e" + id++;
 
-					// Integrate the mainImage function call.
-					fragmentMainImage += "\t" + prefix + "MainImage(color0, UV, color1);\n";
+					if(mainUvExists) {
 
-					if(fragmentShader.indexOf("mainUv") >= 0) {
-
-						// Integrate the mainUv function call.
 						fragmentMainUv += "\t" + prefix + "MainUv(UV);\n";
 						transformedUv = true;
 
@@ -263,17 +260,16 @@ export class EffectPass extends Pass {
 
 						if(vertexShader.indexOf("mainSupport") >= 0) {
 
-							// Integrate the mainSupport function call.
 							vertexMainSupport += "\t" + prefix + "MainSupport();\n";
 
+							result = this.prefix(prefix, varyingRegExp, this.prefix(
+								prefix, functionRegExp, vertexShader).string);
+
+							// Count varyings.
+							this.varyings += result.occurrences;
+							src.push(result.string);
+
 						}
-
-						// Prefix varyings and functions in the vertex code.
-						result = this.prefix(prefix, varyingRegExp, this.prefix(
-							prefix, functionRegExp, vertexShader).string);
-
-						this.varyings += result.occurrences;
-						src.push(result.string);
 
 					}
 
@@ -284,16 +280,24 @@ export class EffectPass extends Pass {
 					// Collect unique blend modes.
 					blendModes.set(blendMode.blendFunction, blendMode);
 
-					// Include the blend opacity uniform of this effect.
-					blendOpacity = prefix + "BlendOpacity";
-					uniforms.set(blendOpacity, blendMode.opacity);
+					if(mainImageExists) {
 
-					// Blend the result of this effect with the input color.
-					fragmentMainImage += "\tcolor0 = vec4(blend" + blendMode.blendFunction +
-						"(color0.rgb, color1.rgb, " + blendOpacity + "), color1.a);\n";
+						fragmentMainImage += "\t" + prefix + "MainImage(color0, UV, color1);\n";
+
+						// Include the blend opacity uniform of this effect.
+						blendOpacity = prefix + "BlendOpacity";
+						uniforms.set(blendOpacity, blendMode.opacity);
+
+						// Blend the result of this effect with the input color.
+						fragmentMainImage += "\tcolor0 = vec4(blend" + blendMode.blendFunction +
+							"(color0.rgb, color1.rgb, " + blendOpacity + "), color1.a);\n\n";
+
+						fragmentHead += "uniform float " + blendOpacity + ";\n";
+
+					}
 
 					// Include the modified code in the final shader.
-					fragmentHead += "uniform float " + blendOpacity + ";\n" + src[0] + "\n";
+					fragmentHead += src[0] + "\n";
 
 					if(src.length === 2) {
 
