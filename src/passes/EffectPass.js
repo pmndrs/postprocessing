@@ -211,6 +211,7 @@ export class EffectPass extends Pass {
 		let fragmentShader, vertexShader;
 		let blendOpacity, blendMode;
 		let transformedUv;
+		let mainImageExists, mainUvExists;
 
 		this.uniforms = 0;
 		this.varyings = 0;
@@ -224,13 +225,20 @@ export class EffectPass extends Pass {
 				fragmentShader = effect.fragmentShader;
 				vertexShader = effect.vertexShader;
 
+				if(fragmentShader !== undefined) {
+
+					mainImageExists = (fragmentShader.indexOf("mainImage") >= 0);
+					mainUvExists = (fragmentShader.indexOf("mainUv") >= 0);
+
+				}
+
 				if(fragmentShader === undefined) {
 
 					console.error("Missing fragment shader", effect);
 
-				} else if(fragmentShader.indexOf("mainImage") < 0) {
+				} else if(!mainImageExists && !mainUvExists) {
 
-					console.error("Missing mainImage function", effect);
+					console.error("The fragment shader contains neither a mainImage nor a mainUv function", effect);
 
 				} else {
 
