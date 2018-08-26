@@ -33,6 +33,8 @@ export class VignetteEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
+			defines: new Map(),
+
 			uniforms: new Map([
 				["offset", new Uniform(settings.offset)],
 				["darkness", new Uniform(settings.darkness)]
@@ -40,9 +42,39 @@ export class VignetteEffect extends Effect {
 
 		});
 
-		if(settings.eskil) {
+		this.eskil = settings.eskil;
+
+	}
+
+	/**
+	 * Indicates whether Eskil's vignette technique is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get eskil() {
+
+		return this.defines.has("ESKIL");
+
+	}
+
+	/**
+	 * Enables or disables Eskil's vignette technique.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set eskil(value) {
+
+		if(value) {
 
 			this.defines.set("ESKIL", "1");
+
+		} else {
+
+			this.defines.delete("ESKIL");
 
 		}
 
