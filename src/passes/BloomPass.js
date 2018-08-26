@@ -1,5 +1,5 @@
 import { LinearFilter, RGBFormat, Vector2, WebGLRenderTarget } from "three";
-import { CombineMaterial, KernelSize, LuminosityMaterial } from "../materials";
+import { CombineMaterial, KernelSize, LuminanceMaterial } from "../materials";
 import { BlurPass } from "./BlurPass.js";
 import { Pass } from "./Pass.js";
 
@@ -76,11 +76,11 @@ export class BloomPass extends Pass {
 		/**
 		 * A luminosity shader material.
 		 *
-		 * @type {LuminosityMaterial}
+		 * @type {LuminanceMaterial}
 		 * @private
 		 */
 
-		this.luminosityMaterial = new LuminosityMaterial(true);
+		this.luminosityMaterial = new LuminanceMaterial(true);
 
 		this.distinction = options.distinction;
 

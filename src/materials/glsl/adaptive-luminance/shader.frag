@@ -15,7 +15,7 @@ void main() {
 	currentLuminance = max(minLuminance, currentLuminance);
 
 	// Adapt the luminance using Pattanaik's technique.
-	float adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));
+	float adaptedLum = previousLuminance + (currentLuminance - previousLuminance) * (1.0 - exp(-delta * tau));
 
 	gl_FragColor.r = adaptedLum;
 

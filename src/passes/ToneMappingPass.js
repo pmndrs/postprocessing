@@ -7,9 +7,9 @@ import {
 } from "three";
 
 import {
-	AdaptiveLuminosityMaterial,
+	AdaptiveLuminanceMaterial,
 	CopyMaterial,
-	LuminosityMaterial,
+	LuminanceMaterial,
 	ToneMappingMaterial
 } from "../materials";
 
@@ -96,22 +96,22 @@ export class ToneMappingPass extends Pass {
 		/**
 		 * A luminosity shader material.
 		 *
-		 * @type {LuminosityMaterial}
+		 * @type {LuminanceMaterial}
 		 * @private
 		 */
 
-		this.luminosityMaterial = new LuminosityMaterial();
+		this.luminosityMaterial = new LuminanceMaterial();
 
 		this.luminosityMaterial.uniforms.distinction.value = (options.distinction !== undefined) ? options.distinction : 1.0;
 
 		/**
 		 * An adaptive luminance shader material.
 		 *
-		 * @type {AdaptiveLuminosityMaterial}
+		 * @type {AdaptiveLuminanceMaterial}
 		 * @private
 		 */
 
-		this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
+		this.adaptiveLuminosityMaterial = new AdaptiveLuminanceMaterial();
 
 		this.resolution = options.resolution;
 

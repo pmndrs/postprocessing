@@ -45,7 +45,7 @@ export {
 } from "./passes";
 
 export {
-	AdaptiveLuminosityMaterial,
+	AdaptiveLuminanceMaterial,
 	BokehMaterial,
 	ColorEdgesMaterial,
 	CombineMaterial,
@@ -58,7 +58,7 @@ export {
 	GlitchMaterial,
 	GodRaysMaterial,
 	KernelSize,
-	LuminosityMaterial,
+	LuminanceMaterial,
 	OutlineBlendMaterial,
 	OutlineEdgesMaterial,
 	PixelationMaterial,

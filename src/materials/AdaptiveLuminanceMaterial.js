@@ -1,23 +1,23 @@
 import { ShaderMaterial, Uniform } from "three";
 
-import fragment from "./glsl/adaptive-luminosity/shader.frag";
-import vertex from "./glsl/adaptive-luminosity/shader.vert";
+import fragment from "./glsl/adaptive-luminance/shader.frag";
+import vertex from "./glsl/adaptive-luminance/shader.vert";
 
 /**
- * An adaptive luminosity shader material.
+ * An adaptive luminance shader material.
  */
 
-export class AdaptiveLuminosityMaterial extends ShaderMaterial {
+export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 
 	/**
-	 * Constructs a new adaptive luminosity material.
+	 * Constructs a new adaptive luminance material.
 	 */
 
 	constructor() {
 
 		super({
 
-			type: "AdaptiveLuminosityMaterial",
+			type: "AdaptiveLuminanceMaterial",
 
 			defines: {
 

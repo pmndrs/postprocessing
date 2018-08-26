@@ -1,10 +1,10 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/luminosity/shader.frag";
-import vertex from "./glsl/luminosity/shader.vert";
+import fragment from "./glsl/luminance/shader.frag";
+import vertex from "./glsl/luminance/shader.vert";
 
 /**
- * A luminosity shader material.
+ * A luminance shader material.
  *
  * This shader produces a greyscale luminance map that describes the absolute
  * amount of light emitted by a scene. It can also be configured to output
@@ -23,10 +23,10 @@ import vertex from "./glsl/luminosity/shader.vert";
  *  https://cycling74.com/2007/05/23/your-first-shader/#.Vty9FfkrL4Z
  */
 
-export class LuminosityMaterial extends ShaderMaterial {
+export class LuminanceMaterial extends ShaderMaterial {
 
 	/**
-	 * Constructs a new luminosity material.
+	 * Constructs a new luminance material.
 	 *
 	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colours scaled with their luminance value.
 	 * @param {Vector2} [luminanceRange] - If provided, the shader will mask out texels that aren't in the specified luminance range.
@@ -38,7 +38,7 @@ export class LuminosityMaterial extends ShaderMaterial {
 
 		super({
 
-			type: "LuminosityMaterial",
+			type: "LuminanceMaterial",
 
 			uniforms: {
 
