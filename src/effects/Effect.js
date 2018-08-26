@@ -52,7 +52,7 @@ export class Effect {
 	 * @param {String} name - The name of this effect. Doesn't have to be unique.
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
-	 * @param {Priority} [options.priority=Priority.NORMAL] - The execution priority. Most effects should use the default priority.
+	 * @param {Priority} [options.type=EffectType.BASIC] - The effect type that determines the execution priority.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines=null] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms=null] - Custom shader uniforms. Keys are names and values are uniforms.
@@ -62,7 +62,7 @@ export class Effect {
 	constructor(name, fragmentShader, options = {}) {
 
 		const settings = Object.assign({
-			priority: Priority.NORMAL,
+			type: EffectType.BASIC,
 			blendFunction: BlendFunction.SCREEN,
 			defines: null,
 			uniforms: null,
@@ -115,20 +115,15 @@ export class Effect {
 		this.uniforms = settings.uniforms;
 
 		/**
-		 * The priority of this effect.
+		 * The type of this effect.
 		 *
-		 * An effect with a higher priority will be executed before an effect with a
-		 * lower priority.
+		 * Effects of the same type will be executed in the order in which they
+		 * were registered. Some types imply a higher priority.
 		 *
-		 * Effects of the same priority will be executed in the order in which they
-		 * were registered.
-		 *
-		 * Changing the priority at runtime has no effect.
-		 *
-		 * @type {Priority}
+		 * @type {EffectType}
 		 */
 
-		this.priority = settings.priority;
+		this.type = settings.type;
 
 		/**
 		 * The blend mode of this effect.
@@ -230,18 +225,18 @@ export class Effect {
 }
 
 /**
- * An enumeration of effect priority levels.
+ * An enumeration of effect types.
  *
  * @type {Object}
- * @property {Number} HIGHEST - The highest priority. There should only be one effect with this priority per EffectPass.
- * @property {Number} HIGH - A high priority level. Effects will be executed before those that have a lower priority.
- * @property {Number} NORMAL - The normal priority level. Most passes should use this priority.
+ * @property {Number} ANTIALIASING - Describes antialiasing effects. There should be no more than one effect of this type per EffectPass.
+ * @property {Number} CONVOLUTION - Describes blur effects which should run before basic effects.
+ * @property {Number} BASIC - The normal image effect type. Most effects should use this type.
  */
 
-export const Priority = {
+export const EffectType = {
 
-	HIGHEST: 0,
-	HIGH: 1,
-	NORMAL: 2
+	ANTIALIASING: 0,
+	CONVOLUTION: 1,
+	BASIC: 2
 
 };

@@ -12,7 +12,7 @@ import {
 import { ColorEdgesMaterial, SMAAWeightsMaterial } from "../materials";
 import { ClearPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect, Priority } from "./Effect.js";
+import { Effect, EffectType } from "./Effect.js";
 
 import searchImageDataURL from "../images/smaa/searchImageDataURL.js";
 import areaImageDataURL from "../images/smaa/areaImageDataURL.js";
@@ -40,7 +40,7 @@ export class SMAAEffect extends Effect {
 
 		super("SMAAEffect", fragment, {
 
-			priority: Priority.HIGHEST,
+			type: EffectType.ANTIALIASING,
 			blendFunction: BlendFunction.NORMAL,
 
 			uniforms: new Map([

@@ -1,4 +1,5 @@
 import { BlendFunction } from "../effects/blending";
+import { EffectType } from "../effects/Effect.js";
 import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -33,13 +34,13 @@ export class EffectPass extends Pass {
 		this.mainCamera = camera;
 
 		/**
-		 * The effects, sorted by priority, DESC.
+		 * The effects, sorted by type priority, DESC.
 		 *
 		 * @type {Effect[]}
 		 * @private
 		 */
 
-		this.effects = effects.sort((a, b) => (a.priority - b.priority));
+		this.effects = effects.sort((a, b) => (a.type - b.type));
 
 		/**
 		 * Indicates whether dithering is enabled.
