@@ -47,7 +47,6 @@ export class SMAAEffect extends Effect {
 				["weightMap", new Uniform(null)]
 			]),
 
-			fragmentShader: fragment,
 			vertexShader: vertex
 
 		});
@@ -156,8 +155,8 @@ export class SMAAEffect extends Effect {
 	update(renderer, inputBuffer, delta) {
 
 		this.clearPass.render(renderer, this.renderTargetColorEdges);
-		this.colorEdgesPass.render(renderer, inputBuffer, this.renderTargetColorEdges, delta, false);
-		this.weightsPass.render(renderer, this.renderTargetColorEdges, this.renderTargetWeights, delta, false);
+		this.colorEdgesPass.render(renderer, inputBuffer, this.renderTargetColorEdges);
+		this.weightsPass.render(renderer, this.renderTargetColorEdges, this.renderTargetWeights);
 
 	}
 
