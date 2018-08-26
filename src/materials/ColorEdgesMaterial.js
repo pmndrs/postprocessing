@@ -64,7 +64,6 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	setEdgeDetectionThreshold(threshold) {
 
 		this.defines.EDGE_THRESHOLD = threshold.toFixed("2");
-
 		this.needsUpdate = true;
 
 	}

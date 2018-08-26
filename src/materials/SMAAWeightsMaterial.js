@@ -72,7 +72,6 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 		this.defines.MAX_SEARCH_STEPS_INT = steps.toFixed("0");
 		this.defines.MAX_SEARCH_STEPS_FLOAT = steps.toFixed("1");
-
 		this.needsUpdate = true;
 
 	}
