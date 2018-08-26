@@ -260,7 +260,7 @@ export class EffectPass extends Pass {
 
 					}
 
-					// Prefix varyings and functions in the fragment code.
+					// Prefix varyings and functions.
 					src = [this.prefix(prefix, varyingRegExp, this.prefix(
 						prefix, functionRegExp, fragmentShader).string).string];
 
@@ -282,6 +282,7 @@ export class EffectPass extends Pass {
 					}
 
 					// Prefix macros and uniforms.
+					// @todo Consider prefixing varyings and uniforms within macros.
 					this.prefixVariables(prefix, effect.defines, defines, src);
 					this.prefixVariables(prefix, effect.uniforms, uniforms, src);
 
