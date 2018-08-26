@@ -212,6 +212,7 @@ export class EffectPass extends Pass {
 		let fragmentShader, vertexShader;
 		let mainImageExists, mainUvExists;
 
+		let antialiasing = false;
 		let transformedUv = false;
 
 		this.uniforms = 0;
@@ -219,6 +220,7 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
+			antialiasing = antialiasing || (effect.type === EffectType.ANTIALIASING);
 			blendMode = effect.blendMode;
 
 			if(blendMode.blendFunction !== BlendFunction.SKIP) {
@@ -249,6 +251,12 @@ export class EffectPass extends Pass {
 
 						fragmentMainUv += "\t" + prefix + "MainUv(UV);\n";
 						transformedUv = true;
+
+						if(antialiasing) {
+
+							console.warn("Effects that transform UV coordinates are incompatible with antialiasing effects", effect);
+
+						}
 
 					}
 
