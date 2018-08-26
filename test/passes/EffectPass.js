@@ -13,7 +13,6 @@ test("can be created and destroyed", t => {
 test("can create a compound shader material", t => {
 
 	const pass = new EffectPass(null, new DotScreenEffect());
-	pass.initialize(null, false);
 
 	t.truthy(pass);
 
