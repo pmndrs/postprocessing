@@ -145,7 +145,35 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
-	 * Detects color edges and computes edge weights.
+	 * Sets the edge detection sensitivity.
+	 *
+	 * See {@link ColorEdgesMaterial#setEdgeDetectionThreshold} for more details.
+	 *
+	 * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].
+	 */
+
+	setSensitivity(threshold) {
+
+		this.colorEdgesPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
+
+	}
+
+	/**
+	 * Sets the maximum amount of horizontal/vertical search steps.
+	 *
+	 * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
+	 *
+	 * @param {Number} steps - The search steps. Range: [0, 112].
+	 */
+
+	setOrthogonalSearchSteps(steps) {
+
+		this.weightsPass.getFullscreenMaterial().setOrthogonalSearchSteps(steps);
+
+	}
+
+	/**
+	 * Updates this effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
