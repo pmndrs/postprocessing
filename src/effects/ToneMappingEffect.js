@@ -182,10 +182,9 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * Whether this pass uses adaptive luminance.
+	 * Indicates whether this pass uses adaptive luminance.
 	 *
 	 * @type {Boolean}
-	 * @default true
 	 */
 
 	get adaptive() {
@@ -199,7 +198,7 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * You'll need to call {@link EffectPass#recompile} after changing this value.
 	 *
-	 * @type {Number}
+	 * @type {Boolean}
 	 */
 
 	set adaptive(value) {
