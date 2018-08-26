@@ -65,10 +65,12 @@ export class OutlineEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
+			defines: new Map(),
+
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
-				["patternTexture", new Uniform(settings.patternTexture)],
+				["patternTexture", new Uniform(null)],
 				["patternScale", new Uniform(settings.patternScale)],
 				["edgeStrength", new Uniform(settings.edgeStrength)],
 				["visibleEdgeColor", new Uniform(settings.visibleEdgeColor)],
@@ -80,17 +82,8 @@ export class OutlineEffect extends Effect {
 
 		});
 
-		if(settings.patternTexture !== null) {
-
-			this.defines.set("USE_PATTERN", "1");
-
-		}
-
-		if(settings.xRay) {
-
-			this.defines.set("X_RAY", "1");
-
-		}
+		this.setPatternTexture(settings.patternTexture);
+		this.xRay = settings.xRay;
 
 		/**
 		 * The main scene.
@@ -336,6 +329,65 @@ export class OutlineEffect extends Effect {
 		this.uniforms.get("edgeTexture").value = value ?
 			this.renderTargetBlurredEdges.texture :
 			this.renderTargetEdges.texture;
+
+	}
+
+	/**
+	 * Indicates whether X-Ray outlines are enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get xRay() {
+
+		return this.defines.has("X_RAY");
+
+	}
+
+	/**
+	 * Enables or disables X-Ray outlines.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set xRay(value) {
+
+		if(value) {
+
+			this.defines.set("X_RAY", "1");
+
+		} else {
+
+			this.defines.delete("X_RAY");
+
+		}
+
+	}
+
+	/**
+	 * Sets the pattern texture.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing the
+	 * texture.
+	 *
+	 * @param {Texture} texture - The new texture.
+	 */
+
+	setPatternTexture(texture) {
+
+		if(texture !== null) {
+
+			this.defines.set("USE_PATTERN", "1");
+			this.uniforms.get("patternTexture").value = texture;
+
+		} else {
+
+			this.defines.delete("USE_PATTERN");
+			this.uniforms.get("patternTexture").value = null;
+
+		}
 
 	}
 
