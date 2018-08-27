@@ -52,7 +52,7 @@ export class Effect {
 	 * @param {String} name - The name of this effect. Doesn't have to be unique.
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
-	 * @param {Priority} [options.type=EffectType.BASIC] - The effect type that determines the execution priority.
+	 * @param {EffectType} [options.type=EffectType.BASIC] - The effect type that determines the execution priority.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines=null] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms=null] - Custom shader uniforms. Keys are names and values are uniforms.
