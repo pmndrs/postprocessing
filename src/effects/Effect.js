@@ -11,16 +11,15 @@ import { BlendMode } from "./blending/BlendMode.js";
  * don't have access to an output buffer and are not supposed to render to
  * screen by themselves.
  *
- * An Effect must specify a fragment shader. The fragment shader may implement
- * the following function: `void mainImage(const in vec4 inputColor, const in
- * vec2 uv, out vec4 outputColor)` to calculate an output color. It may also
- * implement `void mainUv(const inout vec2 uv)` to manipulate the screen UV
- * coordinates.
+ * Every effect must provide a fragment shader that implements at least one of
+ * the following functions:
+ *  - `void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)`
+ *  - `void mainUv(const inout vec2 uv)`
  *
- * Effects may also provide a vertex shader. If defined, it must implement the
- * following function: `void mainSupport()`.
+ * Effects may also provide a vertex shader that implements the function
+ * `void mainSupport()`.
  *
- * The fragment and vertex shaders have access to the following uniforms:
+ * All shaders have access to the following uniforms:
  *  - vec2 resolution
  *  - vec2 texelSize
  *  - float cameraNear
