@@ -59,8 +59,6 @@ export class ToneMappingEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
-			defines: new Map(),
-
 			uniforms: new Map([
 				["luminanceMap", new Uniform(null)],
 				["middleGrey", new Uniform(settings.middleGrey)],

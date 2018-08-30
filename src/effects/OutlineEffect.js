@@ -65,8 +65,6 @@ export class OutlineEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
-			defines: new Map(),
-
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],

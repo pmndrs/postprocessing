@@ -53,8 +53,8 @@ export class Effect {
 	 * @param {Object} [options] - Additional options.
 	 * @param {EffectType} [options.type=EffectType.BASIC] - The effect type that determines the execution priority.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Map<String, String>} [options.defines=null] - Custom preprocessor macro definitions. Keys are names and values are code.
-	 * @param {Map<String, Uniform>} [options.uniforms=null] - Custom shader uniforms. Keys are names and values are uniforms.
+	 * @param {Map<String, String>} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
+	 * @param {Map<String, Uniform>} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
 	 * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don't need one.
 	 */
 
@@ -63,8 +63,8 @@ export class Effect {
 		const settings = Object.assign({
 			type: EffectType.BASIC,
 			blendFunction: BlendFunction.SCREEN,
-			defines: null,
-			uniforms: null,
+			defines: new Map(),
+			uniforms: new Map(),
 			vertexShader: null
 		}, options);
 

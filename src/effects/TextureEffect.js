@@ -34,8 +34,6 @@ export class TextureEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
-			defines: new Map(),
-
 			uniforms: new Map([
 				["texture", new Uniform(settings.texture)]
 			])

@@ -33,8 +33,6 @@ export class VignetteEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
-			defines: new Map(),
-
 			uniforms: new Map([
 				["offset", new Uniform(settings.offset)],
 				["darkness", new Uniform(settings.darkness)]

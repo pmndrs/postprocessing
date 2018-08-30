@@ -31,8 +31,6 @@ export class NoiseEffect extends Effect {
 
 			blendFunction: settings.blendFunction,
 
-			defines: new Map(),
-
 			uniforms: new Map([
 				["intensity", new Uniform(settings.intensity)]
 			])
