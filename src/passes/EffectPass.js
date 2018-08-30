@@ -4,6 +4,73 @@ import { EffectMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
 /**
+ * Prefixes substrings that match the given regular expression.
+ *
+ * @private
+ * @param {String} prefix - A prefix.
+ * @param {RegExp} regExp - A regular expression.
+ * @param {String} string - The string to modify.
+ * @return {Object} The modified string and the number of matches.
+ * @property {String} string - The modified string.
+ * @property {Number} occurrences - The number of matches.
+ */
+
+function prefixRegExp(prefix, regExp, string) {
+
+	let occurrences = 0;
+	let result, name;
+
+	while((result = regExp.exec(string)) !== null) {
+
+		name = result[1];
+
+		string = string.replace(
+			new RegExp(name, "g"),
+			prefix + name.charAt(0).toUpperCase() + name.slice(1)
+		);
+
+		++occurrences;
+
+	}
+
+	return { string, occurrences };
+
+}
+
+/**
+ * Prefixes variables and updates affected code.
+ *
+ * @private
+ * @param {String} prefix - A prefix.
+ * @param {Map} input - An input map of variables.
+ * @param {Map} output - An output map.
+ * @param {String[]} src - Source code that uses the given variables.
+ */
+
+function prefixVariables(prefix, input, output, src) {
+
+	const l = src.length;
+
+	let key, regExp, i;
+
+	for(const entry of input.entries()) {
+
+		key = prefix + entry[0].charAt(0).toUpperCase() + entry[0].slice(1);
+		regExp = new RegExp("\\b" + entry[0] + "\\b", "g");
+
+		output.set(key, entry[1]);
+
+		for(i = 0; i < l; ++i) {
+
+			src[i] = src[i].replace(regExp, key);
+
+		}
+
+	}
+
+}
+
+/**
  * An effect pass.
  *
  * Use this pass to combine {@link Effect} instances.
@@ -114,77 +181,6 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * Prefixes substrings that match the given regular expression.
-	 *
-	 * @private
-	 * @param {String} prefix - A prefix.
-	 * @param {RegExp} regExp - A regular expression.
-	 * @param {String} string - The string to modify.
-	 * @return {Object} The modified string and the number of matches.
-	 * @property {String} string - The modified string.
-	 * @property {Number} occurrences - The number of matches.
-	 */
-
-	prefix(prefix, regExp, string) {
-
-		let occurrences = 0;
-		let result, name;
-
-		while((result = regExp.exec(string)) !== null) {
-
-			name = result[1];
-
-			string = string.replace(
-				new RegExp(name, "g"),
-				prefix + name.charAt(0).toUpperCase() + name.slice(1)
-			);
-
-			++occurrences;
-
-		}
-
-		return { string, occurrences };
-
-	}
-
-	/**
-	 * Prefixes variables and updates affected code.
-	 *
-	 * @private
-	 * @param {String} prefix - A prefix.
-	 * @param {Map} input - An input map of variables.
-	 * @param {Map} output - An output map.
-	 * @param {String[]} src - Source code that uses the given variables.
-	 */
-
-	prefixVariables(prefix, input, output, src) {
-
-		const l = src.length;
-
-		let key, regExp, i;
-
-		if(input !== null) {
-
-			for(const entry of input.entries()) {
-
-				key = prefix + entry[0].charAt(0).toUpperCase() + entry[0].slice(1);
-				regExp = new RegExp("\\b" + entry[0] + "\\b", "g");
-
-				output.set(key, entry[1]);
-
-				for(i = 0; i < l; ++i) {
-
-					src[i] = src[i].replace(regExp, key);
-
-				}
-
-			}
-
-		}
-
-	}
-
-	/**
 	 * Creates a compound shader material.
 	 *
 	 * @private
@@ -261,7 +257,7 @@ export class EffectPass extends Pass {
 					}
 
 					// Prefix varyings and functions.
-					src = [this.prefix(prefix, varyingRegExp, this.prefix(
+					src = [prefixRegExp(prefix, varyingRegExp, prefixRegExp(
 						prefix, functionRegExp, fragmentShader).string).string];
 
 					if(vertexShader !== null) {
@@ -270,7 +266,7 @@ export class EffectPass extends Pass {
 
 							vertexMainSupport += "\t" + prefix + "MainSupport();\n";
 
-							result = this.prefix(prefix, varyingRegExp, this.prefix(
+							result = prefixRegExp(prefix, varyingRegExp, prefixRegExp(
 								prefix, functionRegExp, vertexShader).string);
 
 							// Count varyings.
@@ -283,8 +279,8 @@ export class EffectPass extends Pass {
 
 					// Prefix macros and uniforms.
 					// @todo Consider prefixing varyings and uniforms within macros.
-					this.prefixVariables(prefix, effect.defines, defines, src);
-					this.prefixVariables(prefix, effect.uniforms, uniforms, src);
+					prefixVariables(prefix, effect.defines, defines, src);
+					prefixVariables(prefix, effect.uniforms, uniforms, src);
 
 					// Collect unique blend modes.
 					blendModes.set(blendMode.blendFunction, blendMode);
