@@ -435,7 +435,7 @@ export class EffectPass extends Pass {
 
 		if(this.uniforms > max) {
 
-			console.warn("The current rendering context can't use more than " + max + " uniforms, but " + this.uniforms + " were defined");
+			console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
 
 		}
 
@@ -443,7 +443,7 @@ export class EffectPass extends Pass {
 
 		if(this.varyings > max) {
 
-			console.warn("The current rendering context can't use more than " + max + " varyings, but " + this.varyings + " were defined");
+			console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
 
 		}
 
