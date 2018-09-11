@@ -1,6 +1,6 @@
 import { BlendFunction } from "../effects/blending";
 import { EffectType } from "../effects/Effect.js";
-import { EffectMaterial } from "../materials";
+import { EffectMaterial, Section } from "../materials";
 import { Pass } from "./Pass.js";
 
 /**
@@ -323,25 +323,25 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Register the final shader code snippets.
-		shaderParts.set("VERTEX_HEAD", vertexHead.trim());
-		shaderParts.set("VERTEX_MAIN_SUPPORT", vertexMainSupport.trim());
-		shaderParts.set("FRAGMENT_HEAD", fragmentHead.trim());
-		shaderParts.set("FRAGMENT_MAIN_IMAGE", fragmentMainImage.trim());
-
 		if(transformedUv) {
 
-			shaderParts.set("FRAGMENT_MAIN_UV", "vec2 transformedUv = vUv;\n\t" + fragmentMainUv.trim());
+			fragmentMainUv = "vec2 transformedUv = vUv;\n\t" + fragmentMainUv;
 			defines.set("UV", "transformedUv");
 
 		} else {
 
-			shaderParts.set("FRAGMENT_MAIN_UV", fragmentMainUv.trim());
 			defines.set("UV", "vUv");
 
 		}
 
 		this.uniforms = uniforms.size;
+
+		// Register the final shader code snippets.
+		shaderParts.set(Section.VERTEX_HEAD, vertexHead.trim());
+		shaderParts.set(Section.VERTEX_MAIN_SUPPORT, vertexMainSupport.trim());
+		shaderParts.set(Section.FRAGMENT_HEAD, fragmentHead.trim());
+		shaderParts.set(Section.FRAGMENT_MAIN_UV, fragmentMainUv.trim());
+		shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, fragmentMainImage.trim());
 
 		return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
 

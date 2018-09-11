@@ -42,12 +42,12 @@ export class EffectMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragmentTemplate.replace("FRAGMENT_HEAD", shaderParts.get("FRAGMENT_HEAD"))
-				.replace("FRAGMENT_MAIN_UV", shaderParts.get("FRAGMENT_MAIN_UV"))
-				.replace("FRAGMENT_MAIN_IMAGE", shaderParts.get("FRAGMENT_MAIN_IMAGE")),
+			fragmentShader: fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
+				.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
+				.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)),
 
-			vertexShader: vertexTemplate.replace("VERTEX_HEAD", shaderParts.get("VERTEX_HEAD"))
-				.replace("VERTEX_MAIN_SUPPORT", shaderParts.get("VERTEX_MAIN_SUPPORT")),
+			vertexShader: vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
+				.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)),
 
 			dithering: dithering,
 			depthWrite: false,
@@ -125,3 +125,24 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 }
+
+/**
+ * An enumeration of shader code placeholders.
+ *
+ * @type {Object}
+ * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
+ * @property {String} FRAGMENT_MAIN_UV - A placeholder UV transformations inside the fragment shader.
+ * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
+ * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
+ * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for varying calculations inside the vertex shader.
+ */
+
+export const Section = {
+
+	FRAGMENT_HEAD: "FRAGMENT_HEAD",
+	FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
+	FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
+	VERTEX_HEAD: "VERTEX_HEAD",
+	VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
+
+};

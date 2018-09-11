@@ -12,7 +12,7 @@ export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
 export { CopyMaterial } from "./CopyMaterial.js";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial.js";
 export { DotScreenMaterial } from "./DotScreenMaterial.js";
-export { EffectMaterial } from "./EffectMaterial.js";
+export { EffectMaterial, Section } from "./EffectMaterial.js";
 export { FilmMaterial } from "./FilmMaterial.js";
 export { GlitchMaterial } from "./GlitchMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
