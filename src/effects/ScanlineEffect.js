@@ -92,9 +92,7 @@ export class ScanlineEffect extends Effect {
 
 	setSize(width, height) {
 
-		// Remember the original resolution.
 		this.resolution.set(width, height);
-
 		this.uniforms.get("count").value = Math.round(height * this.density);
 
 	}

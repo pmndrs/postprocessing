@@ -63,15 +63,7 @@ export class NoiseEffect extends Effect {
 
 	set snow(value) {
 
-		if(value) {
-
-			this.defines.set("SNOW", "1");
-
-		} else {
-
-			this.defines.delete("SNOW");
-
-		}
+		value ? this.defines.set("SNOW", "1") : this.defines.delete("SNOW");
 
 	}
 

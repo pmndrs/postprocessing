@@ -352,15 +352,7 @@ export class OutlineEffect extends Effect {
 
 	set xRay(value) {
 
-		if(value) {
-
-			this.defines.set("X_RAY", "1");
-
-		} else {
-
-			this.defines.delete("X_RAY");
-
-		}
+		value ? this.defines.set("X_RAY", "1") : this.defines.delete("X_RAY");
 
 	}
 

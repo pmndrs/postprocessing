@@ -129,7 +129,6 @@ export class GridEffect extends Effect {
 
 	setSize(width, height) {
 
-		// Remember the original resolution.
 		this.resolution.set(width, height);
 
 		const aspect = width / height;
