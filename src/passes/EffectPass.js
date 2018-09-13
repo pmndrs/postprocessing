@@ -235,6 +235,10 @@ export class EffectPass extends Pass {
 
 					console.error("Missing fragment shader", effect);
 
+				} else if(mainUvExists && antialiasing) {
+
+					console.error("Effects that transform UV coordinates are incompatible with antialiasing effects", effect);
+
 				} else if(!mainImageExists && !mainUvExists) {
 
 					console.error("The fragment shader contains neither a mainImage nor a mainUv function", effect);
@@ -247,12 +251,6 @@ export class EffectPass extends Pass {
 
 						fragmentMainUv += "\t" + prefix + "MainUv(UV);\n";
 						transformedUv = true;
-
-						if(antialiasing) {
-
-							console.warn("Effects that transform UV coordinates are incompatible with antialiasing effects", effect);
-
-						}
 
 					}
 
