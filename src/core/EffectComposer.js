@@ -122,9 +122,11 @@ export class EffectComposer {
 	 * written to this texture when something is rendered into one of the buffers
 	 * and the involved materials have depth write enabled.
 	 *
+	 * Under normal circumstances, only the {@link RenderPass} will render depth.
+	 *
 	 * You may enable this mechanism during the instantiation of the composer or
-	 * by assigning a DepthTexture instance later on. You may also disable it by
-	 * assigning null.
+	 * by assigning a `DepthTexture` instance later on. You may also disable it by
+	 * assigning `null`.
 	 *
 	 * @type {DepthTexture}
 	 */
@@ -142,9 +144,6 @@ export class EffectComposer {
 	 * DOM element of the new renderer will take its place.
 	 *
 	 * The auto clear mechanism of the provided renderer will be disabled.
-	 *
-	 * Switching between renderers allows you to dynamically enable or disable
-	 * antialiasing.
 	 *
 	 * @param {WebGLRenderer} renderer - The new renderer.
 	 * @return {WebGLRenderer} The old renderer.
@@ -193,7 +192,6 @@ export class EffectComposer {
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
-	 * @param {Boolean} depthTexture - Whether the render target should have a depth texture.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 

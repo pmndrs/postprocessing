@@ -153,7 +153,7 @@ export class Effect {
 	 * fullscreen render operation, even if the blend function is set to `SKIP`.
 	 *
 	 * You may override this method if you need to render additional off-screen
-	 * textures that will be used in the fragment shader.
+	 * textures or update custom uniforms.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.

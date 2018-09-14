@@ -36,7 +36,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Set this to `BlendFunction.DARKEN` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
 	 * @param {Number} [options.patternScale=1.0] - The scale of the pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
