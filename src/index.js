@@ -18,7 +18,7 @@ export {
 	ColorAverageEffect,
 	DotScreenEffect,
 	Effect,
-	EffectType,
+	EffectAttribute,
 	GlitchEffect,
 	GreyscaleEffect,
 	GridEffect,

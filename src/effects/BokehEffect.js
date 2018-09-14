@@ -1,6 +1,6 @@
 import { Uniform } from "three";
-import { Effect, EffectType } from "./Effect.js";
 import { BlendFunction } from "./blending/BlendFunction.js";
+import { Effect, EffectAttribute } from "./Effect.js";
 
 import fragment from "./glsl/bokeh/shader.frag";
 
@@ -35,7 +35,7 @@ export class BokehEffect extends Effect {
 
 		super("BokehEffect", fragment, {
 
-			type: EffectType.CONVOLUTION,
+			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
 			blendFunction: BlendFunction.NORMAL,
 
 			uniforms: new Map([

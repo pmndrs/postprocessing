@@ -56,7 +56,7 @@ export class Effect {
 	 * @param {String} name - The name of this effect. Doesn't have to be unique.
 	 * @param {String} fragmentShader - The fragment shader. This shader is required.
 	 * @param {Object} [options] - Additional options.
-	 * @param {EffectType} [options.type=EffectType.BASIC] - The effect type that determines the execution priority.
+	 * @param {EffectAttribute} [options.attributes=EffectAttribute.NONE] - The effect attributes that determine the execution priority and resource requirements.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
@@ -66,7 +66,7 @@ export class Effect {
 	constructor(name, fragmentShader, options = {}) {
 
 		const settings = Object.assign({
-			type: EffectType.BASIC,
+			attributes: EffectAttribute.NONE,
 			blendFunction: BlendFunction.SCREEN,
 			defines: new Map(),
 			uniforms: new Map(),
@@ -80,6 +80,17 @@ export class Effect {
 		 */
 
 		this.name = name;
+
+		/**
+		 * An integer that stores effect attributes.
+		 *
+		 * Effects that have the same attributes will be executed in the order in
+		 * which they were registered. Some attributes imply a higher priority.
+		 *
+		 * @type {EffectAttribute}
+		 */
+
+		this.attributes = settings.attributes;
 
 		/**
 		 * The fragment shader.
@@ -117,17 +128,6 @@ export class Effect {
 		 */
 
 		this.uniforms = settings.uniforms;
-
-		/**
-		 * The type of this effect.
-		 *
-		 * Effects of the same type will be executed in the order in which they
-		 * were registered. Some types imply a higher priority.
-		 *
-		 * @type {EffectType}
-		 */
-
-		this.type = settings.type;
 
 		/**
 		 * The blend mode of this effect.
@@ -229,18 +229,23 @@ export class Effect {
 }
 
 /**
- * An enumeration of effect types.
+ * An enumeration of effect attributes.
+ *
+ * Attributes can be concatenated using the bitwise OR operator:
+ *     const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  *
  * @type {Object}
- * @property {Number} ANTIALIASING - Describes antialiasing effects. There should be no more than one effect of this type per EffectPass.
- * @property {Number} CONVOLUTION - Describes blur effects which should run before basic effects.
- * @property {Number} BASIC - The normal image effect type. Most effects should use this type.
+ * @property {Number} ANTIALIASING - Describes antialiasing effects. There should be no more than one effect with this attribute per EffectPass.
+ * @property {Number} CONVOLUTION - Describes blur effects that run before basic effects.
+ * @property {Number} DEPTH - Describes depth effects which require a depth texture.
+ * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
  */
 
-export const EffectType = {
+export const EffectAttribute = {
 
-	ANTIALIASING: 0,
-	CONVOLUTION: 1,
-	BASIC: 2
+	ANTIALIASING: 4,
+	CONVOLUTION: 2,
+	DEPTH: 1,
+	NONE: 0
 
 };
