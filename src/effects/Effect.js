@@ -13,11 +13,14 @@ import { BlendMode } from "./blending/BlendMode.js";
  *
  * Every effect must provide a fragment shader that implements at least one of
  * the following functions:
- *  - `void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)`
- *  - `void mainUv(const inout vec2 uv)`
+ *     void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
+ *     void mainUv(const inout vec2 uv)
  *
- * Effects may also provide a vertex shader that implements the function
- * `void mainSupport()`.
+ * Depth-based effects must implement the following function:
+ *     void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor)
+ *
+ * Effects may also provide a vertex shader that defines the following function:
+ *     void mainSupport()
  *
  * All shaders have access to the following uniforms:
  *  - vec2 resolution
@@ -27,13 +30,15 @@ import { BlendMode } from "./blending/BlendMode.js";
  *  - float aspect
  *  - float time
  *
- * The fragment shader has access to the convenience function `float
- * readDepth(const in vec2 uv)` as well as the following additional uniforms:
+ * The fragment shader has access to the following additional uniforms:
  *  - sampler2D inputBuffer
  *  - sampler2D depthBuffer
  *
+ * If the camera of the associated `EffectPass` is a `PerspectiveCamera`, the
+ * macro `PERSPECTIVE_CAMERA` will be defined.
+ *
  * Effects may define custom uniforms, varyings, functions and preprocessor
- * macros as usual.
+ * macros as usual, but should not define global variables or constants.
  *
  * Furthermore, the shader chunks [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl)
  * and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl)
