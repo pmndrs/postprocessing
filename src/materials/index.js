@@ -20,6 +20,7 @@ export { LuminanceMaterial } from "./LuminanceMaterial.js";
 export { OutlineBlendMaterial } from "./OutlineBlendMaterial.js";
 export { OutlineEdgesMaterial } from "./OutlineEdgesMaterial.js";
 export { PixelationMaterial } from "./PixelationMaterial.js";
+export { RadialBlurMaterial } from "./RadialBlurMaterial.js";
 export { RealisticBokehMaterial } from "./RealisticBokehMaterial.js";
 export { ShockWaveMaterial } from "./ShockWaveMaterial.js";
 export { SMAABlendMaterial } from "./SMAABlendMaterial.js";

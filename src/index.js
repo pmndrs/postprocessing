@@ -77,6 +77,7 @@ export {
 	OutlineBlendMaterial,
 	OutlineEdgesMaterial,
 	PixelationMaterial,
+	RadialBlurMaterial,
 	RealisticBokehMaterial,
 	ShockWaveMaterial,
 	SMAABlendMaterial,
