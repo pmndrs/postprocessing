@@ -1,5 +1,4 @@
 import { DataTexture, FloatType, RGBFormat, Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
 import fragment from "./glsl/glitch/shader.frag";
@@ -39,7 +38,7 @@ function randomFloat(low, high) {
  *
  * Reference: https://github.com/staffantan/unityglitch
  *
- * Warning: This effect is incompatible with antialiasing effects. It is
+ * Warning: This effect cannot be merged with antialiasing effects. It is
  * recommended to run this effect last using a stand-alone {@link EffectPass}.
  */
 
@@ -49,7 +48,6 @@ export class GlitchEffect extends Effect {
 	 * Constructs a new sepia effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.
 	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
 	 */
@@ -57,7 +55,6 @@ export class GlitchEffect extends Effect {
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
 			perturbationMap: null,
 			dtSize: 64
 		}, options);

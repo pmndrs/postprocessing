@@ -1,5 +1,4 @@
 import { Uniform, Vector2 } from "three";
-import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
 import fragment from "./glsl/pixelation/shader.frag";
@@ -7,7 +6,7 @@ import fragment from "./glsl/pixelation/shader.frag";
 /**
  * A pixelation effect.
  *
- * Warning: This effect is incompatible with antialiasing effects. It is
+ * Warning: This effect cannot be merged with antialiasing effects. It is
  * recommended to run this effect last using a stand-alone {@link EffectPass}.
  */
 
@@ -16,21 +15,12 @@ export class PixelationEffect extends Effect {
 	/**
 	 * Constructs a new pixelation effect.
 	 *
-	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Number} [options.granularity=30.0] - The pixel granularity.
+	 * @param {Object} [granularity=30.0] - The pixel granularity.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			granularity: 30.0
-		}, options);
+	constructor(granularity = 30.0) {
 
 		super("PixelationEffect", fragment, {
-
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
 				["active", new Uniform(false)],
@@ -55,7 +45,7 @@ export class PixelationEffect extends Effect {
 		 * @private
 		 */
 
-		this.granularity = settings.granularity;
+		this.granularity = granularity;
 
 	}
 
