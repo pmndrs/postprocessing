@@ -131,10 +131,10 @@ export class EffectMaterial extends ShaderMaterial {
  *
  * @type {Object}
  * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
- * @property {String} FRAGMENT_MAIN_UV - A placeholder UV transformations inside the fragment shader.
+ * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.
  * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.
  * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.
- * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for varying calculations inside the vertex shader.
+ * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.
  */
 
 export const Section = {
