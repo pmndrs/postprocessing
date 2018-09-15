@@ -90,7 +90,7 @@ function prefixVariables(prefix, input, output) {
  * @param {Map<String, Uniform>} uniforms - The uniforms.
  * @param {EffectAttribute} attributes - The global, collective attributes.
  * @return {Object} The results.
- * @property {Number} varyings - The varyings used by the given effect.
+ * @property {String[]} varyings - The varyings used by the given effect.
  * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.
  */
 
@@ -148,7 +148,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			.concat(Array.from(effect.uniforms.keys()))
 			.concat(Array.from(effect.defines.keys()));
 
-		// Create maps of prefixed uniforms and macros.
+		// Store prefixed uniforms and macros.
 		prefixVariables(prefix, effect.uniforms, uniforms);
 		prefixVariables(prefix, effect.defines, defines);
 
