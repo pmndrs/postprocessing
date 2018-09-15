@@ -364,7 +364,7 @@ export class EffectPass extends Pass {
 		// Check if any of the effects relies on depth.
 		if((attributes & EffectAttribute.DEPTH) !== 0) {
 
-			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\t" +
+			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" +
 				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
 
 			this.needsDepthTexture = true;
