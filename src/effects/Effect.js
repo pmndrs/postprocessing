@@ -82,7 +82,7 @@ export class Effect {
 		this.name = name;
 
 		/**
-		 * An integer that stores effect attributes.
+		 * The effect attributes.
 		 *
 		 * Effects that have the same attributes will be executed in the order in
 		 * which they were registered. Some attributes imply a higher priority.
