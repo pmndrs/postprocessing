@@ -85,6 +85,18 @@ export class Pass {
 
 		this.needsSwap = true;
 
+		/**
+		 * Indicates whether the {@link EffectComposer} should prepare a depth
+		 * texture for this pass.
+		 *
+		 * Set this to `true` if this pass relies on depth information from a
+		 * preceding {@link RenderPass}.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.needsDepthTexture = false;
+
 	}
 
 	/**

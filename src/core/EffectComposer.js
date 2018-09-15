@@ -34,10 +34,14 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
-	 * @param {Boolean} [options.depthTexture=false] - Set to true if one of your passes relies on a depth texture.
 	 */
 
 	constructor(renderer = null, options = {}) {
+
+		const settings = Object.assign({
+			depthBuffer: true,
+			stencilBuffer: false
+		}, options);
 
 		/**
 		 * The renderer.
@@ -74,13 +78,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-
-			this.inputBuffer = this.createBuffer(
-				(options.depthBuffer !== undefined) ? options.depthBuffer : true,
-				(options.stencilBuffer !== undefined) ? options.stencilBuffer : false,
-				(options.depthTexture !== undefined) ? options.depthTexture : false
-			);
-
+			this.inputBuffer = this.createBuffer(settings.depthBuffer, settings.stencilBuffer);
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
@@ -131,10 +129,17 @@ export class EffectComposer {
 	 * @type {DepthTexture}
 	 */
 
-	set depthTexture(x) {
+	set depthTexture(value) {
 
-		this.inputBuffer.depthTexture = x;
-		this.outputBuffer.depthTexture = x;
+		if(value !== null && this.inputBuffer.stencilBuffer) {
+
+			value.format = DepthStencilFormat;
+			value.type = UnsignedInt248Type;
+
+		}
+
+		this.inputBuffer.depthTexture = value;
+		this.outputBuffer.depthTexture = value;
 
 	}
 
@@ -195,7 +200,7 @@ export class EffectComposer {
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, depthTexture) {
+	createBuffer(depthBuffer, stencilBuffer) {
 
 		const drawingBufferSize = this.renderer.getDrawingBufferSize();
 		const alpha = this.renderer.context.getContextAttributes().alpha;
@@ -205,16 +210,8 @@ export class EffectComposer {
 			magFilter: LinearFilter,
 			format: alpha ? RGBAFormat : RGBFormat,
 			depthBuffer: depthBuffer,
-			stencilBuffer: stencilBuffer,
-			depthTexture: depthTexture ? new DepthTexture() : null
+			stencilBuffer: stencilBuffer
 		});
-
-		if(depthTexture && stencilBuffer) {
-
-			renderTarget.depthTexture.format = DepthStencilFormat;
-			renderTarget.depthTexture.type = UnsignedInt248Type;
-
-		}
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
@@ -245,6 +242,12 @@ export class EffectComposer {
 		} else {
 
 			this.passes.push(pass);
+
+		}
+
+		if(pass.needsDepthTexture && this.depthTexture === null) {
+
+			this.depthTexture = new DepthTexture();
 
 		}
 
@@ -345,8 +348,7 @@ export class EffectComposer {
 		if(width === undefined || height === undefined) {
 
 			size = renderer.getSize();
-			width = size.width;
-			height = size.height;
+			width = size.width; height = size.height;
 
 		}
 
@@ -375,8 +377,7 @@ export class EffectComposer {
 
 		const renderTarget = this.createBuffer(
 			this.inputBuffer.depthBuffer,
-			this.inputBuffer.stencilBuffer,
-			(this.inputBuffer.depthTexture !== null)
+			this.inputBuffer.stencilBuffer
 		);
 
 		this.dispose();

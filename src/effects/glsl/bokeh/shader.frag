@@ -4,11 +4,9 @@ uniform float aspect;
 uniform float aperture;
 uniform float maxBlur;
 
-void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
+void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
 	vec2 aspectCorrection = vec2(1.0, aspect);
-
-	float depth = readDepth(uv);
 
 	float focusNear = clamp(focus - dof, 0.0, 1.0);
 	float focusFar = clamp(focus + dof, 0.0, 1.0);
