@@ -58,22 +58,6 @@ export class Pass {
 		this.quad = null;
 
 		/**
-		 * Indicates whether this pass should render to screen.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.renderToScreen = false;
-
-		/**
-		 * Indicates whether this pass should be executed.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.enabled = true;
-
-		/**
 		 * Indicates whether the {@link EffectComposer} should swap the frame
 		 * buffers after this pass has finished rendering.
 		 *
@@ -96,6 +80,22 @@ export class Pass {
 		 */
 
 		this.needsDepthTexture = false;
+
+		/**
+		 * Indicates whether this pass should render to screen.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.renderToScreen = false;
+
+		/**
+		 * Indicates whether this pass should be executed.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.enabled = true;
 
 	}
 
