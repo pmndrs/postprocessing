@@ -100,35 +100,6 @@ export class Pass {
 	}
 
 	/**
-	 * The fullscreen material.
-	 *
-	 * @type {Material}
-	 * @deprecated Use getFullscreenMaterial() instead.
-	 */
-
-	get material() {
-
-		console.warn("Pass.material has been deprecated, please use Pass.getFullscreenMaterial()");
-
-		return this.getFullscreenMaterial();
-
-	}
-
-	/**
-	 * @protected
-	 * @type {Material}
-	 * @deprecated Use setFullscreenMaterial(Material) instead.
-	 */
-
-	set material(value) {
-
-		console.warn("Pass.material has been deprecated, please use Pass.setFullscreenMaterial(Material)");
-
-		this.setFullscreenMaterial(value);
-
-	}
-
-	/**
 	 * Returns the current fullscreen material.
 	 *
 	 * @return {Material} The current fullscreen material, or null if there is none.
