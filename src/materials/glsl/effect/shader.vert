@@ -12,11 +12,10 @@ VERTEX_HEAD
 
 void main() {
 
-	vec4 outputPosition = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 	vUv = uv;
 
 	VERTEX_MAIN_SUPPORT
 
-	gl_Position = outputPosition;
+	gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 
 }
