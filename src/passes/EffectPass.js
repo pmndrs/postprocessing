@@ -64,8 +64,8 @@ function prefixSubstrings(prefix, substrings, strings) {
  *
  * @private
  * @param {String} prefix - A prefix.
- * @param {Map} input - An input map of variables.
- * @param {Map} output - An output map. The keys of this map will be prefixed.
+ * @param {Map} input - An input map of variables. The values of this map will be copied to the output map using prefixed keys.
+ * @param {Map} output - An output map.
  */
 
 function prefixVariables(prefix, input, output) {
