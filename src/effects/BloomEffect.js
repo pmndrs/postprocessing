@@ -9,7 +9,7 @@ import {
 import { KernelSize, LuminanceMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect, EffectAttribute } from "./Effect.js";
+import { Effect } from "./Effect.js";
 
 import fragment from "./glsl/texture/shader.frag";
 
@@ -43,7 +43,6 @@ export class BloomEffect extends Effect {
 
 		super("BloomEffect", fragment, {
 
-			attributes: EffectAttribute.CONVOLUTION,
 			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
