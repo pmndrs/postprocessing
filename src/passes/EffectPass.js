@@ -323,11 +323,11 @@ export class EffectPass extends Pass {
 	createMaterial() {
 
 		const shaderParts = new Map([
-			[Section.VERTEX_HEAD, ""],
-			[Section.VERTEX_MAIN_SUPPORT, ""],
 			[Section.FRAGMENT_HEAD, ""],
 			[Section.FRAGMENT_MAIN_UV, ""],
-			[Section.FRAGMENT_MAIN_IMAGE, ""]
+			[Section.FRAGMENT_MAIN_IMAGE, ""],
+			[Section.VERTEX_HEAD, ""],
+			[Section.VERTEX_MAIN_SUPPORT, ""]
 		]);
 
 		const blendModes = new Map();
