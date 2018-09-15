@@ -34,30 +34,10 @@ export {
 } from "./effects";
 
 export {
-	BloomPass,
-	BlurPass,
-	BokehPass,
-	ClearPass,
-	ClearMaskPass,
-	DotScreenPass,
-	EffectPass,
-	FilmPass,
-	GlitchMode,
-	GlitchPass,
-	GodRaysPass,
-	MaskPass,
-	OutlinePass,
-	Pass,
-	PixelationPass,
-	RealisticBokehPass,
-	RenderPass,
-	SavePass,
-	ShaderPass,
-	ShockWavePass,
-	SMAAPass,
-	TexturePass,
-	ToneMappingPass
-} from "./passes";
+	RawImageData,
+	SMAAAreaImageData,
+	SMAASearchImageData
+} from "./images";
 
 export {
 	AdaptiveLuminanceMaterial,
@@ -86,7 +66,27 @@ export {
 } from "./materials";
 
 export {
-	RawImageData,
-	SMAAAreaImageData,
-	SMAASearchImageData
-} from "./images";
+	BloomPass,
+	BlurPass,
+	BokehPass,
+	ClearPass,
+	ClearMaskPass,
+	DotScreenPass,
+	EffectPass,
+	FilmPass,
+	GlitchMode,
+	GlitchPass,
+	GodRaysPass,
+	MaskPass,
+	OutlinePass,
+	Pass,
+	PixelationPass,
+	RealisticBokehPass,
+	RenderPass,
+	SavePass,
+	ShaderPass,
+	ShockWavePass,
+	SMAAPass,
+	TexturePass,
+	ToneMappingPass
+} from "./passes";
