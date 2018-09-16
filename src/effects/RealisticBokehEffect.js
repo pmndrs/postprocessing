@@ -18,7 +18,6 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Constructs a new bokeh effect.
 	 *
-	 * @param {PerspectiveCamera} [camera] - A camera.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.

@@ -103,6 +103,21 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
+	 * A texture that contains the intermediate result of this effect.
+	 *
+	 * This texture will be applied to the scene colors unless the blend function
+	 * is set to `SKIP`.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
@@ -142,7 +157,7 @@ export class BloomEffect extends Effect {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) {
+	set kernelSize(value) {
 
 		this.blurPass.kernelSize = value;
 
@@ -167,21 +182,6 @@ export class BloomEffect extends Effect {
 	set distinction(value = 1.0) {
 
 		this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
-
-	}
-
-	/**
-	 * A texture that contains the intermediate result of this effect.
-	 *
-	 * This texture will be applied to the scene colors unless the blend function
-	 * is set to `SKIP`.
-	 *
-	 * @type {Texture}
-	 */
-
-	get texture() {
-
-		return this.renderTarget.texture;
 
 	}
 
@@ -236,12 +236,9 @@ export class BloomEffect extends Effect {
 
 	setSize(width, height) {
 
-		// Remember the original resolution.
 		this.resolution.set(width, height);
-
 		this.blurPass.setSize(width, height);
 
-		// The blur pass applies the resolution scale.
 		width = this.blurPass.width;
 		height = this.blurPass.height;
 

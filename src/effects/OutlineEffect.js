@@ -305,7 +305,7 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether the outline overlay should be blurred.
+	 * Indicates whether the outlines should be blurred.
 	 *
 	 * @type {Boolean}
 	 */
@@ -581,9 +581,8 @@ export class OutlineEffect extends Effect {
 			// Detect the outline.
 			this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);
 
-			if(this.blurPass.enabled) {
+			if(this.blur) {
 
-				// Blur the edges.
 				this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
 
 			}
@@ -608,7 +607,6 @@ export class OutlineEffect extends Effect {
 
 	setSize(width, height) {
 
-		// Remember the original resolution.
 		this.resolution.set(width, height);
 
 		this.renderTargetDepth.setSize(width, height);
@@ -618,7 +616,6 @@ export class OutlineEffect extends Effect {
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
 
-		// The blur pass applies the resolution scale.
 		width = this.blurPass.width;
 		height = this.blurPass.height;
 

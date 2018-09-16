@@ -87,7 +87,7 @@ export class ShockWaveEffect extends Effect {
 		 * @type {Object3D}
 		 */
 
-		this.mainCamera = camera;
+		this.camera = camera;
 
 		/**
 		 * The epicenter.
@@ -99,21 +99,21 @@ export class ShockWaveEffect extends Effect {
 		this.epicenter = epicenter;
 
 		/**
-		 * The speed of the shock wave animation.
-		 *
-		 * @type {Number}
-		 */
-
-		this.speed = settings.speed;
-
-		/**
 		 * The object position in screen space.
 		 *
 		 * @type {Vector3}
 		 * @private
 		 */
 
-		this.screenPosition = new Vector3();
+		this.screenPosition = this.uniforms.get("center").value;
+
+		/**
+		 * The speed of the shock wave animation.
+		 *
+		 * @type {Number}
+		 */
+
+		this.speed = settings.speed;
 
 		/**
 		 * A time accumulator.
@@ -143,6 +143,7 @@ export class ShockWaveEffect extends Effect {
 
 		this.time = 0.0;
 		this.active = true;
+		this.uniforms.get("active").value = true;
 
 	}
 
@@ -157,39 +158,43 @@ export class ShockWaveEffect extends Effect {
 	update(renderer, inputBuffer, delta) {
 
 		const epicenter = this.epicenter;
-		const mainCamera = this.mainCamera;
-		const screenPosition = this.screenPosition;
+		const camera = this.camera;
 		const uniforms = this.uniforms;
+
+		let radius;
 
 		if(this.active) {
 
-			const center = uniforms.get("center");
-			const radius = uniforms.get("radius");
-			const waveSize = uniforms.get("waveSize");
+			const waveSize = uniforms.get("waveSize").value;
 
 			// Calculate direction vectors.
-			mainCamera.getWorldDirection(v);
-			ab.copy(mainCamera.position).sub(epicenter);
+			camera.getWorldDirection(v);
+			ab.copy(camera.position).sub(epicenter);
 
 			// Don't render the effect if the object is behind the camera.
 			if(v.angleTo(ab) > HALF_PI) {
 
 				// Scale the effect based on distance to the object.
-				uniforms.get("cameraDistance").value = mainCamera.position.distanceTo(epicenter);
+				uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
 
 				// Calculate the screen position of the epicenter.
-				screenPosition.copy(epicenter).project(mainCamera);
-				center.value.x = (screenPosition.x + 1.0) * 0.5;
-				center.value.y = (screenPosition.y + 1.0) * 0.5;
+				v.copy(epicenter).project(camera);
+				this.screenPosition.set((v.x + 1.0) * 0.5, (v.y + 1.0) * 0.5);
 
 			}
 
 			// Update the shock wave radius based on time.
 			this.time += delta * this.speed;
-			radius.value = this.time - waveSize.value;
+			radius = this.time - waveSize;
+			uniforms.get("radius").value = radius;
 
-			this.active = (radius.value < (uniforms.get("maxRadius").value + waveSize.value) * 2);
-			uniforms.get("active").value = this.active;
+			if(radius >= (uniforms.get("maxRadius").value + waveSize) * 2.0) {
+
+				this.active = false;
+				uniforms.get("active").value = false;
+
+			}
+
 
 		}
 
