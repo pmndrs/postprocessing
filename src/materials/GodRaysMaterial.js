@@ -55,7 +55,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				lightPosition: new Uniform(null),
 
 				exposure: new Uniform(settings.exposure),

@@ -463,7 +463,7 @@ export class GodRaysPass extends Pass {
 
 		// Blur the masked scene along radial lines towards the light source.
 		this.setFullscreenMaterial(godRaysMaterial);
-		godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
+		godRaysMaterial.uniforms.inputBuffer.value = renderTargetX.texture;
 		renderer.render(scene, camera, renderTargetY);
 
 		if(this.blend) {
