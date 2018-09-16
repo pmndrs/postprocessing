@@ -2,7 +2,7 @@
 #include <dithering_pars_fragment>
 
 uniform sampler2D inputBuffer;
-uniform vec3 lightPosition;
+uniform vec2 lightPosition;
 uniform float exposure;
 uniform float decay;
 uniform float density;
@@ -16,7 +16,7 @@ void main() {
 	vec2 coord = vUv;
 
 	// Calculate the vector from this pixel to the light position in screen space.
-	vec2 delta = coord - lightPosition.st;
+	vec2 delta = coord - lightPosition;
 	delta *= 1.0 / NUM_SAMPLES_FLOAT * density;
 
 	// A decreasing illumination factor.
@@ -26,7 +26,7 @@ void main() {
 	vec4 color = vec4(0.0);
 
 	/* Estimate the probability of occlusion at each pixel by summing samples
-	along a ray to the center position. */
+	along a ray to the light position. */
 	for(int i = 0; i < NUM_SAMPLES_INT; ++i) {
 
 		coord -= delta;

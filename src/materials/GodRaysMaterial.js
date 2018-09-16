@@ -1,4 +1,4 @@
-import { ShaderMaterial, Uniform } from "three";
+import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/god-rays/shader.frag";
 import vertex from "./glsl/god-rays/shader.vert";
@@ -24,6 +24,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new god rays material.
 	 *
+	 * @param {Vector2} [lightPosition] - The light position in screen space.
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.density=0.96] - The density of the light rays.
 	 * @param {Number} [options.decay=0.93] - An illumination decay factor.
@@ -32,7 +33,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
 	 */
 
-	constructor(options = {}) {
+	constructor(lightPosition = new Vector2(), options = {}) {
 
 		const settings = Object.assign({
 			exposure: 0.6,
@@ -56,7 +57,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 			uniforms: {
 
 				inputBuffer: new Uniform(null),
-				lightPosition: new Uniform(null),
+				lightPosition: new Uniform(lightPosition),
 
 				exposure: new Uniform(settings.exposure),
 				decay: new Uniform(settings.decay),
@@ -73,6 +74,34 @@ export class GodRaysMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
+
+	}
+
+	/**
+	 * The amount of samples per pixel.
+	 *
+	 * @type {Number}
+	 */
+
+	get samples() {
+
+		return Number.parseInt(this.defines.NUM_SAMPLES_INT);
+
+	}
+
+	/**
+	 * Sets the amount of samples per pixel.
+	 *
+	 * @type {Number}
+	 */
+
+	set samples(value = 60) {
+
+		value = Math.floor(value);
+
+		this.defines.NUM_SAMPLES_FLOAT = value.toFixed(1);
+		this.defines.NUM_SAMPLES_INT = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
