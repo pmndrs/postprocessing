@@ -18,7 +18,7 @@ export class BokehEffect extends Effect {
 	 *
 	 * @param {PerspectiveCamera} [camera] - A camera.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.focus=1.0] - The focus distance, corresponds directly with the scene depth.
+	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
 	 * @param {Number} [options.dof=0.02] - Depth of field. An area in front of and behind the focus point that still appears sharp.
 	 * @param {Number} [options.aperture=0.025] - Camera aperture scale. Bigger values for stronger blur and shallower depth of field.
 	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
@@ -27,7 +27,7 @@ export class BokehEffect extends Effect {
 	constructor(camera, options = {}) {
 
 		const settings = Object.assign({
-			focus: 1.0,
+			focus: 0.5,
 			dof: 0.02,
 			aperture: 0.025,
 			maxBlur: 1.0
