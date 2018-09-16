@@ -236,7 +236,6 @@ export class BlurPass extends Pass {
 
 	setSize(width, height) {
 
-		// Remember the original resolution.
 		this.resolution.set(width, height);
 
 		width = Math.max(1, Math.floor(width * this.resolutionScale));
