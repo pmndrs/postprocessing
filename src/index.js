@@ -20,6 +20,7 @@ export {
 	Effect,
 	EffectAttribute,
 	GlitchEffect,
+	GodRaysEffect,
 	GreyscaleEffect,
 	GridEffect,
 	NoiseEffect,
