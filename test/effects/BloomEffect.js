@@ -1,9 +1,9 @@
 import test from "ava";
-import { Effect } from "../../build/postprocessing.js";
+import { BloomEffect } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 
-	const object = new Effect("Test", null);
+	const object = new BloomEffect();
 	object.dispose();
 
 	t.truthy(object);

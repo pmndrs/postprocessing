@@ -1,9 +1,9 @@
 import test from "ava";
-import { Effect } from "../../build/postprocessing.js";
+import { SepiaEffect } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 
-	const object = new Effect("Test", null);
+	const object = new SepiaEffect();
 	object.dispose();
 
 	t.truthy(object);
