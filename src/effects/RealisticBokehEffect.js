@@ -56,10 +56,10 @@ export class RealisticBokehEffect extends Effect {
 			blendFunction: BlendFunction.NORMAL,
 
 			defines: new Map([
-				["RINGS_INT", new Uniform(settings.rings.toFixed(0))],
-				["RINGS_FLOAT", new Uniform(settings.rings.toFixed(1))],
-				["SAMPLES_INT", new Uniform(settings.samples.toFixed(0))],
-				["SAMPLES_FLOAT", new Uniform(settings.samples.toFixed(1))]
+				["RINGS_INT", settings.rings.toFixed(0)],
+				["RINGS_FLOAT", settings.rings.toFixed(1)],
+				["SAMPLES_INT", settings.samples.toFixed(0)],
+				["SAMPLES_FLOAT", settings.samples.toFixed(1)]
 			]),
 
 			uniforms: new Map([
