@@ -23,7 +23,7 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tMask: new Uniform(null),
+				maskTexture: new Uniform(null),
 				texelSize: new Uniform(new Vector2())
 
 			},

@@ -21,7 +21,7 @@ export class CopyMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				opacity: new Uniform(1.0)
 
 			},

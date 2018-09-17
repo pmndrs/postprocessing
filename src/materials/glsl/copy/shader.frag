@@ -1,11 +1,11 @@
-uniform sampler2D tDiffuse;
+uniform sampler2D inputBuffer;
 uniform float opacity;
 
 varying vec2 vUv;
 
 void main() {
 
-	vec4 texel = texture2D(tDiffuse, vUv);
+	vec4 texel = texture2D(inputBuffer, vUv);
 	gl_FragColor = opacity * texel;
 
 }

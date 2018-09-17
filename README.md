@@ -110,5 +110,5 @@ The original code that this library is based on, was written by [mrdoob](http://
 [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors)
 and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
 
-The film effect incorporates code written by Georg Steinrohder and Pat Shearon which was released under the
+The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the
 [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).

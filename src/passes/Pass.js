@@ -58,6 +58,30 @@ export class Pass {
 		this.quad = null;
 
 		/**
+		 * Indicates whether the {@link EffectComposer} should swap the frame
+		 * buffers after this pass has finished rendering.
+		 *
+		 * Set this to `false` if this pass doesn't render to the output buffer or
+		 * the screen. Otherwise, the contents of the input buffer will be lost.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.needsSwap = true;
+
+		/**
+		 * Indicates whether the {@link EffectComposer} should prepare a depth
+		 * texture for this pass.
+		 *
+		 * Set this to `true` if this pass relies on depth information from a
+		 * preceding {@link RenderPass}.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.needsDepthTexture = false;
+
+		/**
 		 * Indicates whether this pass should render to screen.
 		 *
 		 * @type {Boolean}
@@ -72,47 +96,6 @@ export class Pass {
 		 */
 
 		this.enabled = true;
-
-		/**
-		 * Indicates whether the {@link EffectComposer} should swap the frame
-		 * buffers after this pass has finished rendering.
-		 *
-		 * Set this to `false` if this pass doesn't render to the output buffer or
-		 * the screen. Otherwise, the contents of the input buffer will be lost.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.needsSwap = true;
-
-	}
-
-	/**
-	 * The fullscreen material.
-	 *
-	 * @type {Material}
-	 * @deprecated Use getFullscreenMaterial() instead.
-	 */
-
-	get material() {
-
-		console.warn("Pass.material has been deprecated, please use Pass.getFullscreenMaterial()");
-
-		return this.getFullscreenMaterial();
-
-	}
-
-	/**
-	 * @protected
-	 * @type {Material}
-	 * @deprecated Use setFullscreenMaterial(Material) instead.
-	 */
-
-	set material(value) {
-
-		console.warn("Pass.material has been deprecated, please use Pass.setFullscreenMaterial(Material)");
-
-		this.setFullscreenMaterial(value);
 
 	}
 

@@ -185,7 +185,7 @@ export class OutlinePass extends Pass {
 		 */
 
 		this.outlineEdgesMaterial = new OutlineEdgesMaterial(options);
-		this.outlineEdgesMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
+		this.outlineEdgesMaterial.uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		/**
 		 * An outline blend material.
@@ -195,7 +195,7 @@ export class OutlinePass extends Pass {
 		 */
 
 		this.outlineBlendMaterial = new OutlineBlendMaterial(options);
-		this.outlineBlendMaterial.uniforms.tMask.value = this.renderTargetMask.texture;
+		this.outlineBlendMaterial.uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		this.blur = (options.blur !== undefined) ? options.blur : true;
 
@@ -280,7 +280,7 @@ export class OutlinePass extends Pass {
 
 		this.blurPass.enabled = value;
 
-		this.outlineBlendMaterial.uniforms.tEdges.value = value ?
+		this.outlineBlendMaterial.uniforms.edgeTexture.value = value ?
 			this.renderTargetBlurredEdges.texture :
 			this.renderTargetEdges.texture;
 
@@ -345,7 +345,7 @@ export class OutlinePass extends Pass {
 
 	get overlay() {
 
-		return this.outlineBlendMaterial.uniforms.tEdges.value;
+		return this.outlineBlendMaterial.uniforms.edgeTexture.value;
 
 	}
 
@@ -603,7 +603,7 @@ export class OutlinePass extends Pass {
 
 				// Draw the final overlay onto the scene colours.
 				this.setFullscreenMaterial(this.outlineBlendMaterial);
-				this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+				this.outlineBlendMaterial.uniforms.inputBuffer.value = inputBuffer.texture;
 				renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 			}

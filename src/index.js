@@ -11,12 +11,70 @@ export {
 } from "./core";
 
 export {
+	BlendFunction,
+	BlendMode,
+	BloomEffect,
+	BokehEffect,
+	ColorAverageEffect,
+	DotScreenEffect,
+	Effect,
+	EffectAttribute,
+	GlitchEffect,
+	GodRaysEffect,
+	GreyscaleEffect,
+	GridEffect,
+	NoiseEffect,
+	OutlineEffect,
+	PixelationEffect,
+	RealisticBokehEffect,
+	ScanlineEffect,
+	ShockWaveEffect,
+	SepiaEffect,
+	SMAAEffect,
+	TextureEffect,
+	ToneMappingEffect,
+	VignetteEffect
+} from "./effects";
+
+export {
+	RawImageData,
+	SMAAAreaImageData,
+	SMAASearchImageData
+} from "./images";
+
+export {
+	AdaptiveLuminanceMaterial,
+	BokehMaterial,
+	ColorEdgesMaterial,
+	CombineMaterial,
+	ConvolutionMaterial,
+	CopyMaterial,
+	DepthComparisonMaterial,
+	DotScreenMaterial,
+	EffectMaterial,
+	FilmMaterial,
+	GlitchMaterial,
+	GodRaysMaterial,
+	KernelSize,
+	LuminanceMaterial,
+	OutlineBlendMaterial,
+	OutlineEdgesMaterial,
+	PixelationMaterial,
+	RealisticBokehMaterial,
+	ShockWaveMaterial,
+	SMAABlendMaterial,
+	SMAAWeightsMaterial,
+	ToneMappingMaterial
+} from "./materials";
+
+export {
 	BloomPass,
 	BlurPass,
 	BokehPass,
 	ClearPass,
 	ClearMaskPass,
 	DotScreenPass,
+	EffectPass,
 	FilmPass,
 	GlitchMode,
 	GlitchPass,
@@ -34,33 +92,3 @@ export {
 	TexturePass,
 	ToneMappingPass
 } from "./passes";
-
-export {
-	AdaptiveLuminosityMaterial,
-	BokehMaterial,
-	ColorEdgesMaterial,
-	CombineMaterial,
-	ConvolutionMaterial,
-	CopyMaterial,
-	DepthComparisonMaterial,
-	DotScreenMaterial,
-	FilmMaterial,
-	GlitchMaterial,
-	GodRaysMaterial,
-	KernelSize,
-	LuminosityMaterial,
-	OutlineBlendMaterial,
-	OutlineEdgesMaterial,
-	PixelationMaterial,
-	RealisticBokehMaterial,
-	ShockWaveMaterial,
-	SMAABlendMaterial,
-	SMAAWeightsMaterial,
-	ToneMappingMaterial
-} from "./materials";
-
-export {
-	RawImageData,
-	SMAAAreaImageData,
-	SMAASearchImageData
-} from "./images";

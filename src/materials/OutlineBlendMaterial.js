@@ -41,10 +41,10 @@ export class OutlineBlendMaterial extends ShaderMaterial {
 				pulse: new Uniform(1.0),
 				aspect: new Uniform(1.0),
 
-				tDiffuse: new Uniform(null),
-				tMask: new Uniform(null),
-				tEdges: new Uniform(null),
-				tPattern: new Uniform(null),
+				inputBuffer: new Uniform(null),
+				maskTexture: new Uniform(null),
+				edgeTexture: new Uniform(null),
+				patternTexture: new Uniform(null),
 
 				edgeStrength: new Uniform(settings.edgeStrength),
 				patternScale: new Uniform(settings.patternScale),

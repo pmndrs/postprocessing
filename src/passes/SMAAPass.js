@@ -94,7 +94,7 @@ export class SMAAPass extends Pass {
 
 		this.weightsMaterial = new SMAAWeightsMaterial();
 
-		this.weightsMaterial.uniforms.tDiffuse.value = this.renderTargetColorEdges.texture;
+		this.weightsMaterial.uniforms.inputBuffer.value = this.renderTargetColorEdges.texture;
 
 		/**
 		 * The SMAA search texture.
@@ -113,7 +113,7 @@ export class SMAAPass extends Pass {
 		this.searchTexture.needsUpdate = true;
 		this.searchTexture.flipY = false;
 
-		this.weightsMaterial.uniforms.tSearch.value = this.searchTexture;
+		this.weightsMaterial.uniforms.searchTexture.value = this.searchTexture;
 
 		/**
 		 * The SMAA area texture.
@@ -131,7 +131,7 @@ export class SMAAPass extends Pass {
 		this.areaTexture.needsUpdate = true;
 		this.areaTexture.flipY = false;
 
-		this.weightsMaterial.uniforms.tArea.value = this.areaTexture;
+		this.weightsMaterial.uniforms.areaTexture.value = this.areaTexture;
 
 		/**
 		 * SMAA blend shader material.
@@ -142,7 +142,7 @@ export class SMAAPass extends Pass {
 
 		this.blendMaterial = new SMAABlendMaterial();
 
-		this.blendMaterial.uniforms.tWeights.value = this.renderTargetWeights.texture;
+		this.blendMaterial.uniforms.weightMap.value = this.renderTargetWeights.texture;
 
 	}
 
@@ -160,7 +160,7 @@ export class SMAAPass extends Pass {
 
 		// Detect color edges.
 		this.setFullscreenMaterial(this.colorEdgesMaterial);
-		this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.colorEdgesMaterial.uniforms.inputBuffer.value = inputBuffer.texture;
 		this.clearPass.render(renderer, this.renderTargetColorEdges);
 		renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
 
@@ -170,7 +170,7 @@ export class SMAAPass extends Pass {
 
 		// Apply the antialiasing filter to the colors.
 		this.setFullscreenMaterial(this.blendMaterial);
-		this.blendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+		this.blendMaterial.uniforms.inputBuffer.value = inputBuffer.texture;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 

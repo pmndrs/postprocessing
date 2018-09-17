@@ -1,8 +1,8 @@
 #define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)
 
-uniform sampler2D tDiffuse;
-uniform sampler2D tArea;
-uniform sampler2D tSearch;
+uniform sampler2D inputBuffer;
+uniform sampler2D areaTexture;
+uniform sampler2D searchTexture;
 
 uniform vec2 texelSize;
 
@@ -18,13 +18,13 @@ vec2 round(vec2 x) {
 
 float searchLength(vec2 e, float bias, float scale) {
 
-	// Not required if tSearch accesses are set to point.
+	// Not required if searchTexture accesses are set to point.
 	// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);
 	// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;
 
 	e.r = bias + e.r * scale;
 
-	return 255.0 * texture2D(tSearch, e, 0.0).r;
+	return 255.0 * texture2D(searchTexture, e, 0.0).r;
 
 }
 
@@ -41,7 +41,7 @@ float searchXLeft(vec2 texCoord, float end) {
 
 	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
-		e = texture2D(tDiffuse, texCoord, 0.0).rg;
+		e = texture2D(inputBuffer, texCoord, 0.0).rg;
 		texCoord -= vec2(2.0, 0.0) * texelSize;
 
 		if(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }
@@ -68,7 +68,7 @@ float searchXRight(vec2 texCoord, float end) {
 
 	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
-		e = texture2D(tDiffuse, texCoord, 0.0).rg;
+		e = texture2D(inputBuffer, texCoord, 0.0).rg;
 		texCoord += vec2(2.0, 0.0) * texelSize;
 
 		if(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }
@@ -90,7 +90,7 @@ float searchYUp(vec2 texCoord, float end) {
 
 	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
-		e = texture2D(tDiffuse, texCoord, 0.0).rg;
+		e = texture2D(inputBuffer, texCoord, 0.0).rg;
 		texCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.
 
 		if(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }
@@ -112,7 +112,7 @@ float searchYDown(vec2 texCoord, float end) {
 
 	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i ) {
 
-		e = texture2D(tDiffuse, texCoord, 0.0).rg;
+		e = texture2D(inputBuffer, texCoord, 0.0).rg;
 		texCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.
 
 		if(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }
@@ -139,7 +139,7 @@ vec2 area(vec2 dist, float e1, float e2, float offset) {
 	// Move to proper place, according to the subpixel offset.
 	texCoord.y += AREATEX_SUBTEX_SIZE * offset;
 
-	return texture2D(tArea, texCoord, 0.0).rg;
+	return texture2D(areaTexture, texCoord, 0.0).rg;
 
 }
 
@@ -147,7 +147,7 @@ void main() {
 
 	vec4 weights = vec4(0.0);
 	vec4 subsampleIndices = vec4(0.0);
-	vec2 e = texture2D(tDiffuse, vUv).rg;
+	vec2 e = texture2D(inputBuffer, vUv).rg;
 
 	if(e.g > 0.0) {
 
@@ -163,7 +163,7 @@ void main() {
 		/* Now fetch the left crossing edges, two at a time using bilinear
 		filtering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what
 		value each edge has. */
-		float e1 = texture2D(tDiffuse, coords, 0.0).r;
+		float e1 = texture2D(inputBuffer, coords, 0.0).r;
 
 		// Find the distance to the right.
 		coords.x = searchXRight(vOffset[0].zw, vOffset[2].y);
@@ -178,7 +178,7 @@ void main() {
 
 		// Fetch the right crossing edges.
 		coords.y -= texelSize.y; // WebGL port note: Added.
-		float e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(1, 0)).r;
+		float e2 = sampleLevelZeroOffset(inputBuffer, coords, ivec2(1, 0)).r;
 
 		// Pattern recognised, now get the actual area.
 		weights.rg = area(sqrtD, e1, e2, subsampleIndices.y);
@@ -197,7 +197,7 @@ void main() {
 		d.x = coords.y;
 
 		// Fetch the top crossing edges.
-		float e1 = texture2D(tDiffuse, coords, 0.0).g;
+		float e1 = texture2D(inputBuffer, coords, 0.0).g;
 
 		// Find the distance to the bottom.
 		coords.y = searchYDown(vOffset[1].zw, vOffset[2].w);
@@ -211,7 +211,7 @@ void main() {
 
 		// Fetch the bottom crossing edges.
 		coords.y -= texelSize.y; // WebGL port note: Added.
-		float e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(0, 1)).g;
+		float e2 = sampleLevelZeroOffset(inputBuffer, coords, ivec2(0, 1)).g;
 
 		// Get the area for this direction.
 		weights.ba = area(sqrtD, e1, e2, subsampleIndices.x);
