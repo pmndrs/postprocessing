@@ -12,7 +12,7 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { DotScreenPass } from "../../../src";
+import { BlendFunction, DotScreenEffect, EffectPass, SMAAEffect } from "../../../src";
 
 /**
  * A dot screen demo setup.
@@ -31,13 +31,22 @@ export class DotScreenDemo extends PostProcessingDemo {
 		super("dot-screen", composer);
 
 		/**
-		 * A dot screen pass.
+		 * An effect.
 		 *
-		 * @type {DotScreenPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.dotScreenPass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 		/**
 		 * An object.
@@ -90,6 +99,29 @@ export class DotScreenDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -177,15 +209,23 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new DotScreenPass({
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+
+		const dotScreenEffect = new DotScreenEffect({
 			scale: 0.8,
-			angle: Math.PI * 0.5,
-			intensity: 0.25
+			angle: Math.PI * 0.5
 		});
+
+		dotScreenEffect.blendMode.opacity.value = 0.25;
+
+		const pass = new EffectPass(camera, smaaEffect, dotScreenEffect);
+
+		this.effect = dotScreenEffect;
+		this.pass = pass;
 
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		this.dotScreenPass = pass;
+
 		composer.addPass(pass);
 
 	}
@@ -228,52 +268,41 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const material = this.dotScreenPass.getFullscreenMaterial();
+		const pass = this.pass;
+		const effect = this.effect;
+		const uniforms = effect.uniforms;
+		const blendMode = effect.blendMode;
+		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"average": material.defines.AVERAGE !== undefined,
-			"scale": material.uniforms.scale.value,
-			"angle": material.uniforms.angle.value,
-			"intensity": material.uniforms.intensity.value,
-			"center X": material.uniforms.offsetRepeat.value.x,
-			"center Y": material.uniforms.offsetRepeat.value.y
+			"angle": Math.PI * 0.5,
+			"scale": uniforms.get("scale").value,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendFunctions[blendMode.blendFunction]
 		};
 
-		menu.add(params, "average").onChange(() => {
+		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
 
-			material.setAverageEnabled(params.average);
+			effect.setAngle(params.angle);
 
 		});
 
 		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			material.uniforms.scale.value = params.scale;
+			uniforms.get("scale").value = params.scale;
 
 		});
 
-		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			material.uniforms.angle.value = params.angle;
-
-		});
-
-		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.intensity.value = params.intensity;
+			blendMode.opacity.value = params.opacity;
 
 		});
 
-		const f = menu.addFolder("Center");
+		menu.add(params, "blend mode", blendFunctions).onChange(() => {
 
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.offsetRepeat.value.x = params["center X"];
-
-		});
-
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.offsetRepeat.value.y = params["center Y"];
+			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			pass.recompile();
 
 		});
 
