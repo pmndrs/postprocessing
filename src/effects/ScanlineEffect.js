@@ -14,17 +14,15 @@ export class ScanlineEffect extends Effect {
 	 * Constructs a new scanline effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.density=1.25] - The scanline density.
-	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			density: 1.25,
-			intensity: 1.0
+			blendFunction: BlendFunction.MULTIPLY,
+			density: 1.25
 		}, options);
 
 		super("ScanlineEffect", fragment, {
@@ -32,8 +30,7 @@ export class ScanlineEffect extends Effect {
 			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				["count", new Uniform(0.0)],
-				["intensity", new Uniform(settings.intensity)]
+				["count", new Uniform(0.0)]
 			])
 
 		});

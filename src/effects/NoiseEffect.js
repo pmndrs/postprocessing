@@ -1,4 +1,3 @@
-import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -14,28 +13,18 @@ export class NoiseEffect extends Effect {
 	 * Constructs a new noise effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Boolean} [options.snow=false] - Enables white noise.
-	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {Boolean} [options.snow=false] - Enables white noise. Works best with `BlendFunction.ADD`.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			snow: false,
-			intensity: 1.0
+			blendFunction: BlendFunction.MULTIPLY,
+			snow: false
 		}, options);
 
-		super("NoiseEffect", fragment, {
-
-			blendFunction: settings.blendFunction,
-
-			uniforms: new Map([
-				["intensity", new Uniform(settings.intensity)]
-			])
-
-		});
+		super("NoiseEffect", fragment, { blendFunction: settings.blendFunction });
 
 		this.snow = settings.snow;
 

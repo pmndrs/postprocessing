@@ -51,7 +51,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 		vec4 cr = texture2D(inputBuffer, uv + offset);
 		vec4 cb = texture2D(inputBuffer, uv - offset);
 
-		color = vec4(cr.r, color.g, cb.b, color.a);
+		color.rgb = vec3(cr.r, color.g, cb.b);
 
 	}
 

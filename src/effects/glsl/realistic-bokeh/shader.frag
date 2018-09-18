@@ -57,7 +57,7 @@ vec3 processTexel(const in vec2 coords, const in float blur) {
 		texture2D(inputBuffer, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b
 	);
 
-	// Calculate the luminance of the constructed colour.
+	// Calculate the luminance of the constructed color.
 	float luminance = linearToRelativeLuminance(c);
 	float threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);
 
@@ -127,7 +127,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	const int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;
 
-	vec4 color = inputColor;
+	vec3 color = inputColor.rgb;
 
 	if(blur >= 0.05) {
 
@@ -146,13 +146,13 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 				}
 
-				s += gather(float(i), float(j), float(ringSamples), uv, blurFactor, blur, color.rgb);
+				s += gather(float(i), float(j), float(ringSamples), uv, blurFactor, blur, color);
 
 			}
 
 		}
 
-		color.rgb /= s;
+		color /= s;
 
 	}
 
@@ -162,11 +162,11 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 		float m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);
 		float e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);
 
-		color.rgb = mix(color.rgb, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);
-		color.rgb = mix(color.rgb, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);
+		color = mix(color, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);
+		color = mix(color, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);
 
 	#endif
 
-	outputColor = color;
+	outputColor = vec4(color, inputColor.a);
 
 }
