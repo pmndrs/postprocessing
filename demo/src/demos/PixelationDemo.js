@@ -16,9 +16,12 @@ import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
+	BlendFunction,
 	ClearMaskPass,
+	EffectPass,
 	MaskPass,
-	PixelationPass
+	PixelationEffect,
+	SMAAEffect
 } from "../../../src";
 
 /**
@@ -38,6 +41,24 @@ export class PixelationDemo extends PostProcessingDemo {
 		super("pixelation", composer);
 
 		/**
+		 * An effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
+
+		/**
 		 * An object.
 		 *
 		 * @type {Object3D}
@@ -45,15 +66,6 @@ export class PixelationDemo extends PostProcessingDemo {
 		 */
 
 		this.object = null;
-
-		/**
-		 * An object used for masking.
-		 *
-		 * @type {Mesh}
-		 * @private
-		 */
-
-		this.maskObject = null;
 
 		/**
 		 * A mask pass.
@@ -65,13 +77,13 @@ export class PixelationDemo extends PostProcessingDemo {
 		this.maskPass = null;
 
 		/**
-		 * A pixelation pass.
+		 * An object used for masking.
 		 *
-		 * @type {PixelationPass}
+		 * @type {Mesh}
 		 * @private
 		 */
 
-		this.pixelationPass = null;
+		this.maskObject = null;
 
 	}
 
@@ -115,6 +127,29 @@ export class PixelationDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -210,19 +245,25 @@ export class PixelationDemo extends PostProcessingDemo {
 
 		// Passes.
 
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const pixelationEffect = new PixelationEffect(5.0);
+
+		const effectPass = new EffectPass(camera, pixelationEffect);
+		const maskPass = new MaskPass(maskScene, camera);
+		const smaaPass = new EffectPass(camera, smaaEffect);
+
 		this.renderPass.renderToScreen = false;
+		smaaPass.renderToScreen = true;
 
-		let pass = new MaskPass(maskScene, camera);
-		pass.renderToScreen = true;
-		this.maskPass = pass;
-		composer.addPass(pass);
-
-		pass = new PixelationPass(5.0);
-		pass.renderToScreen = true;
-		this.pixelationPass = pass;
-		composer.addPass(pass);
-
+		// The mask pass renders normal geometry and introduces aliasing artifacts.
+		composer.addPass(maskPass);
+		composer.addPass(effectPass);
 		composer.addPass(new ClearMaskPass());
+		composer.addPass(smaaPass);
+
+		this.effect = pixelationEffect;
+		this.pass = effectPass;
+		this.maskPass = maskPass;
 
 	}
 
@@ -271,17 +312,34 @@ export class PixelationDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const pass = this.pass;
+		const effect = this.effect;
 		const maskPass = this.maskPass;
+		const blendMode = effect.blendMode;
+		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"use mask": maskPass.enabled
+			"use mask": maskPass.enabled,
+			"granularity": effect.getGranularity(),
+			"blend mode": blendFunctions[blendMode.blendFunction]
 		};
 
-		menu.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(() => {
+
+			effect.setGranularity(params.granularity);
+
+		});
 
 		menu.add(params, "use mask").onChange(() => {
 
 			maskPass.enabled = params["use mask"];
+
+		});
+
+		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+
+			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			pass.recompile();
 
 		});
 
