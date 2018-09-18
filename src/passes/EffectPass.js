@@ -256,6 +256,7 @@ export class EffectPass extends Pass {
 		 * The amount of shader uniforms that this pass uses.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.uniforms = 0;
@@ -264,9 +265,30 @@ export class EffectPass extends Pass {
 		 * The amount of shader varyings that this pass uses.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.varyings = 0;
+
+		/**
+		 * A time offset.
+		 *
+		 * Elapsed time will start at this value.
+		 *
+		 * @type {Number}
+		 */
+
+		this.minTime = 1.0;
+
+		/**
+		 * The maximum time.
+		 *
+		 * If the elapsed time exceeds this value, it will be reset.
+		 *
+		 * @type {Number}
+		 */
+
+		this.maxTime = 1e3;
 
 		this.setFullscreenMaterial(this.createMaterial());
 
@@ -437,6 +459,7 @@ export class EffectPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const material = this.getFullscreenMaterial();
+		const time = material.uniforms.time.value + delta;
 
 		for(const effect of this.effects) {
 
@@ -446,8 +469,7 @@ export class EffectPass extends Pass {
 
 		material.uniforms.inputBuffer.value = inputBuffer.texture;
 		material.uniforms.depthBuffer.value = inputBuffer.depthTexture;
-
-		material.uniforms.time.value += delta;
+		material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
 
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
