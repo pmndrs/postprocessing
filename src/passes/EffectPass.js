@@ -322,6 +322,8 @@ export class EffectPass extends Pass {
 
 	createMaterial() {
 
+		const blendRegExp = /\bblend\b/g;
+
 		const shaderParts = new Map([
 			[Section.FRAGMENT_HEAD, ""],
 			[Section.FRAGMENT_MAIN_UV, ""],
@@ -357,7 +359,7 @@ export class EffectPass extends Pass {
 		for(const blendMode of blendModes.values()) {
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				blendMode.getShaderCode().replace("blend", "blend" + blendMode.blendFunction));
+				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction));
 
 		}
 
