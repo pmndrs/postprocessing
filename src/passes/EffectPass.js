@@ -42,8 +42,8 @@ function prefixSubstrings(prefix, substrings, strings) {
 
 	for(const substring of substrings) {
 
-		prefixed = prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
-		regExp = new RegExp("\\b" + substring + "\\b", "g");
+		prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
+		regExp = new RegExp("(^\\.)(\\b" + substring + "\\b)", "g");
 
 		for(const entry of strings.entries()) {
 
