@@ -43,7 +43,7 @@ function prefixSubstrings(prefix, substrings, strings) {
 	for(const substring of substrings) {
 
 		prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
-		regExp = new RegExp("(^\\.)(\\b" + substring + "\\b)", "g");
+		regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
 
 		for(const entry of strings.entries()) {
 
@@ -183,7 +183,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				"uniform float " + blendOpacity + ";\n");
+				"uniform float " + blendOpacity + ";\n\n");
 
 		}
 
@@ -381,7 +381,7 @@ export class EffectPass extends Pass {
 		for(const blendMode of blendModes.values()) {
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction));
+				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
 
 		}
 
@@ -398,7 +398,7 @@ export class EffectPass extends Pass {
 		// Check if any of the effects transforms UVs in the fragment shader.
 		if(transformedUv) {
 
-			shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n\t" +
+			shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" +
 				shaderParts.get(Section.FRAGMENT_MAIN_UV));
 
 			defines.set("UV", "transformedUv");
