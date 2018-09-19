@@ -16,6 +16,7 @@ export {
 	BloomEffect,
 	BokehEffect,
 	ColorAverageEffect,
+	ChromaticAberrationEffect,
 	DotScreenEffect,
 	Effect,
 	EffectAttribute,

@@ -9,6 +9,7 @@ export { BlendFunction, BlendMode } from "./blending";
 export { BloomEffect } from "./BloomEffect.js";
 export { BokehEffect } from "./BokehEffect.js";
 export { ColorAverageEffect } from "./ColorAverageEffect.js";
+export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
 export { DotScreenEffect } from "./DotScreenEffect.js";
 export { Effect, EffectAttribute } from "./Effect.js";
 export { GlitchEffect, GlitchMode } from "./GlitchEffect.js";

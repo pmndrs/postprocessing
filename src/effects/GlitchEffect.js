@@ -53,6 +53,8 @@ function randomFloat(low, high) {
 /**
  * A glitch effect.
  *
+ * Thie effect can be paired with the {@link ChromaticAberrationEffect}.
+ *
  * Reference: https://github.com/staffantan/unityglitch
  *
  * Warning: This effect cannot be merged with antialiasing effects. It is
@@ -62,20 +64,24 @@ function randomFloat(low, high) {
 export class GlitchEffect extends Effect {
 
 	/**
-	 * Constructs a new sepia effect.
+	 * Constructs a new glitch effect.
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {ChromaticAberrationEffect} [options.chromaticAberrationEffect] - A chromatic aberration effect that should be influenced by this glitch effect.
 	 * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.
 	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
+	 * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
+			chromaticAberrationEffect: null,
 			perturbationMap: null,
-			dtSize: 64
+			dtSize: 64,
+			columns: 0.05
 		}, options);
 
 		super("GlitchEffect", fragment, {
@@ -84,13 +90,11 @@ export class GlitchEffect extends Effect {
 
 			uniforms: new Map([
 				["perturbationMap", new Uniform(null)],
+				["columns", new Uniform(settings.columns)],
 				["active", new Uniform(false)],
-				["amount", new Uniform(0.8)],
-				["angle", new Uniform(0.02)],
 				["random", new Uniform(0.02)],
-				["colS", new Uniform(0.05)],
-				["seed", new Uniform(new Vector2(0.02, 0.02))],
-				["distortion", new Uniform(new Vector2(0.5, 0.6))]
+				["seed", new Uniform(new Vector2())],
+				["distortion", new Uniform(new Vector2())]
 			])
 
 		});
@@ -106,14 +110,6 @@ export class GlitchEffect extends Effect {
 
 		this.setPerturbationMap((settings.perturbationMap !== null) ? settings.perturbationMap : this.generatePerturbationMap(settings.dtSize));
 		this.perturbationMap.generateMipmaps = false;
-
-		/**
-		 * The effect mode.
-		 *
-		 * @type {GlitchMode}
-		 */
-
-		this.mode = GlitchMode.SPORADIC;
 
 		/**
 		 * A counter for the glitch activation and deactivation.
@@ -133,10 +129,38 @@ export class GlitchEffect extends Effect {
 
 		this.breakPoint = randomInt(120, 240);
 
+		/**
+		 * The effect mode.
+		 *
+		 * @type {GlitchMode}
+		 */
+
+		this.mode = GlitchMode.SPORADIC;
+
+		/**
+		 * The color offset of the given {@link ChromaticAberrationEffect}, or null.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.offset = null;
+
+		if(settings.chromaticAberrationEffect !== null) {
+
+			const uniforms = settings.chromaticAberrationEffect.uniforms;
+
+			this.offset = uniforms.get("offset").value;
+			uniforms.set("active", this.uniforms.get("active"));
+
+		}
+
 	}
 
 	/**
 	 * Indicates whether the glitch effect is currently active.
+	 *
+	 * @type {Boolean}
 	 */
 
 	get active() {
@@ -221,11 +245,12 @@ export class GlitchEffect extends Effect {
 	update(renderer, inputBuffer, delta) {
 
 		const mode = this.mode;
+		const offset = this.offset;
 		const counter = this.counter;
 		const breakPoint = this.breakPoint;
 		const uniforms = this.uniforms;
 
-		uniforms.get("active").value = false;
+		let active = false;
 
 		if(mode !== GlitchMode.DISABLED) {
 
@@ -233,28 +258,40 @@ export class GlitchEffect extends Effect {
 
 			if(counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {
 
-				uniforms.get("amount").value = Math.random() / 30.0;
-				uniforms.get("angle").value = randomFloat(-Math.PI, Math.PI);
+				if(offset !== null) {
+
+					const angle = randomFloat(-Math.PI, Math.PI);
+					offset.set(Math.cos(angle), Math.sin(angle)).multiplyScalar(Math.random() / 30.0);
+
+				}
+
 				uniforms.get("seed").value.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
 				uniforms.get("distortion").value.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
-				uniforms.get("active").value = true;
+				active = true;
 
 				this.breakPoint = randomInt(120, 240);
 				this.counter = 0;
 
 			} else if(counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {
 
-				uniforms.get("amount").value = Math.random() / 90.0;
-				uniforms.get("angle").value = randomFloat(-Math.PI, Math.PI);
+				if(offset !== null) {
+
+					const angle = randomFloat(-Math.PI, Math.PI);
+					offset.set(Math.cos(angle), Math.sin(angle)).multiplyScalar(Math.random() / 90.0);
+
+				}
+
 				uniforms.get("seed").value.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
 				uniforms.get("distortion").value.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
-				uniforms.get("active").value = true;
+				active = true;
 
 			}
 
 			++this.counter;
 
 		}
+
+		uniforms.get("active").value = active;
 
 	}
 

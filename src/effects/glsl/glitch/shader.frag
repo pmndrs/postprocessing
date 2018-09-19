@@ -1,10 +1,8 @@
 uniform sampler2D perturbationMap;
 
 uniform bool active;
-uniform float amount;
-uniform float angle;
+uniform float columns;
 uniform float random;
-uniform float colS;
 uniform vec2 seed;
 uniform vec2 distortion;
 
@@ -17,14 +15,14 @@ void mainUv(inout vec2 uv) {
 
 		vec4 normal = texture2D(perturbationMap, uv * random * random);
 
-		if(uv.y < distortion.x + colS && uv.y > distortion.x - colS * random) {
+		if(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {
 
 			float sx = clamp(ceil(seed.x), 0.0, 1.0);
 			uv.y = sx * (1.0 - (uv.y + distortion.y)) + (1.0 - sx) * distortion.y;
 
 		}
 
-		if(uv.x < distortion.y + colS && uv.x > distortion.y - colS * random) {
+		if(uv.x < distortion.y + columns && uv.x > distortion.y - columns * random) {
 
 			float sy = clamp(ceil(seed.y), 0.0, 1.0);
 			uv.x = sy * distortion.x + (1.0 - sy) * (1.0 - (uv.x + distortion.x));
@@ -35,23 +33,5 @@ void mainUv(inout vec2 uv) {
 		uv.y += normal.y * seed.y * (random * 0.2);
 
 	}
-
-}
-
-void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
-
-	vec4 color = inputColor;
-
-	if(active) {
-
-		vec2 offset = amount * vec2(cos(angle), sin(angle));
-		vec4 cr = texture2D(inputBuffer, uv + offset);
-		vec4 cb = texture2D(inputBuffer, uv - offset);
-
-		color.rgb = vec3(cr.r, color.g, cb.b);
-
-	}
-
-	outputColor = color;
 
 }
