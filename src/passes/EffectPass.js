@@ -60,25 +60,6 @@ function prefixSubstrings(prefix, substrings, strings) {
 }
 
 /**
- * Prefixes variables.
- *
- * @private
- * @param {String} prefix - A prefix.
- * @param {Map} input - An input map of variables. The values of this map will be copied to the output map using prefixed keys.
- * @param {Map} output - An output map.
- */
-
-function prefixVariables(prefix, input, output) {
-
-	for(const entry of input.entries()) {
-
-		output.set(prefix + entry[0].charAt(0).toUpperCase() + entry[0].slice(1), entry[1]);
-
-	}
-
-}
-
-/**
  * Integrates the given effect.
  *
  * @private
@@ -149,8 +130,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			.concat(Array.from(effect.defines.keys()));
 
 		// Store prefixed uniforms and macros.
-		prefixVariables(prefix, effect.uniforms, uniforms);
-		prefixVariables(prefix, effect.defines, defines);
+		effect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
+		effect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
 
 		// Prefix varyings, functions, uniforms and macros.
 		prefixSubstrings(prefix, names, defines);
@@ -393,7 +374,7 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Check if any of the effects relies on depth.
+		// Check if any effect relies on depth.
 		if((attributes & EffectAttribute.DEPTH) !== 0) {
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" +
