@@ -11,7 +11,15 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BokehPass } from "../../../src";
+
+import {
+	BlendFunction,
+	BokehEffect,
+	EffectPass,
+	SMAAEffect,
+	VignetteEffect
+} from "../../../src";
+
 
 /**
  * A bokeh demo setup.
@@ -30,13 +38,22 @@ export class BokehDemo extends PostProcessingDemo {
 		super("bokeh", composer);
 
 		/**
-		 * A bokeh pass.
+		 * An effect.
 		 *
-		 * @type {BloomPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.bokehPass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 	}
 
@@ -80,6 +97,29 @@ export class BokehDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -155,17 +195,29 @@ export class BokehDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new BokehPass(camera, {
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.075);
+
+		const bokehEffect = new BokehEffect({
 			focus: 0.32,
 			dof: 0.02,
 			aperture: 0.015,
 			maxBlur: 0.025
 		});
 
+		const vignetteEffect = new VignetteEffect();
+
+		const smaaPass = new EffectPass(camera, smaaEffect);
+		const bokehPass = new EffectPass(camera, bokehEffect, vignetteEffect);
+
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.bokehPass = pass;
-		composer.addPass(pass);
+		bokehPass.renderToScreen = true;
+
+		this.effect = bokehEffect;
+		this.pass = bokehPass;
+
+		composer.addPass(smaaPass);
+		composer.addPass(bokehPass);
 
 	}
 
@@ -177,36 +229,55 @@ export class BokehDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const material = this.bokehPass.getFullscreenMaterial();
+		const pass = this.pass;
+		const effect = this.effect;
+		const uniforms = effect.uniforms;
+		const blendMode = effect.blendMode;
+		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"focus": material.uniforms.focus.value,
-			"dof": material.uniforms.dof.value,
-			"aperture": material.uniforms.aperture.value,
-			"blur": material.uniforms.maxBlur.value
+			"focus": uniforms.get("focus").value,
+			"dof": uniforms.get("dof").value,
+			"aperture": uniforms.get("aperture").value,
+			"blur": uniforms.get("maxBlur").value,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendFunctions[blendMode.blendFunction]
 		};
 
 		menu.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			material.uniforms.focus.value = params.focus;
+			uniforms.get("focus").value = params.focus;
 
 		});
 
 		menu.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			material.uniforms.dof.value = params.dof;
+			uniforms.get("dof").value = params.dof;
 
 		});
 
 		menu.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(() => {
 
-			material.uniforms.aperture.value = params.aperture;
+			uniforms.get("aperture").value = params.aperture;
 
 		});
 
 		menu.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(() => {
 
-			material.uniforms.maxBlur.value = params.blur;
+			uniforms.get("maxBlur").value = params.blur;
+
+		});
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+
+			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			pass.recompile();
 
 		});
 
