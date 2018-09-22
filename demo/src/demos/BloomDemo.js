@@ -251,7 +251,7 @@ export class BloomDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setSensitivity(0.05);
+		smaaEffect.setEdgeDetectionThreshold(0.065);
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.SCREEN,

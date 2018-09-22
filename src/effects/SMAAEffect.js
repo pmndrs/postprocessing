@@ -149,10 +149,10 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link ColorEdgesMaterial#setEdgeDetectionThreshold} for more details.
 	 *
-	 * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].
+	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
-	setSensitivity(threshold) {
+	setEdgeDetectionThreshold(threshold) {
 
 		this.colorEdgesPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
 

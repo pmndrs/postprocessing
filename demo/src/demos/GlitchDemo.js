@@ -229,7 +229,7 @@ export class GlitchDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setSensitivity(0.05);
+		smaaEffect.setEdgeDetectionThreshold(0.08);
 
 		const chromaticAberrationEffect = new ChromaticAberrationEffect();
 
