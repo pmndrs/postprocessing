@@ -42,7 +42,7 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
-	 * @param {Number} [options.hiddenEdgeColor=0x22090A] - The color of hidden edges.
+	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
 	 * @param {Boolean} [options.blur=true] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.
 	 */
@@ -56,7 +56,7 @@ export class OutlineEffect extends Effect {
 			edgeStrength: 1.0,
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
-			hiddenEdgeColor: 0x22090A,
+			hiddenEdgeColor: 0x22090a,
 			blur: true,
 			xRay: true
 		}, options);
