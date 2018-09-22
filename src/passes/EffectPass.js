@@ -142,7 +142,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainImageExists) {
 
-			let string = prefix + "MainImage(color0, ";
+			let string = prefix + "MainImage(color0, UV, ";
 
 			if((effect.attributes & EffectAttribute.DEPTH) !== 0) {
 
@@ -150,7 +150,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 			}
 
-			string += "UV, color1);\n\t";
+			string += "color1);\n\t";
 
 			// Include the blend opacity uniform of this effect.
 			const blendOpacity = prefix + "BlendOpacity";
