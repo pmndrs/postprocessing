@@ -35,8 +35,8 @@ export class EffectMaterial extends ShaderMaterial {
 				resolution: new Uniform(new Vector2()),
 				texelSize: new Uniform(new Vector2()),
 
-				cameraNear: new Uniform(0.1),
-				cameraFar: new Uniform(2000),
+				cameraNear: new Uniform(0.3),
+				cameraFar: new Uniform(1000.0),
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
 
