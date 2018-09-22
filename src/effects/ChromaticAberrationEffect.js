@@ -1,8 +1,9 @@
 import { Uniform, Vector2 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
-import { Effect } from "./Effect.js";
+import { Effect, EffectAttribute } from "./Effect.js";
 
 import fragment from "./glsl/chromatic-aberration/shader.frag";
+import vertex from "./glsl/chromatic-aberration/shader.vert";
 
 /**
  * A chromatic aberration effect.
@@ -27,12 +28,15 @@ export class ChromaticAberrationEffect extends Effect {
 
 		super("ChromaticAberrationEffect", fragment, {
 
+			attributes: EffectAttribute.CONVOLUTION,
 			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
 				["active", new Uniform(true)],
 				["offset", new Uniform(settings.offset)]
-			])
+			]),
+
+			vertexShader: vertex
 
 		});
 
