@@ -40,7 +40,7 @@ export class SMAAEffect extends Effect {
 
 		super("SMAAEffect", fragment, {
 
-			attributes: EffectAttribute.ANTIALIASING,
+			attributes: EffectAttribute.CONVOLUTION,
 			blendFunction: BlendFunction.NORMAL,
 
 			uniforms: new Map([

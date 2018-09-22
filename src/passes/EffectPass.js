@@ -115,9 +115,9 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		console.error("Missing fragment shader", effect);
 
-	} else if(mainUvExists && ((attributes & EffectAttribute.ANTIALIASING) !== 0)) {
+	} else if(mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-		console.error("Effects that transform UV coordinates are incompatible with antialiasing effects", effect);
+		console.error("Effects that transform UV coordinates are incompatible with convolution effects", effect);
 
 	} else if(!mainImageExists && !mainUvExists) {
 
@@ -235,7 +235,7 @@ export class EffectPass extends Pass {
 		this.mainCamera = camera;
 
 		/**
-		 * The effects, sorted by type priority, DESC.
+		 * The effects, sorted by attribute priority, DESC.
 		 *
 		 * @type {Effect[]}
 		 * @private
@@ -364,14 +364,22 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			attributes |= effect.attributes;
-
 			if(effect.blendMode.blendFunction !== BlendFunction.SKIP) {
 
-				result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+				if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-				varyings += result.varyings.length;
-				transformedUv = transformedUv || result.transformedUv;
+					console.error("Convolution effects cannot be merged", effect);
+
+				} else {
+
+					attributes |= effect.attributes;
+
+					result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+
+					varyings += result.varyings.length;
+					transformedUv = transformedUv || result.transformedUv;
+
+				}
 
 			}
 
