@@ -117,10 +117,9 @@ export class EffectComposer {
 
 	/**
 	 * The input and output buffers share a single depth texture. Depth will be
-	 * written to this texture when something is rendered into one of the buffers
-	 * and the involved materials have depth write enabled.
-	 *
-	 * Under normal circumstances, only the {@link RenderPass} will render depth.
+	 * written to the depth texture when something is rendered into one of the
+	 * frame buffers and the involved materials have depth write enabled. Under
+	 * normal circumstances, only the {@link RenderPass} will render depth.
 	 *
 	 * You may enable this mechanism during the instantiation of the composer or
 	 * by assigning a `DepthTexture` instance later on. You may also disable it by
