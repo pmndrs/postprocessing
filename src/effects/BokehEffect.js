@@ -17,6 +17,7 @@ export class BokehEffect extends Effect {
 	 * Constructs a new bokeh effect.
 	 *
 	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
 	 * @param {Number} [options.dof=0.02] - Depth of field. An area in front of and behind the focus point that still appears sharp.
 	 * @param {Number} [options.aperture=0.015] - Camera aperture scale. Bigger values for stronger blur and shallower depth of field.
@@ -26,6 +27,7 @@ export class BokehEffect extends Effect {
 	constructor(options = {}) {
 
 		const settings = Object.assign({
+			blendFunction: BlendFunction.NORMAL,
 			focus: 0.5,
 			dof: 0.02,
 			aperture: 0.015,
@@ -35,7 +37,7 @@ export class BokehEffect extends Effect {
 		super("BokehEffect", fragment, {
 
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: BlendFunction.NORMAL,
+			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
 				["focus", new Uniform(settings.focus)],
