@@ -10,6 +10,7 @@ export { BloomEffect } from "./BloomEffect.js";
 export { BokehEffect } from "./BokehEffect.js";
 export { ColorAverageEffect } from "./ColorAverageEffect.js";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
+export { DepthEffect } from "./DepthEffect.js";
 export { DotScreenEffect } from "./DotScreenEffect.js";
 export { Effect, EffectAttribute } from "./Effect.js";
 export { GlitchEffect, GlitchMode } from "./GlitchEffect.js";
