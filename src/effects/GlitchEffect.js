@@ -252,6 +252,12 @@ export class GlitchEffect extends Effect {
 
 		let active = false;
 
+		if(offset !== null) {
+
+			offset.set(0.0, 0.0);
+
+		}
+
 		if(mode !== GlitchMode.DISABLED) {
 
 			uniforms.get("random").value = Math.random();
