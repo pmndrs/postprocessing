@@ -229,6 +229,18 @@ export class GodRaysEffect extends Effect {
 	}
 
 	/**
+	 * The internal god rays material.
+	 *
+	 * @type {Material}
+	 */
+
+	get godRaysMaterial() {
+
+		return this.godRaysPass.getFullscreenMaterial();
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
@@ -236,7 +248,7 @@ export class GodRaysEffect extends Effect {
 
 	get dithering() {
 
-		return this.blurPass.dithering;
+		return this.godRaysMaterial.dithering;
 
 	}
 
@@ -248,7 +260,7 @@ export class GodRaysEffect extends Effect {
 
 	set dithering(value) {
 
-		const material = this.godRaysPass.getFullscreenMaterial();
+		const material = this.godRaysMaterial;
 
 		material.dithering = value;
 		material.needsUpdate = true;
@@ -332,7 +344,7 @@ export class GodRaysEffect extends Effect {
 
 	get samples() {
 
-		return this.godRaysPass.getFullscreenMaterial().samples;
+		return this.godRaysMaterial.samples;
 
 	}
 
@@ -345,7 +357,7 @@ export class GodRaysEffect extends Effect {
 
 	set samples(value) {
 
-		this.godRaysPass.getFullscreenMaterial().samples = value;
+		this.godRaysMaterial.samples = value;
 
 	}
 
@@ -418,6 +430,7 @@ export class GodRaysEffect extends Effect {
 		this.renderPassLight.setSize(width, height);
 		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
+		this.godRaysPass.setSize(width, height);
 
 		width = this.blurPass.width;
 		height = this.blurPass.height;
@@ -440,6 +453,7 @@ export class GodRaysEffect extends Effect {
 		this.renderPassLight.initialize(renderer, alpha);
 		this.renderPassMask.initialize(renderer, alpha);
 		this.blurPass.initialize(renderer, alpha);
+		this.godRaysPass.initialize(renderer, alpha);
 
 		if(!alpha) {
 
