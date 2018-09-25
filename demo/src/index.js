@@ -16,6 +16,7 @@ import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
 import { RenderDemo } from "./demos/RenderDemo.js";
 import { ScanlineDemo } from "./demos/ScanlineDemo.js";
+import { SepiaDemo } from "./demos/SepiaDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
@@ -151,6 +152,7 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new RealisticBokehDemo(composer));
 	manager.addDemo(new ColorCorrectionDemo(composer));
 	manager.addDemo(new GreyscaleDemo(composer));
+	manager.addDemo(new SepiaDemo(composer));
 	manager.addDemo(new TextureDemo(composer));
 	manager.addDemo(new DotScreenDemo(composer));
 	manager.addDemo(new GridDemo(composer));
