@@ -278,9 +278,10 @@ export class EffectComposer {
 			if(this.inputBuffer.depthTexture === null) {
 
 				this.createDepthTexture();
-				pass.setDepthTexture(this.getDepthTexture(index));
 
 			}
+
+			pass.setDepthTexture(this.getDepthTexture(index));
 
 		}
 

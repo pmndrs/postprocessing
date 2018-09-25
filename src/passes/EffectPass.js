@@ -417,11 +417,15 @@ export class EffectPass extends Pass {
 
 		let material = this.getFullscreenMaterial();
 		let width = 0, height = 0;
+		let depthTexture = null;
+		let depthPacking = 0;
 
 		if(material !== null) {
 
 			const resolution = material.uniforms.resolution.value;
 			width = resolution.x; height = resolution.y;
+			depthTexture = material.uniforms.depthBuffer.value;
+			depthPacking = material.depthPacking;
 			material.dispose();
 
 			this.uniforms = 0;
@@ -432,6 +436,7 @@ export class EffectPass extends Pass {
 		material = this.createMaterial();
 		material.setResolution(width, height);
 		this.setFullscreenMaterial(material);
+		this.setDepthTexture(depthTexture, depthPacking);
 
 	}
 
@@ -443,7 +448,9 @@ export class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
+		const material = this.getFullscreenMaterial();
+
+		return (material !== null) ? material.uniforms.depthBuffer.value : null;
 
 	}
 
@@ -451,10 +458,10 @@ export class EffectPass extends Pass {
 	 * Sets the depth texture.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Boolean} [depthPacking=false] - Whether the depth texture contains packed depth.
+	 * @param {Number} [depthPacking=0] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = false) {
+	setDepthTexture(depthTexture, depthPacking = 0) {
 
 		const material = this.getFullscreenMaterial();
 

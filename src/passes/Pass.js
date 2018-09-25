@@ -164,10 +164,10 @@ export class Pass {
 	 * of a preceding {@link RenderPass}.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
-	 * @param {Boolean} [depthPacking=false] - Whether the depth texture contains packed depth.
+	 * @param {Number} [depthPacking=0] - The depth packing.
 	 */
 
-	setDepthTexture(depthTexture, depthPacking = false) {}
+	setDepthTexture(depthTexture, depthPacking = 0) {}
 
 	/**
 	 * Renders the effect.

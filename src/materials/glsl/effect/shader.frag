@@ -15,43 +15,27 @@ uniform float time;
 
 varying vec2 vUv;
 
-#ifdef USE_LOGDEPTHBUF
+float readDepth(const in vec2 uv) {
 
-	float readDepth(const in vec2 uv) {
+	#if DEPTH_PACKING == 3201
 
-		return texture2D(depthBuffer, uv).r;
+		float depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
-	}
+	#else
 
-#else
+		float depth = texture2D(depthBuffer, uv).r;
 
-	float readDepth(const in vec2 uv) {
+	#endif
 
-		#ifdef DEPTH_PACKING
+	#if defined(PERSPECTIVE_CAMERA) && !defined(USE_LOGDEPTHBUF)
 
-			float fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, uv));
+		depth = viewZToOrthographicDepth(perspectiveDepthToViewZ(depth, cameraNear, cameraFar), cameraNear, cameraFar);
 
-		#else
+	#endif
 
-			float fragCoordZ = texture2D(depthBuffer, uv).r;
+	return depth;
 
-		#endif
-
-		#ifdef PERSPECTIVE_CAMERA
-
-			float depth = viewZToOrthographicDepth(perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar), cameraNear, cameraFar);
-
-		#else
-
-			float depth = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
-
-		#endif
-
-		return depth;
-
-	}
-
-#endif
+}
 
 FRAGMENT_HEAD
 
