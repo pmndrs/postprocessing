@@ -384,7 +384,7 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Check if any of the effects transforms UVs in the fragment shader.
+		// Check if any effect transforms UVs in the fragment shader.
 		if(transformedUv) {
 
 			shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" +
