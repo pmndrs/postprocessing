@@ -21,6 +21,7 @@ import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
+import { VignetteDemo } from "./demos/VignetteDemo.js";
 
 /**
  * A renderer.
@@ -157,6 +158,7 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new DotScreenDemo(composer));
 	manager.addDemo(new GridDemo(composer));
 	manager.addDemo(new ScanlineDemo(composer));
+	manager.addDemo(new VignetteDemo(composer));
 	manager.addDemo(new GlitchDemo(composer));
 	manager.addDemo(new PixelationDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
