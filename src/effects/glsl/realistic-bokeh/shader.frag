@@ -6,6 +6,12 @@ uniform float luminanceGain;
 uniform float bias;
 uniform float fringe;
 
+#ifdef MANUAL_DOF
+
+	uniform vec4 dof;
+
+#endif
+
 #ifdef PENTAGON
 
 	float pentagon(const in vec2 coords) {
@@ -68,9 +74,8 @@ vec3 processTexel(const in vec2 coords, const in float blur) {
 float gather(const in float i, const in float j, const in float ringSamples,
 	const in vec2 uv, const in vec2 blurFactor, const in float blur, inout vec3 color) {
 
-	const float TWO_PI = 6.28318531;
-	float step = TWO_PI / ringSamples;
-	float wh = vec2(cos(j * step) * i, sin(j * step) * i);
+	float step = PI2 / ringSamples;
+	vec2 wh = vec2(cos(j * step) * i, sin(j * step) * i);
 
 	#ifdef PENTAGON
 
@@ -90,16 +95,14 @@ float gather(const in float i, const in float j, const in float ringSamples,
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
+	// Translate depth into world space units.
+	float linearDepth = (-cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar));
+
 	#ifdef MANUAL_DOF
 
-		const float nDoFStart = 1.0; 
-		const float nDoFDist = 2.0;
-		const float fDoFStart = 1.0;
-		const float fDoFDist = 3.0;
-
-		float focalPlane = depth - focus;
-		float farDoF = (focalPlane - fDoFStart) / fDoFDist;
-		float nearDoF = (-focalPlane - nDoFStart) / nDoFDist;
+		float focalPlane = linearDepth - focus;
+		float farDoF = (focalPlane - dof.z) / dof.w;
+		float nearDoF = (-focalPlane - dof.x) / dof.y;
 
 		float blur = (focalPlane > 0.0) ? farDoF : nearDoF;
 
@@ -108,11 +111,11 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 		const float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.
 
 		float focalPlaneMM = focus * 1000.0;
-		float depthMM = depth * 1000.0;
+		float depthMM = linearDepth * 1000.0;
 
 		float focalPlane = (depthMM * focalLength) / (depthMM - focalLength);
 		float farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);
-		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focalStop * CIRCLE_OF_CONFUSION);
+		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focus * CIRCLE_OF_CONFUSION);
 
 		float blur = abs(focalPlane - farDoF) * nearDoF;
 
@@ -120,7 +123,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	blur = clamp(blur, 0.0, 1.0);
 
-	float blurFactor = vec2(
+	vec2 blurFactor = vec2(
 		texelSize.x * blur * maxBlur,
 		texelSize.y * blur * maxBlur
 	);
@@ -158,7 +161,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	#ifdef SHOW_FOCUS
 
-		float edge = 0.002 * depth;
+		float edge = 0.002 * linearDepth;
 		float m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);
 		float e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);
 
