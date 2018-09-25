@@ -19,6 +19,7 @@ export { GlitchEffect, GlitchMode } from "./GlitchEffect.js";
 export { GodRaysEffect } from "./GodRaysEffect.js";
 export { GreyscaleEffect } from "./GreyscaleEffect.js";
 export { GridEffect } from "./GridEffect.js";
+export { HueSaturationEffect } from "./HueSaturationEffect.js";
 export { NoiseEffect } from "./NoiseEffect.js";
 export { OutlineEffect } from "./OutlineEffect.js";
 export { PixelationEffect } from "./PixelationEffect.js";

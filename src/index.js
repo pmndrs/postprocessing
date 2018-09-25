@@ -28,6 +28,7 @@ export {
 	GodRaysEffect,
 	GreyscaleEffect,
 	GridEffect,
+	HueSaturationEffect,
 	NoiseEffect,
 	OutlineEffect,
 	PixelationEffect,
