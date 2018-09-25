@@ -39,15 +39,15 @@ varying vec2 vUv;
 
 		#ifdef PERSPECTIVE_CAMERA
 
-			float viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+			float depth = viewZToOrthographicDepth(perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar), cameraNear, cameraFar);
 
 		#else
 
-			float viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
+			float depth = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);
 
 		#endif
 
-		return viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+		return depth;
 
 	}
 
