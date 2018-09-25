@@ -22,6 +22,7 @@ export {
 	DotScreenEffect,
 	Effect,
 	EffectAttribute,
+	GammaCorrectionEffect,
 	GlitchEffect,
 	GlitchMode,
 	GodRaysEffect,
