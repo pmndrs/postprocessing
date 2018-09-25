@@ -4,6 +4,7 @@ import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
+import { ColorCorrectionDemo } from "./demos/ColorCorrectionDemo.js";
 import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
@@ -146,8 +147,9 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new BlurDemo(composer));
 	manager.addDemo(new BokehDemo(composer));
 	manager.addDemo(new RealisticBokehDemo(composer));
-	manager.addDemo(new DotScreenDemo(composer));
+	manager.addDemo(new ColorCorrectionDemo(composer));
 	manager.addDemo(new TextureDemo(composer));
+	manager.addDemo(new DotScreenDemo(composer));
 	manager.addDemo(new GlitchDemo(composer));
 	manager.addDemo(new PixelationDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
