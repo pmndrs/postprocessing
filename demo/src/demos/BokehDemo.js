@@ -15,6 +15,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import {
 	BlendFunction,
 	BokehEffect,
+	DepthEffect,
 	EffectPass,
 	SMAAEffect,
 	VignetteEffect
@@ -46,13 +47,22 @@ export class BokehDemo extends PostProcessingDemo {
 		this.effect = null;
 
 		/**
-		 * A pass.
+		 * A bokeh pass.
 		 *
 		 * @type {Pass}
 		 * @private
 		 */
 
-		this.pass = null;
+		this.bokehPass = null;
+
+		/**
+		 * A depth visualization pass.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.depthPass = null;
 
 	}
 
@@ -206,14 +216,18 @@ export class BokehDemo extends PostProcessingDemo {
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
+		const depthPass = new EffectPass(camera, new DepthEffect());
 
 		this.renderPass.renderToScreen = false;
 		smaaPass.renderToScreen = true;
+		depthPass.enabled = false;
 
 		this.effect = bokehEffect;
-		this.pass = bokehPass;
+		this.bokehPass = bokehPass;
+		this.depthPass = depthPass;
 
 		composer.addPass(bokehPass);
+		composer.addPass(depthPass);
 		composer.addPass(smaaPass);
 
 	}
@@ -226,7 +240,8 @@ export class BokehDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
+		const bokehPass = this.bokehPass;
+		const depthPass = this.depthPass;
 		const effect = this.effect;
 		const uniforms = effect.uniforms;
 		const blendMode = effect.blendMode;
@@ -236,6 +251,7 @@ export class BokehDemo extends PostProcessingDemo {
 			"dof": uniforms.get("dof").value,
 			"aperture": uniforms.get("aperture").value,
 			"blur": uniforms.get("maxBlur").value,
+			"show depth": depthPass.enabled,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -273,7 +289,14 @@ export class BokehDemo extends PostProcessingDemo {
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
 			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			pass.recompile();
+			bokehPass.recompile();
+
+		});
+
+		menu.add(params, "show depth").onChange(() => {
+
+			bokehPass.enabled = !params["show depth"];
+			depthPass.enabled = params["show depth"];
 
 		});
 

@@ -4,7 +4,6 @@ import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
-import { DepthDemo } from "./demos/DepthDemo.js";
 import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
@@ -145,7 +144,6 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new GodRaysDemo(composer));
 	manager.addDemo(new OutlineDemo(composer));
 	manager.addDemo(new BlurDemo(composer));
-	manager.addDemo(new DepthDemo(composer));
 	manager.addDemo(new BokehDemo(composer));
 	manager.addDemo(new RealisticBokehDemo(composer));
 	manager.addDemo(new DotScreenDemo(composer));
