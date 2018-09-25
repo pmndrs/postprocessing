@@ -436,6 +436,37 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Returns the current depth texture.
+	 *
+	 * @return {Texture} The current depth texture, or null if there is none.
+	 */
+
+	getDepthTexture() {
+
+		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Boolean} [depthPacking=false] - Whether the depth texture contains packed depth.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = false) {
+
+		const material = this.getFullscreenMaterial();
+
+		material.uniforms.depthBuffer.value = depthTexture;
+		material.depthPacking = depthPacking;
+		material.needsUpdate = true;
+
+		this.needsDepthTexture = (depthTexture === null);
+
+	}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
@@ -457,9 +488,7 @@ export class EffectPass extends Pass {
 		}
 
 		material.uniforms.inputBuffer.value = inputBuffer.texture;
-		material.uniforms.depthBuffer.value = inputBuffer.depthTexture;
 		material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
-
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}

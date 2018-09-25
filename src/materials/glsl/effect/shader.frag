@@ -27,7 +27,7 @@ varying vec2 vUv;
 
 	float readDepth(const in vec2 uv) {
 
-		#ifdef PACKED_DEPTH
+		#ifdef DEPTH_PACKING
 
 			float fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
