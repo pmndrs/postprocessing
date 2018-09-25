@@ -157,8 +157,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = vec4(blend" + blendMode.blendFunction +
-				"(color0.rgb, color1.rgb, " + blendOpacity + "), color1.a);\n\n\t";
+			string += "color0 = blend" + blendMode.blendFunction +
+				"(color0, color1, " + blendOpacity + ");\n\n\t";
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE,
 				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
