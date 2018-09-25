@@ -15,6 +15,7 @@ export {
 	BlendMode,
 	BloomEffect,
 	BokehEffect,
+	BrightnessContrastEffect,
 	ColorAverageEffect,
 	ChromaticAberrationEffect,
 	DepthEffect,

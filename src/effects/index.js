@@ -8,6 +8,7 @@ export { BlendFunction, BlendMode } from "./blending";
 
 export { BloomEffect } from "./BloomEffect.js";
 export { BokehEffect } from "./BokehEffect.js";
+export { BrightnessContrastEffect } from "./BrightnessContrastEffect.js";
 export { ColorAverageEffect } from "./ColorAverageEffect.js";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
 export { DepthEffect } from "./DepthEffect.js";
