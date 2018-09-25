@@ -37,8 +37,7 @@ const ab = new Vector3();
  * Based on a Gist by Jean-Philippe Sarda:
  *  https://gist.github.com/jpsarda/33cea67a9f2ecb0a0eda
  *
- * Warning: This effect cannot be merged with antialiasing effects. It is
- * recommended to run this effect last using a stand-alone {@link EffectPass}.
+ * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class ShockWaveEffect extends Effect {
@@ -84,7 +83,7 @@ export class ShockWaveEffect extends Effect {
 		/**
 		 * The main camera.
 		 *
-		 * @type {Object3D}
+		 * @type {Camera}
 		 */
 
 		this.camera = camera;

@@ -199,7 +199,7 @@ export class GodRaysEffect extends Effect {
 		this.blurPass = new BlurPass(settings);
 
 		/**
-		 * A luminance shader pass.
+		 * A god rays pass.
 		 *
 		 * @type {ShaderPass}
 		 * @private

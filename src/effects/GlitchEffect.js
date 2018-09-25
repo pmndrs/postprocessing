@@ -57,8 +57,7 @@ function randomFloat(low, high) {
  *
  * Reference: https://github.com/staffantan/unityglitch
  *
- * Warning: This effect cannot be merged with antialiasing effects. It is
- * recommended to run this effect in a separate {@link EffectPass}.
+ * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class GlitchEffect extends Effect {
