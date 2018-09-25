@@ -18,7 +18,14 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { KernelSize, OutlinePass } from "../../../src";
+
+import {
+	BlendFunction,
+	EffectPass,
+	OutlineEffect,
+	KernelSize,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A mouse position.
@@ -66,13 +73,22 @@ export class OutlineDemo extends PostProcessingDemo {
 		this.selectedObject = null;
 
 		/**
-		 * An outline pass.
+		 * An effect.
 		 *
-		 * @type {OutlinePass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.outlinePass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 	}
 
@@ -126,19 +142,19 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	handleSelection() {
 
-		const pass = this.outlinePass;
-		const selection = pass.selection;
+		const effect = this.effect;
+		const selection = effect.selection;
 		const selectedObject = this.selectedObject;
 
 		if(selectedObject !== null) {
 
 			if(selection.indexOf(selectedObject) >= 0) {
 
-				pass.deselectObject(selectedObject);
+				effect.deselectObject(selectedObject);
 
 			} else {
 
-				pass.selectObject(selectedObject);
+				effect.selectObject(selectedObject);
 
 			}
 
@@ -210,12 +226,35 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				});
 
-				textureLoader.load("textures/tripattern.jpg", function(texture) {
+				textureLoader.load("textures/pattern.png", function(texture) {
 
 					texture.wrapS = texture.wrapT = RepeatWrapping;
 					assets.set("pattern-color", texture);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -324,18 +363,32 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new OutlinePass(scene, camera, {
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.05);
+
+		const outlineEffect = new OutlineEffect(scene, camera, {
 			edgeStrength: 2.5,
-			patternScale: 7.5
+			pulseSpeed: 0.0,
+			visibleEdgeColor: 0xffffff,
+			hiddenEdgeColor: 0x22090a,
+			blur: false,
+			xRay: true
 		});
 
-		pass.setSelection(scene.children);
-		pass.deselectObject(mesh);
+		outlineEffect.setSelection(scene.children);
+		outlineEffect.deselectObject(mesh);
 
+		const smaaPass = new EffectPass(camera, smaaEffect);
+		const outlinePass = new EffectPass(camera, outlineEffect);
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.outlinePass = pass;
-		composer.addPass(pass);
+		smaaPass.renderToScreen = true;
+
+		this.effect = outlineEffect;
+		this.pass = outlinePass;
+
+		// The outline effect uses mask textures which produce aliasing artifacts.
+		composer.addPass(outlinePass);
+		composer.addPass(smaaPass);
 
 	}
 
@@ -348,81 +401,103 @@ export class OutlineDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const assets = this.assets;
-		const pass = this.outlinePass;
+		const pass = this.pass;
+		const effect = this.effect;
+		const uniforms = effect.uniforms;
+		const blendMode = effect.blendMode;
 
 		const params = {
-			"resolution": pass.getResolutionScale(),
-			"kernel size": pass.kernelSize,
+			"resolution": effect.getResolutionScale(),
+			"blurriness": 0,
 			"use pattern": false,
-			"pattern scale": pass.outlineBlendMaterial.uniforms.patternScale.value,
-			"edge strength": pass.outlineBlendMaterial.uniforms.edgeStrength.value,
-			"pulse speed": pass.pulseSpeed,
-			"visible edge": pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.getHex(),
-			"hidden edge": pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.getHex(),
-			"alpha blending": false,
-			"x-ray": true
+			"pattern scale": 60.0,
+			"pulse speed": effect.pulseSpeed,
+			"edge strength": uniforms.get("edgeStrength").value,
+			"visible edge": uniforms.get("visibleEdgeColor").value.getHex(),
+			"hidden edge": uniforms.get("hiddenEdgeColor").value.getHex(),
+			"x-ray": true,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
 
-			pass.setResolutionScale(params.resolution);
-
-		});
-
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
-
-			pass.kernelSize = params["kernel size"];
+			effect.setResolutionScale(params.resolution);
 
 		});
 
-		menu.add(pass, "blur");
-		menu.add(pass, "dithering");
+		menu.add(effect, "dithering");
+
+		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
+
+			effect.blur = (params.blurriness > 0);
+			effect.kernelSize = params.blurriness - 1;
+
+		});
 
 		menu.add(params, "use pattern").onChange(() => {
 
-			pass.setPatternTexture(params["use pattern"] ? assets.get("pattern-color") : null);
+			if(params["use pattern"]) {
+
+				effect.setPatternTexture(assets.get("pattern-color"));
+				uniforms.get("patternScale").value = params["pattern scale"];
+
+			} else {
+
+				effect.setPatternTexture(null);
+
+			}
+
+			pass.recompile();
 
 		});
 
-		menu.add(params, "pattern scale").min(1.0).max(10.0).step(0.01).onChange(() => {
+		menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(() => {
 
-			pass.outlineBlendMaterial.uniforms.patternScale.value = params["pattern scale"];
+			if(uniforms.has("patternScale")) {
+
+				uniforms.get("patternScale").value = params["pattern scale"];
+
+			}
 
 		});
 
 		menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(() => {
 
-			pass.outlineBlendMaterial.uniforms.edgeStrength.value = params["edge strength"];
+			uniforms.get("edgeStrength").value = params["edge strength"];
 
 		});
 
 		menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(() => {
 
-			pass.pulseSpeed = params["pulse speed"];
+			effect.pulseSpeed = params["pulse speed"];
 
 		});
 
 		menu.addColor(params, "visible edge").onChange(() => {
 
-			pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.setHex(params["visible edge"]);
+			uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]);
 
 		});
 
 		menu.addColor(params, "hidden edge").onChange(() => {
 
-			pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.setHex(params["hidden edge"]);
+			uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]);
 
 		});
 
-		menu.add(params, "alpha blending").onChange(() => {
+		menu.add(effect, "xRay").onChange(() => pass.recompile());
 
-			pass.outlineBlendMaterial.setAlphaBlendingEnabled(params["alpha blending"]);
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blendMode.opacity.value = params.opacity;
 
 		});
 
-		menu.add(params, "x-ray").onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			pass.outlineBlendMaterial.setXRayEnabled(params["x-ray"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 
