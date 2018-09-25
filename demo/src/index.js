@@ -10,6 +10,7 @@ import { BlurDemo } from "./demos/BlurDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
 import { GreyscaleDemo } from "./demos/GreyscaleDemo.js";
+import { GridDemo } from "./demos/GridDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
 import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
@@ -151,6 +152,7 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new GreyscaleDemo(composer));
 	manager.addDemo(new TextureDemo(composer));
 	manager.addDemo(new DotScreenDemo(composer));
+	manager.addDemo(new GridDemo(composer));
 	manager.addDemo(new GlitchDemo(composer));
 	manager.addDemo(new PixelationDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
