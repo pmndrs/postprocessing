@@ -49,7 +49,7 @@ export class OutlineEffect extends Effect {
 	constructor(scene, camera, options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.ALPHA,
+			blendFunction: BlendFunction.SCREEN,
 			patternTexture: null,
 			edgeStrength: 1.0,
 			pulseSpeed: 0.0,
