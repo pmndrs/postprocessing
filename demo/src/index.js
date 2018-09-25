@@ -123,8 +123,7 @@ window.addEventListener("load", function main(event) {
 
 	// Create an effect composer.
 	composer = new EffectComposer(renderer, {
-		stencilBuffer: true,
-		depthTexture: true
+		stencilBuffer: true
 	});
 
 	// Initialise the demo manager.
