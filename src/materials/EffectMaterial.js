@@ -80,6 +80,32 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Indicates whether the depth texture uses RGBA-packed depth.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get packedDepth() {
+
+		return this.defines.has("PACKED_DEPTH");
+
+	}
+
+	/**
+	 * Enables or disables RGBA-packed depth.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set packedDepth(value) {
+
+		value ? this.defines.set("PACKED_DEPTH", "1") : this.defines.delete("PACKED_DEPTH");
+
+	}
+
+	/**
 	 * Sets the resolution.
 	 *
 	 * @param {Number} x - The width.
