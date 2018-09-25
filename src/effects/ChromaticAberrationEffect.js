@@ -32,7 +32,6 @@ export class ChromaticAberrationEffect extends Effect {
 			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				["active", new Uniform(true)],
 				["offset", new Uniform(settings.offset)]
 			]),
 

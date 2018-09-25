@@ -1,6 +1,3 @@
-uniform bool active;
-uniform vec2 offset;
-
 varying vec2 vUvR;
 varying vec2 vUvB;
 
