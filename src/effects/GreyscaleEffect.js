@@ -1,7 +1,7 @@
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/dot-screen/shader.frag";
+import fragment from "./glsl/greyscale/shader.frag";
 
 /**
  * A greyscale effect.
