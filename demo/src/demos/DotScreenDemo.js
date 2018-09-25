@@ -12,7 +12,13 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BlendFunction, DotScreenEffect, EffectPass, SMAAEffect } from "../../../src";
+
+import {
+	BlendFunction,
+	DotScreenEffect,
+	EffectPass,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A dot screen demo setup.
@@ -212,11 +218,12 @@ export class DotScreenDemo extends PostProcessingDemo {
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 
 		const dotScreenEffect = new DotScreenEffect({
-			scale: 0.8,
+			blendFunction: BlendFunction.COLOR_BURN,
+			scale: 0.01,
 			angle: Math.PI * 0.5
 		});
 
-		dotScreenEffect.blendMode.opacity.value = 0.25;
+		dotScreenEffect.blendMode.opacity.value = 0.05;
 
 		const pass = new EffectPass(camera, smaaEffect, dotScreenEffect);
 
@@ -272,13 +279,12 @@ export class DotScreenDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const uniforms = effect.uniforms;
 		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
 			"angle": Math.PI * 0.5,
 			"scale": uniforms.get("scale").value,
 			"opacity": blendMode.opacity.value,
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"blend mode": blendMode.blendFunction
 		};
 
 		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
@@ -299,9 +305,9 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
 			pass.recompile();
 
 		});

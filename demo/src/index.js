@@ -4,6 +4,7 @@ import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
+import { DepthDemo } from "./demos/DepthDemo.js";
 import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
@@ -11,8 +12,10 @@ import { GlitchDemo } from "./demos/GlitchDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
 import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
+import { RenderDemo } from "./demos/RenderDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
+import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 
 /**
@@ -111,8 +114,7 @@ window.addEventListener("load", function main(event) {
 	// Create a custom renderer.
 	renderer = new WebGLRenderer({
 		logarithmicDepthBuffer: true,
-		antialias: false,
-		depth: false
+		antialias: false
 	});
 
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
@@ -136,18 +138,21 @@ window.addEventListener("load", function main(event) {
 	manager.addEventListener("load", onLoad);
 
 	// Register demos.
+	manager.addDemo(new RenderDemo(composer));
 	manager.addDemo(new SMAADemo(composer));
+	manager.addDemo(new ToneMappingDemo(composer));
 	manager.addDemo(new BloomDemo(composer));
+	manager.addDemo(new GodRaysDemo(composer));
+	manager.addDemo(new OutlineDemo(composer));
 	manager.addDemo(new BlurDemo(composer));
+	manager.addDemo(new DepthDemo(composer));
 	manager.addDemo(new BokehDemo(composer));
 	manager.addDemo(new RealisticBokehDemo(composer));
 	manager.addDemo(new DotScreenDemo(composer));
+	manager.addDemo(new TextureDemo(composer));
 	manager.addDemo(new GlitchDemo(composer));
-	manager.addDemo(new GodRaysDemo(composer));
-	manager.addDemo(new OutlineDemo(composer));
 	manager.addDemo(new PixelationDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
-	manager.addDemo(new ToneMappingDemo(composer));
 
 	// Start rendering.
 	render();

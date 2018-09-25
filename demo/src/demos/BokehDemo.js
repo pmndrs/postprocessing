@@ -20,7 +20,6 @@ import {
 	VignetteEffect
 } from "../../../src";
 
-
 /**
  * A bokeh demo setup.
  */
@@ -196,28 +195,26 @@ export class BokehDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.075);
+		smaaEffect.setEdgeDetectionThreshold(0.06);
 
 		const bokehEffect = new BokehEffect({
 			focus: 0.32,
 			dof: 0.02,
 			aperture: 0.015,
-			maxBlur: 0.025
+			maxBlur: 0.0125
 		});
 
-		const vignetteEffect = new VignetteEffect();
-
 		const smaaPass = new EffectPass(camera, smaaEffect);
-		const bokehPass = new EffectPass(camera, bokehEffect, vignetteEffect);
+		const bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
 
 		this.renderPass.renderToScreen = false;
-		bokehPass.renderToScreen = true;
+		smaaPass.renderToScreen = true;
 
 		this.effect = bokehEffect;
 		this.pass = bokehPass;
 
-		composer.addPass(smaaPass);
 		composer.addPass(bokehPass);
+		composer.addPass(smaaPass);
 
 	}
 
@@ -233,7 +230,6 @@ export class BokehDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const uniforms = effect.uniforms;
 		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
 			"focus": uniforms.get("focus").value,
@@ -241,7 +237,7 @@ export class BokehDemo extends PostProcessingDemo {
 			"aperture": uniforms.get("aperture").value,
 			"blur": uniforms.get("maxBlur").value,
 			"opacity": blendMode.opacity.value,
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"blend mode": blendMode.blendFunction
 		};
 
 		menu.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(() => {
@@ -274,9 +270,9 @@ export class BokehDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
 			pass.recompile();
 
 		});

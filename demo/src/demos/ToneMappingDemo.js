@@ -13,7 +13,13 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BlendFunction, ToneMappingEffect, EffectPass, SMAAEffect } from "../../../src";
+
+import {
+	BlendFunction,
+	ToneMappingEffect,
+	EffectPass,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A tone mapping demo setup.

@@ -14,7 +14,14 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BlendFunction, BloomEffect, EffectPass, KernelSize, SMAAEffect } from "../../../src";
+
+import {
+	BlendFunction,
+	BloomEffect,
+	EffectPass,
+	KernelSize,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A bloom demo setup.
@@ -313,24 +320,23 @@ export class BloomDemo extends PostProcessingDemo {
 		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
 			"resolution": effect.getResolutionScale(),
 			"kernel size": effect.kernelSize,
 			"opacity": blendMode.opacity.value,
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
 
 			effect.setResolutionScale(params.resolution);
 
 		});
 
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
+		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			effect.kernelSize = params["kernel size"];
+			effect.kernelSize = Number.parseInt(params["kernel size"]);
 
 		});
 
@@ -344,9 +350,9 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
 			pass.recompile();
 
 		});

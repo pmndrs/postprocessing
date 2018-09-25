@@ -16,7 +16,6 @@ import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
-	BlendFunction,
 	ClearMaskPass,
 	EffectPass,
 	MaskPass,
@@ -48,15 +47,6 @@ export class PixelationDemo extends PostProcessingDemo {
 		 */
 
 		this.effect = null;
-
-		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
 
 		/**
 		 * An object.
@@ -262,7 +252,6 @@ export class PixelationDemo extends PostProcessingDemo {
 		composer.addPass(smaaPass);
 
 		this.effect = pixelationEffect;
-		this.pass = effectPass;
 		this.maskPass = maskPass;
 
 	}
@@ -312,16 +301,12 @@ export class PixelationDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
 		const effect = this.effect;
 		const maskPass = this.maskPass;
-		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
 			"use mask": maskPass.enabled,
-			"granularity": effect.getGranularity(),
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"granularity": effect.getGranularity()
 		};
 
 		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(() => {
@@ -333,13 +318,6 @@ export class PixelationDemo extends PostProcessingDemo {
 		menu.add(params, "use mask").onChange(() => {
 
 			maskPass.enabled = params["use mask"];
-
-		});
-
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
-
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
-			pass.recompile();
 
 		});
 

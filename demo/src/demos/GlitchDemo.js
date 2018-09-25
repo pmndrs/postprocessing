@@ -242,18 +242,20 @@ export class GlitchDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.COLOR_DODGE
 		});
 
-		noiseEffect.blendMode.opacity.value = 0.2;
+		noiseEffect.blendMode.opacity.value = 0.15;
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
-		const pass = new EffectPass(camera, glitchEffect, noiseEffect, chromaticAberrationEffect);
+		const glitchPass = new EffectPass(camera, glitchEffect, noiseEffect);
+		const chromaticAberrationPass = new EffectPass(camera, chromaticAberrationEffect);
 
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
+		chromaticAberrationPass.renderToScreen = true;
 
 		this.effect = glitchEffect;
 
 		composer.addPass(smaaPass);
-		composer.addPass(pass);
+		composer.addPass(glitchPass);
+		composer.addPass(chromaticAberrationPass);
 
 	}
 
@@ -298,17 +300,16 @@ export class GlitchDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const perturbationMap = effect.getPerturbationMap();
 		const uniforms = effect.uniforms;
-		const glitchModes = Object.keys(GlitchMode).map((value) => value.toLowerCase());
 
 		const params = {
-			"glitch mode": glitchModes[effect.mode],
+			"glitch mode": effect.mode,
 			"custom pattern": true,
 			"columns": uniforms.get("columns").value
 		};
 
-		menu.add(params, "glitch mode", glitchModes).onChange(() => {
+		menu.add(params, "glitch mode", GlitchMode).onChange(() => {
 
-			effect.mode = glitchModes.indexOf(params["glitch mode"]);
+			effect.mode = Number.parseInt(params["glitch mode"]);
 
 		});
 
