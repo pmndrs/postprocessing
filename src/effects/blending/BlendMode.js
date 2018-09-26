@@ -83,7 +83,7 @@ export class BlendMode {
 	/**
 	 * Returns the blend function shader code.
 	 *
-	 * @type {String}
+	 * @return {String} The blend function shader code.
 	 */
 
 	getShaderCode() {
