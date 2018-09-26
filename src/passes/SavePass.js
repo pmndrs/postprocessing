@@ -69,7 +69,7 @@ export class SavePass extends Pass {
 
 		this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderTarget);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.renderTarget);
 
 	}
 
