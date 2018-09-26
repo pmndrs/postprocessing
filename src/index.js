@@ -49,50 +49,26 @@ export {
 
 export {
 	AdaptiveLuminanceMaterial,
-	BokehMaterial,
 	ColorEdgesMaterial,
-	CombineMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,
 	DepthComparisonMaterial,
-	DotScreenMaterial,
 	EffectMaterial,
-	FilmMaterial,
-	GlitchMaterial,
 	GodRaysMaterial,
 	KernelSize,
 	LuminanceMaterial,
-	OutlineBlendMaterial,
 	OutlineEdgesMaterial,
-	PixelationMaterial,
-	RealisticBokehMaterial,
-	ShockWaveMaterial,
-	SMAABlendMaterial,
-	SMAAWeightsMaterial,
-	ToneMappingMaterial
+	SMAAWeightsMaterial
 } from "./materials";
 
 export {
-	BloomPass,
 	BlurPass,
-	BokehPass,
 	ClearPass,
 	ClearMaskPass,
-	DotScreenPass,
 	EffectPass,
-	FilmPass,
-	GlitchPass,
-	GodRaysPass,
 	MaskPass,
-	OutlinePass,
 	Pass,
-	PixelationPass,
-	RealisticBokehPass,
 	RenderPass,
 	SavePass,
-	ShaderPass,
-	ShockWavePass,
-	SMAAPass,
-	TexturePass,
-	ToneMappingPass
+	ShaderPass
 } from "./passes";
