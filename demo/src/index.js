@@ -13,7 +13,6 @@ import { GridDemo } from "./demos/GridDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
 import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
-import { RenderDemo } from "./demos/RenderDemo.js";
 import { ScanlineDemo } from "./demos/ScanlineDemo.js";
 import { SepiaDemo } from "./demos/SepiaDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
@@ -141,25 +140,24 @@ window.addEventListener("load", function main(event) {
 	manager.addEventListener("load", onLoad);
 
 	// Register demos.
-	manager.addDemo(new RenderDemo(composer));
-	manager.addDemo(new SMAADemo(composer));
-	manager.addDemo(new ToneMappingDemo(composer));
 	manager.addDemo(new BloomDemo(composer));
-	manager.addDemo(new GodRaysDemo(composer));
-	manager.addDemo(new OutlineDemo(composer));
 	manager.addDemo(new BlurDemo(composer));
 	manager.addDemo(new BokehDemo(composer));
 	manager.addDemo(new RealisticBokehDemo(composer));
 	manager.addDemo(new ColorCorrectionDemo(composer));
-	manager.addDemo(new SepiaDemo(composer));
-	manager.addDemo(new TextureDemo(composer));
 	manager.addDemo(new DotScreenDemo(composer));
-	manager.addDemo(new GridDemo(composer));
-	manager.addDemo(new ScanlineDemo(composer));
-	manager.addDemo(new VignetteDemo(composer));
 	manager.addDemo(new GlitchDemo(composer));
+	manager.addDemo(new GodRaysDemo(composer));
+	manager.addDemo(new GridDemo(composer));
+	manager.addDemo(new OutlineDemo(composer));
 	manager.addDemo(new PixelationDemo(composer));
+	manager.addDemo(new ScanlineDemo(composer));
+	manager.addDemo(new SepiaDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
+	manager.addDemo(new SMAADemo(composer));
+	manager.addDemo(new TextureDemo(composer));
+	manager.addDemo(new ToneMappingDemo(composer));
+	manager.addDemo(new VignetteDemo(composer));
 
 	// Start rendering.
 	render();
