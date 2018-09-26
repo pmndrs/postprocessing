@@ -15,6 +15,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	ColorAverageEffect,
 	DotScreenEffect,
 	EffectPass,
 	SMAAEffect
@@ -37,13 +38,22 @@ export class DotScreenDemo extends PostProcessingDemo {
 		super("dot-screen", composer);
 
 		/**
-		 * An effect.
+		 * A dot-screen effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.effect = null;
+		this.dotScreenEffect = null;
+
+		/**
+		 * A color average effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.colorAverageEffect = null;
 
 		/**
 		 * A pass.
@@ -216,18 +226,19 @@ export class DotScreenDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-
+		const colorAverageEffect = new ColorAverageEffect();
 		const dotScreenEffect = new DotScreenEffect({
-			blendFunction: BlendFunction.COLOR_BURN,
-			scale: 0.01,
-			angle: Math.PI * 0.5
+			blendFunction: BlendFunction.OVERLAY,
+			scale: 1.0,
+			angle: Math.PI * 0.58
 		});
 
-		dotScreenEffect.blendMode.opacity.value = 0.05;
+		dotScreenEffect.blendMode.opacity.value = 0.21;
 
-		const pass = new EffectPass(camera, smaaEffect, dotScreenEffect);
+		const pass = new EffectPass(camera, smaaEffect, dotScreenEffect, colorAverageEffect);
 
-		this.effect = dotScreenEffect;
+		this.dotScreenEffect = dotScreenEffect;
+		this.colorAverageEffect = colorAverageEffect;
 		this.pass = pass;
 
 		this.renderPass.renderToScreen = false;
@@ -276,38 +287,56 @@ export class DotScreenDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const pass = this.pass;
-		const effect = this.effect;
-		const uniforms = effect.uniforms;
-		const blendMode = effect.blendMode;
+		const dotScreenEffect = this.dotScreenEffect;
+		const colorAverageEffect = this.colorAverageEffect;
 
 		const params = {
-			"angle": Math.PI * 0.5,
-			"scale": uniforms.get("scale").value,
-			"opacity": blendMode.opacity.value,
-			"blend mode": blendMode.blendFunction
+			"angle": Math.PI * 0.58,
+			"scale": dotScreenEffect.uniforms.get("scale").value,
+			"opacity": dotScreenEffect.blendMode.opacity.value,
+			"blend mode": dotScreenEffect.blendMode.blendFunction,
+			"colorAverage": {
+				"opacity": colorAverageEffect.blendMode.opacity.value,
+				"blend mode": colorAverageEffect.blendMode.blendFunction
+			}
 		};
 
 		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
 
-			effect.setAngle(params.angle);
+			dotScreenEffect.setAngle(params.angle);
 
 		});
 
 		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			uniforms.get("scale").value = params.scale;
+			dotScreenEffect.uniforms.get("scale").value = params.scale;
 
 		});
 
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			blendMode.opacity.value = params.opacity;
+			dotScreenEffect.blendMode.opacity.value = params.opacity;
 
 		});
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			dotScreenEffect.blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
+
+		});
+
+		const folder = menu.addFolder("Color Average");
+
+		folder.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
+
+		});
+
+		folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(() => {
+
+			colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
 			pass.recompile();
 
 		});
