@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1118,
+  "end": 502,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 28,
+      "line": 16,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1118,
+    "end": 502,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 28,
+        "line": 16,
         "column": 0
       }
     },
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 99,
-        "end": 142,
+        "end": 140,
         "loc": {
           "start": {
             "line": 7,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 7,
-            "column": 43
+            "column": 41
           }
         },
         "declaration": null,
@@ -47,7 +47,7 @@
           {
             "type": "ExportSpecifier",
             "start": 108,
-            "end": 117,
+            "end": 116,
             "loc": {
               "start": {
                 "line": 7,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 7,
-                "column": 18
+                "column": 17
               }
             },
             "local": {
               "type": "Identifier",
               "start": 108,
-              "end": 117,
+              "end": 116,
               "loc": {
                 "start": {
                   "line": 7,
@@ -69,17 +69,17 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 18
+                  "column": 17
                 },
-                "identifierName": "BloomPass"
+                "identifierName": "BlurPass"
               },
-              "name": "BloomPass",
+              "name": "BlurPass",
               "leadingComments": null
             },
             "exported": {
               "type": "Identifier",
               "start": 108,
-              "end": 117,
+              "end": 116,
               "loc": {
                 "start": {
                   "line": 7,
@@ -87,34 +87,34 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 18
+                  "column": 17
                 },
-                "identifierName": "BloomPass"
+                "identifierName": "BlurPass"
               },
-              "name": "BloomPass"
+              "name": "BlurPass"
             },
             "leadingComments": null
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 125,
-          "end": 141,
+          "start": 124,
+          "end": 139,
           "loc": {
             "start": {
               "line": 7,
-              "column": 26
+              "column": 25
             },
             "end": {
               "line": 7,
-              "column": 42
+              "column": 40
             }
           },
           "extra": {
-            "rawValue": "./BloomPass.js",
-            "raw": "\"./BloomPass.js\""
+            "rawValue": "./BlurPass.js",
+            "raw": "\"./BlurPass.js\""
           },
-          "value": "./BloomPass.js"
+          "value": "./BlurPass.js"
         },
         "leadingComments": [
           {
@@ -137,8 +137,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 144,
-        "end": 185,
+        "start": 142,
+        "end": 193,
         "loc": {
           "start": {
             "line": 8,
@@ -146,180 +146,6 @@
           },
           "end": {
             "line": 8,
-            "column": 41
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 153,
-            "end": 161,
-            "loc": {
-              "start": {
-                "line": 8,
-                "column": 9
-              },
-              "end": {
-                "line": 8,
-                "column": 17
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 153,
-              "end": 161,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 9
-                },
-                "end": {
-                  "line": 8,
-                  "column": 17
-                },
-                "identifierName": "BlurPass"
-              },
-              "name": "BlurPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 153,
-              "end": 161,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 9
-                },
-                "end": {
-                  "line": 8,
-                  "column": 17
-                },
-                "identifierName": "BlurPass"
-              },
-              "name": "BlurPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 169,
-          "end": 184,
-          "loc": {
-            "start": {
-              "line": 8,
-              "column": 25
-            },
-            "end": {
-              "line": 8,
-              "column": 40
-            }
-          },
-          "extra": {
-            "rawValue": "./BlurPass.js",
-            "raw": "\"./BlurPass.js\""
-          },
-          "value": "./BlurPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 187,
-        "end": 230,
-        "loc": {
-          "start": {
-            "line": 9,
-            "column": 0
-          },
-          "end": {
-            "line": 9,
-            "column": 43
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 196,
-            "end": 205,
-            "loc": {
-              "start": {
-                "line": 9,
-                "column": 9
-              },
-              "end": {
-                "line": 9,
-                "column": 18
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 196,
-              "end": 205,
-              "loc": {
-                "start": {
-                  "line": 9,
-                  "column": 9
-                },
-                "end": {
-                  "line": 9,
-                  "column": 18
-                },
-                "identifierName": "BokehPass"
-              },
-              "name": "BokehPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 196,
-              "end": 205,
-              "loc": {
-                "start": {
-                  "line": 9,
-                  "column": 9
-                },
-                "end": {
-                  "line": 9,
-                  "column": 18
-                },
-                "identifierName": "BokehPass"
-              },
-              "name": "BokehPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 213,
-          "end": 229,
-          "loc": {
-            "start": {
-              "line": 9,
-              "column": 26
-            },
-            "end": {
-              "line": 9,
-              "column": 42
-            }
-          },
-          "extra": {
-            "rawValue": "./BokehPass.js",
-            "raw": "\"./BokehPass.js\""
-          },
-          "value": "./BokehPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 232,
-        "end": 283,
-        "loc": {
-          "start": {
-            "line": 10,
-            "column": 0
-          },
-          "end": {
-            "line": 10,
             "column": 51
           }
         },
@@ -327,29 +153,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 241,
-            "end": 254,
+            "start": 151,
+            "end": 164,
             "loc": {
               "start": {
-                "line": 10,
+                "line": 8,
                 "column": 9
               },
               "end": {
-                "line": 10,
+                "line": 8,
                 "column": 22
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 241,
-              "end": 254,
+              "start": 151,
+              "end": 164,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 8,
                   "column": 9
                 },
                 "end": {
-                  "line": 10,
+                  "line": 8,
                   "column": 22
                 },
                 "identifierName": "ClearMaskPass"
@@ -358,15 +184,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 241,
-              "end": 254,
+              "start": 151,
+              "end": 164,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 8,
                   "column": 9
                 },
                 "end": {
-                  "line": 10,
+                  "line": 8,
                   "column": 22
                 },
                 "identifierName": "ClearMaskPass"
@@ -377,15 +203,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 262,
-          "end": 282,
+          "start": 172,
+          "end": 192,
           "loc": {
             "start": {
-              "line": 10,
+              "line": 8,
               "column": 30
             },
             "end": {
-              "line": 10,
+              "line": 8,
               "column": 50
             }
           },
@@ -398,15 +224,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 285,
-        "end": 328,
+        "start": 195,
+        "end": 238,
         "loc": {
           "start": {
-            "line": 11,
+            "line": 9,
             "column": 0
           },
           "end": {
-            "line": 11,
+            "line": 9,
             "column": 43
           }
         },
@@ -414,29 +240,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 294,
-            "end": 303,
+            "start": 204,
+            "end": 213,
             "loc": {
               "start": {
-                "line": 11,
+                "line": 9,
                 "column": 9
               },
               "end": {
-                "line": 11,
+                "line": 9,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 294,
-              "end": 303,
+              "start": 204,
+              "end": 213,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 9
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 18
                 },
                 "identifierName": "ClearPass"
@@ -445,15 +271,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 294,
-              "end": 303,
+              "start": 204,
+              "end": 213,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 9
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 18
                 },
                 "identifierName": "ClearPass"
@@ -464,15 +290,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 311,
-          "end": 327,
+          "start": 221,
+          "end": 237,
           "loc": {
             "start": {
-              "line": 11,
+              "line": 9,
               "column": 26
             },
             "end": {
-              "line": 11,
+              "line": 9,
               "column": 42
             }
           },
@@ -485,412 +311,102 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 330,
-        "end": 381,
+        "start": 240,
+        "end": 285,
         "loc": {
           "start": {
-            "line": 12,
+            "line": 10,
             "column": 0
           },
           "end": {
-            "line": 12,
-            "column": 51
+            "line": 10,
+            "column": 45
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 339,
-            "end": 352,
+            "start": 249,
+            "end": 259,
             "loc": {
               "start": {
-                "line": 12,
+                "line": 10,
                 "column": 9
               },
               "end": {
-                "line": 12,
-                "column": 22
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 339,
-              "end": 352,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 9
-                },
-                "end": {
-                  "line": 12,
-                  "column": 22
-                },
-                "identifierName": "DotScreenPass"
-              },
-              "name": "DotScreenPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 339,
-              "end": 352,
-              "loc": {
-                "start": {
-                  "line": 12,
-                  "column": 9
-                },
-                "end": {
-                  "line": 12,
-                  "column": 22
-                },
-                "identifierName": "DotScreenPass"
-              },
-              "name": "DotScreenPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 360,
-          "end": 380,
-          "loc": {
-            "start": {
-              "line": 12,
-              "column": 30
-            },
-            "end": {
-              "line": 12,
-              "column": 50
-            }
-          },
-          "extra": {
-            "rawValue": "./DotScreenPass.js",
-            "raw": "\"./DotScreenPass.js\""
-          },
-          "value": "./DotScreenPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 383,
-        "end": 424,
-        "loc": {
-          "start": {
-            "line": 13,
-            "column": 0
-          },
-          "end": {
-            "line": 13,
-            "column": 41
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 392,
-            "end": 400,
-            "loc": {
-              "start": {
-                "line": 13,
-                "column": 9
-              },
-              "end": {
-                "line": 13,
-                "column": 17
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 392,
-              "end": 400,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 9
-                },
-                "end": {
-                  "line": 13,
-                  "column": 17
-                },
-                "identifierName": "FilmPass"
-              },
-              "name": "FilmPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 392,
-              "end": 400,
-              "loc": {
-                "start": {
-                  "line": 13,
-                  "column": 9
-                },
-                "end": {
-                  "line": 13,
-                  "column": 17
-                },
-                "identifierName": "FilmPass"
-              },
-              "name": "FilmPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 408,
-          "end": 423,
-          "loc": {
-            "start": {
-              "line": 13,
-              "column": 25
-            },
-            "end": {
-              "line": 13,
-              "column": 40
-            }
-          },
-          "extra": {
-            "rawValue": "./FilmPass.js",
-            "raw": "\"./FilmPass.js\""
-          },
-          "value": "./FilmPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 426,
-        "end": 483,
-        "loc": {
-          "start": {
-            "line": 14,
-            "column": 0
-          },
-          "end": {
-            "line": 14,
-            "column": 57
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 435,
-            "end": 445,
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 9
-              },
-              "end": {
-                "line": 14,
+                "line": 10,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 435,
-              "end": 445,
+              "start": 249,
+              "end": 259,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 14,
+                  "line": 10,
                   "column": 19
                 },
-                "identifierName": "GlitchMode"
+                "identifierName": "EffectPass"
               },
-              "name": "GlitchMode"
+              "name": "EffectPass"
             },
             "exported": {
               "type": "Identifier",
-              "start": 435,
-              "end": 445,
+              "start": 249,
+              "end": 259,
               "loc": {
                 "start": {
-                  "line": 14,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 14,
+                  "line": 10,
                   "column": 19
                 },
-                "identifierName": "GlitchMode"
+                "identifierName": "EffectPass"
               },
-              "name": "GlitchMode"
-            }
-          },
-          {
-            "type": "ExportSpecifier",
-            "start": 447,
-            "end": 457,
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 21
-              },
-              "end": {
-                "line": 14,
-                "column": 31
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 447,
-              "end": 457,
-              "loc": {
-                "start": {
-                  "line": 14,
-                  "column": 21
-                },
-                "end": {
-                  "line": 14,
-                  "column": 31
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 447,
-              "end": 457,
-              "loc": {
-                "start": {
-                  "line": 14,
-                  "column": 21
-                },
-                "end": {
-                  "line": 14,
-                  "column": 31
-                },
-                "identifierName": "GlitchPass"
-              },
-              "name": "GlitchPass"
+              "name": "EffectPass"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 465,
-          "end": 482,
+          "start": 267,
+          "end": 284,
           "loc": {
             "start": {
-              "line": 14,
-              "column": 39
+              "line": 10,
+              "column": 27
             },
             "end": {
-              "line": 14,
-              "column": 56
+              "line": 10,
+              "column": 44
             }
           },
           "extra": {
-            "rawValue": "./GlitchPass.js",
-            "raw": "\"./GlitchPass.js\""
+            "rawValue": "./EffectPass.js",
+            "raw": "\"./EffectPass.js\""
           },
-          "value": "./GlitchPass.js"
+          "value": "./EffectPass.js"
         }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 485,
-        "end": 532,
+        "start": 287,
+        "end": 328,
         "loc": {
           "start": {
-            "line": 15,
+            "line": 11,
             "column": 0
           },
           "end": {
-            "line": 15,
-            "column": 47
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 494,
-            "end": 505,
-            "loc": {
-              "start": {
-                "line": 15,
-                "column": 9
-              },
-              "end": {
-                "line": 15,
-                "column": 20
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 494,
-              "end": 505,
-              "loc": {
-                "start": {
-                  "line": 15,
-                  "column": 9
-                },
-                "end": {
-                  "line": 15,
-                  "column": 20
-                },
-                "identifierName": "GodRaysPass"
-              },
-              "name": "GodRaysPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 494,
-              "end": 505,
-              "loc": {
-                "start": {
-                  "line": 15,
-                  "column": 9
-                },
-                "end": {
-                  "line": 15,
-                  "column": 20
-                },
-                "identifierName": "GodRaysPass"
-              },
-              "name": "GodRaysPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 513,
-          "end": 531,
-          "loc": {
-            "start": {
-              "line": 15,
-              "column": 28
-            },
-            "end": {
-              "line": 15,
-              "column": 46
-            }
-          },
-          "extra": {
-            "rawValue": "./GodRaysPass.js",
-            "raw": "\"./GodRaysPass.js\""
-          },
-          "value": "./GodRaysPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 534,
-        "end": 575,
-        "loc": {
-          "start": {
-            "line": 16,
-            "column": 0
-          },
-          "end": {
-            "line": 16,
+            "line": 11,
             "column": 41
           }
         },
@@ -898,29 +414,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 543,
-            "end": 551,
+            "start": 296,
+            "end": 304,
             "loc": {
               "start": {
-                "line": 16,
+                "line": 11,
                 "column": 9
               },
               "end": {
-                "line": 16,
+                "line": 11,
                 "column": 17
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 543,
-              "end": 551,
+              "start": 296,
+              "end": 304,
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 11,
                   "column": 9
                 },
                 "end": {
-                  "line": 16,
+                  "line": 11,
                   "column": 17
                 },
                 "identifierName": "MaskPass"
@@ -929,15 +445,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 543,
-              "end": 551,
+              "start": 296,
+              "end": 304,
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 11,
                   "column": 9
                 },
                 "end": {
-                  "line": 16,
+                  "line": 11,
                   "column": 17
                 },
                 "identifierName": "MaskPass"
@@ -948,15 +464,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 559,
-          "end": 574,
+          "start": 312,
+          "end": 327,
           "loc": {
             "start": {
-              "line": 16,
+              "line": 11,
               "column": 25
             },
             "end": {
-              "line": 16,
+              "line": 11,
               "column": 40
             }
           },
@@ -969,102 +485,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 577,
-        "end": 624,
+        "start": 330,
+        "end": 363,
         "loc": {
           "start": {
-            "line": 17,
+            "line": 12,
             "column": 0
           },
           "end": {
-            "line": 17,
-            "column": 47
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 586,
-            "end": 597,
-            "loc": {
-              "start": {
-                "line": 17,
-                "column": 9
-              },
-              "end": {
-                "line": 17,
-                "column": 20
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 586,
-              "end": 597,
-              "loc": {
-                "start": {
-                  "line": 17,
-                  "column": 9
-                },
-                "end": {
-                  "line": 17,
-                  "column": 20
-                },
-                "identifierName": "OutlinePass"
-              },
-              "name": "OutlinePass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 586,
-              "end": 597,
-              "loc": {
-                "start": {
-                  "line": 17,
-                  "column": 9
-                },
-                "end": {
-                  "line": 17,
-                  "column": 20
-                },
-                "identifierName": "OutlinePass"
-              },
-              "name": "OutlinePass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 605,
-          "end": 623,
-          "loc": {
-            "start": {
-              "line": 17,
-              "column": 28
-            },
-            "end": {
-              "line": 17,
-              "column": 46
-            }
-          },
-          "extra": {
-            "rawValue": "./OutlinePass.js",
-            "raw": "\"./OutlinePass.js\""
-          },
-          "value": "./OutlinePass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 626,
-        "end": 659,
-        "loc": {
-          "start": {
-            "line": 18,
-            "column": 0
-          },
-          "end": {
-            "line": 18,
+            "line": 12,
             "column": 33
           }
         },
@@ -1072,29 +501,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 635,
-            "end": 639,
+            "start": 339,
+            "end": 343,
             "loc": {
               "start": {
-                "line": 18,
+                "line": 12,
                 "column": 9
               },
               "end": {
-                "line": 18,
+                "line": 12,
                 "column": 13
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 635,
-              "end": 639,
+              "start": 339,
+              "end": 343,
               "loc": {
                 "start": {
-                  "line": 18,
+                  "line": 12,
                   "column": 9
                 },
                 "end": {
-                  "line": 18,
+                  "line": 12,
                   "column": 13
                 },
                 "identifierName": "Pass"
@@ -1103,15 +532,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 635,
-              "end": 639,
+              "start": 339,
+              "end": 343,
               "loc": {
                 "start": {
-                  "line": 18,
+                  "line": 12,
                   "column": 9
                 },
                 "end": {
-                  "line": 18,
+                  "line": 12,
                   "column": 13
                 },
                 "identifierName": "Pass"
@@ -1122,15 +551,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 647,
-          "end": 658,
+          "start": 351,
+          "end": 362,
           "loc": {
             "start": {
-              "line": 18,
+              "line": 12,
               "column": 21
             },
             "end": {
-              "line": 18,
+              "line": 12,
               "column": 32
             }
           },
@@ -1143,189 +572,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 661,
-        "end": 714,
+        "start": 365,
+        "end": 410,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 13,
             "column": 0
           },
           "end": {
-            "line": 19,
-            "column": 53
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 670,
-            "end": 684,
-            "loc": {
-              "start": {
-                "line": 19,
-                "column": 9
-              },
-              "end": {
-                "line": 19,
-                "column": 23
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 670,
-              "end": 684,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 9
-                },
-                "end": {
-                  "line": 19,
-                  "column": 23
-                },
-                "identifierName": "PixelationPass"
-              },
-              "name": "PixelationPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 670,
-              "end": 684,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 9
-                },
-                "end": {
-                  "line": 19,
-                  "column": 23
-                },
-                "identifierName": "PixelationPass"
-              },
-              "name": "PixelationPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 692,
-          "end": 713,
-          "loc": {
-            "start": {
-              "line": 19,
-              "column": 31
-            },
-            "end": {
-              "line": 19,
-              "column": 52
-            }
-          },
-          "extra": {
-            "rawValue": "./PixelationPass.js",
-            "raw": "\"./PixelationPass.js\""
-          },
-          "value": "./PixelationPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 716,
-        "end": 777,
-        "loc": {
-          "start": {
-            "line": 20,
-            "column": 0
-          },
-          "end": {
-            "line": 20,
-            "column": 61
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 725,
-            "end": 743,
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 9
-              },
-              "end": {
-                "line": 20,
-                "column": 27
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 725,
-              "end": 743,
-              "loc": {
-                "start": {
-                  "line": 20,
-                  "column": 9
-                },
-                "end": {
-                  "line": 20,
-                  "column": 27
-                },
-                "identifierName": "RealisticBokehPass"
-              },
-              "name": "RealisticBokehPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 725,
-              "end": 743,
-              "loc": {
-                "start": {
-                  "line": 20,
-                  "column": 9
-                },
-                "end": {
-                  "line": 20,
-                  "column": 27
-                },
-                "identifierName": "RealisticBokehPass"
-              },
-              "name": "RealisticBokehPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 751,
-          "end": 776,
-          "loc": {
-            "start": {
-              "line": 20,
-              "column": 35
-            },
-            "end": {
-              "line": 20,
-              "column": 60
-            }
-          },
-          "extra": {
-            "rawValue": "./RealisticBokehPass.js",
-            "raw": "\"./RealisticBokehPass.js\""
-          },
-          "value": "./RealisticBokehPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 779,
-        "end": 824,
-        "loc": {
-          "start": {
-            "line": 21,
-            "column": 0
-          },
-          "end": {
-            "line": 21,
+            "line": 13,
             "column": 45
           }
         },
@@ -1333,29 +588,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 788,
-            "end": 798,
+            "start": 374,
+            "end": 384,
             "loc": {
               "start": {
-                "line": 21,
+                "line": 13,
                 "column": 9
               },
               "end": {
-                "line": 21,
+                "line": 13,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 788,
-              "end": 798,
+              "start": 374,
+              "end": 384,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 13,
                   "column": 9
                 },
                 "end": {
-                  "line": 21,
+                  "line": 13,
                   "column": 19
                 },
                 "identifierName": "RenderPass"
@@ -1364,15 +619,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 788,
-              "end": 798,
+              "start": 374,
+              "end": 384,
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 13,
                   "column": 9
                 },
                 "end": {
-                  "line": 21,
+                  "line": 13,
                   "column": 19
                 },
                 "identifierName": "RenderPass"
@@ -1383,15 +638,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 806,
-          "end": 823,
+          "start": 392,
+          "end": 409,
           "loc": {
             "start": {
-              "line": 21,
+              "line": 13,
               "column": 27
             },
             "end": {
-              "line": 21,
+              "line": 13,
               "column": 44
             }
           },
@@ -1404,15 +659,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 826,
-        "end": 867,
+        "start": 412,
+        "end": 453,
         "loc": {
           "start": {
-            "line": 22,
+            "line": 14,
             "column": 0
           },
           "end": {
-            "line": 22,
+            "line": 14,
             "column": 41
           }
         },
@@ -1420,29 +675,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 835,
-            "end": 843,
+            "start": 421,
+            "end": 429,
             "loc": {
               "start": {
-                "line": 22,
+                "line": 14,
                 "column": 9
               },
               "end": {
-                "line": 22,
+                "line": 14,
                 "column": 17
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 835,
-              "end": 843,
+              "start": 421,
+              "end": 429,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 14,
                   "column": 9
                 },
                 "end": {
-                  "line": 22,
+                  "line": 14,
                   "column": 17
                 },
                 "identifierName": "SavePass"
@@ -1451,15 +706,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 835,
-              "end": 843,
+              "start": 421,
+              "end": 429,
               "loc": {
                 "start": {
-                  "line": 22,
+                  "line": 14,
                   "column": 9
                 },
                 "end": {
-                  "line": 22,
+                  "line": 14,
                   "column": 17
                 },
                 "identifierName": "SavePass"
@@ -1470,15 +725,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 851,
-          "end": 866,
+          "start": 437,
+          "end": 452,
           "loc": {
             "start": {
-              "line": 22,
+              "line": 14,
               "column": 25
             },
             "end": {
-              "line": 22,
+              "line": 14,
               "column": 40
             }
           },
@@ -1491,15 +746,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 869,
-        "end": 914,
+        "start": 455,
+        "end": 500,
         "loc": {
           "start": {
-            "line": 23,
+            "line": 15,
             "column": 0
           },
           "end": {
-            "line": 23,
+            "line": 15,
             "column": 45
           }
         },
@@ -1507,29 +762,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 878,
-            "end": 888,
+            "start": 464,
+            "end": 474,
             "loc": {
               "start": {
-                "line": 23,
+                "line": 15,
                 "column": 9
               },
               "end": {
-                "line": 23,
+                "line": 15,
                 "column": 19
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 878,
-              "end": 888,
+              "start": 464,
+              "end": 474,
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 15,
                   "column": 9
                 },
                 "end": {
-                  "line": 23,
+                  "line": 15,
                   "column": 19
                 },
                 "identifierName": "ShaderPass"
@@ -1538,15 +793,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 878,
-              "end": 888,
+              "start": 464,
+              "end": 474,
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 15,
                   "column": 9
                 },
                 "end": {
-                  "line": 23,
+                  "line": 15,
                   "column": 19
                 },
                 "identifierName": "ShaderPass"
@@ -1557,15 +812,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 896,
-          "end": 913,
+          "start": 482,
+          "end": 499,
           "loc": {
             "start": {
-              "line": 23,
+              "line": 15,
               "column": 27
             },
             "end": {
-              "line": 23,
+              "line": 15,
               "column": 44
             }
           },
@@ -1574,354 +829,6 @@
             "raw": "\"./ShaderPass.js\""
           },
           "value": "./ShaderPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 916,
-        "end": 967,
-        "loc": {
-          "start": {
-            "line": 24,
-            "column": 0
-          },
-          "end": {
-            "line": 24,
-            "column": 51
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 925,
-            "end": 938,
-            "loc": {
-              "start": {
-                "line": 24,
-                "column": 9
-              },
-              "end": {
-                "line": 24,
-                "column": 22
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 925,
-              "end": 938,
-              "loc": {
-                "start": {
-                  "line": 24,
-                  "column": 9
-                },
-                "end": {
-                  "line": 24,
-                  "column": 22
-                },
-                "identifierName": "ShockWavePass"
-              },
-              "name": "ShockWavePass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 925,
-              "end": 938,
-              "loc": {
-                "start": {
-                  "line": 24,
-                  "column": 9
-                },
-                "end": {
-                  "line": 24,
-                  "column": 22
-                },
-                "identifierName": "ShockWavePass"
-              },
-              "name": "ShockWavePass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 946,
-          "end": 966,
-          "loc": {
-            "start": {
-              "line": 24,
-              "column": 30
-            },
-            "end": {
-              "line": 24,
-              "column": 50
-            }
-          },
-          "extra": {
-            "rawValue": "./ShockWavePass.js",
-            "raw": "\"./ShockWavePass.js\""
-          },
-          "value": "./ShockWavePass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 969,
-        "end": 1010,
-        "loc": {
-          "start": {
-            "line": 25,
-            "column": 0
-          },
-          "end": {
-            "line": 25,
-            "column": 41
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 978,
-            "end": 986,
-            "loc": {
-              "start": {
-                "line": 25,
-                "column": 9
-              },
-              "end": {
-                "line": 25,
-                "column": 17
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 978,
-              "end": 986,
-              "loc": {
-                "start": {
-                  "line": 25,
-                  "column": 9
-                },
-                "end": {
-                  "line": 25,
-                  "column": 17
-                },
-                "identifierName": "SMAAPass"
-              },
-              "name": "SMAAPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 978,
-              "end": 986,
-              "loc": {
-                "start": {
-                  "line": 25,
-                  "column": 9
-                },
-                "end": {
-                  "line": 25,
-                  "column": 17
-                },
-                "identifierName": "SMAAPass"
-              },
-              "name": "SMAAPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 994,
-          "end": 1009,
-          "loc": {
-            "start": {
-              "line": 25,
-              "column": 25
-            },
-            "end": {
-              "line": 25,
-              "column": 40
-            }
-          },
-          "extra": {
-            "rawValue": "./SMAAPass.js",
-            "raw": "\"./SMAAPass.js\""
-          },
-          "value": "./SMAAPass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1012,
-        "end": 1059,
-        "loc": {
-          "start": {
-            "line": 26,
-            "column": 0
-          },
-          "end": {
-            "line": 26,
-            "column": 47
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1021,
-            "end": 1032,
-            "loc": {
-              "start": {
-                "line": 26,
-                "column": 9
-              },
-              "end": {
-                "line": 26,
-                "column": 20
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1021,
-              "end": 1032,
-              "loc": {
-                "start": {
-                  "line": 26,
-                  "column": 9
-                },
-                "end": {
-                  "line": 26,
-                  "column": 20
-                },
-                "identifierName": "TexturePass"
-              },
-              "name": "TexturePass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1021,
-              "end": 1032,
-              "loc": {
-                "start": {
-                  "line": 26,
-                  "column": 9
-                },
-                "end": {
-                  "line": 26,
-                  "column": 20
-                },
-                "identifierName": "TexturePass"
-              },
-              "name": "TexturePass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1040,
-          "end": 1058,
-          "loc": {
-            "start": {
-              "line": 26,
-              "column": 28
-            },
-            "end": {
-              "line": 26,
-              "column": 46
-            }
-          },
-          "extra": {
-            "rawValue": "./TexturePass.js",
-            "raw": "\"./TexturePass.js\""
-          },
-          "value": "./TexturePass.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1061,
-        "end": 1116,
-        "loc": {
-          "start": {
-            "line": 27,
-            "column": 0
-          },
-          "end": {
-            "line": 27,
-            "column": 55
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1070,
-            "end": 1085,
-            "loc": {
-              "start": {
-                "line": 27,
-                "column": 9
-              },
-              "end": {
-                "line": 27,
-                "column": 24
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1070,
-              "end": 1085,
-              "loc": {
-                "start": {
-                  "line": 27,
-                  "column": 9
-                },
-                "end": {
-                  "line": 27,
-                  "column": 24
-                },
-                "identifierName": "ToneMappingPass"
-              },
-              "name": "ToneMappingPass"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1070,
-              "end": 1085,
-              "loc": {
-                "start": {
-                  "line": 27,
-                  "column": 9
-                },
-                "end": {
-                  "line": 27,
-                  "column": 24
-                },
-                "identifierName": "ToneMappingPass"
-              },
-              "name": "ToneMappingPass"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1093,
-          "end": 1115,
-          "loc": {
-            "start": {
-              "line": 27,
-              "column": 32
-            },
-            "end": {
-              "line": 27,
-              "column": 54
-            }
-          },
-          "extra": {
-            "rawValue": "./ToneMappingPass.js",
-            "raw": "\"./ToneMappingPass.js\""
-          },
-          "value": "./ToneMappingPass.js"
         }
       }
     ],
@@ -2027,199 +934,16 @@
         "postfix": false,
         "binop": null
       },
-      "value": "BloomPass",
-      "start": 108,
-      "end": 117,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 9
-        },
-        "end": {
-          "line": 7,
-          "column": 18
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 118,
-      "end": 119,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 19
-        },
-        "end": {
-          "line": 7,
-          "column": 20
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 120,
-      "end": 124,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 21
-        },
-        "end": {
-          "line": 7,
-          "column": 25
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./BloomPass.js",
-      "start": 125,
-      "end": 141,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 26
-        },
-        "end": {
-          "line": 7,
-          "column": 42
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 141,
-      "end": 142,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 42
-        },
-        "end": {
-          "line": 7,
-          "column": 43
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 144,
-      "end": 150,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 0
-        },
-        "end": {
-          "line": 8,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 151,
-      "end": 152,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 7
-        },
-        "end": {
-          "line": 8,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
       "value": "BlurPass",
-      "start": 153,
-      "end": 161,
+      "start": 108,
+      "end": 116,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 7,
           "column": 9
         },
         "end": {
-          "line": 8,
+          "line": 7,
           "column": 17
         }
       }
@@ -2236,15 +960,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 162,
-      "end": 163,
+      "start": 117,
+      "end": 118,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 7,
           "column": 18
         },
         "end": {
-          "line": 8,
+          "line": 7,
           "column": 19
         }
       }
@@ -2262,15 +986,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 164,
-      "end": 168,
+      "start": 119,
+      "end": 123,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 7,
           "column": 20
         },
         "end": {
-          "line": 8,
+          "line": 7,
           "column": 24
         }
       }
@@ -2289,15 +1013,15 @@
         "updateContext": null
       },
       "value": "./BlurPass.js",
-      "start": 169,
-      "end": 184,
+      "start": 124,
+      "end": 139,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 7,
           "column": 25
         },
         "end": {
-          "line": 8,
+          "line": 7,
           "column": 40
         }
       }
@@ -2315,15 +1039,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 184,
-      "end": 185,
+      "start": 139,
+      "end": 140,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 7,
           "column": 40
         },
         "end": {
-          "line": 8,
+          "line": 7,
           "column": 41
         }
       }
@@ -2343,8 +1067,191 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 187,
+      "start": 142,
+      "end": 148,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 0
+        },
+        "end": {
+          "line": 8,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 149,
+      "end": 150,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 7
+        },
+        "end": {
+          "line": 8,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ClearMaskPass",
+      "start": 151,
+      "end": 164,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 9
+        },
+        "end": {
+          "line": 8,
+          "column": 22
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 165,
+      "end": 166,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 23
+        },
+        "end": {
+          "line": 8,
+          "column": 24
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 167,
+      "end": 171,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 25
+        },
+        "end": {
+          "line": 8,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./ClearMaskPass.js",
+      "start": 172,
+      "end": 192,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 30
+        },
+        "end": {
+          "line": 8,
+          "column": 50
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 192,
       "end": 193,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 50
+        },
+        "end": {
+          "line": 8,
+          "column": 51
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 195,
+      "end": 201,
       "loc": {
         "start": {
           "line": 9,
@@ -2368,8 +1275,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 194,
-      "end": 195,
+      "start": 202,
+      "end": 203,
       "loc": {
         "start": {
           "line": 9,
@@ -2393,9 +1300,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "BokehPass",
-      "start": 196,
-      "end": 205,
+      "value": "ClearPass",
+      "start": 204,
+      "end": 213,
       "loc": {
         "start": {
           "line": 9,
@@ -2419,8 +1326,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 206,
-      "end": 207,
+      "start": 214,
+      "end": 215,
       "loc": {
         "start": {
           "line": 9,
@@ -2445,8 +1352,8 @@
         "binop": null
       },
       "value": "from",
-      "start": 208,
-      "end": 212,
+      "start": 216,
+      "end": 220,
       "loc": {
         "start": {
           "line": 9,
@@ -2471,9 +1378,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./BokehPass.js",
-      "start": 213,
-      "end": 229,
+      "value": "./ClearPass.js",
+      "start": 221,
+      "end": 237,
       "loc": {
         "start": {
           "line": 9,
@@ -2498,8 +1405,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 229,
-      "end": 230,
+      "start": 237,
+      "end": 238,
       "loc": {
         "start": {
           "line": 9,
@@ -2526,8 +1433,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 232,
-      "end": 238,
+      "start": 240,
+      "end": 246,
       "loc": {
         "start": {
           "line": 10,
@@ -2551,8 +1458,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 239,
-      "end": 240,
+      "start": 247,
+      "end": 248,
       "loc": {
         "start": {
           "line": 10,
@@ -2576,9 +1483,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ClearMaskPass",
-      "start": 241,
-      "end": 254,
+      "value": "EffectPass",
+      "start": 249,
+      "end": 259,
       "loc": {
         "start": {
           "line": 10,
@@ -2586,7 +1493,7 @@
         },
         "end": {
           "line": 10,
-          "column": 22
+          "column": 19
         }
       }
     },
@@ -2602,16 +1509,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 255,
-      "end": 256,
+      "start": 260,
+      "end": 261,
       "loc": {
         "start": {
           "line": 10,
-          "column": 23
+          "column": 20
         },
         "end": {
           "line": 10,
-          "column": 24
+          "column": 21
         }
       }
     },
@@ -2628,16 +1535,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 257,
-      "end": 261,
+      "start": 262,
+      "end": 266,
       "loc": {
         "start": {
           "line": 10,
-          "column": 25
+          "column": 22
         },
         "end": {
           "line": 10,
-          "column": 29
+          "column": 26
         }
       }
     },
@@ -2654,17 +1561,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./ClearMaskPass.js",
-      "start": 262,
-      "end": 282,
+      "value": "./EffectPass.js",
+      "start": 267,
+      "end": 284,
       "loc": {
         "start": {
           "line": 10,
-          "column": 30
+          "column": 27
         },
         "end": {
           "line": 10,
-          "column": 50
+          "column": 44
         }
       }
     },
@@ -2681,16 +1588,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 282,
-      "end": 283,
+      "start": 284,
+      "end": 285,
       "loc": {
         "start": {
           "line": 10,
-          "column": 50
+          "column": 44
         },
         "end": {
           "line": 10,
-          "column": 51
+          "column": 45
         }
       }
     },
@@ -2709,8 +1616,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 285,
-      "end": 291,
+      "start": 287,
+      "end": 293,
       "loc": {
         "start": {
           "line": 11,
@@ -2734,8 +1641,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 292,
-      "end": 293,
+      "start": 294,
+      "end": 295,
       "loc": {
         "start": {
           "line": 11,
@@ -2759,9 +1666,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "ClearPass",
-      "start": 294,
-      "end": 303,
+      "value": "MaskPass",
+      "start": 296,
+      "end": 304,
       "loc": {
         "start": {
           "line": 11,
@@ -2769,7 +1676,7 @@
         },
         "end": {
           "line": 11,
-          "column": 18
+          "column": 17
         }
       }
     },
@@ -2785,16 +1692,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 304,
-      "end": 305,
+      "start": 305,
+      "end": 306,
       "loc": {
         "start": {
           "line": 11,
-          "column": 19
+          "column": 18
         },
         "end": {
           "line": 11,
-          "column": 20
+          "column": 19
         }
       }
     },
@@ -2811,16 +1718,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 306,
-      "end": 310,
+      "start": 307,
+      "end": 311,
       "loc": {
         "start": {
           "line": 11,
-          "column": 21
+          "column": 20
         },
         "end": {
           "line": 11,
-          "column": 25
+          "column": 24
         }
       }
     },
@@ -2837,17 +1744,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./ClearPass.js",
-      "start": 311,
+      "value": "./MaskPass.js",
+      "start": 312,
       "end": 327,
       "loc": {
         "start": {
           "line": 11,
-          "column": 26
+          "column": 25
         },
         "end": {
           "line": 11,
-          "column": 42
+          "column": 40
         }
       }
     },
@@ -2869,11 +1776,11 @@
       "loc": {
         "start": {
           "line": 11,
-          "column": 42
+          "column": 40
         },
         "end": {
           "line": 11,
-          "column": 43
+          "column": 41
         }
       }
     },
@@ -2942,1166 +1849,16 @@
         "postfix": false,
         "binop": null
       },
-      "value": "DotScreenPass",
-      "start": 339,
-      "end": 352,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 9
-        },
-        "end": {
-          "line": 12,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 353,
-      "end": 354,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 23
-        },
-        "end": {
-          "line": 12,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 355,
-      "end": 359,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 25
-        },
-        "end": {
-          "line": 12,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./DotScreenPass.js",
-      "start": 360,
-      "end": 380,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 30
-        },
-        "end": {
-          "line": 12,
-          "column": 50
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 380,
-      "end": 381,
-      "loc": {
-        "start": {
-          "line": 12,
-          "column": 50
-        },
-        "end": {
-          "line": 12,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 383,
-      "end": 389,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 0
-        },
-        "end": {
-          "line": 13,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 390,
-      "end": 391,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 7
-        },
-        "end": {
-          "line": 13,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "FilmPass",
-      "start": 392,
-      "end": 400,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 9
-        },
-        "end": {
-          "line": 13,
-          "column": 17
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 401,
-      "end": 402,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 18
-        },
-        "end": {
-          "line": 13,
-          "column": 19
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 403,
-      "end": 407,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 20
-        },
-        "end": {
-          "line": 13,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./FilmPass.js",
-      "start": 408,
-      "end": 423,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 25
-        },
-        "end": {
-          "line": 13,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 423,
-      "end": 424,
-      "loc": {
-        "start": {
-          "line": 13,
-          "column": 40
-        },
-        "end": {
-          "line": 13,
-          "column": 41
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 426,
-      "end": 432,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 0
-        },
-        "end": {
-          "line": 14,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 433,
-      "end": 434,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 7
-        },
-        "end": {
-          "line": 14,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "GlitchMode",
-      "start": 435,
-      "end": 445,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 9
-        },
-        "end": {
-          "line": 14,
-          "column": 19
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 445,
-      "end": 446,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 19
-        },
-        "end": {
-          "line": 14,
-          "column": 20
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "GlitchPass",
-      "start": 447,
-      "end": 457,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 21
-        },
-        "end": {
-          "line": 14,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 458,
-      "end": 459,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 32
-        },
-        "end": {
-          "line": 14,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 460,
-      "end": 464,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 34
-        },
-        "end": {
-          "line": 14,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./GlitchPass.js",
-      "start": 465,
-      "end": 482,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 39
-        },
-        "end": {
-          "line": 14,
-          "column": 56
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 482,
-      "end": 483,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 56
-        },
-        "end": {
-          "line": 14,
-          "column": 57
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 485,
-      "end": 491,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 0
-        },
-        "end": {
-          "line": 15,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 492,
-      "end": 493,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 7
-        },
-        "end": {
-          "line": 15,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "GodRaysPass",
-      "start": 494,
-      "end": 505,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 9
-        },
-        "end": {
-          "line": 15,
-          "column": 20
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 506,
-      "end": 507,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 21
-        },
-        "end": {
-          "line": 15,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 508,
-      "end": 512,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 23
-        },
-        "end": {
-          "line": 15,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./GodRaysPass.js",
-      "start": 513,
-      "end": 531,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 28
-        },
-        "end": {
-          "line": 15,
-          "column": 46
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 531,
-      "end": 532,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 46
-        },
-        "end": {
-          "line": 15,
-          "column": 47
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 534,
-      "end": 540,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 0
-        },
-        "end": {
-          "line": 16,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 541,
-      "end": 542,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 7
-        },
-        "end": {
-          "line": 16,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "MaskPass",
-      "start": 543,
-      "end": 551,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 9
-        },
-        "end": {
-          "line": 16,
-          "column": 17
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 552,
-      "end": 553,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 18
-        },
-        "end": {
-          "line": 16,
-          "column": 19
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 554,
-      "end": 558,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 20
-        },
-        "end": {
-          "line": 16,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./MaskPass.js",
-      "start": 559,
-      "end": 574,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 25
-        },
-        "end": {
-          "line": 16,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 574,
-      "end": 575,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 40
-        },
-        "end": {
-          "line": 16,
-          "column": 41
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 577,
-      "end": 583,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 0
-        },
-        "end": {
-          "line": 17,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 584,
-      "end": 585,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 7
-        },
-        "end": {
-          "line": 17,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "OutlinePass",
-      "start": 586,
-      "end": 597,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 9
-        },
-        "end": {
-          "line": 17,
-          "column": 20
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 598,
-      "end": 599,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 21
-        },
-        "end": {
-          "line": 17,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 600,
-      "end": 604,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 23
-        },
-        "end": {
-          "line": 17,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./OutlinePass.js",
-      "start": 605,
-      "end": 623,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 28
-        },
-        "end": {
-          "line": 17,
-          "column": 46
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 623,
-      "end": 624,
-      "loc": {
-        "start": {
-          "line": 17,
-          "column": 46
-        },
-        "end": {
-          "line": 17,
-          "column": 47
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 626,
-      "end": 632,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 0
-        },
-        "end": {
-          "line": 18,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 633,
-      "end": 634,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 7
-        },
-        "end": {
-          "line": 18,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
       "value": "Pass",
-      "start": 635,
-      "end": 639,
+      "start": 339,
+      "end": 343,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 12,
           "column": 9
         },
         "end": {
-          "line": 18,
+          "line": 12,
           "column": 13
         }
       }
@@ -4118,15 +1875,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 640,
-      "end": 641,
+      "start": 344,
+      "end": 345,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 12,
           "column": 14
         },
         "end": {
-          "line": 18,
+          "line": 12,
           "column": 15
         }
       }
@@ -4144,15 +1901,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 642,
-      "end": 646,
+      "start": 346,
+      "end": 350,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 12,
           "column": 16
         },
         "end": {
-          "line": 18,
+          "line": 12,
           "column": 20
         }
       }
@@ -4171,15 +1928,15 @@
         "updateContext": null
       },
       "value": "./Pass.js",
-      "start": 647,
-      "end": 658,
+      "start": 351,
+      "end": 362,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 12,
           "column": 21
         },
         "end": {
-          "line": 18,
+          "line": 12,
           "column": 32
         }
       }
@@ -4197,15 +1954,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 658,
-      "end": 659,
+      "start": 362,
+      "end": 363,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 12,
           "column": 32
         },
         "end": {
-          "line": 18,
+          "line": 12,
           "column": 33
         }
       }
@@ -4225,15 +1982,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 661,
-      "end": 667,
+      "start": 365,
+      "end": 371,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 13,
           "column": 0
         },
         "end": {
-          "line": 19,
+          "line": 13,
           "column": 6
         }
       }
@@ -4250,381 +2007,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 668,
-      "end": 669,
+      "start": 372,
+      "end": 373,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 13,
           "column": 7
         },
         "end": {
-          "line": 19,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "PixelationPass",
-      "start": 670,
-      "end": 684,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 9
-        },
-        "end": {
-          "line": 19,
-          "column": 23
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 685,
-      "end": 686,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 24
-        },
-        "end": {
-          "line": 19,
-          "column": 25
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 687,
-      "end": 691,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 26
-        },
-        "end": {
-          "line": 19,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./PixelationPass.js",
-      "start": 692,
-      "end": 713,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 31
-        },
-        "end": {
-          "line": 19,
-          "column": 52
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 713,
-      "end": 714,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 52
-        },
-        "end": {
-          "line": 19,
-          "column": 53
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 716,
-      "end": 722,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 0
-        },
-        "end": {
-          "line": 20,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 723,
-      "end": 724,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 7
-        },
-        "end": {
-          "line": 20,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "RealisticBokehPass",
-      "start": 725,
-      "end": 743,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 9
-        },
-        "end": {
-          "line": 20,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 744,
-      "end": 745,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 28
-        },
-        "end": {
-          "line": 20,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 746,
-      "end": 750,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 30
-        },
-        "end": {
-          "line": 20,
-          "column": 34
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./RealisticBokehPass.js",
-      "start": 751,
-      "end": 776,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 35
-        },
-        "end": {
-          "line": 20,
-          "column": 60
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 776,
-      "end": 777,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 60
-        },
-        "end": {
-          "line": 20,
-          "column": 61
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 779,
-      "end": 785,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 0
-        },
-        "end": {
-          "line": 21,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 786,
-      "end": 787,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 7
-        },
-        "end": {
-          "line": 21,
+          "line": 13,
           "column": 8
         }
       }
@@ -4642,15 +2033,15 @@
         "binop": null
       },
       "value": "RenderPass",
-      "start": 788,
-      "end": 798,
+      "start": 374,
+      "end": 384,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 13,
           "column": 9
         },
         "end": {
-          "line": 21,
+          "line": 13,
           "column": 19
         }
       }
@@ -4667,15 +2058,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 799,
-      "end": 800,
+      "start": 385,
+      "end": 386,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 13,
           "column": 20
         },
         "end": {
-          "line": 21,
+          "line": 13,
           "column": 21
         }
       }
@@ -4693,15 +2084,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 801,
-      "end": 805,
+      "start": 387,
+      "end": 391,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 13,
           "column": 22
         },
         "end": {
-          "line": 21,
+          "line": 13,
           "column": 26
         }
       }
@@ -4720,15 +2111,15 @@
         "updateContext": null
       },
       "value": "./RenderPass.js",
-      "start": 806,
-      "end": 823,
+      "start": 392,
+      "end": 409,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 13,
           "column": 27
         },
         "end": {
-          "line": 21,
+          "line": 13,
           "column": 44
         }
       }
@@ -4746,15 +2137,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 823,
-      "end": 824,
+      "start": 409,
+      "end": 410,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 13,
           "column": 44
         },
         "end": {
-          "line": 21,
+          "line": 13,
           "column": 45
         }
       }
@@ -4774,15 +2165,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 826,
-      "end": 832,
+      "start": 412,
+      "end": 418,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 0
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 6
         }
       }
@@ -4799,15 +2190,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 833,
-      "end": 834,
+      "start": 419,
+      "end": 420,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 7
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 8
         }
       }
@@ -4825,15 +2216,15 @@
         "binop": null
       },
       "value": "SavePass",
-      "start": 835,
-      "end": 843,
+      "start": 421,
+      "end": 429,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 9
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 17
         }
       }
@@ -4850,15 +2241,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 844,
-      "end": 845,
+      "start": 430,
+      "end": 431,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 18
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 19
         }
       }
@@ -4876,15 +2267,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 846,
-      "end": 850,
+      "start": 432,
+      "end": 436,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 20
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 24
         }
       }
@@ -4903,15 +2294,15 @@
         "updateContext": null
       },
       "value": "./SavePass.js",
-      "start": 851,
-      "end": 866,
+      "start": 437,
+      "end": 452,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 25
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 40
         }
       }
@@ -4929,15 +2320,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 866,
-      "end": 867,
+      "start": 452,
+      "end": 453,
       "loc": {
         "start": {
-          "line": 22,
+          "line": 14,
           "column": 40
         },
         "end": {
-          "line": 22,
+          "line": 14,
           "column": 41
         }
       }
@@ -4957,15 +2348,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 869,
-      "end": 875,
+      "start": 455,
+      "end": 461,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 0
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 6
         }
       }
@@ -4982,15 +2373,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 876,
-      "end": 877,
+      "start": 462,
+      "end": 463,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 7
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 8
         }
       }
@@ -5008,15 +2399,15 @@
         "binop": null
       },
       "value": "ShaderPass",
-      "start": 878,
-      "end": 888,
+      "start": 464,
+      "end": 474,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 9
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 19
         }
       }
@@ -5033,15 +2424,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 889,
-      "end": 890,
+      "start": 475,
+      "end": 476,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 20
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 21
         }
       }
@@ -5059,15 +2450,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 891,
-      "end": 895,
+      "start": 477,
+      "end": 481,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 22
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 26
         }
       }
@@ -5086,15 +2477,15 @@
         "updateContext": null
       },
       "value": "./ShaderPass.js",
-      "start": 896,
-      "end": 913,
+      "start": 482,
+      "end": 499,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 27
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 44
         }
       }
@@ -5112,748 +2503,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 913,
-      "end": 914,
+      "start": 499,
+      "end": 500,
       "loc": {
         "start": {
-          "line": 23,
+          "line": 15,
           "column": 44
         },
         "end": {
-          "line": 23,
+          "line": 15,
           "column": 45
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 916,
-      "end": 922,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 0
-        },
-        "end": {
-          "line": 24,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 923,
-      "end": 924,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 7
-        },
-        "end": {
-          "line": 24,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ShockWavePass",
-      "start": 925,
-      "end": 938,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 9
-        },
-        "end": {
-          "line": 24,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 939,
-      "end": 940,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 23
-        },
-        "end": {
-          "line": 24,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 941,
-      "end": 945,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 25
-        },
-        "end": {
-          "line": 24,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./ShockWavePass.js",
-      "start": 946,
-      "end": 966,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 30
-        },
-        "end": {
-          "line": 24,
-          "column": 50
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 966,
-      "end": 967,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 50
-        },
-        "end": {
-          "line": 24,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 969,
-      "end": 975,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 0
-        },
-        "end": {
-          "line": 25,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 976,
-      "end": 977,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 7
-        },
-        "end": {
-          "line": 25,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "SMAAPass",
-      "start": 978,
-      "end": 986,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 9
-        },
-        "end": {
-          "line": 25,
-          "column": 17
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 987,
-      "end": 988,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 18
-        },
-        "end": {
-          "line": 25,
-          "column": 19
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 989,
-      "end": 993,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 20
-        },
-        "end": {
-          "line": 25,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./SMAAPass.js",
-      "start": 994,
-      "end": 1009,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 25
-        },
-        "end": {
-          "line": 25,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1009,
-      "end": 1010,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 40
-        },
-        "end": {
-          "line": 25,
-          "column": 41
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1012,
-      "end": 1018,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 0
-        },
-        "end": {
-          "line": 26,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1019,
-      "end": 1020,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 7
-        },
-        "end": {
-          "line": 26,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "TexturePass",
-      "start": 1021,
-      "end": 1032,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 9
-        },
-        "end": {
-          "line": 26,
-          "column": 20
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1033,
-      "end": 1034,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 21
-        },
-        "end": {
-          "line": 26,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1035,
-      "end": 1039,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 23
-        },
-        "end": {
-          "line": 26,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./TexturePass.js",
-      "start": 1040,
-      "end": 1058,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 28
-        },
-        "end": {
-          "line": 26,
-          "column": 46
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1058,
-      "end": 1059,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 46
-        },
-        "end": {
-          "line": 26,
-          "column": 47
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1061,
-      "end": 1067,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 0
-        },
-        "end": {
-          "line": 27,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1068,
-      "end": 1069,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 7
-        },
-        "end": {
-          "line": 27,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ToneMappingPass",
-      "start": 1070,
-      "end": 1085,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 9
-        },
-        "end": {
-          "line": 27,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1086,
-      "end": 1087,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 25
-        },
-        "end": {
-          "line": 27,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1088,
-      "end": 1092,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 27
-        },
-        "end": {
-          "line": 27,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./ToneMappingPass.js",
-      "start": 1093,
-      "end": 1115,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 32
-        },
-        "end": {
-          "line": 27,
-          "column": 54
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1115,
-      "end": 1116,
-      "loc": {
-        "start": {
-          "line": 27,
-          "column": 54
-        },
-        "end": {
-          "line": 27,
-          "column": 55
         }
       }
     },
@@ -5870,15 +2529,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1118,
-      "end": 1118,
+      "start": 502,
+      "end": 502,
       "loc": {
         "start": {
-          "line": 28,
+          "line": 16,
           "column": 0
         },
         "end": {
-          "line": 28,
+          "line": 16,
           "column": 0
         }
       }

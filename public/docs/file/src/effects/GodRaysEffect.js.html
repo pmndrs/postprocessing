@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/GodRaysEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library that provides the means to implement image filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement image filter effects for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/GodRaysEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+	Color,
+	LinearFilter,
+	MeshBasicMaterial,
+	RGBFormat,
+	Scene,
+	Uniform,
+	Vector2,
+	Vector3,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
+import { KernelSize, GodRaysMaterial } from &quot;../materials&quot;;
+import { BlurPass, RenderPass, ShaderPass } from &quot;../passes&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
+
+import fragment from &quot;./glsl/texture/shader.frag&quot;;
+
+/**
+ * A vector.
+ *
+ * @type {Vector3}
+ * @private
+ */
+
+const v = new Vector3();
+
+/**
+ * A god rays pass.
+ */
+
+export class GodRaysEffect extends Effect {
+
+	/**
+	 * Constructs a new god rays pass.
+	 *
+	 * @param {Scene} scene - The main scene.
+	 * @param {Camera} camera - The main camera.
+	 * @param {Object3D} lightSource - The main light source.
+	 * @param {Object} [options] - The options. See {@link GodRaysMaterial} for additional options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.samples=60.0] - The number of samples per pixel.
+	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
+	 * @param {Number} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
+	 */
+
+	constructor(scene, camera, lightSource, options = {}) {
+
+		const settings = Object.assign({
+			blendFunction: BlendFunction.SCREEN,
+			resolutionScale: 0.5,
+			samples: 60.0,
+			blur: true,
+			kernelSize: KernelSize.SMALL
+		}, options);
+
+		super(&quot;GodRaysEffect&quot;, fragment, {
+
+			blendFunction: settings.blendFunction,
+
+			uniforms: new Map([
+				[&quot;texture&quot;, new Uniform(null)]
+			])
+
+		});
+
+		/**
+		 * The main scene.
+		 *
+		 * @type {Scene}
+		 * @private
+		 */
+
+		this.scene = scene;
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.camera = camera;
+
+		/**
+		 * The light source.
+		 *
+		 * @type {Object3D}
+		 */
+
+		this.lightSource = lightSource;
+
+		/**
+		 * A scene that only contains the light source.
+		 *
+		 * @type {Scene}
+		 * @private
+		 */
+
+		this.lightScene = new Scene();
+
+		/**
+		 * The light position in screen space.
+		 *
+		 * @type {Vector3}
+		 * @private
+		 */
+
+		this.screenPosition = new Vector2();
+
+		/**
+		 * The original resolution.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.resolution = new Vector2();
+
+		/**
+		 * A render target.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetX.texture.name = &quot;GodRays.TargetX&quot;;
+		this.renderTargetX.texture.generateMipmaps = false;
+
+		this.uniforms.get(&quot;texture&quot;).value = this.renderTargetX.texture;
+
+		/**
+		 * A second render target.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetY = this.renderTargetX.clone();
+
+		this.renderTargetY.texture.name = &quot;GodRays.TargetY&quot;;
+
+		/**
+		 * A render target for the masked light scene.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false
+		});
+
+		this.renderTargetMask.texture.name = &quot;GodRays.Mask&quot;;
+		this.renderTargetMask.texture.generateMipmaps = false;
+
+		/**
+		 * A pass that only renders the light source.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassLight = new RenderPass(this.lightScene, camera, {
+			clearColor: new Color(0x000000)
+		});
+
+		/**
+		 * A pass that renders the masked scene over the light source.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPassMask = new RenderPass(scene, camera, {
+			overrideMaterial: new MeshBasicMaterial({ color: 0x000000 })
+		});
+
+		this.renderPassMask.clear = false;
+
+		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass(settings);
+
+		/**
+		 * A god rays pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition, settings));
+
+		this.blur = settings.blur;
+		this.kernelSize = settings.kernelSize;
+		this.samples = settings.samples;
+
+	}
+
+	/**
+	 * A texture that contains the intermediate result of this effect.
+	 *
+	 * This texture will be applied to the scene colors unless the blend function
+	 * is set to `SKIP`.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.renderTargetX.texture;
+
+	}
+
+	/**
+	 * The internal god rays material.
+	 *
+	 * @type {Material}
+	 */
+
+	get godRaysMaterial() {
+
+		return this.godRaysPass.getFullscreenMaterial();
+
+	}
+
+	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.godRaysMaterial.dithering;
+
+	}
+
+	/**
+	 * Enables or disables dithering.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		const material = this.godRaysMaterial;
+
+		material.dithering = value;
+		material.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether the god rays should be blurred to reduce artifacts.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get blur() {
+
+		return this.blurPass.enabled;
+
+	}
+
+	/**
+	 * @type {Boolean}
+	 */
+
+	set blur(value) {
+
+		this.blurPass.enabled = value;
+
+	}
+
+	/**
+	 * The blur kernel size.
+	 *
+	 * @type {KernelSize}
+	 */
+
+	get kernelSize() {
+
+		return this.blurPass.kernelSize;
+
+	}
+
+	/**
+	 * @type {KernelSize}
+	 */
+
+	set kernelSize(value) {
+
+		this.blurPass.kernelSize = value;
+
+	}
+
+	/**
+	 * Returns the current resolution scale.
+	 *
+	 * @return {Number} The resolution scale.
+	 */
+
+	getResolutionScale() {
+
+		return this.blurPass.getResolutionScale();
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * @param {Number} scale - The new resolution scale.
+	 */
+
+	setResolutionScale(scale) {
+
+		this.blurPass.setResolutionScale(scale);
+		this.setSize(this.resolution.x, this.resolution.y);
+
+	}
+
+	/**
+	 * The number of samples per pixel.
+	 *
+	 * @type {Number}
+	 */
+
+	get samples() {
+
+		return this.godRaysMaterial.samples;
+
+	}
+
+	/**
+	 * This value must be carefully chosen. A higher value improves quality but
+	 * also increases the GPU load.
+	 *
+	 * @type {Number}
+	 */
+
+	set samples(value) {
+
+		this.godRaysMaterial.samples = value;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, delta) {
+
+		const scene = this.scene;
+		const lightSource = this.lightSource;
+		const renderTargetMask = this.renderTargetMask;
+		const renderTargetY = this.renderTargetY;
+
+		let background, parent;
+
+		// Compute the screen light position and translate it to [0.0, 1.0].
+		v.copy(lightSource.position).project(this.camera);
+		this.screenPosition.set(
+			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
+			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),
+		);
+
+		parent = lightSource.parent;
+		background = scene.background;
+		scene.background = null;
+		this.lightScene.add(lightSource);
+
+		/* First, render the light source. Then render the scene into the same
+		buffer using a mask override material with depth test enabled. */
+		this.renderPassLight.render(renderer, renderTargetMask);
+		this.renderPassMask.render(renderer, renderTargetMask);
+
+		if(parent !== null) {
+
+			parent.add(lightSource);
+
+		}
+
+		scene.background = background;
+		inputBuffer = renderTargetMask;
+
+		if(this.blur) {
+
+			// Blur the masked scene to reduce artifacts.
+			this.blurPass.render(renderer, inputBuffer, renderTargetY);
+			inputBuffer = renderTargetY;
+
+		}
+
+		// Blur the masked scene along radial lines towards the light source.
+		this.godRaysPass.render(renderer, inputBuffer, this.renderTargetX);
+
+	}
+
+	/**
+	 * Updates the size of internal render targets.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.resolution.set(width, height);
+		this.renderPassLight.setSize(width, height);
+		this.renderPassMask.setSize(width, height);
+		this.blurPass.setSize(width, height);
+		this.godRaysPass.setSize(width, height);
+
+		width = this.blurPass.width;
+		height = this.blurPass.height;
+
+		this.renderTargetMask.setSize(width, height);
+		this.renderTargetX.setSize(width, height);
+		this.renderTargetY.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		this.renderPassLight.initialize(renderer, alpha);
+		this.renderPassMask.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha);
+		this.godRaysPass.initialize(renderer, alpha);
+
+		if(!alpha) {
+
+			this.renderTargetMask.texture.format = RGBFormat;
+			this.renderTargetX.texture.format = RGBFormat;
+			this.renderTargetY.texture.format = RGBFormat;
+
+		}
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

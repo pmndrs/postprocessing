@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1395,
+  "end": 790,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 27,
+      "line": 17,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1395,
+    "end": 790,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 27,
+        "line": 17,
         "column": 0
       }
     },
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 135,
-        "end": 212,
+        "end": 210,
         "loc": {
           "start": {
             "line": 7,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 7,
-            "column": 77
+            "column": 75
           }
         },
         "declaration": null,
@@ -47,7 +47,7 @@
           {
             "type": "ExportSpecifier",
             "start": 144,
-            "end": 170,
+            "end": 169,
             "loc": {
               "start": {
                 "line": 7,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 7,
-                "column": 35
+                "column": 34
               }
             },
             "local": {
               "type": "Identifier",
               "start": 144,
-              "end": 170,
+              "end": 169,
               "loc": {
                 "start": {
                   "line": 7,
@@ -69,17 +69,17 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 35
+                  "column": 34
                 },
-                "identifierName": "AdaptiveLuminosityMaterial"
+                "identifierName": "AdaptiveLuminanceMaterial"
               },
-              "name": "AdaptiveLuminosityMaterial",
+              "name": "AdaptiveLuminanceMaterial",
               "leadingComments": null
             },
             "exported": {
               "type": "Identifier",
               "start": 144,
-              "end": 170,
+              "end": 169,
               "loc": {
                 "start": {
                   "line": 7,
@@ -87,34 +87,34 @@
                 },
                 "end": {
                   "line": 7,
-                  "column": 35
+                  "column": 34
                 },
-                "identifierName": "AdaptiveLuminosityMaterial"
+                "identifierName": "AdaptiveLuminanceMaterial"
               },
-              "name": "AdaptiveLuminosityMaterial"
+              "name": "AdaptiveLuminanceMaterial"
             },
             "leadingComments": null
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 178,
-          "end": 211,
+          "start": 177,
+          "end": 209,
           "loc": {
             "start": {
               "line": 7,
-              "column": 43
+              "column": 42
             },
             "end": {
               "line": 7,
-              "column": 76
+              "column": 74
             }
           },
           "extra": {
-            "rawValue": "./AdaptiveLuminosityMaterial.js",
-            "raw": "\"./AdaptiveLuminosityMaterial.js\""
+            "rawValue": "./AdaptiveLuminanceMaterial.js",
+            "raw": "\"./AdaptiveLuminanceMaterial.js\""
           },
-          "value": "./AdaptiveLuminosityMaterial.js"
+          "value": "./AdaptiveLuminanceMaterial.js"
         },
         "leadingComments": [
           {
@@ -137,8 +137,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 214,
-        "end": 265,
+        "start": 212,
+        "end": 273,
         "loc": {
           "start": {
             "line": 8,
@@ -146,93 +146,6 @@
           },
           "end": {
             "line": 8,
-            "column": 51
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 223,
-            "end": 236,
-            "loc": {
-              "start": {
-                "line": 8,
-                "column": 9
-              },
-              "end": {
-                "line": 8,
-                "column": 22
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 223,
-              "end": 236,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 9
-                },
-                "end": {
-                  "line": 8,
-                  "column": 22
-                },
-                "identifierName": "BokehMaterial"
-              },
-              "name": "BokehMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 223,
-              "end": 236,
-              "loc": {
-                "start": {
-                  "line": 8,
-                  "column": 9
-                },
-                "end": {
-                  "line": 8,
-                  "column": 22
-                },
-                "identifierName": "BokehMaterial"
-              },
-              "name": "BokehMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 244,
-          "end": 264,
-          "loc": {
-            "start": {
-              "line": 8,
-              "column": 30
-            },
-            "end": {
-              "line": 8,
-              "column": 50
-            }
-          },
-          "extra": {
-            "rawValue": "./BokehMaterial.js",
-            "raw": "\"./BokehMaterial.js\""
-          },
-          "value": "./BokehMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 267,
-        "end": 328,
-        "loc": {
-          "start": {
-            "line": 9,
-            "column": 0
-          },
-          "end": {
-            "line": 9,
             "column": 61
           }
         },
@@ -240,29 +153,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 276,
-            "end": 294,
+            "start": 221,
+            "end": 239,
             "loc": {
               "start": {
-                "line": 9,
+                "line": 8,
                 "column": 9
               },
               "end": {
-                "line": 9,
+                "line": 8,
                 "column": 27
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 276,
-              "end": 294,
+              "start": 221,
+              "end": 239,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 8,
                   "column": 9
                 },
                 "end": {
-                  "line": 9,
+                  "line": 8,
                   "column": 27
                 },
                 "identifierName": "ColorEdgesMaterial"
@@ -271,15 +184,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 276,
-              "end": 294,
+              "start": 221,
+              "end": 239,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 8,
                   "column": 9
                 },
                 "end": {
-                  "line": 9,
+                  "line": 8,
                   "column": 27
                 },
                 "identifierName": "ColorEdgesMaterial"
@@ -290,15 +203,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 302,
-          "end": 327,
+          "start": 247,
+          "end": 272,
           "loc": {
             "start": {
-              "line": 9,
+              "line": 8,
               "column": 35
             },
             "end": {
-              "line": 9,
+              "line": 8,
               "column": 60
             }
           },
@@ -311,102 +224,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 330,
-        "end": 385,
+        "start": 275,
+        "end": 350,
         "loc": {
           "start": {
-            "line": 10,
+            "line": 9,
             "column": 0
           },
           "end": {
-            "line": 10,
-            "column": 55
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 339,
-            "end": 354,
-            "loc": {
-              "start": {
-                "line": 10,
-                "column": 9
-              },
-              "end": {
-                "line": 10,
-                "column": 24
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 339,
-              "end": 354,
-              "loc": {
-                "start": {
-                  "line": 10,
-                  "column": 9
-                },
-                "end": {
-                  "line": 10,
-                  "column": 24
-                },
-                "identifierName": "CombineMaterial"
-              },
-              "name": "CombineMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 339,
-              "end": 354,
-              "loc": {
-                "start": {
-                  "line": 10,
-                  "column": 9
-                },
-                "end": {
-                  "line": 10,
-                  "column": 24
-                },
-                "identifierName": "CombineMaterial"
-              },
-              "name": "CombineMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 362,
-          "end": 384,
-          "loc": {
-            "start": {
-              "line": 10,
-              "column": 32
-            },
-            "end": {
-              "line": 10,
-              "column": 54
-            }
-          },
-          "extra": {
-            "rawValue": "./CombineMaterial.js",
-            "raw": "\"./CombineMaterial.js\""
-          },
-          "value": "./CombineMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 387,
-        "end": 462,
-        "loc": {
-          "start": {
-            "line": 11,
-            "column": 0
-          },
-          "end": {
-            "line": 11,
+            "line": 9,
             "column": 75
           }
         },
@@ -414,29 +240,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 396,
-            "end": 415,
+            "start": 284,
+            "end": 303,
             "loc": {
               "start": {
-                "line": 11,
+                "line": 9,
                 "column": 9
               },
               "end": {
-                "line": 11,
+                "line": 9,
                 "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 396,
-              "end": 415,
+              "start": 284,
+              "end": 303,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 9
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 28
                 },
                 "identifierName": "ConvolutionMaterial"
@@ -445,15 +271,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 396,
-              "end": 415,
+              "start": 284,
+              "end": 303,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 9
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 28
                 },
                 "identifierName": "ConvolutionMaterial"
@@ -463,29 +289,29 @@
           },
           {
             "type": "ExportSpecifier",
-            "start": 417,
-            "end": 427,
+            "start": 305,
+            "end": 315,
             "loc": {
               "start": {
-                "line": 11,
+                "line": 9,
                 "column": 30
               },
               "end": {
-                "line": 11,
+                "line": 9,
                 "column": 40
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 417,
-              "end": 427,
+              "start": 305,
+              "end": 315,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 30
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 40
                 },
                 "identifierName": "KernelSize"
@@ -494,15 +320,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 417,
-              "end": 427,
+              "start": 305,
+              "end": 315,
               "loc": {
                 "start": {
-                  "line": 11,
+                  "line": 9,
                   "column": 30
                 },
                 "end": {
-                  "line": 11,
+                  "line": 9,
                   "column": 40
                 },
                 "identifierName": "KernelSize"
@@ -513,15 +339,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 435,
-          "end": 461,
+          "start": 323,
+          "end": 349,
           "loc": {
             "start": {
-              "line": 11,
+              "line": 9,
               "column": 48
             },
             "end": {
-              "line": 11,
+              "line": 9,
               "column": 74
             }
           },
@@ -534,15 +360,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 464,
-        "end": 513,
+        "start": 352,
+        "end": 401,
         "loc": {
           "start": {
-            "line": 12,
+            "line": 10,
             "column": 0
           },
           "end": {
-            "line": 12,
+            "line": 10,
             "column": 49
           }
         },
@@ -550,29 +376,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 473,
-            "end": 485,
+            "start": 361,
+            "end": 373,
             "loc": {
               "start": {
-                "line": 12,
+                "line": 10,
                 "column": 9
               },
               "end": {
-                "line": 12,
+                "line": 10,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 473,
-              "end": 485,
+              "start": 361,
+              "end": 373,
               "loc": {
                 "start": {
-                  "line": 12,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 12,
+                  "line": 10,
                   "column": 21
                 },
                 "identifierName": "CopyMaterial"
@@ -581,15 +407,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 473,
-              "end": 485,
+              "start": 361,
+              "end": 373,
               "loc": {
                 "start": {
-                  "line": 12,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 12,
+                  "line": 10,
                   "column": 21
                 },
                 "identifierName": "CopyMaterial"
@@ -600,15 +426,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 493,
-          "end": 512,
+          "start": 381,
+          "end": 400,
           "loc": {
             "start": {
-              "line": 12,
+              "line": 10,
               "column": 29
             },
             "end": {
-              "line": 12,
+              "line": 10,
               "column": 48
             }
           },
@@ -621,15 +447,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 515,
-        "end": 586,
+        "start": 403,
+        "end": 474,
         "loc": {
           "start": {
-            "line": 13,
+            "line": 11,
             "column": 0
           },
           "end": {
-            "line": 13,
+            "line": 11,
             "column": 71
           }
         },
@@ -637,29 +463,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 524,
-            "end": 547,
+            "start": 412,
+            "end": 435,
             "loc": {
               "start": {
-                "line": 13,
+                "line": 11,
                 "column": 9
               },
               "end": {
-                "line": 13,
+                "line": 11,
                 "column": 32
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 524,
-              "end": 547,
+              "start": 412,
+              "end": 435,
               "loc": {
                 "start": {
-                  "line": 13,
+                  "line": 11,
                   "column": 9
                 },
                 "end": {
-                  "line": 13,
+                  "line": 11,
                   "column": 32
                 },
                 "identifierName": "DepthComparisonMaterial"
@@ -668,15 +494,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 524,
-              "end": 547,
+              "start": 412,
+              "end": 435,
               "loc": {
                 "start": {
-                  "line": 13,
+                  "line": 11,
                   "column": 9
                 },
                 "end": {
-                  "line": 13,
+                  "line": 11,
                   "column": 32
                 },
                 "identifierName": "DepthComparisonMaterial"
@@ -687,15 +513,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 555,
-          "end": 585,
+          "start": 443,
+          "end": 473,
           "loc": {
             "start": {
-              "line": 13,
+              "line": 11,
               "column": 40
             },
             "end": {
-              "line": 13,
+              "line": 11,
               "column": 70
             }
           },
@@ -708,276 +534,151 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 588,
-        "end": 647,
+        "start": 476,
+        "end": 538,
         "loc": {
           "start": {
-            "line": 14,
+            "line": 12,
             "column": 0
           },
           "end": {
-            "line": 14,
-            "column": 59
+            "line": 12,
+            "column": 62
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 597,
-            "end": 614,
+            "start": 485,
+            "end": 499,
             "loc": {
               "start": {
-                "line": 14,
+                "line": 12,
                 "column": 9
               },
               "end": {
-                "line": 14,
-                "column": 26
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 597,
-              "end": 614,
-              "loc": {
-                "start": {
-                  "line": 14,
-                  "column": 9
-                },
-                "end": {
-                  "line": 14,
-                  "column": 26
-                },
-                "identifierName": "DotScreenMaterial"
-              },
-              "name": "DotScreenMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 597,
-              "end": 614,
-              "loc": {
-                "start": {
-                  "line": 14,
-                  "column": 9
-                },
-                "end": {
-                  "line": 14,
-                  "column": 26
-                },
-                "identifierName": "DotScreenMaterial"
-              },
-              "name": "DotScreenMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 622,
-          "end": 646,
-          "loc": {
-            "start": {
-              "line": 14,
-              "column": 34
-            },
-            "end": {
-              "line": 14,
-              "column": 58
-            }
-          },
-          "extra": {
-            "rawValue": "./DotScreenMaterial.js",
-            "raw": "\"./DotScreenMaterial.js\""
-          },
-          "value": "./DotScreenMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 649,
-        "end": 698,
-        "loc": {
-          "start": {
-            "line": 15,
-            "column": 0
-          },
-          "end": {
-            "line": 15,
-            "column": 49
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 658,
-            "end": 670,
-            "loc": {
-              "start": {
-                "line": 15,
-                "column": 9
-              },
-              "end": {
-                "line": 15,
-                "column": 21
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 658,
-              "end": 670,
-              "loc": {
-                "start": {
-                  "line": 15,
-                  "column": 9
-                },
-                "end": {
-                  "line": 15,
-                  "column": 21
-                },
-                "identifierName": "FilmMaterial"
-              },
-              "name": "FilmMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 658,
-              "end": 670,
-              "loc": {
-                "start": {
-                  "line": 15,
-                  "column": 9
-                },
-                "end": {
-                  "line": 15,
-                  "column": 21
-                },
-                "identifierName": "FilmMaterial"
-              },
-              "name": "FilmMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 678,
-          "end": 697,
-          "loc": {
-            "start": {
-              "line": 15,
-              "column": 29
-            },
-            "end": {
-              "line": 15,
-              "column": 48
-            }
-          },
-          "extra": {
-            "rawValue": "./FilmMaterial.js",
-            "raw": "\"./FilmMaterial.js\""
-          },
-          "value": "./FilmMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 700,
-        "end": 753,
-        "loc": {
-          "start": {
-            "line": 16,
-            "column": 0
-          },
-          "end": {
-            "line": 16,
-            "column": 53
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 709,
-            "end": 723,
-            "loc": {
-              "start": {
-                "line": 16,
-                "column": 9
-              },
-              "end": {
-                "line": 16,
+                "line": 12,
                 "column": 23
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 709,
-              "end": 723,
+              "start": 485,
+              "end": 499,
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 12,
                   "column": 9
                 },
                 "end": {
-                  "line": 16,
+                  "line": 12,
                   "column": 23
                 },
-                "identifierName": "GlitchMaterial"
+                "identifierName": "EffectMaterial"
               },
-              "name": "GlitchMaterial"
+              "name": "EffectMaterial"
             },
             "exported": {
               "type": "Identifier",
-              "start": 709,
-              "end": 723,
+              "start": 485,
+              "end": 499,
               "loc": {
                 "start": {
-                  "line": 16,
+                  "line": 12,
                   "column": 9
                 },
                 "end": {
-                  "line": 16,
+                  "line": 12,
                   "column": 23
                 },
-                "identifierName": "GlitchMaterial"
+                "identifierName": "EffectMaterial"
               },
-              "name": "GlitchMaterial"
+              "name": "EffectMaterial"
+            }
+          },
+          {
+            "type": "ExportSpecifier",
+            "start": 501,
+            "end": 508,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 25
+              },
+              "end": {
+                "line": 12,
+                "column": 32
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 501,
+              "end": 508,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 25
+                },
+                "end": {
+                  "line": 12,
+                  "column": 32
+                },
+                "identifierName": "Section"
+              },
+              "name": "Section"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 501,
+              "end": 508,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 25
+                },
+                "end": {
+                  "line": 12,
+                  "column": 32
+                },
+                "identifierName": "Section"
+              },
+              "name": "Section"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 731,
-          "end": 752,
+          "start": 516,
+          "end": 537,
           "loc": {
             "start": {
-              "line": 16,
-              "column": 31
+              "line": 12,
+              "column": 40
             },
             "end": {
-              "line": 16,
-              "column": 52
+              "line": 12,
+              "column": 61
             }
           },
           "extra": {
-            "rawValue": "./GlitchMaterial.js",
-            "raw": "\"./GlitchMaterial.js\""
+            "rawValue": "./EffectMaterial.js",
+            "raw": "\"./EffectMaterial.js\""
           },
-          "value": "./GlitchMaterial.js"
+          "value": "./EffectMaterial.js"
         }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 755,
-        "end": 810,
+        "start": 540,
+        "end": 595,
         "loc": {
           "start": {
-            "line": 17,
+            "line": 13,
             "column": 0
           },
           "end": {
-            "line": 17,
+            "line": 13,
             "column": 55
           }
         },
@@ -985,29 +686,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 764,
-            "end": 779,
+            "start": 549,
+            "end": 564,
             "loc": {
               "start": {
-                "line": 17,
+                "line": 13,
                 "column": 9
               },
               "end": {
-                "line": 17,
+                "line": 13,
                 "column": 24
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 764,
-              "end": 779,
+              "start": 549,
+              "end": 564,
               "loc": {
                 "start": {
-                  "line": 17,
+                  "line": 13,
                   "column": 9
                 },
                 "end": {
-                  "line": 17,
+                  "line": 13,
                   "column": 24
                 },
                 "identifierName": "GodRaysMaterial"
@@ -1016,15 +717,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 764,
-              "end": 779,
+              "start": 549,
+              "end": 564,
               "loc": {
                 "start": {
-                  "line": 17,
+                  "line": 13,
                   "column": 9
                 },
                 "end": {
-                  "line": 17,
+                  "line": 13,
                   "column": 24
                 },
                 "identifierName": "GodRaysMaterial"
@@ -1035,15 +736,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 787,
-          "end": 809,
+          "start": 572,
+          "end": 594,
           "loc": {
             "start": {
-              "line": 17,
+              "line": 13,
               "column": 32
             },
             "end": {
-              "line": 17,
+              "line": 13,
               "column": 54
             }
           },
@@ -1056,102 +757,102 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 812,
-        "end": 873,
+        "start": 597,
+        "end": 656,
         "loc": {
           "start": {
-            "line": 18,
+            "line": 14,
             "column": 0
           },
           "end": {
-            "line": 18,
-            "column": 61
+            "line": 14,
+            "column": 59
           }
         },
         "declaration": null,
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 821,
-            "end": 839,
+            "start": 606,
+            "end": 623,
             "loc": {
               "start": {
-                "line": 18,
+                "line": 14,
                 "column": 9
               },
               "end": {
-                "line": 18,
-                "column": 27
+                "line": 14,
+                "column": 26
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 821,
-              "end": 839,
+              "start": 606,
+              "end": 623,
               "loc": {
                 "start": {
-                  "line": 18,
+                  "line": 14,
                   "column": 9
                 },
                 "end": {
-                  "line": 18,
-                  "column": 27
+                  "line": 14,
+                  "column": 26
                 },
-                "identifierName": "LuminosityMaterial"
+                "identifierName": "LuminanceMaterial"
               },
-              "name": "LuminosityMaterial"
+              "name": "LuminanceMaterial"
             },
             "exported": {
               "type": "Identifier",
-              "start": 821,
-              "end": 839,
+              "start": 606,
+              "end": 623,
               "loc": {
                 "start": {
-                  "line": 18,
+                  "line": 14,
                   "column": 9
                 },
                 "end": {
-                  "line": 18,
-                  "column": 27
+                  "line": 14,
+                  "column": 26
                 },
-                "identifierName": "LuminosityMaterial"
+                "identifierName": "LuminanceMaterial"
               },
-              "name": "LuminosityMaterial"
+              "name": "LuminanceMaterial"
             }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 847,
-          "end": 872,
+          "start": 631,
+          "end": 655,
           "loc": {
             "start": {
-              "line": 18,
-              "column": 35
+              "line": 14,
+              "column": 34
             },
             "end": {
-              "line": 18,
-              "column": 60
+              "line": 14,
+              "column": 58
             }
           },
           "extra": {
-            "rawValue": "./LuminosityMaterial.js",
-            "raw": "\"./LuminosityMaterial.js\""
+            "rawValue": "./LuminanceMaterial.js",
+            "raw": "\"./LuminanceMaterial.js\""
           },
-          "value": "./LuminosityMaterial.js"
+          "value": "./LuminanceMaterial.js"
         }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 875,
-        "end": 940,
+        "start": 658,
+        "end": 723,
         "loc": {
           "start": {
-            "line": 19,
+            "line": 15,
             "column": 0
           },
           "end": {
-            "line": 19,
+            "line": 15,
             "column": 65
           }
         },
@@ -1159,116 +860,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 884,
-            "end": 904,
+            "start": 667,
+            "end": 687,
             "loc": {
               "start": {
-                "line": 19,
+                "line": 15,
                 "column": 9
               },
               "end": {
-                "line": 19,
+                "line": 15,
                 "column": 29
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 884,
-              "end": 904,
+              "start": 667,
+              "end": 687,
               "loc": {
                 "start": {
-                  "line": 19,
+                  "line": 15,
                   "column": 9
                 },
                 "end": {
-                  "line": 19,
-                  "column": 29
-                },
-                "identifierName": "OutlineBlendMaterial"
-              },
-              "name": "OutlineBlendMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 884,
-              "end": 904,
-              "loc": {
-                "start": {
-                  "line": 19,
-                  "column": 9
-                },
-                "end": {
-                  "line": 19,
-                  "column": 29
-                },
-                "identifierName": "OutlineBlendMaterial"
-              },
-              "name": "OutlineBlendMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 912,
-          "end": 939,
-          "loc": {
-            "start": {
-              "line": 19,
-              "column": 37
-            },
-            "end": {
-              "line": 19,
-              "column": 64
-            }
-          },
-          "extra": {
-            "rawValue": "./OutlineBlendMaterial.js",
-            "raw": "\"./OutlineBlendMaterial.js\""
-          },
-          "value": "./OutlineBlendMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 942,
-        "end": 1007,
-        "loc": {
-          "start": {
-            "line": 20,
-            "column": 0
-          },
-          "end": {
-            "line": 20,
-            "column": 65
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 951,
-            "end": 971,
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 9
-              },
-              "end": {
-                "line": 20,
-                "column": 29
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 951,
-              "end": 971,
-              "loc": {
-                "start": {
-                  "line": 20,
-                  "column": 9
-                },
-                "end": {
-                  "line": 20,
+                  "line": 15,
                   "column": 29
                 },
                 "identifierName": "OutlineEdgesMaterial"
@@ -1277,15 +891,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 951,
-              "end": 971,
+              "start": 667,
+              "end": 687,
               "loc": {
                 "start": {
-                  "line": 20,
+                  "line": 15,
                   "column": 9
                 },
                 "end": {
-                  "line": 20,
+                  "line": 15,
                   "column": 29
                 },
                 "identifierName": "OutlineEdgesMaterial"
@@ -1296,15 +910,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 979,
-          "end": 1006,
+          "start": 695,
+          "end": 722,
           "loc": {
             "start": {
-              "line": 20,
+              "line": 15,
               "column": 37
             },
             "end": {
-              "line": 20,
+              "line": 15,
               "column": 64
             }
           },
@@ -1317,363 +931,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1009,
-        "end": 1070,
+        "start": 725,
+        "end": 788,
         "loc": {
           "start": {
-            "line": 21,
+            "line": 16,
             "column": 0
           },
           "end": {
-            "line": 21,
-            "column": 61
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1018,
-            "end": 1036,
-            "loc": {
-              "start": {
-                "line": 21,
-                "column": 9
-              },
-              "end": {
-                "line": 21,
-                "column": 27
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1018,
-              "end": 1036,
-              "loc": {
-                "start": {
-                  "line": 21,
-                  "column": 9
-                },
-                "end": {
-                  "line": 21,
-                  "column": 27
-                },
-                "identifierName": "PixelationMaterial"
-              },
-              "name": "PixelationMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1018,
-              "end": 1036,
-              "loc": {
-                "start": {
-                  "line": 21,
-                  "column": 9
-                },
-                "end": {
-                  "line": 21,
-                  "column": 27
-                },
-                "identifierName": "PixelationMaterial"
-              },
-              "name": "PixelationMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1044,
-          "end": 1069,
-          "loc": {
-            "start": {
-              "line": 21,
-              "column": 35
-            },
-            "end": {
-              "line": 21,
-              "column": 60
-            }
-          },
-          "extra": {
-            "rawValue": "./PixelationMaterial.js",
-            "raw": "\"./PixelationMaterial.js\""
-          },
-          "value": "./PixelationMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1072,
-        "end": 1141,
-        "loc": {
-          "start": {
-            "line": 22,
-            "column": 0
-          },
-          "end": {
-            "line": 22,
-            "column": 69
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1081,
-            "end": 1103,
-            "loc": {
-              "start": {
-                "line": 22,
-                "column": 9
-              },
-              "end": {
-                "line": 22,
-                "column": 31
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1081,
-              "end": 1103,
-              "loc": {
-                "start": {
-                  "line": 22,
-                  "column": 9
-                },
-                "end": {
-                  "line": 22,
-                  "column": 31
-                },
-                "identifierName": "RealisticBokehMaterial"
-              },
-              "name": "RealisticBokehMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1081,
-              "end": 1103,
-              "loc": {
-                "start": {
-                  "line": 22,
-                  "column": 9
-                },
-                "end": {
-                  "line": 22,
-                  "column": 31
-                },
-                "identifierName": "RealisticBokehMaterial"
-              },
-              "name": "RealisticBokehMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1111,
-          "end": 1140,
-          "loc": {
-            "start": {
-              "line": 22,
-              "column": 39
-            },
-            "end": {
-              "line": 22,
-              "column": 68
-            }
-          },
-          "extra": {
-            "rawValue": "./RealisticBokehMaterial.js",
-            "raw": "\"./RealisticBokehMaterial.js\""
-          },
-          "value": "./RealisticBokehMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1143,
-        "end": 1202,
-        "loc": {
-          "start": {
-            "line": 23,
-            "column": 0
-          },
-          "end": {
-            "line": 23,
-            "column": 59
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1152,
-            "end": 1169,
-            "loc": {
-              "start": {
-                "line": 23,
-                "column": 9
-              },
-              "end": {
-                "line": 23,
-                "column": 26
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1152,
-              "end": 1169,
-              "loc": {
-                "start": {
-                  "line": 23,
-                  "column": 9
-                },
-                "end": {
-                  "line": 23,
-                  "column": 26
-                },
-                "identifierName": "ShockWaveMaterial"
-              },
-              "name": "ShockWaveMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1152,
-              "end": 1169,
-              "loc": {
-                "start": {
-                  "line": 23,
-                  "column": 9
-                },
-                "end": {
-                  "line": 23,
-                  "column": 26
-                },
-                "identifierName": "ShockWaveMaterial"
-              },
-              "name": "ShockWaveMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1177,
-          "end": 1201,
-          "loc": {
-            "start": {
-              "line": 23,
-              "column": 34
-            },
-            "end": {
-              "line": 23,
-              "column": 58
-            }
-          },
-          "extra": {
-            "rawValue": "./ShockWaveMaterial.js",
-            "raw": "\"./ShockWaveMaterial.js\""
-          },
-          "value": "./ShockWaveMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1204,
-        "end": 1263,
-        "loc": {
-          "start": {
-            "line": 24,
-            "column": 0
-          },
-          "end": {
-            "line": 24,
-            "column": 59
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1213,
-            "end": 1230,
-            "loc": {
-              "start": {
-                "line": 24,
-                "column": 9
-              },
-              "end": {
-                "line": 24,
-                "column": 26
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1213,
-              "end": 1230,
-              "loc": {
-                "start": {
-                  "line": 24,
-                  "column": 9
-                },
-                "end": {
-                  "line": 24,
-                  "column": 26
-                },
-                "identifierName": "SMAABlendMaterial"
-              },
-              "name": "SMAABlendMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1213,
-              "end": 1230,
-              "loc": {
-                "start": {
-                  "line": 24,
-                  "column": 9
-                },
-                "end": {
-                  "line": 24,
-                  "column": 26
-                },
-                "identifierName": "SMAABlendMaterial"
-              },
-              "name": "SMAABlendMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1238,
-          "end": 1262,
-          "loc": {
-            "start": {
-              "line": 24,
-              "column": 34
-            },
-            "end": {
-              "line": 24,
-              "column": 58
-            }
-          },
-          "extra": {
-            "rawValue": "./SMAABlendMaterial.js",
-            "raw": "\"./SMAABlendMaterial.js\""
-          },
-          "value": "./SMAABlendMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1265,
-        "end": 1328,
-        "loc": {
-          "start": {
-            "line": 25,
-            "column": 0
-          },
-          "end": {
-            "line": 25,
+            "line": 16,
             "column": 63
           }
         },
@@ -1681,29 +947,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1274,
-            "end": 1293,
+            "start": 734,
+            "end": 753,
             "loc": {
               "start": {
-                "line": 25,
+                "line": 16,
                 "column": 9
               },
               "end": {
-                "line": 25,
+                "line": 16,
                 "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1274,
-              "end": 1293,
+              "start": 734,
+              "end": 753,
               "loc": {
                 "start": {
-                  "line": 25,
+                  "line": 16,
                   "column": 9
                 },
                 "end": {
-                  "line": 25,
+                  "line": 16,
                   "column": 28
                 },
                 "identifierName": "SMAAWeightsMaterial"
@@ -1712,15 +978,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1274,
-              "end": 1293,
+              "start": 734,
+              "end": 753,
               "loc": {
                 "start": {
-                  "line": 25,
+                  "line": 16,
                   "column": 9
                 },
                 "end": {
-                  "line": 25,
+                  "line": 16,
                   "column": 28
                 },
                 "identifierName": "SMAAWeightsMaterial"
@@ -1731,15 +997,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 1301,
-          "end": 1327,
+          "start": 761,
+          "end": 787,
           "loc": {
             "start": {
-              "line": 25,
+              "line": 16,
               "column": 36
             },
             "end": {
-              "line": 25,
+              "line": 16,
               "column": 62
             }
           },
@@ -1748,93 +1014,6 @@
             "raw": "\"./SMAAWeightsMaterial.js\""
           },
           "value": "./SMAAWeightsMaterial.js"
-        }
-      },
-      {
-        "type": "ExportNamedDeclaration",
-        "start": 1330,
-        "end": 1393,
-        "loc": {
-          "start": {
-            "line": 26,
-            "column": 0
-          },
-          "end": {
-            "line": 26,
-            "column": 63
-          }
-        },
-        "declaration": null,
-        "specifiers": [
-          {
-            "type": "ExportSpecifier",
-            "start": 1339,
-            "end": 1358,
-            "loc": {
-              "start": {
-                "line": 26,
-                "column": 9
-              },
-              "end": {
-                "line": 26,
-                "column": 28
-              }
-            },
-            "local": {
-              "type": "Identifier",
-              "start": 1339,
-              "end": 1358,
-              "loc": {
-                "start": {
-                  "line": 26,
-                  "column": 9
-                },
-                "end": {
-                  "line": 26,
-                  "column": 28
-                },
-                "identifierName": "ToneMappingMaterial"
-              },
-              "name": "ToneMappingMaterial"
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 1339,
-              "end": 1358,
-              "loc": {
-                "start": {
-                  "line": 26,
-                  "column": 9
-                },
-                "end": {
-                  "line": 26,
-                  "column": 28
-                },
-                "identifierName": "ToneMappingMaterial"
-              },
-              "name": "ToneMappingMaterial"
-            }
-          }
-        ],
-        "source": {
-          "type": "StringLiteral",
-          "start": 1366,
-          "end": 1392,
-          "loc": {
-            "start": {
-              "line": 26,
-              "column": 36
-            },
-            "end": {
-              "line": 26,
-              "column": 62
-            }
-          },
-          "extra": {
-            "rawValue": "./ToneMappingMaterial.js",
-            "raw": "\"./ToneMappingMaterial.js\""
-          },
-          "value": "./ToneMappingMaterial.js"
         }
       }
     ],
@@ -1940,9 +1119,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "AdaptiveLuminosityMaterial",
+      "value": "AdaptiveLuminanceMaterial",
       "start": 144,
-      "end": 170,
+      "end": 169,
       "loc": {
         "start": {
           "line": 7,
@@ -1950,581 +1129,32 @@
         },
         "end": {
           "line": 7,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 171,
-      "end": 172,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 36
-        },
-        "end": {
-          "line": 7,
-          "column": 37
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 173,
-      "end": 177,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 38
-        },
-        "end": {
-          "line": 7,
-          "column": 42
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./AdaptiveLuminosityMaterial.js",
-      "start": 178,
-      "end": 211,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 43
-        },
-        "end": {
-          "line": 7,
-          "column": 76
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 211,
-      "end": 212,
-      "loc": {
-        "start": {
-          "line": 7,
-          "column": 76
-        },
-        "end": {
-          "line": 7,
-          "column": 77
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 214,
-      "end": 220,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 0
-        },
-        "end": {
-          "line": 8,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 221,
-      "end": 222,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 7
-        },
-        "end": {
-          "line": 8,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "BokehMaterial",
-      "start": 223,
-      "end": 236,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 9
-        },
-        "end": {
-          "line": 8,
-          "column": 22
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 237,
-      "end": 238,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 23
-        },
-        "end": {
-          "line": 8,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 239,
-      "end": 243,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 25
-        },
-        "end": {
-          "line": 8,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./BokehMaterial.js",
-      "start": 244,
-      "end": 264,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 30
-        },
-        "end": {
-          "line": 8,
-          "column": 50
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 264,
-      "end": 265,
-      "loc": {
-        "start": {
-          "line": 8,
-          "column": 50
-        },
-        "end": {
-          "line": 8,
-          "column": 51
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 267,
-      "end": 273,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 0
-        },
-        "end": {
-          "line": 9,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 274,
-      "end": 275,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 7
-        },
-        "end": {
-          "line": 9,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ColorEdgesMaterial",
-      "start": 276,
-      "end": 294,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 9
-        },
-        "end": {
-          "line": 9,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 295,
-      "end": 296,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 28
-        },
-        "end": {
-          "line": 9,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 297,
-      "end": 301,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 30
-        },
-        "end": {
-          "line": 9,
           "column": 34
         }
       }
     },
     {
       "type": {
-        "label": "string",
+        "label": "}",
         "beforeExpr": false,
-        "startsExpr": true,
+        "startsExpr": false,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
         "prefix": false,
         "postfix": false,
-        "binop": null,
-        "updateContext": null
+        "binop": null
       },
-      "value": "./ColorEdgesMaterial.js",
-      "start": 302,
-      "end": 327,
+      "start": 170,
+      "end": 171,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 7,
           "column": 35
         },
         "end": {
-          "line": 9,
-          "column": 60
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 327,
-      "end": 328,
-      "loc": {
-        "start": {
-          "line": 9,
-          "column": 60
-        },
-        "end": {
-          "line": 9,
-          "column": 61
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 330,
-      "end": 336,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 0
-        },
-        "end": {
-          "line": 10,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 337,
-      "end": 338,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 7
-        },
-        "end": {
-          "line": 10,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "CombineMaterial",
-      "start": 339,
-      "end": 354,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 9
-        },
-        "end": {
-          "line": 10,
-          "column": 24
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 355,
-      "end": 356,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 25
-        },
-        "end": {
-          "line": 10,
-          "column": 26
+          "line": 7,
+          "column": 36
         }
       }
     },
@@ -2541,251 +1171,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 357,
-      "end": 361,
+      "start": 172,
+      "end": 176,
       "loc": {
         "start": {
-          "line": 10,
-          "column": 27
+          "line": 7,
+          "column": 37
         },
         "end": {
-          "line": 10,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./CombineMaterial.js",
-      "start": 362,
-      "end": 384,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 32
-        },
-        "end": {
-          "line": 10,
-          "column": 54
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 384,
-      "end": 385,
-      "loc": {
-        "start": {
-          "line": 10,
-          "column": 54
-        },
-        "end": {
-          "line": 10,
-          "column": 55
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 387,
-      "end": 393,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 0
-        },
-        "end": {
-          "line": 11,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 394,
-      "end": 395,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 7
-        },
-        "end": {
-          "line": 11,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ConvolutionMaterial",
-      "start": 396,
-      "end": 415,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 9
-        },
-        "end": {
-          "line": 11,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ",",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 415,
-      "end": 416,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 28
-        },
-        "end": {
-          "line": 11,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "KernelSize",
-      "start": 417,
-      "end": 427,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 30
-        },
-        "end": {
-          "line": 11,
-          "column": 40
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 428,
-      "end": 429,
-      "loc": {
-        "start": {
-          "line": 11,
+          "line": 7,
           "column": 41
-        },
-        "end": {
-          "line": 11,
-          "column": 42
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 430,
-      "end": 434,
-      "loc": {
-        "start": {
-          "line": 11,
-          "column": 43
-        },
-        "end": {
-          "line": 11,
-          "column": 47
         }
       }
     },
@@ -2802,16 +1197,16 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./ConvolutionMaterial.js",
-      "start": 435,
-      "end": 461,
+      "value": "./AdaptiveLuminanceMaterial.js",
+      "start": 177,
+      "end": 209,
       "loc": {
         "start": {
-          "line": 11,
-          "column": 48
+          "line": 7,
+          "column": 42
         },
         "end": {
-          "line": 11,
+          "line": 7,
           "column": 74
         }
       }
@@ -2829,15 +1224,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 461,
-      "end": 462,
+      "start": 209,
+      "end": 210,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 7,
           "column": 74
         },
         "end": {
-          "line": 11,
+          "line": 7,
           "column": 75
         }
       }
@@ -2857,15 +1252,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 464,
-      "end": 470,
+      "start": 212,
+      "end": 218,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 8,
           "column": 0
         },
         "end": {
-          "line": 12,
+          "line": 8,
           "column": 6
         }
       }
@@ -2882,15 +1277,433 @@
         "postfix": false,
         "binop": null
       },
-      "start": 471,
-      "end": 472,
+      "start": 219,
+      "end": 220,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 8,
           "column": 7
         },
         "end": {
-          "line": 12,
+          "line": 8,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ColorEdgesMaterial",
+      "start": 221,
+      "end": 239,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 9
+        },
+        "end": {
+          "line": 8,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 240,
+      "end": 241,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 28
+        },
+        "end": {
+          "line": 8,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 242,
+      "end": 246,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 30
+        },
+        "end": {
+          "line": 8,
+          "column": 34
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./ColorEdgesMaterial.js",
+      "start": 247,
+      "end": 272,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 35
+        },
+        "end": {
+          "line": 8,
+          "column": 60
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 272,
+      "end": 273,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 60
+        },
+        "end": {
+          "line": 8,
+          "column": 61
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 275,
+      "end": 281,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 0
+        },
+        "end": {
+          "line": 9,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 282,
+      "end": 283,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 7
+        },
+        "end": {
+          "line": 9,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "ConvolutionMaterial",
+      "start": 284,
+      "end": 303,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 9
+        },
+        "end": {
+          "line": 9,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 303,
+      "end": 304,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 28
+        },
+        "end": {
+          "line": 9,
+          "column": 29
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "KernelSize",
+      "start": 305,
+      "end": 315,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 30
+        },
+        "end": {
+          "line": 9,
+          "column": 40
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 316,
+      "end": 317,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 41
+        },
+        "end": {
+          "line": 9,
+          "column": 42
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 318,
+      "end": 322,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 43
+        },
+        "end": {
+          "line": 9,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./ConvolutionMaterial.js",
+      "start": 323,
+      "end": 349,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 48
+        },
+        "end": {
+          "line": 9,
+          "column": 74
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 349,
+      "end": 350,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 74
+        },
+        "end": {
+          "line": 9,
+          "column": 75
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 352,
+      "end": 358,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 359,
+      "end": 360,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 7
+        },
+        "end": {
+          "line": 10,
           "column": 8
         }
       }
@@ -2908,15 +1721,15 @@
         "binop": null
       },
       "value": "CopyMaterial",
-      "start": 473,
-      "end": 485,
+      "start": 361,
+      "end": 373,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 10,
           "column": 9
         },
         "end": {
-          "line": 12,
+          "line": 10,
           "column": 21
         }
       }
@@ -2933,15 +1746,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 486,
-      "end": 487,
+      "start": 374,
+      "end": 375,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 10,
           "column": 22
         },
         "end": {
-          "line": 12,
+          "line": 10,
           "column": 23
         }
       }
@@ -2959,15 +1772,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 488,
-      "end": 492,
+      "start": 376,
+      "end": 380,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 10,
           "column": 24
         },
         "end": {
-          "line": 12,
+          "line": 10,
           "column": 28
         }
       }
@@ -2986,15 +1799,15 @@
         "updateContext": null
       },
       "value": "./CopyMaterial.js",
-      "start": 493,
-      "end": 512,
+      "start": 381,
+      "end": 400,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 10,
           "column": 29
         },
         "end": {
-          "line": 12,
+          "line": 10,
           "column": 48
         }
       }
@@ -3012,15 +1825,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 512,
-      "end": 513,
+      "start": 400,
+      "end": 401,
       "loc": {
         "start": {
-          "line": 12,
+          "line": 10,
           "column": 48
         },
         "end": {
-          "line": 12,
+          "line": 10,
           "column": 49
         }
       }
@@ -3040,15 +1853,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 515,
-      "end": 521,
+      "start": 403,
+      "end": 409,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 0
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 6
         }
       }
@@ -3065,15 +1878,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 522,
-      "end": 523,
+      "start": 410,
+      "end": 411,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 7
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 8
         }
       }
@@ -3091,15 +1904,15 @@
         "binop": null
       },
       "value": "DepthComparisonMaterial",
-      "start": 524,
-      "end": 547,
+      "start": 412,
+      "end": 435,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 9
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 32
         }
       }
@@ -3116,15 +1929,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 548,
-      "end": 549,
+      "start": 436,
+      "end": 437,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 33
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 34
         }
       }
@@ -3142,15 +1955,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 550,
-      "end": 554,
+      "start": 438,
+      "end": 442,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 35
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 39
         }
       }
@@ -3169,15 +1982,15 @@
         "updateContext": null
       },
       "value": "./DepthComparisonMaterial.js",
-      "start": 555,
-      "end": 585,
+      "start": 443,
+      "end": 473,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 40
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 70
         }
       }
@@ -3195,15 +2008,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 585,
-      "end": 586,
+      "start": 473,
+      "end": 474,
       "loc": {
         "start": {
-          "line": 13,
+          "line": 11,
           "column": 70
         },
         "end": {
-          "line": 13,
+          "line": 11,
           "column": 71
         }
       }
@@ -3223,15 +2036,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 588,
-      "end": 594,
+      "start": 476,
+      "end": 482,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 0
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 6
         }
       }
@@ -3248,15 +2061,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 595,
-      "end": 596,
+      "start": 483,
+      "end": 484,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 7
         },
         "end": {
-          "line": 14,
+          "line": 12,
           "column": 8
         }
       }
@@ -3273,284 +2086,23 @@
         "postfix": false,
         "binop": null
       },
-      "value": "DotScreenMaterial",
-      "start": 597,
-      "end": 614,
+      "value": "EffectMaterial",
+      "start": 485,
+      "end": 499,
       "loc": {
         "start": {
-          "line": 14,
+          "line": 12,
           "column": 9
         },
         "end": {
-          "line": 14,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 615,
-      "end": 616,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 27
-        },
-        "end": {
-          "line": 14,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 617,
-      "end": 621,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 29
-        },
-        "end": {
-          "line": 14,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./DotScreenMaterial.js",
-      "start": 622,
-      "end": 646,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 34
-        },
-        "end": {
-          "line": 14,
-          "column": 58
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 646,
-      "end": 647,
-      "loc": {
-        "start": {
-          "line": 14,
-          "column": 58
-        },
-        "end": {
-          "line": 14,
-          "column": 59
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 649,
-      "end": 655,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 0
-        },
-        "end": {
-          "line": 15,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 656,
-      "end": 657,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 7
-        },
-        "end": {
-          "line": 15,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "FilmMaterial",
-      "start": 658,
-      "end": 670,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 9
-        },
-        "end": {
-          "line": 15,
-          "column": 21
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 671,
-      "end": 672,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 22
-        },
-        "end": {
-          "line": 15,
+          "line": 12,
           "column": 23
         }
       }
     },
     {
       "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 673,
-      "end": 677,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 24
-        },
-        "end": {
-          "line": 15,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./FilmMaterial.js",
-      "start": 678,
-      "end": 697,
-      "loc": {
-        "start": {
-          "line": 15,
-          "column": 29
-        },
-        "end": {
-          "line": 15,
-          "column": 48
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
+        "label": ",",
         "beforeExpr": true,
         "startsExpr": false,
         "rightAssociative": false,
@@ -3561,103 +2113,24 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 697,
-      "end": 698,
+      "start": 499,
+      "end": 500,
       "loc": {
         "start": {
-          "line": 15,
-          "column": 48
-        },
-        "end": {
-          "line": 15,
-          "column": 49
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 700,
-      "end": 706,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 0
-        },
-        "end": {
-          "line": 16,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 707,
-      "end": 708,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 7
-        },
-        "end": {
-          "line": 16,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "GlitchMaterial",
-      "start": 709,
-      "end": 723,
-      "loc": {
-        "start": {
-          "line": 16,
-          "column": 9
-        },
-        "end": {
-          "line": 16,
+          "line": 12,
           "column": 23
+        },
+        "end": {
+          "line": 12,
+          "column": 24
         }
       }
     },
     {
       "type": {
-        "label": "}",
+        "label": "name",
         "beforeExpr": false,
-        "startsExpr": false,
+        "startsExpr": true,
         "rightAssociative": false,
         "isLoop": false,
         "isAssign": false,
@@ -3665,16 +2138,42 @@
         "postfix": false,
         "binop": null
       },
-      "start": 724,
-      "end": 725,
+      "value": "Section",
+      "start": 501,
+      "end": 508,
       "loc": {
         "start": {
-          "line": 16,
-          "column": 24
-        },
-        "end": {
-          "line": 16,
+          "line": 12,
           "column": 25
+        },
+        "end": {
+          "line": 12,
+          "column": 32
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 509,
+      "end": 510,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 33
+        },
+        "end": {
+          "line": 12,
+          "column": 34
         }
       }
     },
@@ -3691,16 +2190,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 726,
-      "end": 730,
+      "start": 511,
+      "end": 515,
       "loc": {
         "start": {
-          "line": 16,
-          "column": 26
+          "line": 12,
+          "column": 35
         },
         "end": {
-          "line": 16,
-          "column": 30
+          "line": 12,
+          "column": 39
         }
       }
     },
@@ -3717,17 +2216,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./GlitchMaterial.js",
-      "start": 731,
-      "end": 752,
+      "value": "./EffectMaterial.js",
+      "start": 516,
+      "end": 537,
       "loc": {
         "start": {
-          "line": 16,
-          "column": 31
+          "line": 12,
+          "column": 40
         },
         "end": {
-          "line": 16,
-          "column": 52
+          "line": 12,
+          "column": 61
         }
       }
     },
@@ -3744,16 +2243,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 752,
-      "end": 753,
+      "start": 537,
+      "end": 538,
       "loc": {
         "start": {
-          "line": 16,
-          "column": 52
+          "line": 12,
+          "column": 61
         },
         "end": {
-          "line": 16,
-          "column": 53
+          "line": 12,
+          "column": 62
         }
       }
     },
@@ -3772,15 +2271,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 755,
-      "end": 761,
+      "start": 540,
+      "end": 546,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 0
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 6
         }
       }
@@ -3797,15 +2296,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 762,
-      "end": 763,
+      "start": 547,
+      "end": 548,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 7
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 8
         }
       }
@@ -3823,15 +2322,15 @@
         "binop": null
       },
       "value": "GodRaysMaterial",
-      "start": 764,
-      "end": 779,
+      "start": 549,
+      "end": 564,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 9
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 24
         }
       }
@@ -3848,15 +2347,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 780,
-      "end": 781,
+      "start": 565,
+      "end": 566,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 25
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 26
         }
       }
@@ -3874,15 +2373,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 782,
-      "end": 786,
+      "start": 567,
+      "end": 571,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 27
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 31
         }
       }
@@ -3901,15 +2400,15 @@
         "updateContext": null
       },
       "value": "./GodRaysMaterial.js",
-      "start": 787,
-      "end": 809,
+      "start": 572,
+      "end": 594,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 32
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 54
         }
       }
@@ -3927,15 +2426,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 809,
-      "end": 810,
+      "start": 594,
+      "end": 595,
       "loc": {
         "start": {
-          "line": 17,
+          "line": 13,
           "column": 54
         },
         "end": {
-          "line": 17,
+          "line": 13,
           "column": 55
         }
       }
@@ -3955,15 +2454,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 812,
-      "end": 818,
+      "start": 597,
+      "end": 603,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 14,
           "column": 0
         },
         "end": {
-          "line": 18,
+          "line": 14,
           "column": 6
         }
       }
@@ -3980,15 +2479,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 819,
-      "end": 820,
+      "start": 604,
+      "end": 605,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 14,
           "column": 7
         },
         "end": {
-          "line": 18,
+          "line": 14,
           "column": 8
         }
       }
@@ -4005,42 +2504,42 @@
         "postfix": false,
         "binop": null
       },
-      "value": "LuminosityMaterial",
-      "start": 821,
-      "end": 839,
+      "value": "LuminanceMaterial",
+      "start": 606,
+      "end": 623,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 14,
           "column": 9
         },
         "end": {
-          "line": 18,
+          "line": 14,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 624,
+      "end": 625,
+      "loc": {
+        "start": {
+          "line": 14,
           "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 840,
-      "end": 841,
-      "loc": {
-        "start": {
-          "line": 18,
+        },
+        "end": {
+          "line": 14,
           "column": 28
-        },
-        "end": {
-          "line": 18,
-          "column": 29
         }
       }
     },
@@ -4057,43 +2556,43 @@
         "binop": null
       },
       "value": "from",
-      "start": 842,
-      "end": 846,
+      "start": 626,
+      "end": 630,
       "loc": {
         "start": {
-          "line": 18,
-          "column": 30
+          "line": 14,
+          "column": 29
         },
         "end": {
-          "line": 18,
+          "line": 14,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./LuminanceMaterial.js",
+      "start": 631,
+      "end": 655,
+      "loc": {
+        "start": {
+          "line": 14,
           "column": 34
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./LuminosityMaterial.js",
-      "start": 847,
-      "end": 872,
-      "loc": {
-        "start": {
-          "line": 18,
-          "column": 35
         },
         "end": {
-          "line": 18,
-          "column": 60
+          "line": 14,
+          "column": 58
         }
       }
     },
@@ -4110,16 +2609,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 872,
-      "end": 873,
+      "start": 655,
+      "end": 656,
       "loc": {
         "start": {
-          "line": 18,
-          "column": 60
+          "line": 14,
+          "column": 58
         },
         "end": {
-          "line": 18,
-          "column": 61
+          "line": 14,
+          "column": 59
         }
       }
     },
@@ -4138,15 +2637,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 875,
-      "end": 881,
+      "start": 658,
+      "end": 664,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 15,
           "column": 0
         },
         "end": {
-          "line": 19,
+          "line": 15,
           "column": 6
         }
       }
@@ -4163,198 +2662,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 882,
-      "end": 883,
+      "start": 665,
+      "end": 666,
       "loc": {
         "start": {
-          "line": 19,
+          "line": 15,
           "column": 7
         },
         "end": {
-          "line": 19,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "OutlineBlendMaterial",
-      "start": 884,
-      "end": 904,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 9
-        },
-        "end": {
-          "line": 19,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 905,
-      "end": 906,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 30
-        },
-        "end": {
-          "line": 19,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 907,
-      "end": 911,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 32
-        },
-        "end": {
-          "line": 19,
-          "column": 36
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./OutlineBlendMaterial.js",
-      "start": 912,
-      "end": 939,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 37
-        },
-        "end": {
-          "line": 19,
-          "column": 64
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 939,
-      "end": 940,
-      "loc": {
-        "start": {
-          "line": 19,
-          "column": 64
-        },
-        "end": {
-          "line": 19,
-          "column": 65
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 942,
-      "end": 948,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 0
-        },
-        "end": {
-          "line": 20,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 949,
-      "end": 950,
-      "loc": {
-        "start": {
-          "line": 20,
-          "column": 7
-        },
-        "end": {
-          "line": 20,
+          "line": 15,
           "column": 8
         }
       }
@@ -4372,15 +2688,15 @@
         "binop": null
       },
       "value": "OutlineEdgesMaterial",
-      "start": 951,
-      "end": 971,
+      "start": 667,
+      "end": 687,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 15,
           "column": 9
         },
         "end": {
-          "line": 20,
+          "line": 15,
           "column": 29
         }
       }
@@ -4397,15 +2713,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 972,
-      "end": 973,
+      "start": 688,
+      "end": 689,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 15,
           "column": 30
         },
         "end": {
-          "line": 20,
+          "line": 15,
           "column": 31
         }
       }
@@ -4423,15 +2739,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 974,
-      "end": 978,
+      "start": 690,
+      "end": 694,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 15,
           "column": 32
         },
         "end": {
-          "line": 20,
+          "line": 15,
           "column": 36
         }
       }
@@ -4450,15 +2766,15 @@
         "updateContext": null
       },
       "value": "./OutlineEdgesMaterial.js",
-      "start": 979,
-      "end": 1006,
+      "start": 695,
+      "end": 722,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 15,
           "column": 37
         },
         "end": {
-          "line": 20,
+          "line": 15,
           "column": 64
         }
       }
@@ -4476,15 +2792,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1006,
-      "end": 1007,
+      "start": 722,
+      "end": 723,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 15,
           "column": 64
         },
         "end": {
-          "line": 20,
+          "line": 15,
           "column": 65
         }
       }
@@ -4504,15 +2820,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1009,
-      "end": 1015,
+      "start": 725,
+      "end": 731,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 16,
           "column": 0
         },
         "end": {
-          "line": 21,
+          "line": 16,
           "column": 6
         }
       }
@@ -4529,747 +2845,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1016,
-      "end": 1017,
+      "start": 732,
+      "end": 733,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 16,
           "column": 7
         },
         "end": {
-          "line": 21,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "PixelationMaterial",
-      "start": 1018,
-      "end": 1036,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 9
-        },
-        "end": {
-          "line": 21,
-          "column": 27
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1037,
-      "end": 1038,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 28
-        },
-        "end": {
-          "line": 21,
-          "column": 29
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1039,
-      "end": 1043,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 30
-        },
-        "end": {
-          "line": 21,
-          "column": 34
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./PixelationMaterial.js",
-      "start": 1044,
-      "end": 1069,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 35
-        },
-        "end": {
-          "line": 21,
-          "column": 60
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1069,
-      "end": 1070,
-      "loc": {
-        "start": {
-          "line": 21,
-          "column": 60
-        },
-        "end": {
-          "line": 21,
-          "column": 61
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1072,
-      "end": 1078,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 0
-        },
-        "end": {
-          "line": 22,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1079,
-      "end": 1080,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 7
-        },
-        "end": {
-          "line": 22,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "RealisticBokehMaterial",
-      "start": 1081,
-      "end": 1103,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 9
-        },
-        "end": {
-          "line": 22,
-          "column": 31
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1104,
-      "end": 1105,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 32
-        },
-        "end": {
-          "line": 22,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1106,
-      "end": 1110,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 34
-        },
-        "end": {
-          "line": 22,
-          "column": 38
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./RealisticBokehMaterial.js",
-      "start": 1111,
-      "end": 1140,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 39
-        },
-        "end": {
-          "line": 22,
-          "column": 68
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1140,
-      "end": 1141,
-      "loc": {
-        "start": {
-          "line": 22,
-          "column": 68
-        },
-        "end": {
-          "line": 22,
-          "column": 69
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1143,
-      "end": 1149,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 0
-        },
-        "end": {
-          "line": 23,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1150,
-      "end": 1151,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 7
-        },
-        "end": {
-          "line": 23,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ShockWaveMaterial",
-      "start": 1152,
-      "end": 1169,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 9
-        },
-        "end": {
-          "line": 23,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1170,
-      "end": 1171,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 27
-        },
-        "end": {
-          "line": 23,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1172,
-      "end": 1176,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 29
-        },
-        "end": {
-          "line": 23,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./ShockWaveMaterial.js",
-      "start": 1177,
-      "end": 1201,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 34
-        },
-        "end": {
-          "line": 23,
-          "column": 58
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1201,
-      "end": 1202,
-      "loc": {
-        "start": {
-          "line": 23,
-          "column": 58
-        },
-        "end": {
-          "line": 23,
-          "column": 59
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1204,
-      "end": 1210,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 0
-        },
-        "end": {
-          "line": 24,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1211,
-      "end": 1212,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 7
-        },
-        "end": {
-          "line": 24,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "SMAABlendMaterial",
-      "start": 1213,
-      "end": 1230,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 9
-        },
-        "end": {
-          "line": 24,
-          "column": 26
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1231,
-      "end": 1232,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 27
-        },
-        "end": {
-          "line": 24,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1233,
-      "end": 1237,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 29
-        },
-        "end": {
-          "line": 24,
-          "column": 33
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./SMAABlendMaterial.js",
-      "start": 1238,
-      "end": 1262,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 34
-        },
-        "end": {
-          "line": 24,
-          "column": 58
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1262,
-      "end": 1263,
-      "loc": {
-        "start": {
-          "line": 24,
-          "column": 58
-        },
-        "end": {
-          "line": 24,
-          "column": 59
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1265,
-      "end": 1271,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 0
-        },
-        "end": {
-          "line": 25,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1272,
-      "end": 1273,
-      "loc": {
-        "start": {
-          "line": 25,
-          "column": 7
-        },
-        "end": {
-          "line": 25,
+          "line": 16,
           "column": 8
         }
       }
@@ -5287,15 +2871,15 @@
         "binop": null
       },
       "value": "SMAAWeightsMaterial",
-      "start": 1274,
-      "end": 1293,
+      "start": 734,
+      "end": 753,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 16,
           "column": 9
         },
         "end": {
-          "line": 25,
+          "line": 16,
           "column": 28
         }
       }
@@ -5312,15 +2896,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1294,
-      "end": 1295,
+      "start": 754,
+      "end": 755,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 16,
           "column": 29
         },
         "end": {
-          "line": 25,
+          "line": 16,
           "column": 30
         }
       }
@@ -5338,15 +2922,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 1296,
-      "end": 1300,
+      "start": 756,
+      "end": 760,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 16,
           "column": 31
         },
         "end": {
-          "line": 25,
+          "line": 16,
           "column": 35
         }
       }
@@ -5365,15 +2949,15 @@
         "updateContext": null
       },
       "value": "./SMAAWeightsMaterial.js",
-      "start": 1301,
-      "end": 1327,
+      "start": 761,
+      "end": 787,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 16,
           "column": 36
         },
         "end": {
-          "line": 25,
+          "line": 16,
           "column": 62
         }
       }
@@ -5391,198 +2975,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1327,
-      "end": 1328,
+      "start": 787,
+      "end": 788,
       "loc": {
         "start": {
-          "line": 25,
+          "line": 16,
           "column": 62
         },
         "end": {
-          "line": 25,
-          "column": 63
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "export",
-        "keyword": "export",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "export",
-      "start": 1330,
-      "end": 1336,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 0
-        },
-        "end": {
-          "line": 26,
-          "column": 6
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "{",
-        "beforeExpr": true,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1337,
-      "end": 1338,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 7
-        },
-        "end": {
-          "line": 26,
-          "column": 8
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "ToneMappingMaterial",
-      "start": 1339,
-      "end": 1358,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 9
-        },
-        "end": {
-          "line": 26,
-          "column": 28
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "}",
-        "beforeExpr": false,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "start": 1359,
-      "end": 1360,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 29
-        },
-        "end": {
-          "line": 26,
-          "column": 30
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "name",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null
-      },
-      "value": "from",
-      "start": 1361,
-      "end": 1365,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 31
-        },
-        "end": {
-          "line": 26,
-          "column": 35
-        }
-      }
-    },
-    {
-      "type": {
-        "label": "string",
-        "beforeExpr": false,
-        "startsExpr": true,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "value": "./ToneMappingMaterial.js",
-      "start": 1366,
-      "end": 1392,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 36
-        },
-        "end": {
-          "line": 26,
-          "column": 62
-        }
-      }
-    },
-    {
-      "type": {
-        "label": ";",
-        "beforeExpr": true,
-        "startsExpr": false,
-        "rightAssociative": false,
-        "isLoop": false,
-        "isAssign": false,
-        "prefix": false,
-        "postfix": false,
-        "binop": null,
-        "updateContext": null
-      },
-      "start": 1392,
-      "end": 1393,
-      "loc": {
-        "start": {
-          "line": 26,
-          "column": 62
-        },
-        "end": {
-          "line": 26,
+          "line": 16,
           "column": 63
         }
       }
@@ -5600,15 +3001,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1395,
-      "end": 1395,
+      "start": 790,
+      "end": 790,
       "loc": {
         "start": {
-          "line": 27,
+          "line": 17,
           "column": 0
         },
         "end": {
-          "line": 27,
+          "line": 17,
           "column": 0
         }
       }
