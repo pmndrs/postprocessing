@@ -26,7 +26,6 @@ export {
 	GlitchEffect,
 	GlitchMode,
 	GodRaysEffect,
-	GreyscaleEffect,
 	GridEffect,
 	HueSaturationEffect,
 	NoiseEffect,
