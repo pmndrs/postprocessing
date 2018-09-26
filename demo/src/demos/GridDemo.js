@@ -219,8 +219,8 @@ export class GridDemo extends PostProcessingDemo {
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 		const gridEffect = new GridEffect({
-			scale: 1.25,
-			lineWidth: 0.0
+			scale: 2.0,
+			lineWidth: 0.1
 		});
 
 		const pass = new EffectPass(camera, smaaEffect, gridEffect);
@@ -284,7 +284,7 @@ export class GridDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "scale").min(0.01).max(2.0).step(0.01).onChange(() => {
+		menu.add(params, "scale").min(0.01).max(3.0).step(0.01).onChange(() => {
 
 			effect.setScale(params.scale);
 
