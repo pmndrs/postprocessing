@@ -16,8 +16,8 @@ export class VignetteEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.eskil=false] - Enables Eskil's vignette technique.
-	 * @param {Number} [options.offset=1.0] - The vignette offset.
-	 * @param {Number} [options.darkness=1.0] - The vignette darkness.
+	 * @param {Number} [options.offset=0.5] - The vignette offset.
+	 * @param {Number} [options.darkness=0.5] - The vignette darkness.
 	 */
 
 	constructor(options = {}) {
@@ -25,8 +25,8 @@ export class VignetteEffect extends Effect {
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
 			eskil: false,
-			offset: 1.0,
-			darkness: 1.0
+			offset: 0.5,
+			darkness: 0.5
 		}, options);
 
 		super("VignetteEffect", fragment, {

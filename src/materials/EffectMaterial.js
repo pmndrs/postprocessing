@@ -27,6 +27,12 @@ export class EffectMaterial extends ShaderMaterial {
 
 			type: "EffectMaterial",
 
+			defines: {
+
+				"DEPTH_PACKING": "0"
+
+			},
+
 			uniforms: {
 
 				inputBuffer: new Uniform(null),
@@ -35,8 +41,8 @@ export class EffectMaterial extends ShaderMaterial {
 				resolution: new Uniform(new Vector2()),
 				texelSize: new Uniform(new Vector2()),
 
-				cameraNear: new Uniform(0.1),
-				cameraFar: new Uniform(2000),
+				cameraNear: new Uniform(0.3),
+				cameraFar: new Uniform(1000.0),
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
 
@@ -76,6 +82,35 @@ export class EffectMaterial extends ShaderMaterial {
 		}
 
 		this.adoptCameraSettings(camera);
+
+	}
+
+	/**
+	 * The current depth packing.
+	 *
+	 * @type {Number}
+	 */
+
+	get depthPacking() {
+
+		return Number.parseInt(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing.
+	 *
+	 * Use `BasicDepthPacking` or `RGBADepthPacking` if your depth texture
+	 * contains packed depth.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
 
 	}
 

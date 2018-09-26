@@ -6,8 +6,7 @@ import fragment from "./glsl/pixelation/shader.frag";
 /**
  * A pixelation effect.
  *
- * Warning: This effect cannot be merged with antialiasing effects. It is
- * recommended to run this effect last using a stand-alone {@link EffectPass}.
+ * Warning: This effect cannot be merged with convolution effects.
  */
 
 export class PixelationEffect extends Effect {

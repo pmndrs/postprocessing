@@ -1,13 +1,17 @@
-uniform sampler2D maskTexture;
 uniform sampler2D edgeTexture;
-uniform sampler2D patternTexture;
+uniform sampler2D maskTexture;
 
 uniform vec3 visibleEdgeColor;
 uniform vec3 hiddenEdgeColor;
 uniform float pulse;
 uniform float edgeStrength;
 
-varying vec2 vUvPattern;
+#ifdef USE_PATTERN
+
+	uniform sampler2D patternTexture;
+	varying vec2 vUvPattern;
+
+#endif
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
@@ -21,13 +25,13 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 	#endif
 
 	edge *= (edgeStrength * mask.x * pulse);
-	vec3 outlineColor = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;
+	vec3 color = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;
 
-	vec3 color = outlineColor;
+	float visibilityFactor = 0.0;
 
 	#ifdef USE_PATTERN
 
-		vec3 patternColor = texture2D(patternTexture, vUvPattern).rgb;
+		vec4 patternColor = texture2D(patternTexture, vUvPattern);
 
 		#ifdef X_RAY
 
@@ -39,11 +43,12 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 		#endif
 
-		float visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;
-		color += visibilityFactor * (1.0 - mask.x) * (1.0 - patternColor);
+		visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;
+		visibilityFactor *= (1.0 - mask.x) * patternColor.a;
+		color += visibilityFactor * patternColor.rgb;
 
 	#endif
 
-	outputColor = vec4(color, inputColor.a);
+	outputColor = vec4(color, max(max(edge.x, edge.y), visibilityFactor));
 
 }

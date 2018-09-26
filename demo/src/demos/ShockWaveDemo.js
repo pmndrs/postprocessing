@@ -11,7 +11,7 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { ShockWavePass } from "../../../src";
+import { EffectPass, ShockWaveEffect, SMAAEffect } from "../../../src";
 
 /**
  * A shock wave demo setup.
@@ -30,13 +30,13 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		super("shock-wave", composer);
 
 		/**
-		 * A shock wave pass.
+		 * An effect.
 		 *
-		 * @type {ShockWavePass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.shockWavePass = null;
+		this.effect = null;
 
 	}
 
@@ -80,6 +80,29 @@ export class ShockWaveDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -151,17 +174,25 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new ShockWavePass(camera, mesh.position, {
-			speed: 1.0,
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+
+		const shockWaveEffect = new ShockWaveEffect(camera, mesh.position, {
+			speed: 1.25,
 			maxRadius: 0.5,
 			waveSize: 0.2,
 			amplitude: 0.05
 		});
 
+		const effectPass = new EffectPass(camera, shockWaveEffect);
+		const smaaPass = new EffectPass(camera, smaaEffect);
+
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.shockWavePass = pass;
-		composer.addPass(pass);
+		smaaPass.renderToScreen = true;
+
+		this.effect = shockWaveEffect;
+
+		composer.addPass(effectPass);
+		composer.addPass(smaaPass);
 
 	}
 
@@ -173,43 +204,43 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.shockWavePass;
-		const material = pass.shockWaveMaterial;
+		const effect = this.effect;
+		const uniforms = effect.uniforms;
 
 		const params = {
-			"size": material.uniforms.size.value,
-			"extent": material.uniforms.maxRadius.value,
-			"waveSize": material.uniforms.waveSize.value,
-			"amplitude": material.uniforms.amplitude.value
+			"size": uniforms.get("size").value,
+			"extent": uniforms.get("maxRadius").value,
+			"waveSize": uniforms.get("waveSize").value,
+			"amplitude": uniforms.get("amplitude").value
 		};
 
-		menu.add(pass, "speed").min(0.0).max(10.0).step(0.001);
+		menu.add(effect, "speed").min(0.0).max(10.0).step(0.001);
 
 		menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(() => {
 
-			material.uniforms.size.value = params.size;
+			uniforms.get("size").value = params.size;
 
 		});
 
 		menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(() => {
 
-			material.uniforms.maxRadius.value = params.extent;
+			uniforms.get("maxRadius").value = params.extent;
 
 		});
 
 		menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(() => {
 
-			material.uniforms.waveSize.value = params.waveSize;
+			uniforms.get("waveSize").value = params.waveSize;
 
 		});
 
 		menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(() => {
 
-			material.uniforms.amplitude.value = params.amplitude;
+			uniforms.get("amplitude").value = params.amplitude;
 
 		});
 
-		menu.add(pass, "explode");
+		menu.add(effect, "explode");
 
 	}
 

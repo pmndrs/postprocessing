@@ -49,8 +49,8 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 			defines: {
 
-				NUM_SAMPLES_FLOAT: "60.0",
-				NUM_SAMPLES_INT: "60"
+				SAMPLES_INT: "60",
+				SAMPLES_FLOAT: "60.0"
 
 			},
 
@@ -85,7 +85,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 	get samples() {
 
-		return Number.parseInt(this.defines.NUM_SAMPLES_INT);
+		return Number.parseInt(this.defines.SAMPLES_INT);
 
 	}
 
@@ -95,12 +95,12 @@ export class GodRaysMaterial extends ShaderMaterial {
 	 * @type {Number}
 	 */
 
-	set samples(value = 60) {
+	set samples(value) {
 
 		value = Math.floor(value);
 
-		this.defines.NUM_SAMPLES_FLOAT = value.toFixed(1);
-		this.defines.NUM_SAMPLES_INT = value.toFixed(0);
+		this.defines.SAMPLES_INT = value.toFixed(0);
+		this.defines.SAMPLES_FLOAT = value.toFixed(1);
 		this.needsUpdate = true;
 
 	}

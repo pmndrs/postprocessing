@@ -17,7 +17,7 @@ void main() {
 
 	// Calculate the vector from this pixel to the light position in screen space.
 	vec2 delta = coord - lightPosition;
-	delta *= 1.0 / NUM_SAMPLES_FLOAT * density;
+	delta *= 1.0 / SAMPLES_FLOAT * density;
 
 	// A decreasing illumination factor.
 	float illuminationDecay = 1.0;
@@ -27,7 +27,7 @@ void main() {
 
 	/* Estimate the probability of occlusion at each pixel by summing samples
 	along a ray to the light position. */
-	for(int i = 0; i < NUM_SAMPLES_INT; ++i) {
+	for(int i = 0; i < SAMPLES_INT; ++i) {
 
 		coord -= delta;
 		sample = texture2D(inputBuffer, coord);

@@ -1,8 +1,8 @@
-import { Uniform } from "three";
+import { Uniform, Vector4 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/bokeh/shader.frag";
+import fragment from "./glsl/realistic-bokeh/shader.frag";
 
 /**
  * Depth of Field shader v2.4.
@@ -19,6 +19,7 @@ export class RealisticBokehEffect extends Effect {
 	 * Constructs a new bokeh effect.
 	 *
 	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
 	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
@@ -33,9 +34,10 @@ export class RealisticBokehEffect extends Effect {
 	 * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.
 	 */
 
-	constructor(camera, options = {}) {
+	constructor(options = {}) {
 
 		const settings = Object.assign({
+			blendFunction: BlendFunction.NORMAL,
 			focus: 0.5,
 			focalLength: 24.0,
 			luminanceThreshold: 0.5,
@@ -53,14 +55,7 @@ export class RealisticBokehEffect extends Effect {
 		super("RealisticBokehEffect", fragment, {
 
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: BlendFunction.NORMAL,
-
-			defines: new Map([
-				["RINGS_INT", settings.rings.toFixed(0)],
-				["RINGS_FLOAT", settings.rings.toFixed(1)],
-				["SAMPLES_INT", settings.samples.toFixed(0)],
-				["SAMPLES_FLOAT", settings.samples.toFixed(1)]
-			]),
+			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
 				["focus", new Uniform(settings.focus)],
@@ -74,9 +69,69 @@ export class RealisticBokehEffect extends Effect {
 
 		});
 
+		this.rings = settings.rings;
+		this.samples = settings.samples;
 		this.showFocus = settings.showFocus;
 		this.manualDoF = settings.manualDoF;
 		this.pentagon = settings.pentagon;
+
+	}
+
+	/**
+	 * The amount of blur iterations.
+	 *
+	 * @type {Number}
+	 */
+
+	get rings() {
+
+		return Number.parseInt(this.defines.get("RINGS_INT"));
+
+	}
+
+	/**
+	 * Sets the amount of blur iterations.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set rings(value) {
+
+		value = Math.floor(value);
+
+		this.defines.set("RINGS_INT", value.toFixed(0));
+		this.defines.set("RINGS_FLOAT", value.toFixed(1));
+
+	}
+
+	/**
+	 * The amount of blur samples per ring.
+	 *
+	 * @type {Number}
+	 */
+
+	get samples() {
+
+		return Number.parseInt(this.defines.get("SAMPLES_INT"));
+
+	}
+
+	/**
+	 * Sets the amount of blur samples per ring.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set samples(value) {
+
+		value = Math.floor(value);
+
+		this.defines.set("SAMPLES_INT", value.toFixed(0));
+		this.defines.set("SAMPLES_FLOAT", value.toFixed(1));
 
 	}
 
@@ -109,6 +164,8 @@ export class RealisticBokehEffect extends Effect {
 	/**
 	 * Indicates whether the Depth of Field should be calculated manually.
 	 *
+	 * If enabled, the Depth of Field can be adjusted via the `dof` uniform.
+	 *
 	 * @type {Boolean}
 	 */
 
@@ -128,7 +185,17 @@ export class RealisticBokehEffect extends Effect {
 
 	set manualDoF(value) {
 
-		value ? this.defines.set("MANUAL_DOF", "1") : this.defines.delete("MANUAL_DOF");
+		if(value) {
+
+			this.defines.set("MANUAL_DOF", "1");
+			this.uniforms.set("dof", new Uniform(new Vector4(0.2, 1.0, 0.2, 2.0)));
+
+		} else {
+
+			this.defines.delete("MANUAL_DOF");
+			this.uniforms.delete("dof");
+
+		}
 
 	}
 

@@ -14,14 +14,14 @@ export class ScanlineEffect extends Effect {
 	 * Constructs a new scanline effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.OVERLAY] - The blend function of this effect.
 	 * @param {Number} [options.density=1.25] - The scanline density.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.MULTIPLY,
+			blendFunction: BlendFunction.OVERLAY,
 			density: 1.25
 		}, options);
 

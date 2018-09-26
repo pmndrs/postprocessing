@@ -36,14 +36,13 @@ export class OutlineEffect extends Effect {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function. Set this to `BlendFunction.DARKEN` for dark outlines.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
-	 * @param {Number} [options.patternScale=1.0] - The scale of the pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
-	 * @param {Number} [options.hiddenEdgeColor=0x22090A] - The color of hidden edges.
-	 * @param {Boolean} [options.blur=true] - Whether the outline should be blurred.
+	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
+	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.
 	 */
 
@@ -52,12 +51,11 @@ export class OutlineEffect extends Effect {
 		const settings = Object.assign({
 			blendFunction: BlendFunction.SCREEN,
 			patternTexture: null,
-			patternScale: 1.0,
 			edgeStrength: 1.0,
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
-			hiddenEdgeColor: 0x22090A,
-			blur: true,
+			hiddenEdgeColor: 0x22090a,
+			blur: false,
 			xRay: true
 		}, options);
 
@@ -68,15 +66,11 @@ export class OutlineEffect extends Effect {
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
-				["patternTexture", new Uniform(null)],
-				["patternScale", new Uniform(settings.patternScale)],
 				["edgeStrength", new Uniform(settings.edgeStrength)],
-				["visibleEdgeColor", new Uniform(settings.visibleEdgeColor)],
-				["hiddenEdgeColor", new Uniform(settings.hiddenEdgeColor)],
+				["visibleEdgeColor", new Uniform(new Color(settings.visibleEdgeColor))],
+				["hiddenEdgeColor", new Uniform(new Color(settings.hiddenEdgeColor))],
 				["pulse", new Uniform(1.0)]
-			]),
-
-			vertexShader: vertex
+			])
 
 		});
 
@@ -283,6 +277,30 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * Indicates whether dithering is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get dithering() {
+
+		return this.blurPass.dithering;
+
+	}
+
+	/**
+	 * Enables or disables dithering.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set dithering(value) {
+
+		this.blurPass.dithering = value;
+
+	}
+
+	/**
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
@@ -370,12 +388,16 @@ export class OutlineEffect extends Effect {
 		if(texture !== null) {
 
 			this.defines.set("USE_PATTERN", "1");
-			this.uniforms.get("patternTexture").value = texture;
+			this.uniforms.set("patternScale", new Uniform(1.0));
+			this.uniforms.set("patternTexture", new Uniform(texture));
+			this.vertexShader = vertex;
 
 		} else {
 
 			this.defines.delete("USE_PATTERN");
-			this.uniforms.get("patternTexture").value = null;
+			this.uniforms.delete("patternScale");
+			this.uniforms.delete("patternTexture");
+			this.vertexShader = null;
 
 		}
 
@@ -622,7 +644,7 @@ export class OutlineEffect extends Effect {
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetBlurredEdges.setSize(width, height);
 
-		this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
+		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 

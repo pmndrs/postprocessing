@@ -17,7 +17,6 @@ export class DotScreenEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.angle=1.57] - The angle of the dot pattern.
 	 * @param {Number} [options.scale=1.0] - The scale of the dot pattern.
-	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
 	 */
 
 	constructor(options = {}) {
@@ -25,8 +24,7 @@ export class DotScreenEffect extends Effect {
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
 			angle: Math.PI * 0.5,
-			scale: 1.0,
-			intensity: 1.0
+			scale: 1.0
 		}, options);
 
 		super("DotScreenEffect", fragment, {
@@ -35,8 +33,7 @@ export class DotScreenEffect extends Effect {
 
 			uniforms: new Map([
 				["angle", new Uniform(new Vector2())],
-				["scale", new Uniform(settings.scale)],
-				["intensity", new Uniform(settings.intensity)]
+				["scale", new Uniform(settings.scale)]
 			])
 
 		});

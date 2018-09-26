@@ -146,6 +146,30 @@ export class Pass {
 	}
 
 	/**
+	 * Returns the current depth texture.
+	 *
+	 * @return {Texture} The current depth texture, or null if there is none.
+	 */
+
+	getDepthTexture() {
+
+		return null;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * You may override this method if your pass relies on the depth information
+	 * of a preceding {@link RenderPass}.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Number} [depthPacking=0] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = 0) {}
+
+	/**
 	 * Renders the effect.
 	 *
 	 * This is an abstract method that must be overridden.

@@ -8,7 +8,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
+import { ClearMaskPass, MaskPass, RenderPass, ShaderPass } from "../passes";
 import { CopyMaterial } from "../materials";
 
 /**
@@ -104,46 +104,6 @@ export class EffectComposer {
 	}
 
 	/**
-	 * The depth texture of the input and output buffers.
-	 *
-	 * @type {DepthTexture}
-	 */
-
-	get depthTexture() {
-
-		return this.inputBuffer.depthTexture;
-
-	}
-
-	/**
-	 * The input and output buffers share a single depth texture. Depth will be
-	 * written to this texture when something is rendered into one of the buffers
-	 * and the involved materials have depth write enabled.
-	 *
-	 * Under normal circumstances, only the {@link RenderPass} will render depth.
-	 *
-	 * You may enable this mechanism during the instantiation of the composer or
-	 * by assigning a `DepthTexture` instance later on. You may also disable it by
-	 * assigning `null`.
-	 *
-	 * @type {DepthTexture}
-	 */
-
-	set depthTexture(value) {
-
-		if(value !== null && this.inputBuffer.stencilBuffer) {
-
-			value.format = DepthStencilFormat;
-			value.type = UnsignedInt248Type;
-
-		}
-
-		this.inputBuffer.depthTexture = value;
-		this.outputBuffer.depthTexture = value;
-
-	}
-
-	/**
 	 * Replaces the current renderer with the given one. The DOM element of the
 	 * current renderer will automatically be removed from its parent node and the
 	 * DOM element of the new renderer will take its place.
@@ -185,6 +145,74 @@ export class EffectComposer {
 		}
 
 		return oldRenderer;
+
+	}
+
+	/**
+	 * Retrieves the most relevant depth texture for the pass at the given index.
+	 *
+	 * @param {Number} index - The index of the pass that needs a depth texture.
+	 * @private
+	 */
+
+	getDepthTexture(index) {
+
+		const passes = this.passes;
+
+		let depthTexture = null;
+		let inputBuffer = true;
+		let i, pass;
+
+		for(i = 0; i < index; ++i) {
+
+			pass = passes[i];
+
+			if(pass.needsSwap) {
+
+				inputBuffer = !inputBuffer;
+
+			} else if(pass instanceof RenderPass) {
+
+				depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
+
+			}
+
+		}
+
+		return depthTexture;
+
+	}
+
+	/**
+	 * Creates two depth texture attachments, one for the input buffer and one for
+	 * the output buffer.
+	 *
+	 * Depth will be written to the depth texture when something is rendered into
+	 * the respective render target and the involved materials have `depthWrite`
+	 * enabled. Under normal circumstances, only a {@link RenderPass} will render
+	 * depth.
+	 *
+	 * When a shader reads from a depth texture and writes to a render target that
+	 * uses the same depth texture attachment, the depth information will be lost.
+	 * This happens even if `depthWrite` is disabled. For that reason, two
+	 * separate depth textures are used.
+	 *
+	 * @private
+	 */
+
+	createDepthTexture() {
+
+		const depthTexture = new DepthTexture();
+
+		if(this.inputBuffer.stencilBuffer) {
+
+			depthTexture.format = DepthStencilFormat;
+			depthTexture.type = UnsignedInt248Type;
+
+		}
+
+		this.inputBuffer.depthTexture = depthTexture;
+		this.outputBuffer.depthTexture = depthTexture.clone();
 
 	}
 
@@ -241,13 +269,19 @@ export class EffectComposer {
 
 		} else {
 
-			this.passes.push(pass);
+			index = this.passes.push(pass) - 1;
 
 		}
 
-		if(pass.needsDepthTexture && this.depthTexture === null) {
+		if(pass.needsDepthTexture) {
 
-			this.depthTexture = new DepthTexture();
+			if(this.inputBuffer.depthTexture === null) {
+
+				this.createDepthTexture();
+
+			}
+
+			pass.setDepthTexture(this.getDepthTexture(index));
 
 		}
 

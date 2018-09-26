@@ -1,6 +1,5 @@
 uniform float focus;
 uniform float dof;
-uniform float aspect;
 uniform float aperture;
 uniform float maxBlur;
 

@@ -42,8 +42,8 @@ function prefixSubstrings(prefix, substrings, strings) {
 
 	for(const substring of substrings) {
 
-		prefixed = prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
-		regExp = new RegExp("\\b" + substring + "\\b", "g");
+		prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
+		regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
 
 		for(const entry of strings.entries()) {
 
@@ -54,25 +54,6 @@ function prefixSubstrings(prefix, substrings, strings) {
 			}
 
 		}
-
-	}
-
-}
-
-/**
- * Prefixes variables.
- *
- * @private
- * @param {String} prefix - A prefix.
- * @param {Map} input - An input map of variables. The values of this map will be copied to the output map using prefixed keys.
- * @param {Map} output - An output map.
- */
-
-function prefixVariables(prefix, input, output) {
-
-	for(const entry of input.entries()) {
-
-		output.set(prefix + entry[0].charAt(0).toUpperCase() + entry[0].slice(1), entry[1]);
 
 	}
 
@@ -115,9 +96,9 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		console.error("Missing fragment shader", effect);
 
-	} else if(mainUvExists && ((attributes & EffectAttribute.ANTIALIASING) !== 0)) {
+	} else if(mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-		console.error("Effects that transform UV coordinates are incompatible with antialiasing effects", effect);
+		console.error("Effects that transform UV coordinates are incompatible with convolution effects", effect);
 
 	} else if(!mainImageExists && !mainUvExists) {
 
@@ -149,8 +130,8 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 			.concat(Array.from(effect.defines.keys()));
 
 		// Store prefixed uniforms and macros.
-		prefixVariables(prefix, effect.uniforms, uniforms);
-		prefixVariables(prefix, effect.defines, defines);
+		effect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
+		effect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
 
 		// Prefix varyings, functions, uniforms and macros.
 		prefixSubstrings(prefix, names, defines);
@@ -161,7 +142,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(mainImageExists) {
 
-			let string = prefix + "MainImage(color0, ";
+			let string = prefix + "MainImage(color0, UV, ";
 
 			if((effect.attributes & EffectAttribute.DEPTH) !== 0) {
 
@@ -169,21 +150,21 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 			}
 
-			string += "UV, color1);\n\t";
+			string += "color1);\n\t";
 
 			// Include the blend opacity uniform of this effect.
 			const blendOpacity = prefix + "BlendOpacity";
 			uniforms.set(blendOpacity, blendMode.opacity);
 
 			// Blend the result of this effect with the input color.
-			string += "color0 = vec4(blend" + blendMode.blendFunction +
-				"(color0.rgb, color1.rgb, " + blendOpacity + "), color1.a);\n\n\t";
+			string += "color0 = blend" + blendMode.blendFunction +
+				"(color0, color1, " + blendOpacity + ");\n\n\t";
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE,
 				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				"uniform float " + blendOpacity + ";\n");
+				"uniform float " + blendOpacity + ";\n\n");
 
 		}
 
@@ -235,7 +216,7 @@ export class EffectPass extends Pass {
 		this.mainCamera = camera;
 
 		/**
-		 * The effects, sorted by type priority, DESC.
+		 * The effects, sorted by attribute priority, DESC.
 		 *
 		 * @type {Effect[]}
 		 * @private
@@ -256,6 +237,7 @@ export class EffectPass extends Pass {
 		 * The amount of shader uniforms that this pass uses.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.uniforms = 0;
@@ -264,9 +246,30 @@ export class EffectPass extends Pass {
 		 * The amount of shader varyings that this pass uses.
 		 *
 		 * @type {Number}
+		 * @private
 		 */
 
 		this.varyings = 0;
+
+		/**
+		 * A time offset.
+		 *
+		 * Elapsed time will start at this value.
+		 *
+		 * @type {Number}
+		 */
+
+		this.minTime = 1.0;
+
+		/**
+		 * The maximum time.
+		 *
+		 * If the elapsed time exceeds this value, it will be reset.
+		 *
+		 * @type {Number}
+		 */
+
+		this.maxTime = 1e3;
 
 		this.setFullscreenMaterial(this.createMaterial());
 
@@ -322,6 +325,8 @@ export class EffectPass extends Pass {
 
 	createMaterial() {
 
+		const blendRegExp = /\bblend\b/g;
+
 		const shaderParts = new Map([
 			[Section.FRAGMENT_HEAD, ""],
 			[Section.FRAGMENT_MAIN_UV, ""],
@@ -340,14 +345,22 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			attributes |= effect.attributes;
-
 			if(effect.blendMode.blendFunction !== BlendFunction.SKIP) {
 
-				result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+				if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-				varyings += result.varyings.length;
-				transformedUv = transformedUv || result.transformedUv;
+					console.error("Convolution effects cannot be merged", effect);
+
+				} else {
+
+					attributes |= effect.attributes;
+
+					result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+
+					varyings += result.varyings.length;
+					transformedUv = transformedUv || result.transformedUv;
+
+				}
 
 			}
 
@@ -357,11 +370,11 @@ export class EffectPass extends Pass {
 		for(const blendMode of blendModes.values()) {
 
 			shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +
-				blendMode.getShaderCode().replace("blend", "blend" + blendMode.blendFunction));
+				blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
 
 		}
 
-		// Check if any of the effects relies on depth.
+		// Check if any effect relies on depth.
 		if((attributes & EffectAttribute.DEPTH) !== 0) {
 
 			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" +
@@ -371,10 +384,10 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Check if any of the effects transforms UVs in the fragment shader.
+		// Check if any effect transforms UVs in the fragment shader.
 		if(transformedUv) {
 
-			shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n\t" +
+			shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" +
 				shaderParts.get(Section.FRAGMENT_MAIN_UV));
 
 			defines.set("UV", "transformedUv");
@@ -404,11 +417,15 @@ export class EffectPass extends Pass {
 
 		let material = this.getFullscreenMaterial();
 		let width = 0, height = 0;
+		let depthTexture = null;
+		let depthPacking = 0;
 
 		if(material !== null) {
 
 			const resolution = material.uniforms.resolution.value;
 			width = resolution.x; height = resolution.y;
+			depthTexture = material.uniforms.depthBuffer.value;
+			depthPacking = material.depthPacking;
 			material.dispose();
 
 			this.uniforms = 0;
@@ -419,6 +436,40 @@ export class EffectPass extends Pass {
 		material = this.createMaterial();
 		material.setResolution(width, height);
 		this.setFullscreenMaterial(material);
+		this.setDepthTexture(depthTexture, depthPacking);
+
+	}
+
+	/**
+	 * Returns the current depth texture.
+	 *
+	 * @return {Texture} The current depth texture, or null if there is none.
+	 */
+
+	getDepthTexture() {
+
+		const material = this.getFullscreenMaterial();
+
+		return (material !== null) ? material.uniforms.depthBuffer.value : null;
+
+	}
+
+	/**
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Number} [depthPacking=0] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = 0) {
+
+		const material = this.getFullscreenMaterial();
+
+		material.uniforms.depthBuffer.value = depthTexture;
+		material.depthPacking = depthPacking;
+		material.needsUpdate = true;
+
+		this.needsDepthTexture = (depthTexture === null);
 
 	}
 
@@ -435,6 +486,7 @@ export class EffectPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
 		const material = this.getFullscreenMaterial();
+		const time = material.uniforms.time.value + delta;
 
 		for(const effect of this.effects) {
 
@@ -443,10 +495,7 @@ export class EffectPass extends Pass {
 		}
 
 		material.uniforms.inputBuffer.value = inputBuffer.texture;
-		material.uniforms.depthBuffer.value = inputBuffer.depthTexture;
-
-		material.uniforms.time.value += delta;
-
+		material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
 		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
 
 	}

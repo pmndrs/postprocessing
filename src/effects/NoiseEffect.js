@@ -13,46 +13,46 @@ export class NoiseEffect extends Effect {
 	 * Constructs a new noise effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Boolean} [options.snow=false] - Enables white noise. Works best with `BlendFunction.ADD`.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
+	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input color.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.MULTIPLY,
-			snow: false
+			blendFunction: BlendFunction.SCREEN,
+			premultiply: false
 		}, options);
 
 		super("NoiseEffect", fragment, { blendFunction: settings.blendFunction });
 
-		this.snow = settings.snow;
+		this.premultiply = settings.premultiply;
 
 	}
 
 	/**
-	 * Indicates whether white noise is enabled.
+	 * Indicates whether the noise should be multiplied with the input color.
 	 *
 	 * @type {Boolean}
 	 */
 
-	get snow() {
+	get premultiply() {
 
-		return this.defines.has("SNOW");
+		return this.defines.has("PREMULTIPLY");
 
 	}
 
 	/**
-	 * Enables or disables white noise.
+	 * Enables or disables noise premultiplication.
 	 *
 	 * You'll need to call {@link EffectPass#recompile} after changing this value.
 	 *
 	 * @type {Boolean}
 	 */
 
-	set snow(value) {
+	set premultiply(value) {
 
-		value ? this.defines.set("SNOW", "1") : this.defines.delete("SNOW");
+		value ? this.defines.set("PREMULTIPLY", "1") : this.defines.delete("PREMULTIPLY");
 
 	}
 

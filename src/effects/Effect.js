@@ -235,15 +235,13 @@ export class Effect {
  *     const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  *
  * @type {Object}
- * @property {Number} ANTIALIASING - Describes antialiasing effects. There should be no more than one effect with this attribute per EffectPass.
- * @property {Number} CONVOLUTION - Describes blur effects that run before basic effects.
- * @property {Number} DEPTH - Describes depth effects which require a depth texture.
+ * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
+ * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
  */
 
 export const EffectAttribute = {
 
-	ANTIALIASING: 4,
 	CONVOLUTION: 2,
 	DEPTH: 1,
 	NONE: 0

@@ -4,6 +4,7 @@
  * @type {Object}
  * @property {Number} SKIP - No blending. The effect will not be included in the final shader.
  * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.
+ * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color. Opacity will be ignored.
  * @property {Number} AVERAGE - Average blending.
  * @property {Number} COLOR_BURN - Color dodge.
  * @property {Number} COLOR_DODGE - Color burn.
@@ -25,20 +26,21 @@ export const BlendFunction = {
 
 	SKIP: 0,
 	ADD: 1,
-	AVERAGE: 2,
-	COLOR_BURN: 3,
-	COLOR_DODGE: 4,
-	DARKEN: 5,
-	DIFFERENCE: 6,
-	EXCLUSION: 7,
-	LIGHTEN: 8,
-	MULTIPLY: 9,
-	NEGATION: 10,
-	NORMAL: 11,
-	OVERLAY: 12,
-	REFLECT: 13,
-	SCREEN: 14,
-	SOFT_LIGHT: 15,
-	SUBTRACT: 16
+	ALPHA: 2,
+	AVERAGE: 3,
+	COLOR_BURN: 4,
+	COLOR_DODGE: 5,
+	DARKEN: 6,
+	DIFFERENCE: 7,
+	EXCLUSION: 8,
+	LIGHTEN: 9,
+	MULTIPLY: 10,
+	NEGATION: 11,
+	NORMAL: 12,
+	OVERLAY: 13,
+	REFLECT: 14,
+	SCREEN: 15,
+	SOFT_LIGHT: 16,
+	SUBTRACT: 17
 
 };

@@ -18,7 +18,6 @@ export class TextureEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Texture} [options.texture] - A texture.
 	 * @param {Boolean} [options.aspectCorrection=false] - Whether the texture coordinates should be affected by the aspect ratio.
-	 * @param {Number} [options.scale=1.0] - The texture scale. Has no effect if aspect correction is disabled.
 	 */
 
 	constructor(options = {}) {
@@ -26,8 +25,7 @@ export class TextureEffect extends Effect {
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
 			texture: null,
-			aspectCorrection: false,
-			scale: 1.0
+			aspectCorrection: false
 		}, options);
 
 		super("TextureEffect", fragment, {
@@ -40,11 +38,45 @@ export class TextureEffect extends Effect {
 
 		});
 
-		if(settings.aspectCorrection) {
+		this.aspectCorrection = settings.aspectCorrection;
+
+	}
+
+	/**
+	 * Indicates whether aspect correction is enabled.
+	 *
+	 * If enabled, the texture can be scaled using the `scale` uniform.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get aspectCorrection() {
+
+		return this.defines.has("ASPECT_CORRECTION");
+
+	}
+
+	/**
+	 * Enables or disables aspect correction.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set aspectCorrection(value) {
+
+		if(value) {
 
 			this.defines.set("ASPECT_CORRECTION", "1");
-			this.uniforms.set("scale", new Uniform(settings.scale));
+			this.uniforms.set("scale", new Uniform(1.0));
 			this.vertexShader = vertex;
+
+		} else {
+
+			this.defines.delete("ASPECT_CORRECTION");
+			this.uniforms.delete("scale");
+			this.vertexShader = null;
 
 		}
 

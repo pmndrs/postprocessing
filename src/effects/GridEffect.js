@@ -14,19 +14,17 @@ export class GridEffect extends Effect {
 	 * Constructs a new grid effect.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.OVERLAY] - The blend function of this effect.
 	 * @param {Number} [options.scale=1.0] - The scale of the grid pattern.
 	 * @param {Number} [options.lineWidth=0.0] - The line width of the grid pattern.
-	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
 	 */
 
 	constructor(options = {}) {
 
 		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
+			blendFunction: BlendFunction.OVERLAY,
 			scale: 1.0,
-			lineWidth: 0.0,
-			intensity: 1.0
+			lineWidth: 0.0
 		}, options);
 
 		super("GridEffect", fragment, {
@@ -35,8 +33,7 @@ export class GridEffect extends Effect {
 
 			uniforms: new Map([
 				["scale", new Uniform(new Vector2())],
-				["lineWidth", new Uniform(settings.lineWidth)],
-				["intensity", new Uniform(settings.intensity)]
+				["lineWidth", new Uniform(settings.lineWidth)]
 			])
 
 		});

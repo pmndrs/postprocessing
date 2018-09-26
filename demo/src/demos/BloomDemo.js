@@ -14,7 +14,14 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BloomPass, KernelSize, TexturePass } from "../../../src";
+
+import {
+	BlendFunction,
+	BloomEffect,
+	EffectPass,
+	KernelSize,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A bloom demo setup.
@@ -33,22 +40,22 @@ export class BloomDemo extends PostProcessingDemo {
 		super("bloom", composer);
 
 		/**
-		 * A bloom pass.
+		 * An effect.
 		 *
-		 * @type {BloomPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.bloomPass = null;
+		this.effect = null;
 
 		/**
-		 * A texture pass.
+		 * A pass.
 		 *
-		 * @type {TexturePass}
+		 * @type {Pass}
 		 * @private
 		 */
 
-		this.texturePass = null;
+		this.pass = null;
 
 		/**
 		 * An object.
@@ -101,6 +108,29 @@ export class BloomDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -227,24 +257,25 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		this.renderPass.renderToScreen = false;
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.065);
 
-		const bloomPass = new BloomPass({
+		const bloomEffect = new BloomEffect({
+			blendFunction: BlendFunction.SCREEN,
 			resolutionScale: 0.5,
-			intensity: 2.0,
 			distinction: 4.0
 		});
 
-		bloomPass.renderToScreen = true;
-		this.bloomPass = bloomPass;
-		composer.addPass(bloomPass);
+		bloomEffect.blendMode.opacity.value = 2.1;
+		this.effect = bloomEffect;
 
-		const texturePass = new TexturePass(bloomPass.overlay);
-		texturePass.renderToScreen = true;
-		texturePass.enabled = false;
-		texturePass.opacityDestination = 0.0;
-		this.texturePass = texturePass;
-		composer.addPass(texturePass);
+		const pass = new EffectPass(camera, smaaEffect, bloomEffect);
+		this.pass = pass;
+
+		this.renderPass.renderToScreen = false;
+		pass.renderToScreen = true;
+
+		composer.addPass(pass);
 
 	}
 
@@ -286,51 +317,47 @@ export class BloomDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.bloomPass;
-		const texturePass = this.texturePass;
+		const pass = this.pass;
+		const effect = this.effect;
+		const blendMode = effect.blendMode;
 
 		const params = {
-			"resolution": pass.getResolutionScale(),
-			"kernel size": pass.kernelSize,
-			"blend mode": "screen"
+			"resolution": effect.getResolutionScale(),
+			"kernel size": effect.kernelSize,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
 
-			pass.setResolutionScale(params.resolution);
-
-		});
-
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
-
-			pass.kernelSize = params["kernel size"];
+			effect.setResolutionScale(params.resolution);
 
 		});
 
-		menu.add(pass, "intensity").min(0.0).max(4.0).step(0.01).onChange(() => {
+		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			texturePass.opacitySource = pass.intensity;
+			effect.kernelSize = Number.parseInt(params["kernel size"]);
 
 		});
 
 		const folder = menu.addFolder("Luminance");
-		folder.add(pass, "distinction").min(1.0).max(10.0).step(0.1);
+		folder.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
 		folder.open();
 
-		menu.add(pass, "blend").onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(() => {
 
-			pass.renderToScreen = pass.blend;
-			texturePass.enabled = !pass.blend;
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 
-		menu.add(pass, "dithering");
-
-		menu.add(params, "blend mode", ["add", "screen"]).onChange(() => {
-
-			pass.combineMaterial.setScreenModeEnabled((params["blend mode"] !== "add"));
-
-		});
+		menu.add(effect, "dithering");
 
 	}
 

@@ -1,4 +1,5 @@
 uniform float patternScale;
+
 varying vec2 vUvPattern;
 
 void mainSupport() {

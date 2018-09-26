@@ -2,6 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./BlendFunction.js";
 
 import addBlendFunction from "./glsl/add/shader.frag";
+import alphaBlendFunction from "./glsl/alpha/shader.frag";
 import averageBlendFunction from "./glsl/average/shader.frag";
 import colorBurnBlendFunction from "./glsl/color-burn/shader.frag";
 import colorDodgeBlendFunction from "./glsl/color-dodge/shader.frag";
@@ -28,6 +29,7 @@ import subtractBlendFunction from "./glsl/subtract/shader.frag";
 const blendFunctions = new Map([
 	[BlendFunction.SKIP, null],
 	[BlendFunction.ADD, addBlendFunction],
+	[BlendFunction.ALPHA, alphaBlendFunction],
 	[BlendFunction.AVERAGE, averageBlendFunction],
 	[BlendFunction.COLOR_BURN, colorBurnBlendFunction],
 	[BlendFunction.COLOR_DODGE, colorDodgeBlendFunction],

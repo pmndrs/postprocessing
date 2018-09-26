@@ -12,7 +12,14 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { DotScreenPass } from "../../../src";
+
+import {
+	BlendFunction,
+	ColorAverageEffect,
+	DotScreenEffect,
+	EffectPass,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A dot screen demo setup.
@@ -31,13 +38,31 @@ export class DotScreenDemo extends PostProcessingDemo {
 		super("dot-screen", composer);
 
 		/**
-		 * A dot screen pass.
+		 * A dot-screen effect.
 		 *
-		 * @type {DotScreenPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.dotScreenPass = null;
+		this.dotScreenEffect = null;
+
+		/**
+		 * A color average effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.colorAverageEffect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 		/**
 		 * An object.
@@ -90,6 +115,29 @@ export class DotScreenDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -177,15 +225,25 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new DotScreenPass({
-			scale: 0.8,
-			angle: Math.PI * 0.5,
-			intensity: 0.25
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const colorAverageEffect = new ColorAverageEffect();
+		const dotScreenEffect = new DotScreenEffect({
+			blendFunction: BlendFunction.OVERLAY,
+			scale: 1.0,
+			angle: Math.PI * 0.58
 		});
+
+		dotScreenEffect.blendMode.opacity.value = 0.21;
+
+		const pass = new EffectPass(camera, smaaEffect, dotScreenEffect, colorAverageEffect);
+
+		this.dotScreenEffect = dotScreenEffect;
+		this.colorAverageEffect = colorAverageEffect;
+		this.pass = pass;
 
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		this.dotScreenPass = pass;
+
 		composer.addPass(pass);
 
 	}
@@ -228,52 +286,58 @@ export class DotScreenDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const material = this.dotScreenPass.getFullscreenMaterial();
+		const pass = this.pass;
+		const dotScreenEffect = this.dotScreenEffect;
+		const colorAverageEffect = this.colorAverageEffect;
 
 		const params = {
-			"average": material.defines.AVERAGE !== undefined,
-			"scale": material.uniforms.scale.value,
-			"angle": material.uniforms.angle.value,
-			"intensity": material.uniforms.intensity.value,
-			"center X": material.uniforms.offsetRepeat.value.x,
-			"center Y": material.uniforms.offsetRepeat.value.y
+			"angle": Math.PI * 0.58,
+			"scale": dotScreenEffect.uniforms.get("scale").value,
+			"opacity": dotScreenEffect.blendMode.opacity.value,
+			"blend mode": dotScreenEffect.blendMode.blendFunction,
+			"colorAverage": {
+				"opacity": colorAverageEffect.blendMode.opacity.value,
+				"blend mode": colorAverageEffect.blendMode.blendFunction
+			}
 		};
 
-		menu.add(params, "average").onChange(() => {
+		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
 
-			material.setAverageEnabled(params.average);
+			dotScreenEffect.setAngle(params.angle);
 
 		});
 
 		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			material.uniforms.scale.value = params.scale;
+			dotScreenEffect.uniforms.get("scale").value = params.scale;
 
 		});
 
-		menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			material.uniforms.angle.value = params.angle;
-
-		});
-
-		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.intensity.value = params.intensity;
+			dotScreenEffect.blendMode.opacity.value = params.opacity;
 
 		});
 
-		const f = menu.addFolder("Center");
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-		f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.offsetRepeat.value.x = params["center X"];
+			dotScreenEffect.blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 
-		f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(() => {
+		const folder = menu.addFolder("Color Average");
 
-			material.uniforms.offsetRepeat.value.y = params["center Y"];
+		folder.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
+
+		});
+
+		folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(() => {
+
+			colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
+			pass.recompile();
 
 		});
 
