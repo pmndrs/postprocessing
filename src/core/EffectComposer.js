@@ -151,8 +151,9 @@ export class EffectComposer {
 	/**
 	 * Retrieves the most relevant depth texture for the pass at the given index.
 	 *
-	 * @param {Number} index - The index of the pass that needs a depth texture.
 	 * @private
+	 * @param {Number} index - The index of the pass that needs a depth texture.
+	 * @return {DepthTexture} The depth texture, or null if there is none.
 	 */
 
 	getDepthTexture(index) {

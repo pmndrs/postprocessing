@@ -10,9 +10,6 @@ void mainUv(inout vec2 uv) {
 
 	if(active) {
 
-		float xs = floor(gl_FragCoord.x * 2.0);
-		float ys = floor(gl_FragCoord.y * 2.0);
-
 		vec4 normal = texture2D(perturbationMap, uv * random * random);
 
 		if(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {

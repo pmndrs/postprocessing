@@ -42,7 +42,7 @@ export class ChromaticAberrationEffect extends Effect {
 	}
 
 	/**
-	 * The color offset for red and blue.
+	 * The color offset.
 	 *
 	 * @type {Vector2}
 	 */
