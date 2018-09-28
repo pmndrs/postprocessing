@@ -235,7 +235,7 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		const glitchEffect = new GlitchEffect({
 			perturbationMap: assets.get("perturbation-map"),
-			chromaticAberrationEffect: chromaticAberrationEffect
+			chromaticAberrationOffset: chromaticAberrationEffect.offset
 		});
 
 		const noiseEffect = new NoiseEffect({
@@ -300,10 +300,16 @@ export class GlitchDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const perturbationMap = effect.getPerturbationMap();
 		const uniforms = effect.uniforms;
+		const delay = effect.delay;
+		const duration = effect.duration;
 
 		const params = {
 			"glitch mode": effect.mode,
 			"custom pattern": true,
+			"min delay": delay.x,
+			"max delay": delay.y,
+			"min duration": duration.x,
+			"max duration": duration.y,
 			"columns": uniforms.get("columns").value
 		};
 
@@ -324,6 +330,30 @@ export class GlitchDemo extends PostProcessingDemo {
 				effect.setPerturbationMap(effect.generatePerturbationMap(64));
 
 			}
+
+		});
+
+		menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange(() => {
+
+			delay.x = params["min delay"];
+
+		});
+
+		menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange(() => {
+
+			delay.y = params["max delay"];
+
+		});
+
+		menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange(() => {
+
+			duration.x = params["min duration"];
+
+		});
+
+		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange(() => {
+
+			duration.y = params["max duration"];
 
 		});
 
