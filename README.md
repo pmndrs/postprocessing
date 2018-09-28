@@ -51,7 +51,7 @@ const clock = new Clock();
 
 ## Performance
 
-This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine a lot of effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of [built-in functions](https://github.com/vanruesc/postprocessing/blob/master/src/effects/blending/BlendFunction.js).
+This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of [built-in functions](https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction).
 
 
 ## Included Effects
