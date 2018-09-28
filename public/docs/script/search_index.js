@@ -763,13 +763,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#distinction",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-distinction",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-distinction",
     "src/effects/BloomEffect.js~BloomEffect#distinction",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#distinction",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-distinction",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-distinction",
     "src/effects/BloomEffect.js~BloomEffect#distinction",
     "member"
   ],
@@ -925,13 +925,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/deptheffect.js~deptheffect#inverted",
-    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-get-inverted",
+    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-set-inverted",
     "src/effects/DepthEffect.js~DepthEffect#inverted",
     "member"
   ],
   [
     "src/effects/deptheffect.js~deptheffect#inverted",
-    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-set-inverted",
+    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-get-inverted",
     "src/effects/DepthEffect.js~DepthEffect#inverted",
     "member"
   ],
@@ -1068,15 +1068,33 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/glitcheffect.js~glitcheffect#chromaticaberrationoffset",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-chromaticAberrationOffset",
+    "src/effects/GlitchEffect.js~GlitchEffect#chromaticAberrationOffset",
+    "member"
+  ],
+  [
     "src/effects/glitcheffect.js~glitcheffect#constructor",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-constructor-constructor",
     "src/effects/GlitchEffect.js~GlitchEffect#constructor",
     "method"
   ],
   [
-    "src/effects/glitcheffect.js~glitcheffect#counter",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-counter",
-    "src/effects/GlitchEffect.js~GlitchEffect#counter",
+    "src/effects/glitcheffect.js~glitcheffect#delay",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-delay",
+    "src/effects/GlitchEffect.js~GlitchEffect#delay",
+    "member"
+  ],
+  [
+    "src/effects/glitcheffect.js~glitcheffect#distortion",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-distortion",
+    "src/effects/GlitchEffect.js~GlitchEffect#distortion",
+    "member"
+  ],
+  [
+    "src/effects/glitcheffect.js~glitcheffect#duration",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-duration",
+    "src/effects/GlitchEffect.js~GlitchEffect#duration",
     "member"
   ],
   [
@@ -1098,15 +1116,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/glitcheffect.js~glitcheffect#offset",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-offset",
-    "src/effects/GlitchEffect.js~GlitchEffect#offset",
-    "member"
-  ],
-  [
     "src/effects/glitcheffect.js~glitcheffect#perturbationmap",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-perturbationMap",
     "src/effects/GlitchEffect.js~GlitchEffect#perturbationMap",
+    "member"
+  ],
+  [
+    "src/effects/glitcheffect.js~glitcheffect#seed",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-seed",
+    "src/effects/GlitchEffect.js~GlitchEffect#seed",
     "member"
   ],
   [
@@ -1114,6 +1132,12 @@ window.esdocSearchIndex = [
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-method-setPerturbationMap",
     "src/effects/GlitchEffect.js~GlitchEffect#setPerturbationMap",
     "method"
+  ],
+  [
+    "src/effects/glitcheffect.js~glitcheffect#time",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-time",
+    "src/effects/GlitchEffect.js~GlitchEffect#time",
+    "member"
   ],
   [
     "src/effects/glitcheffect.js~glitcheffect#update",
@@ -1255,13 +1279,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
@@ -1393,13 +1417,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/noiseeffect.js~noiseeffect#premultiply",
-    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-get-premultiply",
+    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-set-premultiply",
     "src/effects/NoiseEffect.js~NoiseEffect#premultiply",
     "member"
   ],
   [
     "src/effects/noiseeffect.js~noiseeffect#premultiply",
-    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-set-premultiply",
+    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-get-premultiply",
     "src/effects/NoiseEffect.js~NoiseEffect#premultiply",
     "member"
   ],
@@ -1411,13 +1435,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
@@ -1627,13 +1651,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#xray",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-xRay",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-xRay",
     "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#xray",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-xRay",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-xRay",
     "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "member"
   ],
@@ -1717,13 +1741,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#rings",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-rings",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-rings",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#rings",
     "member"
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#rings",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-rings",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-rings",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#rings",
     "member"
   ],
@@ -1951,13 +1975,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/textureeffect.js~textureeffect#aspectcorrection",
-    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-aspectCorrection",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-aspectCorrection",
     "src/effects/TextureEffect.js~TextureEffect#aspectCorrection",
     "member"
   ],
   [
     "src/effects/textureeffect.js~textureeffect#aspectcorrection",
-    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-aspectCorrection",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-aspectCorrection",
     "src/effects/TextureEffect.js~TextureEffect#aspectCorrection",
     "member"
   ],
@@ -1993,13 +2017,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#adaptive",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-adaptive",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-adaptive",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "member"
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#adaptive",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-adaptive",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-adaptive",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "member"
   ],
@@ -2017,13 +2041,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#distinction",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-distinction",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-distinction",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "member"
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#distinction",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-distinction",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-distinction",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "member"
   ],

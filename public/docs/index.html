@@ -98,17 +98,19 @@
 <h2 id="installation">Installation</h2><p>This library requires the peer dependency <a href="https://github.com/mrdoob/three.js/">three</a>.</p>
 <pre><code class="lang-sh"><code class="source-code prettyprint">npm install three postprocessing</code>
 </code></pre>
-<h2 id="usage">Usage</h2><p>Please refer to the <a href="https://github.com/mrdoob/three.js/blob/master/README.md">usage example</a> of three.js for information
-about how to setup the renderer, scene and camera.</p>
-<h4 id="basics">Basics</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from &quot;three&quot;;
-import { EffectComposer, GlitchPass, RenderPass } from &quot;postprocessing&quot;;
+<h2 id="usage">Usage</h2><p>Please refer to the <a href="https://github.com/mrdoob/three.js/blob/master/README.md">usage example</a> of three.js for information about how to setup the renderer, scene and camera.</p>
+<pre><code class="lang-javascript"><code class="source-code prettyprint">import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from &quot;three&quot;;
+import { BloomEffect, EffectComposer, EffectPass, RenderPass } from &quot;postprocessing&quot;;
 
 const composer = new EffectComposer(new WebGLRenderer());
-composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
+const camera = new PerspectiveCamera();
+const scene = new Scene();
 
-const pass = new GlitchPass();
-pass.renderToScreen = true;
-composer.addPass(pass);
+const effectPass = new EffectPass(camera, new BloomEffect());
+effectPass.renderToScreen = true;
+
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(effectPass);
 
 const clock = new Clock();
 
@@ -119,47 +121,36 @@ const clock = new Clock();
 
 }());</code>
 </code></pre>
-<h4 id="custom-passes">Custom Passes</h4><pre><code class="lang-javascript"><code class="source-code prettyprint">import { Pass } from &quot;postprocessing&quot;;
-import { MyMaterial } from &quot;./MyMaterial.js&quot;;
-
-export class MyPass extends Pass {
-
-    constructor() {
-
-        super(&quot;MyPass&quot;);
-
-        this.setFullscreenMaterial(new MyMaterial());
-
-    }
-
-    render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-
-        this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-
-    }
-
-}
-</code>
-</code></pre>
-<p>See the <a href="https://github.com/vanruesc/postprocessing/wiki/Custom-Passes">Wiki</a> for more information.</p>
-<h2 id="included-filters">Included Filters</h2><ul>
+<h2 id="performance">Performance</h2><p>This library provides an <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a> which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine a lot of effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of <a href="https://github.com/vanruesc/postprocessing/blob/master/src/effects/blending/BlendFunction.js">built-in functions</a>.</p>
+<h2 id="included-effects">Included Effects</h2><ul>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bloom">Bloom</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#blur">Blur</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bokeh">Bokeh</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh">Realistic Bokeh</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#depth">Depth</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bokeh">Bokeh</a> &amp; <a href="http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh">Realistic Bokeh</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-correction">Color Correction</a><ul>
+<li>Brightness &amp; Contrast</li>
+<li>Gamma Correction</li>
+<li>Hue &amp; Saturation</li>
+</ul>
+</li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#dot-screen">Dot Screen</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#film">Film</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a><ul>
+<li>Chromatic Aberration</li>
+<li>Noise</li>
+</ul>
+</li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#god-rays">God Rays</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#grid">Grid</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#outline">Outline</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#render">Render</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#scanline">Scanline</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#sepia">Sepia</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#shock-wave">Shock Wave</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#smaa">SMAA</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#texture">Texture</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping">Tone Mapping</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#vignette">Vignette</a></li>
 </ul>
+<h2 id="custom-effects">Custom Effects</h2><p>If you want to learn how to create custom effects or passes, please check the <a href="https://github.com/vanruesc/postprocessing/wiki">Wiki</a>.</p>
 <h2 id="contributing">Contributing</h2><p>Please refer to the <a href="https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md">contribution guidelines</a> for details.</p>
 <h2 id="license">License</h2><p>This library is licensed under the <a href="https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md">Zlib license</a>.</p>
 <p>The original code that this library is based on, was written by <a href="http://mrdoob.com">mrdoob</a> and the

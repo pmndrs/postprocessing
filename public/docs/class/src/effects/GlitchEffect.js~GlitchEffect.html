@@ -89,13 +89,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GlitchEffect} from &apos;<span><a href="file/src/effects/GlitchEffect.js.html#lineNumber63">postprocessing/src/effects/GlitchEffect.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GlitchEffect} from &apos;<span><a href="file/src/effects/GlitchEffect.js.html#lineNumber48">postprocessing/src/effects/GlitchEffect.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/GlitchEffect.js.html#lineNumber63">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/GlitchEffect.js.html#lineNumber48">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -116,7 +116,7 @@
   
   
   <div class="description" data-ice="description"><p>A glitch effect.</p>
-<p>Thie effect can be paired with the <span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span>.</p>
+<p>Thie effect can influence the <span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span>.</p>
 <p>Reference: <a href="https://github.com/staffantan/unityglitch">https://github.com/staffantan/unityglitch</a></p>
 <p>Warning: This effect cannot be merged with convolution effects.</p>
 </div>
@@ -216,6 +216,93 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-chromaticAberrationOffset">chromaticAberrationOffset</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The chromatic aberration offset.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-delay">delay</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The minimum and maximum delay between glitch activations in seconds.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-duration">duration</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The minimum and maximum duration of a glitch in seconds.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-mode">mode</a></span></span><span class="code" data-ice="signature">: <span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span>
         </p>
       </div>
@@ -257,7 +344,7 @@
       <div>
         
         
-        <div data-ice="description"><p>A random break point for the sporadic glitch activation.</p>
+        <div data-ice="description"><p>A random glitch break point.</p>
 </div>
       </div>
     </td>
@@ -280,42 +367,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-counter">counter</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-distortion">distortion</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A counter for the glitch activation and deactivation.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-offset">offset</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The color offset of the given <span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span>, or null.</p>
+        <div data-ice="description"><p>A distortion vector.</p>
 </div>
       </div>
     </td>
@@ -345,6 +403,64 @@
         
         
         <div data-ice="description"><p>The current perturbation map.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-seed">seed</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Random seeds.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-time">time</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A time accumulator.</p>
 </div>
       </div>
     </td>
@@ -852,7 +968,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -888,10 +1004,24 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.chromaticAberrationEffect</td>
-      <td data-ice="type" class="code"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></td>
+      <td data-ice="name" class="code" data-depth="1">options.chromaticAberrationOffset</td>
+      <td data-ice="type" class="code"><span>Vector2</span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>A chromatic aberration effect that should be influenced by this glitch effect.</p>
+      <td data-ice="description"><p>A chromatic aberration offset. If provided, the glitch effect will influence this offset.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.delay</td>
+      <td data-ice="type" class="code"><span>Vector2</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The minimum and maximum delay between glitch activations in seconds.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.duration</td>
+      <td data-ice="type" class="code"><span>Vector2</span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The minimum and maximum duration of a glitch in seconds.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -954,7 +1084,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber181">source</a></span></span>
     </span>
   </h3>
 
@@ -962,6 +1092,138 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Indicates whether the glitch effect is currently active.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-chromaticAberrationOffset">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">chromaticAberrationOffset</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber171">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The chromatic aberration offset.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-delay">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">delay</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber108">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The minimum and maximum delay between glitch activations in seconds.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-duration">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">duration</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber116">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The minimum and maximum duration of a glitch in seconds.</p>
 </div>
 
   
@@ -998,7 +1260,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber137">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber163">source</a></span></span>
     </span>
   </h3>
 
@@ -1044,14 +1306,14 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A random break point for the sporadic glitch activation.</p>
+  <div data-ice="description"><p>A random glitch break point.</p>
 </div>
 
   
@@ -1077,69 +1339,25 @@ deletes them.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-counter">
+  <h3 data-ice="anchor" id="instance-member-distortion">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">counter</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">distortion</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber155">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A counter for the glitch activation and deactivation.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-offset">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">offset</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber146">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The color offset of the given <span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span>, or null.</p>
+  <div data-ice="description"><p>A distortion vector.</p>
 </div>
 
   
@@ -1176,7 +1394,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber97">source</a></span></span>
     </span>
   </h3>
 
@@ -1184,6 +1402,94 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>The current perturbation map.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-seed">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">seed</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber146">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Random seeds.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-time">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">time</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber137">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A time accumulator.</p>
 </div>
 
   
@@ -1223,7 +1529,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber227">source</a></span></span>
     </span>
   </h3>
 
@@ -1298,7 +1604,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber177">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber193">source</a></span></span>
     </span>
   </h3>
 
@@ -1355,7 +1661,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber191">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -1417,7 +1723,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GlitchEffect.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 

@@ -97,39 +97,6 @@ import { BlendMode } from &quot;./blending/BlendMode.js&quot;;
  *
  * Effects can be combined using the {@link EffectPass}.
  *
- * Just like passes, effects may perform initialization tasks, react to render
- * size changes and execute supporting render operations if needed but they
- * don&apos;t have access to an output buffer and are not supposed to render to
- * screen by themselves. Every effect must provide a fragment shader that
- * implements at least `void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)`
- * or `void mainUv(const inout vec2 uv)`. If the effect relies on depth, it must
- * implement `void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor)`.
- * Effects may also provide a vertex shader that implements `void mainSupport()`.
- *
- * All shaders have access to the following uniforms:
- * ```
- * vec2 resolution
- * vec2 texelSize
- * float cameraNear
- * float cameraFar
- * float aspect
- * float time
- * ```
- *
- * The fragment shader has access to the following additional uniforms:
- * ```
- * sampler2D inputBuffer
- * sampler2D depthBuffer
- * ```
- *
- * Effects may define custom uniforms, varyings, functions and preprocessor
- * macros as usual, but should not define global variables or constants. If the
- * camera of the associated `EffectPass` is a `PerspectiveCamera`, the macro
- * `PERSPECTIVE_CAMERA` will be defined. Furthermore, the shader chunks
- * [common](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl)
- * and [packing](https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl)
- * are included in the fragment shader.
- *
  * @implements {Resizable}
  * @implements {Disposable}
  */
@@ -317,15 +284,14 @@ export class Effect {
 /**
  * An enumeration of effect attributes.
  *
- * Attributes can be concatenated using the bitwise OR operator:
- * ```
- * const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
- * ```
+ * Attributes can be concatenated using the bitwise OR operator.
  *
  * @type {Object}
  * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
  * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don&apos;t need to specify any attributes.
+ * @example
+ * const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  */
 
 export const EffectAttribute = {

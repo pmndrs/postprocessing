@@ -89,13 +89,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Effect} from &apos;<span><a href="file/src/effects/Effect.js.html#lineNumber46">postprocessing/src/effects/Effect.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Effect} from &apos;<span><a href="file/src/effects/Effect.js.html#lineNumber13">postprocessing/src/effects/Effect.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/Effect.js.html#lineNumber46">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/Effect.js.html#lineNumber13">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -117,31 +117,6 @@
   
   <div class="description" data-ice="description"><p>An abstract effect.</p>
 <p>Effects can be combined using the <span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span>.</p>
-<p>Just like passes, effects may perform initialization tasks, react to render
-size changes and execute supporting render operations if needed but they
-don&apos;t have access to an output buffer and are not supposed to render to
-screen by themselves. Every effect must provide a fragment shader that
-implements at least <code>void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)</code>
-or <code>void mainUv(const inout vec2 uv)</code>. If the effect relies on depth, it must
-implement <code>void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor)</code>.
-Effects may also provide a vertex shader that implements <code>void mainSupport()</code>.</p>
-<p>All shaders have access to the following uniforms:</p>
-<pre><code><code class="source-code prettyprint">vec2 resolution
-vec2 texelSize
-float cameraNear
-float cameraFar
-float aspect
-float time</code>
-</code></pre><p>The fragment shader has access to the following additional uniforms:</p>
-<pre><code><code class="source-code prettyprint">sampler2D inputBuffer
-sampler2D depthBuffer</code>
-</code></pre><p>Effects may define custom uniforms, varyings, functions and preprocessor
-macros as usual, but should not define global variables or constants. If the
-camera of the associated <code>EffectPass</code> is a <code>PerspectiveCamera</code>, the macro
-<code>PERSPECTIVE_CAMERA</code> will be defined. Furthermore, the shader chunks
-<a href="https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/common.glsl">common</a>
-and <a href="https://github.com/mrdoob/three.js/blob/dev/src/renderers/shaders/ShaderChunk/packing.glsl">packing</a>
-are included in the fragment shader.</p>
 </div>
   
 
@@ -573,7 +548,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber28">source</a></span></span>
     </span>
   </h3>
 
@@ -689,7 +664,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber216">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -732,7 +707,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber55">source</a></span></span>
     </span>
   </h3>
 
@@ -778,7 +753,7 @@ which they were registered. Some attributes imply a higher priority.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber140">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -827,7 +802,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
@@ -872,7 +847,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber96">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -916,7 +891,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber77">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -960,7 +935,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber92">source</a></span></span>
     </span>
   </h3>
 
@@ -1006,7 +981,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber71">source</a></span></span>
     </span>
   </h3>
 
@@ -1053,7 +1028,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber176">source</a></span></span>
     </span>
   </h3>
 
@@ -1106,7 +1081,7 @@ call this method directly.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -1188,7 +1163,7 @@ which happens after the size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber141">source</a></span></span>
     </span>
   </h3>
 
@@ -1267,7 +1242,7 @@ and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 

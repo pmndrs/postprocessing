@@ -1,5 +1,5 @@
 /**
- * postprocessing v4.10.0 build Wed Sep 26 2018
+ * postprocessing v5.0.0 build Fri Sep 28 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -1666,7 +1666,7 @@
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
         this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderTarget);
+        renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.renderTarget);
       }
     }, {
       key: "setSize",
@@ -2215,7 +2215,7 @@
 
       var settings = Object.assign({
         blendFunction: BlendFunction.NORMAL,
-        offset: new three.Vector2(0.01, 0.01)
+        offset: new three.Vector2(0.001, 0.0005)
       }, options);
       return _possibleConstructorReturn(this, _getPrototypeOf(ChromaticAberrationEffect).call(this, "ChromaticAberrationEffect", fragment$d, {
         attributes: EffectAttribute.CONVOLUTION,
@@ -2335,13 +2335,9 @@
     return GammaCorrectionEffect;
   }(Effect);
 
-  var fragment$h = "uniform sampler2D perturbationMap;\r\n\r\nuniform bool active;\r\nuniform float columns;\r\nuniform float random;\r\nuniform vec2 seed;\r\nuniform vec2 distortion;\r\n\r\nvoid mainUv(inout vec2 uv) {\r\n\r\n\tif(active) {\r\n\r\n\t\tfloat xs = floor(gl_FragCoord.x * 2.0);\r\n\t\tfloat ys = floor(gl_FragCoord.y * 2.0);\r\n\r\n\t\tvec4 normal = texture2D(perturbationMap, uv * random * random);\r\n\r\n\t\tif(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {\r\n\r\n\t\t\tfloat sx = clamp(ceil(seed.x), 0.0, 1.0);\r\n\t\t\tuv.y = sx * (1.0 - (uv.y + distortion.y)) + (1.0 - sx) * distortion.y;\r\n\r\n\t\t}\r\n\r\n\t\tif(uv.x < distortion.y + columns && uv.x > distortion.y - columns * random) {\r\n\r\n\t\t\tfloat sy = clamp(ceil(seed.y), 0.0, 1.0);\r\n\t\t\tuv.x = sy * distortion.x + (1.0 - sy) * (1.0 - (uv.x + distortion.x));\r\n\r\n\t\t}\r\n\r\n\t\tuv.x += normal.x * seed.x * (random * 0.2);\r\n\t\tuv.y += normal.y * seed.y * (random * 0.2);\r\n\r\n\t}\r\n\r\n}\r\n";
+  var fragment$h = "uniform sampler2D perturbationMap;\r\n\r\nuniform bool active;\r\nuniform float columns;\r\nuniform float random;\r\nuniform vec2 seed;\r\nuniform vec2 distortion;\r\n\r\nvoid mainUv(inout vec2 uv) {\r\n\r\n\tif(active) {\r\n\r\n\t\tvec4 normal = texture2D(perturbationMap, uv * random * random);\r\n\r\n\t\tif(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {\r\n\r\n\t\t\tfloat sx = clamp(ceil(seed.x), 0.0, 1.0);\r\n\t\t\tuv.y = sx * (1.0 - (uv.y + distortion.y)) + (1.0 - sx) * distortion.y;\r\n\r\n\t\t}\r\n\r\n\t\tif(uv.x < distortion.y + columns && uv.x > distortion.y - columns * random) {\r\n\r\n\t\t\tfloat sy = clamp(ceil(seed.y), 0.0, 1.0);\r\n\t\t\tuv.x = sy * distortion.x + (1.0 - sy) * (1.0 - (uv.x + distortion.x));\r\n\r\n\t\t}\r\n\r\n\t\tuv.x += normal.x * seed.x * (random * 0.2);\r\n\t\tuv.y += normal.y * seed.y * (random * 0.2);\r\n\r\n\t}\r\n\r\n}\r\n";
 
   var generatedTexture = "Glitch.Generated";
-
-  function randomInt(low, high) {
-    return low + Math.floor(Math.random() * (high - low + 1));
-  }
 
   function randomFloat(low, high) {
     return low + Math.random() * (high - low);
@@ -2359,10 +2355,12 @@
 
       var settings = Object.assign({
         blendFunction: BlendFunction.NORMAL,
-        chromaticAberrationEffect: null,
+        chromaticAberrationOffset: null,
+        delay: new three.Vector2(1.5, 3.5),
+        duration: new three.Vector2(0.6, 1.0),
+        columns: 0.05,
         perturbationMap: null,
-        dtSize: 64,
-        columns: 0.05
+        dtSize: 64
       }, options);
       _this = _possibleConstructorReturn(this, _getPrototypeOf(GlitchEffect).call(this, "GlitchEffect", fragment$h, {
         blendFunction: settings.blendFunction,
@@ -2373,17 +2371,14 @@
       _this.setPerturbationMap(settings.perturbationMap !== null ? settings.perturbationMap : _this.generatePerturbationMap(settings.dtSize));
 
       _this.perturbationMap.generateMipmaps = false;
-      _this.counter = 0;
-      _this.breakPoint = randomInt(120, 240);
+      _this.delay = settings.delay;
+      _this.duration = settings.duration;
+      _this.breakPoint = new three.Vector2(randomFloat(_this.delay.x, _this.delay.y), randomFloat(_this.duration.x, _this.duration.y));
+      _this.time = 0;
+      _this.seed = _this.uniforms.get("seed").value;
+      _this.distortion = _this.uniforms.get("distortion").value;
       _this.mode = GlitchMode.SPORADIC;
-      _this.offset = null;
-
-      if (settings.chromaticAberrationEffect !== null) {
-        var uniforms = settings.chromaticAberrationEffect.uniforms;
-        _this.offset = uniforms.get("offset").value;
-        uniforms.set("active", _this.uniforms.get("active"));
-      }
-
+      _this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
       return _this;
     }
 
@@ -2426,46 +2421,51 @@
       key: "update",
       value: function update(renderer, inputBuffer, delta) {
         var mode = this.mode;
-        var offset = this.offset;
-        var counter = this.counter;
         var breakPoint = this.breakPoint;
-        var uniforms = this.uniforms;
+        var offset = this.chromaticAberrationOffset;
+        var time = this.time;
         var active = false;
-
-        if (offset !== null) {
-          offset.set(0.0, 0.0);
-        }
+        var r = 0.0,
+            a = 0.0;
+        var trigger;
 
         if (mode !== GlitchMode.DISABLED) {
-          uniforms.get("random").value = Math.random();
+          time += delta;
+          trigger = time > breakPoint.x;
+          r = Math.random();
+          this.uniforms.get("random").value = r;
 
-          if (counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {
-            if (offset !== null) {
-              var angle = randomFloat(-Math.PI, Math.PI);
-              offset.set(Math.cos(angle), Math.sin(angle)).multiplyScalar(Math.random() / 30.0);
-            }
-
-            uniforms.get("seed").value.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
-            uniforms.get("distortion").value.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+          if (trigger && r > 0.85 || mode === GlitchMode.CONSTANT_WILD) {
             active = true;
-            this.breakPoint = randomInt(120, 240);
-            this.counter = 0;
-          } else if (counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {
-            if (offset !== null) {
-              var _angle = randomFloat(-Math.PI, Math.PI);
-
-              offset.set(Math.cos(_angle), Math.sin(_angle)).multiplyScalar(Math.random() / 90.0);
-            }
-
-            uniforms.get("seed").value.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
-            uniforms.get("distortion").value.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+            r /= 30.0;
+            a = randomFloat(-Math.PI, Math.PI);
+            this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+            this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+          } else if (trigger || mode === GlitchMode.CONSTANT_MILD) {
             active = true;
+            r /= 90.0;
+            a = randomFloat(-Math.PI, Math.PI);
+            this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+            this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
           }
 
-          ++this.counter;
+          if (time >= breakPoint.x + breakPoint.y) {
+            breakPoint.set(randomFloat(this.delay.x, this.delay.y), randomFloat(this.duration.x, this.duration.y));
+            time = 0;
+          }
+
+          this.time = time;
         }
 
-        uniforms.get("active").value = active;
+        if (offset !== null) {
+          if (active) {
+            offset.set(Math.cos(a), Math.sin(a)).multiplyScalar(r);
+          } else {
+            offset.set(0.0, 0.0);
+          }
+        }
+
+        this.uniforms.get("active").value = active;
       }
     }, {
       key: "active",
