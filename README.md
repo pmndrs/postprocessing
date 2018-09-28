@@ -49,9 +49,9 @@ const clock = new Clock();
 ```
 
 
-## Optimized Rendering Pipeline
+## Performance
 
-The `EffectPass` automatically organizes and merges any given combination of effects. After that, the `EffectPass` will have a single fragment shader and a single vertex shader which will be used to create a fullscreen `ShaderMaterial`. This minimizes the amount of render operations and makes it possible to combine a lot of effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of [built-in functions](https://github.com/vanruesc/postprocessing/blob/master/src/effects/blending/BlendFunction.js).
+This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine a lot of effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of [built-in functions](https://github.com/vanruesc/postprocessing/blob/master/src/effects/blending/BlendFunction.js).
 
 
 ## Included Effects

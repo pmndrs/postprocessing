@@ -23,7 +23,7 @@ export class ChromaticAberrationEffect extends Effect {
 
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
-			offset: new Vector2(0.01, 0.01)
+			offset: new Vector2(0.001, 0.0005)
 		}, options);
 
 		super("ChromaticAberrationEffect", fragment, {

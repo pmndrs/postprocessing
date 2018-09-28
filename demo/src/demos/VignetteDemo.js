@@ -220,14 +220,13 @@ export class VignetteDemo extends PostProcessingDemo {
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 		const vignetteEffect = new VignetteEffect({
 			eskil: false,
-			offset: 0.0,
-			darkness: 1.0
+			offset: 0.35,
+			darkness: 0.75
 		});
 
 		const pass = new EffectPass(camera, smaaEffect, vignetteEffect);
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		pass.dithering = true;
 
 		this.effect = vignetteEffect;
 		this.pass = pass;
