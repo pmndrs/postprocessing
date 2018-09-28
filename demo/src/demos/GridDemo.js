@@ -226,7 +226,6 @@ export class GridDemo extends PostProcessingDemo {
 		const pass = new EffectPass(camera, smaaEffect, gridEffect);
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		pass.dithering = true;
 
 		this.effect = gridEffect;
 		this.pass = pass;
