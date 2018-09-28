@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
+import { LinearFilter, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -11,7 +11,7 @@ export class SavePass extends Pass {
 	/**
 	 * Constructs a new save pass.
 	 *
-	 * @param {WebGLRenderTarget} [renderTarget] - The render target to use for saving the input buffer.
+	 * @param {WebGLRenderTarget} [renderTarget] - A render target.
 	 * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the input buffer.
 	 */
 
@@ -29,19 +29,24 @@ export class SavePass extends Pass {
 		 * @type {WebGLRenderTarget}
 		 */
 
-		this.renderTarget = (renderTarget !== undefined) ? renderTarget : new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
+		this.renderTarget = renderTarget;
 
-		this.renderTarget.texture.name = "Save.Target";
-		this.renderTarget.texture.generateMipmaps = false;
+		if(renderTarget === undefined) {
+
+			this.renderTarget = new WebGLRenderTarget(1, 1, {
+				minFilter: LinearFilter,
+				magFilter: LinearFilter,
+				stencilBuffer: false,
+				depthBuffer: false
+			});
+
+			this.renderTarget.texture.name = "SavePass.Target";
+			this.renderTarget.texture.generateMipmaps = false;
+
+		}
 
 		/**
-		 * Indicates whether the render target should be resized when the size of
-		 * the composer's frame buffer changes.
+		 * Indicates whether the render target should be resized automatically.
 		 *
 		 * @type {Boolean}
 		 */
@@ -62,9 +67,9 @@ export class SavePass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
 
-		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
+		this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderTarget);
+		renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.renderTarget);
 
 	}
 
@@ -83,23 +88,6 @@ export class SavePass extends Pass {
 			height = Math.max(1, height);
 
 			this.renderTarget.setSize(width, height);
-
-		}
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialize(renderer, alpha) {
-
-		if(!alpha) {
-
-			this.renderTarget.texture.format = RGBFormat;
 
 		}
 

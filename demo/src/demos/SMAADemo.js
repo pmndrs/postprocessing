@@ -16,7 +16,13 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { SMAAPass, TexturePass } from "../../../src";
+
+import {
+	BlendFunction,
+	EffectPass,
+	SMAAEffect,
+	TextureEffect
+} from "../../../src";
 
 /**
  * An SMAA demo setup.
@@ -62,22 +68,31 @@ export class SMAADemo extends PostProcessingDemo {
 		this.controls2 = null;
 
 		/**
-		 * An SMAA pass.
+		 * An SMAA effect.
 		 *
-		 * @type {SMAAPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.smaaPass = null;
+		this.smaaEffect = null;
 
 		/**
-		 * A texture pass.
+		 * A pass.
 		 *
-		 * @type {TexturePass}
+		 * @type {Pass}
 		 * @private
 		 */
 
-		this.texturePass = null;
+		this.pass = null;
+
+		/**
+		 * A texture effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.textureEffect = null;
 
 		/**
 		 * An object.
@@ -169,7 +184,7 @@ export class SMAADemo extends PostProcessingDemo {
 				});
 
 				loadingManager.itemStart("smaa-search");
-				image.src = SMAAPass.searchImageDataURL;
+				image.src = SMAAEffect.searchImageDataURL;
 
 				image = new Image();
 				image.addEventListener("load", function() {
@@ -180,7 +195,7 @@ export class SMAADemo extends PostProcessingDemo {
 				});
 
 				loadingManager.itemStart("smaa-area");
-				image.src = SMAAPass.areaImageDataURL;
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -337,17 +352,21 @@ export class SMAADemo extends PostProcessingDemo {
 
 		// Passes.
 
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+
+		const textureEffect = new TextureEffect({
+			blendFunction: BlendFunction.SKIP,
+			texture: smaaEffect.renderTargetColorEdges.texture
+		});
+
+		const pass = new EffectPass(camera, smaaEffect, textureEffect);
 		this.renderPass.renderToScreen = false;
-
-		let pass = new SMAAPass(assets.get("smaa-search"), assets.get("smaa-area"));
 		pass.renderToScreen = true;
-		this.smaaPass = pass;
-		composer.addPass(pass);
 
-		pass = new TexturePass(this.smaaPass.renderTargetColorEdges.texture, 1.0, false);
-		pass.renderToScreen = true;
-		pass.enabled = false;
-		this.texturePass = pass;
+		this.smaaEffect = smaaEffect;
+		this.textureEffect = textureEffect;
+		this.pass = pass;
+
 		composer.addPass(pass);
 
 	}
@@ -395,10 +414,12 @@ export class SMAADemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const pass = this.pass;
 		const composer = this.composer;
 		const renderPass = this.renderPass;
-		const smaaPass = this.smaaPass;
-		const texturePass = this.texturePass;
+		const smaaEffect = this.smaaEffect;
+		const textureEffect = this.textureEffect;
+		const blendMode = smaaEffect.blendMode;
 
 		const renderer1 = this.originalRenderer;
 		const renderer2 = this.rendererAA;
@@ -406,33 +427,26 @@ export class SMAADemo extends PostProcessingDemo {
 		const controls1 = this.controls;
 		const controls2 = this.controls2;
 
-		const SMAAMode = {
-			disabled: "disabled",
-			edges: "edges",
-			blend: "blend"
+		const AAMode = {
+			DISABLED: 0,
+			BROWSER: 1,
+			SMAA_EDGES: 2,
+			SMAA: 3
 		};
 
 		const params = {
-			"browser AA": false,
-			"SMAA": SMAAMode.blend,
-			"sensitivity": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD),
-			"search steps": Number.parseFloat(smaaPass.weightsMaterial.defines.MAX_SEARCH_STEPS_INT)
+			"AA mode": AAMode.SMAA,
+			"sensitivity": Number.parseFloat(smaaEffect.colorEdgesPass.getFullscreenMaterial().defines.EDGE_THRESHOLD),
+			"search steps": Number.parseFloat(smaaEffect.weightsPass.getFullscreenMaterial().defines.MAX_SEARCH_STEPS_INT),
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		function toggleSMAAMode() {
-
-			renderPass.renderToScreen = (params.SMAA === SMAAMode.disabled);
-			smaaPass.renderToScreen = (params.SMAA === SMAAMode.blend);
-			smaaPass.enabled = (params.SMAA !== SMAAMode.disabled);
-			texturePass.enabled = (params.SMAA === SMAAMode.edges);
-
-		}
-
-		function swapRenderers() {
+		function swapRenderers(browser) {
 
 			const size = composer.renderer.getSize();
 
-			if(params["browser AA"]) {
+			if(browser && composer.renderer !== renderer2) {
 
 				renderer2.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer2);
@@ -450,18 +464,42 @@ export class SMAADemo extends PostProcessingDemo {
 
 		}
 
-		menu.add(params, "browser AA").onChange(swapRenderers);
-		menu.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
+		function toggleAAMode() {
+
+			const mode = Number.parseInt(params["AA mode"]);
+
+			pass.enabled = (mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES);
+			renderPass.renderToScreen = (mode === AAMode.DISABLED || mode === AAMode.BROWSER);
+			textureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			swapRenderers(mode === AAMode.BROWSER);
+			pass.recompile();
+
+		}
+
+		menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
 
 		menu.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(() => {
 
-			smaaPass.colorEdgesMaterial.setEdgeDetectionThreshold(params.sensitivity);
+			smaaEffect.setEdgeDetectionThreshold(params.sensitivity);
 
 		});
 
-		menu.add(params, "search steps").min(8).max(112).step(1).onChange(() => {
+		menu.add(params, "search steps").min(4).max(112).step(1).onChange(() => {
 
-			smaaPass.weightsMaterial.setOrthogonalSearchSteps(params["search steps"]);
+			smaaEffect.setOrthogonalSearchSteps(params["search steps"]);
+
+		});
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 

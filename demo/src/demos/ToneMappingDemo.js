@@ -13,7 +13,13 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { ToneMappingPass } from "../../../src";
+
+import {
+	BlendFunction,
+	ToneMappingEffect,
+	EffectPass,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A tone mapping demo setup.
@@ -32,13 +38,22 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		super("tone-mapping", composer);
 
 		/**
-		 * A dot screen pass.
+		 * An effect.
 		 *
-		 * @type {DotScreenPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.toneMappingPass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 		/**
 		 * An object.
@@ -99,6 +114,29 @@ export class ToneMappingDemo extends PostProcessingDemo {
 					assets.set("crate-color", texture);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -173,18 +211,29 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new ToneMappingPass({
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.06);
+
+		const toneMappingEffect = new ToneMappingEffect({
+			blendFunction: BlendFunction.NORMAL,
 			adaptive: true,
 			resolution: 256,
-			distinction: 2.0
+			distinction: 2.0,
+			middleGrey: 0.6,
+			maxLuminance: 16.0,
+			averageLuminance: 1.0,
+			adaptationRate: 2.0
 		});
 
-		pass.adaptiveLuminosityMaterial.uniforms.tau.value = 2.0;
+		this.effect = toneMappingEffect;
+
+		const pass = new EffectPass(camera, smaaEffect, toneMappingEffect);
+		pass.dithering = true;
+		this.pass = pass;
 
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		pass.dithering = true;
-		this.toneMappingPass = pass;
+
 		composer.addPass(pass);
 
 	}
@@ -227,66 +276,78 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.toneMappingPass;
+		const pass = this.pass;
+		const effect = this.effect;
+		const blendMode = effect.blendMode;
+		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"resolution": Math.log2(pass.resolution),
-			"distinction": pass.luminosityMaterial.uniforms.distinction.value,
-			"adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
-			"average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
-			"min lum": pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value,
-			"max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
-			"middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
+			"resolution": Math.log2(effect.resolution),
+			"adaptation rate": effect.adaptationRate,
+			"average lum": effect.uniforms.get("averageLuminance").value,
+			"max lum": effect.uniforms.get("maxLuminance").value,
+			"middle grey": effect.uniforms.get("middleGrey").value,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendFunctions[blendMode.blendFunction]
 		};
 
 		menu.add(params, "resolution").min(6).max(11).step(1).onChange(() => {
 
-			pass.resolution = Math.pow(2, params.resolution);
+			effect.resolution = Math.pow(2, params.resolution);
+			pass.recompile();
 
 		});
-
-		menu.add(pass, "adaptive");
-		menu.add(pass, "dithering");
 
 		let f = menu.addFolder("Luminance");
 
-		f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(() => {
+		f.add(effect, "adaptive").onChange(() => {
 
-			pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
+			pass.recompile();
 
 		});
 
-		f.add(params, "adaption rate").min(1.0).max(3.0).step(0.01).onChange(() => {
+		f.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
 
-			pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
+		f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(() => {
+
+			effect.adaptationRate = params["adaptation rate"];
 
 		});
 
 		f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(() => {
 
-			pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
-
-		});
-
-		f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"];
+			effect.uniforms.get("averageLuminance").value = params["average lum"];
 
 		});
 
 		f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(() => {
 
-			pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
+			effect.uniforms.get("maxLuminance").value = params["max lum"];
 
 		});
 
 		f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
+			effect.uniforms.get("middleGrey").value = params["middle grey"];
 
 		});
 
 		f.open();
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+
+			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			pass.recompile();
+
+		});
+
+		menu.add(pass, "dithering");
 
 	}
 

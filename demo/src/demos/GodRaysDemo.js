@@ -4,7 +4,6 @@ import {
 	BufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	MeshPhongMaterial,
 	ObjectLoader,
 	PerspectiveCamera,
@@ -17,7 +16,14 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { GodRaysPass, KernelSize } from "../../../src";
+
+import {
+	BlendFunction,
+	EffectPass,
+	GodRaysEffect,
+	KernelSize,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A god rays demo setup.
@@ -36,13 +42,22 @@ export class GodRaysDemo extends PostProcessingDemo {
 		super("god-rays", composer);
 
 		/**
-		 * A god rays pass.
+		 * A pass.
 		 *
-		 * @type {GodRaysPass}
+		 * @type {Pass}
 		 * @private
 		 */
 
-		this.godRaysPass = null;
+		this.pass = null;
+
+		/**
+		 * An effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.effect = null;
 
 		/**
 		 * A sun.
@@ -123,18 +138,34 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 				});
 
-				textureLoader.load("textures/woodnormals.jpg", function(texture) {
-
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					assets.set("wood-normals", texture);
-
-				});
-
 				textureLoader.load("textures/sun.png", function(texture) {
 
 					assets.set("sun-diffuse", texture);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -174,11 +205,6 @@ export class GodRaysDemo extends PostProcessingDemo {
 		controls.lookAt(target);
 		this.controls = controls;
 
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
-
 		// Sky.
 
 		scene.background = assets.get("sky");
@@ -201,12 +227,10 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const object = assets.get("waggon");
 		const material = new MeshPhongMaterial({
 			color: 0xffffff,
-			map: assets.get("wood-diffuse"),
-			normalMap: assets.get("wood-normals"),
-			fog: true
+			map: assets.get("wood-diffuse")
 		});
 
-		object.traverse(function(child) {
+		object.traverse((child) => {
 
 			child.material = material;
 
@@ -237,10 +261,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new GodRaysPass(scene, camera, sun, {
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.065);
+
+		const godRaysEffect = new GodRaysEffect(scene, camera, sun, {
 			resolutionScale: 0.6,
 			kernelSize: KernelSize.SMALL,
-			intensity: 1.0,
 			density: 0.96,
 			decay: 0.93,
 			weight: 0.4,
@@ -249,10 +275,15 @@ export class GodRaysDemo extends PostProcessingDemo {
 			clampMax: 1.0
 		});
 
+		godRaysEffect.dithering = true;
+		this.effect = godRaysEffect;
+
+		const pass = new EffectPass(camera, smaaEffect, godRaysEffect);
+		this.pass = pass;
+
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		pass.dithering = true;
-		this.godRaysPass = pass;
+
 		composer.addPass(pass);
 
 	}
@@ -265,79 +296,74 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const directionalLight = this.directionalLight;
-		const pass = this.godRaysPass;
 		const sun = this.sun;
+		const directionalLight = this.directionalLight;
+
+		const pass = this.pass;
+		const effect = this.effect;
+		const uniforms = effect.godRaysMaterial.uniforms;
+		const blendMode = effect.blendMode;
 
 		const params = {
-			"resolution": pass.getResolutionScale(),
-			"blurriness": pass.kernelSize,
-			"intensity": pass.intensity,
-			"density": pass.godRaysMaterial.uniforms.density.value,
-			"decay": pass.godRaysMaterial.uniforms.decay.value,
-			"weight": pass.godRaysMaterial.uniforms.weight.value,
-			"exposure": pass.godRaysMaterial.uniforms.exposure.value,
-			"clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
-			"samples": pass.samples,
+			"resolution": effect.getResolutionScale(),
+			"blurriness": effect.kernelSize + 1,
+			"density": uniforms.density.value,
+			"decay": uniforms.decay.value,
+			"weight": uniforms.weight.value,
+			"exposure": uniforms.exposure.value,
+			"clampMax": uniforms.clampMax.value,
+			"samples": effect.samples,
 			"color": sun.material.color.getHex(),
-			"blend mode": "screen"
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
 
-			pass.setResolutionScale(params.resolution);
-
-		});
-
-		menu.add(pass, "dithering");
-
-		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
-
-			pass.kernelSize = params.blurriness;
+			effect.setResolutionScale(params.resolution);
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(effect, "dithering");
 
-			pass.intensity = params.intensity;
+		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
+
+			effect.blur = (params.blurriness > 0);
+			effect.kernelSize = params.blurriness - 1;
 
 		});
 
 		menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.godRaysMaterial.uniforms.density.value = params.density;
+			uniforms.density.value = params.density;
 
 		});
 
 		menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.godRaysMaterial.uniforms.decay.value = params.decay;
+			uniforms.decay.value = params.decay;
 
 		});
 
 		menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.godRaysMaterial.uniforms.weight.value = params.weight;
+			uniforms.weight.value = params.weight;
 
 		});
 
 		menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
+			uniforms.exposure.value = params.exposure;
 
 		});
 
 		menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
+			uniforms.clampMax.value = params.clampMax;
 
 		});
 
-		menu.add(params, "samples").min(15).max(200).step(1).onChange(() => {
-
-			pass.samples = params.samples;
-
-		});
+		menu.add(effect, "samples").min(15).max(200).step(1);
 
 		menu.addColor(params, "color").onChange(() => {
 
@@ -346,9 +372,16 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", ["add", "screen"]).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 

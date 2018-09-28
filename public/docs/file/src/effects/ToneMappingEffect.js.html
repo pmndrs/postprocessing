@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/ToneMappingEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library that provides the means to implement image filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement image filter effects for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/ToneMappingEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+	Color,
+	LinearFilter,
+	LinearMipMapLinearFilter,
+	RGBFormat,
+	Uniform,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
+import { AdaptiveLuminanceMaterial, LuminanceMaterial } from &quot;../materials&quot;;
+import { ClearPass, SavePass, ShaderPass } from &quot;../passes&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
+
+import fragment from &quot;./glsl/tone-mapping/shader.frag&quot;;
+
+/**
+ * A tone mapping effect that supports adaptive luminosity.
+ *
+ * If adaptivity is enabled, this effect generates a texture that represents the
+ * luminosity of the current scene and adjusts it over time to simulate the
+ * optic nerve responding to the amount of light it is receiving.
+ *
+ * Reference:
+ *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline
+ *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf
+ */
+
+export class ToneMappingEffect extends Effect {
+
+	/**
+	 * Constructs a new tone mapping effect.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
+	 * @param {Number} [options.resolution=256] - The render texture resolution of the luminance map.
+	 * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
+	 * @param {Number} [options.middleGrey=0.6] - The middle grey factor.
+	 * @param {Number} [options.maxLuminance=16.0] - The maximum luminance.
+	 * @param {Number} [options.averageLuminance=1.0] - The average luminance.
+	 * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
+	 */
+
+	constructor(options = {}) {
+
+		const settings = Object.assign({
+			blendFunction: BlendFunction.NORMAL,
+			adaptive: true,
+			resolution: 256,
+			distinction: 1.0,
+			middleGrey: 0.6,
+			maxLuminance: 16.0,
+			averageLuminance: 1.0,
+			adaptationRate: 2.0
+		}, options);
+
+		super(&quot;ToneMappingEffect&quot;, fragment, {
+
+			blendFunction: settings.blendFunction,
+
+			uniforms: new Map([
+				[&quot;luminanceMap&quot;, new Uniform(null)],
+				[&quot;middleGrey&quot;, new Uniform(settings.middleGrey)],
+				[&quot;maxLuminance&quot;, new Uniform(settings.maxLuminance)],
+				[&quot;averageLuminance&quot;, new Uniform(settings.averageLuminance)]
+			])
+
+		});
+
+		/**
+		 * The render target for the current luminance.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 * @todo Use RED format in WebGL 2.0.
+		 */
+
+		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearMipMapLinearFilter,
+			magFilter: LinearFilter,
+			format: RGBFormat,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetLuminance.texture.name = &quot;ToneMapping.Luminance&quot;;
+
+		/**
+		 * The render target for adapted luminance.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetAdapted = this.renderTargetLuminance.clone();
+
+		this.renderTargetAdapted.texture.name = &quot;ToneMapping.AdaptedLuminance&quot;;
+		this.renderTargetAdapted.texture.generateMipmaps = false;
+		this.renderTargetAdapted.texture.minFilter = LinearFilter;
+
+		/**
+		 * A render target that holds a copy of the adapted luminance.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetPrevious = this.renderTargetAdapted.clone();
+
+		this.renderTargetPrevious.texture.name = &quot;ToneMapping.PreviousLuminance&quot;;
+
+		/**
+		 * A save pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.savePass = new SavePass(this.renderTargetPrevious, false);
+
+		/**
+		 * A luminance shader pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.luminancePass = new ShaderPass(new LuminanceMaterial());
+
+		/**
+		 * An adaptive luminance shader pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
+
+		// Apply settings.
+		this.adaptationRate = settings.adaptationRate;
+		this.distinction = settings.distinction;
+		this.resolution = settings.resolution;
+		this.adaptive = settings.adaptive;
+
+	}
+
+	/**
+	 * The resolution of the render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get resolution() {
+
+		return this.renderTargetLuminance.width;
+
+	}
+
+	/**
+	 * Sets the resolution of the internal render targets.
+	 *
+	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set resolution(value) {
+
+		// Round the given value to the next power of two.
+		const exponent = Math.max(0, Math.ceil(Math.log2(value)));
+		value = Math.pow(2, exponent);
+
+		this.renderTargetLuminance.setSize(value, value);
+		this.renderTargetPrevious.setSize(value, value);
+		this.renderTargetAdapted.setSize(value, value);
+
+		this.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+
+	}
+
+	/**
+	 * Indicates whether this pass uses adaptive luminance.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get adaptive() {
+
+		return this.defines.has(&quot;ADAPTED_LUMINANCE&quot;);
+
+	}
+
+	/**
+	 * Enables or disables adaptive luminance.
+	 *
+	 * You&apos;ll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set adaptive(value) {
+
+		if(value) {
+
+			this.defines.set(&quot;ADAPTED_LUMINANCE&quot;, &quot;1&quot;);
+			this.uniforms.get(&quot;luminanceMap&quot;).value = this.renderTargetAdapted.texture;
+
+		} else {
+
+			this.defines.delete(&quot;ADAPTED_LUMINANCE&quot;);
+			this.uniforms.get(&quot;luminanceMap&quot;).value = null;
+
+		}
+
+	}
+
+	/**
+	 * The luminance adaptation rate.
+	 *
+	 * @type {Number}
+	 */
+
+	get adaptationRate() {
+
+		return this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value;
+
+	}
+
+	/**
+	 * @type {Number}
+	 */
+
+	set adaptationRate(value) {
+
+		this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value = value;
+
+	}
+
+	/**
+	 * The luminance distinction factor.
+	 *
+	 * @type {Number}
+	 */
+
+	get distinction() {
+
+		return this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;
+
+	}
+
+	/**
+	 * @type {Number}
+	 */
+
+	set distinction(value = 1.0) {
+
+		this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, delta) {
+
+		if(this.adaptive) {
+
+			// Render the luminance of the current scene into a mipmap render target.
+			this.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);
+
+			// Use the frame delta to adapt the luminance over time.
+			const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
+			uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
+			uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
+			uniforms.delta.value = delta;
+			this.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);
+
+			// Save the adapted luminance for the next frame.
+			this.savePass.render(renderer, this.renderTargetAdapted);
+
+		}
+
+	}
+
+	/**
+	 * Updates the size of internal render targets.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.savePass.setSize(width, height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		const clearPass = new ClearPass({ clearColor: new Color(0x7fffff) });
+		clearPass.render(renderer, this.renderTargetPrevious);
+		clearPass.dispose();
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

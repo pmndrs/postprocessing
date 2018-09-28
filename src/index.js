@@ -11,56 +11,64 @@ export {
 } from "./core";
 
 export {
-	BloomPass,
-	BlurPass,
-	BokehPass,
-	ClearPass,
-	ClearMaskPass,
-	DotScreenPass,
-	FilmPass,
+	BlendFunction,
+	BlendMode,
+	BloomEffect,
+	BokehEffect,
+	BrightnessContrastEffect,
+	ColorAverageEffect,
+	ChromaticAberrationEffect,
+	DepthEffect,
+	DotScreenEffect,
+	Effect,
+	EffectAttribute,
+	GammaCorrectionEffect,
+	GlitchEffect,
 	GlitchMode,
-	GlitchPass,
-	GodRaysPass,
-	MaskPass,
-	OutlinePass,
-	Pass,
-	PixelationPass,
-	RealisticBokehPass,
-	RenderPass,
-	SavePass,
-	ShaderPass,
-	ShockWavePass,
-	SMAAPass,
-	TexturePass,
-	ToneMappingPass
-} from "./passes";
-
-export {
-	AdaptiveLuminosityMaterial,
-	BokehMaterial,
-	ColorEdgesMaterial,
-	CombineMaterial,
-	ConvolutionMaterial,
-	CopyMaterial,
-	DepthComparisonMaterial,
-	DotScreenMaterial,
-	FilmMaterial,
-	GlitchMaterial,
-	GodRaysMaterial,
-	KernelSize,
-	LuminosityMaterial,
-	OutlineBlendMaterial,
-	OutlineEdgesMaterial,
-	PixelationMaterial,
-	RealisticBokehMaterial,
-	ShockWaveMaterial,
-	SMAABlendMaterial,
-	SMAAWeightsMaterial,
-	ToneMappingMaterial
-} from "./materials";
+	GodRaysEffect,
+	GridEffect,
+	HueSaturationEffect,
+	NoiseEffect,
+	OutlineEffect,
+	PixelationEffect,
+	RealisticBokehEffect,
+	ScanlineEffect,
+	ShockWaveEffect,
+	SepiaEffect,
+	SMAAEffect,
+	TextureEffect,
+	ToneMappingEffect,
+	VignetteEffect
+} from "./effects";
 
 export {
 	RawImageData,
 	SMAAAreaImageData,
 	SMAASearchImageData
 } from "./images";
+
+export {
+	AdaptiveLuminanceMaterial,
+	ColorEdgesMaterial,
+	ConvolutionMaterial,
+	CopyMaterial,
+	DepthComparisonMaterial,
+	EffectMaterial,
+	GodRaysMaterial,
+	KernelSize,
+	LuminanceMaterial,
+	OutlineEdgesMaterial,
+	SMAAWeightsMaterial
+} from "./materials";
+
+export {
+	BlurPass,
+	ClearPass,
+	ClearMaskPass,
+	EffectPass,
+	MaskPass,
+	Pass,
+	RenderPass,
+	SavePass,
+	ShaderPass
+} from "./passes";

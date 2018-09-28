@@ -14,7 +14,16 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { GlitchMode, GlitchPass } from "../../../src";
+
+import {
+	BlendFunction,
+	ChromaticAberrationEffect,
+	EffectPass,
+	GlitchMode,
+	GlitchEffect,
+	NoiseEffect,
+	SMAAEffect
+} from "../../../src";
 
 /**
  * A glitch demo setup.
@@ -33,13 +42,22 @@ export class GlitchDemo extends PostProcessingDemo {
 		super("glitch", composer);
 
 		/**
-		 * A glitch pass.
+		 * An effect.
 		 *
-		 * @type {GlitchPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.glitchPass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 		/**
 		 * An object.
@@ -97,9 +115,32 @@ export class GlitchDemo extends PostProcessingDemo {
 				textureLoader.load("textures/perturb.jpg", function(texture) {
 
 					texture.magFilter = texture.minFilter = NearestFilter;
-					assets.set("perturb-map", texture);
+					assets.set("perturbation-map", texture);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -187,14 +228,34 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const pass = new GlitchPass({
-			perturbMap: assets.get("perturb-map")
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.08);
+
+		const chromaticAberrationEffect = new ChromaticAberrationEffect();
+
+		const glitchEffect = new GlitchEffect({
+			perturbationMap: assets.get("perturbation-map"),
+			chromaticAberrationOffset: chromaticAberrationEffect.offset
 		});
 
+		const noiseEffect = new NoiseEffect({
+			blendFunction: BlendFunction.COLOR_DODGE
+		});
+
+		noiseEffect.blendMode.opacity.value = 0.15;
+
+		const smaaPass = new EffectPass(camera, smaaEffect);
+		const glitchPass = new EffectPass(camera, glitchEffect, noiseEffect);
+		const chromaticAberrationPass = new EffectPass(camera, chromaticAberrationEffect);
+
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.glitchPass = pass;
-		composer.addPass(pass);
+		chromaticAberrationPass.renderToScreen = true;
+
+		this.effect = glitchEffect;
+
+		composer.addPass(smaaPass);
+		composer.addPass(glitchPass);
+		composer.addPass(chromaticAberrationPass);
 
 	}
 
@@ -236,31 +297,69 @@ export class GlitchDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.glitchPass;
-		const perturbMap = pass.perturbMap;
+		const effect = this.effect;
+		const perturbationMap = effect.getPerturbationMap();
+		const uniforms = effect.uniforms;
+		const delay = effect.delay;
+		const duration = effect.duration;
 
 		const params = {
-			"mode": pass.mode,
-			"custom noise": true
+			"glitch mode": effect.mode,
+			"custom pattern": true,
+			"min delay": delay.x,
+			"max delay": delay.y,
+			"min duration": duration.x,
+			"max duration": duration.y,
+			"columns": uniforms.get("columns").value
 		};
 
-		menu.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(() => {
+		menu.add(params, "glitch mode", GlitchMode).onChange(() => {
 
-			pass.mode = params.mode;
+			effect.mode = Number.parseInt(params["glitch mode"]);
 
 		});
 
-		menu.add(params, "custom noise").onChange(() => {
+		menu.add(params, "custom pattern").onChange(() => {
 
-			if(params["custom noise"]) {
+			if(params["custom pattern"]) {
 
-				pass.perturbMap = perturbMap;
+				effect.setPerturbationMap(perturbationMap);
 
 			} else {
 
-				pass.generatePerturbMap(64);
+				effect.setPerturbationMap(effect.generatePerturbationMap(64));
 
 			}
+
+		});
+
+		menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange(() => {
+
+			delay.x = params["min delay"];
+
+		});
+
+		menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange(() => {
+
+			delay.y = params["max delay"];
+
+		});
+
+		menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange(() => {
+
+			duration.x = params["min duration"];
+
+		});
+
+		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange(() => {
+
+			duration.y = params["max duration"];
+
+		});
+
+		menu.add(params, "columns").min(0.0).max(0.5).step(0.001).onChange(() => {
+
+			uniforms.get("columns").value = params.columns;
 
 		});
 

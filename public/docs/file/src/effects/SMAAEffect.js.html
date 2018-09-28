@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/SMAAEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library that provides the means to implement image filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement image filter effects for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/SMAAEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+	Color,
+	LinearFilter,
+	NearestFilter,
+	RGBAFormat,
+	RGBFormat,
+	Texture,
+	Uniform,
+	WebGLRenderTarget
+} from &quot;three&quot;;
+
+import { ColorEdgesMaterial, SMAAWeightsMaterial } from &quot;../materials&quot;;
+import { ClearPass, ShaderPass } from &quot;../passes&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
+import { Effect, EffectAttribute } from &quot;./Effect.js&quot;;
+
+import searchImageDataURL from &quot;../images/smaa/searchImageDataURL.js&quot;;
+import areaImageDataURL from &quot;../images/smaa/areaImageDataURL.js&quot;;
+
+import fragment from &quot;./glsl/smaa/shader.frag&quot;;
+import vertex from &quot;./glsl/smaa/shader.vert&quot;;
+
+/**
+ * Subpixel Morphological Antialiasing (SMAA) v2.8.
+ *
+ * Preset: SMAA 1x Medium (with color edge detection).
+ *  https://github.com/iryoku/smaa/releases/tag/v2.8
+ */
+
+export class SMAAEffect extends Effect {
+
+	/**
+	 * Constructs a new SMAA effect.
+	 *
+	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
+	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
+	 */
+
+	constructor(searchImage, areaImage) {
+
+		super(&quot;SMAAEffect&quot;, fragment, {
+
+			attributes: EffectAttribute.CONVOLUTION,
+			blendFunction: BlendFunction.NORMAL,
+
+			uniforms: new Map([
+				[&quot;weightMap&quot;, new Uniform(null)]
+			]),
+
+			vertexShader: vertex
+
+		});
+
+		/**
+		 * A render target for the color edge detection.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			format: RGBFormat,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetColorEdges.texture.name = &quot;SMAA.ColorEdges&quot;;
+		this.renderTargetColorEdges.texture.generateMipmaps = false;
+
+		/**
+		 * A render target for the SMAA weights.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetWeights = this.renderTargetColorEdges.clone();
+
+		this.renderTargetWeights.texture.name = &quot;SMAA.Weights&quot;;
+		this.renderTargetWeights.texture.format = RGBAFormat;
+
+		this.uniforms.get(&quot;weightMap&quot;).value = this.renderTargetWeights.texture;
+
+		/**
+		 * A clear pass for the color edges buffer.
+		 *
+		 * @type {ClearPass}
+		 * @private
+		 */
+
+		this.clearPass = new ClearPass({
+			clearColor: new Color(0x000000),
+			clearAlpha: 1.0
+		});
+
+		/**
+		 * A color edge detection pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.colorEdgesPass = new ShaderPass(new ColorEdgesMaterial());
+
+		/**
+		 * An SMAA weights pass.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
+
+		this.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = (() =&gt; {
+
+			const searchTexture = new Texture(searchImage);
+			searchTexture.name = &quot;SMAA.Search&quot;;
+			searchTexture.magFilter = NearestFilter;
+			searchTexture.minFilter = NearestFilter;
+			searchTexture.format = RGBAFormat;
+			searchTexture.generateMipmaps = false;
+			searchTexture.needsUpdate = true;
+			searchTexture.flipY = false;
+
+			return searchTexture;
+
+		})();
+
+		this.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = (() =&gt; {
+
+			const areaTexture = new Texture(areaImage);
+
+			areaTexture.name = &quot;SMAA.Area&quot;;
+			areaTexture.minFilter = LinearFilter;
+			areaTexture.format = RGBAFormat;
+			areaTexture.generateMipmaps = false;
+			areaTexture.needsUpdate = true;
+			areaTexture.flipY = false;
+
+			return areaTexture;
+
+		})();
+
+	}
+
+	/**
+	 * Sets the edge detection sensitivity.
+	 *
+	 * See {@link ColorEdgesMaterial#setEdgeDetectionThreshold} for more details.
+	 *
+	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
+	 */
+
+	setEdgeDetectionThreshold(threshold) {
+
+		this.colorEdgesPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
+
+	}
+
+	/**
+	 * Sets the maximum amount of horizontal/vertical search steps.
+	 *
+	 * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
+	 *
+	 * @param {Number} steps - The search steps. Range: [0, 112].
+	 */
+
+	setOrthogonalSearchSteps(steps) {
+
+		this.weightsPass.getFullscreenMaterial().setOrthogonalSearchSteps(steps);
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, delta) {
+
+		this.clearPass.render(renderer, this.renderTargetColorEdges);
+		this.colorEdgesPass.render(renderer, inputBuffer, this.renderTargetColorEdges);
+		this.weightsPass.render(renderer, this.renderTargetColorEdges, this.renderTargetWeights);
+
+	}
+
+	/**
+	 * Updates the size of internal render targets.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		this.renderTargetColorEdges.setSize(width, height);
+		this.renderTargetWeights.setSize(width, height);
+
+		this.colorEdgesPass.getFullscreenMaterial().uniforms.texelSize.value.copy(
+			this.weightsPass.getFullscreenMaterial().uniforms.texelSize.value.set(
+				1.0 / width, 1.0 / height));
+
+	}
+
+	/**
+	 * The SMAA search image, encoded as a base64 data URL.
+	 *
+	 * Use this image data to create an Image instance and use it together with
+	 * the area image to create an {@link SMAAEffect}.
+	 *
+	 * @type {String}
+	 * @example
+	 * const searchImage = new Image();
+	 * searchImage.addEventListener(&quot;load&quot;, progress);
+	 * searchImage.src = SMAAEffect.searchImageDataURL;
+	 */
+
+	static get searchImageDataURL() {
+
+		return searchImageDataURL;
+
+	}
+
+	/**
+	 * The SMAA area image, encoded as a base64 data URL.
+	 *
+	 * Use this image data to create an Image instance and use it together with
+	 * the search image to create an {@link SMAAEffect}.
+	 *
+	 * @type {String}
+	 * @example
+	 * const areaImage = new Image();
+	 * areaImage.addEventListener(&quot;load&quot;, progress);
+	 * areaImage.src = SMAAEffect.areaImageDataURL;
+	 */
+
+	static get areaImageDataURL() {
+
+		return areaImageDataURL;
+
+	}
+
+}
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

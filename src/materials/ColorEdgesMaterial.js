@@ -31,7 +31,7 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 
 			uniforms: {
 
-				tDiffuse: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 
 			},
@@ -58,13 +58,12 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	 * If temporal supersampling is used, 0.2 could be a reasonable value,
 	 * as low contrast edges are properly filtered by just 2x.
 	 *
-	 * @param {Number} threshold - The edge detection sensitivity. Range: [0, 0.5].
+	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
 	setEdgeDetectionThreshold(threshold) {
 
 		this.defines.EDGE_THRESHOLD = threshold.toFixed("2");
-
 		this.needsUpdate = true;
 
 	}

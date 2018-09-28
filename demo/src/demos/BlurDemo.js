@@ -12,7 +12,16 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { BlurPass, KernelSize, SavePass, TexturePass } from "../../../src";
+
+import {
+	BlendFunction,
+	BlurPass,
+	EffectPass,
+	KernelSize,
+	SavePass,
+	SMAAEffect,
+	TextureEffect
+} from "../../../src";
 
 /**
  * A blur demo setup.
@@ -31,18 +40,9 @@ export class BlurDemo extends PostProcessingDemo {
 		super("blur", composer);
 
 		/**
-		 * A save pass.
-		 *
-		 * @type {SavePass}
-		 * @private
-		 */
-
-		this.savePass = null;
-
-		/**
 		 * A blur pass.
 		 *
-		 * @type {BlurPass}
+		 * @type {Pass}
 		 * @private
 		 */
 
@@ -51,11 +51,20 @@ export class BlurDemo extends PostProcessingDemo {
 		/**
 		 * A texture pass.
 		 *
-		 * @type {TexturePass}
+		 * @type {Pass}
 		 * @private
 		 */
 
 		this.texturePass = null;
+
+		/**
+		 * An effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.effect = null;
 
 		/**
 		 * An object.
@@ -108,6 +117,29 @@ export class BlurDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
+
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
 
 			} else {
 
@@ -196,19 +228,30 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		let pass = new SavePass();
-		this.savePass = pass;
-		composer.addPass(pass);
+		const savePass = new SavePass();
+		const blurPass = new BlurPass();
 
-		pass = new BlurPass();
-		this.blurPass = pass;
-		composer.addPass(pass);
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const textureEffect = new TextureEffect({
+			texture: savePass.renderTarget.texture
+		});
 
-		pass = new TexturePass(this.savePass.renderTarget.texture, 0.0, false);
+		const smaaPass = new EffectPass(camera, smaaEffect);
+		const texturePass = new EffectPass(camera, textureEffect);
+
+		textureEffect.blendMode.opacity.value = 0.0;
+
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.texturePass = pass;
-		composer.addPass(pass);
+		texturePass.renderToScreen = true;
+
+		this.blurPass = blurPass;
+		this.texturePass = texturePass;
+		this.effect = textureEffect;
+
+		composer.addPass(smaaPass);
+		composer.addPass(savePass);
+		composer.addPass(blurPass);
+		composer.addPass(texturePass);
 
 	}
 
@@ -250,43 +293,44 @@ export class BlurDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const renderPass = this.renderPass;
+		const effect = this.effect;
+		const pass = this.texturePass;
 		const blurPass = this.blurPass;
-		const texturePass = this.texturePass;
+		const blendMode = effect.blendMode;
 
 		const params = {
 			"enabled": blurPass.enabled,
 			"resolution": blurPass.getResolutionScale(),
 			"kernel size": blurPass.kernelSize,
-			"strength": texturePass.opacityDestination
+			"opacity": 1.0 - blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
 
 			blurPass.setResolutionScale(params.resolution);
 
 		});
 
-		menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(() => {
+		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			blurPass.kernelSize = params["kernel size"];
-
-		});
-
-		menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			texturePass.opacityDestination = params.strength;
-			texturePass.opacitySource = 1.0 - params.strength;
+			blurPass.kernelSize = Number.parseInt(params["kernel size"]);
 
 		});
 
 		menu.add(blurPass, "dithering");
+		menu.add(blurPass, "enabled");
 
-		menu.add(params, "enabled").onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			renderPass.renderToScreen = !params.enabled;
-			blurPass.enabled = params.enabled;
-			texturePass.enabled = params.enabled;
+			blendMode.opacity.value = 1.0 - params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
 
 		});
 

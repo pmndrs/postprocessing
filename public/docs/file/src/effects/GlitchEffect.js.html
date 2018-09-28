@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/effects/GlitchEffect.js | postprocessing</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+<meta name="description" content="A post processing library that provides the means to implement image filter effects for three.js."><meta property="twitter:card" content="summary"><meta property="twitter:title" content="postprocessing"><meta property="twitter:description" content="A post processing library that provides the means to implement image filter effects for three.js."></head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+<a style="position:relative; top:3px;" href="https://github.com/vanruesc/postprocessing.git"><img width="20px" src="./image/github.png"></a></header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html">BrightnessContrastEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html">ChromaticAberrationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html">ColorAverageEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DepthEffect.js~DepthEffect.html">DepthEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/DotScreenEffect.js~DotScreenEffect.html">DotScreenEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html">GammaCorrectionEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/GridEffect.js~GridEffect.html">GridEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html">HueSaturationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/NoiseEffect.js~NoiseEffect.html">NoiseEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html">SMAAWeightsMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-Section">Section</a></span></span></li>
+<li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/GlitchEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
+	DataTexture,
+	FloatType,
+	RGBFormat,
+	Uniform,
+	Vector2
+} from &quot;three&quot;;
+
+import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
+
+import fragment from &quot;./glsl/glitch/shader.frag&quot;;
+
+/**
+ * A label for generated data textures.
+ *
+ * @type {String}
+ * @private
+ */
+
+const generatedTexture = &quot;Glitch.Generated&quot;;
+
+/**
+ * Returns a random float in the specified range.
+ *
+ * @private
+ * @param {Number} low - The lowest possible value.
+ * @param {Number} high - The highest possible value.
+ * @return {Number} The random value.
+ */
+
+function randomFloat(low, high) {
+
+	return low + Math.random() * (high - low);
+
+}
+
+/**
+ * A glitch effect.
+ *
+ * Thie effect can influence the {@link ChromaticAberrationEffect}.
+ *
+ * Reference: https://github.com/staffantan/unityglitch
+ *
+ * Warning: This effect cannot be merged with convolution effects.
+ */
+
+export class GlitchEffect extends Effect {
+
+	/**
+	 * Constructs a new glitch effect.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
+	 * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.
+	 * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.
+	 * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.
+	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
+	 * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.
+	 */
+
+	constructor(options = {}) {
+
+		const settings = Object.assign({
+			blendFunction: BlendFunction.NORMAL,
+			chromaticAberrationOffset: null,
+			delay: new Vector2(1.5, 3.5),
+			duration: new Vector2(0.6, 1.0),
+			columns: 0.05,
+			perturbationMap: null,
+			dtSize: 64
+		}, options);
+
+		super(&quot;GlitchEffect&quot;, fragment, {
+
+			blendFunction: settings.blendFunction,
+
+			uniforms: new Map([
+				[&quot;perturbationMap&quot;, new Uniform(null)],
+				[&quot;columns&quot;, new Uniform(settings.columns)],
+				[&quot;active&quot;, new Uniform(false)],
+				[&quot;random&quot;, new Uniform(0.02)],
+				[&quot;seed&quot;, new Uniform(new Vector2())],
+				[&quot;distortion&quot;, new Uniform(new Vector2())]
+			])
+
+		});
+
+		/**
+		 * The current perturbation map.
+		 *
+		 * @type {Texture}
+		 * @private
+		 */
+
+		this.perturbationMap = null;
+
+		this.setPerturbationMap((settings.perturbationMap !== null) ? settings.perturbationMap : this.generatePerturbationMap(settings.dtSize));
+		this.perturbationMap.generateMipmaps = false;
+
+		/**
+		 * The minimum and maximum delay between glitch activations in seconds.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.delay = settings.delay;
+
+		/**
+		 * The minimum and maximum duration of a glitch in seconds.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.duration = settings.duration;
+
+		/**
+		 * A random glitch break point.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.breakPoint = new Vector2(
+			randomFloat(this.delay.x, this.delay.y),
+			randomFloat(this.duration.x, this.duration.y)
+		);
+
+		/**
+		 * A time accumulator.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.time = 0;
+
+		/**
+		 * Random seeds.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.seed = this.uniforms.get(&quot;seed&quot;).value;
+
+		/**
+		 * A distortion vector.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.distortion = this.uniforms.get(&quot;distortion&quot;).value;
+
+		/**
+		 * The effect mode.
+		 *
+		 * @type {GlitchMode}
+		 */
+
+		this.mode = GlitchMode.SPORADIC;
+
+		/**
+		 * The chromatic aberration offset.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
+
+	}
+
+	/**
+	 * Indicates whether the glitch effect is currently active.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get active() {
+
+		return this.uniforms.get(&quot;active&quot;).value;
+
+	}
+
+	/**
+	 * Returns the current perturbation map.
+	 *
+	 * @return {Texture} The current perturbation map.
+	 */
+
+	getPerturbationMap() {
+
+		return this.perturbationMap;
+
+	}
+
+	/**
+	 * Replaces the current perturbation map with the given one.
+	 *
+	 * The current map will be disposed if it was generated by this effect.
+	 *
+	 * @param {Texture} perturbationMap - The new perturbation map.
+	 */
+
+	setPerturbationMap(perturbationMap) {
+
+		if(this.perturbationMap !== null &amp;&amp; this.perturbationMap.name === generatedTexture) {
+
+			this.perturbationMap.dispose();
+
+		}
+
+		this.perturbationMap = perturbationMap;
+		this.uniforms.get(&quot;perturbationMap&quot;).value = perturbationMap;
+
+	}
+
+	/**
+	 * Generates a perturbation map.
+	 *
+	 * @param {Number} [size=64] - The texture size.
+	 * @return {DataTexture} The perturbation map.
+	 */
+
+	generatePerturbationMap(size = 64) {
+
+		const pixels = size * size;
+		const data = new Float32Array(pixels * 3);
+
+		let i, x;
+
+		for(i = 0; i &lt; pixels; ++i) {
+
+			x = Math.random();
+
+			data[i * 3] = x;
+			data[i * 3 + 1] = x;
+			data[i * 3 + 2] = x;
+
+		}
+
+		const map = new DataTexture(data, size, size, RGBFormat, FloatType);
+		map.name = generatedTexture;
+		map.needsUpdate = true;
+
+		return map;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, delta) {
+
+		const mode = this.mode;
+		const breakPoint = this.breakPoint;
+		const offset = this.chromaticAberrationOffset;
+
+		let time = this.time;
+		let active = false;
+		let r = 0.0, a = 0.0;
+		let trigger;
+
+		if(mode !== GlitchMode.DISABLED) {
+
+			time += delta;
+			trigger = (time &gt; breakPoint.x);
+			r = Math.random();
+
+			this.uniforms.get(&quot;random&quot;).value = r;
+
+			if((trigger &amp;&amp; r &gt; 0.85) || mode === GlitchMode.CONSTANT_WILD) {
+
+				active = true;
+
+				r /= 30.0;
+				a = randomFloat(-Math.PI, Math.PI);
+
+				this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+
+			} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {
+
+				active = true;
+
+				r /= 90.0;
+				a = randomFloat(-Math.PI, Math.PI);
+
+				this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+
+			}
+
+			if(time &gt;= (breakPoint.x + breakPoint.y)) {
+
+				breakPoint.set(
+					randomFloat(this.delay.x, this.delay.y),
+					randomFloat(this.duration.x, this.duration.y)
+				);
+
+				time = 0;
+
+			}
+
+			this.time = time;
+
+		}
+
+		if(offset !== null) {
+
+			if(active) {
+
+				offset.set(Math.cos(a), Math.sin(a)).multiplyScalar(r);
+
+			} else {
+
+				offset.set(0.0, 0.0);
+
+			}
+
+		}
+
+		this.uniforms.get(&quot;active&quot;).value = active;
+
+	}
+
+}
+
+/**
+ * A glitch mode enumeration.
+ *
+ * @type {Object}
+ * @property {Number} DISABLED - No glitches.
+ * @property {Number} SPORADIC - Sporadic glitches.
+ * @property {Number} CONSTANT_MILD - Constant mild glitches.
+ * @property {Number} CONSTANT_WILD - Constant wild glitches.
+ */
+
+export const GlitchMode = {
+
+	DISABLED: 0,
+	SPORADIC: 1,
+	CONSTANT_MILD: 2,
+	CONSTANT_WILD: 3
+
+};
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

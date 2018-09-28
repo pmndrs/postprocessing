@@ -22,21 +22,21 @@ npm install three postprocessing
 
 ## Usage
 
-Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information
-about how to setup the renderer, scene and camera.
-
-#### Basics
+Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information about how to setup the renderer, scene and camera.
 
 ```javascript
 import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
-import { EffectComposer, GlitchPass, RenderPass } from "postprocessing";
+import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
 const composer = new EffectComposer(new WebGLRenderer());
-composer.addPass(new RenderPass(new Scene(), new PerspectiveCamera()));
+const camera = new PerspectiveCamera();
+const scene = new Scene();
 
-const pass = new GlitchPass();
-pass.renderToScreen = true;
-composer.addPass(pass);
+const effectPass = new EffectPass(camera, new BloomEffect());
+effectPass.renderToScreen = true;
+
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(effectPass);
 
 const clock = new Clock();
 
@@ -48,53 +48,41 @@ const clock = new Clock();
 }());
 ```
 
-#### Custom Passes
 
-```javascript
-import { Pass } from "postprocessing";
-import { MyMaterial } from "./MyMaterial.js";
+## Performance
 
-export class MyPass extends Pass {
-
-	constructor() {
-
-		super("MyPass");
-
-		this.setFullscreenMaterial(new MyMaterial());
-
-	}
-
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-
-		this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-
-	}
-
-}
-
-```
-
-See the [Wiki](https://github.com/vanruesc/postprocessing/wiki/Custom-Passes) for more information.
+This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine a lot of effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of [built-in functions](https://github.com/vanruesc/postprocessing/blob/master/src/effects/blending/BlendFunction.js).
 
 
-## Included Filters
+## Included Effects
 
  - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
  - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
- - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh)
- - [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)
- - [Depth](http://vanruesc.github.io/postprocessing/public/demo/#depth)
+ - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh) & [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)
+ - [Color Correction](http://vanruesc.github.io/postprocessing/public/demo/#color-correction)
+   - Brightness & Contrast
+   - Gamma Correction
+   - Hue & Saturation
  - [Dot Screen](http://vanruesc.github.io/postprocessing/public/demo/#dot-screen)
- - [Film](http://vanruesc.github.io/postprocessing/public/demo/#film)
  - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
+   - Chromatic Aberration
+   - Noise
  - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)
+ - [Grid](http://vanruesc.github.io/postprocessing/public/demo/#grid)
  - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)
  - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)
- - [Render](http://vanruesc.github.io/postprocessing/public/demo/#render)
+ - [Scanline](http://vanruesc.github.io/postprocessing/public/demo/#scanline)
+ - [Sepia](http://vanruesc.github.io/postprocessing/public/demo/#sepia)
  - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)
+ - [Texture](http://vanruesc.github.io/postprocessing/public/demo/#texture)
  - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
+ - [Vignette](http://vanruesc.github.io/postprocessing/public/demo/#vignette)
+
+
+## Custom Effects
+
+If you want to learn how to create custom effects or passes, please check the [Wiki](https://github.com/vanruesc/postprocessing/wiki).
 
 
 ## Contributing
@@ -110,5 +98,5 @@ The original code that this library is based on, was written by [mrdoob](http://
 [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors)
 and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
 
-The film effect incorporates code written by Georg Steinrohder and Pat Shearon which was released under the
+The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the
 [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).

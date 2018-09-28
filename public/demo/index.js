@@ -3342,24 +3342,24 @@
     return Disposable;
   }();
 
-  var fragment = "uniform sampler2D tPreviousLum;\r\nuniform sampler2D tCurrentLum;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLum = texture2D(tPreviousLum, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLum = texture2D(tCurrentLum, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLum = max(minLuminance, previousLum);\r\n\tcurrentLum = max(minLuminance, currentLum);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLum + (currentLum - previousLum) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
+  var fragment = "uniform sampler2D previousLuminanceBuffer;\r\nuniform sampler2D currentLuminanceBuffer;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLuminance = texture2D(previousLuminanceBuffer, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLuminance = texture2D(currentLuminanceBuffer, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLuminance = max(minLuminance, previousLuminance);\r\n\tcurrentLuminance = max(minLuminance, currentLuminance);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLuminance + (currentLuminance - previousLuminance) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
 
   var vertex = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
-  var AdaptiveLuminosityMaterial = function (_ShaderMaterial) {
-    _inherits(AdaptiveLuminosityMaterial, _ShaderMaterial);
+  var AdaptiveLuminanceMaterial = function (_ShaderMaterial) {
+    _inherits(AdaptiveLuminanceMaterial, _ShaderMaterial);
 
-    function AdaptiveLuminosityMaterial() {
-      _classCallCheck(this, AdaptiveLuminosityMaterial);
+    function AdaptiveLuminanceMaterial() {
+      _classCallCheck(this, AdaptiveLuminanceMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(AdaptiveLuminosityMaterial).call(this, {
-        type: "AdaptiveLuminosityMaterial",
+      return _possibleConstructorReturn(this, _getPrototypeOf(AdaptiveLuminanceMaterial).call(this, {
+        type: "AdaptiveLuminanceMaterial",
         defines: {
           MIP_LEVEL_1X1: "0.0"
         },
         uniforms: {
-          tPreviousLum: new three.Uniform(null),
-          tCurrentLum: new three.Uniform(null),
+          previousLuminanceBuffer: new three.Uniform(null),
+          currentLuminanceBuffer: new three.Uniform(null),
           minLuminance: new three.Uniform(0.01),
           delta: new three.Uniform(0.0),
           tau: new three.Uniform(1.0)
@@ -3371,72 +3371,12 @@
       }));
     }
 
-    return AdaptiveLuminosityMaterial;
+    return AdaptiveLuminanceMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$1 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform float focus;\r\nuniform float dof;\r\nuniform float aspect;\r\nuniform float aperture;\r\nuniform float maxBlur;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifndef USE_LOGDEPTHBUF\r\n\r\n\t#include <packing>\r\n\r\n\tuniform float cameraNear;\r\n\tuniform float cameraFar;\r\n\r\n\tfloat readDepth(sampler2D depthSampler, vec2 coord) {\r\n\r\n\t\tfloat fragCoordZ = texture2D(depthSampler, coord).x;\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t\treturn viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(1.0, aspect);\r\n\r\n\t#ifdef USE_LOGDEPTHBUF\r\n\r\n\t\tfloat depth = texture2D(tDepth, vUv).x;\r\n\r\n\t#else\r\n\r\n\t\tfloat depth = readDepth(tDepth, vUv);\r\n\r\n\t#endif\r\n\r\n\tfloat focusNear = clamp(focus - dof, 0.0, 1.0);\r\n\tfloat focusFar = clamp(focus + dof, 0.0, 1.0);\r\n\r\n\t// Calculate a DoF mask.\r\n\tfloat low = step(depth, focusNear);\r\n\tfloat high = step(focusFar, depth);\r\n\r\n\tfloat factor = (depth - focusNear) * low + (depth - focusFar) * high;\r\n\r\n\tvec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));\r\n\r\n\tvec2 dofblur9 = dofBlur * 0.9;\r\n\tvec2 dofblur7 = dofBlur * 0.7;\r\n\tvec2 dofblur4 = dofBlur * 0.4;\r\n\r\n\tvec4 color = vec4(0.0);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur7);\r\n\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(tDiffuse, vUv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur4);\r\n\r\n\tgl_FragColor = color / 41.0;\r\n\r\n}\r\n";
+  var fragment$1 = "uniform sampler2D inputBuffer;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tconst vec2 threshold = vec2(EDGE_THRESHOLD);\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(inputBuffer, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(inputBuffer, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(inputBuffer, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(threshold, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(inputBuffer, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom = texture2D(inputBuffer, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft = texture2D(inputBuffer, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(inputBuffer, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
 
-  var vertex$1 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var BokehMaterial = function (_ShaderMaterial) {
-    _inherits(BokehMaterial, _ShaderMaterial);
-
-    function BokehMaterial(camera) {
-      var _this;
-
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      _classCallCheck(this, BokehMaterial);
-
-      var settings = Object.assign({
-        focus: 1.0,
-        dof: 0.02,
-        aperture: 0.025,
-        maxBlur: 1.0
-      }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(BokehMaterial).call(this, {
-        type: "BokehMaterial",
-        uniforms: {
-          cameraNear: new three.Uniform(0.1),
-          cameraFar: new three.Uniform(2000),
-          aspect: new three.Uniform(1.0),
-          tDiffuse: new three.Uniform(null),
-          tDepth: new three.Uniform(null),
-          focus: new three.Uniform(settings.focus),
-          dof: new three.Uniform(settings.dof),
-          aperture: new three.Uniform(settings.aperture),
-          maxBlur: new three.Uniform(settings.maxBlur)
-        },
-        fragmentShader: fragment$1,
-        vertexShader: vertex$1,
-        depthWrite: false,
-        depthTest: false
-      }));
-
-      _this.adoptCameraSettings(camera);
-
-      return _this;
-    }
-
-    _createClass(BokehMaterial, [{
-      key: "adoptCameraSettings",
-      value: function adoptCameraSettings() {
-        var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-        if (camera !== null) {
-          this.uniforms.cameraNear.value = camera.near;
-          this.uniforms.cameraFar.value = camera.far;
-          this.uniforms.aspect.value = camera.aspect;
-        }
-      }
-    }]);
-
-    return BokehMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$2 = "uniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tconst vec2 threshold = vec2(EDGE_THRESHOLD);\r\n\r\n\t// Calculate color deltas.\r\n\tvec4 delta;\r\n\tvec3 c = texture2D(tDiffuse, vUv).rgb;\r\n\r\n\tvec3 cLeft = texture2D(tDiffuse, vOffset[0].xy).rgb;\r\n\tvec3 t = abs(c - cLeft);\r\n\tdelta.x = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTop = texture2D(tDiffuse, vOffset[0].zw).rgb;\r\n\tt = abs(c - cTop);\r\n\tdelta.y = max(max(t.r, t.g), t.b);\r\n\r\n\t// We do the usual threshold.\r\n\tvec2 edges = step(threshold, delta.xy);\r\n\r\n\t// Then discard if there is no edge.\r\n\tif(dot(edges, vec2(1.0)) == 0.0) {\r\n\r\n\t\tdiscard;\r\n\r\n\t}\r\n\r\n\t// Calculate right and bottom deltas.\r\n\tvec3 cRight = texture2D(tDiffuse, vOffset[1].xy).rgb;\r\n\tt = abs(c - cRight);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cBottom = texture2D(tDiffuse, vOffset[1].zw).rgb;\r\n\tt = abs(c - cBottom);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the maximum delta in the direct neighborhood.\r\n\tfloat maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);\r\n\r\n\t// Calculate left-left and top-top deltas.\r\n\tvec3 cLeftLeft = texture2D(tDiffuse, vOffset[2].xy).rgb;\r\n\tt = abs(c - cLeftLeft);\r\n\tdelta.z = max(max(t.r, t.g), t.b);\r\n\r\n\tvec3 cTopTop = texture2D(tDiffuse, vOffset[2].zw).rgb;\r\n\tt = abs(c - cTopTop);\r\n\tdelta.w = max(max(t.r, t.g), t.b);\r\n\r\n\t// Calculate the final maximum delta.\r\n\tmaxDelta = max(max(maxDelta, delta.z), delta.w);\r\n\r\n\t// Local contrast adaptation in action.\r\n\tedges.xy *= step(0.5 * maxDelta, delta.xy);\r\n\r\n\tgl_FragColor = vec4(edges, 0.0, 0.0);\r\n\r\n}\r\n";
-
-  var vertex$2 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$1 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-1.0, 0.0, 0.0, 1.0); // Changed sign in W component.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\tvOffset[2] = uv.xyxy + texelSize.xyxy * vec4(-2.0, 0.0, 0.0, 2.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var ColorEdgesMaterial = function (_ShaderMaterial) {
     _inherits(ColorEdgesMaterial, _ShaderMaterial);
@@ -3452,11 +3392,11 @@
           EDGE_THRESHOLD: "0.1"
         },
         uniforms: {
-          tDiffuse: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
           texelSize: new three.Uniform(texelSize)
         },
-        fragmentShader: fragment$2,
-        vertexShader: vertex$2,
+        fragmentShader: fragment$1,
+        vertexShader: vertex$1,
         depthWrite: false,
         depthTest: false
       }));
@@ -3473,58 +3413,9 @@
     return ColorEdgesMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$3 = "uniform sampler2D texture1;\r\nuniform sampler2D texture2;\r\n\r\nuniform float opacity1;\r\nuniform float opacity2;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel1 = opacity1 * texture2D(texture1, vUv);\r\n\tvec4 texel2 = opacity2 * texture2D(texture2, vUv);\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invTexel1 = vec3(1.0) - texel1.rgb;\r\n\t\tvec3 invTexel2 = vec3(1.0) - texel2.rgb;\r\n\r\n\t\tvec4 color = vec4(\r\n\t\t\tvec3(1.0) - invTexel1 * invTexel2,\r\n\t\t\ttexel1.a + texel2.a\r\n\t\t);\r\n\r\n\t#else\r\n\r\n\t\tvec4 color = texel1 + texel2;\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+  var fragment$2 = "#include <common>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D inputBuffer;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\t// Sample top left texel.\r\n\tvec4 sum = texture2D(inputBuffer, vUv0);\r\n\r\n\t// Sample top right texel.\r\n\tsum += texture2D(inputBuffer, vUv1);\r\n\r\n\t// Sample bottom right texel.\r\n\tsum += texture2D(inputBuffer, vUv2);\r\n\r\n\t// Sample bottom left texel.\r\n\tsum += texture2D(inputBuffer, vUv3);\r\n\r\n\t// Compute the average.\r\n\tgl_FragColor = sum * 0.25;\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
 
-  var vertex$3 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var CombineMaterial = function (_ShaderMaterial) {
-    _inherits(CombineMaterial, _ShaderMaterial);
-
-    function CombineMaterial() {
-      var _this;
-
-      var screenMode = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-      _classCallCheck(this, CombineMaterial);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(CombineMaterial).call(this, {
-        type: "CombineMaterial",
-        uniforms: {
-          texture1: new three.Uniform(null),
-          texture2: new three.Uniform(null),
-          opacity1: new three.Uniform(1.0),
-          opacity2: new three.Uniform(1.0)
-        },
-        fragmentShader: fragment$3,
-        vertexShader: vertex$3,
-        depthWrite: false,
-        depthTest: false
-      }));
-
-      _this.setScreenModeEnabled(screenMode);
-
-      return _this;
-    }
-
-    _createClass(CombineMaterial, [{
-      key: "setScreenModeEnabled",
-      value: function setScreenModeEnabled(enabled) {
-        if (enabled) {
-          this.defines.SCREEN_MODE = "1";
-        } else {
-          delete this.defines.SCREEN_MODE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }]);
-
-    return CombineMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$4 = "#include <common>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D tDiffuse;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\t// Sample top left texel.\r\n\tvec4 sum = texture2D(tDiffuse, vUv0);\r\n\r\n\t// Sample top right texel.\r\n\tsum += texture2D(tDiffuse, vUv1);\r\n\r\n\t// Sample bottom right texel.\r\n\tsum += texture2D(tDiffuse, vUv2);\r\n\r\n\t// Sample bottom left texel.\r\n\tsum += texture2D(tDiffuse, vUv3);\r\n\r\n\t// Compute the average.\r\n\tgl_FragColor = sum * 0.25;\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
-
-  var vertex$4 = "uniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\nuniform float kernel;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 dUv = (texelSize * vec2(kernel)) + halfTexelSize;\r\n\r\n\tvUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);\r\n\tvUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);\r\n\tvUv2 = vec2(uv.x + dUv.x, uv.y - dUv.y);\r\n\tvUv3 = vec2(uv.x - dUv.x, uv.y - dUv.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$2 = "uniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\nuniform float kernel;\r\n\r\n/* Packing multiple texture coordinates into one varying and using a swizzle to\r\nextract them in the fragment shader still causes a dependent texture read. */\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 dUv = (texelSize * vec2(kernel)) + halfTexelSize;\r\n\r\n\tvUv0 = vec2(uv.x - dUv.x, uv.y + dUv.y);\r\n\tvUv1 = vec2(uv.x + dUv.x, uv.y + dUv.y);\r\n\tvUv2 = vec2(uv.x + dUv.x, uv.y - dUv.y);\r\n\tvUv3 = vec2(uv.x - dUv.x, uv.y - dUv.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var ConvolutionMaterial = function (_ShaderMaterial) {
     _inherits(ConvolutionMaterial, _ShaderMaterial);
@@ -3539,13 +3430,13 @@
       _this = _possibleConstructorReturn(this, _getPrototypeOf(ConvolutionMaterial).call(this, {
         type: "ConvolutionMaterial",
         uniforms: {
-          tDiffuse: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
           texelSize: new three.Uniform(new three.Vector2()),
           halfTexelSize: new three.Uniform(new three.Vector2()),
           kernel: new three.Uniform(0.0)
         },
-        fragmentShader: fragment$4,
-        vertexShader: vertex$4,
+        fragmentShader: fragment$2,
+        vertexShader: vertex$2,
         depthWrite: false,
         depthTest: false
       }));
@@ -3581,9 +3472,9 @@
     HUGE: 5
   };
 
-  var fragment$5 = "uniform sampler2D tDiffuse;\r\nuniform float opacity;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = opacity * texel;\r\n\r\n}\r\n";
+  var fragment$3 = "uniform sampler2D inputBuffer;\r\nuniform float opacity;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(inputBuffer, vUv);\r\n\tgl_FragColor = opacity * texel;\r\n\r\n}\r\n";
 
-  var vertex$5 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$3 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var CopyMaterial = function (_ShaderMaterial) {
     _inherits(CopyMaterial, _ShaderMaterial);
@@ -3594,11 +3485,11 @@
       return _possibleConstructorReturn(this, _getPrototypeOf(CopyMaterial).call(this, {
         type: "CopyMaterial",
         uniforms: {
-          tDiffuse: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
           opacity: new three.Uniform(1.0)
         },
-        fragmentShader: fragment$5,
-        vertexShader: vertex$5,
+        fragmentShader: fragment$3,
+        vertexShader: vertex$3,
         depthWrite: false,
         depthTest: false
       }));
@@ -3607,9 +3498,9 @@
     return CopyMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$6 = "#include <packing>\r\n#include <clipping_planes_pars_fragment>\r\n\r\nuniform sampler2D tDepth;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(tDepth, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
+  var fragment$4 = "#include <packing>\r\n#include <clipping_planes_pars_fragment>\r\n\r\nuniform sampler2D depthBuffer;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
 
-  var vertex$6 = "#include <common>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <skinbase_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <project_vertex>\r\n\r\n\tvViewZ = mvPosition.z;\r\n\tvProjTexCoord = gl_Position;\r\n\r\n\t#include <clipping_planes_vertex>\r\n\r\n}\r\n";
+  var vertex$4 = "#include <common>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <skinbase_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <project_vertex>\r\n\r\n\tvViewZ = mvPosition.z;\r\n\tvProjTexCoord = gl_Position;\r\n\r\n\t#include <clipping_planes_vertex>\r\n\r\n}\r\n";
 
   var DepthComparisonMaterial = function (_ShaderMaterial) {
     _inherits(DepthComparisonMaterial, _ShaderMaterial);
@@ -3625,12 +3516,12 @@
       _this = _possibleConstructorReturn(this, _getPrototypeOf(DepthComparisonMaterial).call(this, {
         type: "DepthComparisonMaterial",
         uniforms: {
-          tDepth: new three.Uniform(depthTexture),
+          depthBuffer: new three.Uniform(depthTexture),
           cameraNear: new three.Uniform(0.1),
           cameraFar: new three.Uniform(2000)
         },
-        fragmentShader: fragment$6,
-        vertexShader: vertex$6,
+        fragmentShader: fragment$4,
+        vertexShader: vertex$4,
         depthWrite: false,
         depthTest: false,
         morphTargets: true,
@@ -3663,271 +3554,155 @@
     return DepthComparisonMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$7 = "uniform sampler2D tDiffuse;\r\n\r\nuniform float angle;\r\nuniform float scale;\r\nuniform float intensity;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nfloat pattern() {\r\n\r\n\tfloat s = sin(angle);\r\n\tfloat c = cos(angle);\r\n\r\n\tvec2 point = vec2(c * vUvPattern.x - s * vUvPattern.y, s * vUvPattern.x + c * vUvPattern.y) * scale;\r\n\r\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef AVERAGE\r\n\r\n\t\tcolor = vec3((color.r + color.g + color.b) / 3.0);\r\n\r\n\t#endif\r\n\r\n\tcolor = vec3(color * 10.0 - 5.0 + pattern());\r\n\tcolor = texel.rgb + (color - texel.rgb) * intensity;\r\n\r\n\tgl_FragColor = vec4(color, texel.a);\r\n\r\n}\r\n";
+  var fragmentTemplate = "#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform sampler2D depthBuffer;\r\n\r\nuniform vec2 resolution;\r\nuniform vec2 texelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform float aspect;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat readDepth(const in vec2 uv) {\r\n\r\n\t#if DEPTH_PACKING == 3201\r\n\r\n\t\tfloat depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));\r\n\r\n\t#else\r\n\r\n\t\tfloat depth = texture2D(depthBuffer, uv).r;\r\n\r\n\t#endif\r\n\r\n\t#if defined(PERSPECTIVE_CAMERA) && !defined(USE_LOGDEPTHBUF)\r\n\r\n\t\tdepth = viewZToOrthographicDepth(perspectiveDepthToViewZ(depth, cameraNear, cameraFar), cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\treturn depth;\r\n\r\n}\r\n\r\nFRAGMENT_HEAD\r\n\r\nvoid main() {\r\n\r\n\tFRAGMENT_MAIN_UV\r\n\r\n\tvec4 color0 = texture2D(inputBuffer, UV);\r\n\tvec4 color1 = vec4(0.0);\r\n\r\n\tFRAGMENT_MAIN_IMAGE\r\n\r\n\tgl_FragColor = color0;\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
 
-  var vertex$7 = "uniform vec4 offsetRepeat;\r\n\r\nvarying vec2 vUv;\r\nvarying vec2 vUvPattern;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvUvPattern = uv * offsetRepeat.zw + offsetRepeat.xy;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertexTemplate = "uniform vec2 resolution;\r\nuniform vec2 texelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform float aspect;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\nVERTEX_HEAD\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tVERTEX_MAIN_SUPPORT\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
-  var DotScreenMaterial = function (_ShaderMaterial) {
-    _inherits(DotScreenMaterial, _ShaderMaterial);
+  var EffectMaterial = function (_ShaderMaterial) {
+    _inherits(EffectMaterial, _ShaderMaterial);
 
-    function DotScreenMaterial() {
+    function EffectMaterial(shaderParts, defines, uniforms) {
       var _this;
 
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var camera = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+      var dithering = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
-      _classCallCheck(this, DotScreenMaterial);
+      _classCallCheck(this, EffectMaterial);
 
-      var settings = Object.assign({
-        average: false,
-        angle: 1.57,
-        scale: 1.0,
-        intensity: 1.0
-      }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenMaterial).call(this, {
-        type: "DotScreenMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          angle: new three.Uniform(settings.angle),
-          scale: new three.Uniform(settings.scale),
-          intensity: new three.Uniform(settings.intensity),
-          offsetRepeat: new three.Uniform(new three.Vector4(0.5, 0.5, 1.0, 1.0))
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(EffectMaterial).call(this, {
+        type: "EffectMaterial",
+        defines: {
+          "DEPTH_PACKING": "0"
         },
-        fragmentShader: fragment$7,
-        vertexShader: vertex$7,
+        uniforms: {
+          inputBuffer: new three.Uniform(null),
+          depthBuffer: new three.Uniform(null),
+          resolution: new three.Uniform(new three.Vector2()),
+          texelSize: new three.Uniform(new three.Vector2()),
+          cameraNear: new three.Uniform(0.3),
+          cameraFar: new three.Uniform(1000.0),
+          aspect: new three.Uniform(1.0),
+          time: new three.Uniform(0.0)
+        },
+        fragmentShader: fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD)).replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV)).replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)),
+        vertexShader: vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD)).replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)),
+        dithering: dithering,
         depthWrite: false,
         depthTest: false
       }));
 
-      _this.setAverageEnabled(settings.average);
+      if (defines !== null) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+          for (var _iterator = defines.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+            var entry = _step.value;
+            _this.defines[entry[0]] = entry[1];
+          }
+        } catch (err) {
+          _didIteratorError = true;
+          _iteratorError = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion && _iterator.return != null) {
+              _iterator.return();
+            }
+          } finally {
+            if (_didIteratorError) {
+              throw _iteratorError;
+            }
+          }
+        }
+      }
+
+      if (uniforms !== null) {
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = uniforms.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var _entry = _step2.value;
+            _this.uniforms[_entry[0]] = _entry[1];
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      }
+
+      _this.adoptCameraSettings(camera);
 
       return _this;
     }
 
-    _createClass(DotScreenMaterial, [{
-      key: "setAverageEnabled",
-      value: function setAverageEnabled(enabled) {
-        if (enabled) {
-          this.defines.AVERAGE = "1";
-        } else {
-          delete this.defines.AVERAGE;
-        }
+    _createClass(EffectMaterial, [{
+      key: "setResolution",
+      value: function setResolution(x, y) {
+        x = Math.max(x, 1.0);
+        y = Math.max(y, 1.0);
+        this.uniforms.resolution.value.set(x, y);
+        this.uniforms.texelSize.value.set(1.0 / x, 1.0 / y);
+        this.uniforms.aspect.value = x / y;
+      }
+    }, {
+      key: "adoptCameraSettings",
+      value: function adoptCameraSettings() {
+        var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-        this.needsUpdate = true;
+        if (camera !== null) {
+          this.uniforms.cameraNear.value = camera.near;
+          this.uniforms.cameraFar.value = camera.far;
+
+          if (camera instanceof three.PerspectiveCamera) {
+            this.defines.PERSPECTIVE_CAMERA = "1";
+          } else {
+            delete this.defines.PERSPECTIVE_CAMERA;
+          }
+        }
+      }
+    }, {
+      key: "depthPacking",
+      get: function get() {
+        return Number.parseInt(this.defines.DEPTH_PACKING);
+      },
+      set: function set(value) {
+        this.defines.DEPTH_PACKING = value.toFixed(0);
       }
     }]);
 
-    return DotScreenMaterial;
+    return EffectMaterial;
   }(three.ShaderMaterial);
+  var Section = {
+    FRAGMENT_HEAD: "FRAGMENT_HEAD",
+    FRAGMENT_MAIN_UV: "FRAGMENT_MAIN_UV",
+    FRAGMENT_MAIN_IMAGE: "FRAGMENT_MAIN_IMAGE",
+    VERTEX_HEAD: "VERTEX_HEAD",
+    VERTEX_MAIN_SUPPORT: "VERTEX_MAIN_SUPPORT"
+  };
 
-  var fragment$8 = "uniform sampler2D tDiffuse;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifdef NOISE\r\n\r\n\tuniform float noiseIntensity;\r\n\r\n#endif\r\n\r\n#ifdef SCANLINES\r\n\r\n\tuniform float scanlineIntensity;\r\n\tuniform float scanlineCount;\r\n\r\n#endif\r\n\r\n#ifdef GRID\r\n\r\n\tuniform float gridIntensity;\r\n\tuniform vec2 gridScale;\r\n\tuniform float gridLineWidth;\r\n\r\n#endif\r\n\r\n#ifdef GREYSCALE\r\n\r\n\t#include <common>\r\n\r\n\tuniform float greyscaleIntensity;\r\n\r\n#elif defined(SEPIA)\r\n\r\n\tuniform float sepiaIntensity;\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tuniform float vignetteOffset;\r\n\tuniform float vignetteDarkness;\r\n\r\n#endif\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tvec3 color = texel.rgb;\r\n\r\n\t#ifdef SCREEN_MODE\r\n\r\n\t\tvec3 invColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tfloat x = vUv.x * vUv.y * time * 1000.0;\r\n\t\tx = mod(x, 13.0) * mod(x, 123.0);\r\n\t\tx = mod(x, 0.01);\r\n\r\n\t\tvec3 noise = texel.rgb * clamp(0.1 + x * 100.0, 0.0, 1.0) * noiseIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invNoise = vec3(1.0) - noise;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invNoise;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += noise;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef SCANLINES\r\n\r\n\t\tvec2 sl = vec2(sin(vUv.y * scanlineCount), cos(vUv.y * scanlineCount));\r\n\t\tvec3 scanlines = texel.rgb * vec3(sl.x, sl.y, sl.x) * scanlineIntensity;\r\n\r\n\t\t#ifdef SCREEN_MODE\r\n\r\n\t\t\tinvColor = vec3(1.0) - color;\r\n\t\t\tvec3 invScanlines = vec3(1.0) - scanlines;\r\n\r\n\t\t\tcolor = vec3(1.0) - invColor * invScanlines;\r\n\r\n\t\t#else\r\n\r\n\t\t\tcolor += scanlines;\r\n\r\n\t\t#endif\r\n\r\n\t#endif\r\n\r\n\t#ifdef GRID\r\n\r\n\t\tfloat grid = 0.5 - max(abs(mod(vUv.x * gridScale.x, 1.0) - 0.5), abs(mod(vUv.y * gridScale.y, 1.0) - 0.5));\r\n\t\tcolor *= (1.0 - gridIntensity) + vec3(smoothstep(0.0, gridLineWidth, grid)) * gridIntensity;\r\n\r\n\t#endif\r\n\r\n\t#ifdef GREYSCALE\r\n\r\n\t\tcolor = mix(color, vec3(linearToRelativeLuminance(color)), greyscaleIntensity);\r\n\r\n\t#elif defined(SEPIA)\r\n\r\n\t\tvec3 c = color.rgb;\r\n\r\n\t\tcolor.r = dot(c, vec3(1.0 - 0.607 * sepiaIntensity, 0.769 * sepiaIntensity, 0.189 * sepiaIntensity));\r\n\t\tcolor.g = dot(c, vec3(0.349 * sepiaIntensity, 1.0 - 0.314 * sepiaIntensity, 0.168 * sepiaIntensity));\r\n\t\tcolor.b = dot(c, vec3(0.272 * sepiaIntensity, 0.534 * sepiaIntensity, 1.0 - 0.869 * sepiaIntensity));\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tconst vec2 center = vec2(0.5);\r\n\r\n\t\t#ifdef ESKIL\r\n\r\n\t\t\tvec2 uv = (vUv - center) * vec2(vignetteOffset);\r\n\t\t\tcolor = mix(color.rgb, vec3(1.0 - vignetteDarkness), dot(uv, uv));\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat dist = distance(vUv, center);\r\n\t\t\tcolor *= smoothstep(0.8, vignetteOffset * 0.799, dist * (vignetteDarkness + vignetteOffset));\r\n\r\n\t\t#endif\t\t\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = vec4(clamp(color, 0.0, 1.0), texel.a);\r\n\r\n}\r\n";
+  var fragment$5 = "#include <common>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform vec2 lightPosition;\r\nuniform float exposure;\r\nuniform float decay;\r\nuniform float density;\r\nuniform float weight;\r\nuniform float clampMax;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\t// Calculate the vector from this pixel to the light position in screen space.\r\n\tvec2 delta = coord - lightPosition;\r\n\tdelta *= 1.0 / SAMPLES_FLOAT * density;\r\n\r\n\t// A decreasing illumination factor.\r\n\tfloat illuminationDecay = 1.0;\r\n\r\n\tvec4 sample;\r\n\tvec4 color = vec4(0.0);\r\n\r\n\t/* Estimate the probability of occlusion at each pixel by summing samples\r\n\talong a ray to the light position. */\r\n\tfor(int i = 0; i < SAMPLES_INT; ++i) {\r\n\r\n\t\tcoord -= delta;\r\n\t\tsample = texture2D(inputBuffer, coord);\r\n\r\n\t\t// Apply the sample attenuation scale/decay factors.\r\n\t\tsample *= illuminationDecay * weight;\r\n\t\tcolor += sample;\r\n\r\n\t\t// Update the exponential decay factor.\r\n\t\tilluminationDecay *= decay;\r\n\r\n\t}\r\n\r\n\tgl_FragColor = clamp(color * exposure, 0.0, clampMax);\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
 
-  var vertex$8 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var FilmMaterial = function (_ShaderMaterial) {
-    _inherits(FilmMaterial, _ShaderMaterial);
-
-    function FilmMaterial() {
-      var _this;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, FilmMaterial);
-
-      var settings = Object.assign({
-        screenMode: true,
-        noise: true,
-        scanlines: true,
-        grid: false,
-        greyscale: false,
-        sepia: false,
-        vignette: false,
-        eskil: false,
-        noiseIntensity: 0.5,
-        scanlineIntensity: 0.05,
-        gridIntensity: 1.0,
-        greyscaleIntensity: 1.0,
-        sepiaIntensity: 1.0,
-        vignetteOffset: 1.0,
-        vignetteDarkness: 1.0
-      }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(FilmMaterial).call(this, {
-        type: "FilmMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          time: new three.Uniform(0.0),
-          noiseIntensity: new three.Uniform(settings.noiseIntensity),
-          scanlineIntensity: new three.Uniform(settings.scanlineIntensity),
-          gridIntensity: new three.Uniform(settings.gridIntensity),
-          scanlineCount: new three.Uniform(0.0),
-          gridScale: new three.Uniform(new three.Vector2()),
-          gridLineWidth: new three.Uniform(0.0),
-          greyscaleIntensity: new three.Uniform(settings.greyscaleIntensity),
-          sepiaIntensity: new three.Uniform(settings.sepiaIntensity),
-          vignetteOffset: new three.Uniform(settings.vignetteOffset),
-          vignetteDarkness: new three.Uniform(settings.vignetteDarkness)
-        },
-        fragmentShader: fragment$8,
-        vertexShader: vertex$8,
-        depthWrite: false,
-        depthTest: false
-      }));
-
-      _this.setScreenModeEnabled(settings.screenMode);
-
-      _this.setNoiseEnabled(settings.noise);
-
-      _this.setScanlinesEnabled(settings.scanlines);
-
-      _this.setGridEnabled(settings.grid);
-
-      _this.setGreyscaleEnabled(settings.greyscale);
-
-      _this.setSepiaEnabled(settings.sepia);
-
-      _this.setVignetteEnabled(settings.vignette);
-
-      _this.setEskilEnabled(settings.eskil);
-
-      return _this;
-    }
-
-    _createClass(FilmMaterial, [{
-      key: "setScreenModeEnabled",
-      value: function setScreenModeEnabled(enabled) {
-        if (enabled) {
-          this.defines.SCREEN_MODE = "1";
-        } else {
-          delete this.defines.SCREEN_MODE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setNoiseEnabled",
-      value: function setNoiseEnabled(enabled) {
-        if (enabled) {
-          this.defines.NOISE = "1";
-        } else {
-          delete this.defines.NOISE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setScanlinesEnabled",
-      value: function setScanlinesEnabled(enabled) {
-        if (enabled) {
-          this.defines.SCANLINES = "1";
-        } else {
-          delete this.defines.SCANLINES;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setGridEnabled",
-      value: function setGridEnabled(enabled) {
-        if (enabled) {
-          this.defines.GRID = "1";
-        } else {
-          delete this.defines.GRID;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setGreyscaleEnabled",
-      value: function setGreyscaleEnabled(enabled) {
-        if (enabled) {
-          this.defines.GREYSCALE = "1";
-        } else {
-          delete this.defines.GREYSCALE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setSepiaEnabled",
-      value: function setSepiaEnabled(enabled) {
-        if (enabled) {
-          this.defines.SEPIA = "1";
-        } else {
-          delete this.defines.SEPIA;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setVignetteEnabled",
-      value: function setVignetteEnabled(enabled) {
-        if (enabled) {
-          this.defines.VIGNETTE = "1";
-        } else {
-          delete this.defines.VIGNETTE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setEskilEnabled",
-      value: function setEskilEnabled(enabled) {
-        if (enabled) {
-          this.defines.ESKIL = "1";
-        } else {
-          delete this.defines.ESKIL;
-        }
-
-        this.needsUpdate = true;
-      }
-    }]);
-
-    return FilmMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$9 = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tPerturb;\r\n\r\nuniform bool active;\r\n\r\nuniform float amount;\r\nuniform float angle;\r\nuniform float seed;\r\nuniform float seedX;\r\nuniform float seedY;\r\nuniform float distortionX;\r\nuniform float distortionY;\r\nuniform float colS;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat rand(vec2 tc) {\r\n\r\n\tconst float a = 12.9898;\r\n\tconst float b = 78.233;\r\n\tconst float c = 43758.5453;\r\n\r\n\tfloat dt = dot(tc, vec2(a, b));\r\n\tfloat sn = mod(dt, 3.14);\r\n\r\n\treturn fract(sin(sn) * c);\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec2 coord = vUv;\r\n\r\n\tfloat xs, ys;\r\n\tvec4 normal;\r\n\r\n\tvec2 offset;\r\n\tvec4 cr, cga, cb;\r\n\tvec4 snow, color;\r\n\r\n\tfloat sx, sy;\r\n\r\n\tif(active) {\r\n\r\n\t\txs = floor(gl_FragCoord.x / 0.5);\r\n\t\tys = floor(gl_FragCoord.y / 0.5);\r\n\r\n\t\tnormal = texture2D(tPerturb, coord * seed * seed);\r\n\r\n\t\tif(coord.y < distortionX + colS && coord.y > distortionX - colS * seed) {\r\n\r\n\t\t\tsx = clamp(ceil(seedX), 0.0, 1.0);\r\n\t\t\tcoord.y = sx * (1.0 - (coord.y + distortionY)) + (1.0 - sx) * distortionY;\r\n\r\n\t\t}\r\n\r\n\t\tif(coord.x < distortionY + colS && coord.x > distortionY - colS * seed) {\r\n\r\n\t\t\tsy = clamp(ceil(seedY), 0.0, 1.0);\r\n\t\t\tcoord.x = sy * distortionX + (1.0 - sy) * (1.0 - (coord.x + distortionX));\r\n\r\n\t\t}\r\n\r\n\t\tcoord.x += normal.x * seedX * (seed / 5.0);\r\n\t\tcoord.y += normal.y * seedY * (seed / 5.0);\r\n\r\n\t\toffset = amount * vec2(cos(angle), sin(angle));\r\n\r\n\t\tcr = texture2D(tDiffuse, coord + offset);\r\n\t\tcga = texture2D(tDiffuse, coord);\r\n\t\tcb = texture2D(tDiffuse, coord - offset);\r\n\r\n\t\tcolor = vec4(cr.r, cga.g, cb.b, cga.a);\r\n\t\tsnow = 200.0 * amount * vec4(rand(vec2(xs * seed, ys * seed * 50.0)) * 0.2);\r\n\t\tcolor += snow;\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
-
-  var vertex$9 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var GlitchMaterial = function (_ShaderMaterial) {
-    _inherits(GlitchMaterial, _ShaderMaterial);
-
-    function GlitchMaterial() {
-      _classCallCheck(this, GlitchMaterial);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(GlitchMaterial).call(this, {
-        type: "GlitchMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          tPerturb: new three.Uniform(null),
-          active: new three.Uniform(1),
-          amount: new three.Uniform(0.8),
-          angle: new three.Uniform(0.02),
-          seed: new three.Uniform(0.02),
-          seedX: new three.Uniform(0.02),
-          seedY: new three.Uniform(0.02),
-          distortionX: new three.Uniform(0.5),
-          distortionY: new three.Uniform(0.6),
-          colS: new three.Uniform(0.05)
-        },
-        fragmentShader: fragment$9,
-        vertexShader: vertex$9,
-        depthWrite: false,
-        depthTest: false
-      }));
-    }
-
-    return GlitchMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$a = "#include <common>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform vec3 lightPosition;\r\n\r\nuniform float exposure;\r\nuniform float decay;\r\nuniform float density;\r\nuniform float weight;\r\nuniform float clampMax;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec2 texCoord = vUv;\r\n\r\n\t// Calculate vector from pixel to light source in screen space.\r\n\tvec2 deltaTexCoord = texCoord - lightPosition.st;\r\n\tdeltaTexCoord *= 1.0 / NUM_SAMPLES_FLOAT * density;\r\n\r\n\t// A decreasing illumination factor.\r\n\tfloat illuminationDecay = 1.0;\r\n\r\n\tvec4 sample;\r\n\tvec4 color = vec4(0.0);\r\n\r\n\t// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light source.\r\n\tfor(int i = 0; i < NUM_SAMPLES_INT; ++i) {\r\n\r\n\t\ttexCoord -= deltaTexCoord;\r\n\t\tsample = texture2D(tDiffuse, texCoord);\r\n\r\n\t\t// Apply sample attenuation scale/decay factors.\r\n\t\tsample *= illuminationDecay * weight;\r\n\r\n\t\tcolor += sample;\r\n\r\n\t\t// Update exponential decay factor.\r\n\t\tilluminationDecay *= decay;\r\n\r\n\t}\r\n\r\n\tgl_FragColor = clamp(color * exposure, 0.0, clampMax);\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
-
-  var vertex$a = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$5 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var GodRaysMaterial = function (_ShaderMaterial) {
     _inherits(GodRaysMaterial, _ShaderMaterial);
 
     function GodRaysMaterial() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var lightPosition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.Vector2();
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
       _classCallCheck(this, GodRaysMaterial);
 
@@ -3941,53 +3716,66 @@
       return _possibleConstructorReturn(this, _getPrototypeOf(GodRaysMaterial).call(this, {
         type: "GodRaysMaterial",
         defines: {
-          NUM_SAMPLES_FLOAT: "60.0",
-          NUM_SAMPLES_INT: "60"
+          SAMPLES_INT: "60",
+          SAMPLES_FLOAT: "60.0"
         },
         uniforms: {
-          tDiffuse: new three.Uniform(null),
-          lightPosition: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
+          lightPosition: new three.Uniform(lightPosition),
           exposure: new three.Uniform(settings.exposure),
           decay: new three.Uniform(settings.decay),
           density: new three.Uniform(settings.density),
           weight: new three.Uniform(settings.weight),
           clampMax: new three.Uniform(settings.clampMax)
         },
-        fragmentShader: fragment$a,
-        vertexShader: vertex$a,
+        fragmentShader: fragment$5,
+        vertexShader: vertex$5,
         depthWrite: false,
         depthTest: false
       }));
     }
 
+    _createClass(GodRaysMaterial, [{
+      key: "samples",
+      get: function get() {
+        return Number.parseInt(this.defines.SAMPLES_INT);
+      },
+      set: function set(value) {
+        value = Math.floor(value);
+        this.defines.SAMPLES_INT = value.toFixed(0);
+        this.defines.SAMPLES_FLOAT = value.toFixed(1);
+        this.needsUpdate = true;
+      }
+    }]);
+
     return GodRaysMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$b = "#include <common>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tfloat l = linearToRelativeLuminance(texel.rgb);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, l);\r\n\t\tfloat high = step(l, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tl *= low * high;\r\n\r\n\t#endif\r\n\r\n\tl = pow(abs(l), distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * l, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(l, l, l, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n";
+  var fragment$6 = "#include <common>\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform float distinction;\r\nuniform vec2 range;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(inputBuffer, vUv);\r\n\tfloat l = linearToRelativeLuminance(texel.rgb);\r\n\r\n\t#ifdef RANGE\r\n\r\n\t\tfloat low = step(range.x, l);\r\n\t\tfloat high = step(l, range.y);\r\n\r\n\t\t// Apply the mask.\r\n\t\tl *= low * high;\r\n\r\n\t#endif\r\n\r\n\tl = pow(abs(l), distinction);\r\n\r\n\t#ifdef COLOR\r\n\r\n\t\tgl_FragColor = vec4(texel.rgb * l, texel.a);\r\n\r\n\t#else\r\n\r\n\t\tgl_FragColor = vec4(l, l, l, texel.a);\r\n\r\n\t#endif\r\n\r\n}\r\n";
 
-  var vertex$b = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$6 = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
-  var LuminosityMaterial = function (_ShaderMaterial) {
-    _inherits(LuminosityMaterial, _ShaderMaterial);
+  var LuminanceMaterial = function (_ShaderMaterial) {
+    _inherits(LuminanceMaterial, _ShaderMaterial);
 
-    function LuminosityMaterial() {
+    function LuminanceMaterial() {
       var _this;
 
       var colorOutput = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
       var luminanceRange = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
-      _classCallCheck(this, LuminosityMaterial);
+      _classCallCheck(this, LuminanceMaterial);
 
       var maskLuminance = luminanceRange !== null;
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(LuminosityMaterial).call(this, {
-        type: "LuminosityMaterial",
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(LuminanceMaterial).call(this, {
+        type: "LuminanceMaterial",
         uniforms: {
-          tDiffuse: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
           distinction: new three.Uniform(1.0),
           range: new three.Uniform(maskLuminance ? luminanceRange : new three.Vector2())
         },
-        fragmentShader: fragment$b,
-        vertexShader: vertex$b
+        fragmentShader: fragment$6,
+        vertexShader: vertex$6
       }));
 
       _this.setColorOutputEnabled(colorOutput);
@@ -3997,7 +3785,7 @@
       return _this;
     }
 
-    _createClass(LuminosityMaterial, [{
+    _createClass(LuminanceMaterial, [{
       key: "setColorOutputEnabled",
       value: function setColorOutputEnabled(enabled) {
         if (enabled) {
@@ -4021,102 +3809,12 @@
       }
     }]);
 
-    return LuminosityMaterial;
+    return LuminanceMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$c = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tMask;\r\nuniform sampler2D tEdges;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D tPattern;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 color = texture2D(tDiffuse, vUv);\r\n\tvec2 edge = texture2D(tEdges, vUv).rg;\r\n\tvec2 mask = texture2D(tMask, vUv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\tedge.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\tedge *= (edgeStrength * mask.x * pulse);\r\n\tvec3 outlineColor = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;\r\n\r\n\t#ifdef ALPHA_BLENDING\r\n\r\n\t\tcolor.rgb = mix(color.rgb, outlineColor, max(edge.x, edge.y));\r\n\r\n\t#else\r\n\r\n\t\tcolor.rgb += outlineColor;\r\n\r\n\t#endif\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec3 patternColor = texture2D(tPattern, vPatternCoord).rgb;\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tfloat visibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\r\n\t\tcolor.rgb += visibilityFactor * (1.0 - mask.x) * (1.0 - patternColor);\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
+  var fragment$7 = "uniform sampler2D maskTexture;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 c0 = texture2D(maskTexture, vUv0).rg;\r\n\tvec2 c1 = texture2D(maskTexture, vUv1).rg;\r\n\tvec2 c2 = texture2D(maskTexture, vUv2).rg;\r\n\tvec2 c3 = texture2D(maskTexture, vUv3).rg;\r\n\r\n\tfloat d0 = (c0.x - c1.x) * 0.5;\r\n\tfloat d1 = (c2.x - c3.x) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.y, c1.y);\r\n\tfloat a1 = min(c2.y, c3.y);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tgl_FragColor.rg = (1.0 - visibilityFactor > 0.001) ? vec2(d, 0.0) : vec2(0.0, d);\r\n\r\n}\r\n";
 
-  var vertex$c = "#ifdef USE_PATTERN\r\n\r\n\tuniform float aspect;\r\n\tuniform float patternScale;\r\n\tvarying vec2 vPatternCoord;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\t\tvPatternCoord = uv * aspectCorrection * patternScale;\r\n\r\n\t#endif\r\n\r\n\tvUv = uv;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var OutlineBlendMaterial = function (_ShaderMaterial) {
-    _inherits(OutlineBlendMaterial, _ShaderMaterial);
-
-    function OutlineBlendMaterial() {
-      var _this;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, OutlineBlendMaterial);
-
-      var settings = Object.assign({
-        edgeStrength: 1.0,
-        patternScale: 1.0,
-        visibleEdgeColor: 0xffffff,
-        hiddenEdgeColor: 0x22090A,
-        alphaBlending: false,
-        xRay: true
-      }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(OutlineBlendMaterial).call(this, {
-        type: "OutlineBlendMaterial",
-        uniforms: {
-          pulse: new three.Uniform(1.0),
-          aspect: new three.Uniform(1.0),
-          tDiffuse: new three.Uniform(null),
-          tMask: new three.Uniform(null),
-          tEdges: new three.Uniform(null),
-          tPattern: new three.Uniform(null),
-          edgeStrength: new three.Uniform(settings.edgeStrength),
-          patternScale: new three.Uniform(settings.patternScale),
-          visibleEdgeColor: new three.Uniform(new three.Color(settings.visibleEdgeColor)),
-          hiddenEdgeColor: new three.Uniform(new three.Color(settings.hiddenEdgeColor))
-        },
-        fragmentShader: fragment$c,
-        vertexShader: vertex$c,
-        depthWrite: false,
-        depthTest: false
-      }));
-
-      _this.setAlphaBlendingEnabled(settings.alphaBlending);
-
-      _this.setXRayEnabled(settings.xRay);
-
-      return _this;
-    }
-
-    _createClass(OutlineBlendMaterial, [{
-      key: "setAlphaBlendingEnabled",
-      value: function setAlphaBlendingEnabled(enabled) {
-        if (enabled) {
-          this.defines.ALPHA_BLENDING = "1";
-        } else {
-          delete this.defines.ALPHA_BLENDING;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setXRayEnabled",
-      value: function setXRayEnabled(enabled) {
-        if (enabled) {
-          this.defines.X_RAY = "1";
-        } else {
-          delete this.defines.X_RAY;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setPatternTexture",
-      value: function setPatternTexture() {
-        var texture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-        if (texture !== null) {
-          this.defines.USE_PATTERN = "1";
-        } else {
-          delete this.defines.USE_PATTERN;
-        }
-
-        this.uniforms.tPattern.value = texture;
-        this.needsUpdate = true;
-      }
-    }]);
-
-    return OutlineBlendMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$d = "uniform sampler2D tMask;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvec2 c0 = texture2D(tMask, vUv0).rg;\r\n\tvec2 c1 = texture2D(tMask, vUv1).rg;\r\n\tvec2 c2 = texture2D(tMask, vUv2).rg;\r\n\tvec2 c3 = texture2D(tMask, vUv3).rg;\r\n\r\n\tfloat d0 = (c0.x - c1.x) * 0.5;\r\n\tfloat d1 = (c2.x - c3.x) * 0.5;\r\n\tfloat d = length(vec2(d0, d1));\r\n\r\n\tfloat a0 = min(c0.y, c1.y);\r\n\tfloat a1 = min(c2.y, c3.y);\r\n\tfloat visibilityFactor = min(a0, a1);\r\n\r\n\tgl_FragColor.rg = (1.0 - visibilityFactor > 0.001) ? vec2(d, 0.0) : vec2(0.0, d);\r\n\r\n}\r\n";
-
-  var vertex$d = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvUv0 = vec2(uv.x + texelSize.x, uv.y);\r\n\tvUv1 = vec2(uv.x - texelSize.x, uv.y);\r\n\tvUv2 = vec2(uv.x, uv.y + texelSize.y);\r\n\tvUv3 = vec2(uv.x, uv.y - texelSize.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$7 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv0;\r\nvarying vec2 vUv1;\r\nvarying vec2 vUv2;\r\nvarying vec2 vUv3;\r\n\r\nvoid main() {\r\n\r\n\tvUv0 = vec2(uv.x + texelSize.x, uv.y);\r\n\tvUv1 = vec2(uv.x - texelSize.x, uv.y);\r\n\tvUv2 = vec2(uv.x, uv.y + texelSize.y);\r\n\tvUv3 = vec2(uv.x, uv.y - texelSize.y);\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var OutlineEdgesMaterial = function (_ShaderMaterial) {
     _inherits(OutlineEdgesMaterial, _ShaderMaterial);
@@ -4131,11 +3829,11 @@
       _this = _possibleConstructorReturn(this, _getPrototypeOf(OutlineEdgesMaterial).call(this, {
         type: "OutlineEdgesMaterial",
         uniforms: {
-          tMask: new three.Uniform(null),
+          maskTexture: new three.Uniform(null),
           texelSize: new three.Uniform(new three.Vector2())
         },
-        fragmentShader: fragment$d,
-        vertexShader: vertex$d,
+        fragmentShader: fragment$7,
+        vertexShader: vertex$7,
         depthWrite: false,
         depthTest: false
       }));
@@ -4155,298 +3853,9 @@
     return OutlineEdgesMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$e = "uniform sampler2D tDiffuse;\r\nuniform float granularity;\r\nuniform float dx;\r\nuniform float dy;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel;\r\n\r\n\tif(granularity > 0.0) {\r\n\r\n\t\tvec2 coord = vec2(\r\n\t\t\tdx * (floor(vUv.x / dx) + 0.5),\r\n\t\t\tdy * (floor(vUv.y / dy) + 0.5)\r\n\t\t);\r\n\r\n\t\ttexel = texture2D(tDiffuse, coord);\r\n\r\n\t} else {\r\n\r\n\t\ttexel = texture2D(tDiffuse, vUv);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texel;\r\n\r\n}\r\n";
+  var fragment$8 = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform sampler2D areaTexture;\r\nuniform sampler2D searchTexture;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvec2 round(vec2 x) {\r\n\r\n\treturn sign(x) * floor(abs(x) + 0.5);\r\n\r\n}\r\n\r\nfloat searchLength(vec2 e, float bias, float scale) {\r\n\r\n\t// Not required if searchTexture accesses are set to point.\r\n\t// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);\r\n\t// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;\r\n\r\n\te.r = bias + e.r * scale;\r\n\r\n\treturn 255.0 * texture2D(searchTexture, e, 0.0).r;\r\n\r\n}\r\n\r\nfloat searchXLeft(vec2 texCoord, float end) {\r\n\r\n\t/* @PSEUDO_GATHER4\r\n\t * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to\r\n\t * sample between edge, thus fetching four edges in a row.\r\n\t * Sampling with different offsets in each direction allows to disambiguate\r\n\t * which edges are active from the four fetched ones.\r\n\t */\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(inputBuffer, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\t// Correct the previously applied offset (-0.25, -0.125).\r\n\ttexCoord.x += 0.25 * texelSize.x;\r\n\r\n\t// The searches are biased by 1, so adjust the coords accordingly.\r\n\ttexCoord.x += texelSize.x;\r\n\r\n\t// Disambiguate the length added by the last step.\r\n\ttexCoord.x += 2.0 * texelSize.x; // Undo last step.\r\n\ttexCoord.x -= texelSize.x * searchLength(e, 0.0, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchXRight(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(inputBuffer, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.x -= 0.25 * texelSize.x;\r\n\ttexCoord.x -= texelSize.x;\r\n\ttexCoord.x -= 2.0 * texelSize.x;\r\n\ttexCoord.x += texelSize.x * searchLength(e, 0.5, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchYUp(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(inputBuffer, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y -= 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y; // Changed sign.\r\n\ttexCoord.y -= 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y * searchLength(e.gr, 0.0, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nfloat searchYDown(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i ) {\r\n\r\n\t\te = texture2D(inputBuffer, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y += 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y; // Changed sign.\r\n\ttexCoord.y += 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y * searchLength(e.gr, 0.5, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nvec2 area(vec2 dist, float e1, float e2, float offset) {\r\n\r\n\t// Rounding prevents precision errors of bilinear filtering.\r\n\tvec2 texCoord = AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;\r\n\r\n\t// Scale and bias for texel space translation.\r\n\ttexCoord = AREATEX_PIXEL_SIZE * texCoord + (0.5 * AREATEX_PIXEL_SIZE);\r\n\r\n\t// Move to proper place, according to the subpixel offset.\r\n\ttexCoord.y += AREATEX_SUBTEX_SIZE * offset;\r\n\r\n\treturn texture2D(areaTexture, texCoord, 0.0).rg;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 weights = vec4(0.0);\r\n\tvec4 subsampleIndices = vec4(0.0);\r\n\tvec2 e = texture2D(inputBuffer, vUv).rg;\r\n\r\n\tif(e.g > 0.0) {\r\n\r\n\t\t// Edge at north.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the left.\r\n\t\tvec2 coords;\r\n\t\tcoords.x = searchXLeft(vOffset[0].xy, vOffset[2].x);\r\n\t\tcoords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)\r\n\t\td.x = coords.x;\r\n\r\n\t\t/* Now fetch the left crossing edges, two at a time using bilinear\r\n\t\tfiltering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what\r\n\t\tvalue each edge has. */\r\n\t\tfloat e1 = texture2D(inputBuffer, coords, 0.0).r;\r\n\r\n\t\t// Find the distance to the right.\r\n\t\tcoords.x = searchXRight(vOffset[0].zw, vOffset[2].y);\r\n\t\td.y = coords.x;\r\n\r\n\t\t/* Translate distances to pixel units for better interleave arithmetic and\r\n\t\tmemory accesses. */\r\n\t\td = d / texelSize.x - vPixCoord.x;\r\n\r\n\t\t// The area texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the right crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(inputBuffer, coords, ivec2(1, 0)).r;\r\n\r\n\t\t// Pattern recognised, now get the actual area.\r\n\t\tweights.rg = area(sqrtD, e1, e2, subsampleIndices.y);\r\n\r\n\t}\r\n\r\n\tif(e.r > 0.0) {\r\n\r\n\t\t// Edge at west.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the top.\r\n\t\tvec2 coords;\r\n\t\tcoords.y = searchYUp(vOffset[1].xy, vOffset[2].z);\r\n\t\tcoords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;\r\n\t\td.x = coords.y;\r\n\r\n\t\t// Fetch the top crossing edges.\r\n\t\tfloat e1 = texture2D(inputBuffer, coords, 0.0).g;\r\n\r\n\t\t// Find the distance to the bottom.\r\n\t\tcoords.y = searchYDown(vOffset[1].zw, vOffset[2].w);\r\n\t\td.y = coords.y;\r\n\r\n\t\t// Distances in pixel units.\r\n\t\td = d / texelSize.y - vPixCoord.y;\r\n\r\n\t\t// The area texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the bottom crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(inputBuffer, coords, ivec2(0, 1)).g;\r\n\r\n\t\t// Get the area for this direction.\r\n\t\tweights.ba = area(sqrtD, e1, e2, subsampleIndices.x);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = weights;\r\n\r\n}\r\n";
 
-  var vertex$e = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var PixelationMaterial = function (_ShaderMaterial) {
-    _inherits(PixelationMaterial, _ShaderMaterial);
-
-    function PixelationMaterial() {
-      _classCallCheck(this, PixelationMaterial);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(PixelationMaterial).call(this, {
-        type: "PixelationMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          granularity: new three.Uniform(1.0),
-          resolution: new three.Uniform(new three.Vector2(1.0, 1.0)),
-          dx: new three.Uniform(1.0),
-          dy: new three.Uniform(1.0)
-        },
-        fragmentShader: fragment$e,
-        vertexShader: vertex$e,
-        depthWrite: false,
-        depthTest: false
-      }));
-    }
-
-    _createClass(PixelationMaterial, [{
-      key: "setResolution",
-      value: function setResolution(width, height) {
-        this.uniforms.resolution.value.set(width, height);
-        this.granularity = this.granularity;
-      }
-    }, {
-      key: "granularity",
-      get: function get() {
-        return this.uniforms.granularity.value;
-      },
-      set: function set(x) {
-        var uniforms = this.uniforms;
-        var resolution = uniforms.resolution.value;
-        uniforms.granularity.value = x;
-        uniforms.dx.value = x / resolution.x;
-        uniforms.dy.value = x / resolution.y;
-      }
-    }]);
-
-    return PixelationMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$f = "#include <common>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tDepth;\r\n\r\nuniform vec2 texelSize;\r\nuniform vec2 halfTexelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nuniform float focalLength;\r\nuniform float focalStop;\r\n\r\nuniform float maxBlur;\r\nuniform float luminanceThreshold;\r\nuniform float luminanceGain;\r\nuniform float bias;\r\nuniform float fringe;\r\nuniform float ditherStrength;\r\n\r\n#ifdef SHADER_FOCUS\r\n\r\n\tuniform vec2 focusCoords;\r\n\r\n#else\r\n\r\n\tuniform float focalDepth;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\n#ifndef USE_LOGDEPTHBUF\r\n\r\n\t#include <packing>\r\n\r\n\tfloat readDepth(sampler2D depthSampler, vec2 coord) {\r\n\r\n\t\tfloat fragCoordZ = texture2D(depthSampler, coord).x;\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t\treturn viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef PENTAGON\r\n\r\n\tfloat penta(vec2 coords) {\r\n\r\n\t\tconst vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);\r\n\t\tconst vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);\r\n\r\n\t\tconst vec4 ONE = vec4(1.0);\r\n\r\n\t\tconst float P_FEATHER = 0.4;\r\n\t\tconst float N_FEATHER = -P_FEATHER;\r\n\r\n\t\tfloat inOrOut = -4.0;\r\n\r\n\t\tvec4 P = vec4(coords, vec2(RINGS_FLOAT - 1.3));\r\n\r\n\t\tvec4 dist = vec4(\r\n\t\t\tdot(P, HS0),\r\n\t\t\tdot(P, HS1),\r\n\t\t\tdot(P, HS2),\r\n\t\t\tdot(P, HS3)\r\n\t\t);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\r\n\t\tinOrOut += dot(dist, ONE);\r\n\r\n\t\tdist.x = dot(P, HS4);\r\n\t\tdist.y = HS5.w - abs(P.z);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\t\tinOrOut += dist.x;\r\n\r\n\t\treturn clamp(inOrOut, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef SHOW_FOCUS\r\n\r\n\tvec3 debugFocus(vec3 c, float blur, float depth) {\r\n\r\n\t\tfloat edge = 0.002 * depth;\r\n\t\tfloat m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);\r\n\t\tfloat e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);\r\n\r\n\t\tc = mix(c, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);\r\n\t\tc = mix(c, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);\r\n\r\n\t\treturn c;\r\n\r\n\t}\r\n\r\n#endif\r\n\r\n#ifdef VIGNETTE\r\n\r\n\tfloat vignette() {\r\n\r\n\t\tconst vec2 CENTER = vec2(0.5);\r\n\r\n\t\tconst float VIGNETTE_OUT = 1.3;\r\n\t\tconst float VIGNETTE_IN = 0.0;\r\n\t\tconst float VIGNETTE_FADE = 22.0; \r\n\r\n\t\tfloat d = distance(vUv, CENTER);\r\n\t\td = smoothstep(VIGNETTE_OUT + (focalStop / VIGNETTE_FADE), VIGNETTE_IN + (focalStop / VIGNETTE_FADE), d);\r\n\r\n\t\treturn clamp(d, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\nvec2 rand2(vec2 coord) {\r\n\r\n\tvec2 noise;\r\n\r\n\t#ifdef NOISE\r\n\r\n\t\tconst float a = 12.9898;\r\n\t\tconst float b = 78.233;\r\n\t\tconst float c = 43758.5453;\r\n\r\n\t\tnoise.x = clamp(fract(sin(mod(dot(coord, vec2(a, b)), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;\r\n\t\tnoise.y = clamp(fract(sin(mod(dot(coord, vec2(a, b) * 2.0), 3.14)) * c), 0.0, 1.0) * 2.0 - 1.0;\r\n\r\n\t#else\r\n\r\n\t\tnoise.x = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.25) + (fract(coord.t * halfTexelSize.y) * 0.75)) * 2.0 - 1.0;\r\n\t\tnoise.y = ((fract(1.0 - coord.s * halfTexelSize.x) * 0.75) + (fract(coord.t * halfTexelSize.y) * 0.25)) * 2.0 - 1.0;\r\n\r\n\t#endif\r\n\r\n\treturn noise;\r\n\r\n}\r\n\r\nvec3 processTexel(vec2 coords, float blur) {\r\n\r\n\tvec3 c;\r\n\tc.r = texture2D(tDiffuse, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r;\r\n\tc.g = texture2D(tDiffuse, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g;\r\n\tc.b = texture2D(tDiffuse, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b;\r\n\r\n\t// Calculate the luminance of the constructed colour.\r\n\tfloat luminance = linearToRelativeLuminance(c);\r\n\tfloat threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);\r\n\r\n\treturn c + mix(vec3(0.0), c, threshold * blur);\r\n\r\n}\r\n\r\nfloat linearize(float depth) {\r\n\r\n\treturn -cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar);\r\n\r\n}\r\n\r\nfloat gather(float i, float j, float ringSamples, inout vec3 color, float w, float h, float blur) {\r\n\r\n\tconst float TWO_PI = 6.28318531;\r\n\r\n\tfloat step = TWO_PI / ringSamples;\r\n\tfloat pw = cos(j * step) * i;\r\n\tfloat ph = sin(j * step) * i;\r\n\r\n\t#ifdef PENTAGON\r\n\r\n\t\tfloat p = penta(vec2(pw, ph));\r\n\r\n\t#else\r\n\r\n\t\tfloat p = 1.0;\r\n\r\n\t#endif\r\n\r\n\tcolor += processTexel(vUv + vec2(pw * w, ph * h), blur) * mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n\treturn mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\t#ifdef USE_LOGDEPTHBUF\r\n\r\n\t\tfloat depth = linearize(texture2D(tDepth, vUv).x);\r\n\r\n\t#else\r\n\r\n\t\tfloat depth = linearize(readDepth(tDepth, vUv));\r\n\r\n\t#endif\r\n\r\n\t#ifdef SHADER_FOCUS\r\n\r\n\t\t#ifdef USE_LOGDEPTHBUF\r\n\r\n\t\t\tfloat fDepth = linearize(texture2D(tDepth, focusCoords).x);\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat fDepth = linearize(readDepth(tDepth, focusCoords));\r\n\r\n\t\t#endif\r\n\r\n\t#else\r\n\r\n\t\tfloat fDepth = focalDepth;\r\n\r\n\t#endif\r\n\r\n\t#ifdef MANUAL_DOF\r\n\r\n\t\tconst float nDoFStart = 1.0; \r\n\t\tconst float nDoFDist = 2.0;\r\n\t\tconst float fDoFStart = 1.0;\r\n\t\tconst float fDoFDist = 3.0;\r\n\r\n\t\tfloat focalPlane = depth - fDepth;\r\n\t\tfloat farDoF = (focalPlane - fDoFStart) / fDoFDist;\r\n\t\tfloat nearDoF = (-focalPlane - nDoFStart) / nDoFDist;\r\n\r\n\t\tfloat blur = (focalPlane > 0.0) ? farDoF : nearDoF;\r\n\r\n\t#else\r\n\r\n\t\tconst float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.\r\n\r\n\t\tfloat focalPlaneMM = fDepth * 1000.0;\r\n\t\tfloat depthMM = depth * 1000.0;\r\n\r\n\t\tfloat focalPlane = (depthMM * focalLength) / (depthMM - focalLength);\r\n\t\tfloat farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);\r\n\t\tfloat nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focalStop * CIRCLE_OF_CONFUSION);\r\n\r\n\t\tfloat blur = abs(focalPlane - farDoF) * nearDoF;\r\n\r\n\t#endif\r\n\r\n\tblur = clamp(blur, 0.0, 1.0);\r\n\r\n\t// Dithering.\r\n\tvec2 noise = rand2(vUv) * ditherStrength * blur;\r\n\r\n\tfloat blurFactorX = texelSize.x * blur * maxBlur + noise.x;\r\n\tfloat blurFactorY = texelSize.y * blur * maxBlur + noise.y;\r\n\r\n\tconst int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;\r\n\r\n\t// Calculation of final color.\r\n\tvec4 color;\r\n\r\n\tif(blur < 0.05) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t} else {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv);\r\n\r\n\t\tfloat s = 1.0;\r\n\t\tint ringSamples;\r\n\r\n\t\tfor(int i = 1; i <= RINGS_INT; ++i) {\r\n\r\n\t\t\tringSamples = i * SAMPLES_INT;\r\n\r\n\t\t\t// Constant loop.\r\n\t\t\tfor(int j = 0; j < MAX_RING_SAMPLES; ++j) {\r\n\r\n\t\t\t\t// Break earlier.\r\n\t\t\t\tif(j >= ringSamples) { break; }\r\n\r\n\t\t\t\ts += gather(float(i), float(j), float(ringSamples), color.rgb, blurFactorX, blurFactorY, blur);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tcolor.rgb /= s; // Divide by sample count.\r\n\r\n\t}\r\n\r\n\t#ifdef SHOW_FOCUS\r\n\r\n\t\tcolor.rgb = debugFocus(color.rgb, blur, depth);\r\n\r\n\t#endif\r\n\r\n\t#ifdef VIGNETTE\r\n\r\n\t\tcolor.rgb *= vignette();\r\n\r\n\t#endif\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
-
-  var vertex$f = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var RealisticBokehMaterial = function (_ShaderMaterial) {
-    _inherits(RealisticBokehMaterial, _ShaderMaterial);
-
-    function RealisticBokehMaterial() {
-      var _this;
-
-      var camera = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      _classCallCheck(this, RealisticBokehMaterial);
-
-      var settings = Object.assign({
-        texelSize: null,
-        rings: 3,
-        samples: 2,
-        showFocus: false,
-        manualDoF: false,
-        vignette: false,
-        pentagon: false,
-        shaderFocus: true,
-        noise: true,
-        maxBlur: 1.0,
-        luminanceThreshold: 0.5,
-        luminanceGain: 2.0,
-        bias: 0.5,
-        fringe: 0.7,
-        ditherStrength: 0.0001
-      }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehMaterial).call(this, {
-        type: "RealisticBokehMaterial",
-        defines: {
-          RINGS_INT: settings.rings.toFixed(0),
-          RINGS_FLOAT: settings.rings.toFixed(1),
-          SAMPLES_INT: settings.samples.toFixed(0),
-          SAMPLES_FLOAT: settings.samples.toFixed(1)
-        },
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          tDepth: new three.Uniform(null),
-          texelSize: new three.Uniform(new three.Vector2()),
-          halfTexelSize: new three.Uniform(new three.Vector2()),
-          cameraNear: new three.Uniform(0.1),
-          cameraFar: new three.Uniform(2000),
-          focalLength: new three.Uniform(24.0),
-          focalStop: new three.Uniform(0.9),
-          maxBlur: new three.Uniform(settings.maxBlur),
-          luminanceThreshold: new three.Uniform(settings.luminanceThreshold),
-          luminanceGain: new three.Uniform(settings.luminanceGain),
-          bias: new three.Uniform(settings.bias),
-          fringe: new three.Uniform(settings.fringe),
-          ditherStrength: new three.Uniform(settings.ditherStrength),
-          focusCoords: new three.Uniform(new three.Vector2(0.5, 0.5)),
-          focalDepth: new three.Uniform(1.0)
-        },
-        fragmentShader: fragment$f,
-        vertexShader: vertex$f,
-        depthWrite: false,
-        depthTest: false
-      }));
-
-      _this.setShowFocusEnabled(settings.showFocus);
-
-      _this.setManualDepthOfFieldEnabled(settings.manualDoF);
-
-      _this.setVignetteEnabled(settings.vignette);
-
-      _this.setPentagonEnabled(settings.pentagon);
-
-      _this.setShaderFocusEnabled(settings.shaderFocus);
-
-      _this.setNoiseEnabled(settings.noise);
-
-      if (settings.texelSize !== null) {
-        _this.setTexelSize(settings.texelSize.x, settings.texelSize.y);
-      }
-
-      _this.adoptCameraSettings(camera);
-
-      return _this;
-    }
-
-    _createClass(RealisticBokehMaterial, [{
-      key: "setShowFocusEnabled",
-      value: function setShowFocusEnabled(enabled) {
-        if (enabled) {
-          this.defines.SHOW_FOCUS = "1";
-        } else {
-          delete this.defines.SHOW_FOCUS;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setManualDepthOfFieldEnabled",
-      value: function setManualDepthOfFieldEnabled(enabled) {
-        if (enabled) {
-          this.defines.MANUAL_DOF = "1";
-        } else {
-          delete this.defines.MANUAL_DOF;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setVignetteEnabled",
-      value: function setVignetteEnabled(enabled) {
-        if (enabled) {
-          this.defines.VIGNETTE = "1";
-        } else {
-          delete this.defines.VIGNETTE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setPentagonEnabled",
-      value: function setPentagonEnabled(enabled) {
-        if (enabled) {
-          this.defines.PENTAGON = "1";
-        } else {
-          delete this.defines.PENTAGON;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setShaderFocusEnabled",
-      value: function setShaderFocusEnabled(enabled) {
-        if (enabled) {
-          this.defines.SHADER_FOCUS = "1";
-        } else {
-          delete this.defines.SHADER_FOCUS;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setNoiseEnabled",
-      value: function setNoiseEnabled(enabled) {
-        if (enabled) {
-          this.defines.NOISE = "1";
-        } else {
-          delete this.defines.NOISE;
-        }
-
-        this.needsUpdate = true;
-      }
-    }, {
-      key: "setTexelSize",
-      value: function setTexelSize(x, y) {
-        this.uniforms.texelSize.value.set(x, y);
-        this.uniforms.halfTexelSize.value.set(x, y).multiplyScalar(0.5);
-      }
-    }, {
-      key: "adoptCameraSettings",
-      value: function adoptCameraSettings(camera) {
-        if (camera !== null) {
-          this.uniforms.cameraNear.value = camera.near;
-          this.uniforms.cameraFar.value = camera.far;
-          this.uniforms.focalLength.value = camera.getFocalLength();
-        }
-      }
-    }]);
-
-    return RealisticBokehMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$g = "#include <common>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform vec2 center;\r\nuniform float aspect;\r\nuniform float waveSize;\r\nuniform float radius;\r\nuniform float maxRadius;\r\nuniform float amplitude;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\r\n\tvec2 difference = vUv * aspectCorrection - center * aspectCorrection;\r\n\tfloat distance = sqrt(dot(difference, difference)) * vSize;\r\n\r\n\tvec2 displacement = vec2(0.0);\r\n\r\n\tif(distance > radius) {\r\n\r\n\t\tif(distance < radius + waveSize) {\r\n\r\n\t\t\tfloat angle = (distance - radius) * PI2 / waveSize;\r\n\t\t\tfloat cosSin = (1.0 - cos(angle)) * 0.5;\r\n\r\n\t\t\tfloat extent = maxRadius + waveSize;\r\n\t\t\tfloat decay = max(extent - distance * distance, 0.0) / extent;\r\n\r\n\t\t\tdisplacement = ((cosSin * amplitude * difference) / distance) * decay;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\tgl_FragColor = texture2D(tDiffuse, vUv - displacement);\r\n\r\n}\r\n";
-
-  var vertex$g = "uniform float size;\r\nuniform float scale;\r\nuniform float cameraDistance;\r\n\r\nvarying vec2 vUv;\r\nvarying float vSize;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tvSize = (0.1 * cameraDistance) / size;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var ShockWaveMaterial = function (_ShaderMaterial) {
-    _inherits(ShockWaveMaterial, _ShaderMaterial);
-
-    function ShockWaveMaterial() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, ShockWaveMaterial);
-
-      var settings = Object.assign({
-        maxRadius: 1.0,
-        waveSize: 0.2,
-        amplitude: 0.05
-      }, options);
-      return _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveMaterial).call(this, {
-        type: "ShockWaveMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          center: new three.Uniform(new three.Vector2(0.5, 0.5)),
-          aspect: new three.Uniform(1.0),
-          cameraDistance: new three.Uniform(1.0),
-          size: new three.Uniform(1.0),
-          radius: new three.Uniform(-settings.waveSize),
-          maxRadius: new three.Uniform(settings.maxRadius),
-          waveSize: new three.Uniform(settings.waveSize),
-          amplitude: new three.Uniform(settings.amplitude)
-        },
-        fragmentShader: fragment$g,
-        vertexShader: vertex$g,
-        depthWrite: false,
-        depthTest: false
-      }));
-    }
-
-    return ShockWaveMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$h = "uniform sampler2D tDiffuse;\r\nuniform sampler2D tWeights;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\t// Fetch the blending weights for current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(tWeights, vUv).xz;\r\n\ta.y = texture2D(tWeights, vOffset.zw).g;\r\n\ta.w = texture2D(tWeights, vOffset.xy).a;\r\n\r\n\tvec4 color;\r\n\r\n\t// Check if there is any blending weight with a value greater than 0.0.\r\n\tif(dot(a, vec4(1.0)) < 1e-5) {\r\n\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\r\n\t} else {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge).\r\n\t\t * The line with the maximum weight for each direction is favoured.\r\n\t\t */\r\n\r\n\t\tvec2 offset;\r\n\t\toffset.x = a.a > a.b ? a.a : -a.b; // Left vs. right.\r\n\t\toffset.y = a.g > a.r ? -a.g : a.r; // Top vs. bottom (changed signs).\r\n\r\n\t\t// Go in the direction with the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tcolor = texture2D(tDiffuse, vUv, 0.0);\r\n\t\tvec2 coord = vUv + sign(offset) * texelSize;\r\n\t\tvec4 oppositeColor = texture2D(tDiffuse, coord, 0.0);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\tgl_FragColor = color;\r\n\r\n}\r\n";
-
-  var vertex$h = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var SMAABlendMaterial = function (_ShaderMaterial) {
-    _inherits(SMAABlendMaterial, _ShaderMaterial);
-
-    function SMAABlendMaterial() {
-      var texelSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.Vector2();
-
-      _classCallCheck(this, SMAABlendMaterial);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(SMAABlendMaterial).call(this, {
-        type: "SMAABlendMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          tWeights: new three.Uniform(null),
-          texelSize: new three.Uniform(texelSize)
-        },
-        fragmentShader: fragment$h,
-        vertexShader: vertex$h,
-        depthWrite: false,
-        depthTest: false
-      }));
-    }
-
-    return SMAABlendMaterial;
-  }(three.ShaderMaterial);
-
-  var fragment$i = "#define sampleLevelZeroOffset(t, coord, offset) texture2D(t, coord + float(offset) * texelSize, 0.0)\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform sampler2D tArea;\r\nuniform sampler2D tSearch;\r\n\r\nuniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvec2 round(vec2 x) {\r\n\r\n\treturn sign(x) * floor(abs(x) + 0.5);\r\n\r\n}\r\n\r\nfloat searchLength(vec2 e, float bias, float scale) {\r\n\r\n\t// Not required if tSearch accesses are set to point.\r\n\t// const vec2 SEARCH_TEX_PIXEL_SIZE = 1.0 / vec2(66.0, 33.0);\r\n\t// e = vec2(bias, 0.0) + 0.5 * SEARCH_TEX_PIXEL_SIZE + e * vec2(scale, 1.0) * vec2(64.0, 32.0) * SEARCH_TEX_PIXEL_SIZE;\r\n\r\n\te.r = bias + e.r * scale;\r\n\r\n\treturn 255.0 * texture2D(tSearch, e, 0.0).r;\r\n\r\n}\r\n\r\nfloat searchXLeft(vec2 texCoord, float end) {\r\n\r\n\t/* @PSEUDO_GATHER4\r\n\t * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to\r\n\t * sample between edge, thus fetching four edges in a row.\r\n\t * Sampling with different offsets in each direction allows to disambiguate\r\n\t * which edges are active from the four fetched ones.\r\n\t */\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x > end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\t// Correct the previously applied offset (-0.25, -0.125).\r\n\ttexCoord.x += 0.25 * texelSize.x;\r\n\r\n\t// The searches are biased by 1, so adjust the coords accordingly.\r\n\ttexCoord.x += texelSize.x;\r\n\r\n\t// Disambiguate the length added by the last step.\r\n\ttexCoord.x += 2.0 * texelSize.x; // Undo last step.\r\n\ttexCoord.x -= texelSize.x * searchLength(e, 0.0, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchXRight(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(0.0, 1.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(2.0, 0.0) * texelSize;\r\n\r\n\t\tif(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.x -= 0.25 * texelSize.x;\r\n\ttexCoord.x -= texelSize.x;\r\n\ttexCoord.x -= 2.0 * texelSize.x;\r\n\ttexCoord.x += texelSize.x * searchLength(e, 0.5, 0.5);\r\n\r\n\treturn texCoord.x;\r\n\r\n}\r\n\r\nfloat searchYUp(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord += vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y -= 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y; // Changed sign.\r\n\ttexCoord.y -= 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y * searchLength(e.gr, 0.0, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nfloat searchYDown(vec2 texCoord, float end) {\r\n\r\n\tvec2 e = vec2(1.0, 0.0);\r\n\r\n\tfor(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i ) {\r\n\r\n\t\te = texture2D(tDiffuse, texCoord, 0.0).rg;\r\n\t\ttexCoord -= vec2(0.0, 2.0) * texelSize; // Changed sign.\r\n\r\n\t\tif(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) { break; }\r\n\r\n\t}\r\n\r\n\ttexCoord.y += 0.25 * texelSize.y; // Changed sign.\r\n\ttexCoord.y += texelSize.y; // Changed sign.\r\n\ttexCoord.y += 2.0 * texelSize.y; // Changed sign.\r\n\ttexCoord.y -= texelSize.y * searchLength(e.gr, 0.5, 0.5); // Changed sign.\r\n\r\n\treturn texCoord.y;\r\n\r\n}\r\n\r\nvec2 area(vec2 dist, float e1, float e2, float offset) {\r\n\r\n\t// Rounding prevents precision errors of bilinear filtering.\r\n\tvec2 texCoord = AREATEX_MAX_DISTANCE * round(4.0 * vec2(e1, e2)) + dist;\r\n\r\n\t// Scale and bias for texel space translation.\r\n\ttexCoord = AREATEX_PIXEL_SIZE * texCoord + (0.5 * AREATEX_PIXEL_SIZE);\r\n\r\n\t// Move to proper place, according to the subpixel offset.\r\n\ttexCoord.y += AREATEX_SUBTEX_SIZE * offset;\r\n\r\n\treturn texture2D(tArea, texCoord, 0.0).rg;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 weights = vec4(0.0);\r\n\tvec4 subsampleIndices = vec4(0.0);\r\n\tvec2 e = texture2D(tDiffuse, vUv).rg;\r\n\r\n\tif(e.g > 0.0) {\r\n\r\n\t\t// Edge at north.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the left.\r\n\t\tvec2 coords;\r\n\t\tcoords.x = searchXLeft(vOffset[0].xy, vOffset[2].x);\r\n\t\tcoords.y = vOffset[1].y; // vOffset[1].y = vUv.y - 0.25 * texelSize.y (@CROSSING_OFFSET)\r\n\t\td.x = coords.x;\r\n\r\n\t\t/* Now fetch the left crossing edges, two at a time using bilinear\r\n\t\tfiltering. Sampling at -0.25 (see @CROSSING_OFFSET) enables to discern what\r\n\t\tvalue each edge has. */\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).r;\r\n\r\n\t\t// Find the distance to the right.\r\n\t\tcoords.x = searchXRight(vOffset[0].zw, vOffset[2].y);\r\n\t\td.y = coords.x;\r\n\r\n\t\t/* Translate distances to pixel units for better interleave arithmetic and\r\n\t\tmemory accesses. */\r\n\t\td = d / texelSize.x - vPixCoord.x;\r\n\r\n\t\t// The area texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the right crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(1, 0)).r;\r\n\r\n\t\t// Pattern recognised, now get the actual area.\r\n\t\tweights.rg = area(sqrtD, e1, e2, subsampleIndices.y);\r\n\r\n\t}\r\n\r\n\tif(e.r > 0.0) {\r\n\r\n\t\t// Edge at west.\r\n\t\tvec2 d;\r\n\r\n\t\t// Find the distance to the top.\r\n\t\tvec2 coords;\r\n\t\tcoords.y = searchYUp(vOffset[1].xy, vOffset[2].z);\r\n\t\tcoords.x = vOffset[0].x; // vOffset[1].x = vUv.x - 0.25 * texelSize.x;\r\n\t\td.x = coords.y;\r\n\r\n\t\t// Fetch the top crossing edges.\r\n\t\tfloat e1 = texture2D(tDiffuse, coords, 0.0).g;\r\n\r\n\t\t// Find the distance to the bottom.\r\n\t\tcoords.y = searchYDown(vOffset[1].zw, vOffset[2].w);\r\n\t\td.y = coords.y;\r\n\r\n\t\t// Distances in pixel units.\r\n\t\td = d / texelSize.y - vPixCoord.y;\r\n\r\n\t\t// The area texture is compressed quadratically.\r\n\t\tvec2 sqrtD = sqrt(abs(d));\r\n\r\n\t\t// Fetch the bottom crossing edges.\r\n\t\tcoords.y -= texelSize.y; // WebGL port note: Added.\r\n\t\tfloat e2 = sampleLevelZeroOffset(tDiffuse, coords, ivec2(0, 1)).g;\r\n\r\n\t\t// Get the area for this direction.\r\n\t\tweights.ba = area(sqrtD, e1, e2, subsampleIndices.x);\r\n\r\n\t}\r\n\r\n\tgl_FragColor = weights;\r\n\r\n}\r\n";
-
-  var vertex$i = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvPixCoord = uv / texelSize;\r\n\r\n\t// Offsets for the searches (see @PSEUDO_GATHER4).\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-0.25, 0.125, 1.25, 0.125); // Changed sign in Y and W components.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(-0.125, 0.25, -0.125, -1.25); //Changed sign in Y and W components.\r\n\r\n\t// This indicates the ends of the loops.\r\n\tvOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) + vec4(-2.0, 2.0, -2.0, 2.0) * texelSize.xxyy * MAX_SEARCH_STEPS_FLOAT;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
+  var vertex$8 = "uniform vec2 texelSize;\r\n\r\nvarying vec2 vUv;\r\nvarying vec4 vOffset[3];\r\nvarying vec2 vPixCoord;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tvPixCoord = uv / texelSize;\r\n\r\n\t// Offsets for the searches (see @PSEUDO_GATHER4).\r\n\tvOffset[0] = uv.xyxy + texelSize.xyxy * vec4(-0.25, 0.125, 1.25, 0.125); // Changed sign in Y and W components.\r\n\tvOffset[1] = uv.xyxy + texelSize.xyxy * vec4(-0.125, 0.25, -0.125, -1.25); //Changed sign in Y and W components.\r\n\r\n\t// This indicates the ends of the loops.\r\n\tvOffset[2] = vec4(vOffset[0].xz, vOffset[1].yw) + vec4(-2.0, 2.0, -2.0, 2.0) * texelSize.xxyy * MAX_SEARCH_STEPS_FLOAT;\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
   var SMAAWeightsMaterial = function (_ShaderMaterial) {
     _inherits(SMAAWeightsMaterial, _ShaderMaterial);
@@ -4468,13 +3877,13 @@
           SEARCHTEX_PACKED_SIZE: "vec2(64.0, 16.0)"
         },
         uniforms: {
-          tDiffuse: new three.Uniform(null),
-          tArea: new three.Uniform(null),
-          tSearch: new three.Uniform(null),
+          inputBuffer: new three.Uniform(null),
+          areaTexture: new three.Uniform(null),
+          searchTexture: new three.Uniform(null),
           texelSize: new three.Uniform(texelSize)
         },
-        fragmentShader: fragment$i,
-        vertexShader: vertex$i,
+        fragmentShader: fragment$8,
+        vertexShader: vertex$8,
         depthWrite: false,
         depthTest: false
       }));
@@ -4492,35 +3901,6 @@
     return SMAAWeightsMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$j = "#include <common>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D tDiffuse;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\n\r\n#ifdef ADAPTED_LUMINANCE\r\n\r\n\tuniform sampler2D luminanceMap;\r\n\r\n#else\r\n\r\n\tuniform float averageLuminance;\r\n\r\n#endif\r\n\r\nvarying vec2 vUv;\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance by sampling the center.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, vec2(0.5)).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = linearToRelativeLuminance(c);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid main() {\r\n\r\n\tvec4 texel = texture2D(tDiffuse, vUv);\r\n\tgl_FragColor = vec4(toneMap(texel.rgb), texel.a);\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
-
-  var vertex$j = "varying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
-
-  var ToneMappingMaterial = function (_ShaderMaterial) {
-    _inherits(ToneMappingMaterial, _ShaderMaterial);
-
-    function ToneMappingMaterial() {
-      _classCallCheck(this, ToneMappingMaterial);
-
-      return _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingMaterial).call(this, {
-        type: "ToneMappingMaterial",
-        uniforms: {
-          tDiffuse: new three.Uniform(null),
-          luminanceMap: new three.Uniform(null),
-          averageLuminance: new three.Uniform(1.0),
-          maxLuminance: new three.Uniform(16.0),
-          middleGrey: new three.Uniform(0.6)
-        },
-        fragmentShader: fragment$j,
-        vertexShader: vertex$j,
-        depthWrite: false,
-        depthTest: false
-      }));
-    }
-
-    return ToneMappingMaterial;
-  }(three.ShaderMaterial);
-
   var Pass = function () {
     function Pass() {
       var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Pass";
@@ -4533,9 +3913,10 @@
       this.scene = scene;
       this.camera = camera;
       this.quad = null;
+      this.needsSwap = true;
+      this.needsDepthTexture = false;
       this.renderToScreen = false;
       this.enabled = true;
-      this.needsSwap = true;
     }
 
     _createClass(Pass, [{
@@ -4559,6 +3940,15 @@
             this.quad = quad;
           }
         }
+      }
+    }, {
+      key: "getDepthTexture",
+      value: function getDepthTexture() {
+        return null;
+      }
+    }, {
+      key: "setDepthTexture",
+      value: function setDepthTexture(depthTexture) {
       }
     }, {
       key: "render",
@@ -4590,16 +3980,6 @@
             this[key] = null;
           }
         }
-      }
-    }, {
-      key: "material",
-      get: function get() {
-        console.warn("Pass.material has been deprecated, please use Pass.getFullscreenMaterial()");
-        return this.getFullscreenMaterial();
-      },
-      set: function set(value) {
-        console.warn("Pass.material has been deprecated, please use Pass.setFullscreenMaterial(Material)");
-        this.setFullscreenMaterial(value);
       }
     }]);
 
@@ -4666,7 +4046,7 @@
         for (i = 0, l = kernel.length - 1; i < l; ++i) {
           destRT = i % 2 === 0 ? renderTargetX : renderTargetY;
           uniforms.kernel.value = kernel[i];
-          uniforms.tDiffuse.value = lastRT.texture;
+          uniforms.inputBuffer.value = lastRT.texture;
           renderer.render(scene, camera, destRT);
           lastRT = destRT;
         }
@@ -4678,7 +4058,7 @@
         }
 
         uniforms.kernel.value = kernel[i];
-        uniforms.tDiffuse.value = lastRT.texture;
+        uniforms.inputBuffer.value = lastRT.texture;
         renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
       }
     }, {
@@ -4723,182 +4103,6 @@
     }]);
 
     return BlurPass;
-  }(Pass);
-
-  var BloomPass = function (_Pass) {
-    _inherits(BloomPass, _Pass);
-
-    function BloomPass() {
-      var _this;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, BloomPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(BloomPass).call(this, "BloomPass"));
-      _this.renderTarget = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter,
-        stencilBuffer: false,
-        depthBuffer: false
-      });
-      _this.renderTarget.texture.name = "Bloom.Target";
-      _this.renderTarget.texture.generateMipmaps = false;
-      _this.blurPass = new BlurPass(options);
-      _this.resolution = new three.Vector2();
-      _this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
-      _this.intensity = options.intensity;
-      _this.luminosityMaterial = new LuminosityMaterial(true);
-      _this.distinction = options.distinction;
-      return _this;
-    }
-
-    _createClass(BloomPass, [{
-      key: "getResolutionScale",
-      value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
-      }
-    }, {
-      key: "setResolutionScale",
-      value: function setResolutionScale(scale) {
-        this.blurPass.setResolutionScale(scale);
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var scene = this.scene;
-        var camera = this.camera;
-        var blurPass = this.blurPass;
-        var luminosityMaterial = this.luminosityMaterial;
-        var combineMaterial = this.combineMaterial;
-        var renderTarget = this.renderTarget;
-        this.setFullscreenMaterial(luminosityMaterial);
-        luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(scene, camera, renderTarget);
-        blurPass.render(renderer, renderTarget, renderTarget);
-
-        if (this.blend) {
-          this.setFullscreenMaterial(combineMaterial);
-          combineMaterial.uniforms.texture1.value = inputBuffer.texture;
-          combineMaterial.uniforms.texture2.value = renderTarget.texture;
-          renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
-        }
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.resolution.set(width, height);
-        this.blurPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
-        this.renderTarget.setSize(width, height);
-      }
-    }, {
-      key: "initialize",
-      value: function initialize(renderer, alpha) {
-        this.blurPass.initialize(renderer, alpha);
-
-        if (!alpha) {
-          this.renderTarget.texture.format = three.RGBFormat;
-        }
-      }
-    }, {
-      key: "kernelSize",
-      get: function get() {
-        return this.blurPass.kernelSize;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
-        this.blurPass.kernelSize = value;
-      }
-    }, {
-      key: "intensity",
-      get: function get() {
-        return this.combineMaterial.uniforms.opacity2.value;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
-        this.combineMaterial.uniforms.opacity2.value = value;
-      }
-    }, {
-      key: "distinction",
-      get: function get() {
-        return this.luminosityMaterial.uniforms.distinction.value;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
-        this.luminosityMaterial.uniforms.distinction.value = value;
-      }
-    }, {
-      key: "dithering",
-      get: function get() {
-        return this.blurPass.dithering;
-      },
-      set: function set(value) {
-        this.blurPass.dithering = value;
-      }
-    }, {
-      key: "blend",
-      get: function get() {
-        return this.needsSwap;
-      },
-      set: function set(value) {
-        this.needsSwap = value;
-      }
-    }, {
-      key: "overlay",
-      get: function get() {
-        return this.renderTarget.texture;
-      }
-    }, {
-      key: "resolutionScale",
-      get: function get() {
-        console.warn("BloomPass.resolutionScale has been deprecated, please use BloomPass.getResolutionScale()");
-        return this.getResolutionScale();
-      },
-      set: function set(value) {
-        console.warn("BloomPass.resolutionScale has been deprecated, please use BloomPass.setResolutionScale(Number)");
-        this.setResolutionScale(value);
-      }
-    }]);
-
-    return BloomPass;
-  }(Pass);
-
-  var BokehPass = function (_Pass) {
-    _inherits(BokehPass, _Pass);
-
-    function BokehPass(camera) {
-      var _this;
-
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      _classCallCheck(this, BokehPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(BokehPass).call(this, "BokehPass"));
-
-      _this.setFullscreenMaterial(new BokehMaterial(camera, options));
-
-      return _this;
-    }
-
-    _createClass(BokehPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.tDiffuse.value = inputBuffer.texture;
-        uniforms.tDepth.value = inputBuffer.depthTexture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.getFullscreenMaterial().uniforms.aspect.value = width / height;
-      }
-    }]);
-
-    return BokehPass;
   }(Pass);
 
   var ClearMaskPass = function (_Pass) {
@@ -4966,476 +4170,580 @@
     return ClearPass;
   }(Pass);
 
-  var DotScreenPass = function (_Pass) {
-    _inherits(DotScreenPass, _Pass);
+  var BlendFunction = {
+    SKIP: 0,
+    ADD: 1,
+    ALPHA: 2,
+    AVERAGE: 3,
+    COLOR_BURN: 4,
+    COLOR_DODGE: 5,
+    DARKEN: 6,
+    DIFFERENCE: 7,
+    EXCLUSION: 8,
+    LIGHTEN: 9,
+    MULTIPLY: 10,
+    NEGATION: 11,
+    NORMAL: 12,
+    OVERLAY: 13,
+    REFLECT: 14,
+    SCREEN: 15,
+    SOFT_LIGHT: 16,
+    SUBTRACT: 17
+  };
 
-    function DotScreenPass() {
-      var _this;
+  var addBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn min(x + y, 1.0) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var alphaBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn y * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, y.a), x.a);\r\n\r\n}\r\n";
 
-      _classCallCheck(this, DotScreenPass);
+  var averageBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn (x + y) * 0.5 * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenPass).call(this, "DotScreenPass"));
+  var colorBurnBlendFunction = "float blend(const in float x, const in float y) {\r\n\r\n\treturn (y == 0.0) ? y : max(1.0 - (1.0 - x) / y, 0.0);\r\n\r\n}\r\n\r\nvec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\tvec3 z = vec3(blend(x.r, y.r), blend(x.g, y.g), blend(x.b, y.b));\r\n\r\n\treturn z * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
-      _this.setFullscreenMaterial(new DotScreenMaterial(options));
+  var colorDodgeBlendFunction = "float blend(const in float x, const in float y) {\r\n\r\n\treturn (y == 1.0) ? y : min(x / (1.0 - y), 1.0);\r\n\r\n}\r\n\r\nvec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\tvec3 z = vec3(blend(x.r, y.r), blend(x.g, y.g), blend(x.b, y.b));\r\n\r\n\treturn z * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
-      return _this;
+  var darkenBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn min(x, y) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var differenceBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn abs(x - y) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var exclusionBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn (x + y - 2.0 * x * y) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var lightenBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn max(x, y) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var multiplyBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn x * y * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var negationBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn (1.0 - abs(1.0 - x - y)) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var normalBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn y * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var overlayBlendFunction = "float blend(const in float x, const in float y) {\r\n\r\n\treturn (x < 0.5) ? (2.0 * x * y) : (1.0 - 2.0 * (1.0 - x) * (1.0 - y));\r\n\r\n}\r\n\r\nvec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\tvec3 z = vec3(blend(x.r, y.r), blend(x.g, y.g), blend(x.b, y.b));\r\n\r\n\treturn z * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var reflectBlendFunction = "float blend(const in float x, const in float y) {\r\n\r\n\treturn (y == 1.0) ? y : min(x * x / (1.0 - y), 1.0);\r\n\r\n}\r\n\r\nvec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\tvec3 z = vec3(blend(x.r, y.r), blend(x.g, y.g), blend(x.b, y.b));\r\n\r\n\treturn z * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var screenBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn (1.0 - (1.0 - x) * (1.0 - y)) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var softLightBlendFunction = "float blend(const in float x, const in float y) {\r\n\r\n\treturn (y < 0.5) ?\r\n\t\t(2.0 * x * y + x * x * (1.0 - 2.0 * y)) :\r\n\t\t(sqrt(x) * (2.0 * y - 1.0) + 2.0 * x * (1.0 - y));\r\n\r\n}\r\n\r\nvec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\tvec3 z = vec3(blend(x.r, y.r), blend(x.g, y.g), blend(x.b, y.b));\r\n\r\n\treturn z * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var subtractBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn max(x + y - 1.0, 0.0) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
+
+  var blendFunctions = new Map([[BlendFunction.SKIP, null], [BlendFunction.ADD, addBlendFunction], [BlendFunction.ALPHA, alphaBlendFunction], [BlendFunction.AVERAGE, averageBlendFunction], [BlendFunction.COLOR_BURN, colorBurnBlendFunction], [BlendFunction.COLOR_DODGE, colorDodgeBlendFunction], [BlendFunction.DARKEN, darkenBlendFunction], [BlendFunction.DIFFERENCE, differenceBlendFunction], [BlendFunction.EXCLUSION, exclusionBlendFunction], [BlendFunction.LIGHTEN, lightenBlendFunction], [BlendFunction.MULTIPLY, multiplyBlendFunction], [BlendFunction.NEGATION, negationBlendFunction], [BlendFunction.NORMAL, normalBlendFunction], [BlendFunction.OVERLAY, overlayBlendFunction], [BlendFunction.REFLECT, reflectBlendFunction], [BlendFunction.SCREEN, screenBlendFunction], [BlendFunction.SOFT_LIGHT, softLightBlendFunction], [BlendFunction.SUBTRACT, subtractBlendFunction]]);
+  var BlendMode = function () {
+    function BlendMode(blendFunction) {
+      var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
+
+      _classCallCheck(this, BlendMode);
+
+      this.blendFunction = blendFunction;
+      this.opacity = new three.Uniform(opacity);
     }
 
-    _createClass(DotScreenPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        width = Math.max(1, width);
-        height = Math.max(1, height);
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.offsetRepeat.value.z = width;
-        uniforms.offsetRepeat.value.w = height;
+    _createClass(BlendMode, [{
+      key: "getShaderCode",
+      value: function getShaderCode() {
+        return blendFunctions.get(this.blendFunction);
       }
     }]);
 
-    return DotScreenPass;
-  }(Pass);
+    return BlendMode;
+  }();
 
-  var FilmPass = function (_Pass) {
-    _inherits(FilmPass, _Pass);
+  var Effect = function () {
+    function Effect(name, fragmentShader) {
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    function FilmPass() {
-      var _this;
+      _classCallCheck(this, Effect);
 
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, FilmPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(FilmPass).call(this, "FilmPass"));
-
-      _this.setFullscreenMaterial(new FilmMaterial(options));
-
-      _this.resolution = new three.Vector2();
-      _this.scanlineDensity = options.scanlineDensity === undefined ? 1.25 : options.scanlineDensity;
-      _this.gridScale = options.gridScale === undefined ? 1.0 : Math.max(options.gridScale, 1e-6);
-      _this.gridLineWidth = options.gridLineWidth === undefined ? 0.0 : Math.max(options.gridLineWidth, 0.0);
-      return _this;
+      var settings = Object.assign({
+        attributes: EffectAttribute.NONE,
+        blendFunction: BlendFunction.SCREEN,
+        defines: new Map(),
+        uniforms: new Map(),
+        vertexShader: null
+      }, options);
+      this.name = name;
+      this.attributes = settings.attributes;
+      this.fragmentShader = fragmentShader;
+      this.vertexShader = settings.vertexShader;
+      this.defines = settings.defines;
+      this.uniforms = settings.uniforms;
+      this.blendMode = new BlendMode(settings.blendFunction);
     }
 
-    _createClass(FilmPass, [{
-      key: "getScanlineDensity",
-      value: function getScanlineDensity() {
-        return this.scanlineDensity;
-      }
-    }, {
-      key: "setScanlineDensity",
-      value: function setScanlineDensity(density) {
-        this.scanlineDensity = density;
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "getGridScale",
-      value: function getGridScale() {
-        return this.gridScale;
-      }
-    }, {
-      key: "setGridScale",
-      value: function setGridScale(scale) {
-        this.gridScale = scale;
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "getGridLineWidth",
-      value: function getGridLineWidth() {
-        return this.gridLineWidth;
-      }
-    }, {
-      key: "setGridLineWidth",
-      value: function setGridLineWidth(lineWidth) {
-        this.gridLineWidth = lineWidth;
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.tDiffuse.value = inputBuffer.texture;
-        uniforms.time.value += delta;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
+    _createClass(Effect, [{
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {}
     }, {
       key: "setSize",
-      value: function setSize(width, height) {
-        this.resolution.set(width, height);
-        var aspect = width / height;
-        var gridScale = this.gridScale * (height * 0.125);
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.scanlineCount.value = Math.round(height * this.scanlineDensity);
-        uniforms.gridScale.value.set(aspect * gridScale, gridScale);
-        uniforms.gridLineWidth.value = gridScale / height + this.gridLineWidth;
+      value: function setSize(width, height) {}
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {}
+    }, {
+      key: "dispose",
+      value: function dispose() {
+        var _arr = Object.keys(this);
+
+        for (var _i = 0; _i < _arr.length; _i++) {
+          var key = _arr[_i];
+
+          if (this[key] !== null && typeof this[key].dispose === "function") {
+            this[key].dispose();
+            this[key] = null;
+          }
+        }
       }
     }]);
 
-    return FilmPass;
-  }(Pass);
+    return Effect;
+  }();
+  var EffectAttribute = {
+    CONVOLUTION: 2,
+    DEPTH: 1,
+    NONE: 0
+  };
 
-  function randomInt(low, high) {
-    return low + Math.floor(Math.random() * (high - low + 1));
+  function findSubstrings(regExp, string) {
+    var substrings = [];
+    var result;
+
+    while ((result = regExp.exec(string)) !== null) {
+      substrings.push(result[1]);
+    }
+
+    return substrings;
   }
 
-  function randomFloat(low, high) {
-    return low + Math.random() * (high - low);
+  function prefixSubstrings(prefix, substrings, strings) {
+    var prefixed, regExp;
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = substrings[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var substring = _step.value;
+        prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
+        regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+          for (var _iterator2 = strings.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var entry = _step2.value;
+
+            if (entry[1] !== null) {
+              strings.set(entry[0], entry[1].replace(regExp, prefixed));
+            }
+          }
+        } catch (err) {
+          _didIteratorError2 = true;
+          _iteratorError2 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+              _iterator2.return();
+            }
+          } finally {
+            if (_didIteratorError2) {
+              throw _iteratorError2;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
   }
 
-  var GlitchPass = function (_Pass) {
-    _inherits(GlitchPass, _Pass);
+  function integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {
+    var functionRegExp = /(?:\w+\s+(\w+)\([\w\s,]*\)\s*{[^}]+})/g;
+    var varyingRegExp = /(?:varying\s+\w+\s+(\w*))/g;
+    var blendMode = effect.blendMode;
+    var shaders = new Map([["fragment", effect.fragmentShader], ["vertex", effect.vertexShader]]);
+    var mainImageExists = shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainImage") >= 0;
+    var mainUvExists = shaders.get("fragment") !== undefined && shaders.get("fragment").indexOf("mainUv") >= 0;
+    var varyings = [],
+        names = [];
+    var transformedUv = false;
 
-    function GlitchPass() {
+    if (shaders.get("fragment") === undefined) {
+      console.error("Missing fragment shader", effect);
+    } else if (mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {
+      console.error("Effects that transform UV coordinates are incompatible with convolution effects", effect);
+    } else if (!mainImageExists && !mainUvExists) {
+      console.error("The fragment shader contains neither a mainImage nor a mainUv function", effect);
+    } else {
+      if (mainUvExists) {
+        shaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) + "\t" + prefix + "MainUv(UV);\n");
+        transformedUv = true;
+      }
+
+      if (shaders.get("vertex") !== null && shaders.get("vertex").indexOf("mainSupport") >= 0) {
+        shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + "\t" + prefix + "MainSupport();\n");
+        varyings = varyings.concat(findSubstrings(varyingRegExp, shaders.get("vertex")));
+        names = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get("vertex")));
+      }
+
+      names = names.concat(findSubstrings(functionRegExp, shaders.get("fragment"))).concat(Array.from(effect.uniforms.keys())).concat(Array.from(effect.defines.keys()));
+      effect.uniforms.forEach(function (value, key) {
+        return uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value);
+      });
+      effect.defines.forEach(function (value, key) {
+        return defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value);
+      });
+      prefixSubstrings(prefix, names, defines);
+      prefixSubstrings(prefix, names, shaders);
+      blendModes.set(blendMode.blendFunction, blendMode);
+
+      if (mainImageExists) {
+        var string = prefix + "MainImage(color0, UV, ";
+
+        if ((effect.attributes & EffectAttribute.DEPTH) !== 0) {
+          string += "depth, ";
+        }
+
+        string += "color1);\n\t";
+        var blendOpacity = prefix + "BlendOpacity";
+        uniforms.set(blendOpacity, blendMode.opacity);
+        string += "color0 = blend" + blendMode.blendFunction + "(color0, color1, " + blendOpacity + ");\n\n\t";
+        shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);
+        shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + "uniform float " + blendOpacity + ";\n\n");
+      }
+
+      shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + shaders.get("fragment") + "\n");
+
+      if (shaders.get("vertex") !== null) {
+        shaderParts.set(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) + shaders.get("vertex") + "\n");
+      }
+    }
+
+    return {
+      varyings: varyings,
+      transformedUv: transformedUv
+    };
+  }
+
+  var EffectPass = function (_Pass) {
+    _inherits(EffectPass, _Pass);
+
+    function EffectPass(camera) {
       var _this;
 
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      _classCallCheck(this, EffectPass);
 
-      _classCallCheck(this, GlitchPass);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(EffectPass).call(this, "EffectPass"));
+      _this.mainCamera = camera;
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(GlitchPass).call(this, "GlitchPass"));
+      for (var _len = arguments.length, effects = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        effects[_key - 1] = arguments[_key];
+      }
 
-      _this.setFullscreenMaterial(new GlitchMaterial());
+      _this.effects = effects.sort(function (a, b) {
+        return b.attributes - a.attributes;
+      });
+      _this.quantize = false;
+      _this.uniforms = 0;
+      _this.varyings = 0;
+      _this.minTime = 1.0;
+      _this.maxTime = 1e3;
 
-      _this.texture = null;
-      _this.perturbMap = options.perturbMap !== undefined ? options.perturbMap : _this.generatePerturbMap(options.dtSize);
-      _this.perturbMap.name = "Glitch.Perturbation";
-      _this.perturbMap.generateMipmaps = false;
-      _this.mode = GlitchMode.SPORADIC;
-      _this.counter = 0;
-      _this.breakPoint = randomInt(120, 240);
+      _this.setFullscreenMaterial(_this.createMaterial());
+
       return _this;
     }
 
-    _createClass(GlitchPass, [{
-      key: "generatePerturbMap",
-      value: function generatePerturbMap() {
-        var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 64;
-        var pixels = size * size;
-        var data = new Float32Array(pixels * 3);
-        var dt = this.perturbMap;
-        var i, x;
+    _createClass(EffectPass, [{
+      key: "createMaterial",
+      value: function createMaterial() {
+        var blendRegExp = /\bblend\b/g;
+        var shaderParts = new Map([[Section.FRAGMENT_HEAD, ""], [Section.FRAGMENT_MAIN_UV, ""], [Section.FRAGMENT_MAIN_IMAGE, ""], [Section.VERTEX_HEAD, ""], [Section.VERTEX_MAIN_SUPPORT, ""]]);
+        var blendModes = new Map();
+        var defines = new Map();
+        var uniforms = new Map();
+        var id = 0,
+            varyings = 0,
+            attributes = 0;
+        var transformedUv = false;
+        var result;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
-        for (i = 0; i < pixels; ++i) {
-          x = Math.random();
-          data[i * 3] = x;
-          data[i * 3 + 1] = x;
-          data[i * 3 + 2] = x;
-        }
+        try {
+          for (var _iterator3 = this.effects[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var effect = _step3.value;
 
-        if (dt !== null) {
-          dt.dispose();
-        }
-
-        dt = new three.DataTexture(data, size, size, three.RGBFormat, three.FloatType);
-        dt.needsUpdate = true;
-        this.perturbMap = dt;
-        return dt;
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var mode = this.mode;
-        var counter = this.counter;
-        var breakPoint = this.breakPoint;
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.tDiffuse.value = inputBuffer.texture;
-        uniforms.seed.value = Math.random();
-        uniforms.active.value = true;
-
-        if (counter % breakPoint === 0 || mode === GlitchMode.CONSTANT_WILD) {
-          uniforms.amount.value = Math.random() / 30.0;
-          uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
-          uniforms.seedX.value = randomFloat(-1.0, 1.0);
-          uniforms.seedY.value = randomFloat(-1.0, 1.0);
-          uniforms.distortionX.value = randomFloat(0.0, 1.0);
-          uniforms.distortionY.value = randomFloat(0.0, 1.0);
-          this.breakPoint = randomInt(120, 240);
-          this.counter = 0;
-        } else {
-          if (counter % breakPoint < breakPoint / 5 || mode === GlitchMode.CONSTANT_MILD) {
-            uniforms.amount.value = Math.random() / 90.0;
-            uniforms.angle.value = randomFloat(-Math.PI, Math.PI);
-            uniforms.distortionX.value = randomFloat(0.0, 1.0);
-            uniforms.distortionY.value = randomFloat(0.0, 1.0);
-            uniforms.seedX.value = randomFloat(-0.3, 0.3);
-            uniforms.seedY.value = randomFloat(-0.3, 0.3);
-          } else {
-            uniforms.active.value = false;
+            if (effect.blendMode.blendFunction !== BlendFunction.SKIP) {
+              if ((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
+                console.error("Convolution effects cannot be merged", effect);
+              } else {
+                attributes |= effect.attributes;
+                result = integrateEffect("e" + id++, effect, shaderParts, blendModes, defines, uniforms, attributes);
+                varyings += result.varyings.length;
+                transformedUv = transformedUv || result.transformedUv;
+              }
+            }
+          }
+        } catch (err) {
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+              _iterator3.return();
+            }
+          } finally {
+            if (_didIteratorError3) {
+              throw _iteratorError3;
+            }
           }
         }
 
-        ++this.counter;
+        var _iteratorNormalCompletion4 = true;
+        var _didIteratorError4 = false;
+        var _iteratorError4 = undefined;
+
+        try {
+          for (var _iterator4 = blendModes.values()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+            var blendMode = _step4.value;
+            shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
+          }
+        } catch (err) {
+          _didIteratorError4 = true;
+          _iteratorError4 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+              _iterator4.return();
+            }
+          } finally {
+            if (_didIteratorError4) {
+              throw _iteratorError4;
+            }
+          }
+        }
+
+        if ((attributes & EffectAttribute.DEPTH) !== 0) {
+          shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+          this.needsDepthTexture = true;
+        }
+
+        if (transformedUv) {
+          shaderParts.set(Section.FRAGMENT_MAIN_UV, "vec2 transformedUv = vUv;\n" + shaderParts.get(Section.FRAGMENT_MAIN_UV));
+          defines.set("UV", "transformedUv");
+        } else {
+          defines.set("UV", "vUv");
+        }
+
+        shaderParts.forEach(function (value, key, map) {
+          return map.set(key, value.trim());
+        });
+        this.uniforms = uniforms.size;
+        this.varyings = varyings;
+        return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+      }
+    }, {
+      key: "recompile",
+      value: function recompile() {
+        var material = this.getFullscreenMaterial();
+        var width = 0,
+            height = 0;
+        var depthTexture = null;
+        var depthPacking = 0;
+
+        if (material !== null) {
+          var resolution = material.uniforms.resolution.value;
+          width = resolution.x;
+          height = resolution.y;
+          depthTexture = material.uniforms.depthBuffer.value;
+          depthPacking = material.depthPacking;
+          material.dispose();
+          this.uniforms = 0;
+          this.varyings = 0;
+        }
+
+        material = this.createMaterial();
+        material.setResolution(width, height);
+        this.setFullscreenMaterial(material);
+        this.setDepthTexture(depthTexture, depthPacking);
+      }
+    }, {
+      key: "getDepthTexture",
+      value: function getDepthTexture() {
+        var material = this.getFullscreenMaterial();
+        return material !== null ? material.uniforms.depthBuffer.value : null;
+      }
+    }, {
+      key: "setDepthTexture",
+      value: function setDepthTexture(depthTexture) {
+        var depthPacking = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        var material = this.getFullscreenMaterial();
+        material.uniforms.depthBuffer.value = depthTexture;
+        material.depthPacking = depthPacking;
+        material.needsUpdate = true;
+        this.needsDepthTexture = depthTexture === null;
+      }
+    }, {
+      key: "render",
+      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+        var material = this.getFullscreenMaterial();
+        var time = material.uniforms.time.value + delta;
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
+
+        try {
+          for (var _iterator5 = this.effects[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var effect = _step5.value;
+            effect.update(renderer, inputBuffer, delta);
+          }
+        } catch (err) {
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+              _iterator5.return();
+            }
+          } finally {
+            if (_didIteratorError5) {
+              throw _iteratorError5;
+            }
+          }
+        }
+
+        material.uniforms.inputBuffer.value = inputBuffer.texture;
+        material.uniforms.time.value = time <= this.maxTime ? time : this.minTime;
         renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "perturbMap",
-      get: function get() {
-        return this.texture;
-      },
-      set: function set(value) {
-        this.texture = value;
-        this.getFullscreenMaterial().uniforms.tPerturb.value = value;
-      }
-    }]);
-
-    return GlitchPass;
-  }(Pass);
-  var GlitchMode = {
-    SPORADIC: 0,
-    CONSTANT_MILD: 1,
-    CONSTANT_WILD: 2
-  };
-
-  var RenderPass = function (_Pass) {
-    _inherits(RenderPass, _Pass);
-
-    function RenderPass(scene, camera) {
-      var _this;
-
-      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-      _classCallCheck(this, RenderPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(RenderPass).call(this, "RenderPass", scene, camera));
-      _this.needsSwap = false;
-      _this.clearPass = new ClearPass(options);
-      _this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
-      _this.clearDepth = options.clearDepth !== undefined ? options.clearDepth : false;
-      _this.clear = options.clear !== undefined ? options.clear : true;
-      return _this;
-    }
-
-    _createClass(RenderPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var scene = this.scene;
-        var renderTarget = this.renderToScreen ? null : inputBuffer;
-        var overrideMaterial = scene.overrideMaterial;
-
-        if (this.clear) {
-          this.clearPass.renderToScreen = this.renderToScreen;
-          this.clearPass.render(renderer, inputBuffer);
-        } else if (this.clearDepth) {
-          renderer.setRenderTarget(renderTarget);
-          renderer.clearDepth();
-        }
-
-        scene.overrideMaterial = this.overrideMaterial;
-        renderer.render(scene, this.camera, renderTarget);
-        scene.overrideMaterial = overrideMaterial;
-      }
-    }]);
-
-    return RenderPass;
-  }(Pass);
-
-  function clamp(value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
-  var GodRaysPass = function (_Pass) {
-    _inherits(GodRaysPass, _Pass);
-
-    function GodRaysPass(scene, camera, lightSource) {
-      var _this;
-
-      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-
-      _classCallCheck(this, GodRaysPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysPass).call(this, "GodRaysPass"));
-      _this.lightScene = new three.Scene();
-      _this.mainScene = scene;
-      _this.mainCamera = camera;
-      _this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter,
-        stencilBuffer: false,
-        depthBuffer: false
-      });
-      _this.renderTargetX.texture.name = "GodRays.TargetX";
-      _this.renderTargetX.texture.generateMipmaps = false;
-      _this.renderTargetY = _this.renderTargetX.clone();
-      _this.renderTargetY.texture.name = "GodRays.TargetY";
-      _this.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter
-      });
-      _this.renderTargetMask.texture.name = "GodRays.Mask";
-      _this.renderTargetMask.texture.generateMipmaps = false;
-      _this.renderPassLight = new RenderPass(_this.lightScene, _this.mainCamera, {
-        clearColor: new three.Color(0x000000)
-      });
-      _this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
-        overrideMaterial: new three.MeshBasicMaterial({
-          color: 0x000000
-        })
-      });
-      _this.renderPassMask.clear = false;
-      _this.blurPass = new BlurPass(options);
-      _this.resolution = new three.Vector2();
-      _this.lightSource = lightSource;
-      _this.screenPosition = new three.Vector3();
-      _this.godRaysMaterial = new GodRaysMaterial(options);
-      _this.godRaysMaterial.uniforms.lightPosition.value = _this.screenPosition;
-      _this.samples = options.samples;
-      _this.combineMaterial = new CombineMaterial(options.screenMode !== undefined ? options.screenMode : true);
-      _this.intensity = options.intensity;
-      return _this;
-    }
-
-    _createClass(GodRaysPass, [{
-      key: "getResolutionScale",
-      value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
-      }
-    }, {
-      key: "setResolutionScale",
-      value: function setResolutionScale(scale) {
-        this.blurPass.setResolutionScale(scale);
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var scene = this.scene;
-        var camera = this.camera;
-        var mainScene = this.mainScene;
-        var lightSource = this.lightSource;
-        var screenPosition = this.screenPosition;
-        var godRaysMaterial = this.godRaysMaterial;
-        var combineMaterial = this.combineMaterial;
-        var renderTargetMask = this.renderTargetMask;
-        var renderTargetX = this.renderTargetX;
-        var renderTargetY = this.renderTargetY;
-        var background, parent;
-        screenPosition.copy(lightSource.position).project(this.mainCamera);
-        screenPosition.x = clamp((screenPosition.x + 1.0) * 0.5, 0.0, 1.0);
-        screenPosition.y = clamp((screenPosition.y + 1.0) * 0.5, 0.0, 1.0);
-        parent = lightSource.parent;
-        background = mainScene.background;
-        mainScene.background = null;
-        this.lightScene.add(lightSource);
-        this.renderPassLight.render(renderer, renderTargetMask);
-        this.renderPassMask.render(renderer, renderTargetMask);
-
-        if (parent !== null) {
-          parent.add(lightSource);
-        }
-
-        mainScene.background = background;
-        this.blurPass.render(renderer, this.renderTargetMask, renderTargetX);
-        this.setFullscreenMaterial(godRaysMaterial);
-        godRaysMaterial.uniforms.tDiffuse.value = renderTargetX.texture;
-        renderer.render(scene, camera, renderTargetY);
-
-        if (this.blend) {
-          this.setFullscreenMaterial(combineMaterial);
-          combineMaterial.uniforms.texture1.value = inputBuffer.texture;
-          combineMaterial.uniforms.texture2.value = renderTargetY.texture;
-          renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
-        }
       }
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.resolution.set(width, height);
-        this.renderPassLight.setSize(width, height);
-        this.renderPassMask.setSize(width, height);
-        this.blurPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
-        this.renderTargetMask.setSize(width, height);
-        this.renderTargetX.setSize(width, height);
-        this.renderTargetY.setSize(width, height);
+        this.getFullscreenMaterial().setResolution(width, height);
+        var _iteratorNormalCompletion6 = true;
+        var _didIteratorError6 = false;
+        var _iteratorError6 = undefined;
+
+        try {
+          for (var _iterator6 = this.effects[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+            var effect = _step6.value;
+            effect.setSize(width, height);
+          }
+        } catch (err) {
+          _didIteratorError6 = true;
+          _iteratorError6 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+              _iterator6.return();
+            }
+          } finally {
+            if (_didIteratorError6) {
+              throw _iteratorError6;
+            }
+          }
+        }
       }
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha) {
-        this.renderPassLight.initialize(renderer, alpha);
-        this.renderPassMask.initialize(renderer, alpha);
-        this.blurPass.initialize(renderer, alpha);
+        var capabilities = renderer.capabilities;
+        var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
-        if (!alpha) {
-          this.renderTargetMask.texture.format = three.RGBFormat;
-          this.renderTargetX.texture.format = three.RGBFormat;
-          this.renderTargetY.texture.format = three.RGBFormat;
+        if (this.uniforms > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
+        }
+
+        max = capabilities.maxVaryings;
+
+        if (this.varyings > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
+        }
+
+        var _iteratorNormalCompletion7 = true;
+        var _didIteratorError7 = false;
+        var _iteratorError7 = undefined;
+
+        try {
+          for (var _iterator7 = this.effects[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            var effect = _step7.value;
+            effect.initialize(renderer, alpha);
+          }
+        } catch (err) {
+          _didIteratorError7 = true;
+          _iteratorError7 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
+              _iterator7.return();
+            }
+          } finally {
+            if (_didIteratorError7) {
+              throw _iteratorError7;
+            }
+          }
         }
       }
     }, {
-      key: "kernelSize",
-      get: function get() {
-        return this.blurPass.kernelSize;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.LARGE;
-        this.blurPass.kernelSize = value;
-      }
-    }, {
-      key: "intensity",
-      get: function get() {
-        return this.combineMaterial.uniforms.opacity2.value;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
-        this.combineMaterial.uniforms.opacity2.value = value;
-      }
-    }, {
-      key: "samples",
-      get: function get() {
-        return Number.parseInt(this.godRaysMaterial.defines.NUM_SAMPLES_INT);
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 60;
-        value = Math.floor(value);
-        this.godRaysMaterial.defines.NUM_SAMPLES_FLOAT = value.toFixed(1);
-        this.godRaysMaterial.defines.NUM_SAMPLES_INT = value.toFixed(0);
-        this.godRaysMaterial.needsUpdate = true;
+      key: "dispose",
+      value: function dispose() {
+        _get(_getPrototypeOf(EffectPass.prototype), "dispose", this).call(this);
+
+        var _iteratorNormalCompletion8 = true;
+        var _didIteratorError8 = false;
+        var _iteratorError8 = undefined;
+
+        try {
+          for (var _iterator8 = this.effects[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+            var effect = _step8.value;
+            effect.dispose();
+          }
+        } catch (err) {
+          _didIteratorError8 = true;
+          _iteratorError8 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
+              _iterator8.return();
+            }
+          } finally {
+            if (_didIteratorError8) {
+              throw _iteratorError8;
+            }
+          }
+        }
       }
     }, {
       key: "dithering",
-      get: function get() {
-        return this.godRaysMaterial.dithering;
+      get: function get$$1() {
+        return this.quantize;
       },
       set: function set(value) {
-        if (this.dithering !== value) {
-          this.godRaysMaterial.dithering = value;
-          this.godRaysMaterial.needsUpdate = true;
+        if (this.quantize !== value) {
+          var material = this.getFullscreenMaterial();
+
+          if (material !== null) {
+            material.dithering = value;
+            material.needsUpdate = true;
+          }
+
+          this.quantize = value;
         }
-      }
-    }, {
-      key: "blend",
-      get: function get() {
-        return this.needsSwap;
-      },
-      set: function set(value) {
-        this.needsSwap = value;
-      }
-    }, {
-      key: "overlay",
-      get: function get() {
-        return this.renderTargetY.texture;
-      }
-    }, {
-      key: "resolutionScale",
-      get: function get() {
-        console.warn("GodRaysPass.resolutionScale has been deprecated, please use GodRaysPass.getResolutionScale()");
-        return this.getResolutionScale();
-      },
-      set: function set(value) {
-        console.warn("GodRaysPass.resolutionScale has been deprecated, please use GodRaysPass.setResolutionScale(Number)");
-        this.setResolutionScale(value);
       }
     }]);
 
-    return GodRaysPass;
+    return EffectPass;
   }(Pass);
 
   var MaskPass = function (_Pass) {
@@ -5500,390 +4808,47 @@
     return MaskPass;
   }(Pass);
 
-  var ShaderPass = function (_Pass) {
-    _inherits(ShaderPass, _Pass);
+  var RenderPass = function (_Pass) {
+    _inherits(RenderPass, _Pass);
 
-    function ShaderPass(material) {
-      var _this;
-
-      var textureID = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "tDiffuse";
-
-      _classCallCheck(this, ShaderPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(ShaderPass).call(this, "ShaderPass"));
-
-      _this.setFullscreenMaterial(material);
-
-      _this.textureID = textureID;
-      return _this;
-    }
-
-    _createClass(ShaderPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var uniforms = this.getFullscreenMaterial().uniforms;
-
-        if (uniforms[this.textureID] !== undefined) {
-          uniforms[this.textureID].value = inputBuffer.texture;
-        }
-
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }]);
-
-    return ShaderPass;
-  }(Pass);
-
-  var OutlinePass = function (_Pass) {
-    _inherits(OutlinePass, _Pass);
-
-    function OutlinePass(scene, camera) {
+    function RenderPass(scene, camera) {
       var _this;
 
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-      _classCallCheck(this, OutlinePass);
+      _classCallCheck(this, RenderPass);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(OutlinePass).call(this, "OutlinePass"));
-      _this.mainScene = scene;
-      _this.mainCamera = camera;
-      _this.renderTargetDepth = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter
-      });
-      _this.renderTargetDepth.texture.name = "Outline.Depth";
-      _this.renderTargetDepth.texture.generateMipmaps = false;
-      _this.renderTargetMask = _this.renderTargetDepth.clone();
-      _this.renderTargetMask.texture.format = three.RGBFormat;
-      _this.renderTargetMask.texture.name = "Outline.Mask";
-      _this.renderTargetEdges = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter,
-        stencilBuffer: false,
-        depthBuffer: false,
-        format: three.RGBFormat
-      });
-      _this.renderTargetEdges.texture.name = "Outline.Edges";
-      _this.renderTargetEdges.texture.generateMipmaps = false;
-      _this.renderTargetBlurredEdges = _this.renderTargetEdges.clone();
-      _this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
-      _this.renderPassDepth = new RenderPass(_this.mainScene, _this.mainCamera, {
-        overrideMaterial: new three.MeshDepthMaterial({
-          depthPacking: three.RGBADepthPacking,
-          morphTargets: true,
-          skinning: true
-        }),
-        clearColor: new three.Color(0xffffff),
-        clearAlpha: 1.0
-      });
-      _this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
-        overrideMaterial: new DepthComparisonMaterial(_this.renderTargetDepth.texture, _this.mainCamera),
-        clearColor: new three.Color(0xffffff),
-        clearAlpha: 1.0
-      });
-      _this.blurPass = new BlurPass(options);
-      _this.kernelSize = options.kernelSize;
-      _this.resolution = new three.Vector2();
-      _this.copyPass = new ShaderPass(new CopyMaterial());
-      _this.copyPass.renderToScreen = true;
-      _this.outlineEdgesMaterial = new OutlineEdgesMaterial(options);
-      _this.outlineEdgesMaterial.uniforms.tMask.value = _this.renderTargetMask.texture;
-      _this.outlineBlendMaterial = new OutlineBlendMaterial(options);
-      _this.outlineBlendMaterial.uniforms.tMask.value = _this.renderTargetMask.texture;
-      _this.blur = options.blur !== undefined ? options.blur : true;
-      _this.selection = [];
-      _this.time = 0.0;
-      _this.pulseSpeed = options.pulseSpeed !== undefined ? options.pulseSpeed : 0.0;
-      _this.selectionLayer = 10;
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(RenderPass).call(this, "RenderPass", scene, camera));
+      _this.needsSwap = false;
+      _this.clearPass = new ClearPass(options);
+      _this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
+      _this.clearDepth = options.clearDepth !== undefined ? options.clearDepth : false;
+      _this.clear = options.clear !== undefined ? options.clear : true;
       return _this;
     }
 
-    _createClass(OutlinePass, [{
-      key: "getResolutionScale",
-      value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
-      }
-    }, {
-      key: "setResolutionScale",
-      value: function setResolutionScale(scale) {
-        this.blurPass.setResolutionScale(scale);
-        this.setSize(this.resolution.x, this.resolution.y);
-      }
-    }, {
-      key: "setPatternTexture",
-      value: function setPatternTexture() {
-        var texture = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-        this.outlineBlendMaterial.setPatternTexture(texture);
-      }
-    }, {
-      key: "setSelection",
-      value: function setSelection(objects) {
-        var selection = objects.slice(0);
-        var selectionLayer = this.selectionLayer;
-        var i, l;
-        this.clearSelection();
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          selection[i].layers.enable(selectionLayer);
-        }
-
-        this.selection = selection;
-        return this;
-      }
-    }, {
-      key: "clearSelection",
-      value: function clearSelection() {
-        var selection = this.selection;
-        var selectionLayer = this.selectionLayer;
-        var i, l;
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          selection[i].layers.disable(selectionLayer);
-        }
-
-        this.selection = [];
-        this.time = 0.0;
-        return this;
-      }
-    }, {
-      key: "selectObject",
-      value: function selectObject(object) {
-        object.layers.enable(this.selectionLayer);
-        this.selection.push(object);
-        return this;
-      }
-    }, {
-      key: "deselectObject",
-      value: function deselectObject(object) {
-        var selection = this.selection;
-        var index = selection.indexOf(object);
-
-        if (index >= 0) {
-          selection[index].layers.disable(this.selectionLayer);
-          selection.splice(index, 1);
-
-          if (selection.length === 0) {
-            this.time = 0.0;
-          }
-        }
-
-        return this;
-      }
-    }, {
-      key: "setSelectionVisible",
-      value: function setSelectionVisible(visible) {
-        var selection = this.selection;
-        var i, l;
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          if (visible) {
-            selection[i].layers.enable(0);
-          } else {
-            selection[i].layers.disable(0);
-          }
-        }
-      }
-    }, {
+    _createClass(RenderPass, [{
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var mainScene = this.mainScene;
-        var mainCamera = this.mainCamera;
-        var pulse = this.outlineBlendMaterial.uniforms.pulse;
-        var background, mask;
+        var scene = this.scene;
+        var renderTarget = this.renderToScreen ? null : inputBuffer;
+        var overrideMaterial = scene.overrideMaterial;
 
-        if (this.selection.length > 0) {
-          background = mainScene.background;
-          mask = mainCamera.layers.mask;
-          mainScene.background = null;
-          pulse.value = 1.0;
-
-          if (this.pulseSpeed > 0.0) {
-            pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-            this.time += delta;
-          }
-
-          this.setSelectionVisible(false);
-          this.renderPassDepth.render(renderer, this.renderTargetDepth);
-          this.setSelectionVisible(true);
-          mainCamera.layers.mask = 1 << this.selectionLayer;
-          this.renderPassMask.render(renderer, this.renderTargetMask);
-          mainCamera.layers.mask = mask;
-          mainScene.background = background;
-          this.setFullscreenMaterial(this.outlineEdgesMaterial);
-          renderer.render(this.scene, this.camera, this.renderTargetEdges);
-
-          if (this.blurPass.enabled) {
-            this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
-          }
-
-          if (this.blend) {
-            this.setFullscreenMaterial(this.outlineBlendMaterial);
-            this.outlineBlendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-            renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-          }
-        } else if (this.renderToScreen) {
-          this.copyPass.render(renderer, inputBuffer);
+        if (this.clear) {
+          this.clearPass.renderToScreen = this.renderToScreen;
+          this.clearPass.render(renderer, inputBuffer);
+        } else if (this.clearDepth) {
+          renderer.setRenderTarget(renderTarget);
+          renderer.clearDepth();
         }
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.resolution.set(width, height);
-        this.renderTargetDepth.setSize(width, height);
-        this.renderTargetMask.setSize(width, height);
-        this.renderPassDepth.setSize(width, height);
-        this.renderPassMask.setSize(width, height);
-        this.blurPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
-        this.renderTargetEdges.setSize(width, height);
-        this.renderTargetBlurredEdges.setSize(width, height);
-        this.outlineBlendMaterial.uniforms.aspect.value = width / height;
-        this.outlineEdgesMaterial.setTexelSize(1.0 / width, 1.0 / height);
-      }
-    }, {
-      key: "initialize",
-      value: function initialize(renderer, alpha) {
-        this.renderPassDepth.initialize(renderer, alpha);
-        this.renderPassMask.initialize(renderer, alpha);
-        this.blurPass.initialize(renderer, alpha);
-      }
-    }, {
-      key: "kernelSize",
-      get: function get() {
-        return this.blurPass.kernelSize;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.VERY_SMALL;
-        this.blurPass.kernelSize = value;
-      }
-    }, {
-      key: "blur",
-      get: function get() {
-        return this.blurPass.enabled;
-      },
-      set: function set(value) {
-        this.blurPass.enabled = value;
-        this.outlineBlendMaterial.uniforms.tEdges.value = value ? this.renderTargetBlurredEdges.texture : this.renderTargetEdges.texture;
-      }
-    }, {
-      key: "dithering",
-      get: function get() {
-        return this.blurPass.dithering;
-      },
-      set: function set(value) {
-        this.blurPass.dithering = value;
-      }
-    }, {
-      key: "blend",
-      get: function get() {
-        return this.needsSwap;
-      },
-      set: function set(value) {
-        this.needsSwap = value;
-      }
-    }, {
-      key: "overlay",
-      get: function get() {
-        return this.outlineBlendMaterial.uniforms.tEdges.value;
-      }
-    }, {
-      key: "resolutionScale",
-      get: function get() {
-        console.warn("OutlinePass.resolutionScale has been deprecated, please use OutlinePass.getResolutionScale()");
-        return this.getResolutionScale();
-      },
-      set: function set(value) {
-        console.warn("OutlinePass.resolutionScale has been deprecated, please use OutlinePass.setResolutionScale(Number)");
-        this.setResolutionScale(value);
+
+        scene.overrideMaterial = this.overrideMaterial;
+        renderer.render(scene, this.camera, renderTarget);
+        scene.overrideMaterial = overrideMaterial;
       }
     }]);
 
-    return OutlinePass;
-  }(Pass);
-
-  var PixelationPass = function (_Pass) {
-    _inherits(PixelationPass, _Pass);
-
-    function PixelationPass() {
-      var _this;
-
-      var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
-
-      _classCallCheck(this, PixelationPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(PixelationPass).call(this, "PixelationPass"));
-
-      _this.setFullscreenMaterial(new PixelationMaterial());
-
-      _this.granularity = granularity;
-      return _this;
-    }
-
-    _createClass(PixelationPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.getFullscreenMaterial().setResolution(width, height);
-      }
-    }, {
-      key: "granularity",
-      get: function get() {
-        return this.getFullscreenMaterial().granularity;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30;
-        value = Math.floor(value);
-
-        if (value % 2 > 0) {
-          value += 1;
-        }
-
-        this.getFullscreenMaterial().granularity = value;
-      }
-    }]);
-
-    return PixelationPass;
-  }(Pass);
-
-  var RealisticBokehPass = function (_Pass) {
-    _inherits(RealisticBokehPass, _Pass);
-
-    function RealisticBokehPass(camera) {
-      var _this;
-
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-      _classCallCheck(this, RealisticBokehPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehPass).call(this, "RealisticBokehPass"));
-
-      _this.setFullscreenMaterial(new RealisticBokehMaterial(camera, options));
-
-      return _this;
-    }
-
-    _createClass(RealisticBokehPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var uniforms = this.getFullscreenMaterial().uniforms;
-        uniforms.tDiffuse.value = inputBuffer.texture;
-        uniforms.tDepth.value = inputBuffer.depthTexture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
-      }
-    }]);
-
-    return RealisticBokehPass;
+    return RenderPass;
   }(Pass);
 
   var SavePass = function (_Pass) {
@@ -5901,14 +4866,19 @@
       _this.setFullscreenMaterial(new CopyMaterial());
 
       _this.needsSwap = false;
-      _this.renderTarget = renderTarget !== undefined ? renderTarget : new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        magFilter: three.LinearFilter,
-        stencilBuffer: false,
-        depthBuffer: false
-      });
-      _this.renderTarget.texture.name = "Save.Target";
-      _this.renderTarget.texture.generateMipmaps = false;
+      _this.renderTarget = renderTarget;
+
+      if (renderTarget === undefined) {
+        _this.renderTarget = new three.WebGLRenderTarget(1, 1, {
+          minFilter: three.LinearFilter,
+          magFilter: three.LinearFilter,
+          stencilBuffer: false,
+          depthBuffer: false
+        });
+        _this.renderTarget.texture.name = "SavePass.Target";
+        _this.renderTarget.texture.generateMipmaps = false;
+      }
+
       _this.resize = resize;
       return _this;
     }
@@ -5916,8 +4886,8 @@
     _createClass(SavePass, [{
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        this.getFullscreenMaterial().uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderTarget);
+        this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
+        renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.renderTarget);
       }
     }, {
       key: "setSize",
@@ -5928,366 +4898,58 @@
           this.renderTarget.setSize(width, height);
         }
       }
-    }, {
-      key: "initialize",
-      value: function initialize(renderer, alpha) {
-        if (!alpha) {
-          this.renderTarget.texture.format = three.RGBFormat;
-        }
-      }
     }]);
 
     return SavePass;
   }(Pass);
 
-  var HALF_PI = Math.PI * 0.5;
-  var v = new three.Vector3();
-  var ab = new three.Vector3();
-  var ShockWavePass = function (_Pass) {
-    _inherits(ShockWavePass, _Pass);
+  var ShaderPass = function (_Pass) {
+    _inherits(ShaderPass, _Pass);
 
-    function ShockWavePass(camera) {
+    function ShaderPass(material) {
       var _this;
 
-      var epicenter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector3();
-      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+      var input = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "inputBuffer";
 
-      _classCallCheck(this, ShockWavePass);
+      _classCallCheck(this, ShaderPass);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(ShockWavePass).call(this, "ShockWavePass"));
-      _this.mainCamera = camera;
-      _this.epicenter = epicenter;
-      _this.screenPosition = new three.Vector3();
-      _this.speed = options.speed !== undefined ? options.speed : 2.0;
-      _this.time = 0.0;
-      _this.active = false;
-      _this.shockWaveMaterial = new ShockWaveMaterial(options);
-      _this.shockWaveMaterial.uniforms.center.value = _this.screenPosition;
-      _this.copyMaterial = new CopyMaterial();
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ShaderPass).call(this, "ShaderPass"));
+
+      _this.setFullscreenMaterial(material);
+
+      _this.uniform = null;
+
+      _this.setInput(input);
+
       return _this;
     }
 
-    _createClass(ShockWavePass, [{
-      key: "explode",
-      value: function explode() {
-        this.time = 0.0;
-        this.active = true;
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var epicenter = this.epicenter;
-        var mainCamera = this.mainCamera;
-        var screenPosition = this.screenPosition;
-        var shockWaveMaterial = this.shockWaveMaterial;
-        var uniforms = shockWaveMaterial.uniforms;
-        var center = uniforms.center;
-        var radius = uniforms.radius;
-        var maxRadius = uniforms.maxRadius;
-        var waveSize = uniforms.waveSize;
-        this.copyMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-        this.setFullscreenMaterial(this.copyMaterial);
+    _createClass(ShaderPass, [{
+      key: "setInput",
+      value: function setInput(input) {
+        var material = this.getFullscreenMaterial();
+        this.uniform = null;
 
-        if (this.active) {
-          mainCamera.getWorldDirection(v);
-          ab.copy(mainCamera.position).sub(epicenter);
+        if (material !== null) {
+          var uniforms = material.uniforms;
 
-          if (v.angleTo(ab) > HALF_PI) {
-            uniforms.cameraDistance.value = mainCamera.position.distanceTo(epicenter);
-            screenPosition.copy(epicenter).project(mainCamera);
-            center.value.x = (screenPosition.x + 1.0) * 0.5;
-            center.value.y = (screenPosition.y + 1.0) * 0.5;
-            uniforms.tDiffuse.value = inputBuffer.texture;
-            this.setFullscreenMaterial(shockWaveMaterial);
-          }
-
-          this.time += delta * this.speed;
-          radius.value = this.time - waveSize.value;
-
-          if (radius.value >= (maxRadius.value + waveSize.value) * 2) {
-            this.active = false;
+          if (uniforms[input] !== undefined) {
+            this.uniform = uniforms[input];
           }
         }
-
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
       }
     }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.shockWaveMaterial.uniforms.aspect.value = width / height;
-      }
-    }]);
-
-    return ShockWavePass;
-  }(Pass);
-
-  var searchImageDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII";
-
-  var areaImageDataURL = "data:image/png;base64,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";
-
-  var SMAAPass = function (_Pass) {
-    _inherits(SMAAPass, _Pass);
-
-    function SMAAPass(searchImage, areaImage) {
-      var _this;
-
-      _classCallCheck(this, SMAAPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(SMAAPass).call(this, "SMAAPass"));
-      _this.clearPass = new ClearPass({
-        clearColor: new three.Color(0x000000),
-        clearAlpha: 1.0
-      });
-      _this.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearFilter,
-        format: three.RGBFormat,
-        stencilBuffer: false,
-        depthBuffer: false
-      });
-      _this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
-      _this.renderTargetColorEdges.texture.generateMipmaps = false;
-      _this.renderTargetWeights = _this.renderTargetColorEdges.clone();
-      _this.renderTargetWeights.texture.name = "SMAA.Weights";
-      _this.renderTargetWeights.texture.format = three.RGBAFormat;
-      _this.colorEdgesMaterial = new ColorEdgesMaterial();
-      _this.weightsMaterial = new SMAAWeightsMaterial();
-      _this.weightsMaterial.uniforms.tDiffuse.value = _this.renderTargetColorEdges.texture;
-      _this.searchTexture = new three.Texture(searchImage);
-      _this.searchTexture.name = "SMAA.Search";
-      _this.searchTexture.magFilter = three.NearestFilter;
-      _this.searchTexture.minFilter = three.NearestFilter;
-      _this.searchTexture.format = three.RGBAFormat;
-      _this.searchTexture.generateMipmaps = false;
-      _this.searchTexture.needsUpdate = true;
-      _this.searchTexture.flipY = false;
-      _this.weightsMaterial.uniforms.tSearch.value = _this.searchTexture;
-      _this.areaTexture = new three.Texture(areaImage);
-      _this.areaTexture.name = "SMAA.Area";
-      _this.areaTexture.minFilter = three.LinearFilter;
-      _this.areaTexture.format = three.RGBAFormat;
-      _this.areaTexture.generateMipmaps = false;
-      _this.areaTexture.needsUpdate = true;
-      _this.areaTexture.flipY = false;
-      _this.weightsMaterial.uniforms.tArea.value = _this.areaTexture;
-      _this.blendMaterial = new SMAABlendMaterial();
-      _this.blendMaterial.uniforms.tWeights.value = _this.renderTargetWeights.texture;
-      return _this;
-    }
-
-    _createClass(SMAAPass, [{
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        this.setFullscreenMaterial(this.colorEdgesMaterial);
-        this.colorEdgesMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-        this.clearPass.render(renderer, this.renderTargetColorEdges);
-        renderer.render(this.scene, this.camera, this.renderTargetColorEdges);
-        this.setFullscreenMaterial(this.weightsMaterial);
-        renderer.render(this.scene, this.camera, this.renderTargetWeights);
-        this.setFullscreenMaterial(this.blendMaterial);
-        this.blendMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
+        if (this.uniform !== null) {
+          this.uniform.value = inputBuffer.texture;
+        }
+
         renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.renderTargetColorEdges.setSize(width, height);
-        this.renderTargetWeights.setSize(width, height);
-        this.colorEdgesMaterial.uniforms.texelSize.value.copy(this.weightsMaterial.uniforms.texelSize.value.copy(this.blendMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height)));
-      }
-    }], [{
-      key: "searchImageDataURL",
-      get: function get() {
-        return searchImageDataURL;
-      }
-    }, {
-      key: "areaImageDataURL",
-      get: function get() {
-        return areaImageDataURL;
       }
     }]);
 
-    return SMAAPass;
-  }(Pass);
-
-  var TexturePass = function (_Pass) {
-    _inherits(TexturePass, _Pass);
-
-    function TexturePass(texture) {
-      var _this;
-
-      var opacity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1.0;
-      var screenMode = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
-      _classCallCheck(this, TexturePass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(TexturePass).call(this, "TexturePass"));
-
-      _this.setFullscreenMaterial(new CombineMaterial(screenMode));
-
-      _this.texture = texture;
-      _this.opacitySource = opacity;
-      return _this;
-    }
-
-    _createClass(TexturePass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        this.getFullscreenMaterial().uniforms.texture1.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "texture",
-      get: function get() {
-        return this.getFullscreenMaterial().uniforms.texture2.value;
-      },
-      set: function set(value) {
-        this.getFullscreenMaterial().uniforms.texture2.value = value;
-      }
-    }, {
-      key: "opacityDestination",
-      get: function get() {
-        return this.getFullscreenMaterial().uniforms.opacity1.value;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
-        this.getFullscreenMaterial().uniforms.opacity1.value = value;
-      }
-    }, {
-      key: "opacitySource",
-      get: function get() {
-        return this.getFullscreenMaterial().uniforms.opacity2.value;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
-        this.getFullscreenMaterial().uniforms.opacity2.value = value;
-      }
-    }]);
-
-    return TexturePass;
-  }(Pass);
-
-  var ToneMappingPass = function (_Pass) {
-    _inherits(ToneMappingPass, _Pass);
-
-    function ToneMappingPass() {
-      var _this;
-
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      _classCallCheck(this, ToneMappingPass);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingPass).call(this, "ToneMappingPass"));
-      _this.renderTargetLuminosity = new three.WebGLRenderTarget(1, 1, {
-        minFilter: three.LinearMipMapLinearFilter,
-        magFilter: three.LinearFilter,
-        format: three.RGBFormat,
-        stencilBuffer: false,
-        depthBuffer: false
-      });
-      _this.renderTargetLuminosity.texture.name = "ToneMapping.Luminosity";
-      _this.renderTargetAdapted = _this.renderTargetLuminosity.clone();
-      _this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminosity";
-      _this.renderTargetAdapted.texture.generateMipmaps = false;
-      _this.renderTargetAdapted.texture.minFilter = three.LinearFilter;
-      _this.renderTargetPrevious = _this.renderTargetAdapted.clone();
-      _this.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminosity";
-      _this.copyMaterial = new CopyMaterial();
-      _this.luminosityMaterial = new LuminosityMaterial();
-      _this.luminosityMaterial.uniforms.distinction.value = options.distinction !== undefined ? options.distinction : 1.0;
-      _this.adaptiveLuminosityMaterial = new AdaptiveLuminosityMaterial();
-      _this.resolution = options.resolution;
-      _this.toneMappingMaterial = new ToneMappingMaterial();
-      _this.adaptive = options.adaptive;
-      return _this;
-    }
-
-    _createClass(ToneMappingPass, [{
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var scene = this.scene;
-        var camera = this.camera;
-        var adaptiveLuminosityMaterial = this.adaptiveLuminosityMaterial;
-        var luminosityMaterial = this.luminosityMaterial;
-        var toneMappingMaterial = this.toneMappingMaterial;
-        var copyMaterial = this.copyMaterial;
-        var renderTargetPrevious = this.renderTargetPrevious;
-        var renderTargetLuminosity = this.renderTargetLuminosity;
-        var renderTargetAdapted = this.renderTargetAdapted;
-
-        if (this.adaptive) {
-          this.setFullscreenMaterial(luminosityMaterial);
-          luminosityMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-          renderer.render(scene, camera, renderTargetLuminosity);
-          this.setFullscreenMaterial(adaptiveLuminosityMaterial);
-          adaptiveLuminosityMaterial.uniforms.delta.value = delta;
-          adaptiveLuminosityMaterial.uniforms.tPreviousLum.value = renderTargetPrevious.texture;
-          adaptiveLuminosityMaterial.uniforms.tCurrentLum.value = renderTargetLuminosity.texture;
-          renderer.render(scene, camera, renderTargetAdapted);
-          this.setFullscreenMaterial(copyMaterial);
-          copyMaterial.uniforms.tDiffuse.value = renderTargetAdapted.texture;
-          renderer.render(scene, camera, renderTargetPrevious);
-        }
-
-        this.setFullscreenMaterial(toneMappingMaterial);
-        toneMappingMaterial.uniforms.tDiffuse.value = inputBuffer.texture;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "initialize",
-      value: function initialize(renderer, alpha) {
-        this.setFullscreenMaterial(new three.MeshBasicMaterial({
-          color: 0x7fffff
-        }));
-        renderer.render(this.scene, this.camera, this.renderTargetPrevious);
-        this.getFullscreenMaterial().dispose();
-      }
-    }, {
-      key: "resolution",
-      get: function get() {
-        return this.renderTargetLuminosity.width;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 256;
-        var exponent = Math.max(0, Math.ceil(Math.log2(value)));
-        value = Math.pow(2, exponent);
-        this.renderTargetLuminosity.setSize(value, value);
-        this.renderTargetPrevious.setSize(value, value);
-        this.renderTargetAdapted.setSize(value, value);
-        this.adaptiveLuminosityMaterial.defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
-        this.adaptiveLuminosityMaterial.needsUpdate = true;
-      }
-    }, {
-      key: "adaptive",
-      get: function get() {
-        return this.toneMappingMaterial.defines.ADAPTED_LUMINANCE !== undefined;
-      },
-      set: function set() {
-        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-
-        if (value) {
-          this.toneMappingMaterial.defines.ADAPTED_LUMINANCE = "1";
-          this.toneMappingMaterial.uniforms.luminanceMap.value = this.renderTargetAdapted.texture;
-        } else {
-          delete this.toneMappingMaterial.defines.ADAPTED_LUMINANCE;
-          this.toneMappingMaterial.uniforms.luminanceMap.value = null;
-        }
-
-        this.toneMappingMaterial.needsUpdate = true;
-      }
-    }, {
-      key: "dithering",
-      get: function get() {
-        return this.toneMappingMaterial.dithering;
-      },
-      set: function set(value) {
-        if (this.dithering !== value) {
-          this.toneMappingMaterial.dithering = value;
-          this.toneMappingMaterial.needsUpdate = true;
-        }
-      }
-    }]);
-
-    return ToneMappingPass;
+    return ShaderPass;
   }(Pass);
 
   var EffectComposer = function () {
@@ -6297,13 +4959,17 @@
 
       _classCallCheck(this, EffectComposer);
 
+      var settings = Object.assign({
+        depthBuffer: true,
+        stencilBuffer: false
+      }, options);
       this.renderer = renderer;
       this.inputBuffer = null;
       this.outputBuffer = null;
 
       if (this.renderer !== null) {
         this.renderer.autoClear = false;
-        this.inputBuffer = this.createBuffer(options.depthBuffer !== undefined ? options.depthBuffer : true, options.stencilBuffer !== undefined ? options.stencilBuffer : false, options.depthTexture !== undefined ? options.depthTexture : false);
+        this.inputBuffer = this.createBuffer(settings.depthBuffer, settings.stencilBuffer);
         this.outputBuffer = this.inputBuffer.clone();
       }
 
@@ -6337,8 +5003,41 @@
         return oldRenderer;
       }
     }, {
+      key: "getDepthTexture",
+      value: function getDepthTexture(index) {
+        var passes = this.passes;
+        var depthTexture = null;
+        var inputBuffer = true;
+        var i, pass;
+
+        for (i = 0; i < index; ++i) {
+          pass = passes[i];
+
+          if (pass.needsSwap) {
+            inputBuffer = !inputBuffer;
+          } else if (pass instanceof RenderPass) {
+            depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
+          }
+        }
+
+        return depthTexture;
+      }
+    }, {
+      key: "createDepthTexture",
+      value: function createDepthTexture() {
+        var depthTexture = new three.DepthTexture();
+
+        if (this.inputBuffer.stencilBuffer) {
+          depthTexture.format = three.DepthStencilFormat;
+          depthTexture.type = three.UnsignedInt248Type;
+        }
+
+        this.inputBuffer.depthTexture = depthTexture;
+        this.outputBuffer.depthTexture = depthTexture.clone();
+      }
+    }, {
       key: "createBuffer",
-      value: function createBuffer(depthBuffer, stencilBuffer, depthTexture) {
+      value: function createBuffer(depthBuffer, stencilBuffer) {
         var drawingBufferSize = this.renderer.getDrawingBufferSize();
         var alpha = this.renderer.context.getContextAttributes().alpha;
         var renderTarget = new three.WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
@@ -6346,15 +5045,8 @@
           magFilter: three.LinearFilter,
           format: alpha ? three.RGBAFormat : three.RGBFormat,
           depthBuffer: depthBuffer,
-          stencilBuffer: stencilBuffer,
-          depthTexture: depthTexture ? new three.DepthTexture() : null
+          stencilBuffer: stencilBuffer
         });
-
-        if (depthTexture && stencilBuffer) {
-          renderTarget.depthTexture.format = three.DepthStencilFormat;
-          renderTarget.depthTexture.type = three.UnsignedInt248Type;
-        }
-
         renderTarget.texture.name = "EffectComposer.Buffer";
         renderTarget.texture.generateMipmaps = false;
         return renderTarget;
@@ -6370,7 +5062,15 @@
         if (index !== undefined) {
           this.passes.splice(index, 0, pass);
         } else {
-          this.passes.push(pass);
+          index = this.passes.push(pass) - 1;
+        }
+
+        if (pass.needsDepthTexture) {
+          if (this.inputBuffer.depthTexture === null) {
+            this.createDepthTexture();
+          }
+
+          pass.setDepthTexture(this.getDepthTexture(index));
         }
       }
     }, {
@@ -6478,7 +5178,7 @@
     }, {
       key: "reset",
       value: function reset() {
-        var renderTarget = this.createBuffer(this.inputBuffer.depthBuffer, this.inputBuffer.stencilBuffer, this.inputBuffer.depthTexture !== null);
+        var renderTarget = this.createBuffer(this.inputBuffer.depthBuffer, this.inputBuffer.stencilBuffer);
         this.dispose();
         this.inputBuffer = renderTarget;
         this.outputBuffer = renderTarget.clone();
@@ -6525,15 +5225,6 @@
 
         this.copyPass.dispose();
       }
-    }, {
-      key: "depthTexture",
-      get: function get() {
-        return this.inputBuffer.depthTexture;
-      },
-      set: function set(x) {
-        this.inputBuffer.depthTexture = x;
-        this.outputBuffer.depthTexture = x;
-      }
     }]);
 
     return EffectComposer;
@@ -6551,6 +5242,1677 @@
 
     return Resizable;
   }();
+
+  var fragment$9 = "uniform sampler2D texture;\r\n\r\n#ifdef ASPECT_CORRECTION\r\n\r\n\tvarying vec2 vUv2;\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\t#ifdef ASPECT_CORRECTION\r\n\r\n\t\toutputColor = texture2D(texture, vUv2);\r\n\r\n\t#else\r\n\r\n\t\toutputColor = texture2D(texture, uv);\r\n\r\n\t#endif\r\n\r\n}\r\n";
+
+  var BloomEffect = function (_Effect) {
+    _inherits(BloomEffect, _Effect);
+
+    function BloomEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, BloomEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.SCREEN,
+        resolutionScale: 0.5,
+        kernelSize: KernelSize.LARGE,
+        distinction: 1.0
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(BloomEffect).call(this, "BloomEffect", fragment$9, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["texture", new three.Uniform(null)]])
+      }));
+      _this.renderTarget = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter,
+        stencilBuffer: false,
+        depthBuffer: false
+      });
+      _this.renderTarget.texture.name = "Bloom.Target";
+      _this.renderTarget.texture.generateMipmaps = false;
+      _this.uniforms.get("texture").value = _this.renderTarget.texture;
+      _this.resolution = new three.Vector2();
+      _this.blurPass = new BlurPass(settings);
+      _this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
+      _this.distinction = settings.distinction;
+      _this.kernelSize = settings.kernelSize;
+      return _this;
+    }
+
+    _createClass(BloomEffect, [{
+      key: "getResolutionScale",
+      value: function getResolutionScale() {
+        return this.blurPass.getResolutionScale();
+      }
+    }, {
+      key: "setResolutionScale",
+      value: function setResolutionScale(scale) {
+        this.blurPass.setResolutionScale(scale);
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        var renderTarget = this.renderTarget;
+        this.luminancePass.render(renderer, inputBuffer, renderTarget);
+        this.blurPass.render(renderer, renderTarget, renderTarget);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.blurPass.setSize(width, height);
+        width = this.blurPass.width;
+        height = this.blurPass.height;
+        this.renderTarget.setSize(width, height);
+      }
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        this.blurPass.initialize(renderer, alpha);
+
+        if (!alpha) {
+          this.renderTarget.texture.format = three.RGBFormat;
+        }
+      }
+    }, {
+      key: "texture",
+      get: function get() {
+        return this.renderTarget.texture;
+      }
+    }, {
+      key: "dithering",
+      get: function get() {
+        return this.blurPass.dithering;
+      },
+      set: function set(value) {
+        this.blurPass.dithering = value;
+      }
+    }, {
+      key: "kernelSize",
+      get: function get() {
+        return this.blurPass.kernelSize;
+      },
+      set: function set(value) {
+        this.blurPass.kernelSize = value;
+      }
+    }, {
+      key: "distinction",
+      get: function get() {
+        return this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;
+      },
+      set: function set() {
+        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+        this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
+      }
+    }]);
+
+    return BloomEffect;
+  }(Effect);
+
+  var fragment$a = "uniform float focus;\r\nuniform float dof;\r\nuniform float aperture;\r\nuniform float maxBlur;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {\r\n\r\n\tvec2 aspectCorrection = vec2(1.0, aspect);\r\n\r\n\tfloat focusNear = clamp(focus - dof, 0.0, 1.0);\r\n\tfloat focusFar = clamp(focus + dof, 0.0, 1.0);\r\n\r\n\t// Calculate a DoF mask.\r\n\tfloat low = step(depth, focusNear);\r\n\tfloat high = step(focusFar, depth);\r\n\r\n\tfloat factor = (depth - focusNear) * low + (depth - focusFar) * high;\r\n\tvec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));\r\n\r\n\tvec2 dofblur9 = dofBlur * 0.9;\r\n\tvec2 dofblur7 = dofBlur * 0.7;\r\n\tvec2 dofblur4 = dofBlur * 0.4;\r\n\r\n\tvec4 color = inputColor;\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.15,  0.37) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29,  0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.37,  0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.37, -0.15) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29, -0.29) * aspectCorrection) * dofBlur);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.15, -0.37) * aspectCorrection) * dofBlur);\r\n\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.15,  0.37) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.37,  0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.37, -0.15) * aspectCorrection) * dofblur9);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.15, -0.37) * aspectCorrection) * dofblur9);\r\n\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.40,  0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur7);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur7);\r\n\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,  -0.4 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29,  0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.4,   0.0 ) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2(-0.29, -0.29) * aspectCorrection) * dofblur4);\r\n\tcolor += texture2D(inputBuffer, uv + (vec2( 0.0,   0.4 ) * aspectCorrection) * dofblur4);\r\n\r\n\toutputColor = color / 41.0;\r\n\r\n}\r\n";
+
+  var BokehEffect = function (_Effect) {
+    _inherits(BokehEffect, _Effect);
+
+    function BokehEffect() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, BokehEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        focus: 0.5,
+        dof: 0.02,
+        aperture: 0.015,
+        maxBlur: 1.0
+      }, options);
+      return _possibleConstructorReturn(this, _getPrototypeOf(BokehEffect).call(this, "BokehEffect", fragment$a, {
+        attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["focus", new three.Uniform(settings.focus)], ["dof", new three.Uniform(settings.dof)], ["aperture", new three.Uniform(settings.aperture)], ["maxBlur", new three.Uniform(settings.maxBlur)]])
+      }));
+    }
+
+    return BokehEffect;
+  }(Effect);
+
+  var fragment$b = "uniform float brightness;\r\nuniform float contrast;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec3 color = inputColor.rgb + vec3(brightness - 0.5);\r\n\r\n\tif(contrast > 0.0) {\r\n\r\n\t\tcolor /= vec3(1.0 - contrast);\r\n\r\n\t} else {\r\n\r\n\t\tcolor *= vec3(1.0 + contrast);\r\n\r\n\t}\r\n\r\n\toutputColor = vec4(min(color + vec3(0.5), 1.0), inputColor.a);\r\n\r\n}\r\n";
+
+  var BrightnessContrastEffect = function (_Effect) {
+    _inherits(BrightnessContrastEffect, _Effect);
+
+    function BrightnessContrastEffect() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, BrightnessContrastEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        brightness: 0.0,
+        contrast: 0.0
+      }, options);
+      return _possibleConstructorReturn(this, _getPrototypeOf(BrightnessContrastEffect).call(this, "BrightnessContrastEffect", fragment$b, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["brightness", new three.Uniform(settings.brightness)], ["contrast", new three.Uniform(settings.contrast)]])
+      }));
+    }
+
+    return BrightnessContrastEffect;
+  }(Effect);
+
+  var fragment$c = "void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tfloat sum = inputColor.r + inputColor.g + inputColor.b;\r\n\r\n\toutputColor = vec4(vec3(sum / 3.0), inputColor.a);\r\n\r\n}\r\n";
+
+  var ColorAverageEffect = function (_Effect) {
+    _inherits(ColorAverageEffect, _Effect);
+
+    function ColorAverageEffect() {
+      var blendFunction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : BlendFunction.NORMAL;
+
+      _classCallCheck(this, ColorAverageEffect);
+
+      return _possibleConstructorReturn(this, _getPrototypeOf(ColorAverageEffect).call(this, "ColorAverageEffect", fragment$c, {
+        blendFunction: blendFunction
+      }));
+    }
+
+    return ColorAverageEffect;
+  }(Effect);
+
+  var fragment$d = "varying vec2 vUvR;\r\nvarying vec2 vUvB;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec4 color = inputColor;\r\n\r\n\tcolor.r = texture2D(inputBuffer, vUvR).r;\r\n\tcolor.b = texture2D(inputBuffer, vUvB).b;\r\n\r\n\toutputColor = color;\r\n\r\n}\r\n";
+
+  var vertex$9 = "uniform vec2 offset;\r\n\r\nvarying vec2 vUvR;\r\nvarying vec2 vUvB;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\r\n\tvUvR = uv + offset * aspectCorrection;\r\n\tvUvB = uv - offset * aspectCorrection;\r\n\r\n}\r\n";
+
+  var ChromaticAberrationEffect = function (_Effect) {
+    _inherits(ChromaticAberrationEffect, _Effect);
+
+    function ChromaticAberrationEffect() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, ChromaticAberrationEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        offset: new three.Vector2(0.001, 0.0005)
+      }, options);
+      return _possibleConstructorReturn(this, _getPrototypeOf(ChromaticAberrationEffect).call(this, "ChromaticAberrationEffect", fragment$d, {
+        attributes: EffectAttribute.CONVOLUTION,
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["offset", new three.Uniform(settings.offset)]]),
+        vertexShader: vertex$9
+      }));
+    }
+
+    _createClass(ChromaticAberrationEffect, [{
+      key: "offset",
+      get: function get() {
+        return this.uniforms.get("offset").value;
+      },
+      set: function set(value) {
+        this.uniforms.get("offset").value = value;
+      }
+    }]);
+
+    return ChromaticAberrationEffect;
+  }(Effect);
+
+  var fragment$e = "void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {\r\n\r\n\t#ifdef INVERTED\r\n\r\n\t\tvec3 color = vec3(1.0 - depth);\r\n\r\n\t#else\r\n\r\n\t\tvec3 color = vec3(depth);\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+
+  var DepthEffect = function (_Effect) {
+    _inherits(DepthEffect, _Effect);
+
+    function DepthEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, DepthEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        inverted: false
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(DepthEffect).call(this, "DepthEffect", fragment$e, {
+        attributes: EffectAttribute.DEPTH,
+        blendFunction: settings.blendFunction
+      }));
+      _this.inverted = settings.inverted;
+      return _this;
+    }
+
+    _createClass(DepthEffect, [{
+      key: "inverted",
+      get: function get() {
+        return this.defines.has("INVERTED");
+      },
+      set: function set(value) {
+        value ? this.defines.set("INVERTED", "1") : this.defines.delete("INVERTED");
+      }
+    }]);
+
+    return DepthEffect;
+  }(Effect);
+
+  var fragment$f = "uniform vec2 angle;\r\nuniform float scale;\r\n\r\nfloat pattern(const in vec2 uv) {\r\n\r\n\tvec2 point = scale * vec2(\r\n\t\tdot(angle.yx, vec2(uv.x, -uv.y)),\r\n\t\tdot(angle, uv)\r\n\t);\r\n\r\n\treturn (sin(point.x) * sin(point.y)) * 4.0;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec3 color = vec3(inputColor.rgb * 10.0 - 5.0 + pattern(uv * resolution));\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+
+  var DotScreenEffect = function (_Effect) {
+    _inherits(DotScreenEffect, _Effect);
+
+    function DotScreenEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, DotScreenEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        angle: Math.PI * 0.5,
+        scale: 1.0
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenEffect).call(this, "DotScreenEffect", fragment$f, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["angle", new three.Uniform(new three.Vector2())], ["scale", new three.Uniform(settings.scale)]])
+      }));
+
+      _this.setAngle(settings.angle);
+
+      return _this;
+    }
+
+    _createClass(DotScreenEffect, [{
+      key: "setAngle",
+      value: function setAngle(angle) {
+        this.uniforms.get("angle").value.set(Math.sin(angle), Math.cos(angle));
+      }
+    }]);
+
+    return DotScreenEffect;
+  }(Effect);
+
+  var fragment$g = "uniform float gamma;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\toutputColor = LinearToGamma(max(inputColor, 0.0), gamma);\r\n\r\n}\r\n";
+
+  var GammaCorrectionEffect = function (_Effect) {
+    _inherits(GammaCorrectionEffect, _Effect);
+
+    function GammaCorrectionEffect() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, GammaCorrectionEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        gamma: 2.0
+      }, options);
+      return _possibleConstructorReturn(this, _getPrototypeOf(GammaCorrectionEffect).call(this, "GammaCorrectionEffect", fragment$g, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["gamma", new three.Uniform(settings.gamma)]])
+      }));
+    }
+
+    return GammaCorrectionEffect;
+  }(Effect);
+
+  var fragment$h = "uniform sampler2D perturbationMap;\r\n\r\nuniform bool active;\r\nuniform float columns;\r\nuniform float random;\r\nuniform vec2 seed;\r\nuniform vec2 distortion;\r\n\r\nvoid mainUv(inout vec2 uv) {\r\n\r\n\tif(active) {\r\n\r\n\t\tvec4 normal = texture2D(perturbationMap, uv * random * random);\r\n\r\n\t\tif(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {\r\n\r\n\t\t\tfloat sx = clamp(ceil(seed.x), 0.0, 1.0);\r\n\t\t\tuv.y = sx * (1.0 - (uv.y + distortion.y)) + (1.0 - sx) * distortion.y;\r\n\r\n\t\t}\r\n\r\n\t\tif(uv.x < distortion.y + columns && uv.x > distortion.y - columns * random) {\r\n\r\n\t\t\tfloat sy = clamp(ceil(seed.y), 0.0, 1.0);\r\n\t\t\tuv.x = sy * distortion.x + (1.0 - sy) * (1.0 - (uv.x + distortion.x));\r\n\r\n\t\t}\r\n\r\n\t\tuv.x += normal.x * seed.x * (random * 0.2);\r\n\t\tuv.y += normal.y * seed.y * (random * 0.2);\r\n\r\n\t}\r\n\r\n}\r\n";
+
+  var generatedTexture = "Glitch.Generated";
+
+  function randomFloat(low, high) {
+    return low + Math.random() * (high - low);
+  }
+
+  var GlitchEffect = function (_Effect) {
+    _inherits(GlitchEffect, _Effect);
+
+    function GlitchEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, GlitchEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        chromaticAberrationOffset: null,
+        delay: new three.Vector2(1.5, 3.5),
+        duration: new three.Vector2(0.6, 1.0),
+        columns: 0.05,
+        perturbationMap: null,
+        dtSize: 64
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(GlitchEffect).call(this, "GlitchEffect", fragment$h, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["perturbationMap", new three.Uniform(null)], ["columns", new three.Uniform(settings.columns)], ["active", new three.Uniform(false)], ["random", new three.Uniform(0.02)], ["seed", new three.Uniform(new three.Vector2())], ["distortion", new three.Uniform(new three.Vector2())]])
+      }));
+      _this.perturbationMap = null;
+
+      _this.setPerturbationMap(settings.perturbationMap !== null ? settings.perturbationMap : _this.generatePerturbationMap(settings.dtSize));
+
+      _this.perturbationMap.generateMipmaps = false;
+      _this.delay = settings.delay;
+      _this.duration = settings.duration;
+      _this.breakPoint = new three.Vector2(randomFloat(_this.delay.x, _this.delay.y), randomFloat(_this.duration.x, _this.duration.y));
+      _this.time = 0;
+      _this.seed = _this.uniforms.get("seed").value;
+      _this.distortion = _this.uniforms.get("distortion").value;
+      _this.mode = GlitchMode.SPORADIC;
+      _this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
+      return _this;
+    }
+
+    _createClass(GlitchEffect, [{
+      key: "getPerturbationMap",
+      value: function getPerturbationMap() {
+        return this.perturbationMap;
+      }
+    }, {
+      key: "setPerturbationMap",
+      value: function setPerturbationMap(perturbationMap) {
+        if (this.perturbationMap !== null && this.perturbationMap.name === generatedTexture) {
+          this.perturbationMap.dispose();
+        }
+
+        this.perturbationMap = perturbationMap;
+        this.uniforms.get("perturbationMap").value = perturbationMap;
+      }
+    }, {
+      key: "generatePerturbationMap",
+      value: function generatePerturbationMap() {
+        var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 64;
+        var pixels = size * size;
+        var data = new Float32Array(pixels * 3);
+        var i, x;
+
+        for (i = 0; i < pixels; ++i) {
+          x = Math.random();
+          data[i * 3] = x;
+          data[i * 3 + 1] = x;
+          data[i * 3 + 2] = x;
+        }
+
+        var map = new three.DataTexture(data, size, size, three.RGBFormat, three.FloatType);
+        map.name = generatedTexture;
+        map.needsUpdate = true;
+        return map;
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        var mode = this.mode;
+        var breakPoint = this.breakPoint;
+        var offset = this.chromaticAberrationOffset;
+        var time = this.time;
+        var active = false;
+        var r = 0.0,
+            a = 0.0;
+        var trigger;
+
+        if (mode !== GlitchMode.DISABLED) {
+          time += delta;
+          trigger = time > breakPoint.x;
+          r = Math.random();
+          this.uniforms.get("random").value = r;
+
+          if (trigger && r > 0.85 || mode === GlitchMode.CONSTANT_WILD) {
+            active = true;
+            r /= 30.0;
+            a = randomFloat(-Math.PI, Math.PI);
+            this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+            this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+          } else if (trigger || mode === GlitchMode.CONSTANT_MILD) {
+            active = true;
+            r /= 90.0;
+            a = randomFloat(-Math.PI, Math.PI);
+            this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+            this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
+          }
+
+          if (time >= breakPoint.x + breakPoint.y) {
+            breakPoint.set(randomFloat(this.delay.x, this.delay.y), randomFloat(this.duration.x, this.duration.y));
+            time = 0;
+          }
+
+          this.time = time;
+        }
+
+        if (offset !== null) {
+          if (active) {
+            offset.set(Math.cos(a), Math.sin(a)).multiplyScalar(r);
+          } else {
+            offset.set(0.0, 0.0);
+          }
+        }
+
+        this.uniforms.get("active").value = active;
+      }
+    }, {
+      key: "active",
+      get: function get() {
+        return this.uniforms.get("active").value;
+      }
+    }]);
+
+    return GlitchEffect;
+  }(Effect);
+  var GlitchMode = {
+    DISABLED: 0,
+    SPORADIC: 1,
+    CONSTANT_MILD: 2,
+    CONSTANT_WILD: 3
+  };
+
+  var v = new three.Vector3();
+  var GodRaysEffect = function (_Effect) {
+    _inherits(GodRaysEffect, _Effect);
+
+    function GodRaysEffect(scene, camera, lightSource) {
+      var _this;
+
+      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+
+      _classCallCheck(this, GodRaysEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.SCREEN,
+        resolutionScale: 0.5,
+        samples: 60.0,
+        blur: true,
+        kernelSize: KernelSize.SMALL
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysEffect).call(this, "GodRaysEffect", fragment$9, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["texture", new three.Uniform(null)]])
+      }));
+      _this.scene = scene;
+      _this.camera = camera;
+      _this.lightSource = lightSource;
+      _this.lightScene = new three.Scene();
+      _this.screenPosition = new three.Vector2();
+      _this.resolution = new three.Vector2();
+      _this.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter,
+        stencilBuffer: false,
+        depthBuffer: false
+      });
+      _this.renderTargetX.texture.name = "GodRays.TargetX";
+      _this.renderTargetX.texture.generateMipmaps = false;
+      _this.uniforms.get("texture").value = _this.renderTargetX.texture;
+      _this.renderTargetY = _this.renderTargetX.clone();
+      _this.renderTargetY.texture.name = "GodRays.TargetY";
+      _this.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter,
+        stencilBuffer: false
+      });
+      _this.renderTargetMask.texture.name = "GodRays.Mask";
+      _this.renderTargetMask.texture.generateMipmaps = false;
+      _this.renderPassLight = new RenderPass(_this.lightScene, camera, {
+        clearColor: new three.Color(0x000000)
+      });
+      _this.renderPassMask = new RenderPass(scene, camera, {
+        overrideMaterial: new three.MeshBasicMaterial({
+          color: 0x000000
+        })
+      });
+      _this.renderPassMask.clear = false;
+      _this.blurPass = new BlurPass(settings);
+      _this.godRaysPass = new ShaderPass(new GodRaysMaterial(_this.screenPosition, settings));
+      _this.blur = settings.blur;
+      _this.kernelSize = settings.kernelSize;
+      _this.samples = settings.samples;
+      return _this;
+    }
+
+    _createClass(GodRaysEffect, [{
+      key: "getResolutionScale",
+      value: function getResolutionScale() {
+        return this.blurPass.getResolutionScale();
+      }
+    }, {
+      key: "setResolutionScale",
+      value: function setResolutionScale(scale) {
+        this.blurPass.setResolutionScale(scale);
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        var scene = this.scene;
+        var lightSource = this.lightSource;
+        var renderTargetMask = this.renderTargetMask;
+        var renderTargetY = this.renderTargetY;
+        var background, parent;
+        v.copy(lightSource.position).project(this.camera);
+        this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
+        parent = lightSource.parent;
+        background = scene.background;
+        scene.background = null;
+        this.lightScene.add(lightSource);
+        this.renderPassLight.render(renderer, renderTargetMask);
+        this.renderPassMask.render(renderer, renderTargetMask);
+
+        if (parent !== null) {
+          parent.add(lightSource);
+        }
+
+        scene.background = background;
+        inputBuffer = renderTargetMask;
+
+        if (this.blur) {
+          this.blurPass.render(renderer, inputBuffer, renderTargetY);
+          inputBuffer = renderTargetY;
+        }
+
+        this.godRaysPass.render(renderer, inputBuffer, this.renderTargetX);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.renderPassLight.setSize(width, height);
+        this.renderPassMask.setSize(width, height);
+        this.blurPass.setSize(width, height);
+        this.godRaysPass.setSize(width, height);
+        width = this.blurPass.width;
+        height = this.blurPass.height;
+        this.renderTargetMask.setSize(width, height);
+        this.renderTargetX.setSize(width, height);
+        this.renderTargetY.setSize(width, height);
+      }
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        this.renderPassLight.initialize(renderer, alpha);
+        this.renderPassMask.initialize(renderer, alpha);
+        this.blurPass.initialize(renderer, alpha);
+        this.godRaysPass.initialize(renderer, alpha);
+
+        if (!alpha) {
+          this.renderTargetMask.texture.format = three.RGBFormat;
+          this.renderTargetX.texture.format = three.RGBFormat;
+          this.renderTargetY.texture.format = three.RGBFormat;
+        }
+      }
+    }, {
+      key: "texture",
+      get: function get() {
+        return this.renderTargetX.texture;
+      }
+    }, {
+      key: "godRaysMaterial",
+      get: function get() {
+        return this.godRaysPass.getFullscreenMaterial();
+      }
+    }, {
+      key: "dithering",
+      get: function get() {
+        return this.godRaysMaterial.dithering;
+      },
+      set: function set(value) {
+        var material = this.godRaysMaterial;
+        material.dithering = value;
+        material.needsUpdate = true;
+      }
+    }, {
+      key: "blur",
+      get: function get() {
+        return this.blurPass.enabled;
+      },
+      set: function set(value) {
+        this.blurPass.enabled = value;
+      }
+    }, {
+      key: "kernelSize",
+      get: function get() {
+        return this.blurPass.kernelSize;
+      },
+      set: function set(value) {
+        this.blurPass.kernelSize = value;
+      }
+    }, {
+      key: "samples",
+      get: function get() {
+        return this.godRaysMaterial.samples;
+      },
+      set: function set(value) {
+        this.godRaysMaterial.samples = value;
+      }
+    }]);
+
+    return GodRaysEffect;
+  }(Effect);
+
+  var fragment$i = "uniform vec2 scale;\r\nuniform float lineWidth;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tfloat grid = 0.5 - max(abs(mod(uv.x * scale.x, 1.0) - 0.5), abs(mod(uv.y * scale.y, 1.0) - 0.5));\r\n\toutputColor = vec4(vec3(smoothstep(0.0, lineWidth, grid)), inputColor.a);\r\n\r\n}\r\n";
+
+  var GridEffect = function (_Effect) {
+    _inherits(GridEffect, _Effect);
+
+    function GridEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, GridEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.OVERLAY,
+        scale: 1.0,
+        lineWidth: 0.0
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(GridEffect).call(this, "GridEffect", fragment$i, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["scale", new three.Uniform(new three.Vector2())], ["lineWidth", new three.Uniform(settings.lineWidth)]])
+      }));
+      _this.resolution = new three.Vector2();
+      _this.scale = Math.max(settings.scale, 1e-6);
+      _this.lineWidth = Math.max(settings.lineWidth, 0.0);
+      return _this;
+    }
+
+    _createClass(GridEffect, [{
+      key: "getScale",
+      value: function getScale() {
+        return this.scale;
+      }
+    }, {
+      key: "setScale",
+      value: function setScale(scale) {
+        this.scale = scale;
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "getLineWidth",
+      value: function getLineWidth() {
+        return this.lineWidth;
+      }
+    }, {
+      key: "setLineWidth",
+      value: function setLineWidth(lineWidth) {
+        this.lineWidth = lineWidth;
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        var aspect = width / height;
+        var scale = this.scale * (height * 0.125);
+        this.uniforms.get("scale").value.set(aspect * scale, scale);
+        this.uniforms.get("lineWidth").value = scale / height + this.lineWidth;
+      }
+    }]);
+
+    return GridEffect;
+  }(Effect);
+
+  var fragment$j = "uniform vec3 hue;\r\nuniform float saturation;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\t// Hue.\r\n\tvec3 color = vec3(\r\n\t\tdot(inputColor.rgb, hue.xyz),\r\n\t\tdot(inputColor.rgb, hue.zxy),\r\n\t\tdot(inputColor.rgb, hue.yzx)\r\n\t);\r\n\r\n\t// Saturation.\r\n\tfloat average = (color.r + color.g + color.b) / 3.0;\r\n\tvec3 diff = average - color;\r\n\r\n\tif(saturation > 0.0) {\r\n\r\n\t\tcolor += diff * (1.0 - 1.0 / (1.001 - saturation));\r\n\r\n\t} else {\r\n\r\n\t\tcolor += diff * -saturation;\r\n\r\n\t}\r\n\r\n\toutputColor = vec4(min(color, 1.0), inputColor.a);\r\n\r\n}\r\n";
+
+  var HueSaturationEffect = function (_Effect) {
+    _inherits(HueSaturationEffect, _Effect);
+
+    function HueSaturationEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, HueSaturationEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        hue: 0.0,
+        saturation: 0.0
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(HueSaturationEffect).call(this, "HueSaturationEffect", fragment$j, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["hue", new three.Uniform(new three.Vector3())], ["saturation", new three.Uniform(settings.saturation)]])
+      }));
+
+      _this.setHue(settings.hue);
+
+      return _this;
+    }
+
+    _createClass(HueSaturationEffect, [{
+      key: "setHue",
+      value: function setHue(hue) {
+        var s = Math.sin(hue),
+            c = Math.cos(hue);
+        this.uniforms.get("hue").value.set(2.0 * c, -Math.sqrt(3.0) * s - c, Math.sqrt(3.0) * s - c).addScalar(1.0).divideScalar(3.0);
+      }
+    }]);
+
+    return HueSaturationEffect;
+  }(Effect);
+
+  var fragment$k = "void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec3 noise = vec3(rand(uv * time));\r\n\r\n\t#ifdef PREMULTIPLY\r\n\r\n\t\toutputColor = vec4(inputColor.rgb * noise, inputColor.a);\r\n\r\n\t#else\r\n\r\n\t\toutputColor = vec4(noise, inputColor.a);\r\n\r\n\t#endif\r\n\r\n}\r\n";
+
+  var NoiseEffect = function (_Effect) {
+    _inherits(NoiseEffect, _Effect);
+
+    function NoiseEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, NoiseEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.SCREEN,
+        premultiply: false
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(NoiseEffect).call(this, "NoiseEffect", fragment$k, {
+        blendFunction: settings.blendFunction
+      }));
+      _this.premultiply = settings.premultiply;
+      return _this;
+    }
+
+    _createClass(NoiseEffect, [{
+      key: "premultiply",
+      get: function get() {
+        return this.defines.has("PREMULTIPLY");
+      },
+      set: function set(value) {
+        value ? this.defines.set("PREMULTIPLY", "1") : this.defines.delete("PREMULTIPLY");
+      }
+    }]);
+
+    return NoiseEffect;
+  }(Effect);
+
+  var fragment$l = "uniform sampler2D edgeTexture;\r\nuniform sampler2D maskTexture;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D patternTexture;\r\n\tvarying vec2 vUvPattern;\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec2 edge = texture2D(edgeTexture, uv).rg;\r\n\tvec2 mask = texture2D(maskTexture, uv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\tedge.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\tedge *= (edgeStrength * mask.x * pulse);\r\n\tvec3 color = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;\r\n\r\n\tfloat visibilityFactor = 0.0;\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec4 patternColor = texture2D(patternTexture, vUvPattern);\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tvisibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\t\tvisibilityFactor *= (1.0 - mask.x) * patternColor.a;\r\n\t\tcolor += visibilityFactor * patternColor.rgb;\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, max(max(edge.x, edge.y), visibilityFactor));\r\n\r\n}\r\n";
+
+  var vertex$a = "uniform float patternScale;\r\n\r\nvarying vec2 vUvPattern;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvUvPattern = uv * vec2(aspect, 1.0) * patternScale;\r\n\r\n}\r\n";
+
+  var OutlineEffect = function (_Effect) {
+    _inherits(OutlineEffect, _Effect);
+
+    function OutlineEffect(scene, camera) {
+      var _this;
+
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      _classCallCheck(this, OutlineEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.SCREEN,
+        patternTexture: null,
+        edgeStrength: 1.0,
+        pulseSpeed: 0.0,
+        visibleEdgeColor: 0xffffff,
+        hiddenEdgeColor: 0x22090a,
+        blur: false,
+        xRay: true
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(OutlineEffect).call(this, "OutlineEffect", fragment$l, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["maskTexture", new three.Uniform(null)], ["edgeTexture", new three.Uniform(null)], ["edgeStrength", new three.Uniform(settings.edgeStrength)], ["visibleEdgeColor", new three.Uniform(new three.Color(settings.visibleEdgeColor))], ["hiddenEdgeColor", new three.Uniform(new three.Color(settings.hiddenEdgeColor))], ["pulse", new three.Uniform(1.0)]])
+      }));
+
+      _this.setPatternTexture(settings.patternTexture);
+
+      _this.xRay = settings.xRay;
+      _this.mainScene = scene;
+      _this.mainCamera = camera;
+      _this.renderTargetDepth = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter
+      });
+      _this.renderTargetDepth.texture.name = "Outline.Depth";
+      _this.renderTargetDepth.texture.generateMipmaps = false;
+      _this.renderTargetMask = _this.renderTargetDepth.clone();
+      _this.renderTargetMask.texture.format = three.RGBFormat;
+      _this.renderTargetMask.texture.name = "Outline.Mask";
+      _this.uniforms.get("maskTexture").value = _this.renderTargetMask.texture;
+      _this.renderTargetEdges = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter,
+        stencilBuffer: false,
+        depthBuffer: false,
+        format: three.RGBFormat
+      });
+      _this.renderTargetEdges.texture.name = "Outline.Edges";
+      _this.renderTargetEdges.texture.generateMipmaps = false;
+      _this.renderTargetBlurredEdges = _this.renderTargetEdges.clone();
+      _this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
+      _this.clearPass = new ClearPass({
+        clearColor: new three.Color(0xffffff),
+        clearAlpha: 1.0
+      });
+      _this.renderPassDepth = new RenderPass(_this.mainScene, _this.mainCamera, {
+        overrideMaterial: new three.MeshDepthMaterial({
+          depthPacking: three.RGBADepthPacking,
+          morphTargets: true,
+          skinning: true
+        }),
+        clearColor: new three.Color(0xffffff),
+        clearAlpha: 1.0
+      });
+      _this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
+        overrideMaterial: new DepthComparisonMaterial(_this.renderTargetDepth.texture, _this.mainCamera),
+        clearColor: new three.Color(0xffffff),
+        clearAlpha: 1.0
+      });
+      _this.blurPass = new BlurPass(settings);
+      _this.kernelSize = settings.kernelSize;
+      _this.blur = settings.blur;
+      _this.resolution = new three.Vector2();
+      _this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial(settings));
+      _this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = _this.renderTargetMask.texture;
+      _this.selection = [];
+      _this.time = 0.0;
+      _this.pulseSpeed = settings.pulseSpeed;
+      _this.selectionLayer = 10;
+      _this.clear = false;
+      return _this;
+    }
+
+    _createClass(OutlineEffect, [{
+      key: "setPatternTexture",
+      value: function setPatternTexture(texture) {
+        if (texture !== null) {
+          this.defines.set("USE_PATTERN", "1");
+          this.uniforms.set("patternScale", new three.Uniform(1.0));
+          this.uniforms.set("patternTexture", new three.Uniform(texture));
+          this.vertexShader = vertex$a;
+        } else {
+          this.defines.delete("USE_PATTERN");
+          this.uniforms.delete("patternScale");
+          this.uniforms.delete("patternTexture");
+          this.vertexShader = null;
+        }
+      }
+    }, {
+      key: "getResolutionScale",
+      value: function getResolutionScale() {
+        return this.blurPass.getResolutionScale();
+      }
+    }, {
+      key: "setResolutionScale",
+      value: function setResolutionScale(scale) {
+        this.blurPass.setResolutionScale(scale);
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "setSelection",
+      value: function setSelection(objects) {
+        var selection = objects.slice(0);
+        var selectionLayer = this.selectionLayer;
+        var i, l;
+        this.clearSelection();
+
+        for (i = 0, l = selection.length; i < l; ++i) {
+          selection[i].layers.enable(selectionLayer);
+        }
+
+        this.selection = selection;
+        return this;
+      }
+    }, {
+      key: "clearSelection",
+      value: function clearSelection() {
+        var selection = this.selection;
+        var selectionLayer = this.selectionLayer;
+        var i, l;
+
+        for (i = 0, l = selection.length; i < l; ++i) {
+          selection[i].layers.disable(selectionLayer);
+        }
+
+        this.selection = [];
+        this.time = 0.0;
+        this.clear = true;
+        return this;
+      }
+    }, {
+      key: "selectObject",
+      value: function selectObject(object) {
+        object.layers.enable(this.selectionLayer);
+        this.selection.push(object);
+        return this;
+      }
+    }, {
+      key: "deselectObject",
+      value: function deselectObject(object) {
+        var selection = this.selection;
+        var index = selection.indexOf(object);
+
+        if (index >= 0) {
+          selection[index].layers.disable(this.selectionLayer);
+          selection.splice(index, 1);
+
+          if (selection.length === 0) {
+            this.time = 0.0;
+            this.clear = true;
+          }
+        }
+
+        return this;
+      }
+    }, {
+      key: "setSelectionVisible",
+      value: function setSelectionVisible(visible) {
+        var selection = this.selection;
+        var i, l;
+
+        for (i = 0, l = selection.length; i < l; ++i) {
+          if (visible) {
+            selection[i].layers.enable(0);
+          } else {
+            selection[i].layers.disable(0);
+          }
+        }
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        var mainScene = this.mainScene;
+        var mainCamera = this.mainCamera;
+        var pulse = this.uniforms.get("pulse");
+        var background = mainScene.background;
+        var mask = mainCamera.layers.mask;
+
+        if (this.selection.length > 0) {
+          mainScene.background = null;
+          pulse.value = 1.0;
+
+          if (this.pulseSpeed > 0.0) {
+            pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
+            this.time += delta;
+          }
+
+          this.setSelectionVisible(false);
+          this.renderPassDepth.render(renderer, this.renderTargetDepth);
+          this.setSelectionVisible(true);
+          mainCamera.layers.mask = 1 << this.selectionLayer;
+          this.renderPassMask.render(renderer, this.renderTargetMask);
+          mainCamera.layers.mask = mask;
+          mainScene.background = background;
+          this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);
+
+          if (this.blur) {
+            this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
+          }
+        } else if (this.clear) {
+          this.clearPass.render(renderer, this.renderTargetMask);
+          this.clearPass.render(renderer, this.renderTargetEdges);
+          this.clear = false;
+        }
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.renderTargetDepth.setSize(width, height);
+        this.renderTargetMask.setSize(width, height);
+        this.renderPassDepth.setSize(width, height);
+        this.renderPassMask.setSize(width, height);
+        this.blurPass.setSize(width, height);
+        width = this.blurPass.width;
+        height = this.blurPass.height;
+        this.renderTargetEdges.setSize(width, height);
+        this.renderTargetBlurredEdges.setSize(width, height);
+        this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+      }
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        this.renderPassDepth.initialize(renderer, alpha);
+        this.renderPassMask.initialize(renderer, alpha);
+        this.blurPass.initialize(renderer, alpha);
+      }
+    }, {
+      key: "dithering",
+      get: function get() {
+        return this.blurPass.dithering;
+      },
+      set: function set(value) {
+        this.blurPass.dithering = value;
+      }
+    }, {
+      key: "kernelSize",
+      get: function get() {
+        return this.blurPass.kernelSize;
+      },
+      set: function set() {
+        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : KernelSize.VERY_SMALL;
+        this.blurPass.kernelSize = value;
+      }
+    }, {
+      key: "blur",
+      get: function get() {
+        return this.blurPass.enabled;
+      },
+      set: function set(value) {
+        this.blurPass.enabled = value;
+        this.uniforms.get("edgeTexture").value = value ? this.renderTargetBlurredEdges.texture : this.renderTargetEdges.texture;
+      }
+    }, {
+      key: "xRay",
+      get: function get() {
+        return this.defines.has("X_RAY");
+      },
+      set: function set(value) {
+        value ? this.defines.set("X_RAY", "1") : this.defines.delete("X_RAY");
+      }
+    }]);
+
+    return OutlineEffect;
+  }(Effect);
+
+  var fragment$m = "uniform bool active;\r\nuniform vec2 d;\r\n\r\nvoid mainUv(inout vec2 uv) {\r\n\r\n\tif(active) {\r\n\r\n\t\tuv = vec2(\r\n\t\t\td.x * (floor(uv.x / d.x) + 0.5),\r\n\t\t\td.y * (floor(uv.y / d.y) + 0.5)\r\n\t\t);\r\n\r\n\t}\r\n\r\n}\r\n";
+
+  var PixelationEffect = function (_Effect) {
+    _inherits(PixelationEffect, _Effect);
+
+    function PixelationEffect() {
+      var _this;
+
+      var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
+
+      _classCallCheck(this, PixelationEffect);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(PixelationEffect).call(this, "PixelationEffect", fragment$m, {
+        uniforms: new Map([["active", new three.Uniform(false)], ["d", new three.Uniform(new three.Vector2())]])
+      }));
+      _this.resolution = new three.Vector2();
+      _this.granularity = granularity;
+      return _this;
+    }
+
+    _createClass(PixelationEffect, [{
+      key: "getGranularity",
+      value: function getGranularity() {
+        return this.granularity;
+      }
+    }, {
+      key: "setGranularity",
+      value: function setGranularity(granularity) {
+        granularity = Math.floor(granularity);
+
+        if (granularity % 2 > 0) {
+          granularity += 1;
+        }
+
+        var uniforms = this.uniforms;
+        uniforms.get("active").value = granularity > 0.0;
+        uniforms.get("d").value.set(granularity, granularity).divide(this.resolution);
+        this.granularity = granularity;
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.setGranularity(this.granularity);
+      }
+    }]);
+
+    return PixelationEffect;
+  }(Effect);
+
+  var fragment$n = "uniform float focus;\r\nuniform float focalLength;\r\nuniform float maxBlur;\r\nuniform float luminanceThreshold;\r\nuniform float luminanceGain;\r\nuniform float bias;\r\nuniform float fringe;\r\n\r\n#ifdef MANUAL_DOF\r\n\r\n\tuniform vec4 dof;\r\n\r\n#endif\r\n\r\n#ifdef PENTAGON\r\n\r\n\tfloat pentagon(const in vec2 coords) {\r\n\r\n\t\tconst vec4 HS0 = vec4( 1.0,          0.0,         0.0, 1.0);\r\n\t\tconst vec4 HS1 = vec4( 0.309016994,  0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS2 = vec4(-0.809016994,  0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS3 = vec4(-0.809016994, -0.587785252, 0.0, 1.0);\r\n\t\tconst vec4 HS4 = vec4( 0.309016994, -0.951056516, 0.0, 1.0);\r\n\t\tconst vec4 HS5 = vec4( 0.0,          0.0,         1.0, 1.0);\r\n\r\n\t\tconst vec4 ONE = vec4(1.0);\r\n\r\n\t\tconst float P_FEATHER = 0.4;\r\n\t\tconst float N_FEATHER = -P_FEATHER;\r\n\r\n\t\tfloat inOrOut = -4.0;\r\n\r\n\t\tvec4 P = vec4(coords, vec2(RINGS_FLOAT - 1.3));\r\n\r\n\t\tvec4 dist = vec4(\r\n\t\t\tdot(P, HS0),\r\n\t\t\tdot(P, HS1),\r\n\t\t\tdot(P, HS2),\r\n\t\t\tdot(P, HS3)\r\n\t\t);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\r\n\t\tinOrOut += dot(dist, ONE);\r\n\r\n\t\tdist.x = dot(P, HS4);\r\n\t\tdist.y = HS5.w - abs(P.z);\r\n\r\n\t\tdist = smoothstep(N_FEATHER, P_FEATHER, dist);\r\n\t\tinOrOut += dist.x;\r\n\r\n\t\treturn clamp(inOrOut, 0.0, 1.0);\r\n\r\n\t}\r\n\r\n#endif\r\n\r\nvec3 processTexel(const in vec2 coords, const in float blur) {\r\n\r\n\tvec3 c = vec3(\r\n\t\ttexture2D(inputBuffer, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r,\r\n\t\ttexture2D(inputBuffer, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g,\r\n\t\ttexture2D(inputBuffer, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b\r\n\t);\r\n\r\n\t// Calculate the luminance of the constructed color.\r\n\tfloat luminance = linearToRelativeLuminance(c);\r\n\tfloat threshold = max((luminance - luminanceThreshold) * luminanceGain, 0.0);\r\n\r\n\treturn c + mix(vec3(0.0), c, threshold * blur);\r\n\r\n}\r\n\r\nfloat gather(const in float i, const in float j, const in float ringSamples,\r\n\tconst in vec2 uv, const in vec2 blurFactor, const in float blur, inout vec3 color) {\r\n\r\n\tfloat step = PI2 / ringSamples;\r\n\tvec2 wh = vec2(cos(j * step) * i, sin(j * step) * i);\r\n\r\n\t#ifdef PENTAGON\r\n\r\n\t\tfloat p = pentagon(wh);\r\n\r\n\t#else\r\n\r\n\t\tfloat p = 1.0;\r\n\r\n\t#endif\r\n\r\n\tcolor += processTexel(wh * blurFactor + uv, blur) * mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n\treturn mix(1.0, i / RINGS_FLOAT, bias) * p;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {\r\n\r\n\t// Translate depth into world space units.\r\n\tfloat linearDepth = (-cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar));\r\n\r\n\t#ifdef MANUAL_DOF\r\n\r\n\t\tfloat focalPlane = linearDepth - focus;\r\n\t\tfloat farDoF = (focalPlane - dof.z) / dof.w;\r\n\t\tfloat nearDoF = (-focalPlane - dof.x) / dof.y;\r\n\r\n\t\tfloat blur = (focalPlane > 0.0) ? farDoF : nearDoF;\r\n\r\n\t#else\r\n\r\n\t\tconst float CIRCLE_OF_CONFUSION = 0.03; // 35mm film = 0.03mm CoC.\r\n\r\n\t\tfloat focalPlaneMM = focus * 1000.0;\r\n\t\tfloat depthMM = linearDepth * 1000.0;\r\n\r\n\t\tfloat focalPlane = (depthMM * focalLength) / (depthMM - focalLength);\r\n\t\tfloat farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);\r\n\t\tfloat nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focus * CIRCLE_OF_CONFUSION);\r\n\r\n\t\tfloat blur = abs(focalPlane - farDoF) * nearDoF;\r\n\r\n\t#endif\r\n\r\n\tblur = clamp(blur, 0.0, 1.0);\r\n\r\n\tvec2 blurFactor = vec2(\r\n\t\ttexelSize.x * blur * maxBlur,\r\n\t\ttexelSize.y * blur * maxBlur\r\n\t);\r\n\r\n\tconst int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;\r\n\r\n\tvec3 color = inputColor.rgb;\r\n\r\n\tif(blur >= 0.05) {\r\n\r\n\t\tfloat s = 1.0;\r\n\t\tint ringSamples;\r\n\r\n\t\tfor(int i = 1; i <= RINGS_INT; i++) {\r\n\r\n\t\t\tringSamples = i * SAMPLES_INT;\r\n\r\n\t\t\tfor(int j = 0; j < MAX_RING_SAMPLES; j++) {\r\n\r\n\t\t\t\tif(j >= ringSamples) {\r\n\r\n\t\t\t\t\tbreak;\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t\ts += gather(float(i), float(j), float(ringSamples), uv, blurFactor, blur, color);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tcolor /= s;\r\n\r\n\t}\r\n\r\n\t#ifdef SHOW_FOCUS\r\n\r\n\t\tfloat edge = 0.002 * linearDepth;\r\n\t\tfloat m = clamp(smoothstep(0.0, edge, blur), 0.0, 1.0);\r\n\t\tfloat e = clamp(smoothstep(1.0 - edge, 1.0, blur), 0.0, 1.0);\r\n\r\n\t\tcolor = mix(color, vec3(1.0, 0.5, 0.0), (1.0 - m) * 0.6);\r\n\t\tcolor = mix(color, vec3(0.0, 0.5, 1.0), ((1.0 - e) - (1.0 - m)) * 0.2);\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+
+  var RealisticBokehEffect = function (_Effect) {
+    _inherits(RealisticBokehEffect, _Effect);
+
+    function RealisticBokehEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, RealisticBokehEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        focus: 0.5,
+        focalLength: 24.0,
+        luminanceThreshold: 0.5,
+        luminanceGain: 2.0,
+        bias: 0.5,
+        fringe: 0.7,
+        maxBlur: 1.0,
+        rings: 3,
+        samples: 2,
+        showFocus: false,
+        manualDoF: false,
+        pentagon: false
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehEffect).call(this, "RealisticBokehEffect", fragment$n, {
+        attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["focus", new three.Uniform(settings.focus)], ["focalLength", new three.Uniform(settings.focalLength)], ["luminanceThreshold", new three.Uniform(settings.luminanceThreshold)], ["luminanceGain", new three.Uniform(settings.luminanceGain)], ["bias", new three.Uniform(settings.bias)], ["fringe", new three.Uniform(settings.fringe)], ["maxBlur", new three.Uniform(settings.maxBlur)]])
+      }));
+      _this.rings = settings.rings;
+      _this.samples = settings.samples;
+      _this.showFocus = settings.showFocus;
+      _this.manualDoF = settings.manualDoF;
+      _this.pentagon = settings.pentagon;
+      return _this;
+    }
+
+    _createClass(RealisticBokehEffect, [{
+      key: "rings",
+      get: function get() {
+        return Number.parseInt(this.defines.get("RINGS_INT"));
+      },
+      set: function set(value) {
+        value = Math.floor(value);
+        this.defines.set("RINGS_INT", value.toFixed(0));
+        this.defines.set("RINGS_FLOAT", value.toFixed(1));
+      }
+    }, {
+      key: "samples",
+      get: function get() {
+        return Number.parseInt(this.defines.get("SAMPLES_INT"));
+      },
+      set: function set(value) {
+        value = Math.floor(value);
+        this.defines.set("SAMPLES_INT", value.toFixed(0));
+        this.defines.set("SAMPLES_FLOAT", value.toFixed(1));
+      }
+    }, {
+      key: "showFocus",
+      get: function get() {
+        return this.defines.has("SHOW_FOCUS");
+      },
+      set: function set(value) {
+        value ? this.defines.set("SHOW_FOCUS", "1") : this.defines.delete("SHOW_FOCUS");
+      }
+    }, {
+      key: "manualDoF",
+      get: function get() {
+        return this.defines.has("MANUAL_DOF");
+      },
+      set: function set(value) {
+        if (value) {
+          this.defines.set("MANUAL_DOF", "1");
+          this.uniforms.set("dof", new three.Uniform(new three.Vector4(0.2, 1.0, 0.2, 2.0)));
+        } else {
+          this.defines.delete("MANUAL_DOF");
+          this.uniforms.delete("dof");
+        }
+      }
+    }, {
+      key: "pentagon",
+      get: function get() {
+        return this.defines.has("PENTAGON");
+      },
+      set: function set(value) {
+        value ? this.defines.set("PENTAGON", "1") : this.defines.delete("PENTAGON");
+      }
+    }]);
+
+    return RealisticBokehEffect;
+  }(Effect);
+
+  var fragment$o = "uniform float count;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec2 sl = vec2(sin(uv.y * count), cos(uv.y * count));\r\n\tvec3 scanlines = vec3(sl.x, sl.y, sl.x);\r\n\r\n\toutputColor = vec4(scanlines, inputColor.a);\r\n\r\n}\r\n";
+
+  var ScanlineEffect = function (_Effect) {
+    _inherits(ScanlineEffect, _Effect);
+
+    function ScanlineEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, ScanlineEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.OVERLAY,
+        density: 1.25
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineEffect).call(this, "ScanlineEffect", fragment$o, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["count", new three.Uniform(0.0)]])
+      }));
+      _this.resolution = new three.Vector2();
+      _this.density = settings.density;
+      return _this;
+    }
+
+    _createClass(ScanlineEffect, [{
+      key: "getDensity",
+      value: function getDensity() {
+        return this.density;
+      }
+    }, {
+      key: "setDensity",
+      value: function setDensity(density) {
+        this.density = density;
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.uniforms.get("count").value = Math.round(height * this.density);
+      }
+    }]);
+
+    return ScanlineEffect;
+  }(Effect);
+
+  var fragment$p = "uniform bool active;\r\nuniform vec2 center;\r\nuniform float waveSize;\r\nuniform float radius;\r\nuniform float maxRadius;\r\nuniform float amplitude;\r\n\r\nvarying float vSize;\r\n\r\nvoid mainUv(inout vec2 uv) {\r\n\r\n\tif(active) {\r\n\r\n\t\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\t\tvec2 difference = uv * aspectCorrection - center * aspectCorrection;\r\n\t\tfloat distance = sqrt(dot(difference, difference)) * vSize;\r\n\r\n\t\tif(distance > radius) {\r\n\r\n\t\t\tif(distance < radius + waveSize) {\r\n\r\n\t\t\t\tfloat angle = (distance - radius) * PI2 / waveSize;\r\n\t\t\t\tfloat cosSin = (1.0 - cos(angle)) * 0.5;\r\n\r\n\t\t\t\tfloat extent = maxRadius + waveSize;\r\n\t\t\t\tfloat decay = max(extent - distance * distance, 0.0) / extent;\r\n\r\n\t\t\t\tuv -= ((cosSin * amplitude * difference) / distance) * decay;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n";
+
+  var vertex$b = "uniform float size;\r\nuniform float cameraDistance;\r\n\r\nvarying float vSize;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvSize = (0.1 * cameraDistance) / size;\r\n\r\n}\r\n";
+
+  var HALF_PI = Math.PI * 0.5;
+  var v$1 = new three.Vector3();
+  var ab = new three.Vector3();
+  var ShockWaveEffect = function (_Effect) {
+    _inherits(ShockWaveEffect, _Effect);
+
+    function ShockWaveEffect(camera) {
+      var _this;
+
+      var epicenter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector3();
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      _classCallCheck(this, ShockWaveEffect);
+
+      var settings = Object.assign({
+        speed: 2.0,
+        maxRadius: 1.0,
+        waveSize: 0.2,
+        amplitude: 0.05
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveEffect).call(this, "ShockWaveEffect", fragment$p, {
+        uniforms: new Map([["active", new three.Uniform(false)], ["center", new three.Uniform(new three.Vector2(0.5, 0.5))], ["cameraDistance", new three.Uniform(1.0)], ["size", new three.Uniform(1.0)], ["radius", new three.Uniform(-settings.waveSize)], ["maxRadius", new three.Uniform(settings.maxRadius)], ["waveSize", new three.Uniform(settings.waveSize)], ["amplitude", new three.Uniform(settings.amplitude)]]),
+        vertexShader: vertex$b
+      }));
+      _this.camera = camera;
+      _this.epicenter = epicenter;
+      _this.screenPosition = _this.uniforms.get("center").value;
+      _this.speed = settings.speed;
+      _this.time = 0.0;
+      _this.active = false;
+      return _this;
+    }
+
+    _createClass(ShockWaveEffect, [{
+      key: "explode",
+      value: function explode() {
+        this.time = 0.0;
+        this.active = true;
+        this.uniforms.get("active").value = true;
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        var epicenter = this.epicenter;
+        var camera = this.camera;
+        var uniforms = this.uniforms;
+        var radius;
+
+        if (this.active) {
+          var waveSize = uniforms.get("waveSize").value;
+          camera.getWorldDirection(v$1);
+          ab.copy(camera.position).sub(epicenter);
+
+          if (v$1.angleTo(ab) > HALF_PI) {
+            uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
+            v$1.copy(epicenter).project(camera);
+            this.screenPosition.set((v$1.x + 1.0) * 0.5, (v$1.y + 1.0) * 0.5);
+          }
+
+          this.time += delta * this.speed;
+          radius = this.time - waveSize;
+          uniforms.get("radius").value = radius;
+
+          if (radius >= (uniforms.get("maxRadius").value + waveSize) * 2.0) {
+            this.active = false;
+            uniforms.get("active").value = false;
+          }
+        }
+      }
+    }]);
+
+    return ShockWaveEffect;
+  }(Effect);
+
+  var fragment$q = "uniform float intensity;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec3 color = vec3(\r\n\t\tdot(inputColor.rgb, vec3(1.0 - 0.607 * intensity, 0.769 * intensity, 0.189 * intensity)),\r\n\t\tdot(inputColor.rgb, vec3(0.349 * intensity, 1.0 - 0.314 * intensity, 0.168 * intensity)),\r\n\t\tdot(inputColor.rgb, vec3(0.272 * intensity, 0.534 * intensity, 1.0 - 0.869 * intensity))\r\n\t);\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+
+  var SepiaEffect = function (_Effect) {
+    _inherits(SepiaEffect, _Effect);
+
+    function SepiaEffect() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, SepiaEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        intensity: 1.0
+      }, options);
+      return _possibleConstructorReturn(this, _getPrototypeOf(SepiaEffect).call(this, "SepiaEffect", fragment$q, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["intensity", new three.Uniform(settings.intensity)]])
+      }));
+    }
+
+    return SepiaEffect;
+  }(Effect);
+
+  var searchImageDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII";
+
+  var areaImageDataURL = "data:image/png;base64,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";
+
+  var fragment$r = "uniform sampler2D weightMap;\r\nvarying vec4 vOffset;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\t// Fetch the blending weights for the current pixel.\r\n\tvec4 a;\r\n\ta.xz = texture2D(weightMap, uv).xz;\r\n\ta.y = texture2D(weightMap, vOffset.zw).g;\r\n\ta.w = texture2D(weightMap, vOffset.xy).a;\r\n\r\n\tvec4 color = inputColor;\r\n\r\n\t// Ignore tiny blending weights.\r\n\tif(dot(a, vec4(1.0)) >= 1e-5) {\r\n\r\n\t\t/* Up to four lines can be crossing a pixel (one through each edge).\r\n\t\t * The line with the maximum weight for each direction is favoured.\r\n\t\t */\r\n\r\n\t\tvec2 offset = vec2(\r\n\t\t\ta.a > a.b ? a.a : -a.b,\t// Left vs. right.\r\n\t\t\ta.g > a.r ? -a.g : a.r\t// Top vs. bottom (changed signs).\r\n\t\t);\r\n\r\n\t\t// Go in the direction with the maximum weight (horizontal vs. vertical).\r\n\t\tif(abs(offset.x) > abs(offset.y)) {\r\n\r\n\t\t\toffset.y = 0.0;\r\n\r\n\t\t} else {\r\n\r\n\t\t\toffset.x = 0.0;\r\n\r\n\t\t}\r\n\r\n\t\t// Fetch the opposite color and lerp by hand.\r\n\t\tvec4 oppositeColor = texture2D(inputBuffer, uv + sign(offset) * texelSize);\r\n\t\tfloat s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);\r\n\r\n\t\t// Gamma correction.\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(2.2));\r\n\t\toppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));\r\n\t\tcolor = mix(color, oppositeColor, s);\r\n\t\tcolor.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));\r\n\r\n\t}\r\n\r\n\toutputColor = color;\r\n\r\n}\r\n";
+
+  var vertex$c = "varying vec4 vOffset;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.\r\n\r\n}\r\n";
+
+  var SMAAEffect = function (_Effect) {
+    _inherits(SMAAEffect, _Effect);
+
+    function SMAAEffect(searchImage, areaImage) {
+      var _this;
+
+      _classCallCheck(this, SMAAEffect);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(SMAAEffect).call(this, "SMAAEffect", fragment$r, {
+        attributes: EffectAttribute.CONVOLUTION,
+        blendFunction: BlendFunction.NORMAL,
+        uniforms: new Map([["weightMap", new three.Uniform(null)]]),
+        vertexShader: vertex$c
+      }));
+      _this.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        format: three.RGBFormat,
+        stencilBuffer: false,
+        depthBuffer: false
+      });
+      _this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
+      _this.renderTargetColorEdges.texture.generateMipmaps = false;
+      _this.renderTargetWeights = _this.renderTargetColorEdges.clone();
+      _this.renderTargetWeights.texture.name = "SMAA.Weights";
+      _this.renderTargetWeights.texture.format = three.RGBAFormat;
+      _this.uniforms.get("weightMap").value = _this.renderTargetWeights.texture;
+      _this.clearPass = new ClearPass({
+        clearColor: new three.Color(0x000000),
+        clearAlpha: 1.0
+      });
+      _this.colorEdgesPass = new ShaderPass(new ColorEdgesMaterial());
+      _this.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
+
+      _this.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = function () {
+        var searchTexture = new three.Texture(searchImage);
+        searchTexture.name = "SMAA.Search";
+        searchTexture.magFilter = three.NearestFilter;
+        searchTexture.minFilter = three.NearestFilter;
+        searchTexture.format = three.RGBAFormat;
+        searchTexture.generateMipmaps = false;
+        searchTexture.needsUpdate = true;
+        searchTexture.flipY = false;
+        return searchTexture;
+      }();
+
+      _this.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = function () {
+        var areaTexture = new three.Texture(areaImage);
+        areaTexture.name = "SMAA.Area";
+        areaTexture.minFilter = three.LinearFilter;
+        areaTexture.format = three.RGBAFormat;
+        areaTexture.generateMipmaps = false;
+        areaTexture.needsUpdate = true;
+        areaTexture.flipY = false;
+        return areaTexture;
+      }();
+
+      return _this;
+    }
+
+    _createClass(SMAAEffect, [{
+      key: "setEdgeDetectionThreshold",
+      value: function setEdgeDetectionThreshold(threshold) {
+        this.colorEdgesPass.getFullscreenMaterial().setEdgeDetectionThreshold(threshold);
+      }
+    }, {
+      key: "setOrthogonalSearchSteps",
+      value: function setOrthogonalSearchSteps(steps) {
+        this.weightsPass.getFullscreenMaterial().setOrthogonalSearchSteps(steps);
+      }
+    }, {
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        this.clearPass.render(renderer, this.renderTargetColorEdges);
+        this.colorEdgesPass.render(renderer, inputBuffer, this.renderTargetColorEdges);
+        this.weightsPass.render(renderer, this.renderTargetColorEdges, this.renderTargetWeights);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.renderTargetColorEdges.setSize(width, height);
+        this.renderTargetWeights.setSize(width, height);
+        this.colorEdgesPass.getFullscreenMaterial().uniforms.texelSize.value.copy(this.weightsPass.getFullscreenMaterial().uniforms.texelSize.value.set(1.0 / width, 1.0 / height));
+      }
+    }], [{
+      key: "searchImageDataURL",
+      get: function get() {
+        return searchImageDataURL;
+      }
+    }, {
+      key: "areaImageDataURL",
+      get: function get() {
+        return areaImageDataURL;
+      }
+    }]);
+
+    return SMAAEffect;
+  }(Effect);
+
+  var vertex$d = "uniform float scale;\r\n\r\nvarying vec2 vUv2;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvUv2 = uv * vec2(aspect, 1.0) * scale;\r\n\r\n}\r\n";
+
+  var TextureEffect = function (_Effect) {
+    _inherits(TextureEffect, _Effect);
+
+    function TextureEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, TextureEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        texture: null,
+        aspectCorrection: false
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(TextureEffect).call(this, "TextureEffect", fragment$9, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["texture", new three.Uniform(settings.texture)]])
+      }));
+      _this.aspectCorrection = settings.aspectCorrection;
+      return _this;
+    }
+
+    _createClass(TextureEffect, [{
+      key: "aspectCorrection",
+      get: function get() {
+        return this.defines.has("ASPECT_CORRECTION");
+      },
+      set: function set(value) {
+        if (value) {
+          this.defines.set("ASPECT_CORRECTION", "1");
+          this.uniforms.set("scale", new three.Uniform(1.0));
+          this.vertexShader = vertex$d;
+        } else {
+          this.defines.delete("ASPECT_CORRECTION");
+          this.uniforms.delete("scale");
+          this.vertexShader = null;
+        }
+      }
+    }]);
+
+    return TextureEffect;
+  }(Effect);
+
+  var fragment$s = "uniform sampler2D luminanceMap;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\nuniform float averageLuminance;\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance by sampling the center.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, vec2(0.5)).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = linearToRelativeLuminance(c);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\toutputColor = vec4(toneMap(inputColor.rgb), inputColor.a);\r\n\r\n}\r\n";
+
+  var ToneMappingEffect = function (_Effect) {
+    _inherits(ToneMappingEffect, _Effect);
+
+    function ToneMappingEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, ToneMappingEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        adaptive: true,
+        resolution: 256,
+        distinction: 1.0,
+        middleGrey: 0.6,
+        maxLuminance: 16.0,
+        averageLuminance: 1.0,
+        adaptationRate: 2.0
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragment$s, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["luminanceMap", new three.Uniform(null)], ["middleGrey", new three.Uniform(settings.middleGrey)], ["maxLuminance", new three.Uniform(settings.maxLuminance)], ["averageLuminance", new three.Uniform(settings.averageLuminance)]])
+      }));
+      _this.renderTargetLuminance = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearMipMapLinearFilter,
+        magFilter: three.LinearFilter,
+        format: three.RGBFormat,
+        stencilBuffer: false,
+        depthBuffer: false
+      });
+      _this.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
+      _this.renderTargetAdapted = _this.renderTargetLuminance.clone();
+      _this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminance";
+      _this.renderTargetAdapted.texture.generateMipmaps = false;
+      _this.renderTargetAdapted.texture.minFilter = three.LinearFilter;
+      _this.renderTargetPrevious = _this.renderTargetAdapted.clone();
+      _this.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminance";
+      _this.savePass = new SavePass(_this.renderTargetPrevious, false);
+      _this.luminancePass = new ShaderPass(new LuminanceMaterial());
+      _this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
+      _this.adaptationRate = settings.adaptationRate;
+      _this.distinction = settings.distinction;
+      _this.resolution = settings.resolution;
+      _this.adaptive = settings.adaptive;
+      return _this;
+    }
+
+    _createClass(ToneMappingEffect, [{
+      key: "update",
+      value: function update(renderer, inputBuffer, delta) {
+        if (this.adaptive) {
+          this.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);
+          var uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
+          uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
+          uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
+          uniforms.delta.value = delta;
+          this.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);
+          this.savePass.render(renderer, this.renderTargetAdapted);
+        }
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.savePass.setSize(width, height);
+      }
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        var clearPass = new ClearPass({
+          clearColor: new three.Color(0x7fffff)
+        });
+        clearPass.render(renderer, this.renderTargetPrevious);
+        clearPass.dispose();
+      }
+    }, {
+      key: "resolution",
+      get: function get() {
+        return this.renderTargetLuminance.width;
+      },
+      set: function set(value) {
+        var exponent = Math.max(0, Math.ceil(Math.log2(value)));
+        value = Math.pow(2, exponent);
+        this.renderTargetLuminance.setSize(value, value);
+        this.renderTargetPrevious.setSize(value, value);
+        this.renderTargetAdapted.setSize(value, value);
+        this.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);
+      }
+    }, {
+      key: "adaptive",
+      get: function get() {
+        return this.defines.has("ADAPTED_LUMINANCE");
+      },
+      set: function set(value) {
+        if (value) {
+          this.defines.set("ADAPTED_LUMINANCE", "1");
+          this.uniforms.get("luminanceMap").value = this.renderTargetAdapted.texture;
+        } else {
+          this.defines.delete("ADAPTED_LUMINANCE");
+          this.uniforms.get("luminanceMap").value = null;
+        }
+      }
+    }, {
+      key: "adaptationRate",
+      get: function get() {
+        return this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value;
+      },
+      set: function set(value) {
+        this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value = value;
+      }
+    }, {
+      key: "distinction",
+      get: function get() {
+        return this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;
+      },
+      set: function set() {
+        var value = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1.0;
+        this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
+      }
+    }]);
+
+    return ToneMappingEffect;
+  }(Effect);
+
+  var fragment$t = "uniform float offset;\r\nuniform float darkness;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tconst vec2 center = vec2(0.5);\r\n\tvec3 color = inputColor.rgb;\r\n\r\n\t#ifdef ESKIL\r\n\r\n\t\tvec2 coord = (uv - center) * vec2(offset);\r\n\t\tcolor = mix(color, vec3(1.0 - darkness), dot(coord, coord));\r\n\r\n\t#else\r\n\r\n\t\tfloat d = distance(uv, center);\r\n\t\tcolor *= smoothstep(0.8, offset * 0.799, d * (darkness + offset));\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+
+  var VignetteEffect = function (_Effect) {
+    _inherits(VignetteEffect, _Effect);
+
+    function VignetteEffect() {
+      var _this;
+
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      _classCallCheck(this, VignetteEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.NORMAL,
+        eskil: false,
+        offset: 0.5,
+        darkness: 0.5
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragment$t, {
+        blendFunction: settings.blendFunction,
+        uniforms: new Map([["offset", new three.Uniform(settings.offset)], ["darkness", new three.Uniform(settings.darkness)]])
+      }));
+      _this.eskil = settings.eskil;
+      return _this;
+    }
+
+    _createClass(VignetteEffect, [{
+      key: "eskil",
+      get: function get() {
+        return this.defines.has("ESKIL");
+      },
+      set: function set(value) {
+        value ? this.defines.set("ESKIL", "1") : this.defines.delete("ESKIL");
+      }
+    }]);
+
+    return VignetteEffect;
+  }(Effect);
 
   function createCanvas(width, height, data, channels) {
     var canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
@@ -7628,7 +7990,7 @@
     return Vector3;
   }();
 
-  var v$1 = new Vector3();
+  var v$2 = new Vector3();
   var points = [new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   var Box3 = function () {
     function Box3() {
@@ -7728,7 +8090,7 @@
     }, {
       key: "setFromCenterAndSize",
       value: function setFromCenterAndSize(center, size) {
-        var halfSize = v$1.copy(size).multiplyScalar(0.5);
+        var halfSize = v$2.copy(size).multiplyScalar(0.5);
         this.min.copy(center).sub(halfSize);
         this.max.copy(center).add(halfSize);
         return this;
@@ -7742,7 +8104,7 @@
     }, {
       key: "distanceToPoint",
       value: function distanceToPoint(p) {
-        var clampedPoint = v$1.copy(p).clamp(this.min, this.max);
+        var clampedPoint = v$2.copy(p).clamp(this.min, this.max);
         return clampedPoint.sub(p).length();
       }
     }, {
@@ -7819,7 +8181,7 @@
     }, {
       key: "intersectsSphere",
       value: function intersectsSphere(s) {
-        var closestPoint = this.clampPoint(s.center, v$1);
+        var closestPoint = this.clampPoint(s.center, v$2);
         return closestPoint.distanceToSquared(s.center) <= s.radius * s.radius;
       }
     }, {
@@ -7851,7 +8213,7 @@
           max += p.normal.z * this.min.z;
         }
 
-        return min <= p.constant && max >= p.constant;
+        return min <= -p.constant && max >= -p.constant;
       }
     }, {
       key: "equals",
@@ -7864,7 +8226,7 @@
   }();
 
   var box = new Box3();
-  var v$2 = new Vector3();
+  var v$3 = new Vector3();
   var Sphere = function () {
     function Sphere() {
       var center = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Vector3();
@@ -7913,7 +8275,7 @@
       key: "setFromBox",
       value: function setFromBox(box) {
         box.getCenter(this.center);
-        this.radius = box.getSize(v$2).length() * 0.5;
+        this.radius = box.getSize(v$3).length() * 0.5;
         return this;
       }
     }, {
@@ -8272,7 +8634,7 @@
     return Vector2;
   }();
 
-  var v$3 = new Vector2();
+  var v$4 = new Vector2();
   var Box2 = function () {
     function Box2() {
       var min = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Vector2(Infinity, Infinity);
@@ -8332,7 +8694,7 @@
       value: function getBoundingSphere() {
         var target = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Sphere();
         this.getCenter(target.center);
-        target.radius = this.getSize(v$3).length() * 0.5;
+        target.radius = this.getSize(v$4).length() * 0.5;
         return target;
       }
     }, {
@@ -8372,7 +8734,7 @@
     }, {
       key: "setFromCenterAndSize",
       value: function setFromCenterAndSize(center, size) {
-        var halfSize = v$3.copy(size).multiplyScalar(0.5);
+        var halfSize = v$4.copy(size).multiplyScalar(0.5);
         this.min.copy(center).sub(halfSize);
         this.max.copy(center).add(halfSize);
         return this;
@@ -8386,7 +8748,7 @@
     }, {
       key: "distanceToPoint",
       value: function distanceToPoint(p) {
-        var clampedPoint = v$3.copy(p).clamp(this.min, this.max);
+        var clampedPoint = v$4.copy(p).clamp(this.min, this.max);
         return clampedPoint.sub(p).length();
       }
     }, {
@@ -8781,7 +9143,7 @@
     ZYX: "ZYX"
   };
 
-  var v$4 = new Vector3();
+  var v$5 = new Vector3();
   var Quaternion = function () {
     function Quaternion() {
       var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
@@ -8966,17 +9328,17 @@
           r = 0;
 
           if (Math.abs(vFrom.x) > Math.abs(vFrom.z)) {
-            v$4.set(-vFrom.y, vFrom.x, 0);
+            v$5.set(-vFrom.y, vFrom.x, 0);
           } else {
-            v$4.set(0, -vFrom.z, vFrom.y);
+            v$5.set(0, -vFrom.z, vFrom.y);
           }
         } else {
-          v$4.crossVectors(vFrom, vTo);
+          v$5.crossVectors(vFrom, vTo);
         }
 
-        this.x = v$4.x;
-        this.y = v$4.y;
-        this.z = v$4.z;
+        this.x = v$5.x;
+        this.y = v$5.y;
+        this.z = v$5.z;
         this.w = r;
         return this.normalize();
       }
@@ -9190,7 +9552,7 @@
     return Quaternion;
   }();
 
-  function clamp$1(value, min, max) {
+  function clamp(value, min, max) {
     return Math.max(Math.min(value, max), min);
   }
 
@@ -9279,7 +9641,7 @@
         switch (order) {
           case RotationOrder.XYZ:
             {
-              this.y = Math.asin(clamp$1(m02, -1, 1));
+              this.y = Math.asin(clamp(m02, -1, 1));
 
               if (Math.abs(m02) < THRESHOLD) {
                 this.x = Math.atan2(-m12, m22);
@@ -9294,7 +9656,7 @@
 
           case RotationOrder.YXZ:
             {
-              this.x = Math.asin(-clamp$1(m12, -1, 1));
+              this.x = Math.asin(-clamp(m12, -1, 1));
 
               if (Math.abs(m12) < THRESHOLD) {
                 this.y = Math.atan2(m02, m22);
@@ -9309,7 +9671,7 @@
 
           case RotationOrder.ZXY:
             {
-              this.x = Math.asin(clamp$1(m21, -1, 1));
+              this.x = Math.asin(clamp(m21, -1, 1));
 
               if (Math.abs(m21) < THRESHOLD) {
                 this.y = Math.atan2(-m20, m22);
@@ -9324,7 +9686,7 @@
 
           case RotationOrder.ZYX:
             {
-              this.y = Math.asin(-clamp$1(m20, -1, 1));
+              this.y = Math.asin(-clamp(m20, -1, 1));
 
               if (Math.abs(m20) < THRESHOLD) {
                 this.x = Math.atan2(m21, m22);
@@ -9339,7 +9701,7 @@
 
           case RotationOrder.YZX:
             {
-              this.z = Math.asin(clamp$1(m10, -1, 1));
+              this.z = Math.asin(clamp(m10, -1, 1));
 
               if (Math.abs(m10) < THRESHOLD) {
                 this.x = Math.atan2(-m12, m11);
@@ -9354,7 +9716,7 @@
 
           case RotationOrder.XZY:
             {
-              this.z = Math.asin(-clamp$1(m01, -1, 1));
+              this.z = Math.asin(-clamp(m01, -1, 1));
 
               if (Math.abs(m01) < THRESHOLD) {
                 this.x = Math.atan2(m21, m11);
@@ -9545,7 +9907,7 @@
     return Plane;
   }();
 
-  var v$5 = new Vector3();
+  var v$6 = new Vector3();
   var Frustum = function () {
     function Frustum() {
       var p0 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Plane();
@@ -9648,11 +10010,11 @@
 
         for (i = 0; i < 6; ++i) {
           plane = planes[i];
-          v$5.x = plane.normal.x > 0.0 ? max.x : min.x;
-          v$5.y = plane.normal.y > 0.0 ? max.y : min.y;
-          v$5.z = plane.normal.z > 0.0 ? max.z : min.z;
+          v$6.x = plane.normal.x > 0.0 ? max.x : min.x;
+          v$6.y = plane.normal.y > 0.0 ? max.y : min.y;
+          v$6.z = plane.normal.z > 0.0 ? max.z : min.z;
 
-          if (plane.distanceToPoint(v$5) < 0.0) {
+          if (plane.distanceToPoint(v$6) < 0.0) {
             return false;
           }
         }
@@ -10530,7 +10892,7 @@
     return Matrix4;
   }();
 
-  var v$6 = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
+  var v$7 = [new Vector3(), new Vector3(), new Vector3(), new Vector3()];
   var Ray = function () {
     function Ray() {
       var origin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new Vector3();
@@ -10576,7 +10938,7 @@
     }, {
       key: "recast",
       value: function recast(t) {
-        this.origin.copy(this.at(t, v$6[0]));
+        this.origin.copy(this.at(t, v$7[0]));
         return this;
       }
     }, {
@@ -10589,8 +10951,8 @@
     }, {
       key: "distanceSquaredToPoint",
       value: function distanceSquaredToPoint(p) {
-        var directionDistance = v$6[0].subVectors(p, this.origin).dot(this.direction);
-        return directionDistance < 0.0 ? this.origin.distanceToSquared(p) : v$6[0].copy(this.direction).multiplyScalar(directionDistance).add(this.origin).distanceToSquared(p);
+        var directionDistance = v$7[0].subVectors(p, this.origin).dot(this.direction);
+        return directionDistance < 0.0 ? this.origin.distanceToSquared(p) : v$7[0].copy(this.direction).multiplyScalar(directionDistance).add(this.origin).distanceToSquared(p);
       }
     }, {
       key: "distanceToPoint",
@@ -10607,9 +10969,9 @@
     }, {
       key: "distanceSquaredToSegment",
       value: function distanceSquaredToSegment(v0, v1, pointOnRay, pointOnSegment) {
-        var segCenter = v$6[0].copy(v0).add(v1).multiplyScalar(0.5);
-        var segDir = v$6[1].copy(v1).sub(v0).normalize();
-        var diff = v$6[2].copy(this.origin).sub(segCenter);
+        var segCenter = v$7[0].copy(v0).add(v1).multiplyScalar(0.5);
+        var segDir = v$7[1].copy(v1).sub(v0).normalize();
+        var diff = v$7[2].copy(this.origin).sub(segCenter);
         var segExtent = v0.distanceTo(v1) * 0.5;
         var a01 = -this.direction.dot(segDir);
         var b0 = diff.dot(this.direction);
@@ -10675,7 +11037,7 @@
       key: "intersectSphere",
       value: function intersectSphere(s) {
         var target = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Vector3();
-        var ab = v$6[0].subVectors(s.center, this.origin);
+        var ab = v$7[0].subVectors(s.center, this.origin);
         var tca = ab.dot(this.direction);
         var d2 = ab.dot(ab) - tca * tca;
         var radius2 = s.radius * s.radius;
@@ -10779,16 +11141,16 @@
     }, {
       key: "intersectsBox",
       value: function intersectsBox(b) {
-        return this.intersectBox(b, v$6[0]) !== null;
+        return this.intersectBox(b, v$7[0]) !== null;
       }
     }, {
       key: "intersectTriangle",
       value: function intersectTriangle(a, b, c, backfaceCulling, target) {
         var direction = this.direction;
-        var diff = v$6[0];
-        var edge1 = v$6[1];
-        var edge2 = v$6[2];
-        var normal = v$6[3];
+        var diff = v$7[0];
+        var edge1 = v$7[1];
+        var edge2 = v$7[2];
+        var normal = v$7[3];
         var result = null;
         var DdN, sign, DdQxE2, DdE1xQ, QdN;
         edge1.subVectors(b, a);
@@ -11437,7 +11799,7 @@
   };
 
   var TWO_PI = Math.PI * 2;
-  var v$7 = new Vector3();
+  var v$8 = new Vector3();
   var m$1 = new Matrix4();
   var RotationManager = function () {
     function RotationManager(position, quaternion, target, settings) {
@@ -11475,9 +11837,9 @@
         var rotation = settings.rotation;
 
         if (settings.general.orbit) {
-          m$1.lookAt(v$7.subVectors(this.position, this.target), rotation.pivotOffset, rotation.up);
+          m$1.lookAt(v$8.subVectors(this.position, this.target), rotation.pivotOffset, rotation.up);
         } else {
-          m$1.lookAt(v$7.set(0, 0, 0), this.target.setFromSpherical(this.spherical), rotation.up);
+          m$1.lookAt(v$8.set(0, 0, 0), this.target.setFromSpherical(this.spherical), rotation.up);
         }
 
         this.quaternion.setFromRotationMatrix(m$1);
@@ -11540,12 +11902,12 @@
         target.copy(point);
 
         if (this.settings.general.orbit) {
-          v$7.subVectors(position, target);
+          v$8.subVectors(position, target);
         } else {
-          v$7.subVectors(target, position).normalize();
+          v$8.subVectors(target, position).normalize();
         }
 
-        spherical.setFromVector3(v$7);
+        spherical.setFromVector3(v$8);
         spherical.radius = Math.max(spherical.radius, 1e-6);
         this.updateQuaternion();
         return this;
@@ -11599,7 +11961,7 @@
   var y = new Vector3(0, 1, 0);
   var z = new Vector3(0, 0, 1);
 
-  var v$8 = new Vector3();
+  var v$9 = new Vector3();
   var TranslationManager = function () {
     function TranslationManager(position, quaternion, target, settings) {
       _classCallCheck(this, TranslationManager);
@@ -11632,11 +11994,11 @@
     }, {
       key: "translateOnAxis",
       value: function translateOnAxis(axis, distance) {
-        v$8.copy(axis).applyQuaternion(this.quaternion).multiplyScalar(distance);
-        this.position.add(v$8);
+        v$9.copy(axis).applyQuaternion(this.quaternion).multiplyScalar(distance);
+        this.position.add(v$9);
 
         if (this.settings.general.orbit) {
-          this.target.add(v$8);
+          this.target.add(v$9);
         }
       }
     }, {
@@ -12556,8 +12918,8 @@
       _classCallCheck(this, BloomDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(BloomDemo).call(this, "bloom", composer));
-      _this.bloomPass = null;
-      _this.texturePass = null;
+      _this.effect = null;
+      _this.pass = null;
       _this.object = null;
       return _this;
     }
@@ -12584,6 +12946,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -12661,21 +13037,20 @@
         object.add(o1);
         object.add(o2);
         scene.add(object);
-        this.renderPass.renderToScreen = false;
-        var bloomPass = new BloomPass({
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.065);
+        var bloomEffect = new BloomEffect({
+          blendFunction: BlendFunction.SCREEN,
           resolutionScale: 0.5,
-          intensity: 2.0,
           distinction: 4.0
         });
-        bloomPass.renderToScreen = true;
-        this.bloomPass = bloomPass;
-        composer.addPass(bloomPass);
-        var texturePass = new TexturePass(bloomPass.overlay);
-        texturePass.renderToScreen = true;
-        texturePass.enabled = false;
-        texturePass.opacityDestination = 0.0;
-        this.texturePass = texturePass;
-        composer.addPass(texturePass);
+        bloomEffect.blendMode.opacity.value = 2.1;
+        this.effect = bloomEffect;
+        var pass = new EffectPass(camera, smaaEffect, bloomEffect);
+        this.pass = pass;
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        composer.addPass(pass);
       }
     }, {
       key: "render",
@@ -12698,33 +13073,32 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.bloomPass;
-        var texturePass = this.texturePass;
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
         var params = {
-          "resolution": pass.getResolutionScale(),
-          "kernel size": pass.kernelSize,
-          "blend mode": "screen"
+          "resolution": effect.getResolutionScale(),
+          "kernel size": effect.kernelSize,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
-        menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.setResolutionScale(params.resolution);
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
+          effect.setResolutionScale(params.resolution);
         });
-        menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
-          pass.kernelSize = params["kernel size"];
-        });
-        menu.add(pass, "intensity").min(0.0).max(4.0).step(0.01).onChange(function () {
-          texturePass.opacitySource = pass.intensity;
+        menu.add(params, "kernel size", KernelSize).onChange(function () {
+          effect.kernelSize = Number.parseInt(params["kernel size"]);
         });
         var folder = menu.addFolder("Luminance");
-        folder.add(pass, "distinction").min(1.0).max(10.0).step(0.1);
+        folder.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
         folder.open();
-        menu.add(pass, "blend").onChange(function () {
-          pass.renderToScreen = pass.blend;
-          texturePass.enabled = !pass.blend;
+        menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
         });
-        menu.add(pass, "dithering");
-        menu.add(params, "blend mode", ["add", "screen"]).onChange(function () {
-          pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
+        menu.add(effect, "dithering");
       }
     }]);
 
@@ -12740,7 +13114,9 @@
       _classCallCheck(this, BokehDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(BokehDemo).call(this, "bokeh", composer));
+      _this.effect = null;
       _this.bokehPass = null;
+      _this.depthPass = null;
       return _this;
     }
 
@@ -12766,6 +13142,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -12808,43 +13198,240 @@
         var mesh = new three.Mesh(geometry, material);
         mesh.rotation.set(0, 0, Math.PI / 2);
         scene.add(mesh);
-        var pass = new BokehPass(camera, {
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.06);
+        var bokehEffect = new BokehEffect({
           focus: 0.32,
           dof: 0.02,
           aperture: 0.015,
-          maxBlur: 0.025
+          maxBlur: 0.0125
         });
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
+        var depthPass = new EffectPass(camera, new DepthEffect());
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.bokehPass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        depthPass.enabled = false;
+        this.effect = bokehEffect;
+        this.bokehPass = bokehPass;
+        this.depthPass = depthPass;
+        composer.addPass(bokehPass);
+        composer.addPass(depthPass);
+        composer.addPass(smaaPass);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var material = this.bokehPass.getFullscreenMaterial();
+        var bokehPass = this.bokehPass;
+        var depthPass = this.depthPass;
+        var effect = this.effect;
+        var uniforms = effect.uniforms;
+        var blendMode = effect.blendMode;
         var params = {
-          "focus": material.uniforms.focus.value,
-          "dof": material.uniforms.dof.value,
-          "aperture": material.uniforms.aperture.value,
-          "blur": material.uniforms.maxBlur.value
+          "focus": uniforms.get("focus").value,
+          "dof": uniforms.get("dof").value,
+          "aperture": uniforms.get("aperture").value,
+          "blur": uniforms.get("maxBlur").value,
+          "show depth": depthPass.enabled,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
         menu.add(params, "focus").min(0.0).max(1.0).step(0.001).onChange(function () {
-          material.uniforms.focus.value = params.focus;
+          uniforms.get("focus").value = params.focus;
         });
         menu.add(params, "dof").min(0.0).max(1.0).step(0.001).onChange(function () {
-          material.uniforms.dof.value = params.dof;
+          uniforms.get("dof").value = params.dof;
         });
         menu.add(params, "aperture").min(0.0).max(0.05).step(0.0001).onChange(function () {
-          material.uniforms.aperture.value = params.aperture;
+          uniforms.get("aperture").value = params.aperture;
         });
         menu.add(params, "blur").min(0.0).max(0.1).step(0.001).onChange(function () {
-          material.uniforms.maxBlur.value = params.blur;
+          uniforms.get("maxBlur").value = params.blur;
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          bokehPass.recompile();
+        });
+        menu.add(params, "show depth").onChange(function () {
+          bokehPass.enabled = !params["show depth"];
+          depthPass.enabled = params["show depth"];
         });
       }
     }]);
 
     return BokehDemo;
+  }(PostProcessingDemo);
+
+  var ColorCorrectionDemo = function (_PostProcessingDemo) {
+    _inherits(ColorCorrectionDemo, _PostProcessingDemo);
+
+    function ColorCorrectionDemo(composer) {
+      var _this;
+
+      _classCallCheck(this, ColorCorrectionDemo);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ColorCorrectionDemo).call(this, "color-correction", composer));
+      _this.brightnessContrastEffect = null;
+      _this.gammaCorrectionEffect = null;
+      _this.hueSaturationEffect = null;
+      _this.pass = null;
+      return _this;
+    }
+
+    _createClass(ColorCorrectionDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/sunset/";
+        var format = ".png";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          var image;
+
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(-0.75, -0.1, -1);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.background = assets.get("sky");
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var brightnessContrastEffect = new BrightnessContrastEffect();
+        var gammaCorrectionEffect = new GammaCorrectionEffect({
+          blendFunction: BlendFunction.NORMAL,
+          gamma: 0.65
+        });
+        var hueSaturationEffect = new HueSaturationEffect(BlendFunction.NORMAL);
+        var pass = new EffectPass(camera, smaaEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        pass.dithering = true;
+        this.brightnessContrastEffect = brightnessContrastEffect;
+        this.gammaCorrectionEffect = gammaCorrectionEffect;
+        this.hueSaturationEffect = hueSaturationEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var brightnessContrastEffect = this.brightnessContrastEffect;
+        var gammaCorrectionEffect = this.gammaCorrectionEffect;
+        var hueSaturationEffect = this.hueSaturationEffect;
+        var params = {
+          brightnessContrast: {
+            "brightness": brightnessContrastEffect.uniforms.get("brightness").value,
+            "contrast": brightnessContrastEffect.uniforms.get("contrast").value,
+            "opacity": brightnessContrastEffect.blendMode.opacity.value,
+            "blend mode": brightnessContrastEffect.blendMode.blendFunction
+          },
+          gammaCorrection: {
+            "gamma": gammaCorrectionEffect.uniforms.get("gamma").value,
+            "opacity": gammaCorrectionEffect.blendMode.opacity.value,
+            "blend mode": gammaCorrectionEffect.blendMode.blendFunction
+          },
+          hueSaturation: {
+            "hue": 0.0,
+            "saturation": hueSaturationEffect.uniforms.get("saturation").value,
+            "opacity": hueSaturationEffect.blendMode.opacity.value,
+            "blend mode": hueSaturationEffect.blendMode.blendFunction
+          }
+        };
+        var folder = menu.addFolder("Brightness & Contrast");
+        folder.add(params.brightnessContrast, "brightness").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          brightnessContrastEffect.uniforms.get("brightness").value = params.brightnessContrast.brightness;
+        });
+        folder.add(params.brightnessContrast, "contrast").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          brightnessContrastEffect.uniforms.get("contrast").value = params.brightnessContrast.contrast;
+        });
+        folder.add(params.brightnessContrast, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          brightnessContrastEffect.blendMode.opacity.value = params.brightnessContrast.opacity;
+        });
+        folder.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(function () {
+          brightnessContrastEffect.blendMode.blendFunction = Number.parseInt(params.brightnessContrast["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        folder = menu.addFolder("Gamma Correction");
+        folder.add(params.gammaCorrection, "gamma").min(0.01).max(1.5).step(0.001).onChange(function () {
+          gammaCorrectionEffect.uniforms.get("gamma").value = params.gammaCorrection.gamma;
+        });
+        folder.add(params.gammaCorrection, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          gammaCorrectionEffect.blendMode.opacity.value = params.gammaCorrection.opacity;
+        });
+        folder.add(params.gammaCorrection, "blend mode", BlendFunction).onChange(function () {
+          gammaCorrectionEffect.blendMode.blendFunction = Number.parseInt(params.gammaCorrection["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        folder = menu.addFolder("Hue & Saturation");
+        folder.add(params.hueSaturation, "hue").min(-Math.PI).max(Math.PI).step(0.001).onChange(function () {
+          hueSaturationEffect.setHue(params.hueSaturation.hue);
+        });
+        folder.add(params.hueSaturation, "saturation").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          hueSaturationEffect.uniforms.get("saturation").value = params.hueSaturation.saturation;
+        });
+        folder.add(params.hueSaturation, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          hueSaturationEffect.blendMode.opacity.value = params.hueSaturation.opacity;
+        });
+        folder.add(params.hueSaturation, "blend mode", BlendFunction).onChange(function () {
+          hueSaturationEffect.blendMode.blendFunction = Number.parseInt(params.hueSaturation["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        menu.add(pass, "dithering");
+      }
+    }]);
+
+    return ColorCorrectionDemo;
   }(PostProcessingDemo);
 
   var RealisticBokehDemo = function (_PostProcessingDemo) {
@@ -12856,7 +13443,8 @@
       _classCallCheck(this, RealisticBokehDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehDemo).call(this, "realistic-bokeh", composer));
-      _this.bokehPass = null;
+      _this.effect = null;
+      _this.pass = null;
       return _this;
     }
 
@@ -12882,6 +13470,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -12894,143 +13496,150 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 50);
-        camera.position.set(3, 1, 3);
-        camera.lookAt(scene.position);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+        camera.position.set(12.5, -0.3, 1.7);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
         controls.settings.pointer.lock = false;
         controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 0.25;
-        controls.settings.zoom.minDistance = 2.5;
+        controls.settings.sensitivity.rotation = 0.000425;
+        controls.settings.sensitivity.zoom = 0.15;
+        controls.settings.zoom.minDistance = 11.5;
         controls.settings.zoom.maxDistance = 40.0;
         controls.lookAt(scene.position);
         this.controls = controls;
         scene.fog = new three.FogExp2(0x000000, 0.0025);
         renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
+        var ambientLight = new three.AmbientLight(0x404040);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.target.position.copy(scene.position);
         scene.add(directionalLight);
         scene.add(ambientLight);
-        var geometry = new three.SphereBufferGeometry(1, 64, 64);
-        var material = new three.MeshBasicMaterial({
-          color: 0xffff00,
+        var geometry = new three.CylinderBufferGeometry(1, 1, 20, 6);
+        var material = new three.MeshPhongMaterial({
+          color: 0xffaaaa,
+          flatShading: true,
           envMap: assets.get("sky")
         });
         var mesh = new three.Mesh(geometry, material);
+        mesh.rotation.set(0, 0, Math.PI / 2);
         scene.add(mesh);
-        var pass = new RealisticBokehPass(camera, {
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.06);
+        var bokehEffect = new RealisticBokehEffect({
+          focus: 1.55,
+          focalLength: camera.getFocalLength(),
+          luminanceThreshold: 0.325,
+          luminanceGain: 2.0,
+          bias: -0.35,
+          fringe: 0.7,
+          maxBlur: 2.5,
           rings: 5,
           samples: 5,
           showFocus: false,
-          manualDoF: true,
-          vignette: true,
-          pentagon: true,
-          shaderFocus: true,
-          noise: false,
-          maxBlur: 2.0,
-          luminanceThreshold: 0.15,
-          luminanceGain: 3.5,
-          bias: 0.25,
-          fringe: 0.33
+          manualDoF: false,
+          pentagon: true
         });
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.bokehPass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        this.effect = bokehEffect;
+        this.pass = bokehPass;
+        composer.addPass(bokehPass);
+        composer.addPass(smaaPass);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var material = this.bokehPass.getFullscreenMaterial();
+        var pass = this.pass;
+        var effect = this.effect;
+        var uniforms = effect.uniforms;
+        var blendMode = effect.blendMode;
         var params = {
-          "rings": Number.parseInt(material.defines.RINGS_INT),
-          "samples": Number.parseInt(material.defines.SAMPLES_INT),
-          "focal stop": material.uniforms.focalStop.value,
-          "focal length": material.uniforms.focalLength.value,
-          "shader focus": material.defines.SHADER_FOCUS !== undefined,
-          "focal depth": material.uniforms.focalDepth.value,
-          "focus coord X": material.uniforms.focusCoords.value.x,
-          "focus coord Y": material.uniforms.focusCoords.value.y,
-          "max blur": material.uniforms.maxBlur.value,
-          "lum threshold": material.uniforms.luminanceThreshold.value,
-          "lum gain": material.uniforms.luminanceGain.value,
-          "bias": material.uniforms.bias.value,
-          "fringe": material.uniforms.fringe.value,
-          "dithering": material.uniforms.ditherStrength.value,
-          "vignette": material.defines.VIGNETTE !== undefined,
-          "pentagon": material.defines.PENTAGON !== undefined,
-          "manual DoF": material.defines.MANUAL_DOF !== undefined,
-          "show focus": material.defines.SHOW_FOCUS !== undefined,
-          "noise": material.defines.NOISE !== undefined
+          "focus": uniforms.get("focus").value,
+          "focal length": uniforms.get("focalLength").value,
+          "threshold": uniforms.get("luminanceThreshold").value,
+          "gain": uniforms.get("luminanceGain").value,
+          "bias": uniforms.get("bias").value,
+          "fringe": uniforms.get("fringe").value,
+          "max": uniforms.get("maxBlur").value,
+          "near start": 0.2,
+          "near dist": 1.0,
+          "far start": 0.2,
+          "far dist": 2.0,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
-        var f = menu.addFolder("Focus");
-        f.add(params, "show focus").onChange(function () {
-          material.setShowFocusEnabled(params["show focus"]);
+        menu.add(params, "focus").min(this.camera.near).max(20.0).step(0.01).onChange(function () {
+          uniforms.get("focus").value = params.focus;
         });
-        f.add(params, "shader focus").onChange(function () {
-          material.setShaderFocusEnabled(params["shader focus"]);
+        menu.add(params, "focal length").min(0.1).max(35.0).step(0.01).onChange(function () {
+          uniforms.get("focalLength").value = params["focal length"];
         });
-        f.add(params, "manual DoF").onChange(function () {
-          material.setManualDepthOfFieldEnabled(params["manual DoF"]);
+        menu.add(effect, "showFocus").onChange(function () {
+          return pass.recompile();
         });
-        f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(function () {
-          material.uniforms.focalStop.value = params["focal stop"];
+        var folder = menu.addFolder("Depth of Field");
+        folder.add(effect, "manualDoF").onChange(function () {
+          return pass.recompile();
         });
-        f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(function () {
-          material.uniforms.focalDepth.value = params["focal depth"];
+        folder.add(params, "near start").min(0.0).max(1.0).step(0.001).onChange(function () {
+          if (uniforms.has("dof")) {
+            uniforms.get("dof").value.x = params["near start"];
+          }
         });
-        f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.focusCoords.value.x = params["focus coord X"];
+        folder.add(params, "near dist").min(0.0).max(2.0).step(0.001).onChange(function () {
+          if (uniforms.has("dof")) {
+            uniforms.get("dof").value.y = params["near dist"];
+          }
         });
-        f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.focusCoords.value.y = params["focus coord Y"];
+        folder.add(params, "far start").min(0.0).max(1.0).step(0.001).onChange(function () {
+          if (uniforms.has("dof")) {
+            uniforms.get("dof").value.z = params["far start"];
+          }
         });
-        f.open();
-        f = menu.addFolder("Sampling");
-        f.add(params, "rings").min(1).max(6).step(1).onChange(function () {
-          material.defines.RINGS_INT = params.rings.toFixed(0);
-          material.defines.RINGS_FLOAT = params.rings.toFixed(1);
-          material.needsUpdate = true;
+        folder.add(params, "far dist").min(0.0).max(3.0).step(0.001).onChange(function () {
+          if (uniforms.has("dof")) {
+            uniforms.get("dof").value.w = params["far dist"];
+          }
         });
-        f.add(params, "samples").min(1).max(6).step(1).onChange(function () {
-          material.defines.SAMPLES_INT = params.samples.toFixed(0);
-          material.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
-          material.needsUpdate = true;
+        folder = menu.addFolder("Blur");
+        folder.add(params, "max").min(0.0).max(5.0).step(0.001).onChange(function () {
+          uniforms.get("maxBlur").value = params.max;
         });
-        f = menu.addFolder("Blur");
-        f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(function () {
-          material.uniforms.maxBlur.value = params["max blur"];
+        folder.add(params, "bias").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          uniforms.get("bias").value = params.bias;
         });
-        f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(function () {
-          material.uniforms.bias.value = params.bias;
+        folder.add(params, "fringe").min(0.0).max(5.0).step(0.001).onChange(function () {
+          uniforms.get("fringe").value = params.fringe;
         });
-        f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(function () {
-          material.uniforms.fringe.value = params.fringe;
+        folder.add(effect, "rings").min(1).max(8).step(1).onChange(function () {
+          return pass.recompile();
         });
-        f.add(params, "noise").onChange(function () {
-          material.setNoiseEnabled(params.noise);
+        folder.add(effect, "samples").min(1).max(8).step(1).onChange(function () {
+          return pass.recompile();
         });
-        f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(function () {
-          material.uniforms.ditherStrength.value = params.dithering;
+        folder.add(effect, "pentagon").onChange(function () {
+          return pass.recompile();
         });
-        f.add(params, "pentagon").onChange(function () {
-          material.setPentagonEnabled(params.pentagon);
+        folder = menu.addFolder("Luminance");
+        folder.add(params, "threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
+          uniforms.get("luminanceThreshold").value = params.threshold;
         });
-        f.open();
-        f = menu.addFolder("Luminosity");
-        f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.luminanceThreshold.value = params["lum threshold"];
+        folder.add(params, "gain").min(0.0).max(4.0).step(0.01).onChange(function () {
+          uniforms.get("luminanceGain").value = params.gain;
         });
-        f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(function () {
-          material.uniforms.luminanceGain.value = params["lum gain"];
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
         });
-        menu.add(params, "vignette").onChange(function () {
-          material.setVignetteEnabled(params.vignette);
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
+        menu.add(pass, "dithering");
       }
     }]);
 
@@ -13046,9 +13655,9 @@
       _classCallCheck(this, BlurDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
-      _this.savePass = null;
       _this.blurPass = null;
       _this.texturePass = null;
+      _this.effect = null;
       _this.object = null;
       return _this;
     }
@@ -13075,6 +13684,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -13126,17 +13749,24 @@
 
         this.object = object;
         scene.add(object);
-        var pass = new SavePass();
-        this.savePass = pass;
-        composer.addPass(pass);
-        pass = new BlurPass();
-        this.blurPass = pass;
-        composer.addPass(pass);
-        pass = new TexturePass(this.savePass.renderTarget.texture, 0.0, false);
+        var savePass = new SavePass();
+        var blurPass = new BlurPass();
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var textureEffect = new TextureEffect({
+          texture: savePass.renderTarget.texture
+        });
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var texturePass = new EffectPass(camera, textureEffect);
+        textureEffect.blendMode.opacity.value = 0.0;
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.texturePass = pass;
-        composer.addPass(pass);
+        texturePass.renderToScreen = true;
+        this.blurPass = blurPass;
+        this.texturePass = texturePass;
+        this.effect = textureEffect;
+        composer.addPass(smaaPass);
+        composer.addPass(savePass);
+        composer.addPass(blurPass);
+        composer.addPass(texturePass);
       }
     }, {
       key: "render",
@@ -13159,103 +13789,36 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var renderPass = this.renderPass;
+        var effect = this.effect;
+        var pass = this.texturePass;
         var blurPass = this.blurPass;
-        var texturePass = this.texturePass;
+        var blendMode = effect.blendMode;
         var params = {
           "enabled": blurPass.enabled,
           "resolution": blurPass.getResolutionScale(),
           "kernel size": blurPass.kernelSize,
-          "strength": texturePass.opacityDestination
+          "opacity": 1.0 - blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
-        menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
           blurPass.setResolutionScale(params.resolution);
         });
-        menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
-          blurPass.kernelSize = params["kernel size"];
-        });
-        menu.add(params, "strength").min(0.0).max(1.0).step(0.01).onChange(function () {
-          texturePass.opacityDestination = params.strength;
-          texturePass.opacitySource = 1.0 - params.strength;
+        menu.add(params, "kernel size", KernelSize).onChange(function () {
+          blurPass.kernelSize = Number.parseInt(params["kernel size"]);
         });
         menu.add(blurPass, "dithering");
-        menu.add(params, "enabled").onChange(function () {
-          renderPass.renderToScreen = !params.enabled;
-          blurPass.enabled = params.enabled;
-          texturePass.enabled = params.enabled;
+        menu.add(blurPass, "enabled");
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = 1.0 - params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
       }
     }]);
 
     return BlurDemo;
-  }(PostProcessingDemo);
-
-  var DepthDemo = function (_PostProcessingDemo) {
-    _inherits(DepthDemo, _PostProcessingDemo);
-
-    function DepthDemo(composer) {
-      var _this;
-
-      _classCallCheck(this, DepthDemo);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(DepthDemo).call(this, "depth", composer));
-      _this.object = null;
-      return _this;
-    }
-
-    _createClass(DepthDemo, [{
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 2, 10);
-        camera.position.set(2, 1, 2);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 0.25;
-        controls.settings.zoom.minDistance = 3.0;
-        controls.settings.zoom.maxDistance = 9.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        renderer.setClearColor(0x000000);
-        var mesh = new three.Mesh(new three.DodecahedronBufferGeometry(1), new three.MeshBasicMaterial());
-        this.object = mesh;
-        scene.add(mesh);
-        this.renderPass.overrideMaterial = new three.MeshDepthMaterial();
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        _get(_getPrototypeOf(DepthDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var pass = this.renderPass;
-        menu.add(pass.overrideMaterial, "dithering").onChange(function () {
-          pass.overrideMaterial.needsUpdate = true;
-        });
-      }
-    }]);
-
-    return DepthDemo;
   }(PostProcessingDemo);
 
   var DotScreenDemo = function (_PostProcessingDemo) {
@@ -13267,7 +13830,9 @@
       _classCallCheck(this, DotScreenDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenDemo).call(this, "dot-screen", composer));
-      _this.dotScreenPass = null;
+      _this.dotScreenEffect = null;
+      _this.colorAverageEffect = null;
+      _this.pass = null;
       _this.object = null;
       return _this;
     }
@@ -13294,6 +13859,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -13345,14 +13924,20 @@
 
         this.object = object;
         scene.add(object);
-        var pass = new DotScreenPass({
-          scale: 0.8,
-          angle: Math.PI * 0.5,
-          intensity: 0.25
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var colorAverageEffect = new ColorAverageEffect();
+        var dotScreenEffect = new DotScreenEffect({
+          blendFunction: BlendFunction.OVERLAY,
+          scale: 1.0,
+          angle: Math.PI * 0.58
         });
+        dotScreenEffect.blendMode.opacity.value = 0.21;
+        var pass = new EffectPass(camera, smaaEffect, dotScreenEffect, colorAverageEffect);
+        this.dotScreenEffect = dotScreenEffect;
+        this.colorAverageEffect = colorAverageEffect;
+        this.pass = pass;
         this.renderPass.renderToScreen = false;
         pass.renderToScreen = true;
-        this.dotScreenPass = pass;
         composer.addPass(pass);
       }
     }, {
@@ -13376,256 +13961,44 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var material = this.dotScreenPass.getFullscreenMaterial();
+        var pass = this.pass;
+        var dotScreenEffect = this.dotScreenEffect;
+        var colorAverageEffect = this.colorAverageEffect;
         var params = {
-          "average": material.defines.AVERAGE !== undefined,
-          "scale": material.uniforms.scale.value,
-          "angle": material.uniforms.angle.value,
-          "intensity": material.uniforms.intensity.value,
-          "center X": material.uniforms.offsetRepeat.value.x,
-          "center Y": material.uniforms.offsetRepeat.value.y
+          "angle": Math.PI * 0.58,
+          "scale": dotScreenEffect.uniforms.get("scale").value,
+          "opacity": dotScreenEffect.blendMode.opacity.value,
+          "blend mode": dotScreenEffect.blendMode.blendFunction,
+          "colorAverage": {
+            "opacity": colorAverageEffect.blendMode.opacity.value,
+            "blend mode": colorAverageEffect.blendMode.blendFunction
+          }
         };
-        menu.add(params, "average").onChange(function () {
-          material.setAverageEnabled(params.average);
+        menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
+          dotScreenEffect.setAngle(params.angle);
         });
         menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.scale.value = params.scale;
+          dotScreenEffect.uniforms.get("scale").value = params.scale;
         });
-        menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
-          material.uniforms.angle.value = params.angle;
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          dotScreenEffect.blendMode.opacity.value = params.opacity;
         });
-        menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.intensity.value = params.intensity;
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          dotScreenEffect.blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
-        var f = menu.addFolder("Center");
-        f.add(params, "center X").min(-1.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.offsetRepeat.value.x = params["center X"];
+        var folder = menu.addFolder("Color Average");
+        folder.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
         });
-        f.add(params, "center Y").min(-1.0).max(1.0).step(0.01).onChange(function () {
-          material.uniforms.offsetRepeat.value.y = params["center Y"];
+        folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(function () {
+          colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
+          pass.recompile();
         });
       }
     }]);
 
     return DotScreenDemo;
-  }(PostProcessingDemo);
-
-  var FilmDemo = function (_PostProcessingDemo) {
-    _inherits(FilmDemo, _PostProcessingDemo);
-
-    function FilmDemo(composer) {
-      var _this;
-
-      _classCallCheck(this, FilmDemo);
-
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(FilmDemo).call(this, "film", composer));
-      _this.filmPass = null;
-      _this.object = null;
-      return _this;
-    }
-
-    _createClass(FilmDemo, [{
-      key: "load",
-      value: function load() {
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/space/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(10, 1, 10);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
-        scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(-1, 1, 1);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var object = new three.Object3D();
-        var geometry = new three.SphereBufferGeometry(1, 4, 4);
-        var material, mesh;
-        var i;
-
-        for (i = 0; i < 100; ++i) {
-          material = new three.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
-            flatShading: true
-          });
-          mesh = new three.Mesh(geometry, material);
-          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-          mesh.position.multiplyScalar(Math.random() * 10);
-          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-          mesh.scale.multiplyScalar(Math.random());
-          object.add(mesh);
-        }
-
-        this.object = object;
-        scene.add(object);
-        var pass = new FilmPass({
-          grayscale: false,
-          sepia: true,
-          vignette: true,
-          eskil: true,
-          scanlines: true,
-          grid: false,
-          noise: true,
-          noiseIntensity: 0.5,
-          scanlineIntensity: 0.5,
-          gridIntensity: 0.2,
-          scanlineDensity: 1.5,
-          gridScale: 1.25,
-          greyscaleIntensity: 1.0,
-          sepiaIntensity: 0.5,
-          vignetteOffset: 1.0,
-          vignetteDarkness: 1.0
-        });
-        this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.filmPass = pass;
-        composer.addPass(pass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        _get(_getPrototypeOf(FilmDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var pass = this.filmPass;
-        var material = pass.getFullscreenMaterial();
-        var uniforms = material.uniforms;
-        var params = {
-          "greyscale": material.defines.GREYSCALE !== undefined,
-          "sepia": material.defines.SEPIA !== undefined,
-          "vignette": material.defines.VIGNETTE !== undefined,
-          "eskil": material.defines.ESKIL !== undefined,
-          "noise": material.defines.NOISE !== undefined,
-          "scanlines": material.defines.SCANLINES !== undefined,
-          "grid": material.defines.GRID !== undefined,
-          "noise intensity": uniforms.noiseIntensity.value,
-          "scanlines intensity": uniforms.scanlineIntensity.value,
-          "grid intensity": uniforms.gridIntensity.value,
-          "scanlines count": pass.getScanlineDensity(),
-          "grid scale": pass.getGridScale(),
-          "grid line width": pass.getGridLineWidth(),
-          "blend mode": "screen",
-          "greyscale intensity": uniforms.greyscaleIntensity.value,
-          "sepia intensity": uniforms.sepiaIntensity.value,
-          "vignette offset": uniforms.vignetteOffset.value,
-          "vignette darkness": uniforms.vignetteDarkness.value
-        };
-        var f = menu.addFolder("Greyscale");
-        f.add(params, "greyscale").onChange(function () {
-          material.setGreyscaleEnabled(params.greyscale);
-        });
-        f.add(params, "greyscale intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.greyscaleIntensity.value = params["greyscale intensity"];
-        });
-        f = menu.addFolder("Noise, Scanlines and Grid");
-        f.add(params, "blend mode", ["add", "screen"]).onChange(function () {
-          material.setScreenModeEnabled(params["blend mode"] !== "add");
-        });
-        f.add(params, "noise").onChange(function () {
-          material.setNoiseEnabled(params.noise);
-        });
-        f.add(params, "noise intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.noiseIntensity.value = params["noise intensity"];
-        });
-        f.add(params, "scanlines").onChange(function () {
-          material.setScanlinesEnabled(params.scanlines);
-        });
-        f.add(params, "scanlines intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.scanlineIntensity.value = params["scanlines intensity"];
-        });
-        f.add(params, "scanlines count").min(0.0).max(2.0).step(0.01).onChange(function () {
-          pass.setScanlineDensity(params["scanlines count"]);
-        });
-        f.add(params, "grid").onChange(function () {
-          material.setGridEnabled(params.grid);
-        });
-        f.add(params, "grid intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.gridIntensity.value = params["grid intensity"];
-        });
-        f.add(params, "grid scale").min(0.01).max(2.0).step(0.01).onChange(function () {
-          pass.setGridScale(params["grid scale"]);
-        });
-        f.add(params, "grid line width").min(0.0).max(1.0).step(0.001).onChange(function () {
-          pass.setGridLineWidth(params["grid line width"]);
-        });
-        f = menu.addFolder("Sepia");
-        f.add(params, "sepia").onChange(function () {
-          material.setSepiaEnabled(params.sepia);
-        });
-        f.add(params, "sepia intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.sepiaIntensity.value = params["sepia intensity"];
-        });
-        f = menu.addFolder("Vignette");
-        f.add(params, "vignette").onChange(function () {
-          material.setVignetteEnabled(params.vignette);
-        });
-        f.add(params, "eskil").onChange(function () {
-          material.setEskilEnabled(params.eskil);
-        });
-        f.add(params, "vignette offset").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.vignetteOffset.value = params["vignette offset"];
-        });
-        f.add(params, "vignette darkness").min(0.0).max(1.0).step(0.01).onChange(function () {
-          uniforms.vignetteDarkness.value = params["vignette darkness"];
-        });
-      }
-    }]);
-
-    return FilmDemo;
   }(PostProcessingDemo);
 
   var GlitchDemo = function (_PostProcessingDemo) {
@@ -13637,7 +14010,8 @@
       _classCallCheck(this, GlitchDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
-      _this.glitchPass = null;
+      _this.effect = null;
+      _this.pass = null;
       _this.object = null;
       return _this;
     }
@@ -13667,8 +14041,22 @@
             });
             textureLoader.load("textures/perturb.jpg", function (texture) {
               texture.magFilter = texture.minFilter = three.NearestFilter;
-              assets.set("perturb-map", texture);
+              assets.set("perturbation-map", texture);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -13720,13 +14108,26 @@
 
         this.object = object;
         scene.add(object);
-        var pass = new GlitchPass({
-          perturbMap: assets.get("perturb-map")
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.08);
+        var chromaticAberrationEffect = new ChromaticAberrationEffect();
+        var glitchEffect = new GlitchEffect({
+          perturbationMap: assets.get("perturbation-map"),
+          chromaticAberrationOffset: chromaticAberrationEffect.offset
         });
+        var noiseEffect = new NoiseEffect({
+          blendFunction: BlendFunction.COLOR_DODGE
+        });
+        noiseEffect.blendMode.opacity.value = 0.15;
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var glitchPass = new EffectPass(camera, glitchEffect, noiseEffect);
+        var chromaticAberrationPass = new EffectPass(camera, chromaticAberrationEffect);
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.glitchPass = pass;
-        composer.addPass(pass);
+        chromaticAberrationPass.renderToScreen = true;
+        this.effect = glitchEffect;
+        composer.addPass(smaaPass);
+        composer.addPass(glitchPass);
+        composer.addPass(chromaticAberrationPass);
       }
     }, {
       key: "render",
@@ -13749,26 +14150,215 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.glitchPass;
-        var perturbMap = pass.perturbMap;
+        var effect = this.effect;
+        var perturbationMap = effect.getPerturbationMap();
+        var uniforms = effect.uniforms;
+        var delay = effect.delay;
+        var duration = effect.duration;
         var params = {
-          "mode": pass.mode,
-          "custom noise": true
+          "glitch mode": effect.mode,
+          "custom pattern": true,
+          "min delay": delay.x,
+          "max delay": delay.y,
+          "min duration": duration.x,
+          "max duration": duration.y,
+          "columns": uniforms.get("columns").value
         };
-        menu.add(params, "mode").min(GlitchMode.SPORADIC).max(GlitchMode.CONSTANT_WILD).step(1).onChange(function () {
-          pass.mode = params.mode;
+        menu.add(params, "glitch mode", GlitchMode).onChange(function () {
+          effect.mode = Number.parseInt(params["glitch mode"]);
         });
-        menu.add(params, "custom noise").onChange(function () {
-          if (params["custom noise"]) {
-            pass.perturbMap = perturbMap;
+        menu.add(params, "custom pattern").onChange(function () {
+          if (params["custom pattern"]) {
+            effect.setPerturbationMap(perturbationMap);
           } else {
-            pass.generatePerturbMap(64);
+            effect.setPerturbationMap(effect.generatePerturbationMap(64));
           }
+        });
+        menu.add(params, "min delay").min(0.0).max(2.0).step(0.001).onChange(function () {
+          delay.x = params["min delay"];
+        });
+        menu.add(params, "max delay").min(2.0).max(4.0).step(0.001).onChange(function () {
+          delay.y = params["max delay"];
+        });
+        menu.add(params, "min duration").min(0.0).max(0.6).step(0.001).onChange(function () {
+          duration.x = params["min duration"];
+        });
+        menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange(function () {
+          duration.y = params["max duration"];
+        });
+        menu.add(params, "columns").min(0.0).max(0.5).step(0.001).onChange(function () {
+          uniforms.get("columns").value = params.columns;
         });
       }
     }]);
 
     return GlitchDemo;
+  }(PostProcessingDemo);
+
+  var GridDemo = function (_PostProcessingDemo) {
+    _inherits(GridDemo, _PostProcessingDemo);
+
+    function GridDemo(composer) {
+      var _this;
+
+      _classCallCheck(this, GridDemo);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(GridDemo).call(this, "grid", composer));
+      _this.effect = null;
+      _this.pass = null;
+      _this.object = null;
+      return _this;
+    }
+
+    _createClass(GridDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/space/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          var image;
+
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(10, 1, 10);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x666666);
+        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        directionalLight.position.set(-1, 1, 1);
+        directionalLight.target.position.copy(scene.position);
+        scene.add(directionalLight);
+        scene.add(ambientLight);
+        var object = new three.Object3D();
+        var geometry = new three.SphereBufferGeometry(1, 4, 4);
+        var material, mesh;
+        var i;
+
+        for (i = 0; i < 100; ++i) {
+          material = new three.MeshPhongMaterial({
+            color: 0xffffff * Math.random(),
+            flatShading: true
+          });
+          mesh = new three.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(Math.random() * 10);
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          mesh.scale.multiplyScalar(Math.random());
+          object.add(mesh);
+        }
+
+        this.object = object;
+        scene.add(object);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var gridEffect = new GridEffect({
+          scale: 2.0,
+          lineWidth: 0.1
+        });
+        var pass = new EffectPass(camera, smaaEffect, gridEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        this.effect = gridEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var twoPI = 2.0 * Math.PI;
+        object.rotation.x += 0.001;
+        object.rotation.y += 0.005;
+
+        if (object.rotation.x >= twoPI) {
+          object.rotation.x -= twoPI;
+        }
+
+        if (object.rotation.y >= twoPI) {
+          object.rotation.y -= twoPI;
+        }
+
+        _get(_getPrototypeOf(GridDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "scale": effect.getScale(),
+          "line width": effect.getLineWidth(),
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "scale").min(0.01).max(3.0).step(0.01).onChange(function () {
+          effect.setScale(params.scale);
+        });
+        menu.add(params, "line width").min(0.0).max(1.0).step(0.01).onChange(function () {
+          effect.setLineWidth(params["line width"]);
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
+      }
+    }]);
+
+    return GridDemo;
   }(PostProcessingDemo);
 
   var mouse = new three.Vector2();
@@ -13783,7 +14373,8 @@
       _this = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
       _this.raycaster = null;
       _this.selectedObject = null;
-      _this.outlinePass = null;
+      _this.effect = null;
+      _this.pass = null;
       return _this;
     }
 
@@ -13814,15 +14405,15 @@
     }, {
       key: "handleSelection",
       value: function handleSelection() {
-        var pass = this.outlinePass;
-        var selection = pass.selection;
+        var effect = this.effect;
+        var selection = effect.selection;
         var selectedObject = this.selectedObject;
 
         if (selectedObject !== null) {
           if (selection.indexOf(selectedObject) >= 0) {
-            pass.deselectObject(selectedObject);
+            effect.deselectObject(selectedObject);
           } else {
-            pass.selectObject(selectedObject);
+            effect.selectObject(selectedObject);
           }
         }
       }
@@ -13862,10 +14453,24 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
-            textureLoader.load("textures/tripattern.jpg", function (texture) {
+            textureLoader.load("textures/pattern.png", function (texture) {
               texture.wrapS = texture.wrapT = three.RepeatWrapping;
               assets.set("pattern-color", texture);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -13920,65 +14525,92 @@
         this.raycaster = new three.Raycaster();
         renderer.domElement.addEventListener("mousemove", this);
         renderer.domElement.addEventListener("mousedown", this);
-        var pass = new OutlinePass(scene, camera, {
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.05);
+        var outlineEffect = new OutlineEffect(scene, camera, {
           edgeStrength: 2.5,
-          patternScale: 7.5
+          pulseSpeed: 0.0,
+          visibleEdgeColor: 0xffffff,
+          hiddenEdgeColor: 0x22090a,
+          blur: false,
+          xRay: true
         });
-        pass.setSelection(scene.children);
-        pass.deselectObject(mesh);
+        outlineEffect.setSelection(scene.children);
+        outlineEffect.deselectObject(mesh);
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var outlinePass = new EffectPass(camera, outlineEffect);
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.outlinePass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        this.effect = outlineEffect;
+        this.pass = outlinePass;
+        composer.addPass(outlinePass);
+        composer.addPass(smaaPass);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
         var assets = this.assets;
-        var pass = this.outlinePass;
+        var pass = this.pass;
+        var effect = this.effect;
+        var uniforms = effect.uniforms;
+        var blendMode = effect.blendMode;
         var params = {
-          "resolution": pass.getResolutionScale(),
-          "kernel size": pass.kernelSize,
+          "resolution": effect.getResolutionScale(),
+          "blurriness": 0,
           "use pattern": false,
-          "pattern scale": pass.outlineBlendMaterial.uniforms.patternScale.value,
-          "edge strength": pass.outlineBlendMaterial.uniforms.edgeStrength.value,
-          "pulse speed": pass.pulseSpeed,
-          "visible edge": pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.getHex(),
-          "hidden edge": pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.getHex(),
-          "alpha blending": false,
-          "x-ray": true
+          "pattern scale": 60.0,
+          "pulse speed": effect.pulseSpeed,
+          "edge strength": uniforms.get("edgeStrength").value,
+          "visible edge": uniforms.get("visibleEdgeColor").value.getHex(),
+          "hidden edge": uniforms.get("hiddenEdgeColor").value.getHex(),
+          "x-ray": true,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
-        menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.setResolutionScale(params.resolution);
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
+          effect.setResolutionScale(params.resolution);
         });
-        menu.add(params, "kernel size").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
-          pass.kernelSize = params["kernel size"];
+        menu.add(effect, "dithering");
+        menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
+          effect.blur = params.blurriness > 0;
+          effect.kernelSize = params.blurriness - 1;
         });
-        menu.add(pass, "blur");
-        menu.add(pass, "dithering");
         menu.add(params, "use pattern").onChange(function () {
-          pass.setPatternTexture(params["use pattern"] ? assets.get("pattern-color") : null);
+          if (params["use pattern"]) {
+            effect.setPatternTexture(assets.get("pattern-color"));
+            uniforms.get("patternScale").value = params["pattern scale"];
+          } else {
+            effect.setPatternTexture(null);
+          }
+
+          pass.recompile();
         });
-        menu.add(params, "pattern scale").min(1.0).max(10.0).step(0.01).onChange(function () {
-          pass.outlineBlendMaterial.uniforms.patternScale.value = params["pattern scale"];
+        menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(function () {
+          if (uniforms.has("patternScale")) {
+            uniforms.get("patternScale").value = params["pattern scale"];
+          }
         });
         menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(function () {
-          pass.outlineBlendMaterial.uniforms.edgeStrength.value = params["edge strength"];
+          uniforms.get("edgeStrength").value = params["edge strength"];
         });
         menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(function () {
-          pass.pulseSpeed = params["pulse speed"];
+          effect.pulseSpeed = params["pulse speed"];
         });
         menu.addColor(params, "visible edge").onChange(function () {
-          pass.outlineBlendMaterial.uniforms.visibleEdgeColor.value.setHex(params["visible edge"]);
+          uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]);
         });
         menu.addColor(params, "hidden edge").onChange(function () {
-          pass.outlineBlendMaterial.uniforms.hiddenEdgeColor.value.setHex(params["hidden edge"]);
+          uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]);
         });
-        menu.add(params, "alpha blending").onChange(function () {
-          pass.outlineBlendMaterial.setAlphaBlendingEnabled(params["alpha blending"]);
+        menu.add(effect, "xRay").onChange(function () {
+          return pass.recompile();
         });
-        menu.add(params, "x-ray").onChange(function () {
-          pass.outlineBlendMaterial.setXRayEnabled(params["x-ray"]);
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
       }
     }, {
@@ -14005,10 +14637,10 @@
       _classCallCheck(this, PixelationDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
+      _this.effect = null;
       _this.object = null;
-      _this.maskObject = null;
       _this.maskPass = null;
-      _this.pixelationPass = null;
+      _this.maskObject = null;
       return _this;
     }
 
@@ -14034,6 +14666,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14089,16 +14735,19 @@
         mesh = new three.Mesh(new three.BoxBufferGeometry(4, 4, 4));
         this.maskObject = mesh;
         maskScene.add(mesh);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var pixelationEffect = new PixelationEffect(5.0);
+        var effectPass = new EffectPass(camera, pixelationEffect);
+        var maskPass = new MaskPass(maskScene, camera);
+        var smaaPass = new EffectPass(camera, smaaEffect);
         this.renderPass.renderToScreen = false;
-        var pass = new MaskPass(maskScene, camera);
-        pass.renderToScreen = true;
-        this.maskPass = pass;
-        composer.addPass(pass);
-        pass = new PixelationPass(5.0);
-        pass.renderToScreen = true;
-        this.pixelationPass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        composer.addPass(maskPass);
+        composer.addPass(effectPass);
         composer.addPass(new ClearMaskPass());
+        composer.addPass(smaaPass);
+        this.effect = pixelationEffect;
+        this.maskPass = maskPass;
       }
     }, {
       key: "render",
@@ -14128,11 +14777,15 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
+        var effect = this.effect;
         var maskPass = this.maskPass;
         var params = {
-          "use mask": maskPass.enabled
+          "use mask": maskPass.enabled,
+          "granularity": effect.getGranularity()
         };
-        menu.add(this.pixelationPass, "granularity").min(0.0).max(50.0).step(0.1);
+        menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(function () {
+          effect.setGranularity(params.granularity);
+        });
         menu.add(params, "use mask").onChange(function () {
           maskPass.enabled = params["use mask"];
         });
@@ -14151,7 +14804,8 @@
       _classCallCheck(this, GodRaysDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
-      _this.godRaysPass = null;
+      _this.pass = null;
+      _this.effect = null;
       _this.sun = null;
       _this.directionalLight = null;
       return _this;
@@ -14190,13 +14844,23 @@
               texture.wrapS = texture.wrapT = three.RepeatWrapping;
               assets.set("wood-diffuse", texture);
             });
-            textureLoader.load("textures/woodnormals.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              assets.set("wood-normals", texture);
-            });
             textureLoader.load("textures/sun.png", function (texture) {
               assets.set("sun-diffuse", texture);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14220,8 +14884,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(target);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x0f0f0f);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -14233,9 +14895,7 @@
         var object = assets.get("waggon");
         var material = new three.MeshPhongMaterial({
           color: 0xffffff,
-          map: assets.get("wood-diffuse"),
-          normalMap: assets.get("wood-normals"),
-          fog: true
+          map: assets.get("wood-diffuse")
         });
         object.traverse(function (child) {
           child.material = material;
@@ -14257,10 +14917,11 @@
         sun.position.set(75, 25, 100);
         this.sun = sun;
         scene.add(sun);
-        var pass = new GodRaysPass(scene, camera, sun, {
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.065);
+        var godRaysEffect = new GodRaysEffect(scene, camera, sun, {
           resolutionScale: 0.6,
           kernelSize: KernelSize.SMALL,
-          intensity: 1.0,
           density: 0.96,
           decay: 0.93,
           weight: 0.4,
@@ -14268,65 +14929,70 @@
           samples: 60,
           clampMax: 1.0
         });
+        godRaysEffect.dithering = true;
+        this.effect = godRaysEffect;
+        var pass = new EffectPass(camera, smaaEffect, godRaysEffect);
+        this.pass = pass;
         this.renderPass.renderToScreen = false;
         pass.renderToScreen = true;
-        pass.dithering = true;
-        this.godRaysPass = pass;
         composer.addPass(pass);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var directionalLight = this.directionalLight;
-        var pass = this.godRaysPass;
         var sun = this.sun;
+        var directionalLight = this.directionalLight;
+        var pass = this.pass;
+        var effect = this.effect;
+        var uniforms = effect.godRaysMaterial.uniforms;
+        var blendMode = effect.blendMode;
         var params = {
-          "resolution": pass.getResolutionScale(),
-          "blurriness": pass.kernelSize,
-          "intensity": pass.intensity,
-          "density": pass.godRaysMaterial.uniforms.density.value,
-          "decay": pass.godRaysMaterial.uniforms.decay.value,
-          "weight": pass.godRaysMaterial.uniforms.weight.value,
-          "exposure": pass.godRaysMaterial.uniforms.exposure.value,
-          "clampMax": pass.godRaysMaterial.uniforms.clampMax.value,
-          "samples": pass.samples,
+          "resolution": effect.getResolutionScale(),
+          "blurriness": effect.kernelSize + 1,
+          "density": uniforms.density.value,
+          "decay": uniforms.decay.value,
+          "weight": uniforms.weight.value,
+          "exposure": uniforms.exposure.value,
+          "clampMax": uniforms.clampMax.value,
+          "samples": effect.samples,
           "color": sun.material.color.getHex(),
-          "blend mode": "screen"
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
-        menu.add(params, "resolution").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.setResolutionScale(params.resolution);
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
+          effect.setResolutionScale(params.resolution);
         });
-        menu.add(pass, "dithering");
-        menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE).step(1).onChange(function () {
-          pass.kernelSize = params.blurriness;
-        });
-        menu.add(params, "intensity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.intensity = params.intensity;
+        menu.add(effect, "dithering");
+        menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
+          effect.blur = params.blurriness > 0;
+          effect.kernelSize = params.blurriness - 1;
         });
         menu.add(params, "density").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.godRaysMaterial.uniforms.density.value = params.density;
+          uniforms.density.value = params.density;
         });
         menu.add(params, "decay").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.godRaysMaterial.uniforms.decay.value = params.decay;
+          uniforms.decay.value = params.decay;
         });
         menu.add(params, "weight").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.godRaysMaterial.uniforms.weight.value = params.weight;
+          uniforms.weight.value = params.weight;
         });
         menu.add(params, "exposure").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.godRaysMaterial.uniforms.exposure.value = params.exposure;
+          uniforms.exposure.value = params.exposure;
         });
         menu.add(params, "clampMax").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.godRaysMaterial.uniforms.clampMax.value = params.clampMax;
+          uniforms.clampMax.value = params.clampMax;
         });
-        menu.add(params, "samples").min(15).max(200).step(1).onChange(function () {
-          pass.samples = params.samples;
-        });
+        menu.add(effect, "samples").min(15).max(200).step(1);
         menu.addColor(params, "color").onChange(function () {
           sun.material.color.setHex(params.color);
           directionalLight.color.setHex(params.color);
         });
-        menu.add(params, "blend mode", ["add", "screen"]).onChange(function () {
-          pass.combineMaterial.setScreenModeEnabled(params["blend mode"] !== "add");
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
       }
     }]);
@@ -14334,30 +15000,33 @@
     return GodRaysDemo;
   }(PostProcessingDemo);
 
-  var RenderDemo = function (_PostProcessingDemo) {
-    _inherits(RenderDemo, _PostProcessingDemo);
+  var ScanlineDemo = function (_PostProcessingDemo) {
+    _inherits(ScanlineDemo, _PostProcessingDemo);
 
-    function RenderDemo(composer) {
+    function ScanlineDemo(composer) {
       var _this;
 
-      _classCallCheck(this, RenderDemo);
+      _classCallCheck(this, ScanlineDemo);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(RenderDemo).call(this, "render", composer));
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineDemo).call(this, "scanline", composer));
+      _this.effect = null;
+      _this.pass = null;
       _this.object = null;
       return _this;
     }
 
-    _createClass(RenderDemo, [{
+    _createClass(ScanlineDemo, [{
       key: "load",
       value: function load() {
         var assets = this.assets;
         var loadingManager = this.loadingManager;
-        var textureLoader = new three.TextureLoader(loadingManager);
         var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/sunset/";
-        var format = ".png";
+        var path = "textures/skies/space/";
+        var format = ".jpg";
         var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
         return new Promise(function (resolve, reject) {
+          var image;
+
           if (assets.size === 0) {
             loadingManager.onError = reject;
 
@@ -14370,10 +15039,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
-            textureLoader.load("textures/crate.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              assets.set("crate-color", texture);
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
             });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14387,7 +15066,7 @@
         var composer = this.composer;
         var renderer = composer.renderer;
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(-3, 0, -3);
+        camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -14401,24 +15080,49 @@
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(1440, 200, 2000);
+        directionalLight.position.set(-1, 1, 1);
         directionalLight.target.position.copy(scene.position);
         scene.add(directionalLight);
         scene.add(ambientLight);
-        var mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
-          color: 0xffffff,
-          map: assets.get("crate-color")
-        }));
-        this.object = mesh;
-        scene.add(mesh);
+        var object = new three.Object3D();
+        var geometry = new three.SphereBufferGeometry(1, 4, 4);
+        var material, mesh;
+        var i;
+
+        for (i = 0; i < 100; ++i) {
+          material = new three.MeshPhongMaterial({
+            color: 0xffffff * Math.random(),
+            flatShading: true
+          });
+          mesh = new three.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(Math.random() * 10);
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          mesh.scale.multiplyScalar(Math.random());
+          object.add(mesh);
+        }
+
+        this.object = object;
+        scene.add(object);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var scanlineEffect = new ScanlineEffect({
+          density: 1.5
+        });
+        var pass = new EffectPass(camera, smaaEffect, scanlineEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        pass.dithering = true;
+        this.effect = scanlineEffect;
+        this.pass = pass;
+        composer.addPass(pass);
       }
     }, {
       key: "render",
       value: function render(delta) {
         var object = this.object;
         var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.0005;
-        object.rotation.y += 0.001;
+        object.rotation.x += 0.001;
+        object.rotation.y += 0.005;
 
         if (object.rotation.x >= twoPI) {
           object.rotation.x -= twoPI;
@@ -14428,11 +15132,194 @@
           object.rotation.y -= twoPI;
         }
 
-        _get(_getPrototypeOf(RenderDemo.prototype), "render", this).call(this, delta);
+        _get(_getPrototypeOf(ScanlineDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "density": effect.getDensity(),
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "density").min(0.001).max(2.0).step(0.001).onChange(function () {
+          effect.setDensity(params.density);
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
       }
     }]);
 
-    return RenderDemo;
+    return ScanlineDemo;
+  }(PostProcessingDemo);
+
+  var SepiaDemo = function (_PostProcessingDemo) {
+    _inherits(SepiaDemo, _PostProcessingDemo);
+
+    function SepiaDemo(composer) {
+      var _this;
+
+      _classCallCheck(this, SepiaDemo);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(SepiaDemo).call(this, "sepia", composer));
+      _this.effect = null;
+      _this.pass = null;
+      _this.object = null;
+      return _this;
+    }
+
+    _createClass(SepiaDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/space/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          var image;
+
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(10, 1, 10);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x666666);
+        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        directionalLight.position.set(-1, 1, 1);
+        directionalLight.target.position.copy(scene.position);
+        scene.add(directionalLight);
+        scene.add(ambientLight);
+        var object = new three.Object3D();
+        var geometry = new three.SphereBufferGeometry(1, 4, 4);
+        var material, mesh;
+        var i;
+
+        for (i = 0; i < 100; ++i) {
+          material = new three.MeshPhongMaterial({
+            color: 0xffffff * Math.random(),
+            flatShading: true
+          });
+          mesh = new three.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(Math.random() * 10);
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          mesh.scale.multiplyScalar(Math.random());
+          object.add(mesh);
+        }
+
+        this.object = object;
+        scene.add(object);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var sepiaEffect = new SepiaEffect();
+        var pass = new EffectPass(camera, smaaEffect, sepiaEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        pass.dithering = true;
+        this.effect = sepiaEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var twoPI = 2.0 * Math.PI;
+        object.rotation.x += 0.001;
+        object.rotation.y += 0.005;
+
+        if (object.rotation.x >= twoPI) {
+          object.rotation.x -= twoPI;
+        }
+
+        if (object.rotation.y >= twoPI) {
+          object.rotation.y -= twoPI;
+        }
+
+        _get(_getPrototypeOf(SepiaDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "intensity": effect.uniforms.get("intensity").value,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "intensity").min(0.0).max(4.0).step(0.01).onChange(function () {
+          effect.uniforms.get("intensity").value = params.intensity;
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
+      }
+    }]);
+
+    return SepiaDemo;
   }(PostProcessingDemo);
 
   var ShockWaveDemo = function (_PostProcessingDemo) {
@@ -14444,7 +15331,7 @@
       _classCallCheck(this, ShockWaveDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
-      _this.shockWavePass = null;
+      _this.effect = null;
       return _this;
     }
 
@@ -14470,6 +15357,20 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14508,42 +15409,46 @@
         });
         var mesh = new three.Mesh(geometry, material);
         scene.add(mesh);
-        var pass = new ShockWavePass(camera, mesh.position, {
-          speed: 1.0,
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var shockWaveEffect = new ShockWaveEffect(camera, mesh.position, {
+          speed: 1.25,
           maxRadius: 0.5,
           waveSize: 0.2,
           amplitude: 0.05
         });
+        var effectPass = new EffectPass(camera, shockWaveEffect);
+        var smaaPass = new EffectPass(camera, smaaEffect);
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.shockWavePass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        this.effect = shockWaveEffect;
+        composer.addPass(effectPass);
+        composer.addPass(smaaPass);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.shockWavePass;
-        var material = pass.shockWaveMaterial;
+        var effect = this.effect;
+        var uniforms = effect.uniforms;
         var params = {
-          "size": material.uniforms.size.value,
-          "extent": material.uniforms.maxRadius.value,
-          "waveSize": material.uniforms.waveSize.value,
-          "amplitude": material.uniforms.amplitude.value
+          "size": uniforms.get("size").value,
+          "extent": uniforms.get("maxRadius").value,
+          "waveSize": uniforms.get("waveSize").value,
+          "amplitude": uniforms.get("amplitude").value
         };
-        menu.add(pass, "speed").min(0.0).max(10.0).step(0.001);
+        menu.add(effect, "speed").min(0.0).max(10.0).step(0.001);
         menu.add(params, "size").min(0.01).max(2.0).step(0.001).onChange(function () {
-          material.uniforms.size.value = params.size;
+          uniforms.get("size").value = params.size;
         });
         menu.add(params, "extent").min(0.0).max(10.0).step(0.001).onChange(function () {
-          material.uniforms.maxRadius.value = params.extent;
+          uniforms.get("maxRadius").value = params.extent;
         });
         menu.add(params, "waveSize").min(0.0).max(2.0).step(0.001).onChange(function () {
-          material.uniforms.waveSize.value = params.waveSize;
+          uniforms.get("waveSize").value = params.waveSize;
         });
         menu.add(params, "amplitude").min(0.0).max(0.25).step(0.001).onChange(function () {
-          material.uniforms.amplitude.value = params.amplitude;
+          uniforms.get("amplitude").value = params.amplitude;
         });
-        menu.add(pass, "explode");
+        menu.add(effect, "explode");
       }
     }]);
 
@@ -14562,8 +15467,9 @@
       _this.originalRenderer = null;
       _this.rendererAA = null;
       _this.controls2 = null;
-      _this.smaaPass = null;
-      _this.texturePass = null;
+      _this.smaaEffect = null;
+      _this.pass = null;
+      _this.textureEffect = null;
       _this.objectA = null;
       _this.objectB = null;
       _this.objectC = null;
@@ -14605,14 +15511,14 @@
               loadingManager.itemEnd("smaa-search");
             });
             loadingManager.itemStart("smaa-search");
-            image.src = SMAAPass.searchImageDataURL;
+            image.src = SMAAEffect.searchImageDataURL;
             image = new Image();
             image.addEventListener("load", function () {
               assets.set("smaa-area", this);
               loadingManager.itemEnd("smaa-area");
             });
             loadingManager.itemStart("smaa-area");
-            image.src = SMAAPass.areaImageDataURL;
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14703,15 +15609,17 @@
         object.scale.set(0.1, 0.1, 0.1);
         this.objectC = object;
         scene.add(object);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var textureEffect = new TextureEffect({
+          blendFunction: BlendFunction.SKIP,
+          texture: smaaEffect.renderTargetColorEdges.texture
+        });
+        var pass = new EffectPass(camera, smaaEffect, textureEffect);
         this.renderPass.renderToScreen = false;
-        var pass = new SMAAPass(assets.get("smaa-search"), assets.get("smaa-area"));
         pass.renderToScreen = true;
-        this.smaaPass = pass;
-        composer.addPass(pass);
-        pass = new TexturePass(this.smaaPass.renderTargetColorEdges.texture, 1.0, false);
-        pass.renderToScreen = true;
-        pass.enabled = false;
-        this.texturePass = pass;
+        this.smaaEffect = smaaEffect;
+        this.textureEffect = textureEffect;
+        this.pass = pass;
         composer.addPass(pass);
       }
     }, {
@@ -14739,37 +15647,34 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
+        var pass = this.pass;
         var composer = this.composer;
         var renderPass = this.renderPass;
-        var smaaPass = this.smaaPass;
-        var texturePass = this.texturePass;
+        var smaaEffect = this.smaaEffect;
+        var textureEffect = this.textureEffect;
+        var blendMode = smaaEffect.blendMode;
         var renderer1 = this.originalRenderer;
         var renderer2 = this.rendererAA;
         var controls1 = this.controls;
         var controls2 = this.controls2;
-        var SMAAMode = {
-          disabled: "disabled",
-          edges: "edges",
-          blend: "blend"
+        var AAMode = {
+          DISABLED: 0,
+          BROWSER: 1,
+          SMAA_EDGES: 2,
+          SMAA: 3
         };
         var params = {
-          "browser AA": false,
-          "SMAA": SMAAMode.blend,
-          "sensitivity": Number.parseFloat(smaaPass.colorEdgesMaterial.defines.EDGE_THRESHOLD),
-          "search steps": Number.parseFloat(smaaPass.weightsMaterial.defines.MAX_SEARCH_STEPS_INT)
+          "AA mode": AAMode.SMAA,
+          "sensitivity": Number.parseFloat(smaaEffect.colorEdgesPass.getFullscreenMaterial().defines.EDGE_THRESHOLD),
+          "search steps": Number.parseFloat(smaaEffect.weightsPass.getFullscreenMaterial().defines.MAX_SEARCH_STEPS_INT),
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
         };
 
-        function toggleSMAAMode() {
-          renderPass.renderToScreen = params.SMAA === SMAAMode.disabled;
-          smaaPass.renderToScreen = params.SMAA === SMAAMode.blend;
-          smaaPass.enabled = params.SMAA !== SMAAMode.disabled;
-          texturePass.enabled = params.SMAA === SMAAMode.edges;
-        }
-
-        function swapRenderers() {
+        function swapRenderers(browser) {
           var size = composer.renderer.getSize();
 
-          if (params["browser AA"]) {
+          if (browser && composer.renderer !== renderer2) {
             renderer2.setSize(size.width, size.height);
             composer.replaceRenderer(renderer2);
             controls1.setEnabled(false);
@@ -14782,13 +15687,28 @@
           }
         }
 
-        menu.add(params, "browser AA").onChange(swapRenderers);
-        menu.add(params, "SMAA", SMAAMode).onChange(toggleSMAAMode);
+        function toggleAAMode() {
+          var mode = Number.parseInt(params["AA mode"]);
+          pass.enabled = mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES;
+          renderPass.renderToScreen = mode === AAMode.DISABLED || mode === AAMode.BROWSER;
+          textureEffect.blendMode.blendFunction = mode === AAMode.SMAA_EDGES ? BlendFunction.NORMAL : BlendFunction.SKIP;
+          swapRenderers(mode === AAMode.BROWSER);
+          pass.recompile();
+        }
+
+        menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
         menu.add(params, "sensitivity").min(0.05).max(0.5).step(0.01).onChange(function () {
-          smaaPass.colorEdgesMaterial.setEdgeDetectionThreshold(params.sensitivity);
+          smaaEffect.setEdgeDetectionThreshold(params.sensitivity);
         });
-        menu.add(params, "search steps").min(8).max(112).step(1).onChange(function () {
-          smaaPass.weightsMaterial.setOrthogonalSearchSteps(params["search steps"]);
+        menu.add(params, "search steps").min(4).max(112).step(1).onChange(function () {
+          smaaEffect.setOrthogonalSearchSteps(params["search steps"]);
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
         });
       }
     }, {
@@ -14811,6 +15731,123 @@
     return SMAADemo;
   }(PostProcessingDemo);
 
+  var TextureDemo = function (_PostProcessingDemo) {
+    _inherits(TextureDemo, _PostProcessingDemo);
+
+    function TextureDemo(composer) {
+      var _this;
+
+      _classCallCheck(this, TextureDemo);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(TextureDemo).call(this, "texture", composer));
+      _this.effect = null;
+      _this.pass = null;
+      return _this;
+    }
+
+    _createClass(TextureDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var textureLoader = new three.TextureLoader(loadingManager);
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/sunset/";
+        var format = ".png";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          var image;
+
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            textureLoader.load("textures/scratches.jpg", function (texture) {
+              texture.wrapS = texture.wrapT = three.RepeatWrapping;
+              assets.set("scratches-color", texture);
+            });
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(-0.75, -0.1, -1);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.background = assets.get("sky");
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var textureEffect = new TextureEffect({
+          blendFunction: BlendFunction.REFLECT,
+          texture: assets.get("scratches-color")
+        });
+        textureEffect.blendMode.opacity.value = 0.8;
+        var pass = new EffectPass(camera, smaaEffect, textureEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        this.effect = textureEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
+      }
+    }]);
+
+    return TextureDemo;
+  }(PostProcessingDemo);
+
   var ToneMappingDemo = function (_PostProcessingDemo) {
     _inherits(ToneMappingDemo, _PostProcessingDemo);
 
@@ -14820,7 +15857,8 @@
       _classCallCheck(this, ToneMappingDemo);
 
       _this = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingDemo).call(this, "tone-mapping", composer));
-      _this.toneMappingPass = null;
+      _this.effect = null;
+      _this.pass = null;
       _this.object = null;
       return _this;
     }
@@ -14852,6 +15890,20 @@
               texture.wrapS = texture.wrapT = three.RepeatWrapping;
               assets.set("crate-color", texture);
             });
+            var image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
           } else {
             resolve();
           }
@@ -14890,16 +15942,24 @@
         }));
         this.object = mesh;
         scene.add(mesh);
-        var pass = new ToneMappingPass({
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.06);
+        var toneMappingEffect = new ToneMappingEffect({
+          blendFunction: BlendFunction.NORMAL,
           adaptive: true,
           resolution: 256,
-          distinction: 2.0
+          distinction: 2.0,
+          middleGrey: 0.6,
+          maxLuminance: 16.0,
+          averageLuminance: 1.0,
+          adaptationRate: 2.0
         });
-        pass.adaptiveLuminosityMaterial.uniforms.tau.value = 2.0;
+        this.effect = toneMappingEffect;
+        var pass = new EffectPass(camera, smaaEffect, toneMappingEffect);
+        pass.dithering = true;
+        this.pass = pass;
         this.renderPass.renderToScreen = false;
         pass.renderToScreen = true;
-        pass.dithering = true;
-        this.toneMappingPass = pass;
         composer.addPass(pass);
       }
     }, {
@@ -14923,45 +15983,225 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.toneMappingPass;
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var blendFunctions = Object.keys(BlendFunction).map(function (value) {
+          return value.toLowerCase();
+        });
         var params = {
-          "resolution": Math.log2(pass.resolution),
-          "distinction": pass.luminosityMaterial.uniforms.distinction.value,
-          "adaption rate": pass.adaptiveLuminosityMaterial.uniforms.tau.value,
-          "average lum": pass.toneMappingMaterial.uniforms.averageLuminance.value,
-          "min lum": pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value,
-          "max lum": pass.toneMappingMaterial.uniforms.maxLuminance.value,
-          "middle grey": pass.toneMappingMaterial.uniforms.middleGrey.value
+          "resolution": Math.log2(effect.resolution),
+          "adaptation rate": effect.adaptationRate,
+          "average lum": effect.uniforms.get("averageLuminance").value,
+          "max lum": effect.uniforms.get("maxLuminance").value,
+          "middle grey": effect.uniforms.get("middleGrey").value,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendFunctions[blendMode.blendFunction]
         };
         menu.add(params, "resolution").min(6).max(11).step(1).onChange(function () {
-          pass.resolution = Math.pow(2, params.resolution);
+          effect.resolution = Math.pow(2, params.resolution);
+          pass.recompile();
         });
-        menu.add(pass, "adaptive");
-        menu.add(pass, "dithering");
         var f = menu.addFolder("Luminance");
-        f.add(params, "distinction").min(1.0).max(10.0).step(0.1).onChange(function () {
-          pass.luminosityMaterial.uniforms.distinction.value = params.distinction;
+        f.add(effect, "adaptive").onChange(function () {
+          pass.recompile();
         });
-        f.add(params, "adaption rate").min(1.0).max(3.0).step(0.01).onChange(function () {
-          pass.adaptiveLuminosityMaterial.uniforms.tau.value = params["adaption rate"];
+        f.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
+        f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(function () {
+          effect.adaptationRate = params["adaptation rate"];
         });
         f.add(params, "average lum").min(0.01).max(1.0).step(0.01).onChange(function () {
-          pass.toneMappingMaterial.uniforms.averageLuminance.value = params["average lum"];
-        });
-        f.add(params, "min lum").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.adaptiveLuminosityMaterial.uniforms.minLuminance.value = params["min lum"];
+          effect.uniforms.get("averageLuminance").value = params["average lum"];
         });
         f.add(params, "max lum").min(0.0).max(32.0).step(1).onChange(function () {
-          pass.toneMappingMaterial.uniforms.maxLuminance.value = params["max lum"];
+          effect.uniforms.get("maxLuminance").value = params["max lum"];
         });
         f.add(params, "middle grey").min(0.0).max(1.0).step(0.01).onChange(function () {
-          pass.toneMappingMaterial.uniforms.middleGrey.value = params["middle grey"];
+          effect.uniforms.get("middleGrey").value = params["middle grey"];
         });
         f.open();
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", blendFunctions).onChange(function () {
+          blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
       }
     }]);
 
     return ToneMappingDemo;
+  }(PostProcessingDemo);
+
+  var VignetteDemo = function (_PostProcessingDemo) {
+    _inherits(VignetteDemo, _PostProcessingDemo);
+
+    function VignetteDemo(composer) {
+      var _this;
+
+      _classCallCheck(this, VignetteDemo);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(VignetteDemo).call(this, "vignette", composer));
+      _this.effect = null;
+      _this.pass = null;
+      _this.object = null;
+      return _this;
+    }
+
+    _createClass(VignetteDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/space/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          var image;
+
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-search", this);
+              loadingManager.itemEnd("smaa-search");
+            });
+            loadingManager.itemStart("smaa-search");
+            image.src = SMAAEffect.searchImageDataURL;
+            image = new Image();
+            image.addEventListener("load", function () {
+              assets.set("smaa-area", this);
+              loadingManager.itemEnd("smaa-area");
+            });
+            loadingManager.itemStart("smaa-area");
+            image.src = SMAAEffect.areaImageDataURL;
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(10, 1, 10);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x666666);
+        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        directionalLight.position.set(-1, 1, 1);
+        directionalLight.target.position.copy(scene.position);
+        scene.add(directionalLight);
+        scene.add(ambientLight);
+        var object = new three.Object3D();
+        var geometry = new three.SphereBufferGeometry(1, 4, 4);
+        var material, mesh;
+        var i;
+
+        for (i = 0; i < 100; ++i) {
+          material = new three.MeshPhongMaterial({
+            color: 0xffffff * Math.random(),
+            flatShading: true
+          });
+          mesh = new three.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(Math.random() * 10);
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          mesh.scale.multiplyScalar(Math.random());
+          object.add(mesh);
+        }
+
+        this.object = object;
+        scene.add(object);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var vignetteEffect = new VignetteEffect({
+          eskil: false,
+          offset: 0.35,
+          darkness: 0.75
+        });
+        var pass = new EffectPass(camera, smaaEffect, vignetteEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        this.effect = vignetteEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var twoPI = 2.0 * Math.PI;
+        object.rotation.x += 0.001;
+        object.rotation.y += 0.005;
+
+        if (object.rotation.x >= twoPI) {
+          object.rotation.x -= twoPI;
+        }
+
+        if (object.rotation.y >= twoPI) {
+          object.rotation.y -= twoPI;
+        }
+
+        _get(_getPrototypeOf(VignetteDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "offset": effect.uniforms.get("offset").value,
+          "darkness": effect.uniforms.get("darkness").value,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(effect, "eskil").onChange(function () {
+          return pass.recompile();
+        });
+        menu.add(params, "offset").min(0.0).max(1.0).step(0.001).onChange(function () {
+          effect.uniforms.get("offset").value = params.offset;
+        });
+        menu.add(params, "darkness").min(0.0).max(1.0).step(0.001).onChange(function () {
+          effect.uniforms.get("darkness").value = params.darkness;
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+        menu.add(pass, "dithering");
+      }
+    }]);
+
+    return VignetteDemo;
   }(PostProcessingDemo);
 
   var renderer;
@@ -14999,8 +16239,7 @@
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setClearColor(0x000000);
     composer = new EffectComposer(renderer, {
-      stencilBuffer: true,
-      depthTexture: true
+      stencilBuffer: true
     });
     manager = new DemoManager(viewport, {
       aside: document.getElementById("aside"),
@@ -15008,21 +16247,24 @@
     });
     manager.addEventListener("change", onChange);
     manager.addEventListener("load", onLoad);
-    manager.addDemo(new RenderDemo(composer));
     manager.addDemo(new BloomDemo(composer));
     manager.addDemo(new BlurDemo(composer));
     manager.addDemo(new BokehDemo(composer));
     manager.addDemo(new RealisticBokehDemo(composer));
-    manager.addDemo(new DepthDemo(composer));
+    manager.addDemo(new ColorCorrectionDemo(composer));
     manager.addDemo(new DotScreenDemo(composer));
-    manager.addDemo(new FilmDemo(composer));
     manager.addDemo(new GlitchDemo(composer));
     manager.addDemo(new GodRaysDemo(composer));
+    manager.addDemo(new GridDemo(composer));
     manager.addDemo(new OutlineDemo(composer));
     manager.addDemo(new PixelationDemo(composer));
+    manager.addDemo(new ScanlineDemo(composer));
+    manager.addDemo(new SepiaDemo(composer));
     manager.addDemo(new ShockWaveDemo(composer));
     manager.addDemo(new SMAADemo(composer));
+    manager.addDemo(new TextureDemo(composer));
     manager.addDemo(new ToneMappingDemo(composer));
+    manager.addDemo(new VignetteDemo(composer));
     render();
   });
   window.addEventListener("resize", function () {

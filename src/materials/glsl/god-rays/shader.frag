@@ -1,9 +1,8 @@
 #include <common>
 #include <dithering_pars_fragment>
 
-uniform sampler2D tDiffuse;
-uniform vec3 lightPosition;
-
+uniform sampler2D inputBuffer;
+uniform vec2 lightPosition;
 uniform float exposure;
 uniform float decay;
 uniform float density;
@@ -14,11 +13,11 @@ varying vec2 vUv;
 
 void main() {
 
-	vec2 texCoord = vUv;
+	vec2 coord = vUv;
 
-	// Calculate vector from pixel to light source in screen space.
-	vec2 deltaTexCoord = texCoord - lightPosition.st;
-	deltaTexCoord *= 1.0 / NUM_SAMPLES_FLOAT * density;
+	// Calculate the vector from this pixel to the light position in screen space.
+	vec2 delta = coord - lightPosition;
+	delta *= 1.0 / SAMPLES_FLOAT * density;
 
 	// A decreasing illumination factor.
 	float illuminationDecay = 1.0;
@@ -26,18 +25,18 @@ void main() {
 	vec4 sample;
 	vec4 color = vec4(0.0);
 
-	// Estimate the probability of occlusion at each pixel by summing samples along a ray to the light source.
-	for(int i = 0; i < NUM_SAMPLES_INT; ++i) {
+	/* Estimate the probability of occlusion at each pixel by summing samples
+	along a ray to the light position. */
+	for(int i = 0; i < SAMPLES_INT; ++i) {
 
-		texCoord -= deltaTexCoord;
-		sample = texture2D(tDiffuse, texCoord);
+		coord -= delta;
+		sample = texture2D(inputBuffer, coord);
 
-		// Apply sample attenuation scale/decay factors.
+		// Apply the sample attenuation scale/decay factors.
 		sample *= illuminationDecay * weight;
-
 		color += sample;
 
-		// Update exponential decay factor.
+		// Update the exponential decay factor.
 		illuminationDecay *= decay;
 
 	}

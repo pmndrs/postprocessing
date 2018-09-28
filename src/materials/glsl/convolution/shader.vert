@@ -2,6 +2,8 @@ uniform vec2 texelSize;
 uniform vec2 halfTexelSize;
 uniform float kernel;
 
+/* Packing multiple texture coordinates into one varying and using a swizzle to
+extract them in the fragment shader still causes a dependent texture read. */
 varying vec2 vUv0;
 varying vec2 vUv1;
 varying vec2 vUv2;

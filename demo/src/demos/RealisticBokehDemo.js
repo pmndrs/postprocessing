@@ -4,23 +4,30 @@ import {
 	DirectionalLight,
 	FogExp2,
 	Mesh,
-	MeshBasicMaterial,
+	MeshPhongMaterial,
 	PerspectiveCamera,
-	SphereBufferGeometry
+	CylinderBufferGeometry
 } from "three";
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { RealisticBokehPass } from "../../../src";
+
+import {
+	BlendFunction,
+	RealisticBokehEffect,
+	EffectPass,
+	SMAAEffect,
+	VignetteEffect
+} from "../../../src";
 
 /**
- * A high quality bokeh demo setup.
+ * A bokeh demo setup.
  */
 
 export class RealisticBokehDemo extends PostProcessingDemo {
 
 	/**
-	 * Constructs a new bokeh2 demo.
+	 * Constructs a new bokeh demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
@@ -30,13 +37,22 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		super("realistic-bokeh", composer);
 
 		/**
-		 * A bokeh pass.
+		 * An effect.
 		 *
-		 * @type {RealisticBokehPass}
+		 * @type {Effect}
 		 * @private
 		 */
 
-		this.bokehPass = null;
+		this.effect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.pass = null;
 
 	}
 
@@ -81,6 +97,29 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 				});
 
+				// Preload the SMAA images.
+				let image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-search", this);
+					loadingManager.itemEnd("smaa-search");
+
+				});
+
+				loadingManager.itemStart("smaa-search");
+				image.src = SMAAEffect.searchImageDataURL;
+
+				image = new Image();
+				image.addEventListener("load", function() {
+
+					assets.set("smaa-area", this);
+					loadingManager.itemEnd("smaa-area");
+
+				});
+
+				loadingManager.itemStart("smaa-area");
+				image.src = SMAAEffect.areaImageDataURL;
+
 			} else {
 
 				resolve();
@@ -104,9 +143,8 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 50);
-		camera.position.set(3, 1, 3);
-		camera.lookAt(scene.position);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+		camera.position.set(12.5, -0.3, 1.7);
 		this.camera = camera;
 
 		// Controls.
@@ -114,8 +152,9 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 0.25;
-		controls.settings.zoom.minDistance = 2.5;
+		controls.settings.sensitivity.rotation = 0.000425;
+		controls.settings.sensitivity.zoom = 0.15;
+		controls.settings.zoom.minDistance = 11.5;
 		controls.settings.zoom.maxDistance = 40.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
@@ -131,7 +170,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
+		const ambientLight = new AmbientLight(0x404040);
 		const directionalLight = new DirectionalLight(0xffbbaa);
 
 		directionalLight.position.set(-1, 1, 1);
@@ -142,37 +181,48 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		// Objects.
 
-		const geometry = new SphereBufferGeometry(1, 64, 64);
-		const material = new MeshBasicMaterial({
-			color: 0xffff00,
+		const geometry = new CylinderBufferGeometry(1, 1, 20, 6);
+		const material = new MeshPhongMaterial({
+			color: 0xffaaaa,
+			flatShading: true,
 			envMap: assets.get("sky")
 		});
 
 		const mesh = new Mesh(geometry, material);
+		mesh.rotation.set(0, 0, Math.PI / 2);
 		scene.add(mesh);
 
 		// Passes.
 
-		const pass = new RealisticBokehPass(camera, {
+		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		smaaEffect.setEdgeDetectionThreshold(0.06);
+
+		const bokehEffect = new RealisticBokehEffect({
+			focus: 1.55,
+			focalLength: camera.getFocalLength(),
+			luminanceThreshold: 0.325,
+			luminanceGain: 2.0,
+			bias: -0.35,
+			fringe: 0.7,
+			maxBlur: 2.5,
 			rings: 5,
 			samples: 5,
 			showFocus: false,
-			manualDoF: true,
-			vignette: true,
-			pentagon: true,
-			shaderFocus: true,
-			noise: false,
-			maxBlur: 2.0,
-			luminanceThreshold: 0.15,
-			luminanceGain: 3.5,
-			bias: 0.25,
-			fringe: 0.33
+			manualDoF: false,
+			pentagon: true
 		});
 
+		const smaaPass = new EffectPass(camera, smaaEffect);
+		const bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
+
 		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-		this.bokehPass = pass;
-		composer.addPass(pass);
+		smaaPass.renderToScreen = true;
+
+		this.effect = bokehEffect;
+		this.pass = bokehPass;
+
+		composer.addPass(bokehPass);
+		composer.addPass(smaaPass);
 
 	}
 
@@ -184,153 +234,139 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const material = this.bokehPass.getFullscreenMaterial();
+		const pass = this.pass;
+		const effect = this.effect;
+		const uniforms = effect.uniforms;
+		const blendMode = effect.blendMode;
 
 		const params = {
-			"rings": Number.parseInt(material.defines.RINGS_INT),
-			"samples": Number.parseInt(material.defines.SAMPLES_INT),
-			"focal stop": material.uniforms.focalStop.value,
-			"focal length": material.uniforms.focalLength.value,
-			"shader focus": material.defines.SHADER_FOCUS !== undefined,
-			"focal depth": material.uniforms.focalDepth.value,
-			"focus coord X": material.uniforms.focusCoords.value.x,
-			"focus coord Y": material.uniforms.focusCoords.value.y,
-			"max blur": material.uniforms.maxBlur.value,
-			"lum threshold": material.uniforms.luminanceThreshold.value,
-			"lum gain": material.uniforms.luminanceGain.value,
-			"bias": material.uniforms.bias.value,
-			"fringe": material.uniforms.fringe.value,
-			"dithering": material.uniforms.ditherStrength.value,
-			"vignette": material.defines.VIGNETTE !== undefined,
-			"pentagon": material.defines.PENTAGON !== undefined,
-			"manual DoF": material.defines.MANUAL_DOF !== undefined,
-			"show focus": material.defines.SHOW_FOCUS !== undefined,
-			"noise": material.defines.NOISE !== undefined
+			"focus": uniforms.get("focus").value,
+			"focal length": uniforms.get("focalLength").value,
+			"threshold": uniforms.get("luminanceThreshold").value,
+			"gain": uniforms.get("luminanceGain").value,
+			"bias": uniforms.get("bias").value,
+			"fringe": uniforms.get("fringe").value,
+			"max": uniforms.get("maxBlur").value,
+			"near start": 0.2,
+			"near dist": 1.0,
+			"far start": 0.2,
+			"far dist": 2.0,
+			"opacity": blendMode.opacity.value,
+			"blend mode": blendMode.blendFunction
 		};
 
-		let f = menu.addFolder("Focus");
+		// Object is 20 units long, actual maximum would be camera.far.
+		menu.add(params, "focus").min(this.camera.near).max(20.0).step(0.01).onChange(() => {
 
-		f.add(params, "show focus").onChange(() => {
-
-			material.setShowFocusEnabled(params["show focus"]);
-
-		});
-
-		f.add(params, "shader focus").onChange(() => {
-
-			material.setShaderFocusEnabled(params["shader focus"]);
+			uniforms.get("focus").value = params.focus;
 
 		});
 
-		f.add(params, "manual DoF").onChange(() => {
+		menu.add(params, "focal length").min(0.1).max(35.0).step(0.01).onChange(() => {
 
-			material.setManualDepthOfFieldEnabled(params["manual DoF"]);
-
-		});
-
-		f.add(params, "focal stop").min(0.0).max(100.0).step(0.1).onChange(() => {
-
-			material.uniforms.focalStop.value = params["focal stop"];
+			uniforms.get("focalLength").value = params["focal length"];
 
 		});
 
-		f.add(params, "focal depth").min(0.1).max(35.0).step(0.1).onChange(() => {
+		menu.add(effect, "showFocus").onChange(() => pass.recompile());
 
-			material.uniforms.focalDepth.value = params["focal depth"];
+		let folder = menu.addFolder("Depth of Field");
 
-		});
+		folder.add(effect, "manualDoF").onChange(() => pass.recompile());
 
-		f.add(params, "focus coord X").min(0.0).max(1.0).step(0.01).onChange(() => {
+		folder.add(params, "near start").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			material.uniforms.focusCoords.value.x = params["focus coord X"];
+			if(uniforms.has("dof")) {
 
-		});
+				uniforms.get("dof").value.x = params["near start"];
 
-		f.add(params, "focus coord Y").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.focusCoords.value.y = params["focus coord Y"];
+			}
 
 		});
 
-		f.open();
+		folder.add(params, "near dist").min(0.0).max(2.0).step(0.001).onChange(() => {
 
-		f = menu.addFolder("Sampling");
+			if(uniforms.has("dof")) {
 
-		f.add(params, "rings").min(1).max(6).step(1).onChange(() => {
+				uniforms.get("dof").value.y = params["near dist"];
 
-			material.defines.RINGS_INT = params.rings.toFixed(0);
-			material.defines.RINGS_FLOAT = params.rings.toFixed(1);
-			material.needsUpdate = true;
+			}
 
 		});
 
-		f.add(params, "samples").min(1).max(6).step(1).onChange(() => {
+		folder.add(params, "far start").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			material.defines.SAMPLES_INT = params.samples.toFixed(0);
-			material.defines.SAMPLES_FLOAT = params.samples.toFixed(1);
-			material.needsUpdate = true;
+			if(uniforms.has("dof")) {
 
-		});
+				uniforms.get("dof").value.z = params["far start"];
 
-		f = menu.addFolder("Blur");
-
-		f.add(params, "max blur").min(0.0).max(10.0).step(0.001).onChange(() => {
-
-			material.uniforms.maxBlur.value = params["max blur"];
+			}
 
 		});
 
-		f.add(params, "bias").min(0.0).max(3.0).step(0.01).onChange(() => {
+		folder.add(params, "far dist").min(0.0).max(3.0).step(0.001).onChange(() => {
 
-			material.uniforms.bias.value = params.bias;
+			if(uniforms.has("dof")) {
 
-		});
+				uniforms.get("dof").value.w = params["far dist"];
 
-		f.add(params, "fringe").min(0.0).max(2.0).step(0.05).onChange(() => {
-
-			material.uniforms.fringe.value = params.fringe;
+			}
 
 		});
 
-		f.add(params, "noise").onChange(() => {
+		folder = menu.addFolder("Blur");
 
-			material.setNoiseEnabled(params.noise);
+		folder.add(params, "max").min(0.0).max(5.0).step(0.001).onChange(() => {
 
-		});
-
-		f.add(params, "dithering").min(0.0).max(0.01).step(0.0001).onChange(() => {
-
-			material.uniforms.ditherStrength.value = params.dithering;
+			uniforms.get("maxBlur").value = params.max;
 
 		});
 
-		f.add(params, "pentagon").onChange(() => {
+		folder.add(params, "bias").min(-1.0).max(1.0).step(0.001).onChange(() => {
 
-			material.setPentagonEnabled(params.pentagon);
-
-		});
-
-		f.open();
-
-		f = menu.addFolder("Luminosity");
-
-		f.add(params, "lum threshold").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			material.uniforms.luminanceThreshold.value = params["lum threshold"];
+			uniforms.get("bias").value = params.bias;
 
 		});
 
-		f.add(params, "lum gain").min(0.0).max(4.0).step(0.01).onChange(() => {
+		folder.add(params, "fringe").min(0.0).max(5.0).step(0.001).onChange(() => {
 
-			material.uniforms.luminanceGain.value = params["lum gain"];
+			uniforms.get("fringe").value = params.fringe;
+
+		});
+
+		folder.add(effect, "rings").min(1).max(8).step(1).onChange(() => pass.recompile());
+		folder.add(effect, "samples").min(1).max(8).step(1).onChange(() => pass.recompile());
+
+		folder.add(effect, "pentagon").onChange(() => pass.recompile());
+
+		folder = menu.addFolder("Luminance");
+
+		folder.add(params, "threshold").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			uniforms.get("luminanceThreshold").value = params.threshold;
 
 		});
 
-		menu.add(params, "vignette").onChange(() => {
+		folder.add(params, "gain").min(0.0).max(4.0).step(0.01).onChange(() => {
 
-			material.setVignetteEnabled(params.vignette);
+			uniforms.get("luminanceGain").value = params.gain;
 
 		});
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blendMode.opacity.value = params.opacity;
+
+		});
+
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			pass.recompile();
+
+		});
+
+		menu.add(pass, "dithering");
 
 	}
 
