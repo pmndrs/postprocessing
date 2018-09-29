@@ -16,7 +16,7 @@ export class PostProcessingDemo extends Demo {
 
 	constructor(id, composer) {
 
-		super(id, composer);
+		super(id);
 
 		/**
 		 * An effect composer.

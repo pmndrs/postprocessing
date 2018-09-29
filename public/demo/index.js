@@ -12881,7 +12881,7 @@
 
       _classCallCheck(this, PostProcessingDemo);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(PostProcessingDemo).call(this, id, composer));
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(PostProcessingDemo).call(this, id));
       _this.composer = composer;
       _this.renderPass = new RenderPass(_this.scene, null);
       _this.renderPass.renderToScreen = true;
