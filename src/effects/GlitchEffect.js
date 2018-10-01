@@ -38,7 +38,7 @@ function randomFloat(low, high) {
 /**
  * A glitch effect.
  *
- * Thie effect can influence the {@link ChromaticAberrationEffect}.
+ * This effect can influence the {@link ChromaticAberrationEffect}.
  *
  * Reference: https://github.com/staffantan/unityglitch
  *
