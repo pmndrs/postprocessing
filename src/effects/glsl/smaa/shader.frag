@@ -1,13 +1,15 @@
 uniform sampler2D weightMap;
-varying vec4 vOffset;
+
+varying vec2 vOffset0;
+varying vec2 vOffset1;
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	// Fetch the blending weights for the current pixel.
 	vec4 a;
-	a.xz = texture2D(weightMap, uv).xz;
-	a.y = texture2D(weightMap, vOffset.zw).g;
-	a.w = texture2D(weightMap, vOffset.xy).a;
+	a.rb = texture2D(weightMap, uv).rb;
+	a.g = texture2D(weightMap, vOffset1).g;
+	a.a = texture2D(weightMap, vOffset0).a;
 
 	vec4 color = inputColor;
 

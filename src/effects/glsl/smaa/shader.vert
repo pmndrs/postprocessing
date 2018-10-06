@@ -1,7 +1,9 @@
-varying vec4 vOffset;
+varying vec2 vOffset0;
+varying vec2 vOffset1;
 
 void mainSupport() {
 
-	vOffset = uv.xyxy + texelSize.xyxy * vec4(1.0, 0.0, 0.0, -1.0); // Changed sign in W component.
+	vOffset0 = uv + texelSize * vec2(1.0, 0.0);
+	vOffset1 = uv + texelSize * vec2(0.0, -1.0); // Changed sign in Y component.
 
 }
