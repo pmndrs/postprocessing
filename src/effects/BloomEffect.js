@@ -14,16 +14,16 @@ import { Effect } from "./Effect.js";
 import fragment from "./glsl/texture/shader.frag";
 
 /**
- * A bloom pass.
+ * A bloom effect.
  *
- * This pass uses the fast Kawase convolution technique and a luminance filter
+ * This effect uses the fast Kawase convolution technique and a luminance filter
  * to blur bright highlights.
  */
 
 export class BloomEffect extends Effect {
 
 	/**
-	 * Constructs a new bloom pass.
+	 * Constructs a new bloom effect.
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.

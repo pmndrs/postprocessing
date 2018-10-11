@@ -27,13 +27,13 @@ import fragment from "./glsl/texture/shader.frag";
 const v = new Vector3();
 
 /**
- * A god rays pass.
+ * A god rays effect.
  */
 
 export class GodRaysEffect extends Effect {
 
 	/**
-	 * Constructs a new god rays pass.
+	 * Constructs a new god rays effect.
 	 *
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
