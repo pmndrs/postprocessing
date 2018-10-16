@@ -58,7 +58,6 @@ export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
 			include: ["**/*.frag", "**/*.vert"]
 		})].concat([babel(), minify({
 			bannerNewLine: true,
-			sourceMap: false,
 			comments: false
 		})])
 
@@ -73,7 +72,6 @@ export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
 		plugins: [resolve(), string({
 			include: ["**/*.frag", "**/*.vert"]
 		})].concat([babel(), minify({
-			sourceMap: false,
 			comments: false
 		})])
 
