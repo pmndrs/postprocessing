@@ -281,6 +281,7 @@ export class GlitchDemo extends PostProcessingDemo {
 		const uniforms = effect.uniforms;
 		const delay = effect.delay;
 		const duration = effect.duration;
+		const strength = effect.strength;
 
 		const params = {
 			"glitch mode": effect.mode,
@@ -289,6 +290,9 @@ export class GlitchDemo extends PostProcessingDemo {
 			"max delay": delay.y,
 			"min duration": duration.x,
 			"max duration": duration.y,
+			"weak glitches": strength.x,
+			"strong glitches": strength.y,
+			"glitch ratio": effect.ratio,
 			"columns": uniforms.get("columns").value
 		};
 
@@ -333,6 +337,24 @@ export class GlitchDemo extends PostProcessingDemo {
 		menu.add(params, "max duration").min(0.6).max(1.8).step(0.001).onChange(() => {
 
 			duration.y = params["max duration"];
+
+		});
+
+		menu.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			strength.x = params["weak glitches"];
+
+		});
+
+		menu.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			strength.y = params["strong glitches"];
+
+		});
+
+		menu.add(params, "glitch ratio").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.ratio = Number.parseFloat(params["glitch ratio"]);
 
 		});
 
