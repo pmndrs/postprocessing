@@ -42,7 +42,6 @@ export class PostProcessingDemo extends Demo {
 	 * Loads the SMAA images.
 	 *
 	 * @protected
-	 * @param {Number} delta - The time since the last frame in seconds.
 	 */
 
 	loadSMAAImages() {
