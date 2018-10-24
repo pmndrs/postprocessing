@@ -19,21 +19,13 @@ float readDepth(const in vec2 uv) {
 
 	#if DEPTH_PACKING == 3201
 
-		float depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));
+		return unpackRGBAToDepth(texture2D(depthBuffer, uv));
 
 	#else
 
-		float depth = texture2D(depthBuffer, uv).r;
+		return texture2D(depthBuffer, uv).r;
 
 	#endif
-
-	#if defined(PERSPECTIVE_CAMERA) && !defined(USE_LOGDEPTHBUF)
-
-		depth = viewZToOrthographicDepth(perspectiveDepthToViewZ(depth, cameraNear, cameraFar), cameraNear, cameraFar);
-
-	#endif
-
-	return depth;
 
 }
 
