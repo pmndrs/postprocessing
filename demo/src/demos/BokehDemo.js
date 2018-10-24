@@ -107,28 +107,7 @@ export class BokehDemo extends PostProcessingDemo {
 
 				});
 
-				// Preload the SMAA images.
-				let image = new Image();
-				image.addEventListener("load", function() {
-
-					assets.set("smaa-search", this);
-					loadingManager.itemEnd("smaa-search");
-
-				});
-
-				loadingManager.itemStart("smaa-search");
-				image.src = SMAAEffect.searchImageDataURL;
-
-				image = new Image();
-				image.addEventListener("load", function() {
-
-					assets.set("smaa-area", this);
-					loadingManager.itemEnd("smaa-area");
-
-				});
-
-				loadingManager.itemStart("smaa-area");
-				image.src = SMAAEffect.areaImageDataURL;
+				this.loadSMAAImages();
 
 			} else {
 

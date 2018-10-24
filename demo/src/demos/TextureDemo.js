@@ -74,8 +74,6 @@ export class TextureDemo extends PostProcessingDemo {
 
 		return new Promise((resolve, reject) => {
 
-			let image;
-
 			if(assets.size === 0) {
 
 				loadingManager.onError = reject;
@@ -102,28 +100,7 @@ export class TextureDemo extends PostProcessingDemo {
 
 				});
 
-				// Preload the SMAA images.
-				image = new Image();
-				image.addEventListener("load", function() {
-
-					assets.set("smaa-search", this);
-					loadingManager.itemEnd("smaa-search");
-
-				});
-
-				loadingManager.itemStart("smaa-search");
-				image.src = SMAAEffect.searchImageDataURL;
-
-				image = new Image();
-				image.addEventListener("load", function() {
-
-					assets.set("smaa-area", this);
-					loadingManager.itemEnd("smaa-area");
-
-				});
-
-				loadingManager.itemStart("smaa-area");
-				image.src = SMAAEffect.areaImageDataURL;
+				this.loadSMAAImages();
 
 			} else {
 
