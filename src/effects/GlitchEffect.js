@@ -55,9 +55,11 @@ export class GlitchEffect extends Effect {
 	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
 	 * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.
 	 * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.
+	 * @param {Vector2} [options.strength] - The strength of weak and strong glitches.
 	 * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.
 	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
 	 * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.
+	 * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.
 	 */
 
 	constructor(options = {}) {
@@ -67,7 +69,9 @@ export class GlitchEffect extends Effect {
 			chromaticAberrationOffset: null,
 			delay: new Vector2(1.5, 3.5),
 			duration: new Vector2(0.6, 1.0),
+			strength: new Vector2(0.3, 1.0),
 			columns: 0.05,
+			ratio: 0.85,
 			perturbationMap: null,
 			dtSize: 64
 		}, options);
@@ -161,6 +165,24 @@ export class GlitchEffect extends Effect {
 		 */
 
 		this.mode = GlitchMode.SPORADIC;
+
+		/**
+		 * The strength of weak and strong glitches.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.strength = settings.strength;
+
+		/**
+		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no
+		 * weak glitches and 1 means no strong ones. The default ratio of 0.85
+		 * offers a decent balance.
+		 *
+		 * @type {Number}
+		 */
+
+		this.ratio = settings.ratio;
 
 		/**
 		 * The chromatic aberration offset.
@@ -262,6 +284,7 @@ export class GlitchEffect extends Effect {
 		const mode = this.mode;
 		const breakPoint = this.breakPoint;
 		const offset = this.chromaticAberrationOffset;
+		const s = this.strength;
 
 		let time = this.time;
 		let active = false;
@@ -270,42 +293,46 @@ export class GlitchEffect extends Effect {
 
 		if(mode !== GlitchMode.DISABLED) {
 
-			time += delta;
-			trigger = (time > breakPoint.x);
-			r = Math.random();
+			if(mode === GlitchMode.SPORADIC) {
 
+				time += delta;
+				trigger = (time > breakPoint.x);
+
+				if(time >= (breakPoint.x + breakPoint.y)) {
+
+					breakPoint.set(
+						randomFloat(this.delay.x, this.delay.y),
+						randomFloat(this.duration.x, this.duration.y)
+					);
+
+					time = 0;
+
+				}
+
+			}
+
+			r = Math.random();
 			this.uniforms.get("random").value = r;
 
-			if((trigger && r > 0.85) || mode === GlitchMode.CONSTANT_WILD) {
+			if((trigger && r > this.ratio) || mode === GlitchMode.CONSTANT_WILD) {
 
 				active = true;
 
-				r /= 30.0;
+				r *= s.y * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+				this.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
 
 			} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {
 
 				active = true;
 
-				r /= 90.0;
+				r *= s.x * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+				this.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
-
-			}
-
-			if(time >= (breakPoint.x + breakPoint.y)) {
-
-				breakPoint.set(
-					randomFloat(this.delay.x, this.delay.y),
-					randomFloat(this.duration.x, this.duration.y)
-				);
-
-				time = 0;
 
 			}
 
