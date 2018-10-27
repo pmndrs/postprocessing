@@ -6,6 +6,7 @@
 
 export {
 	Disposable,
+	Initializable,
 	EffectComposer,
 	Resizable
 } from "./core";

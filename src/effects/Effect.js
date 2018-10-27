@@ -6,6 +6,7 @@ import { BlendMode } from "./blending/BlendMode.js";
  *
  * Effects can be combined using the {@link EffectPass}.
  *
+ * @implements {Initializable}
  * @implements {Resizable}
  * @implements {Disposable}
  */
