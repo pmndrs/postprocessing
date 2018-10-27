@@ -7,6 +7,8 @@ import vertexTemplate from "./glsl/effect/shader.vert";
  * An effect material for compound shaders.
  *
  * This material supports dithering.
+ *
+ * @implements {Resizable}
  */
 
 export class EffectMaterial extends ShaderMaterial {
@@ -117,18 +119,18 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Sets the resolution.
 	 *
-	 * @param {Number} x - The width.
-	 * @param {Number} y - The height.
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
 	 */
 
-	setResolution(x, y) {
+	setSize(width, height) {
 
-		x = Math.max(x, 1.0);
-		y = Math.max(y, 1.0);
+		width = Math.max(width, 1.0);
+		height = Math.max(height, 1.0);
 
-		this.uniforms.resolution.value.set(x, y);
-		this.uniforms.texelSize.value.set(1.0 / x, 1.0 / y);
-		this.uniforms.aspect.value = x / y;
+		this.uniforms.resolution.value.set(width, height);
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		this.uniforms.aspect.value = width / height;
 
 	}
 

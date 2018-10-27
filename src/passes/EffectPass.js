@@ -434,7 +434,7 @@ export class EffectPass extends Pass {
 		}
 
 		material = this.createMaterial();
-		material.setResolution(width, height);
+		material.setSize(width, height);
 		this.setFullscreenMaterial(material);
 		this.setDepthTexture(depthTexture, depthPacking);
 
@@ -509,7 +509,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setResolution(width, height);
+		this.getFullscreenMaterial().setSize(width, height);
 
 		for(const effect of this.effects) {
 
