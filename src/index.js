@@ -67,6 +67,7 @@ export {
 	ClearMaskPass,
 	EffectPass,
 	MaskPass,
+	NormalPass,
 	Pass,
 	RenderPass,
 	SavePass,
