@@ -110,6 +110,18 @@ export class Effect {
 	}
 
 	/**
+	 * Sets the depth texture.
+	 *
+	 * You may override this method if your effect requires direct access to the
+	 * depth texture that is bound to the associated {@link EffectPass}.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Number} [depthPacking=0] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = 0) {}
+
+	/**
 	 * Updates the effect by performing supporting operations.
 	 *
 	 * This method is called by the {@link EffectPass} right before the main

@@ -73,6 +73,7 @@ function prefixSubstrings(prefix, substrings, strings) {
  * @return {Object} The results.
  * @property {String[]} varyings - The varyings used by the given effect.
  * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.
+ * @property {Boolean} readDepth - Indicates whether the effect actually uses depth in the fragment shader.
  */
 
 function integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {
@@ -91,6 +92,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	let varyings = [], names = [];
 	let transformedUv = false;
+	let readDepth = false;
 
 	if(shaders.get("fragment") === undefined) {
 
@@ -144,9 +146,11 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 			let string = prefix + "MainImage(color0, UV, ";
 
-			if((effect.attributes & EffectAttribute.DEPTH) !== 0) {
+			// The effect may sample depth in a different shader.
+			if((attributes & EffectAttribute.DEPTH) !== 0 && shaders.get("fragment").indexOf("depth") >= 0) {
 
 				string += "depth, ";
+				readDepth = true;
 
 			}
 
@@ -181,7 +185,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	}
 
-	return { varyings, transformedUv };
+	return { varyings, transformedUv, readDepth };
 
 }
 
@@ -341,6 +345,7 @@ export class EffectPass extends Pass {
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false;
+		let readDepth = false;
 		let result;
 
 		for(const effect of this.effects) {
@@ -359,6 +364,7 @@ export class EffectPass extends Pass {
 
 					varyings += result.varyings.length;
 					transformedUv = transformedUv || result.transformedUv;
+					readDepth = readDepth || result.readDepth;
 
 				}
 
@@ -377,8 +383,13 @@ export class EffectPass extends Pass {
 		// Check if any effect relies on depth.
 		if((attributes & EffectAttribute.DEPTH) !== 0) {
 
-			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" +
-				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+			// Only read depth if any effect actually uses this information.
+			if(readDepth) {
+
+				shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" +
+					shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+
+			}
 
 			this.needsDepthTexture = true;
 
@@ -468,6 +479,12 @@ export class EffectPass extends Pass {
 		material.uniforms.depthBuffer.value = depthTexture;
 		material.depthPacking = depthPacking;
 		material.needsUpdate = true;
+
+		for(const effect of this.effects) {
+
+			effect.setDepthTexture(depthTexture, depthPacking);
+
+		}
 
 		this.needsDepthTexture = (depthTexture === null);
 
