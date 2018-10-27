@@ -1,6 +1,5 @@
 import {
 	Color,
-	FloatType,
 	MeshNormalMaterial,
 	NearestFilter,
 	RGBFormat,
