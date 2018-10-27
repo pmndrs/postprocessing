@@ -1,5 +1,6 @@
 import babel from "rollup-plugin-babel";
 import minify from "rollup-plugin-babel-minify";
+import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
 import string from "rollup-plugin-string";
 
@@ -40,7 +41,7 @@ const demo = {
 	},
 
 	external: ["three"],
-	plugins: [resolve(), string({
+	plugins: [resolve(), commonjs(), string({
 		include: ["**/*.frag", "**/*.vert"]
 	})].concat(process.env.NODE_ENV === "production" ? [babel()] : [])
 
