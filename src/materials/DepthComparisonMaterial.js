@@ -25,8 +25,8 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 			uniforms: {
 
 				depthBuffer: new Uniform(depthTexture),
-				cameraNear: new Uniform(0.1),
-				cameraFar: new Uniform(2000)
+				cameraNear: new Uniform(0.3),
+				cameraFar: new Uniform(1000)
 
 			},
 

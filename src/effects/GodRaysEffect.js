@@ -231,7 +231,7 @@ export class GodRaysEffect extends Effect {
 	/**
 	 * The internal god rays material.
 	 *
-	 * @type {Material}
+	 * @type {GodRaysMaterial}
 	 */
 
 	get godRaysMaterial() {

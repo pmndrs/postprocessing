@@ -54,7 +54,6 @@ export class ConvolutionMaterial extends ShaderMaterial {
 		 * The current kernel size.
 		 *
 		 * @type {KernelSize}
-		 * @default KernelSize.LARGE
 		 */
 
 		this.kernelSize = KernelSize.LARGE;

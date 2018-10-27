@@ -29,7 +29,7 @@ export class EffectMaterial extends ShaderMaterial {
 
 			defines: {
 
-				"DEPTH_PACKING": "0"
+				DEPTH_PACKING: "0"
 
 			},
 
