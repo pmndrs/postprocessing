@@ -1,8 +1,6 @@
 import {
 	Color,
 	LinearFilter,
-	MeshDepthMaterial,
-	RGBADepthPacking,
 	RGBFormat,
 	Uniform,
 	Vector2,
@@ -15,7 +13,7 @@ import {
 	KernelSize
 } from "../materials";
 
-import { ClearPass, BlurPass, RenderPass, ShaderPass } from "../passes";
+import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -168,20 +166,12 @@ export class OutlineEffect extends Effect {
 		/**
 		 * A depth pass.
 		 *
-		 * @type {RenderPass}
+		 * @type {DepthPass}
 		 * @private
 		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
-		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new MeshDepthMaterial({
-				depthPacking: RGBADepthPacking,
-				morphTargets: true,
-				skinning: true
-			}),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.depthPass = new DepthPass(this.mainScene, this.mainCamera);
 
 		/**
 		 * A depth comparison mask pass.
@@ -191,8 +181,8 @@ export class OutlineEffect extends Effect {
 		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
-		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new DepthComparisonMaterial(this.renderTargetDepth.texture, this.mainCamera),
+		this.maskPass = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),
 			clearColor: new Color(0xffffff),
 			clearAlpha: 1.0
 		});
@@ -589,12 +579,12 @@ export class OutlineEffect extends Effect {
 
 			// Render a custom depth texture and ignore selected objects.
 			this.setSelectionVisible(false);
-			this.renderPassDepth.render(renderer, this.renderTargetDepth);
+			this.depthPass.render(renderer);
 			this.setSelectionVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
 			mainCamera.layers.mask = 1 << this.selectionLayer;
-			this.renderPassMask.render(renderer, this.renderTargetMask);
+			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
 			mainCamera.layers.mask = mask;
@@ -630,13 +620,11 @@ export class OutlineEffect extends Effect {
 	setSize(width, height) {
 
 		this.resolution.set(width, height);
-
-		this.renderTargetDepth.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
-		this.renderPassDepth.setSize(width, height);
-		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
+		this.maskPass.setSize(width, height);
+		this.depthPass.setSize(width, height);
 
 		width = this.blurPass.width;
 		height = this.blurPass.height;
@@ -657,8 +645,8 @@ export class OutlineEffect extends Effect {
 
 	initialize(renderer, alpha) {
 
-		this.renderPassDepth.initialize(renderer, alpha);
-		this.renderPassMask.initialize(renderer, alpha);
+		this.depthPass.initialize(renderer, alpha);
+		this.maskPass.initialize(renderer, alpha);
 		this.blurPass.initialize(renderer, alpha);
 
 	}
