@@ -1,7 +1,7 @@
 import {
 	Color,
 	MeshNormalMaterial,
-	NearestFilter,
+	LinearFilter,
 	RGBFormat,
 	Vector2,
 	WebGLRenderTarget
@@ -59,8 +59,8 @@ export class NormalPass extends Pass {
 		if(this.renderTarget === undefined) {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
-				minFilter: NearestFilter,
-				magFilter: NearestFilter
+				minFilter: LinearFilter,
+				magFilter: LinearFilter
 			});
 
 			this.renderTarget.texture.name = "NormalPass.Target";
@@ -114,7 +114,7 @@ export class NormalPass extends Pass {
 	}
 
 	/**
-	 * Render the scene normals.
+	 * Renders the scene normals.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.

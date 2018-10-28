@@ -56,7 +56,7 @@ export class SavePass extends Pass {
 	}
 
 	/**
-	 * Renders the effect.
+	 * Saves the input buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
