@@ -75,6 +75,7 @@ This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/
  - [Sepia](http://vanruesc.github.io/postprocessing/public/demo/#sepia)
  - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)
+ - [SSAO](http://vanruesc.github.io/postprocessing/public/demo/#ssao)
  - [Texture](http://vanruesc.github.io/postprocessing/public/demo/#texture)
  - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
  - [Vignette](http://vanruesc.github.io/postprocessing/public/demo/#vignette)
