@@ -37,6 +37,7 @@ export {
 	ShockWaveEffect,
 	SepiaEffect,
 	SMAAEffect,
+	SSAOEffect,
 	TextureEffect,
 	ToneMappingEffect,
 	VignetteEffect

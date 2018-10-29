@@ -17,6 +17,7 @@ import { ScanlineDemo } from "./demos/ScanlineDemo.js";
 import { SepiaDemo } from "./demos/SepiaDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
+import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 import { VignetteDemo } from "./demos/VignetteDemo.js";
@@ -155,6 +156,7 @@ window.addEventListener("load", function main(event) {
 	manager.addDemo(new SepiaDemo(composer));
 	manager.addDemo(new ShockWaveDemo(composer));
 	manager.addDemo(new SMAADemo(composer));
+	manager.addDemo(new SSAODemo(composer));
 	manager.addDemo(new TextureDemo(composer));
 	manager.addDemo(new ToneMappingDemo(composer));
 	manager.addDemo(new VignetteDemo(composer));
