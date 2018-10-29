@@ -66,6 +66,7 @@ export {
 	BlurPass,
 	ClearPass,
 	ClearMaskPass,
+	DepthPass,
 	EffectPass,
 	MaskPass,
 	NormalPass,
