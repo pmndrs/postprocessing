@@ -60,7 +60,8 @@ export class NormalPass extends Pass {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: LinearFilter,
-				magFilter: LinearFilter
+				magFilter: LinearFilter,
+				format: RGBFormat
 			});
 
 			this.renderTarget.texture.name = "NormalPass.Target";
@@ -145,23 +146,6 @@ export class NormalPass extends Pass {
 			Math.max(1, Math.floor(width * this.resolutionScale)),
 			Math.max(1, Math.floor(height * this.resolutionScale))
 		);
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 */
-
-	initialize(renderer, alpha) {
-
-		if(!alpha) {
-
-			this.renderTarget.texture.format = RGBFormat;
-
-		}
 
 	}
 
