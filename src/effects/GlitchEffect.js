@@ -1,6 +1,8 @@
 import {
 	DataTexture,
 	FloatType,
+	NearestFilter,
+	RepeatWrapping,
 	RGBFormat,
 	Uniform,
 	Vector2
@@ -100,7 +102,10 @@ export class GlitchEffect extends Effect {
 
 		this.perturbationMap = null;
 
-		this.setPerturbationMap((settings.perturbationMap !== null) ? settings.perturbationMap : this.generatePerturbationMap(settings.dtSize));
+		this.setPerturbationMap((settings.perturbationMap === null) ?
+			this.generatePerturbationMap(settings.dtSize) :
+			settings.perturbationMap);
+
 		this.perturbationMap.generateMipmaps = false;
 
 		/**
@@ -233,6 +238,9 @@ export class GlitchEffect extends Effect {
 			this.perturbationMap.dispose();
 
 		}
+
+		perturbationMap.wrapS = perturbationMap.wrapT = RepeatWrapping;
+		perturbationMap.magFilter = perturbationMap.minFilter = NearestFilter;
 
 		this.perturbationMap = perturbationMap;
 		this.uniforms.get("perturbationMap").value = perturbationMap;

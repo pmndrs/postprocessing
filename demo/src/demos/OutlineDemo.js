@@ -10,7 +10,6 @@ import {
 	OctahedronBufferGeometry,
 	PerspectiveCamera,
 	Raycaster,
-	RepeatWrapping,
 	SphereBufferGeometry,
 	TextureLoader,
 	Vector2
@@ -228,7 +227,6 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				textureLoader.load("textures/pattern.png", function(texture) {
 
-					texture.wrapS = texture.wrapT = RepeatWrapping;
 					assets.set("pattern-color", texture);
 
 				});

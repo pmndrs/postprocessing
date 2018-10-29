@@ -1,6 +1,7 @@
 import {
 	Color,
 	LinearFilter,
+	RepeatWrapping,
 	RGBFormat,
 	Uniform,
 	Vector2,
@@ -376,6 +377,8 @@ export class OutlineEffect extends Effect {
 	setPatternTexture(texture) {
 
 		if(texture !== null) {
+
+			texture.wrapS = texture.wrapT = RepeatWrapping;
 
 			this.defines.set("USE_PATTERN", "1");
 			this.uniforms.set("patternScale", new Uniform(1.0));

@@ -5,7 +5,6 @@ import {
 	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
-	NearestFilter,
 	Object3D,
 	PerspectiveCamera,
 	SphereBufferGeometry,
@@ -114,7 +113,6 @@ export class GlitchDemo extends PostProcessingDemo {
 
 				textureLoader.load("textures/perturb.jpg", function(texture) {
 
-					texture.magFilter = texture.minFilter = NearestFilter;
 					assets.set("perturbation-map", texture);
 
 				});
