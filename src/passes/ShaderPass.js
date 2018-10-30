@@ -39,7 +39,7 @@ export class ShaderPass extends Pass {
 	/**
 	 * Sets the name of the input buffer uniform.
 	 *
-	 * Most fullscreen materials modify texels from an input texture. This effect
+	 * Most fullscreen materials modify texels from an input texture. This pass
 	 * automatically assigns the main input buffer to the uniform identified by
 	 * the given name.
 	 *
