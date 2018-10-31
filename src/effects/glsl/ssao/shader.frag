@@ -1,5 +1,4 @@
 uniform sampler2D normalBuffer;
-uniform sampler2D normalMap;
 
 uniform mat4 cameraProjectionMatrix;
 uniform mat4 cameraInverseProjectionMatrix;
