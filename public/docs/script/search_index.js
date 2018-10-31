@@ -96,6 +96,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/passes/depthpass.js~depthpass",
+    "class/src/passes/DepthPass.js~DepthPass.html",
+    "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/DepthPass.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/core/disposable.js~disposable",
     "class/src/core/Disposable.js~Disposable.html",
     "<span>Disposable</span> <span class=\"search-result-import-path\">postprocessing/src/core/Disposable.js</span>",
@@ -180,6 +186,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/core/initializable.js~initializable",
+    "class/src/core/Initializable.js~Initializable.html",
+    "<span>Initializable</span> <span class=\"search-result-import-path\">postprocessing/src/core/Initializable.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/materials/convolutionmaterial.js~kernelsize",
     "variable/index.html#static-variable-KernelSize",
     "<span>KernelSize</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ConvolutionMaterial.js</span>",
@@ -201,6 +213,12 @@ window.esdocSearchIndex = [
     "postprocessing/src/effects/noiseeffect.js~noiseeffect",
     "class/src/effects/NoiseEffect.js~NoiseEffect.html",
     "<span>NoiseEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/NoiseEffect.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/passes/normalpass.js~normalpass",
+    "class/src/passes/NormalPass.js~NormalPass.html",
+    "<span>NormalPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/NormalPass.js</span>",
     "class"
   ],
   [
@@ -273,6 +291,12 @@ window.esdocSearchIndex = [
     "postprocessing/src/materials/smaaweightsmaterial.js~smaaweightsmaterial",
     "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html",
     "<span>SMAAWeightsMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/SMAAWeightsMaterial.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/effects/ssaoeffect.js~ssaoeffect",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html",
+    "<span>SSAOEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SSAOEffect.js</span>",
     "class"
   ],
   [
@@ -726,6 +750,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/initializable.js",
+    "file/src/core/Initializable.js.html",
+    "src/core/Initializable.js",
+    "file"
+  ],
+  [
+    "src/core/initializable.js~initializable#initialize",
+    "class/src/core/Initializable.js~Initializable.html#instance-method-initialize",
+    "src/core/Initializable.js~Initializable#initialize",
+    "method"
+  ],
+  [
     "src/core/resizable.js",
     "file/src/core/Resizable.js.html",
     "src/core/Resizable.js",
@@ -763,13 +799,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#distinction",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-distinction",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-distinction",
     "src/effects/BloomEffect.js~BloomEffect#distinction",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#distinction",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-distinction",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-distinction",
     "src/effects/BloomEffect.js~BloomEffect#distinction",
     "member"
   ],
@@ -1014,6 +1050,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/effect.js~effect#setdepthtexture",
+    "class/src/effects/Effect.js~Effect.html#instance-method-setDepthTexture",
+    "src/effects/Effect.js~Effect#setDepthTexture",
+    "method"
+  ],
+  [
     "src/effects/effect.js~effect#setsize",
     "class/src/effects/Effect.js~Effect.html#instance-method-setSize",
     "src/effects/Effect.js~Effect#setSize",
@@ -1122,6 +1164,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/glitcheffect.js~glitcheffect#ratio",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-ratio",
+    "src/effects/GlitchEffect.js~GlitchEffect#ratio",
+    "member"
+  ],
+  [
     "src/effects/glitcheffect.js~glitcheffect#seed",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-seed",
     "src/effects/GlitchEffect.js~GlitchEffect#seed",
@@ -1132,6 +1180,12 @@ window.esdocSearchIndex = [
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-method-setPerturbationMap",
     "src/effects/GlitchEffect.js~GlitchEffect#setPerturbationMap",
     "method"
+  ],
+  [
+    "src/effects/glitcheffect.js~glitcheffect#strength",
+    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-strength",
+    "src/effects/GlitchEffect.js~GlitchEffect#strength",
+    "member"
   ],
   [
     "src/effects/glitcheffect.js~glitcheffect#time",
@@ -1183,13 +1237,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-dithering",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-dithering",
     "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-dithering",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-dithering",
     "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "member"
   ],
@@ -1219,13 +1273,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#kernelsize",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-kernelSize",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-kernelSize",
     "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#kernelsize",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-kernelSize",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-kernelSize",
     "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "member"
   ],
@@ -1279,13 +1333,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
@@ -1435,13 +1489,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
@@ -1476,6 +1530,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#depthpass",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-depthPass",
+    "src/effects/OutlineEffect.js~OutlineEffect#depthPass",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#deselectobject",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-deselectObject",
     "src/effects/OutlineEffect.js~OutlineEffect#deselectObject",
@@ -1483,13 +1543,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#dithering",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-dithering",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-dithering",
     "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#dithering",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-dithering",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-dithering",
     "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "member"
   ],
@@ -1530,6 +1590,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#maskpass",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-maskPass",
+    "src/effects/OutlineEffect.js~OutlineEffect#maskPass",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#outlineedgespass",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-outlineEdgesPass",
     "src/effects/OutlineEffect.js~OutlineEffect#outlineEdgesPass",
@@ -1539,18 +1605,6 @@ window.esdocSearchIndex = [
     "src/effects/outlineeffect.js~outlineeffect#pulsespeed",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-pulseSpeed",
     "src/effects/OutlineEffect.js~OutlineEffect#pulseSpeed",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#renderpassdepth",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderPassDepth",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderPassDepth",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#renderpassmask",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderPassMask",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderPassMask",
     "member"
   ],
   [
@@ -1765,13 +1819,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#showfocus",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-showFocus",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-showFocus",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "member"
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#showfocus",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-showFocus",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-showFocus",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "member"
   ],
@@ -1852,6 +1906,90 @@ window.esdocSearchIndex = [
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#static-get-searchImageDataURL",
     "src/effects/SMAAEffect.js~SMAAEffect.searchImageDataURL",
     "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js",
+    "file/src/effects/SSAOEffect.js.html",
+    "src/effects/SSAOEffect.js",
+    "file"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#camera",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-camera",
+    "src/effects/SSAOEffect.js~SSAOEffect#camera",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#constructor",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-constructor-constructor",
+    "src/effects/SSAOEffect.js~SSAOEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#r",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-r",
+    "src/effects/SSAOEffect.js~SSAOEffect#r",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#radius",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-radius",
+    "src/effects/SSAOEffect.js~SSAOEffect#radius",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#radius",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-radius",
+    "src/effects/SSAOEffect.js~SSAOEffect#radius",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#resolution",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-resolution",
+    "src/effects/SSAOEffect.js~SSAOEffect#resolution",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#rings",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-rings",
+    "src/effects/SSAOEffect.js~SSAOEffect#rings",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#rings",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-rings",
+    "src/effects/SSAOEffect.js~SSAOEffect#rings",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-samples",
+    "src/effects/SSAOEffect.js~SSAOEffect#samples",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-samples",
+    "src/effects/SSAOEffect.js~SSAOEffect#samples",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#setsize",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setSize",
+    "src/effects/SSAOEffect.js~SSAOEffect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#updateanglestep",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-updateAngleStep",
+    "src/effects/SSAOEffect.js~SSAOEffect#updateAngleStep",
+    "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#updateradiusstep",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-updateRadiusStep",
+    "src/effects/SSAOEffect.js~SSAOEffect#updateRadiusStep",
+    "method"
   ],
   [
     "src/effects/scanlineeffect.js",
@@ -2041,13 +2179,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#distinction",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-distinction",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-distinction",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "member"
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#distinction",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-distinction",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-distinction",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "member"
   ],
@@ -2389,20 +2527,20 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/effectmaterial.js~effectmaterial#depthpacking",
-    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-get-depthPacking",
-    "src/materials/EffectMaterial.js~EffectMaterial#depthPacking",
-    "member"
-  ],
-  [
-    "src/materials/effectmaterial.js~effectmaterial#depthpacking",
     "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-set-depthPacking",
     "src/materials/EffectMaterial.js~EffectMaterial#depthPacking",
     "member"
   ],
   [
-    "src/materials/effectmaterial.js~effectmaterial#setresolution",
-    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setResolution",
-    "src/materials/EffectMaterial.js~EffectMaterial#setResolution",
+    "src/materials/effectmaterial.js~effectmaterial#depthpacking",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-get-depthPacking",
+    "src/materials/EffectMaterial.js~EffectMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#setsize",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setSize",
+    "src/materials/EffectMaterial.js~EffectMaterial#setSize",
     "method"
   ],
   [
@@ -2425,13 +2563,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/godraysmaterial.js~godraysmaterial#samples",
-    "class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html#instance-set-samples",
+    "class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html#instance-get-samples",
     "src/materials/GodRaysMaterial.js~GodRaysMaterial#samples",
     "member"
   ],
   [
     "src/materials/godraysmaterial.js~godraysmaterial#samples",
-    "class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html#instance-get-samples",
+    "class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html#instance-set-samples",
     "src/materials/GodRaysMaterial.js~GodRaysMaterial#samples",
     "member"
   ],
@@ -2682,6 +2820,72 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/depthpass.js",
+    "file/src/passes/DepthPass.js.html",
+    "src/passes/DepthPass.js",
+    "file"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#constructor",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-constructor-constructor",
+    "src/passes/DepthPass.js~DepthPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#getresolutionscale",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-method-getResolutionScale",
+    "src/passes/DepthPass.js~DepthPass#getResolutionScale",
+    "method"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#needsswap",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-needsSwap",
+    "src/passes/DepthPass.js~DepthPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#render",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-method-render",
+    "src/passes/DepthPass.js~DepthPass#render",
+    "method"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#renderpass",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-renderPass",
+    "src/passes/DepthPass.js~DepthPass#renderPass",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#rendertarget",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-renderTarget",
+    "src/passes/DepthPass.js~DepthPass#renderTarget",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#resolution",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolution",
+    "src/passes/DepthPass.js~DepthPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#resolutionscale",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolutionScale",
+    "src/passes/DepthPass.js~DepthPass#resolutionScale",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#setresolutionscale",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-method-setResolutionScale",
+    "src/passes/DepthPass.js~DepthPass#setResolutionScale",
+    "method"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#setsize",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-method-setSize",
+    "src/passes/DepthPass.js~DepthPass#setSize",
+    "method"
+  ],
+  [
     "src/passes/effectpass.js",
     "file/src/passes/EffectPass.js.html",
     "src/passes/EffectPass.js",
@@ -2707,13 +2911,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/effectpass.js~effectpass#dithering",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-get-dithering",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-set-dithering",
     "src/passes/EffectPass.js~EffectPass#dithering",
     "member"
   ],
   [
     "src/passes/effectpass.js~effectpass#dithering",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-set-dithering",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-get-dithering",
     "src/passes/EffectPass.js~EffectPass#dithering",
     "member"
   ],
@@ -2835,6 +3039,72 @@ window.esdocSearchIndex = [
     "src/passes/maskpass.js~maskpass#render",
     "class/src/passes/MaskPass.js~MaskPass.html#instance-method-render",
     "src/passes/MaskPass.js~MaskPass#render",
+    "method"
+  ],
+  [
+    "src/passes/normalpass.js",
+    "file/src/passes/NormalPass.js.html",
+    "src/passes/NormalPass.js",
+    "file"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#constructor",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-constructor-constructor",
+    "src/passes/NormalPass.js~NormalPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#getresolutionscale",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-method-getResolutionScale",
+    "src/passes/NormalPass.js~NormalPass#getResolutionScale",
+    "method"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#needsswap",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-needsSwap",
+    "src/passes/NormalPass.js~NormalPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#render",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-method-render",
+    "src/passes/NormalPass.js~NormalPass#render",
+    "method"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#renderpass",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-renderPass",
+    "src/passes/NormalPass.js~NormalPass#renderPass",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#rendertarget",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-renderTarget",
+    "src/passes/NormalPass.js~NormalPass#renderTarget",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#resolution",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolution",
+    "src/passes/NormalPass.js~NormalPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#resolutionscale",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolutionScale",
+    "src/passes/NormalPass.js~NormalPass#resolutionScale",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#setresolutionscale",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-method-setResolutionScale",
+    "src/passes/NormalPass.js~NormalPass#setResolutionScale",
+    "method"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#setsize",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-method-setSize",
+    "src/passes/NormalPass.js~NormalPass#setSize",
     "method"
   ],
   [

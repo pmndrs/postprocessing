@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 1515,
+  "end": 1562,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 33,
+      "line": 34,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 1515,
+    "end": 1562,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 33,
+        "line": 34,
         "column": 0
       }
     },
@@ -2112,7 +2112,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 1346,
-        "end": 1397,
+        "end": 1391,
         "loc": {
           "start": {
             "line": 30,
@@ -2120,7 +2120,7 @@
           },
           "end": {
             "line": 30,
-            "column": 51
+            "column": 45
           }
         },
         "declaration": null,
@@ -2128,7 +2128,7 @@
           {
             "type": "ExportSpecifier",
             "start": 1355,
-            "end": 1368,
+            "end": 1365,
             "loc": {
               "start": {
                 "line": 30,
@@ -2136,13 +2136,13 @@
               },
               "end": {
                 "line": 30,
-                "column": 22
+                "column": 19
               }
             },
             "local": {
               "type": "Identifier",
               "start": 1355,
-              "end": 1368,
+              "end": 1365,
               "loc": {
                 "start": {
                   "line": 30,
@@ -2150,6 +2150,93 @@
                 },
                 "end": {
                   "line": 30,
+                  "column": 19
+                },
+                "identifierName": "SSAOEffect"
+              },
+              "name": "SSAOEffect"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 1355,
+              "end": 1365,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 9
+                },
+                "end": {
+                  "line": 30,
+                  "column": 19
+                },
+                "identifierName": "SSAOEffect"
+              },
+              "name": "SSAOEffect"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 1373,
+          "end": 1390,
+          "loc": {
+            "start": {
+              "line": 30,
+              "column": 27
+            },
+            "end": {
+              "line": 30,
+              "column": 44
+            }
+          },
+          "extra": {
+            "rawValue": "./SSAOEffect.js",
+            "raw": "\"./SSAOEffect.js\""
+          },
+          "value": "./SSAOEffect.js"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 1393,
+        "end": 1444,
+        "loc": {
+          "start": {
+            "line": 31,
+            "column": 0
+          },
+          "end": {
+            "line": 31,
+            "column": 51
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 1402,
+            "end": 1415,
+            "loc": {
+              "start": {
+                "line": 31,
+                "column": 9
+              },
+              "end": {
+                "line": 31,
+                "column": 22
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 1402,
+              "end": 1415,
+              "loc": {
+                "start": {
+                  "line": 31,
+                  "column": 9
+                },
+                "end": {
+                  "line": 31,
                   "column": 22
                 },
                 "identifierName": "TextureEffect"
@@ -2158,15 +2245,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1355,
-              "end": 1368,
+              "start": 1402,
+              "end": 1415,
               "loc": {
                 "start": {
-                  "line": 30,
+                  "line": 31,
                   "column": 9
                 },
                 "end": {
-                  "line": 30,
+                  "line": 31,
                   "column": 22
                 },
                 "identifierName": "TextureEffect"
@@ -2177,15 +2264,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 1376,
-          "end": 1396,
+          "start": 1423,
+          "end": 1443,
           "loc": {
             "start": {
-              "line": 30,
+              "line": 31,
               "column": 30
             },
             "end": {
-              "line": 30,
+              "line": 31,
               "column": 50
             }
           },
@@ -2198,15 +2285,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1399,
-        "end": 1458,
+        "start": 1446,
+        "end": 1505,
         "loc": {
           "start": {
-            "line": 31,
+            "line": 32,
             "column": 0
           },
           "end": {
-            "line": 31,
+            "line": 32,
             "column": 59
           }
         },
@@ -2214,29 +2301,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1408,
-            "end": 1425,
+            "start": 1455,
+            "end": 1472,
             "loc": {
               "start": {
-                "line": 31,
+                "line": 32,
                 "column": 9
               },
               "end": {
-                "line": 31,
+                "line": 32,
                 "column": 26
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1408,
-              "end": 1425,
+              "start": 1455,
+              "end": 1472,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 32,
                   "column": 9
                 },
                 "end": {
-                  "line": 31,
+                  "line": 32,
                   "column": 26
                 },
                 "identifierName": "ToneMappingEffect"
@@ -2245,15 +2332,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1408,
-              "end": 1425,
+              "start": 1455,
+              "end": 1472,
               "loc": {
                 "start": {
-                  "line": 31,
+                  "line": 32,
                   "column": 9
                 },
                 "end": {
-                  "line": 31,
+                  "line": 32,
                   "column": 26
                 },
                 "identifierName": "ToneMappingEffect"
@@ -2264,15 +2351,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 1433,
-          "end": 1457,
+          "start": 1480,
+          "end": 1504,
           "loc": {
             "start": {
-              "line": 31,
+              "line": 32,
               "column": 34
             },
             "end": {
-              "line": 31,
+              "line": 32,
               "column": 58
             }
           },
@@ -2285,15 +2372,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 1460,
-        "end": 1513,
+        "start": 1507,
+        "end": 1560,
         "loc": {
           "start": {
-            "line": 32,
+            "line": 33,
             "column": 0
           },
           "end": {
-            "line": 32,
+            "line": 33,
             "column": 53
           }
         },
@@ -2301,29 +2388,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 1469,
-            "end": 1483,
+            "start": 1516,
+            "end": 1530,
             "loc": {
               "start": {
-                "line": 32,
+                "line": 33,
                 "column": 9
               },
               "end": {
-                "line": 32,
+                "line": 33,
                 "column": 23
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 1469,
-              "end": 1483,
+              "start": 1516,
+              "end": 1530,
               "loc": {
                 "start": {
-                  "line": 32,
+                  "line": 33,
                   "column": 9
                 },
                 "end": {
-                  "line": 32,
+                  "line": 33,
                   "column": 23
                 },
                 "identifierName": "VignetteEffect"
@@ -2332,15 +2419,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 1469,
-              "end": 1483,
+              "start": 1516,
+              "end": 1530,
               "loc": {
                 "start": {
-                  "line": 32,
+                  "line": 33,
                   "column": 9
                 },
                 "end": {
-                  "line": 32,
+                  "line": 33,
                   "column": 23
                 },
                 "identifierName": "VignetteEffect"
@@ -2351,15 +2438,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 1491,
-          "end": 1512,
+          "start": 1538,
+          "end": 1559,
           "loc": {
             "start": {
-              "line": 32,
+              "line": 33,
               "column": 31
             },
             "end": {
-              "line": 32,
+              "line": 33,
               "column": 52
             }
           },
@@ -6655,9 +6742,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "TextureEffect",
+      "value": "SSAOEffect",
       "start": 1355,
-      "end": 1368,
+      "end": 1365,
       "loc": {
         "start": {
           "line": 30,
@@ -6665,6 +6752,189 @@
         },
         "end": {
           "line": 30,
+          "column": 19
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1366,
+      "end": 1367,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 20
+        },
+        "end": {
+          "line": 30,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 1368,
+      "end": 1372,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 22
+        },
+        "end": {
+          "line": 30,
+          "column": 26
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./SSAOEffect.js",
+      "start": 1373,
+      "end": 1390,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 27
+        },
+        "end": {
+          "line": 30,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 1390,
+      "end": 1391,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 44
+        },
+        "end": {
+          "line": 30,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 1393,
+      "end": 1399,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 1400,
+      "end": 1401,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 7
+        },
+        "end": {
+          "line": 31,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "TextureEffect",
+      "start": 1402,
+      "end": 1415,
+      "loc": {
+        "start": {
+          "line": 31,
+          "column": 9
+        },
+        "end": {
+          "line": 31,
           "column": 22
         }
       }
@@ -6681,15 +6951,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1369,
-      "end": 1370,
+      "start": 1416,
+      "end": 1417,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 31,
           "column": 23
         },
         "end": {
-          "line": 30,
+          "line": 31,
           "column": 24
         }
       }
@@ -6707,15 +6977,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 1371,
-      "end": 1375,
+      "start": 1418,
+      "end": 1422,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 31,
           "column": 25
         },
         "end": {
-          "line": 30,
+          "line": 31,
           "column": 29
         }
       }
@@ -6734,15 +7004,15 @@
         "updateContext": null
       },
       "value": "./TextureEffect.js",
-      "start": 1376,
-      "end": 1396,
+      "start": 1423,
+      "end": 1443,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 31,
           "column": 30
         },
         "end": {
-          "line": 30,
+          "line": 31,
           "column": 50
         }
       }
@@ -6760,15 +7030,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1396,
-      "end": 1397,
+      "start": 1443,
+      "end": 1444,
       "loc": {
         "start": {
-          "line": 30,
+          "line": 31,
           "column": 50
         },
         "end": {
-          "line": 30,
+          "line": 31,
           "column": 51
         }
       }
@@ -6788,15 +7058,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1399,
-      "end": 1405,
+      "start": 1446,
+      "end": 1452,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 0
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 6
         }
       }
@@ -6813,15 +7083,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1406,
-      "end": 1407,
+      "start": 1453,
+      "end": 1454,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 7
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 8
         }
       }
@@ -6839,15 +7109,15 @@
         "binop": null
       },
       "value": "ToneMappingEffect",
-      "start": 1408,
-      "end": 1425,
+      "start": 1455,
+      "end": 1472,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 9
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 26
         }
       }
@@ -6864,15 +7134,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1426,
-      "end": 1427,
+      "start": 1473,
+      "end": 1474,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 27
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 28
         }
       }
@@ -6890,15 +7160,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 1428,
-      "end": 1432,
+      "start": 1475,
+      "end": 1479,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 29
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 33
         }
       }
@@ -6917,15 +7187,15 @@
         "updateContext": null
       },
       "value": "./ToneMappingEffect.js",
-      "start": 1433,
-      "end": 1457,
+      "start": 1480,
+      "end": 1504,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 34
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 58
         }
       }
@@ -6943,15 +7213,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1457,
-      "end": 1458,
+      "start": 1504,
+      "end": 1505,
       "loc": {
         "start": {
-          "line": 31,
+          "line": 32,
           "column": 58
         },
         "end": {
-          "line": 31,
+          "line": 32,
           "column": 59
         }
       }
@@ -6971,15 +7241,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 1460,
-      "end": 1466,
+      "start": 1507,
+      "end": 1513,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 0
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 6
         }
       }
@@ -6996,15 +7266,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1467,
-      "end": 1468,
+      "start": 1514,
+      "end": 1515,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 7
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 8
         }
       }
@@ -7022,15 +7292,15 @@
         "binop": null
       },
       "value": "VignetteEffect",
-      "start": 1469,
-      "end": 1483,
+      "start": 1516,
+      "end": 1530,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 9
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 23
         }
       }
@@ -7047,15 +7317,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 1484,
-      "end": 1485,
+      "start": 1531,
+      "end": 1532,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 24
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 25
         }
       }
@@ -7073,15 +7343,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 1486,
-      "end": 1490,
+      "start": 1533,
+      "end": 1537,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 26
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 30
         }
       }
@@ -7100,15 +7370,15 @@
         "updateContext": null
       },
       "value": "./VignetteEffect.js",
-      "start": 1491,
-      "end": 1512,
+      "start": 1538,
+      "end": 1559,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 31
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 52
         }
       }
@@ -7126,15 +7396,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1512,
-      "end": 1513,
+      "start": 1559,
+      "end": 1560,
       "loc": {
         "start": {
-          "line": 32,
+          "line": 33,
           "column": 52
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 53
         }
       }
@@ -7152,15 +7422,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 1515,
-      "end": 1515,
+      "start": 1562,
+      "end": 1562,
       "loc": {
         "start": {
-          "line": 33,
+          "line": 34,
           "column": 0
         },
         "end": {
-          "line": 33,
+          "line": 34,
           "column": 0
         }
       }

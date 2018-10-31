@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
@@ -78,8 +80,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
@@ -164,6 +168,7 @@ function prefixSubstrings(prefix, substrings, strings) {
  * @return {Object} The results.
  * @property {String[]} varyings - The varyings used by the given effect.
  * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.
+ * @property {Boolean} readDepth - Indicates whether the effect actually uses depth in the fragment shader.
  */
 
 function integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {
@@ -182,6 +187,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	let varyings = [], names = [];
 	let transformedUv = false;
+	let readDepth = false;
 
 	if(shaders.get(&quot;fragment&quot;) === undefined) {
 
@@ -235,9 +241,11 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 			let string = prefix + &quot;MainImage(color0, UV, &quot;;
 
-			if((effect.attributes &amp; EffectAttribute.DEPTH) !== 0) {
+			// The effect may sample depth in a different shader.
+			if((attributes &amp; EffectAttribute.DEPTH) !== 0 &amp;&amp; shaders.get(&quot;fragment&quot;).indexOf(&quot;depth&quot;) &gt;= 0) {
 
 				string += &quot;depth, &quot;;
+				readDepth = true;
 
 			}
 
@@ -272,7 +280,7 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 	}
 
-	return { varyings, transformedUv };
+	return { varyings, transformedUv, readDepth };
 
 }
 
@@ -432,6 +440,7 @@ export class EffectPass extends Pass {
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false;
+		let readDepth = false;
 		let result;
 
 		for(const effect of this.effects) {
@@ -450,6 +459,7 @@ export class EffectPass extends Pass {
 
 					varyings += result.varyings.length;
 					transformedUv = transformedUv || result.transformedUv;
+					readDepth = readDepth || result.readDepth;
 
 				}
 
@@ -468,8 +478,13 @@ export class EffectPass extends Pass {
 		// Check if any effect relies on depth.
 		if((attributes &amp; EffectAttribute.DEPTH) !== 0) {
 
-			shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, &quot;float depth = readDepth(UV);\n\n\t&quot; +
-				shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+			// Only read depth if any effect actually uses this information.
+			if(readDepth) {
+
+				shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, &quot;float depth = readDepth(UV);\n\n\t&quot; +
+					shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+
+			}
 
 			this.needsDepthTexture = true;
 
@@ -525,7 +540,7 @@ export class EffectPass extends Pass {
 		}
 
 		material = this.createMaterial();
-		material.setResolution(width, height);
+		material.setSize(width, height);
 		this.setFullscreenMaterial(material);
 		this.setDepthTexture(depthTexture, depthPacking);
 
@@ -559,6 +574,12 @@ export class EffectPass extends Pass {
 		material.uniforms.depthBuffer.value = depthTexture;
 		material.depthPacking = depthPacking;
 		material.needsUpdate = true;
+
+		for(const effect of this.effects) {
+
+			effect.setDepthTexture(depthTexture, depthPacking);
+
+		}
 
 		this.needsDepthTexture = (depthTexture === null);
 
@@ -600,7 +621,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setResolution(width, height);
+		this.getFullscreenMaterial().setSize(width, height);
 
 		for(const effect of this.effects) {
 

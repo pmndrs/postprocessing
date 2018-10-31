@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
@@ -78,8 +80,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
@@ -88,7 +92,7 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">431/445</span></h1>
+<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">470/486</span></h1>
 
 <table class="files-summary" data-ice="files" data-use-coverage="true">
   <thead>
@@ -120,6 +124,14 @@
       <td style="display: none;" data-ice="updated">2018-09-06 13:35:17 (UTC)</td>
     </tr>
 <tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/core/Initializable.js.html">src/core/Initializable.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
+      <td style="display: none;" data-ice="size">370 byte</td>
+      <td style="display: none;" data-ice="lines">20</td>
+      <td style="display: none;" data-ice="updated">2018-10-07 12:24:53 (UTC)</td>
+    </tr>
+<tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/core/Resizable.js.html">src/core/Resizable.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
@@ -131,17 +143,17 @@
       <td data-ice="filePath"><span><a href="file/src/core/index.js.html">src/core/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">216 byte</td>
-      <td style="display: none;" data-ice="lines">9</td>
-      <td style="display: none;" data-ice="updated">2018-04-04 16:49:09 (UTC)</td>
+      <td style="display: none;" data-ice="size">269 byte</td>
+      <td style="display: none;" data-ice="lines">10</td>
+      <td style="display: none;" data-ice="updated">2018-10-07 12:24:24 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/BloomEffect.js.html">src/effects/BloomEffect.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">18/18</span></td>
-      <td style="display: none;" data-ice="size">5322 byte</td>
+      <td style="display: none;" data-ice="size">5328 byte</td>
       <td style="display: none;" data-ice="lines">268</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 17:25:38 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/BokehEffect.js.html">src/effects/BokehEffect.js</a></span></td>
@@ -149,7 +161,7 @@
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">2/2</span></td>
       <td style="display: none;" data-ice="size">1663 byte</td>
       <td style="display: none;" data-ice="lines">53</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-02 12:35:07 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/BrightnessContrastEffect.js.html">src/effects/BrightnessContrastEffect.js</a></span></td>
@@ -192,13 +204,13 @@
       <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/effects/Effect.js.html#errorLines=183">src/effects/Effect.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/effects/Effect.js.html#errorLines=196">src/effects/Effect.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span>
 <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></td>
-      <td class="coverage"><span data-ice="coverage">93 %</span><span data-ice="coverageCount" class="coverage-count">14/15</span></td>
-      <td style="display: none;" data-ice="size">6149 byte</td>
-      <td style="display: none;" data-ice="lines">212</td>
-      <td style="display: none;" data-ice="updated">2018-09-05 19:39:56 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">93 %</span><span data-ice="coverageCount" class="coverage-count">15/16</span></td>
+      <td style="display: none;" data-ice="size">6552 byte</td>
+      <td style="display: none;" data-ice="lines">225</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 14:56:24 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/GammaCorrectionEffect.js.html">src/effects/GammaCorrectionEffect.js</a></span></td>
@@ -212,18 +224,18 @@
       <td data-ice="filePath"><span><a href="file/src/effects/GlitchEffect.js.html">src/effects/GlitchEffect.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GlitchEffect.js~GlitchEffect.html">GlitchEffect</a></span>
 <span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">19/19</span></td>
-      <td style="display: none;" data-ice="size">7711 byte</td>
-      <td style="display: none;" data-ice="lines">353</td>
-      <td style="display: none;" data-ice="updated">2018-09-06 13:27:44 (UTC)</td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">21/21</span></td>
+      <td style="display: none;" data-ice="size">8613 byte</td>
+      <td style="display: none;" data-ice="lines">388</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 21:02:51 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/GodRaysEffect.js.html">src/effects/GodRaysEffect.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html">GodRaysEffect</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">31/31</span></td>
-      <td style="display: none;" data-ice="size">9621 byte</td>
+      <td style="display: none;" data-ice="size">9632 byte</td>
       <td style="display: none;" data-ice="lines">468</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 16:25:22 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/GridEffect.js.html">src/effects/GridEffect.js</a></span></td>
@@ -250,12 +262,12 @@
       <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/effects/OutlineEffect.js.html#errorLines=393">src/effects/OutlineEffect.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/effects/OutlineEffect.js.html#errorLines=386">src/effects/OutlineEffect.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html">OutlineEffect</a></span></td>
       <td class="coverage"><span data-ice="coverage">97 %</span><span data-ice="coverageCount" class="coverage-count">38/39</span></td>
-      <td style="display: none;" data-ice="size">14094 byte</td>
-      <td style="display: none;" data-ice="lines">666</td>
-      <td style="display: none;" data-ice="updated">2018-09-06 13:57:34 (UTC)</td>
+      <td style="display: none;" data-ice="size">13814 byte</td>
+      <td style="display: none;" data-ice="lines">657</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 21:01:57 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/PixelationEffect.js.html">src/effects/PixelationEffect.js</a></span></td>
@@ -280,6 +292,14 @@
       <td style="display: none;" data-ice="size">6327 byte</td>
       <td style="display: none;" data-ice="lines">247</td>
       <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/effects/SSAOEffect.js.html">src/effects/SSAOEffect.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></td>
+      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">14/14</span></td>
+      <td style="display: none;" data-ice="size">5435 byte</td>
+      <td style="display: none;" data-ice="lines">235</td>
+      <td style="display: none;" data-ice="updated">2018-10-02 21:50:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/effects/ScanlineEffect.js.html">src/effects/ScanlineEffect.js</a></span></td>
@@ -357,9 +377,9 @@
       <td data-ice="filePath"><span><a href="file/src/effects/index.js.html">src/effects/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">1515 byte</td>
-      <td style="display: none;" data-ice="lines">32</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">1562 byte</td>
+      <td style="display: none;" data-ice="lines">33</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 16:30:52 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/images/RawImageData.js.html">src/images/RawImageData.js</a></span></td>
@@ -413,9 +433,9 @@
       <td data-ice="filePath"><span><a href="file/src/index.js.html">src/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">1204 byte</td>
-      <td style="display: none;" data-ice="lines">74</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:51:23 (UTC)</td>
+      <td style="display: none;" data-ice="size">1262 byte</td>
+      <td style="display: none;" data-ice="lines">78</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 17:43:22 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/materials/AdaptiveLuminanceMaterial.js.html">src/materials/AdaptiveLuminanceMaterial.js</a></span></td>
@@ -438,9 +458,9 @@
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span>
 <span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">3002 byte</td>
-      <td style="display: none;" data-ice="lines">129</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">2970 byte</td>
+      <td style="display: none;" data-ice="lines">128</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 15:42:02 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/materials/CopyMaterial.js.html">src/materials/CopyMaterial.js</a></span></td>
@@ -456,16 +476,16 @@
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">3/3</span></td>
       <td style="display: none;" data-ice="size">1398 byte</td>
       <td style="display: none;" data-ice="lines">75</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 11:19:39 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/materials/EffectMaterial.js.html">src/materials/EffectMaterial.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span>
 <span><a href="variable/index.html#static-variable-Section">Section</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">7/7</span></td>
-      <td style="display: none;" data-ice="size">4347 byte</td>
-      <td style="display: none;" data-ice="lines">183</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">4434 byte</td>
+      <td style="display: none;" data-ice="lines">185</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 14:52:00 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/materials/GodRaysMaterial.js.html#errorLines=104">src/materials/GodRaysMaterial.js</a></span></td>
@@ -505,7 +525,7 @@
       <td class="coverage"><span data-ice="coverage">-</span></td>
       <td style="display: none;" data-ice="size">790 byte</td>
       <td style="display: none;" data-ice="lines">16</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:49:05 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 17:43:07 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/passes/BlurPass.js.html">src/passes/BlurPass.js</a></span></td>
@@ -532,12 +552,20 @@
       <td style="display: none;" data-ice="updated">2018-09-07 13:49:51 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/passes/EffectPass.js.html#errorLines=383">src/passes/EffectPass.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/passes/DepthPass.js.html#errorLines=33">src/passes/DepthPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">90 %</span><span data-ice="coverageCount" class="coverage-count">10/11</span></td>
+      <td style="display: none;" data-ice="size">3467 byte</td>
+      <td style="display: none;" data-ice="lines">152</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 09:35:01 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/EffectPass.js.html#errorLines=394">src/passes/EffectPass.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></td>
       <td class="coverage"><span data-ice="coverage">95 %</span><span data-ice="coverageCount" class="coverage-count">22/23</span></td>
-      <td style="display: none;" data-ice="size">14268 byte</td>
-      <td style="display: none;" data-ice="lines">575</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">14806 byte</td>
+      <td style="display: none;" data-ice="lines">592</td>
+      <td style="display: none;" data-ice="updated">2018-10-06 20:14:33 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/passes/MaskPass.js.html#errorLines=23">src/passes/MaskPass.js</a></span></td>
@@ -548,12 +576,20 @@
       <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
     </tr>
 <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/passes/Pass.js.html#errorLines=257">src/passes/Pass.js</a></span></td>
+      <td data-ice="filePath"><span><a href="file/src/passes/NormalPass.js.html#errorLines=33">src/passes/NormalPass.js</a></span></td>
+      <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></td>
+      <td class="coverage"><span data-ice="coverage">90 %</span><span data-ice="coverageCount" class="coverage-count">10/11</span></td>
+      <td style="display: none;" data-ice="size">3472 byte</td>
+      <td style="display: none;" data-ice="lines">152</td>
+      <td style="display: none;" data-ice="updated">2018-10-02 21:48:46 (UTC)</td>
+    </tr>
+<tr data-ice="file">
+      <td data-ice="filePath"><span><a href="file/src/passes/Pass.js.html#errorLines=258">src/passes/Pass.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></td>
       <td class="coverage"><span data-ice="coverage">94 %</span><span data-ice="coverageCount" class="coverage-count">18/19</span></td>
-      <td style="display: none;" data-ice="size">6381 byte</td>
-      <td style="display: none;" data-ice="lines">265</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:42:19 (UTC)</td>
+      <td style="display: none;" data-ice="size">6413 byte</td>
+      <td style="display: none;" data-ice="lines">266</td>
+      <td style="display: none;" data-ice="updated">2018-10-05 14:55:31 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/passes/RenderPass.js.html#errorLines=28">src/passes/RenderPass.js</a></span></td>
@@ -567,25 +603,25 @@
       <td data-ice="filePath"><span><a href="file/src/passes/SavePass.js.html#errorLines=24">src/passes/SavePass.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></td>
       <td class="coverage"><span data-ice="coverage">85 %</span><span data-ice="coverageCount" class="coverage-count">6/7</span></td>
-      <td style="display: none;" data-ice="size">2356 byte</td>
+      <td style="display: none;" data-ice="size">2360 byte</td>
       <td style="display: none;" data-ice="lines">96</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 12:28:34 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 09:27:04 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/passes/ShaderPass.js.html">src/passes/ShaderPass.js</a></span></td>
       <td data-ice="identifier" class="identifiers"><span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></td>
       <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">5/5</span></td>
-      <td style="display: none;" data-ice="size">2149 byte</td>
+      <td style="display: none;" data-ice="size">2147 byte</td>
       <td style="display: none;" data-ice="lines">91</td>
-      <td style="display: none;" data-ice="updated">2018-09-06 12:17:17 (UTC)</td>
+      <td style="display: none;" data-ice="updated">2018-10-03 13:01:14 (UTC)</td>
     </tr>
 <tr data-ice="file">
       <td data-ice="filePath"><span><a href="file/src/passes/index.js.html">src/passes/index.js</a></span></td>
       <td data-ice="identifier" class="identifiers">-</td>
       <td class="coverage"><span data-ice="coverage">-</span></td>
-      <td style="display: none;" data-ice="size">502 byte</td>
-      <td style="display: none;" data-ice="lines">15</td>
-      <td style="display: none;" data-ice="updated">2018-09-04 10:52:12 (UTC)</td>
+      <td style="display: none;" data-ice="size">594 byte</td>
+      <td style="display: none;" data-ice="lines">17</td>
+      <td style="display: none;" data-ice="updated">2018-10-01 09:12:32 (UTC)</td>
     </tr>
 </tbody>
 </table>

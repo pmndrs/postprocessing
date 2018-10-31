@@ -1,5 +1,5 @@
 /**
- * postprocessing v5.0.0 build Wed Oct 17 2018
+ * postprocessing v5.1.0 build Wed Oct 31 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -119,6 +119,19 @@
     }]);
 
     return Disposable;
+  }();
+
+  var Initializable = function () {
+    function Initializable() {
+      _classCallCheck(this, Initializable);
+    }
+
+    _createClass(Initializable, [{
+      key: "initialize",
+      value: function initialize(renderer, alpha) {}
+    }]);
+
+    return Initializable;
   }();
 
   var fragment = "uniform sampler2D previousLuminanceBuffer;\r\nuniform sampler2D currentLuminanceBuffer;\r\nuniform float minLuminance;\r\nuniform float delta;\r\nuniform float tau;\r\n\r\nvarying vec2 vUv;\r\n\r\nvoid main() {\r\n\r\n\tfloat previousLuminance = texture2D(previousLuminanceBuffer, vUv, MIP_LEVEL_1X1).r;\r\n\tfloat currentLuminance = texture2D(currentLuminanceBuffer, vUv, MIP_LEVEL_1X1).r;\r\n\r\n\tpreviousLuminance = max(minLuminance, previousLuminance);\r\n\tcurrentLuminance = max(minLuminance, currentLuminance);\r\n\r\n\t// Adapt the luminance using Pattanaik's technique.\r\n\tfloat adaptedLum = previousLuminance + (currentLuminance - previousLuminance) * (1.0 - exp(-delta * tau));\r\n\r\n\tgl_FragColor.r = adaptedLum;\r\n\r\n}\r\n";
@@ -296,8 +309,8 @@
         type: "DepthComparisonMaterial",
         uniforms: {
           depthBuffer: new three.Uniform(depthTexture),
-          cameraNear: new three.Uniform(0.1),
-          cameraFar: new three.Uniform(2000)
+          cameraNear: new three.Uniform(0.3),
+          cameraFar: new three.Uniform(1000)
         },
         fragmentShader: fragment$4,
         vertexShader: vertex$4,
@@ -333,7 +346,7 @@
     return DepthComparisonMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentTemplate = "#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform sampler2D depthBuffer;\r\n\r\nuniform vec2 resolution;\r\nuniform vec2 texelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform float aspect;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat readDepth(const in vec2 uv) {\r\n\r\n\t#if DEPTH_PACKING == 3201\r\n\r\n\t\tfloat depth = unpackRGBAToDepth(texture2D(depthBuffer, uv));\r\n\r\n\t#else\r\n\r\n\t\tfloat depth = texture2D(depthBuffer, uv).r;\r\n\r\n\t#endif\r\n\r\n\t#if defined(PERSPECTIVE_CAMERA) && !defined(USE_LOGDEPTHBUF)\r\n\r\n\t\tdepth = viewZToOrthographicDepth(perspectiveDepthToViewZ(depth, cameraNear, cameraFar), cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\treturn depth;\r\n\r\n}\r\n\r\nFRAGMENT_HEAD\r\n\r\nvoid main() {\r\n\r\n\tFRAGMENT_MAIN_UV\r\n\r\n\tvec4 color0 = texture2D(inputBuffer, UV);\r\n\tvec4 color1 = vec4(0.0);\r\n\r\n\tFRAGMENT_MAIN_IMAGE\r\n\r\n\tgl_FragColor = color0;\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
+  var fragmentTemplate = "#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n\r\nuniform sampler2D inputBuffer;\r\nuniform sampler2D depthBuffer;\r\n\r\nuniform vec2 resolution;\r\nuniform vec2 texelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform float aspect;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\nfloat readDepth(const in vec2 uv) {\r\n\r\n\t#if DEPTH_PACKING == 3201\r\n\r\n\t\treturn unpackRGBAToDepth(texture2D(depthBuffer, uv));\r\n\r\n\t#else\r\n\r\n\t\treturn texture2D(depthBuffer, uv).r;\r\n\r\n\t#endif\r\n\r\n}\r\n\r\nFRAGMENT_HEAD\r\n\r\nvoid main() {\r\n\r\n\tFRAGMENT_MAIN_UV\r\n\r\n\tvec4 color0 = texture2D(inputBuffer, UV);\r\n\tvec4 color1 = vec4(0.0);\r\n\r\n\tFRAGMENT_MAIN_IMAGE\r\n\r\n\tgl_FragColor = color0;\r\n\r\n\t#include <dithering_fragment>\r\n\r\n}\r\n";
 
   var vertexTemplate = "uniform vec2 resolution;\r\nuniform vec2 texelSize;\r\n\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\nuniform float aspect;\r\nuniform float time;\r\n\r\nvarying vec2 vUv;\r\n\r\nVERTEX_HEAD\r\n\r\nvoid main() {\r\n\r\n\tvUv = uv;\r\n\r\n\tVERTEX_MAIN_SUPPORT\r\n\r\n\tgl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\r\n\r\n}\r\n";
 
@@ -351,7 +364,7 @@
       _this = _possibleConstructorReturn(this, _getPrototypeOf(EffectMaterial).call(this, {
         type: "EffectMaterial",
         defines: {
-          "DEPTH_PACKING": "0"
+          DEPTH_PACKING: "0"
         },
         uniforms: {
           inputBuffer: new three.Uniform(null),
@@ -428,13 +441,13 @@
     }
 
     _createClass(EffectMaterial, [{
-      key: "setResolution",
-      value: function setResolution(x, y) {
-        x = Math.max(x, 1.0);
-        y = Math.max(y, 1.0);
-        this.uniforms.resolution.value.set(x, y);
-        this.uniforms.texelSize.value.set(1.0 / x, 1.0 / y);
-        this.uniforms.aspect.value = x / y;
+      key: "setSize",
+      value: function setSize(width, height) {
+        width = Math.max(width, 1.0);
+        height = Math.max(height, 1.0);
+        this.uniforms.resolution.value.set(width, height);
+        this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+        this.uniforms.aspect.value = width / height;
       }
     }, {
       key: "adoptCameraSettings",
@@ -949,6 +962,114 @@
     return ClearPass;
   }(Pass);
 
+  var RenderPass = function (_Pass) {
+    _inherits(RenderPass, _Pass);
+
+    function RenderPass(scene, camera) {
+      var _this;
+
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      _classCallCheck(this, RenderPass);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(RenderPass).call(this, "RenderPass", scene, camera));
+      _this.needsSwap = false;
+      _this.clearPass = new ClearPass(options);
+      _this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
+      _this.clearDepth = options.clearDepth !== undefined ? options.clearDepth : false;
+      _this.clear = options.clear !== undefined ? options.clear : true;
+      return _this;
+    }
+
+    _createClass(RenderPass, [{
+      key: "render",
+      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+        var scene = this.scene;
+        var renderTarget = this.renderToScreen ? null : inputBuffer;
+        var overrideMaterial = scene.overrideMaterial;
+
+        if (this.clear) {
+          this.clearPass.renderToScreen = this.renderToScreen;
+          this.clearPass.render(renderer, inputBuffer);
+        } else if (this.clearDepth) {
+          renderer.setRenderTarget(renderTarget);
+          renderer.clearDepth();
+        }
+
+        scene.overrideMaterial = this.overrideMaterial;
+        renderer.render(scene, this.camera, renderTarget);
+        scene.overrideMaterial = overrideMaterial;
+      }
+    }]);
+
+    return RenderPass;
+  }(Pass);
+
+  var DepthPass = function (_Pass) {
+    _inherits(DepthPass, _Pass);
+
+    function DepthPass(scene, camera) {
+      var _this;
+
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      _classCallCheck(this, DepthPass);
+
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(DepthPass).call(this, "DepthPass"));
+      _this.needsSwap = false;
+      _this.renderPass = new RenderPass(scene, camera, {
+        overrideMaterial: new three.MeshDepthMaterial({
+          depthPacking: three.RGBADepthPacking,
+          morphTargets: true,
+          skinning: true
+        }),
+        clearColor: new three.Color(0xffffff),
+        clearAlpha: 1.0
+      });
+      _this.renderTarget = options.renderTarget;
+
+      if (_this.renderTarget === undefined) {
+        _this.renderTarget = new three.WebGLRenderTarget(1, 1, {
+          minFilter: three.LinearFilter,
+          magFilter: three.LinearFilter
+        });
+        _this.renderTarget.texture.name = "DepthPass.Target";
+        _this.renderTarget.texture.generateMipmaps = false;
+      }
+
+      _this.resolution = new three.Vector2();
+      _this.resolutionScale = options.resolutionScale !== undefined ? options.resolutionScale : 0.5;
+      return _this;
+    }
+
+    _createClass(DepthPass, [{
+      key: "getResolutionScale",
+      value: function getResolutionScale() {
+        return this.resolutionScale;
+      }
+    }, {
+      key: "setResolutionScale",
+      value: function setResolutionScale(scale) {
+        this.resolutionScale = scale;
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
+      key: "render",
+      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+        var renderTarget = this.renderToScreen ? null : this.renderTarget;
+        this.renderPass.render(renderer, renderTarget, renderTarget);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.renderTarget.setSize(Math.max(1, Math.floor(width * this.resolutionScale)), Math.max(1, Math.floor(height * this.resolutionScale)));
+      }
+    }]);
+
+    return DepthPass;
+  }(Pass);
+
   var BlendFunction = {
     SKIP: 0,
     ADD: 1,
@@ -1048,6 +1169,10 @@
     }
 
     _createClass(Effect, [{
+      key: "setDepthTexture",
+      value: function setDepthTexture(depthTexture) {
+      }
+    }, {
       key: "update",
       value: function update(renderer, inputBuffer, delta) {}
     }, {
@@ -1155,6 +1280,7 @@
     var varyings = [],
         names = [];
     var transformedUv = false;
+    var readDepth = false;
 
     if (shaders.get("fragment") === undefined) {
       console.error("Missing fragment shader", effect);
@@ -1188,8 +1314,9 @@
       if (mainImageExists) {
         var string = prefix + "MainImage(color0, UV, ";
 
-        if ((effect.attributes & EffectAttribute.DEPTH) !== 0) {
+        if ((attributes & EffectAttribute.DEPTH) !== 0 && shaders.get("fragment").indexOf("depth") >= 0) {
           string += "depth, ";
+          readDepth = true;
         }
 
         string += "color1);\n\t";
@@ -1209,7 +1336,8 @@
 
     return {
       varyings: varyings,
-      transformedUv: transformedUv
+      transformedUv: transformedUv,
+      readDepth: readDepth
     };
   }
 
@@ -1254,6 +1382,7 @@
             varyings = 0,
             attributes = 0;
         var transformedUv = false;
+        var readDepth = false;
         var result;
         var _iteratorNormalCompletion3 = true;
         var _didIteratorError3 = false;
@@ -1271,6 +1400,7 @@
                 result = integrateEffect("e" + id++, effect, shaderParts, blendModes, defines, uniforms, attributes);
                 varyings += result.varyings.length;
                 transformedUv = transformedUv || result.transformedUv;
+                readDepth = readDepth || result.readDepth;
               }
             }
           }
@@ -1314,7 +1444,10 @@
         }
 
         if ((attributes & EffectAttribute.DEPTH) !== 0) {
-          shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+          if (readDepth) {
+            shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+          }
+
           this.needsDepthTexture = true;
         }
 
@@ -1353,7 +1486,7 @@
         }
 
         material = this.createMaterial();
-        material.setResolution(width, height);
+        material.setSize(width, height);
         this.setFullscreenMaterial(material);
         this.setDepthTexture(depthTexture, depthPacking);
       }
@@ -1371,13 +1504,6 @@
         material.uniforms.depthBuffer.value = depthTexture;
         material.depthPacking = depthPacking;
         material.needsUpdate = true;
-        this.needsDepthTexture = depthTexture === null;
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var material = this.getFullscreenMaterial();
-        var time = material.uniforms.time.value + delta;
         var _iteratorNormalCompletion5 = true;
         var _didIteratorError5 = false;
         var _iteratorError5 = undefined;
@@ -1385,7 +1511,7 @@
         try {
           for (var _iterator5 = this.effects[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
             var effect = _step5.value;
-            effect.update(renderer, inputBuffer, delta);
+            effect.setDepthTexture(depthTexture, depthPacking);
           }
         } catch (err) {
           _didIteratorError5 = true;
@@ -1402,14 +1528,13 @@
           }
         }
 
-        material.uniforms.inputBuffer.value = inputBuffer.texture;
-        material.uniforms.time.value = time <= this.maxTime ? time : this.minTime;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+        this.needsDepthTexture = depthTexture === null;
       }
     }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.getFullscreenMaterial().setResolution(width, height);
+      key: "render",
+      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+        var material = this.getFullscreenMaterial();
+        var time = material.uniforms.time.value + delta;
         var _iteratorNormalCompletion6 = true;
         var _didIteratorError6 = false;
         var _iteratorError6 = undefined;
@@ -1417,7 +1542,7 @@
         try {
           for (var _iterator6 = this.effects[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
             var effect = _step6.value;
-            effect.setSize(width, height);
+            effect.update(renderer, inputBuffer, delta);
           }
         } catch (err) {
           _didIteratorError6 = true;
@@ -1430,6 +1555,38 @@
           } finally {
             if (_didIteratorError6) {
               throw _iteratorError6;
+            }
+          }
+        }
+
+        material.uniforms.inputBuffer.value = inputBuffer.texture;
+        material.uniforms.time.value = time <= this.maxTime ? time : this.minTime;
+        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.getFullscreenMaterial().setSize(width, height);
+        var _iteratorNormalCompletion7 = true;
+        var _didIteratorError7 = false;
+        var _iteratorError7 = undefined;
+
+        try {
+          for (var _iterator7 = this.effects[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            var effect = _step7.value;
+            effect.setSize(width, height);
+          }
+        } catch (err) {
+          _didIteratorError7 = true;
+          _iteratorError7 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
+              _iterator7.return();
+            }
+          } finally {
+            if (_didIteratorError7) {
+              throw _iteratorError7;
             }
           }
         }
@@ -1450,35 +1607,6 @@
           console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
         }
 
-        var _iteratorNormalCompletion7 = true;
-        var _didIteratorError7 = false;
-        var _iteratorError7 = undefined;
-
-        try {
-          for (var _iterator7 = this.effects[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-            var effect = _step7.value;
-            effect.initialize(renderer, alpha);
-          }
-        } catch (err) {
-          _didIteratorError7 = true;
-          _iteratorError7 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
-              _iterator7.return();
-            }
-          } finally {
-            if (_didIteratorError7) {
-              throw _iteratorError7;
-            }
-          }
-        }
-      }
-    }, {
-      key: "dispose",
-      value: function dispose() {
-        _get(_getPrototypeOf(EffectPass.prototype), "dispose", this).call(this);
-
         var _iteratorNormalCompletion8 = true;
         var _didIteratorError8 = false;
         var _iteratorError8 = undefined;
@@ -1486,7 +1614,7 @@
         try {
           for (var _iterator8 = this.effects[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
             var effect = _step8.value;
-            effect.dispose();
+            effect.initialize(renderer, alpha);
           }
         } catch (err) {
           _didIteratorError8 = true;
@@ -1499,6 +1627,35 @@
           } finally {
             if (_didIteratorError8) {
               throw _iteratorError8;
+            }
+          }
+        }
+      }
+    }, {
+      key: "dispose",
+      value: function dispose() {
+        _get(_getPrototypeOf(EffectPass.prototype), "dispose", this).call(this);
+
+        var _iteratorNormalCompletion9 = true;
+        var _didIteratorError9 = false;
+        var _iteratorError9 = undefined;
+
+        try {
+          for (var _iterator9 = this.effects[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+            var effect = _step9.value;
+            effect.dispose();
+          }
+        } catch (err) {
+          _didIteratorError9 = true;
+          _iteratorError9 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
+              _iterator9.return();
+            }
+          } finally {
+            if (_didIteratorError9) {
+              throw _iteratorError9;
             }
           }
         }
@@ -1587,47 +1744,69 @@
     return MaskPass;
   }(Pass);
 
-  var RenderPass = function (_Pass) {
-    _inherits(RenderPass, _Pass);
+  var NormalPass = function (_Pass) {
+    _inherits(NormalPass, _Pass);
 
-    function RenderPass(scene, camera) {
+    function NormalPass(scene, camera) {
       var _this;
 
       var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-      _classCallCheck(this, RenderPass);
+      _classCallCheck(this, NormalPass);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(RenderPass).call(this, "RenderPass", scene, camera));
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(NormalPass).call(this, "NormalPass"));
       _this.needsSwap = false;
-      _this.clearPass = new ClearPass(options);
-      _this.overrideMaterial = options.overrideMaterial !== undefined ? options.overrideMaterial : null;
-      _this.clearDepth = options.clearDepth !== undefined ? options.clearDepth : false;
-      _this.clear = options.clear !== undefined ? options.clear : true;
+      _this.renderPass = new RenderPass(scene, camera, {
+        overrideMaterial: new three.MeshNormalMaterial({
+          morphTargets: true,
+          skinning: true
+        }),
+        clearColor: new three.Color(0x7777ff),
+        clearAlpha: 1.0
+      });
+      _this.renderTarget = options.renderTarget;
+
+      if (_this.renderTarget === undefined) {
+        _this.renderTarget = new three.WebGLRenderTarget(1, 1, {
+          minFilter: three.LinearFilter,
+          magFilter: three.LinearFilter,
+          format: three.RGBFormat
+        });
+        _this.renderTarget.texture.name = "NormalPass.Target";
+        _this.renderTarget.texture.generateMipmaps = false;
+      }
+
+      _this.resolution = new three.Vector2();
+      _this.resolutionScale = options.resolutionScale !== undefined ? options.resolutionScale : 0.5;
       return _this;
     }
 
-    _createClass(RenderPass, [{
+    _createClass(NormalPass, [{
+      key: "getResolutionScale",
+      value: function getResolutionScale() {
+        return this.resolutionScale;
+      }
+    }, {
+      key: "setResolutionScale",
+      value: function setResolutionScale(scale) {
+        this.resolutionScale = scale;
+        this.setSize(this.resolution.x, this.resolution.y);
+      }
+    }, {
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var scene = this.scene;
-        var renderTarget = this.renderToScreen ? null : inputBuffer;
-        var overrideMaterial = scene.overrideMaterial;
-
-        if (this.clear) {
-          this.clearPass.renderToScreen = this.renderToScreen;
-          this.clearPass.render(renderer, inputBuffer);
-        } else if (this.clearDepth) {
-          renderer.setRenderTarget(renderTarget);
-          renderer.clearDepth();
-        }
-
-        scene.overrideMaterial = this.overrideMaterial;
-        renderer.render(scene, this.camera, renderTarget);
-        scene.overrideMaterial = overrideMaterial;
+        var renderTarget = this.renderToScreen ? null : this.renderTarget;
+        this.renderPass.render(renderer, renderTarget, renderTarget);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.renderTarget.setSize(Math.max(1, Math.floor(width * this.resolutionScale)), Math.max(1, Math.floor(height * this.resolutionScale)));
       }
     }]);
 
-    return RenderPass;
+    return NormalPass;
   }(Pass);
 
   var SavePass = function (_Pass) {
@@ -2203,7 +2382,7 @@
 
   var fragment$d = "varying vec2 vUvR;\r\nvarying vec2 vUvB;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec4 color = inputColor;\r\n\r\n\tcolor.r = texture2D(inputBuffer, vUvR).r;\r\n\tcolor.b = texture2D(inputBuffer, vUvB).b;\r\n\r\n\toutputColor = color;\r\n\r\n}\r\n";
 
-  var vertex$9 = "uniform vec2 offset;\r\n\r\nvarying vec2 vUvR;\r\nvarying vec2 vUvB;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvec2 aspectCorrection = vec2(aspect, 1.0);\r\n\r\n\tvUvR = uv + offset * aspectCorrection;\r\n\tvUvB = uv - offset * aspectCorrection;\r\n\r\n}\r\n";
+  var vertex$9 = "uniform vec2 offset;\r\n\r\nvarying vec2 vUvR;\r\nvarying vec2 vUvB;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvUvR = uv + offset;\r\n\tvUvB = uv - offset;\r\n\r\n}\r\n";
 
   var ChromaticAberrationEffect = function (_Effect) {
     _inherits(ChromaticAberrationEffect, _Effect);
@@ -2358,7 +2537,9 @@
         chromaticAberrationOffset: null,
         delay: new three.Vector2(1.5, 3.5),
         duration: new three.Vector2(0.6, 1.0),
+        strength: new three.Vector2(0.3, 1.0),
         columns: 0.05,
+        ratio: 0.85,
         perturbationMap: null,
         dtSize: 64
       }, options);
@@ -2368,7 +2549,7 @@
       }));
       _this.perturbationMap = null;
 
-      _this.setPerturbationMap(settings.perturbationMap !== null ? settings.perturbationMap : _this.generatePerturbationMap(settings.dtSize));
+      _this.setPerturbationMap(settings.perturbationMap === null ? _this.generatePerturbationMap(settings.dtSize) : settings.perturbationMap);
 
       _this.perturbationMap.generateMipmaps = false;
       _this.delay = settings.delay;
@@ -2378,6 +2559,8 @@
       _this.seed = _this.uniforms.get("seed").value;
       _this.distortion = _this.uniforms.get("distortion").value;
       _this.mode = GlitchMode.SPORADIC;
+      _this.strength = settings.strength;
+      _this.ratio = settings.ratio;
       _this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
       return _this;
     }
@@ -2394,6 +2577,8 @@
           this.perturbationMap.dispose();
         }
 
+        perturbationMap.wrapS = perturbationMap.wrapT = three.RepeatWrapping;
+        perturbationMap.magFilter = perturbationMap.minFilter = three.NearestFilter;
         this.perturbationMap = perturbationMap;
         this.uniforms.get("perturbationMap").value = perturbationMap;
       }
@@ -2423,6 +2608,7 @@
         var mode = this.mode;
         var breakPoint = this.breakPoint;
         var offset = this.chromaticAberrationOffset;
+        var s = this.strength;
         var time = this.time;
         var active = false;
         var r = 0.0,
@@ -2430,28 +2616,31 @@
         var trigger;
 
         if (mode !== GlitchMode.DISABLED) {
-          time += delta;
-          trigger = time > breakPoint.x;
+          if (mode === GlitchMode.SPORADIC) {
+            time += delta;
+            trigger = time > breakPoint.x;
+
+            if (time >= breakPoint.x + breakPoint.y) {
+              breakPoint.set(randomFloat(this.delay.x, this.delay.y), randomFloat(this.duration.x, this.duration.y));
+              time = 0;
+            }
+          }
+
           r = Math.random();
           this.uniforms.get("random").value = r;
 
-          if (trigger && r > 0.85 || mode === GlitchMode.CONSTANT_WILD) {
+          if (trigger && r > this.ratio || mode === GlitchMode.CONSTANT_WILD) {
             active = true;
-            r /= 30.0;
+            r *= s.y * 0.03;
             a = randomFloat(-Math.PI, Math.PI);
-            this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+            this.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));
             this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
           } else if (trigger || mode === GlitchMode.CONSTANT_MILD) {
             active = true;
-            r /= 90.0;
+            r *= s.x * 0.03;
             a = randomFloat(-Math.PI, Math.PI);
-            this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+            this.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));
             this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
-          }
-
-          if (time >= breakPoint.x + breakPoint.y) {
-            breakPoint.set(randomFloat(this.delay.x, this.delay.y), randomFloat(this.duration.x, this.duration.y));
-            time = 0;
           }
 
           this.time = time;
@@ -2862,17 +3051,9 @@
         clearColor: new three.Color(0xffffff),
         clearAlpha: 1.0
       });
-      _this.renderPassDepth = new RenderPass(_this.mainScene, _this.mainCamera, {
-        overrideMaterial: new three.MeshDepthMaterial({
-          depthPacking: three.RGBADepthPacking,
-          morphTargets: true,
-          skinning: true
-        }),
-        clearColor: new three.Color(0xffffff),
-        clearAlpha: 1.0
-      });
-      _this.renderPassMask = new RenderPass(_this.mainScene, _this.mainCamera, {
-        overrideMaterial: new DepthComparisonMaterial(_this.renderTargetDepth.texture, _this.mainCamera),
+      _this.depthPass = new DepthPass(_this.mainScene, _this.mainCamera);
+      _this.maskPass = new RenderPass(_this.mainScene, _this.mainCamera, {
+        overrideMaterial: new DepthComparisonMaterial(_this.depthPass.renderTarget.texture, _this.mainCamera),
         clearColor: new three.Color(0xffffff),
         clearAlpha: 1.0
       });
@@ -2894,6 +3075,7 @@
       key: "setPatternTexture",
       value: function setPatternTexture(texture) {
         if (texture !== null) {
+          texture.wrapS = texture.wrapT = three.RepeatWrapping;
           this.defines.set("USE_PATTERN", "1");
           this.uniforms.set("patternScale", new three.Uniform(1.0));
           this.uniforms.set("patternTexture", new three.Uniform(texture));
@@ -3005,10 +3187,10 @@
           }
 
           this.setSelectionVisible(false);
-          this.renderPassDepth.render(renderer, this.renderTargetDepth);
+          this.depthPass.render(renderer);
           this.setSelectionVisible(true);
           mainCamera.layers.mask = 1 << this.selectionLayer;
-          this.renderPassMask.render(renderer, this.renderTargetMask);
+          this.maskPass.render(renderer, this.renderTargetMask);
           mainCamera.layers.mask = mask;
           mainScene.background = background;
           this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);
@@ -3026,11 +3208,10 @@
       key: "setSize",
       value: function setSize(width, height) {
         this.resolution.set(width, height);
-        this.renderTargetDepth.setSize(width, height);
         this.renderTargetMask.setSize(width, height);
-        this.renderPassDepth.setSize(width, height);
-        this.renderPassMask.setSize(width, height);
         this.blurPass.setSize(width, height);
+        this.maskPass.setSize(width, height);
+        this.depthPass.setSize(width, height);
         width = this.blurPass.width;
         height = this.blurPass.height;
         this.renderTargetEdges.setSize(width, height);
@@ -3040,8 +3221,8 @@
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha) {
-        this.renderPassDepth.initialize(renderer, alpha);
-        this.renderPassMask.initialize(renderer, alpha);
+        this.depthPass.initialize(renderer, alpha);
+        this.maskPass.initialize(renderer, alpha);
         this.blurPass.initialize(renderer, alpha);
       }
     }, {
@@ -3482,6 +3663,97 @@
     return SMAAEffect;
   }(Effect);
 
+  var fragment$s = "uniform sampler2D normalBuffer;\r\nuniform sampler2D normalMap;\r\n\r\nuniform mat4 cameraProjectionMatrix;\r\nuniform mat4 cameraInverseProjectionMatrix;\r\n\r\nuniform vec2 radiusStep;\r\nuniform float seed;\r\nuniform float luminanceInfluence;\r\nuniform float rangeThreshold;\r\nuniform float scale;\r\nuniform float bias;\r\n\r\nfloat getViewZ(const in float depth) {\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\treturn perspectiveDepthToViewZ(depth, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\treturn orthographicDepthToViewZ(depth, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n}\r\n\r\nvec3 getViewPosition(const in vec2 screenPosition, const in float depth, const in float viewZ) {\r\n\r\n\tfloat clipW = cameraProjectionMatrix[2][3] * viewZ + cameraProjectionMatrix[3][3];\r\n\tvec4 clipPosition = vec4((vec3(screenPosition, depth) - 0.5) * 2.0, 1.0);\r\n\tclipPosition *= clipW; // Unproject.\r\n\r\n\treturn (cameraInverseProjectionMatrix * clipPosition).xyz;\r\n\r\n}\r\n\r\nfloat getOcclusion(const in vec3 p, const in vec3 n, const in vec3 sampleViewPosition) {\r\n\r\n\tvec3 viewDelta = sampleViewPosition - p;\r\n\tfloat d = length(viewDelta) * scale;\r\n\r\n\treturn max(0.0, dot(n, viewDelta) / d - bias) / (1.0 + pow2(d));\r\n\r\n}\r\n\r\nfloat getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth, const in vec2 uv) {\r\n\r\n\tvec2 radius = radiusStep;\r\n\tfloat angle = rand(uv + seed) * PI2;\r\n\tfloat occlusionSum = 0.0;\r\n\tint sampleCount = 0;\r\n\r\n\t// Collect samples along a discrete spiral pattern.\r\n\tfor(int i = 0; i < SAMPLES; ++i) {\r\n\r\n\t\tvec2 coord = uv + vec2(cos(angle), sin(angle)) * radius;\r\n\t\tradius += radiusStep;\r\n\t\tangle += ANGLE_STEP;\r\n\r\n\t\tfloat sampleDepth = readDepth(coord);\r\n\r\n\t\tif(sampleDepth < (1.0 - EPSILON) && abs(depth - sampleDepth) < rangeThreshold) {\r\n\r\n\t\t\tvec3 sampleViewPosition = getViewPosition(coord, sampleDepth, getViewZ(sampleDepth));\r\n\t\t\tocclusionSum += getOcclusion(p, n, sampleViewPosition);\r\n\r\n\t\t\t++sampleCount;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\treturn (sampleCount == 0) ? 0.0 : occlusionSum / float(sampleCount);\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {\r\n\r\n\tfloat ao = 1.0;\r\n\r\n\t// Skip fragments of objects that are too far away.\r\n\tif(depth < (1.0 - EPSILON)) {\r\n\r\n\t\tvec3 viewPosition = getViewPosition(uv, depth, getViewZ(depth));\r\n\t\tvec3 viewNormal = unpackRGBToNormal(texture2D(normalBuffer, uv).xyz);\r\n\t\tao -= getAmbientOcclusion(viewPosition, viewNormal, depth, uv);\r\n\r\n\t\t// Fade AO based on luminance.\r\n\t\tfloat l = linearToRelativeLuminance(inputColor.rgb);\r\n\t\tao = mix(ao, 1.0, l * luminanceInfluence);\r\n\r\n\t}\r\n\r\n\toutputColor = vec4(vec3(ao), inputColor.a);\r\n\r\n}\r\n";
+
+  var SSAOEffect = function (_Effect) {
+    _inherits(SSAOEffect, _Effect);
+
+    function SSAOEffect(camera, normalBuffer) {
+      var _this;
+
+      var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+      _classCallCheck(this, SSAOEffect);
+
+      var settings = Object.assign({
+        blendFunction: BlendFunction.MULTIPLY,
+        samples: 11,
+        rings: 4,
+        luminanceInfluence: 0.7,
+        rangeThreshold: 0.01,
+        radius: 18.25,
+        scale: 1.0,
+        bias: 0.5
+      }, options);
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(SSAOEffect).call(this, "SSAOEffect", fragment$s, {
+        attributes: EffectAttribute.DEPTH,
+        blendFunction: settings.blendFunction,
+        defines: new Map([["RINGS", "0"], ["SAMPLES", "0"]]),
+        uniforms: new Map([["normalBuffer", new three.Uniform(normalBuffer)], ["cameraInverseProjectionMatrix", new three.Uniform(new three.Matrix4())], ["cameraProjectionMatrix", new three.Uniform(new three.Matrix4())], ["radiusStep", new three.Uniform(new three.Vector2())], ["seed", new three.Uniform(Math.random())], ["luminanceInfluence", new three.Uniform(settings.luminanceInfluence)], ["rangeThreshold", new three.Uniform(settings.rangeThreshold)], ["scale", new three.Uniform(settings.scale)], ["bias", new three.Uniform(settings.bias)]])
+      }));
+      _this.r = 0.0;
+      _this.resolution = new three.Vector2(1, 1);
+      _this.camera = camera;
+      _this.samples = settings.samples;
+      _this.rings = settings.rings;
+      _this.radius = settings.radius;
+      return _this;
+    }
+
+    _createClass(SSAOEffect, [{
+      key: "updateAngleStep",
+      value: function updateAngleStep() {
+        this.defines.set("ANGLE_STEP", (Math.PI * 2.0 * this.rings / this.samples).toFixed(11));
+      }
+    }, {
+      key: "updateRadiusStep",
+      value: function updateRadiusStep() {
+        var r = this.r / this.samples;
+        this.uniforms.get("radiusStep").value.set(r, r).divide(this.resolution);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.resolution.set(width, height);
+        this.updateRadiusStep();
+        this.uniforms.get("cameraInverseProjectionMatrix").value.getInverse(this.camera.projectionMatrix);
+        this.uniforms.get("cameraProjectionMatrix").value.copy(this.camera.projectionMatrix);
+      }
+    }, {
+      key: "samples",
+      get: function get() {
+        return Number.parseInt(this.defines.get("SAMPLES"));
+      },
+      set: function set(value) {
+        value = Math.floor(value);
+        this.defines.set("SAMPLES", value.toFixed(0));
+        this.updateAngleStep();
+        this.updateRadiusStep();
+      }
+    }, {
+      key: "rings",
+      get: function get() {
+        return Number.parseInt(this.defines.get("RINGS"));
+      },
+      set: function set(value) {
+        value = Math.floor(value);
+        this.defines.set("RINGS", value.toFixed(0));
+        this.updateAngleStep();
+      }
+    }, {
+      key: "radius",
+      get: function get() {
+        return this.r;
+      },
+      set: function set(value) {
+        this.r = value;
+        this.updateRadiusStep();
+      }
+    }]);
+
+    return SSAOEffect;
+  }(Effect);
+
   var vertex$d = "uniform float scale;\r\n\r\nvarying vec2 vUv2;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvUv2 = uv * vec2(aspect, 1.0) * scale;\r\n\r\n}\r\n";
 
   var TextureEffect = function (_Effect) {
@@ -3528,7 +3800,7 @@
     return TextureEffect;
   }(Effect);
 
-  var fragment$s = "uniform sampler2D luminanceMap;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\nuniform float averageLuminance;\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance by sampling the center.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, vec2(0.5)).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = linearToRelativeLuminance(c);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\toutputColor = vec4(toneMap(inputColor.rgb), inputColor.a);\r\n\r\n}\r\n";
+  var fragment$t = "uniform sampler2D luminanceMap;\r\nuniform float middleGrey;\r\nuniform float maxLuminance;\r\nuniform float averageLuminance;\r\n\r\nvec3 toneMap(vec3 c) {\r\n\r\n\t#ifdef ADAPTED_LUMINANCE\r\n\r\n\t\t// Get the calculated average luminance by sampling the center.\r\n\t\tfloat lumAvg = texture2D(luminanceMap, vec2(0.5)).r;\r\n\r\n\t#else\r\n\r\n\t\tfloat lumAvg = averageLuminance;\r\n\r\n\t#endif\r\n\r\n\t// Calculate the luminance of the current pixel.\r\n\tfloat lumPixel = linearToRelativeLuminance(c);\r\n\r\n\t// Apply the modified operator (Reinhard Eq. 4).\r\n\tfloat lumScaled = (lumPixel * middleGrey) / lumAvg;\r\n\r\n\tfloat lumCompressed = (lumScaled * (1.0 + (lumScaled / (maxLuminance * maxLuminance)))) / (1.0 + lumScaled);\r\n\r\n\treturn lumCompressed * c;\r\n\r\n}\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\toutputColor = vec4(toneMap(inputColor.rgb), inputColor.a);\r\n\r\n}\r\n";
 
   var ToneMappingEffect = function (_Effect) {
     _inherits(ToneMappingEffect, _Effect);
@@ -3550,7 +3822,7 @@
         averageLuminance: 1.0,
         adaptationRate: 2.0
       }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragment$s, {
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragment$t, {
         blendFunction: settings.blendFunction,
         uniforms: new Map([["luminanceMap", new three.Uniform(null)], ["middleGrey", new three.Uniform(settings.middleGrey)], ["maxLuminance", new three.Uniform(settings.maxLuminance)], ["averageLuminance", new three.Uniform(settings.averageLuminance)]])
       }));
@@ -3654,7 +3926,7 @@
     return ToneMappingEffect;
   }(Effect);
 
-  var fragment$t = "uniform float offset;\r\nuniform float darkness;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tconst vec2 center = vec2(0.5);\r\n\tvec3 color = inputColor.rgb;\r\n\r\n\t#ifdef ESKIL\r\n\r\n\t\tvec2 coord = (uv - center) * vec2(offset);\r\n\t\tcolor = mix(color, vec3(1.0 - darkness), dot(coord, coord));\r\n\r\n\t#else\r\n\r\n\t\tfloat d = distance(uv, center);\r\n\t\tcolor *= smoothstep(0.8, offset * 0.799, d * (darkness + offset));\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
+  var fragment$u = "uniform float offset;\r\nuniform float darkness;\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tconst vec2 center = vec2(0.5);\r\n\tvec3 color = inputColor.rgb;\r\n\r\n\t#ifdef ESKIL\r\n\r\n\t\tvec2 coord = (uv - center) * vec2(offset);\r\n\t\tcolor = mix(color, vec3(1.0 - darkness), dot(coord, coord));\r\n\r\n\t#else\r\n\r\n\t\tfloat d = distance(uv, center);\r\n\t\tcolor *= smoothstep(0.8, offset * 0.799, d * (darkness + offset));\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, inputColor.a);\r\n\r\n}\r\n";
 
   var VignetteEffect = function (_Effect) {
     _inherits(VignetteEffect, _Effect);
@@ -3672,7 +3944,7 @@
         offset: 0.5,
         darkness: 0.5
       }, options);
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragment$t, {
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragment$u, {
         blendFunction: settings.blendFunction,
         uniforms: new Map([["offset", new three.Uniform(settings.offset)], ["darkness", new three.Uniform(settings.darkness)]])
       }));
@@ -4341,6 +4613,7 @@
   }();
 
   exports.Disposable = Disposable;
+  exports.Initializable = Initializable;
   exports.EffectComposer = EffectComposer;
   exports.Resizable = Resizable;
   exports.BlendFunction = BlendFunction;
@@ -4368,6 +4641,7 @@
   exports.ShockWaveEffect = ShockWaveEffect;
   exports.SepiaEffect = SepiaEffect;
   exports.SMAAEffect = SMAAEffect;
+  exports.SSAOEffect = SSAOEffect;
   exports.TextureEffect = TextureEffect;
   exports.ToneMappingEffect = ToneMappingEffect;
   exports.VignetteEffect = VignetteEffect;
@@ -4388,8 +4662,10 @@
   exports.BlurPass = BlurPass;
   exports.ClearPass = ClearPass;
   exports.ClearMaskPass = ClearMaskPass;
+  exports.DepthPass = DepthPass;
   exports.EffectPass = EffectPass;
   exports.MaskPass = MaskPass;
+  exports.NormalPass = NormalPass;
   exports.Pass = Pass;
   exports.RenderPass = RenderPass;
   exports.SavePass = SavePass;

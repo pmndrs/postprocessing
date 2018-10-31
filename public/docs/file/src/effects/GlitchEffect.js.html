@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
@@ -78,8 +80,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
@@ -92,6 +96,8 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
 	DataTexture,
 	FloatType,
+	NearestFilter,
+	RepeatWrapping,
 	RGBFormat,
 	Uniform,
 	Vector2
@@ -129,7 +135,7 @@ function randomFloat(low, high) {
 /**
  * A glitch effect.
  *
- * Thie effect can influence the {@link ChromaticAberrationEffect}.
+ * This effect can influence the {@link ChromaticAberrationEffect}.
  *
  * Reference: https://github.com/staffantan/unityglitch
  *
@@ -146,9 +152,11 @@ export class GlitchEffect extends Effect {
 	 * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.
 	 * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.
 	 * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.
+	 * @param {Vector2} [options.strength] - The strength of weak and strong glitches.
 	 * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.
 	 * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.
 	 * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.
+	 * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.
 	 */
 
 	constructor(options = {}) {
@@ -158,7 +166,9 @@ export class GlitchEffect extends Effect {
 			chromaticAberrationOffset: null,
 			delay: new Vector2(1.5, 3.5),
 			duration: new Vector2(0.6, 1.0),
+			strength: new Vector2(0.3, 1.0),
 			columns: 0.05,
+			ratio: 0.85,
 			perturbationMap: null,
 			dtSize: 64
 		}, options);
@@ -187,7 +197,10 @@ export class GlitchEffect extends Effect {
 
 		this.perturbationMap = null;
 
-		this.setPerturbationMap((settings.perturbationMap !== null) ? settings.perturbationMap : this.generatePerturbationMap(settings.dtSize));
+		this.setPerturbationMap((settings.perturbationMap === null) ?
+			this.generatePerturbationMap(settings.dtSize) :
+			settings.perturbationMap);
+
 		this.perturbationMap.generateMipmaps = false;
 
 		/**
@@ -254,6 +267,24 @@ export class GlitchEffect extends Effect {
 		this.mode = GlitchMode.SPORADIC;
 
 		/**
+		 * The strength of weak and strong glitches.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.strength = settings.strength;
+
+		/**
+		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no
+		 * weak glitches and 1 means no strong ones. The default ratio of 0.85
+		 * offers a decent balance.
+		 *
+		 * @type {Number}
+		 */
+
+		this.ratio = settings.ratio;
+
+		/**
 		 * The chromatic aberration offset.
 		 *
 		 * @type {Vector2}
@@ -302,6 +333,9 @@ export class GlitchEffect extends Effect {
 			this.perturbationMap.dispose();
 
 		}
+
+		perturbationMap.wrapS = perturbationMap.wrapT = RepeatWrapping;
+		perturbationMap.magFilter = perturbationMap.minFilter = NearestFilter;
 
 		this.perturbationMap = perturbationMap;
 		this.uniforms.get(&quot;perturbationMap&quot;).value = perturbationMap;
@@ -353,6 +387,7 @@ export class GlitchEffect extends Effect {
 		const mode = this.mode;
 		const breakPoint = this.breakPoint;
 		const offset = this.chromaticAberrationOffset;
+		const s = this.strength;
 
 		let time = this.time;
 		let active = false;
@@ -361,42 +396,46 @@ export class GlitchEffect extends Effect {
 
 		if(mode !== GlitchMode.DISABLED) {
 
-			time += delta;
-			trigger = (time &gt; breakPoint.x);
-			r = Math.random();
+			if(mode === GlitchMode.SPORADIC) {
 
+				time += delta;
+				trigger = (time &gt; breakPoint.x);
+
+				if(time &gt;= (breakPoint.x + breakPoint.y)) {
+
+					breakPoint.set(
+						randomFloat(this.delay.x, this.delay.y),
+						randomFloat(this.duration.x, this.duration.y)
+					);
+
+					time = 0;
+
+				}
+
+			}
+
+			r = Math.random();
 			this.uniforms.get(&quot;random&quot;).value = r;
 
-			if((trigger &amp;&amp; r &gt; 0.85) || mode === GlitchMode.CONSTANT_WILD) {
+			if((trigger &amp;&amp; r &gt; this.ratio) || mode === GlitchMode.CONSTANT_WILD) {
 
 				active = true;
 
-				r /= 30.0;
+				r *= s.y * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-1.0, 1.0), randomFloat(-1.0, 1.0));
+				this.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
 
 			} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {
 
 				active = true;
 
-				r /= 90.0;
+				r *= s.x * 0.03;
 				a = randomFloat(-Math.PI, Math.PI);
 
-				this.seed.set(randomFloat(-0.3, 0.3), randomFloat(-0.3, 0.3));
+				this.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));
 				this.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));
-
-			}
-
-			if(time &gt;= (breakPoint.x + breakPoint.y)) {
-
-				breakPoint.set(
-					randomFloat(this.delay.x, this.delay.y),
-					randomFloat(this.duration.x, this.duration.y)
-				);
-
-				time = 0;
 
 			}
 

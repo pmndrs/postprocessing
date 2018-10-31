@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
@@ -78,8 +80,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
@@ -89,13 +93,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectPass} from &apos;<span><a href="file/src/passes/EffectPass.js.html#lineNumber194">postprocessing/src/passes/EffectPass.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectPass} from &apos;<span><a href="file/src/passes/EffectPass.js.html#lineNumber198">postprocessing/src/passes/EffectPass.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/passes/EffectPass.js.html#lineNumber194">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/passes/EffectPass.js.html#lineNumber198">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -109,7 +113,7 @@
   
   
   
-  <div class="flat-list" data-ice="indirectImplements"><h4>Indirect Implements:</h4><ul><li><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></li>, <li><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></li></ul></div>
+  <div class="flat-list" data-ice="indirectImplements"><h4>Indirect Implements:</h4><ul><li><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></li>, <li><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></li>, <li><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></li></ul></div>
   
   
 
@@ -1237,7 +1241,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -1309,7 +1313,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber286">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber290">source</a></span></span>
     </span>
   </h3>
 
@@ -1354,7 +1358,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber300">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber304">source</a></span></span>
     </span>
   </h3>
 
@@ -1399,7 +1403,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber272">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
@@ -1444,7 +1448,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber262">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -1489,7 +1493,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber383">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber394">source</a></span></span>
     </span>
   </h3>
 
@@ -1538,7 +1542,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber229">source</a></span></span>
     </span>
   </h3>
 
@@ -1582,7 +1586,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber216">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1626,7 +1630,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber238">source</a></span></span>
     </span>
   </h3>
 
@@ -1670,7 +1674,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -1714,7 +1718,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber252">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber256">source</a></span></span>
     </span>
   </h3>
 
@@ -1761,7 +1765,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber563">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber580">source</a></span></span>
     </span>
   </h3>
 
@@ -1806,7 +1810,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber449">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -1863,7 +1867,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber529">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber546">source</a></span></span>
     </span>
   </h3>
 
@@ -1931,7 +1935,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber416">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber427">source</a></span></span>
     </span>
   </h3>
 
@@ -1976,7 +1980,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber486">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber503">source</a></span></span>
     </span>
   </h3>
 
@@ -2065,7 +2069,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber464">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber475">source</a></span></span>
     </span>
   </h3>
 
@@ -2134,7 +2138,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber510">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber527">source</a></span></span>
     </span>
   </h3>
 
@@ -2204,7 +2208,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber326">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber330">source</a></span></span>
     </span>
   </h3>
 

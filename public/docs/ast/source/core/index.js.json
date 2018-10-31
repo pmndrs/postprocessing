@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 216,
+  "end": 269,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 10,
+      "line": 11,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 216,
+    "end": 269,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 10,
+        "line": 11,
         "column": 0
       }
     },
@@ -138,7 +138,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 116,
-        "end": 169,
+        "end": 167,
         "loc": {
           "start": {
             "line": 8,
@@ -146,7 +146,7 @@
           },
           "end": {
             "line": 8,
-            "column": 53
+            "column": 51
           }
         },
         "declaration": null,
@@ -154,7 +154,7 @@
           {
             "type": "ExportSpecifier",
             "start": 125,
-            "end": 139,
+            "end": 138,
             "loc": {
               "start": {
                 "line": 8,
@@ -162,13 +162,13 @@
               },
               "end": {
                 "line": 8,
-                "column": 23
+                "column": 22
               }
             },
             "local": {
               "type": "Identifier",
               "start": 125,
-              "end": 139,
+              "end": 138,
               "loc": {
                 "start": {
                   "line": 8,
@@ -176,6 +176,93 @@
                 },
                 "end": {
                   "line": 8,
+                  "column": 22
+                },
+                "identifierName": "Initializable"
+              },
+              "name": "Initializable"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 125,
+              "end": 138,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 9
+                },
+                "end": {
+                  "line": 8,
+                  "column": 22
+                },
+                "identifierName": "Initializable"
+              },
+              "name": "Initializable"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 146,
+          "end": 166,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 30
+            },
+            "end": {
+              "line": 8,
+              "column": 50
+            }
+          },
+          "extra": {
+            "rawValue": "./Initializable.js",
+            "raw": "\"./Initializable.js\""
+          },
+          "value": "./Initializable.js"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 169,
+        "end": 222,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 53
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 178,
+            "end": 192,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 9
+              },
+              "end": {
+                "line": 9,
+                "column": 23
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 178,
+              "end": 192,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 9
+                },
+                "end": {
+                  "line": 9,
                   "column": 23
                 },
                 "identifierName": "EffectComposer"
@@ -184,15 +271,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 125,
-              "end": 139,
+              "start": 178,
+              "end": 192,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 9,
                   "column": 9
                 },
                 "end": {
-                  "line": 8,
+                  "line": 9,
                   "column": 23
                 },
                 "identifierName": "EffectComposer"
@@ -203,15 +290,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 147,
-          "end": 168,
+          "start": 200,
+          "end": 221,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 9,
               "column": 31
             },
             "end": {
-              "line": 8,
+              "line": 9,
               "column": 52
             }
           },
@@ -224,15 +311,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 171,
-        "end": 214,
+        "start": 224,
+        "end": 267,
         "loc": {
           "start": {
-            "line": 9,
+            "line": 10,
             "column": 0
           },
           "end": {
-            "line": 9,
+            "line": 10,
             "column": 43
           }
         },
@@ -240,29 +327,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 180,
-            "end": 189,
+            "start": 233,
+            "end": 242,
             "loc": {
               "start": {
-                "line": 9,
+                "line": 10,
                 "column": 9
               },
               "end": {
-                "line": 9,
+                "line": 10,
                 "column": 18
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 180,
-              "end": 189,
+              "start": 233,
+              "end": 242,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 9,
+                  "line": 10,
                   "column": 18
                 },
                 "identifierName": "Resizable"
@@ -271,15 +358,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 180,
-              "end": 189,
+              "start": 233,
+              "end": 242,
               "loc": {
                 "start": {
-                  "line": 9,
+                  "line": 10,
                   "column": 9
                 },
                 "end": {
-                  "line": 9,
+                  "line": 10,
                   "column": 18
                 },
                 "identifierName": "Resizable"
@@ -290,15 +377,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 197,
-          "end": 213,
+          "start": 250,
+          "end": 266,
           "loc": {
             "start": {
-              "line": 9,
+              "line": 10,
               "column": 26
             },
             "end": {
-              "line": 9,
+              "line": 10,
               "column": 42
             }
           },
@@ -595,9 +682,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "EffectComposer",
+      "value": "Initializable",
       "start": 125,
-      "end": 139,
+      "end": 138,
       "loc": {
         "start": {
           "line": 8,
@@ -605,7 +692,7 @@
         },
         "end": {
           "line": 8,
-          "column": 23
+          "column": 22
         }
       }
     },
@@ -621,16 +708,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 140,
-      "end": 141,
+      "start": 139,
+      "end": 140,
       "loc": {
         "start": {
           "line": 8,
-          "column": 24
+          "column": 23
         },
         "end": {
           "line": 8,
-          "column": 25
+          "column": 24
         }
       }
     },
@@ -647,16 +734,16 @@
         "binop": null
       },
       "value": "from",
-      "start": 142,
-      "end": 146,
+      "start": 141,
+      "end": 145,
       "loc": {
         "start": {
           "line": 8,
-          "column": 26
+          "column": 25
         },
         "end": {
           "line": 8,
-          "column": 30
+          "column": 29
         }
       }
     },
@@ -673,17 +760,17 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "./EffectComposer.js",
-      "start": 147,
-      "end": 168,
+      "value": "./Initializable.js",
+      "start": 146,
+      "end": 166,
       "loc": {
         "start": {
           "line": 8,
-          "column": 31
+          "column": 30
         },
         "end": {
           "line": 8,
-          "column": 52
+          "column": 50
         }
       }
     },
@@ -700,16 +787,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 168,
-      "end": 169,
+      "start": 166,
+      "end": 167,
       "loc": {
         "start": {
           "line": 8,
-          "column": 52
+          "column": 50
         },
         "end": {
           "line": 8,
-          "column": 53
+          "column": 51
         }
       }
     },
@@ -728,8 +815,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 171,
-      "end": 177,
+      "start": 169,
+      "end": 175,
       "loc": {
         "start": {
           "line": 9,
@@ -753,8 +840,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 178,
-      "end": 179,
+      "start": 176,
+      "end": 177,
       "loc": {
         "start": {
           "line": 9,
@@ -778,9 +865,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "Resizable",
-      "start": 180,
-      "end": 189,
+      "value": "EffectComposer",
+      "start": 178,
+      "end": 192,
       "loc": {
         "start": {
           "line": 9,
@@ -788,6 +875,189 @@
         },
         "end": {
           "line": 9,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 193,
+      "end": 194,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 24
+        },
+        "end": {
+          "line": 9,
+          "column": 25
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 195,
+      "end": 199,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 26
+        },
+        "end": {
+          "line": 9,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./EffectComposer.js",
+      "start": 200,
+      "end": 221,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 31
+        },
+        "end": {
+          "line": 9,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 221,
+      "end": 222,
+      "loc": {
+        "start": {
+          "line": 9,
+          "column": 52
+        },
+        "end": {
+          "line": 9,
+          "column": 53
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 224,
+      "end": 230,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 231,
+      "end": 232,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 7
+        },
+        "end": {
+          "line": 10,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "Resizable",
+      "start": 233,
+      "end": 242,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 9
+        },
+        "end": {
+          "line": 10,
           "column": 18
         }
       }
@@ -804,15 +1074,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 190,
-      "end": 191,
+      "start": 243,
+      "end": 244,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 19
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 20
         }
       }
@@ -830,15 +1100,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 192,
-      "end": 196,
+      "start": 245,
+      "end": 249,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 21
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 25
         }
       }
@@ -857,15 +1127,15 @@
         "updateContext": null
       },
       "value": "./Resizable.js",
-      "start": 197,
-      "end": 213,
+      "start": 250,
+      "end": 266,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 26
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 42
         }
       }
@@ -883,15 +1153,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 213,
-      "end": 214,
+      "start": 266,
+      "end": 267,
       "loc": {
         "start": {
-          "line": 9,
+          "line": 10,
           "column": 42
         },
         "end": {
-          "line": 9,
+          "line": 10,
           "column": 43
         }
       }
@@ -909,15 +1179,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 216,
-      "end": 216,
+      "start": 269,
+      "end": 269,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 11,
           "column": 0
         },
         "end": {
-          "line": 10,
+          "line": 11,
           "column": 0
         }
       }

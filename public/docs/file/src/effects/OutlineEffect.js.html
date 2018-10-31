@@ -31,6 +31,7 @@
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects">effects</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/BokehEffect.js~BokehEffect.html">BokehEffect</a></span></span></li>
@@ -50,6 +51,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/PixelationEffect.js~PixelationEffect.html">PixelationEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html">RealisticBokehEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
@@ -78,8 +80,10 @@
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#passes">passes</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearMaskPass.js~ClearMaskPass.html">ClearMaskPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/DepthPass.js~DepthPass.html">DepthPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/MaskPass.js~MaskPass.html">MaskPass</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html">NormalPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span></li>
@@ -92,8 +96,7 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import {
 	Color,
 	LinearFilter,
-	MeshDepthMaterial,
-	RGBADepthPacking,
+	RepeatWrapping,
 	RGBFormat,
 	Uniform,
 	Vector2,
@@ -106,7 +109,7 @@ import {
 	KernelSize
 } from &quot;../materials&quot;;
 
-import { ClearPass, BlurPass, RenderPass, ShaderPass } from &quot;../passes&quot;;
+import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from &quot;../passes&quot;;
 import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
 import { Effect } from &quot;./Effect.js&quot;;
 
@@ -259,20 +262,12 @@ export class OutlineEffect extends Effect {
 		/**
 		 * A depth pass.
 		 *
-		 * @type {RenderPass}
+		 * @type {DepthPass}
 		 * @private
 		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
-		this.renderPassDepth = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new MeshDepthMaterial({
-				depthPacking: RGBADepthPacking,
-				morphTargets: true,
-				skinning: true
-			}),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.depthPass = new DepthPass(this.mainScene, this.mainCamera);
 
 		/**
 		 * A depth comparison mask pass.
@@ -282,8 +277,8 @@ export class OutlineEffect extends Effect {
 		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
-		this.renderPassMask = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new DepthComparisonMaterial(this.renderTargetDepth.texture, this.mainCamera),
+		this.maskPass = new RenderPass(this.mainScene, this.mainCamera, {
+			overrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),
 			clearColor: new Color(0xffffff),
 			clearAlpha: 1.0
 		});
@@ -477,6 +472,8 @@ export class OutlineEffect extends Effect {
 	setPatternTexture(texture) {
 
 		if(texture !== null) {
+
+			texture.wrapS = texture.wrapT = RepeatWrapping;
 
 			this.defines.set(&quot;USE_PATTERN&quot;, &quot;1&quot;);
 			this.uniforms.set(&quot;patternScale&quot;, new Uniform(1.0));
@@ -680,12 +677,12 @@ export class OutlineEffect extends Effect {
 
 			// Render a custom depth texture and ignore selected objects.
 			this.setSelectionVisible(false);
-			this.renderPassDepth.render(renderer, this.renderTargetDepth);
+			this.depthPass.render(renderer);
 			this.setSelectionVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
 			mainCamera.layers.mask = 1 &lt;&lt; this.selectionLayer;
-			this.renderPassMask.render(renderer, this.renderTargetMask);
+			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
 			mainCamera.layers.mask = mask;
@@ -721,13 +718,11 @@ export class OutlineEffect extends Effect {
 	setSize(width, height) {
 
 		this.resolution.set(width, height);
-
-		this.renderTargetDepth.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
-		this.renderPassDepth.setSize(width, height);
-		this.renderPassMask.setSize(width, height);
 		this.blurPass.setSize(width, height);
+		this.maskPass.setSize(width, height);
+		this.depthPass.setSize(width, height);
 
 		width = this.blurPass.width;
 		height = this.blurPass.height;
@@ -748,8 +743,8 @@ export class OutlineEffect extends Effect {
 
 	initialize(renderer, alpha) {
 
-		this.renderPassDepth.initialize(renderer, alpha);
-		this.renderPassMask.initialize(renderer, alpha);
+		this.depthPass.initialize(renderer, alpha);
+		this.maskPass.initialize(renderer, alpha);
 		this.blurPass.initialize(renderer, alpha);
 
 	}
