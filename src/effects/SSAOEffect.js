@@ -26,7 +26,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
-	 * @param {Number} [options.samples=4] - The amount of rings in the occlusion sampling pattern.
+	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.rangeThreshold=0.01] - An occlusion range threshold. Range [0.0, 1.0].
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.

@@ -11,7 +11,7 @@ import { Pass } from "./Pass.js";
 import { RenderPass } from "./RenderPass.js";
 
 /**
- * A pass that renders the screen space normals of a given scene.
+ * A pass that renders the normals of a given scene.
  */
 
 export class NormalPass extends Pass {
