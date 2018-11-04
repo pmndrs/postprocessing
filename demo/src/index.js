@@ -140,26 +140,41 @@ window.addEventListener("load", function main(event) {
 	manager.addEventListener("change", onChange);
 	manager.addEventListener("load", onLoad);
 
+	const demos = [
+		new BloomDemo(composer),
+		new BlurDemo(composer),
+		new BokehDemo(composer),
+		new RealisticBokehDemo(composer),
+		new ColorCorrectionDemo(composer),
+		new DotScreenDemo(composer),
+		new GlitchDemo(composer),
+		new GodRaysDemo(composer),
+		new GridDemo(composer),
+		new OutlineDemo(composer),
+		new PixelationDemo(composer),
+		new ScanlineDemo(composer),
+		new SepiaDemo(composer),
+		new ShockWaveDemo(composer),
+		new SMAADemo(composer),
+		new SSAODemo(composer),
+		new TextureDemo(composer),
+		new ToneMappingDemo(composer),
+		new VignetteDemo(composer)
+	];
+
+	if(demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1)) === -1) {
+
+		// Invalid URL hash: demo doesn't exist.
+		window.location.hash = "";
+
+	}
+
 	// Register demos.
-	manager.addDemo(new BloomDemo(composer));
-	manager.addDemo(new BlurDemo(composer));
-	manager.addDemo(new BokehDemo(composer));
-	manager.addDemo(new RealisticBokehDemo(composer));
-	manager.addDemo(new ColorCorrectionDemo(composer));
-	manager.addDemo(new DotScreenDemo(composer));
-	manager.addDemo(new GlitchDemo(composer));
-	manager.addDemo(new GodRaysDemo(composer));
-	manager.addDemo(new GridDemo(composer));
-	manager.addDemo(new OutlineDemo(composer));
-	manager.addDemo(new PixelationDemo(composer));
-	manager.addDemo(new ScanlineDemo(composer));
-	manager.addDemo(new SepiaDemo(composer));
-	manager.addDemo(new ShockWaveDemo(composer));
-	manager.addDemo(new SMAADemo(composer));
-	manager.addDemo(new SSAODemo(composer));
-	manager.addDemo(new TextureDemo(composer));
-	manager.addDemo(new ToneMappingDemo(composer));
-	manager.addDemo(new VignetteDemo(composer));
+	for(const demo of demos) {
+
+		manager.addDemo(demo);
+
+	}
 
 	// Start rendering.
 	render();
