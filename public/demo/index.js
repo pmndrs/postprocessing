@@ -3168,7 +3168,6 @@
   var change = new DemoManagerEvent("change");
   var load = new DemoManagerEvent("load");
 
-  var initialHash = window.location.hash.slice(1);
   var DemoManager = function (_EventTarget) {
     _inherits(DemoManager, _EventTarget);
 
@@ -3238,36 +3237,33 @@
       value: function loadDemo() {
         var _this3 = this;
 
-        var id = this.demo;
-        var demos = this.demos;
-        var demo = demos.get(id);
-        var previousDemo = this.currentDemo;
+        var nextDemo = this.demos.get(this.demo);
+        var currentDemo = this.currentDemo;
         var renderer = this.renderer;
-        window.location.hash = id;
+        window.location.hash = nextDemo.id;
 
-        if (previousDemo !== null) {
-          previousDemo.reset();
+        if (currentDemo !== null) {
+          currentDemo.reset();
         }
 
         this.menu.domElement.style.display = "none";
-        renderer.clear();
-        change.previousDemo = previousDemo;
-        change.demo = demo;
-        this.currentDemo = demo;
+        change.previousDemo = currentDemo;
+        change.demo = nextDemo;
+        this.currentDemo = nextDemo;
         this.dispatchEvent(change);
-        demo.load().then(function () {
-          return _this3.startDemo(demo);
-        }).catch(function (e) {
-          return console.error(e);
-        });
+        renderer.clear();
+        nextDemo.load().then(function () {
+          return _this3.startDemo(nextDemo);
+        }).catch(console.error);
       }
     }, {
       key: "addDemo",
       value: function addDemo(demo) {
+        var hash = window.location.hash.slice(1);
         var currentDemo = this.currentDemo;
         this.demos.set(demo.id, demo.setRenderer(this.renderer));
 
-        if (this.demo === null || demo.id === initialHash) {
+        if (this.demo === null && hash.length === 0 || demo.id === hash) {
           this.demo = demo.id;
           this.loadDemo();
         }
@@ -3310,8 +3306,18 @@
         this.renderer.setSize(width, height);
 
         if (demo !== null && demo.camera !== null) {
-          demo.camera.aspect = width / height;
-          demo.camera.updateProjectionMatrix();
+          var camera = demo.camera;
+
+          if (camera instanceof three.OrthographicCamera) {
+            camera.left = width / -2.0;
+            camera.right = width / 2.0;
+            camera.top = height / 2.0;
+            camera.bottom = height / -2.0;
+            camera.updateProjectionMatrix();
+          } else if (!(camera instanceof three.CubeCamera)) {
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+          }
         }
       }
     }, {
@@ -16617,25 +16623,19 @@
     });
     manager.addEventListener("change", onChange);
     manager.addEventListener("load", onLoad);
-    manager.addDemo(new BloomDemo(composer));
-    manager.addDemo(new BlurDemo(composer));
-    manager.addDemo(new BokehDemo(composer));
-    manager.addDemo(new RealisticBokehDemo(composer));
-    manager.addDemo(new ColorCorrectionDemo(composer));
-    manager.addDemo(new DotScreenDemo(composer));
-    manager.addDemo(new GlitchDemo(composer));
-    manager.addDemo(new GodRaysDemo(composer));
-    manager.addDemo(new GridDemo(composer));
-    manager.addDemo(new OutlineDemo(composer));
-    manager.addDemo(new PixelationDemo(composer));
-    manager.addDemo(new ScanlineDemo(composer));
-    manager.addDemo(new SepiaDemo(composer));
-    manager.addDemo(new ShockWaveDemo(composer));
-    manager.addDemo(new SMAADemo(composer));
-    manager.addDemo(new SSAODemo(composer));
-    manager.addDemo(new TextureDemo(composer));
-    manager.addDemo(new ToneMappingDemo(composer));
-    manager.addDemo(new VignetteDemo(composer));
+    var demos = [new BloomDemo(composer), new BlurDemo(composer), new BokehDemo(composer), new RealisticBokehDemo(composer), new ColorCorrectionDemo(composer), new DotScreenDemo(composer), new GlitchDemo(composer), new GodRaysDemo(composer), new GridDemo(composer), new OutlineDemo(composer), new PixelationDemo(composer), new ScanlineDemo(composer), new SepiaDemo(composer), new ShockWaveDemo(composer), new SMAADemo(composer), new SSAODemo(composer), new TextureDemo(composer), new ToneMappingDemo(composer), new VignetteDemo(composer)];
+
+    if (demos.map(function (demo) {
+      return demo.id;
+    }).indexOf(window.location.hash.slice(1)) === -1) {
+      window.location.hash = "";
+    }
+
+    for (var _i = 0; _i < demos.length; _i++) {
+      var demo = demos[_i];
+      manager.addDemo(demo);
+    }
+
     render();
   });
   window.addEventListener("resize", function () {
