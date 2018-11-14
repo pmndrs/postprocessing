@@ -811,13 +811,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#dithering",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-dithering",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-dithering",
     "src/effects/BloomEffect.js~BloomEffect#dithering",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#dithering",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-dithering",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-dithering",
     "src/effects/BloomEffect.js~BloomEffect#dithering",
     "member"
   ],
@@ -835,13 +835,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-kernelSize",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
     "member"
   ],
@@ -961,13 +961,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/deptheffect.js~deptheffect#inverted",
-    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-set-inverted",
+    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-get-inverted",
     "src/effects/DepthEffect.js~DepthEffect#inverted",
     "member"
   ],
   [
     "src/effects/deptheffect.js~deptheffect#inverted",
-    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-get-inverted",
+    "class/src/effects/DepthEffect.js~DepthEffect.html#instance-set-inverted",
     "src/effects/DepthEffect.js~DepthEffect#inverted",
     "member"
   ],
@@ -1207,13 +1207,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#blur",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-blur",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-blur",
     "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#blur",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-blur",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-blur",
     "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "member"
   ],
@@ -1237,13 +1237,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-dithering",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-dithering",
     "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-dithering",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-dithering",
     "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "member"
   ],
@@ -1273,13 +1273,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#kernelsize",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-kernelSize",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-kernelSize",
     "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#kernelsize",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-kernelSize",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-kernelSize",
     "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "member"
   ],
@@ -1333,13 +1333,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#samples",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "member"
   ],
@@ -1471,13 +1471,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/noiseeffect.js~noiseeffect#premultiply",
-    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-set-premultiply",
+    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-get-premultiply",
     "src/effects/NoiseEffect.js~NoiseEffect#premultiply",
     "member"
   ],
   [
     "src/effects/noiseeffect.js~noiseeffect#premultiply",
-    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-get-premultiply",
+    "class/src/effects/NoiseEffect.js~NoiseEffect.html#instance-set-premultiply",
     "src/effects/NoiseEffect.js~NoiseEffect#premultiply",
     "member"
   ],
@@ -1567,13 +1567,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#kernelsize",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-kernelSize",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-kernelSize",
     "src/effects/OutlineEffect.js~OutlineEffect#kernelSize",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#kernelsize",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-kernelSize",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-kernelSize",
     "src/effects/OutlineEffect.js~OutlineEffect#kernelSize",
     "member"
   ],
@@ -1771,25 +1771,25 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#manualdof",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-manualDoF",
-    "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#manualDoF",
-    "member"
-  ],
-  [
-    "src/effects/realisticbokeheffect.js~realisticbokeheffect#manualdof",
     "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-manualDoF",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#manualDoF",
     "member"
   ],
   [
-    "src/effects/realisticbokeheffect.js~realisticbokeheffect#pentagon",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-pentagon",
-    "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
+    "src/effects/realisticbokeheffect.js~realisticbokeheffect#manualdof",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-manualDoF",
+    "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#manualDoF",
     "member"
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#pentagon",
     "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-pentagon",
+    "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
+    "member"
+  ],
+  [
+    "src/effects/realisticbokeheffect.js~realisticbokeheffect#pentagon",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-pentagon",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
     "member"
   ],
@@ -1933,13 +1933,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#radius",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-radius",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-radius",
     "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "member"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#radius",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-radius",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-radius",
     "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "member"
   ],
@@ -1963,15 +1963,27 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#samples",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-samples",
     "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "member"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#samples",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-samples",
     "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#setdistancecutoff",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setDistanceCutoff",
+    "src/effects/SSAOEffect.js~SSAOEffect#setDistanceCutoff",
+    "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#setproximitycutoff",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setProximityCutoff",
+    "src/effects/SSAOEffect.js~SSAOEffect#setProximityCutoff",
+    "method"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#setsize",
@@ -2263,13 +2275,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/vignetteeffect.js~vignetteeffect#eskil",
-    "class/src/effects/VignetteEffect.js~VignetteEffect.html#instance-set-eskil",
+    "class/src/effects/VignetteEffect.js~VignetteEffect.html#instance-get-eskil",
     "src/effects/VignetteEffect.js~VignetteEffect#eskil",
     "member"
   ],
   [
     "src/effects/vignetteeffect.js~vignetteeffect#eskil",
-    "class/src/effects/VignetteEffect.js~VignetteEffect.html#instance-get-eskil",
+    "class/src/effects/VignetteEffect.js~VignetteEffect.html#instance-set-eskil",
     "src/effects/VignetteEffect.js~VignetteEffect#eskil",
     "member"
   ],
