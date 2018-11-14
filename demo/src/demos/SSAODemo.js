@@ -221,14 +221,18 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const planeGeometry = new PlaneBufferGeometry();
 		const planeMaterial = new MeshPhongMaterial({
-			color: 0xffffff,
-			shininess: shininess
+			color: 0xffffff, shininess: shininess
 		});
 
+		const plane00 = new Mesh(planeGeometry, planeMaterial);
 		const plane01 = new Mesh(planeGeometry, planeMaterial);
 		const plane02 = new Mesh(planeGeometry, planeMaterial);
 		const plane03 = new Mesh(planeGeometry, planeMaterial);
 		const plane04 = new Mesh(planeGeometry, planeMaterial);
+
+		plane00.position.y = -10;
+		plane00.rotation.x = Math.PI * 0.5;
+		plane00.scale.set(20, 20, 1);
 
 		plane01.position.y = -10;
 		plane01.rotation.x = Math.PI * -0.5;
@@ -249,25 +253,16 @@ export class SSAODemo extends PostProcessingDemo {
 		plane04.scale.set(20, 20, 1);
 		plane04.receiveShadow = true;
 
-		environment.add(plane01);
-		environment.add(plane02);
-		environment.add(plane03);
-		environment.add(plane04);
-
 		const plane05 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0xff0000,
-			shininess: shininess
+			color: 0xff0000, shininess: shininess
 		}));
 
 		const plane06 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0x00ff00,
-			shininess: shininess
+			color: 0x00ff00, shininess: shininess
 		}));
 
 		const plane07 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0xffffff,
-			emissive: 0xffffff,
-			shininess: shininess
+			color: 0xffffff, emissive: 0xffffff, shininess: shininess
 		}));
 
 		plane05.position.x = -10;
@@ -284,37 +279,27 @@ export class SSAODemo extends PostProcessingDemo {
 		plane07.rotation.x = Math.PI * 0.5;
 		plane07.scale.set(4, 4, 1);
 
-		environment.add(plane05);
-		environment.add(plane06);
-		environment.add(plane07);
-
 		const actorMaterial = new MeshPhongMaterial({
-			color: 0xffffff,
-			shininess: shininess
+			color: 0xffffff, shininess: shininess
 		});
 
 		const box01 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
 		const box02 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
 
-		box01.position.x = -3.5;
-		box01.position.y = -4;
-		box01.position.z = -3;
+		box01.position.set(-3.5, -4, -3);
 		box01.rotation.y = Math.PI * 0.1;
 		box01.scale.set(6, 12, 6);
 		box01.castShadow = true;
 
-		box02.position.x = 3.5;
-		box02.position.y = -7;
-		box02.position.z = 3;
+		box02.position.set(3.5, -7, 3);
 		box02.rotation.y = Math.PI * -0.1;
 		box02.scale.set(6, 6, 6);
 		box02.castShadow = true;
 
-		actors.add(box01);
-		actors.add(box02);
+		environment.add(plane00, plane01, plane02, plane03, plane04, plane05, plane06, plane07);
+		actors.add(box01, box02);
 
-		scene.add(environment);
-		scene.add(actors);
+		scene.add(environment, actors);
 
 		// Passes.
 
@@ -327,12 +312,17 @@ export class SSAODemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
 			rings: 4,
+			distanceThreshold: 0.6,
+			distanceFalloff: 0.1,
+			rangeThreshold: 0.0015,
+			rangeFalloff: 0.01,
 			luminanceInfluence: 0.7,
-			rangeThreshold: 0.01,
 			radius: 18.25,
 			scale: 1.0,
 			bias: 0.5
 		});
+
+		ssaoEffect.blendMode.opacity.value = 1.5;
 
 		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect);
 		this.renderPass.renderToScreen = false;
@@ -363,8 +353,15 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const params = {
 			"normal res": normalPass.getResolutionScale(),
+			"distance": {
+				"threshold": uniforms.get("distanceCutoff").value.x,
+				"falloff": uniforms.get("distanceCutoff").value.y - uniforms.get("distanceCutoff").value.x
+			},
+			"proximity": {
+				"threshold": uniforms.get("proximityCutoff").value.x,
+				"falloff": uniforms.get("proximityCutoff").value.y - uniforms.get("proximityCutoff").value.x
+			},
 			"lum influence": uniforms.get("luminanceInfluence").value,
-			"range check": uniforms.get("rangeThreshold").value,
 			"scale": uniforms.get("scale").value,
 			"bias": uniforms.get("bias").value,
 			"opacity": blendMode.opacity.value,
@@ -387,9 +384,31 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "range check").min(0.0).max(0.05).step(0.0001).onChange(() => {
+		let f = menu.addFolder("Distance Cutoff");
 
-			uniforms.get("rangeThreshold").value = params["range check"];
+		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+
+		});
+
+		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+
+		});
+
+		f = menu.addFolder("Proximity Cutoff");
+
+		f.add(params.proximity, "threshold").min(0.0).max(0.05).step(0.0001).onChange(() => {
+
+			effect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+
+		});
+
+		f.add(params.proximity, "falloff").min(0.0).max(0.1).step(0.0001).onChange(() => {
+
+			effect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
@@ -398,7 +417,6 @@ export class SSAODemo extends PostProcessingDemo {
 			uniforms.get("bias").value = params.bias;
 
 		});
-
 
 		menu.add(params, "scale").min(0.0).max(2.0).step(0.001).onChange(() => {
 

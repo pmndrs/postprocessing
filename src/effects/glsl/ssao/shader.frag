@@ -4,9 +4,10 @@ uniform mat4 cameraProjectionMatrix;
 uniform mat4 cameraInverseProjectionMatrix;
 
 uniform vec2 radiusStep;
+uniform vec2 distanceCutoff;
+uniform vec2 proximityCutoff;
 uniform float seed;
 uniform float luminanceInfluence;
-uniform float rangeThreshold;
 uniform float scale;
 uniform float bias;
 
@@ -59,10 +60,11 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 		float sampleDepth = readDepth(coord);
 
-		if(sampleDepth < (1.0 - EPSILON) && abs(depth - sampleDepth) < rangeThreshold) {
+		if(sampleDepth <= distanceCutoff.y) {
 
+			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, abs(depth - sampleDepth));
 			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, getViewZ(sampleDepth));
-			occlusionSum += getOcclusion(p, n, sampleViewPosition);
+			occlusionSum += getOcclusion(p, n, sampleViewPosition) * falloff;
 
 			++sampleCount;
 
@@ -79,15 +81,15 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	float ao = 1.0;
 
 	// Skip fragments of objects that are too far away.
-	if(depth < (1.0 - EPSILON)) {
+	if(depth <= distanceCutoff.y) {
 
 		vec3 viewPosition = getViewPosition(uv, depth, getViewZ(depth));
 		vec3 viewNormal = unpackRGBToNormal(texture2D(normalBuffer, uv).xyz);
 		ao -= getAmbientOcclusion(viewPosition, viewNormal, depth, uv);
 
-		// Fade AO based on luminance.
+		// Fade AO based on luminance and depth.
 		float l = linearToRelativeLuminance(inputColor.rgb);
-		ao = mix(ao, 1.0, l * luminanceInfluence);
+		ao = mix(ao, 1.0, max(l * luminanceInfluence, smoothstep(distanceCutoff.x, distanceCutoff.y, depth)));
 
 	}
 

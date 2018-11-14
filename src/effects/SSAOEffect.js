@@ -27,8 +27,11 @@ export class SSAOEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
+	 * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
-	 * @param {Number} [options.rangeThreshold=0.01] - An occlusion range threshold. Range [0.0, 1.0].
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
 	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
 	 * @param {Number} [options.bias=0.5] - An occlusion bias.
@@ -40,8 +43,11 @@ export class SSAOEffect extends Effect {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
 			rings: 4,
+			distanceThreshold: 0.65,
+			distanceFalloff: 0.1,
+			rangeThreshold: 0.0015,
+			rangeFalloff: 0.01,
 			luminanceInfluence: 0.7,
-			rangeThreshold: 0.01,
 			radius: 18.25,
 			scale: 1.0,
 			bias: 0.5
@@ -62,9 +68,10 @@ export class SSAOEffect extends Effect {
 				["cameraInverseProjectionMatrix", new Uniform(new Matrix4())],
 				["cameraProjectionMatrix", new Uniform(new Matrix4())],
 				["radiusStep", new Uniform(new Vector2())],
+				["distanceCutoff", new Uniform(new Vector2())],
+				["proximityCutoff", new Uniform(new Vector2())],
 				["seed", new Uniform(Math.random())],
 				["luminanceInfluence", new Uniform(settings.luminanceInfluence)],
-				["rangeThreshold", new Uniform(settings.rangeThreshold)],
 				["scale", new Uniform(settings.scale)],
 				["bias", new Uniform(settings.bias)]
 			])
@@ -101,6 +108,9 @@ export class SSAOEffect extends Effect {
 		this.samples = settings.samples;
 		this.rings = settings.rings;
 		this.radius = settings.radius;
+
+		this.setDistanceCutoff(settings.distanceThreshold, settings.distanceFalloff);
+		this.setProximityCutoff(settings.rangeThreshold, settings.rangeFalloff);
 
 	}
 
@@ -212,6 +222,32 @@ export class SSAOEffect extends Effect {
 
 		this.r = value;
 		this.updateRadiusStep();
+
+	}
+
+	/**
+	 * Sets the occlusion distance cutoff.
+	 *
+	 * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setDistanceCutoff(threshold, falloff) {
+
+		this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+
+	}
+
+	/**
+	 * Sets the occlusion proximity cutoff.
+	 *
+	 * @param {Number} threshold - The range threshold. Range [0.0, 1.0].
+	 * @param {Number} falloff - The falloff. Range [0.0, 1.0].
+	 */
+
+	setProximityCutoff(threshold, falloff) {
+
+		this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
 
 	}
 
