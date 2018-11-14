@@ -59,8 +59,9 @@ export class SSAOEffect extends Effect {
 			blendFunction: settings.blendFunction,
 
 			defines: new Map([
-				["RINGS", "0"],
-				["SAMPLES", "0"]
+				["RINGS_INT", "0"],
+				["SAMPLES_INT", "0"],
+				["SAMPLES_FLOAT", "0.0"]
 			]),
 
 			uniforms: new Map([
@@ -149,7 +150,7 @@ export class SSAOEffect extends Effect {
 
 	get samples() {
 
-		return Number.parseInt(this.defines.get("SAMPLES"));
+		return Number.parseInt(this.defines.get("SAMPLES_INT"));
 
 	}
 
@@ -165,7 +166,8 @@ export class SSAOEffect extends Effect {
 
 		value = Math.floor(value);
 
-		this.defines.set("SAMPLES", value.toFixed(0));
+		this.defines.set("SAMPLES_INT", value.toFixed(0));
+		this.defines.set("SAMPLES_FLOAT", value.toFixed(1));
 		this.updateAngleStep();
 		this.updateRadiusStep();
 
@@ -179,7 +181,7 @@ export class SSAOEffect extends Effect {
 
 	get rings() {
 
-		return Number.parseInt(this.defines.get("RINGS"));
+		return Number.parseInt(this.defines.get("RINGS_INT"));
 
 	}
 
@@ -195,7 +197,7 @@ export class SSAOEffect extends Effect {
 
 		value = Math.floor(value);
 
-		this.defines.set("RINGS", value.toFixed(0));
+		this.defines.set("RINGS_INT", value.toFixed(0));
 		this.updateAngleStep();
 
 	}

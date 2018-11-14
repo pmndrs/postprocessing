@@ -49,30 +49,28 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	vec2 radius = radiusStep;
 	float angle = rand(uv + seed) * PI2;
 	float occlusionSum = 0.0;
-	int sampleCount = 0;
 
 	// Collect samples along a discrete spiral pattern.
-	for(int i = 0; i < SAMPLES; ++i) {
+	for(int i = 0; i < SAMPLES_INT; ++i) {
 
 		vec2 coord = uv + vec2(cos(angle), sin(angle)) * radius;
 		radius += radiusStep;
 		angle += ANGLE_STEP;
 
 		float sampleDepth = readDepth(coord);
+		float proximity = abs(depth - sampleDepth);
 
 		if(sampleDepth <= distanceCutoff.y) {
 
-			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, abs(depth - sampleDepth));
+			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, proximity);
 			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, getViewZ(sampleDepth));
 			occlusionSum += getOcclusion(p, n, sampleViewPosition) * falloff;
-
-			++sampleCount;
 
 		}
 
 	}
 
-	return (sampleCount == 0) ? 0.0 : occlusionSum / float(sampleCount);
+	return occlusionSum / SAMPLES_FLOAT;
 
 }
 
