@@ -7844,7 +7844,7 @@
     "__docId__": 366,
     "kind": "file",
     "name": "src/effects/SSAOEffect.js",
-    "content": "import { Matrix4, Uniform, Vector2 } from \"three\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/ssao/shader.frag\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) effect.\r\n *\r\n * SSAO is a method to approximate ambient occlusion in screen space.\r\n *\r\n * For high quality visuals use two SSAO effect instances in a row with\r\n * different radii, one for rough AO and one for fine details.\r\n *\r\n * This implementation uses a discrete spiral sampling pattern:\r\n *  https://jsfiddle.net/a16ff1p7\r\n */\r\n\r\nexport class SSAOEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO effect.\r\n\t *\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Texture} normalBuffer - A texture that contains the scene normals. See {@link NormalPass}.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.\r\n\t * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.\r\n\t * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.\r\n\t * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.\r\n\t * @param {Number} [options.radius=18.25] - The occlusion sampling radius.\r\n\t * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.\r\n\t * @param {Number} [options.bias=0.5] - An occlusion bias.\r\n\t */\r\n\r\n\tconstructor(camera, normalBuffer, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.MULTIPLY,\r\n\t\t\tsamples: 11,\r\n\t\t\trings: 4,\r\n\t\t\tdistanceThreshold: 0.65,\r\n\t\t\tdistanceFalloff: 0.1,\r\n\t\t\trangeThreshold: 0.0015,\r\n\t\t\trangeFalloff: 0.01,\r\n\t\t\tluminanceInfluence: 0.7,\r\n\t\t\tradius: 18.25,\r\n\t\t\tscale: 1.0,\r\n\t\t\tbias: 0.5\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"SSAOEffect\", fragment, {\r\n\r\n\t\t\tattributes: EffectAttribute.DEPTH,\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tdefines: new Map([\r\n\t\t\t\t[\"RINGS\", \"0\"],\r\n\t\t\t\t[\"SAMPLES\", \"0\"]\r\n\t\t\t]),\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"normalBuffer\", new Uniform(normalBuffer)],\r\n\t\t\t\t[\"cameraInverseProjectionMatrix\", new Uniform(new Matrix4())],\r\n\t\t\t\t[\"cameraProjectionMatrix\", new Uniform(new Matrix4())],\r\n\t\t\t\t[\"radiusStep\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"distanceCutoff\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"proximityCutoff\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"seed\", new Uniform(Math.random())],\r\n\t\t\t\t[\"luminanceInfluence\", new Uniform(settings.luminanceInfluence)],\r\n\t\t\t\t[\"scale\", new Uniform(settings.scale)],\r\n\t\t\t\t[\"bias\", new Uniform(settings.bias)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The current sampling radius.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.r = 0.0;\r\n\r\n\t\t/**\r\n\t\t * The current resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2(1, 1);\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\tthis.samples = settings.samples;\r\n\t\tthis.rings = settings.rings;\r\n\t\tthis.radius = settings.radius;\r\n\r\n\t\tthis.setDistanceCutoff(settings.distanceThreshold, settings.distanceFalloff);\r\n\t\tthis.setProximityCutoff(settings.rangeThreshold, settings.rangeFalloff);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the angle step constant.\r\n\t *\r\n\t * @private\r\n\t */\r\n\r\n\tupdateAngleStep() {\r\n\r\n\t\tthis.defines.set(\"ANGLE_STEP\", (Math.PI * 2.0 * this.rings / this.samples).toFixed(11));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the radius step uniform.\r\n\t *\r\n\t * Note: The radius step is a uniform because it changes with the screen size.\r\n\t *\r\n\t * @private\r\n\t */\r\n\r\n\tupdateRadiusStep() {\r\n\r\n\t\tconst r = this.r / this.samples;\r\n\t\tthis.uniforms.get(\"radiusStep\").value.set(r, r).divide(this.resolution);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"SAMPLES\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of occlusion samples per pixel.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"SAMPLES\", value.toFixed(0));\r\n\t\tthis.updateAngleStep();\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of rings in the occlusion sampling spiral pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"RINGS\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of rings in the occlusion sampling spiral pattern.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"RINGS\", value.toFixed(0));\r\n\t\tthis.updateAngleStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget radius() {\r\n\r\n\t\treturn this.r;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset radius(value) {\r\n\r\n\t\tthis.r = value;\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion distance cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetDistanceCutoff(threshold, falloff) {\r\n\r\n\t\tthis.uniforms.get(\"distanceCutoff\").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion proximity cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The range threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetProximityCutoff(threshold, falloff) {\r\n\r\n\t\tthis.uniforms.get(\"proximityCutoff\").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the camera projection matrix uniforms.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t\tthis.uniforms.get(\"cameraInverseProjectionMatrix\").value.getInverse(this.camera.projectionMatrix);\r\n\t\tthis.uniforms.get(\"cameraProjectionMatrix\").value.copy(this.camera.projectionMatrix);\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import { Matrix4, Uniform, Vector2 } from \"three\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/ssao/shader.frag\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) effect.\r\n *\r\n * SSAO is a method to approximate ambient occlusion in screen space.\r\n *\r\n * For high quality visuals use two SSAO effect instances in a row with\r\n * different radii, one for rough AO and one for fine details.\r\n *\r\n * This implementation uses a discrete spiral sampling pattern:\r\n *  https://jsfiddle.net/a16ff1p7\r\n */\r\n\r\nexport class SSAOEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO effect.\r\n\t *\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Texture} normalBuffer - A texture that contains the scene normals. See {@link NormalPass}.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.\r\n\t * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.\r\n\t * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.\r\n\t * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.\r\n\t * @param {Number} [options.radius=18.25] - The occlusion sampling radius.\r\n\t * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.\r\n\t * @param {Number} [options.bias=0.5] - An occlusion bias.\r\n\t */\r\n\r\n\tconstructor(camera, normalBuffer, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.MULTIPLY,\r\n\t\t\tsamples: 11,\r\n\t\t\trings: 4,\r\n\t\t\tdistanceThreshold: 0.65,\r\n\t\t\tdistanceFalloff: 0.1,\r\n\t\t\trangeThreshold: 0.0015,\r\n\t\t\trangeFalloff: 0.01,\r\n\t\t\tluminanceInfluence: 0.7,\r\n\t\t\tradius: 18.25,\r\n\t\t\tscale: 1.0,\r\n\t\t\tbias: 0.5\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"SSAOEffect\", fragment, {\r\n\r\n\t\t\tattributes: EffectAttribute.DEPTH,\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tdefines: new Map([\r\n\t\t\t\t[\"RINGS_INT\", \"0\"],\r\n\t\t\t\t[\"SAMPLES_INT\", \"0\"],\r\n\t\t\t\t[\"SAMPLES_FLOAT\", \"0.0\"]\r\n\t\t\t]),\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"normalBuffer\", new Uniform(normalBuffer)],\r\n\t\t\t\t[\"cameraInverseProjectionMatrix\", new Uniform(new Matrix4())],\r\n\t\t\t\t[\"cameraProjectionMatrix\", new Uniform(new Matrix4())],\r\n\t\t\t\t[\"radiusStep\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"distanceCutoff\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"proximityCutoff\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"seed\", new Uniform(Math.random())],\r\n\t\t\t\t[\"luminanceInfluence\", new Uniform(settings.luminanceInfluence)],\r\n\t\t\t\t[\"scale\", new Uniform(settings.scale)],\r\n\t\t\t\t[\"bias\", new Uniform(settings.bias)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The current sampling radius.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.r = 0.0;\r\n\r\n\t\t/**\r\n\t\t * The current resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2(1, 1);\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\tthis.samples = settings.samples;\r\n\t\tthis.rings = settings.rings;\r\n\t\tthis.radius = settings.radius;\r\n\r\n\t\tthis.setDistanceCutoff(settings.distanceThreshold, settings.distanceFalloff);\r\n\t\tthis.setProximityCutoff(settings.rangeThreshold, settings.rangeFalloff);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the angle step constant.\r\n\t *\r\n\t * @private\r\n\t */\r\n\r\n\tupdateAngleStep() {\r\n\r\n\t\tthis.defines.set(\"ANGLE_STEP\", (Math.PI * 2.0 * this.rings / this.samples).toFixed(11));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the radius step uniform.\r\n\t *\r\n\t * Note: The radius step is a uniform because it changes with the screen size.\r\n\t *\r\n\t * @private\r\n\t */\r\n\r\n\tupdateRadiusStep() {\r\n\r\n\t\tconst r = this.r / this.samples;\r\n\t\tthis.uniforms.get(\"radiusStep\").value.set(r, r).divide(this.resolution);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"SAMPLES_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of occlusion samples per pixel.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"SAMPLES_INT\", value.toFixed(0));\r\n\t\tthis.defines.set(\"SAMPLES_FLOAT\", value.toFixed(1));\r\n\t\tthis.updateAngleStep();\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of rings in the occlusion sampling spiral pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"RINGS_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of rings in the occlusion sampling spiral pattern.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"RINGS_INT\", value.toFixed(0));\r\n\t\tthis.updateAngleStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget radius() {\r\n\r\n\t\treturn this.r;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset radius(value) {\r\n\r\n\t\tthis.r = value;\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion distance cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetDistanceCutoff(threshold, falloff) {\r\n\r\n\t\tthis.uniforms.get(\"distanceCutoff\").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion proximity cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The range threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetProximityCutoff(threshold, falloff) {\r\n\r\n\t\tthis.uniforms.get(\"proximityCutoff\").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the camera projection matrix uniforms.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.updateRadiusStep();\r\n\r\n\t\tthis.uniforms.get(\"cameraInverseProjectionMatrix\").value.getInverse(this.camera.projectionMatrix);\r\n\t\tthis.uniforms.get(\"cameraProjectionMatrix\").value.copy(this.camera.projectionMatrix);\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/SSAOEffect.js",
     "access": "public",
@@ -8055,7 +8055,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#r",
     "access": "private",
     "description": "The current sampling radius.",
-    "lineNumber": 88,
+    "lineNumber": 89,
     "type": {
       "nullable": null,
       "types": [
@@ -8074,7 +8074,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#resolution",
     "access": "private",
     "description": "The current resolution.",
-    "lineNumber": 97,
+    "lineNumber": 98,
     "type": {
       "nullable": null,
       "types": [
@@ -8093,7 +8093,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#camera",
     "access": "private",
     "description": "The main camera.",
-    "lineNumber": 106,
+    "lineNumber": 107,
     "type": {
       "nullable": null,
       "types": [
@@ -8114,7 +8114,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#updateAngleStep",
     "access": "private",
     "description": "Updates the angle step constant.",
-    "lineNumber": 123,
+    "lineNumber": 124,
     "params": [],
     "return": null
   },
@@ -8129,7 +8129,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#updateRadiusStep",
     "access": "private",
     "description": "Updates the radius step uniform.\n\nNote: The radius step is a uniform because it changes with the screen size.",
-    "lineNumber": 137,
+    "lineNumber": 138,
     "params": [],
     "return": null
   },
@@ -8144,7 +8144,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "access": "public",
     "description": "The amount of occlusion samples per pixel.",
-    "lineNumber": 150,
+    "lineNumber": 151,
     "type": {
       "nullable": null,
       "types": [
@@ -8165,7 +8165,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "access": "public",
     "description": "Sets the amount of occlusion samples per pixel.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 164,
+    "lineNumber": 165,
     "type": {
       "nullable": null,
       "types": [
@@ -8186,7 +8186,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#rings",
     "access": "public",
     "description": "The amount of rings in the occlusion sampling spiral pattern.",
-    "lineNumber": 180,
+    "lineNumber": 182,
     "type": {
       "nullable": null,
       "types": [
@@ -8207,7 +8207,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#rings",
     "access": "public",
     "description": "Sets the amount of rings in the occlusion sampling spiral pattern.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 194,
+    "lineNumber": 196,
     "type": {
       "nullable": null,
       "types": [
@@ -8228,7 +8228,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "access": "public",
     "description": "The occlusion sampling radius.",
-    "lineNumber": 209,
+    "lineNumber": 211,
     "type": {
       "nullable": null,
       "types": [
@@ -8249,7 +8249,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "access": "public",
     "description": "Sets the occlusion sampling radius.",
-    "lineNumber": 221,
+    "lineNumber": 223,
     "type": {
       "nullable": null,
       "types": [
@@ -8270,7 +8270,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setDistanceCutoff",
     "access": "public",
     "description": "Sets the occlusion distance cutoff.",
-    "lineNumber": 235,
+    "lineNumber": 237,
     "params": [
       {
         "nullable": null,
@@ -8306,7 +8306,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setProximityCutoff",
     "access": "public",
     "description": "Sets the occlusion proximity cutoff.",
-    "lineNumber": 248,
+    "lineNumber": 250,
     "params": [
       {
         "nullable": null,
@@ -8342,7 +8342,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setSize",
     "access": "public",
     "description": "Updates the camera projection matrix uniforms.",
-    "lineNumber": 261,
+    "lineNumber": 263,
     "params": [
       {
         "nullable": null,
@@ -15728,7 +15728,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.2.0\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.98.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.98.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.2.1\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.98.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.98.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,
