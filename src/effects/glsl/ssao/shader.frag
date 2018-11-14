@@ -60,7 +60,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 		float sampleDepth = readDepth(coord);
 		float proximity = abs(depth - sampleDepth);
 
-		if(sampleDepth <= distanceCutoff.y) {
+		if(sampleDepth < distanceCutoff.y && proximity < proximityCutoff.y) {
 
 			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, proximity);
 			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, getViewZ(sampleDepth));
@@ -79,7 +79,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	float ao = 1.0;
 
 	// Skip fragments of objects that are too far away.
-	if(depth <= distanceCutoff.y) {
+	if(depth < distanceCutoff.y) {
 
 		vec3 viewPosition = getViewPosition(uv, depth, getViewZ(depth));
 		vec3 viewNormal = unpackRGBToNormal(texture2D(normalBuffer, uv).xyz);
