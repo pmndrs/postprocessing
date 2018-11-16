@@ -184,7 +184,11 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderPassMask = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshBasicMaterial({ color: 0x000000 })
+			overrideMaterial: new MeshBasicMaterial({
+				color: 0x000000,
+				morphTargets: true,
+				skinning: true
+			})
 		});
 
 		this.renderPassMask.clear = false;
