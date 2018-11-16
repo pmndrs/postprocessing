@@ -3919,7 +3919,7 @@
     "__docId__": 184,
     "kind": "file",
     "name": "src/effects/GodRaysEffect.js",
-    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tMeshBasicMaterial,\r\n\tRGBFormat,\r\n\tScene,\r\n\tUniform,\r\n\tVector2,\r\n\tVector3,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { KernelSize, GodRaysMaterial } from \"../materials\";\r\nimport { BlurPass, RenderPass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/texture/shader.frag\";\r\n\r\n/**\r\n * A vector.\r\n *\r\n * @type {Vector3}\r\n * @private\r\n */\r\n\r\nconst v = new Vector3();\r\n\r\n/**\r\n * A god rays effect.\r\n */\r\n\r\nexport class GodRaysEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new god rays effect.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object3D} lightSource - The main light source.\r\n\t * @param {Object} [options] - The options. See {@link GodRaysMaterial} for additional options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.samples=60.0] - The number of samples per pixel.\r\n\t * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.\r\n\t * @param {Number} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.\r\n\t */\r\n\r\n\tconstructor(scene, camera, lightSource, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.SCREEN,\r\n\t\t\tresolutionScale: 0.5,\r\n\t\t\tsamples: 60.0,\r\n\t\t\tblur: true,\r\n\t\t\tkernelSize: KernelSize.SMALL\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"GodRaysEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"texture\", new Uniform(null)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * The light source.\r\n\t\t *\r\n\t\t * @type {Object3D}\r\n\t\t */\r\n\r\n\t\tthis.lightSource = lightSource;\r\n\r\n\t\t/**\r\n\t\t * A scene that only contains the light source.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.lightScene = new Scene();\r\n\r\n\t\t/**\r\n\t\t * The light position in screen space.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screenPosition = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * The original resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetX.texture.name = \"GodRays.TargetX\";\r\n\t\tthis.renderTargetX.texture.generateMipmaps = false;\r\n\r\n\t\tthis.uniforms.get(\"texture\").value = this.renderTargetX.texture;\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"GodRays.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A render target for the masked light scene.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetMask.texture.name = \"GodRays.Mask\";\r\n\t\tthis.renderTargetMask.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A pass that only renders the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassLight = new RenderPass(this.lightScene, camera, {\r\n\t\t\tclearColor: new Color(0x000000)\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A pass that renders the masked scene over the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassMask = new RenderPass(scene, camera, {\r\n\t\t\toverrideMaterial: new MeshBasicMaterial({ color: 0x000000 })\r\n\t\t});\r\n\r\n\t\tthis.renderPassMask.clear = false;\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(settings);\r\n\r\n\t\t/**\r\n\t\t * A god rays pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition, settings));\r\n\r\n\t\tthis.blur = settings.blur;\r\n\t\tthis.kernelSize = settings.kernelSize;\r\n\t\tthis.samples = settings.samples;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * A texture that contains the intermediate result of this effect.\r\n\t *\r\n\t * This texture will be applied to the scene colors unless the blend function\r\n\t * is set to `SKIP`.\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tget texture() {\r\n\r\n\t\treturn this.renderTargetX.texture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The internal god rays material.\r\n\t *\r\n\t * @type {GodRaysMaterial}\r\n\t */\r\n\r\n\tget godRaysMaterial() {\r\n\r\n\t\treturn this.godRaysPass.getFullscreenMaterial();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.godRaysMaterial.dithering;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tconst material = this.godRaysMaterial;\r\n\r\n\t\tmaterial.dithering = value;\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the god rays should be blurred to reduce artifacts.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget blur() {\r\n\r\n\t\treturn this.blurPass.enabled;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset blur(value) {\r\n\r\n\t\tthis.blurPass.enabled = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tget kernelSize() {\r\n\r\n\t\treturn this.blurPass.kernelSize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(value) {\r\n\r\n\t\tthis.blurPass.kernelSize = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current resolution scale.\r\n\t *\r\n\t * @return {Number} The resolution scale.\r\n\t */\r\n\r\n\tgetResolutionScale() {\r\n\r\n\t\treturn this.blurPass.getResolutionScale();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution scale.\r\n\t *\r\n\t * @param {Number} scale - The new resolution scale.\r\n\t */\r\n\r\n\tsetResolutionScale(scale) {\r\n\r\n\t\tthis.blurPass.setResolutionScale(scale);\r\n\t\tthis.setSize(this.resolution.x, this.resolution.y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The number of samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn this.godRaysMaterial.samples;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * This value must be carefully chosen. A higher value improves quality but\r\n\t * also increases the GPU load.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tthis.godRaysMaterial.samples = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst lightSource = this.lightSource;\r\n\t\tconst renderTargetMask = this.renderTargetMask;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\tlet background, parent;\r\n\r\n\t\t// Compute the screen light position and translate it to [0.0, 1.0].\r\n\t\tv.copy(lightSource.position).project(this.camera);\r\n\t\tthis.screenPosition.set(\r\n\t\t\tMath.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),\r\n\t\t\tMath.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),\r\n\t\t);\r\n\r\n\t\tparent = lightSource.parent;\r\n\t\tbackground = scene.background;\r\n\t\tscene.background = null;\r\n\t\tthis.lightScene.add(lightSource);\r\n\r\n\t\t/* First, render the light source. Then render the scene into the same\r\n\t\tbuffer using a mask override material with depth test enabled. */\r\n\t\tthis.renderPassLight.render(renderer, renderTargetMask);\r\n\t\tthis.renderPassMask.render(renderer, renderTargetMask);\r\n\r\n\t\tif(parent !== null) {\r\n\r\n\t\t\tparent.add(lightSource);\r\n\r\n\t\t}\r\n\r\n\t\tscene.background = background;\r\n\t\tinputBuffer = renderTargetMask;\r\n\r\n\t\tif(this.blur) {\r\n\r\n\t\t\t// Blur the masked scene to reduce artifacts.\r\n\t\t\tthis.blurPass.render(renderer, inputBuffer, renderTargetY);\r\n\t\t\tinputBuffer = renderTargetY;\r\n\r\n\t\t}\r\n\r\n\t\t// Blur the masked scene along radial lines towards the light source.\r\n\t\tthis.godRaysPass.render(renderer, inputBuffer, this.renderTargetX);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.renderPassLight.setSize(width, height);\r\n\t\tthis.renderPassMask.setSize(width, height);\r\n\t\tthis.blurPass.setSize(width, height);\r\n\t\tthis.godRaysPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.width;\r\n\t\theight = this.blurPass.height;\r\n\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tthis.renderPassLight.initialize(renderer, alpha);\r\n\t\tthis.renderPassMask.initialize(renderer, alpha);\r\n\t\tthis.blurPass.initialize(renderer, alpha);\r\n\t\tthis.godRaysPass.initialize(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tMeshBasicMaterial,\r\n\tRGBFormat,\r\n\tScene,\r\n\tUniform,\r\n\tVector2,\r\n\tVector3,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { KernelSize, GodRaysMaterial } from \"../materials\";\r\nimport { BlurPass, RenderPass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/texture/shader.frag\";\r\n\r\n/**\r\n * A vector.\r\n *\r\n * @type {Vector3}\r\n * @private\r\n */\r\n\r\nconst v = new Vector3();\r\n\r\n/**\r\n * A god rays effect.\r\n */\r\n\r\nexport class GodRaysEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new god rays effect.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object3D} lightSource - The main light source.\r\n\t * @param {Object} [options] - The options. See {@link GodRaysMaterial} for additional options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.\r\n\t * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.\r\n\t * @param {Number} [options.samples=60.0] - The number of samples per pixel.\r\n\t * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.\r\n\t * @param {Number} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.\r\n\t */\r\n\r\n\tconstructor(scene, camera, lightSource, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.SCREEN,\r\n\t\t\tresolutionScale: 0.5,\r\n\t\t\tsamples: 60.0,\r\n\t\t\tblur: true,\r\n\t\t\tkernelSize: KernelSize.SMALL\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"GodRaysEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"texture\", new Uniform(null)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * The light source.\r\n\t\t *\r\n\t\t * @type {Object3D}\r\n\t\t */\r\n\r\n\t\tthis.lightSource = lightSource;\r\n\r\n\t\t/**\r\n\t\t * A scene that only contains the light source.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.lightScene = new Scene();\r\n\r\n\t\t/**\r\n\t\t * The light position in screen space.\r\n\t\t *\r\n\t\t * @type {Vector3}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screenPosition = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * The original resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * A render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetX = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetX.texture.name = \"GodRays.TargetX\";\r\n\t\tthis.renderTargetX.texture.generateMipmaps = false;\r\n\r\n\t\tthis.uniforms.get(\"texture\").value = this.renderTargetX.texture;\r\n\r\n\t\t/**\r\n\t\t * A second render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetY = this.renderTargetX.clone();\r\n\r\n\t\tthis.renderTargetY.texture.name = \"GodRays.TargetY\";\r\n\r\n\t\t/**\r\n\t\t * A render target for the masked light scene.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetMask.texture.name = \"GodRays.Mask\";\r\n\t\tthis.renderTargetMask.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A pass that only renders the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassLight = new RenderPass(this.lightScene, camera, {\r\n\t\t\tclearColor: new Color(0x000000)\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A pass that renders the masked scene over the light source.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderPassMask = new RenderPass(scene, camera, {\r\n\t\t\toverrideMaterial: new MeshBasicMaterial({\r\n\t\t\t\tcolor: 0x000000,\r\n\t\t\t\tmorphTargets: true,\r\n\t\t\t\tskinning: true\r\n\t\t\t})\r\n\t\t});\r\n\r\n\t\tthis.renderPassMask.clear = false;\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(settings);\r\n\r\n\t\t/**\r\n\t\t * A god rays pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition, settings));\r\n\r\n\t\tthis.blur = settings.blur;\r\n\t\tthis.kernelSize = settings.kernelSize;\r\n\t\tthis.samples = settings.samples;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * A texture that contains the intermediate result of this effect.\r\n\t *\r\n\t * This texture will be applied to the scene colors unless the blend function\r\n\t * is set to `SKIP`.\r\n\t *\r\n\t * @type {Texture}\r\n\t */\r\n\r\n\tget texture() {\r\n\r\n\t\treturn this.renderTargetX.texture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The internal god rays material.\r\n\t *\r\n\t * @type {GodRaysMaterial}\r\n\t */\r\n\r\n\tget godRaysMaterial() {\r\n\r\n\t\treturn this.godRaysPass.getFullscreenMaterial();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.godRaysMaterial.dithering;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tconst material = this.godRaysMaterial;\r\n\r\n\t\tmaterial.dithering = value;\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the god rays should be blurred to reduce artifacts.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget blur() {\r\n\r\n\t\treturn this.blurPass.enabled;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset blur(value) {\r\n\r\n\t\tthis.blurPass.enabled = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tget kernelSize() {\r\n\r\n\t\treturn this.blurPass.kernelSize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(value) {\r\n\r\n\t\tthis.blurPass.kernelSize = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current resolution scale.\r\n\t *\r\n\t * @return {Number} The resolution scale.\r\n\t */\r\n\r\n\tgetResolutionScale() {\r\n\r\n\t\treturn this.blurPass.getResolutionScale();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution scale.\r\n\t *\r\n\t * @param {Number} scale - The new resolution scale.\r\n\t */\r\n\r\n\tsetResolutionScale(scale) {\r\n\r\n\t\tthis.blurPass.setResolutionScale(scale);\r\n\t\tthis.setSize(this.resolution.x, this.resolution.y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The number of samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn this.godRaysMaterial.samples;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * This value must be carefully chosen. A higher value improves quality but\r\n\t * also increases the GPU load.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tthis.godRaysMaterial.samples = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst lightSource = this.lightSource;\r\n\t\tconst renderTargetMask = this.renderTargetMask;\r\n\t\tconst renderTargetY = this.renderTargetY;\r\n\r\n\t\tlet background, parent;\r\n\r\n\t\t// Compute the screen light position and translate it to [0.0, 1.0].\r\n\t\tv.copy(lightSource.position).project(this.camera);\r\n\t\tthis.screenPosition.set(\r\n\t\t\tMath.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),\r\n\t\t\tMath.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),\r\n\t\t);\r\n\r\n\t\tparent = lightSource.parent;\r\n\t\tbackground = scene.background;\r\n\t\tscene.background = null;\r\n\t\tthis.lightScene.add(lightSource);\r\n\r\n\t\t/* First, render the light source. Then render the scene into the same\r\n\t\tbuffer using a mask override material with depth test enabled. */\r\n\t\tthis.renderPassLight.render(renderer, renderTargetMask);\r\n\t\tthis.renderPassMask.render(renderer, renderTargetMask);\r\n\r\n\t\tif(parent !== null) {\r\n\r\n\t\t\tparent.add(lightSource);\r\n\r\n\t\t}\r\n\r\n\t\tscene.background = background;\r\n\t\tinputBuffer = renderTargetMask;\r\n\r\n\t\tif(this.blur) {\r\n\r\n\t\t\t// Blur the masked scene to reduce artifacts.\r\n\t\t\tthis.blurPass.render(renderer, inputBuffer, renderTargetY);\r\n\t\t\tinputBuffer = renderTargetY;\r\n\r\n\t\t}\r\n\r\n\t\t// Blur the masked scene along radial lines towards the light source.\r\n\t\tthis.godRaysPass.render(renderer, inputBuffer, this.renderTargetX);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.renderPassLight.setSize(width, height);\r\n\t\tthis.renderPassMask.setSize(width, height);\r\n\t\tthis.blurPass.setSize(width, height);\r\n\t\tthis.godRaysPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.width;\r\n\t\theight = this.blurPass.height;\r\n\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\t\tthis.renderTargetX.setSize(width, height);\r\n\t\tthis.renderTargetY.setSize(width, height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tthis.renderPassLight.initialize(renderer, alpha);\r\n\t\tthis.renderPassMask.initialize(renderer, alpha);\r\n\t\tthis.blurPass.initialize(renderer, alpha);\r\n\t\tthis.godRaysPass.initialize(renderer, alpha);\r\n\r\n\t\tif(!alpha) {\r\n\r\n\t\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetX.texture.format = RGBFormat;\r\n\t\t\tthis.renderTargetY.texture.format = RGBFormat;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/GodRaysEffect.js",
     "access": "public",
@@ -4300,7 +4300,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#blurPass",
     "access": "private",
     "description": "A blur pass.",
-    "lineNumber": 199,
+    "lineNumber": 203,
     "type": {
       "nullable": null,
       "types": [
@@ -4319,7 +4319,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#godRaysPass",
     "access": "private",
     "description": "A god rays pass.",
-    "lineNumber": 208,
+    "lineNumber": 212,
     "type": {
       "nullable": null,
       "types": [
@@ -4340,7 +4340,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#texture",
     "access": "public",
     "description": "A texture that contains the intermediate result of this effect.\n\nThis texture will be applied to the scene colors unless the blend function\nis set to `SKIP`.",
-    "lineNumber": 225,
+    "lineNumber": 229,
     "type": {
       "nullable": null,
       "types": [
@@ -4361,7 +4361,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#godRaysMaterial",
     "access": "public",
     "description": "The internal god rays material.",
-    "lineNumber": 237,
+    "lineNumber": 241,
     "type": {
       "nullable": null,
       "types": [
@@ -4382,7 +4382,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "access": "public",
     "description": "Indicates whether dithering is enabled.",
-    "lineNumber": 249,
+    "lineNumber": 253,
     "type": {
       "nullable": null,
       "types": [
@@ -4403,7 +4403,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#dithering",
     "access": "public",
     "description": "Enables or disables dithering.",
-    "lineNumber": 261,
+    "lineNumber": 265,
     "type": {
       "nullable": null,
       "types": [
@@ -4424,7 +4424,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "access": "public",
     "description": "Indicates whether the god rays should be blurred to reduce artifacts.",
-    "lineNumber": 276,
+    "lineNumber": 280,
     "type": {
       "nullable": null,
       "types": [
@@ -4445,7 +4445,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "access": "public",
     "description": "",
-    "lineNumber": 286,
+    "lineNumber": 290,
     "type": {
       "nullable": null,
       "types": [
@@ -4466,7 +4466,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "access": "public",
     "description": "The blur kernel size.",
-    "lineNumber": 298,
+    "lineNumber": 302,
     "type": {
       "nullable": null,
       "types": [
@@ -4487,7 +4487,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#kernelSize",
     "access": "public",
     "description": "",
-    "lineNumber": 308,
+    "lineNumber": 312,
     "type": {
       "nullable": null,
       "types": [
@@ -4508,7 +4508,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#getResolutionScale",
     "access": "public",
     "description": "Returns the current resolution scale.",
-    "lineNumber": 320,
+    "lineNumber": 324,
     "return": {
       "nullable": null,
       "types": [
@@ -4530,7 +4530,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#setResolutionScale",
     "access": "public",
     "description": "Sets the resolution scale.",
-    "lineNumber": 332,
+    "lineNumber": 336,
     "params": [
       {
         "nullable": null,
@@ -4556,7 +4556,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "access": "public",
     "description": "The number of samples per pixel.",
-    "lineNumber": 345,
+    "lineNumber": 349,
     "type": {
       "nullable": null,
       "types": [
@@ -4577,7 +4577,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
     "access": "public",
     "description": "This value must be carefully chosen. A higher value improves quality but\nalso increases the GPU load.",
-    "lineNumber": 358,
+    "lineNumber": 362,
     "type": {
       "nullable": null,
       "types": [
@@ -4598,7 +4598,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#update",
     "access": "public",
     "description": "Updates this effect.",
-    "lineNumber": 372,
+    "lineNumber": 376,
     "params": [
       {
         "nullable": null,
@@ -4644,7 +4644,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#setSize",
     "access": "public",
     "description": "Updates the size of internal render targets.",
-    "lineNumber": 427,
+    "lineNumber": 431,
     "params": [
       {
         "nullable": null,
@@ -4680,7 +4680,7 @@
     "longname": "src/effects/GodRaysEffect.js~GodRaysEffect#initialize",
     "access": "public",
     "description": "Performs initialization tasks.",
-    "lineNumber": 451,
+    "lineNumber": 455,
     "params": [
       {
         "nullable": null,
@@ -15728,7 +15728,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.2.1\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.98.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.98.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.2.2\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.98.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.98.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,

@@ -1,5 +1,5 @@
 /**
- * postprocessing v5.2.1 build Wed Nov 14 2018
+ * postprocessing v5.2.2 build Fri Nov 16 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -2723,7 +2723,9 @@
       });
       _this.renderPassMask = new RenderPass(scene, camera, {
         overrideMaterial: new three.MeshBasicMaterial({
-          color: 0x000000
+          color: 0x000000,
+          morphTargets: true,
+          skinning: true
         })
       });
       _this.renderPassMask.clear = false;

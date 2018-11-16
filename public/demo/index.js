@@ -5950,7 +5950,9 @@
       });
       _this.renderPassMask = new RenderPass(scene, camera, {
         overrideMaterial: new three.MeshBasicMaterial({
-          color: 0x000000
+          color: 0x000000,
+          morphTargets: true,
+          skinning: true
         })
       });
       _this.renderPassMask.clear = false;
