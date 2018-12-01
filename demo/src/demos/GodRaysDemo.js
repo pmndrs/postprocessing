@@ -4,17 +4,15 @@ import {
 	BufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	MeshPhongMaterial,
-	ObjectLoader,
 	PerspectiveCamera,
 	Points,
 	PointsMaterial,
-	RepeatWrapping,
 	TextureLoader,
 	Vector3
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import GLTFLoader from "three-gltf-loader";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
@@ -69,13 +67,13 @@ export class GodRaysDemo extends PostProcessingDemo {
 		this.sun = null;
 
 		/**
-		 * A directional light.
+		 * A light.
 		 *
-		 * @type {DirectionalLight}
+		 * @type {Light}
 		 * @private
 		 */
 
-		this.directionalLight = null;
+		this.light = null;
 
 	}
 
@@ -91,7 +89,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const textureLoader = new TextureLoader(loadingManager);
-		const modelLoader = new ObjectLoader(loadingManager);
+		const modelLoader = new GLTFLoader(loadingManager);
 
 		const path = "textures/skies/starry/";
 		const format = ".png";
@@ -122,19 +120,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 				});
 
-				modelLoader.load("models/waggon.json", function(object) {
+				modelLoader.load("models/tree/scene.gltf", function(gltf) {
 
-					object.rotation.x = Math.PI * 0.25;
-					object.rotation.y = Math.PI * 0.75;
+					gltf.scene.scale.multiplyScalar(2.5);
+					gltf.scene.position.set(0, -2, 0);
 
-					assets.set("waggon", object);
-
-				});
-
-				textureLoader.load("textures/wood.jpg", function(texture) {
-
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					assets.set("wood-diffuse", texture);
+					assets.set("model", gltf.scene);
 
 				});
 
@@ -169,7 +160,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
 		camera.position.set(-5, -1, -4);
 		this.camera = camera;
 
@@ -190,32 +181,19 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x0f0f0f);
+		const ambientLight = new AmbientLight(0x808080);
 		const directionalLight = new DirectionalLight(0xffbbaa);
+		directionalLight.position.set(75, 25, 100);
+		directionalLight.target = scene;
 
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
+		this.light = directionalLight;
 
-		this.directionalLight = directionalLight;
-
-		scene.add(directionalLight);
 		scene.add(ambientLight);
+		scene.add(directionalLight);
 
 		// Objects.
 
-		const object = assets.get("waggon");
-		const material = new MeshPhongMaterial({
-			color: 0xffffff,
-			map: assets.get("wood-diffuse")
-		});
-
-		object.traverse((child) => {
-
-			child.material = material;
-
-		});
-
-		scene.add(object);
+		scene.add(assets.get("model"));
 
 		// Sun.
 
@@ -233,7 +211,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		sunGeometry.addAttribute("position", new BufferAttribute(new Float32Array(3), 3));
 		const sun = new Points(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
-		sun.position.set(75, 25, 100);
+		sun.position.copy(this.light.position);
 
 		this.sun = sun;
 		scene.add(sun);
@@ -276,7 +254,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const sun = this.sun;
-		const directionalLight = this.directionalLight;
+		const light = this.light;
 
 		const pass = this.pass;
 		const effect = this.effect;
@@ -347,7 +325,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		menu.addColor(params, "color").onChange(() => {
 
 			sun.material.color.setHex(params.color);
-			directionalLight.color.setHex(params.color);
+			light.color.setHex(params.color);
 
 		});
 
