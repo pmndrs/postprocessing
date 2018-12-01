@@ -123,7 +123,8 @@ export class GodRaysDemo extends PostProcessingDemo {
 				modelLoader.load("models/tree/scene.gltf", function(gltf) {
 
 					gltf.scene.scale.multiplyScalar(2.5);
-					gltf.scene.position.set(0, -2, 0);
+					gltf.scene.position.set(0, -2.3, 0);
+					gltf.scene.rotation.set(0, 3, 0);
 
 					assets.set("model", gltf.scene);
 
@@ -161,7 +162,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// Camera.
 
 		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-		camera.position.set(-5, -1, -4);
+		camera.position.set(-6, -1, -6);
 		this.camera = camera;
 
 		// Controls.
@@ -222,12 +223,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 		smaaEffect.setEdgeDetectionThreshold(0.065);
 
 		const godRaysEffect = new GodRaysEffect(scene, camera, sun, {
-			resolutionScale: 0.6,
+			resolutionScale: 0.75,
 			kernelSize: KernelSize.SMALL,
 			density: 0.96,
-			decay: 0.93,
+			decay: 0.90,
 			weight: 0.4,
-			exposure: 0.6,
+			exposure: 0.55,
 			samples: 60,
 			clampMax: 1.0
 		});

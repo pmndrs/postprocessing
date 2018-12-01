@@ -17091,7 +17091,8 @@
             });
             modelLoader.load("models/tree/scene.gltf", function (gltf) {
               gltf.scene.scale.multiplyScalar(2.5);
-              gltf.scene.position.set(0, -2, 0);
+              gltf.scene.position.set(0, -2.3, 0);
+              gltf.scene.rotation.set(0, 3, 0);
               assets.set("model", gltf.scene);
             });
             textureLoader.load("textures/sun.png", function (texture) {
@@ -17112,7 +17113,7 @@
         var composer = this.composer;
         var renderer = composer.renderer;
         var camera = new three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(-5, -1, -4);
+        camera.position.set(-6, -1, -6);
         this.camera = camera;
         var target = new three.Vector3(0, 0.5, 0);
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -17150,12 +17151,12 @@
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
         smaaEffect.setEdgeDetectionThreshold(0.065);
         var godRaysEffect = new GodRaysEffect(scene, camera, sun, {
-          resolutionScale: 0.6,
+          resolutionScale: 0.75,
           kernelSize: KernelSize.SMALL,
           density: 0.96,
-          decay: 0.93,
+          decay: 0.90,
           weight: 0.4,
-          exposure: 0.6,
+          exposure: 0.55,
           samples: 60,
           clampMax: 1.0
         });
