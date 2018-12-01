@@ -85,6 +85,7 @@ export class ToneMappingEffect extends Effect {
 		});
 
 		this.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
+		this.renderTargetLuminance.texture.generateMipmaps = true;
 
 		/**
 		 * The render target for adapted luminance.
