@@ -1,5 +1,5 @@
 /**
- * postprocessing v5.2.2 build Fri Nov 16 2018
+ * postprocessing v5.3.0 build Sat Dec 01 2018
  * https://github.com/vanruesc/postprocessing
  * Copyright 2018 Raoul van Rüschen, Zlib
  */
@@ -3855,6 +3855,7 @@
         depthBuffer: false
       });
       _this.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
+      _this.renderTargetLuminance.texture.generateMipmaps = true;
       _this.renderTargetAdapted = _this.renderTargetLuminance.clone();
       _this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminance";
       _this.renderTargetAdapted.texture.generateMipmaps = false;

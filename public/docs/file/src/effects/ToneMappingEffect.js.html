@@ -180,6 +180,7 @@ export class ToneMappingEffect extends Effect {
 		});
 
 		this.renderTargetLuminance.texture.name = &quot;ToneMapping.Luminance&quot;;
+		this.renderTargetLuminance.texture.generateMipmaps = true;
 
 		/**
 		 * The render target for adapted luminance.

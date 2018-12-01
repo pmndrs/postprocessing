@@ -8518,7 +8518,7 @@
     "__docId__": 395,
     "kind": "file",
     "name": "src/effects/ToneMappingEffect.js",
-    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tLinearMipMapLinearFilter,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { AdaptiveLuminanceMaterial, LuminanceMaterial } from \"../materials\";\r\nimport { ClearPass, SavePass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/tone-mapping/shader.frag\";\r\n\r\n/**\r\n * A tone mapping effect that supports adaptive luminosity.\r\n *\r\n * If adaptivity is enabled, this effect generates a texture that represents the\r\n * luminosity of the current scene and adjusts it over time to simulate the\r\n * optic nerve responding to the amount of light it is receiving.\r\n *\r\n * Reference:\r\n *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline\r\n *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf\r\n */\r\n\r\nexport class ToneMappingEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new tone mapping effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.\r\n\t * @param {Number} [options.resolution=256] - The render texture resolution of the luminance map.\r\n\t * @param {Number} [options.distinction=1.0] - A luminance distinction factor.\r\n\t * @param {Number} [options.middleGrey=0.6] - The middle grey factor.\r\n\t * @param {Number} [options.maxLuminance=16.0] - The maximum luminance.\r\n\t * @param {Number} [options.averageLuminance=1.0] - The average luminance.\r\n\t * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.NORMAL,\r\n\t\t\tadaptive: true,\r\n\t\t\tresolution: 256,\r\n\t\t\tdistinction: 1.0,\r\n\t\t\tmiddleGrey: 0.6,\r\n\t\t\tmaxLuminance: 16.0,\r\n\t\t\taverageLuminance: 1.0,\r\n\t\t\tadaptationRate: 2.0\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"ToneMappingEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"luminanceMap\", new Uniform(null)],\r\n\t\t\t\t[\"middleGrey\", new Uniform(settings.middleGrey)],\r\n\t\t\t\t[\"maxLuminance\", new Uniform(settings.maxLuminance)],\r\n\t\t\t\t[\"averageLuminance\", new Uniform(settings.averageLuminance)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The render target for the current luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t * @todo Use RED format in WebGL 2.0.\r\n\t\t */\r\n\r\n\t\tthis.renderTargetLuminance = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearMipMapLinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tformat: RGBFormat,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetLuminance.texture.name = \"ToneMapping.Luminance\";\r\n\r\n\t\t/**\r\n\t\t * The render target for adapted luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetAdapted = this.renderTargetLuminance.clone();\r\n\r\n\t\tthis.renderTargetAdapted.texture.name = \"ToneMapping.AdaptedLuminance\";\r\n\t\tthis.renderTargetAdapted.texture.generateMipmaps = false;\r\n\t\tthis.renderTargetAdapted.texture.minFilter = LinearFilter;\r\n\r\n\t\t/**\r\n\t\t * A render target that holds a copy of the adapted luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetPrevious = this.renderTargetAdapted.clone();\r\n\r\n\t\tthis.renderTargetPrevious.texture.name = \"ToneMapping.PreviousLuminance\";\r\n\r\n\t\t/**\r\n\t\t * A save pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.savePass = new SavePass(this.renderTargetPrevious, false);\r\n\r\n\t\t/**\r\n\t\t * A luminance shader pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.luminancePass = new ShaderPass(new LuminanceMaterial());\r\n\r\n\t\t/**\r\n\t\t * An adaptive luminance shader pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());\r\n\r\n\t\t// Apply settings.\r\n\t\tthis.adaptationRate = settings.adaptationRate;\r\n\t\tthis.distinction = settings.distinction;\r\n\t\tthis.resolution = settings.resolution;\r\n\t\tthis.adaptive = settings.adaptive;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution of the render targets.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget resolution() {\r\n\r\n\t\treturn this.renderTargetLuminance.width;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution of the internal render targets.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolution(value) {\r\n\r\n\t\t// Round the given value to the next power of two.\r\n\t\tconst exponent = Math.max(0, Math.ceil(Math.log2(value)));\r\n\t\tvalue = Math.pow(2, exponent);\r\n\r\n\t\tthis.renderTargetLuminance.setSize(value, value);\r\n\t\tthis.renderTargetPrevious.setSize(value, value);\r\n\t\tthis.renderTargetAdapted.setSize(value, value);\r\n\r\n\t\tthis.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether this pass uses adaptive luminance.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget adaptive() {\r\n\r\n\t\treturn this.defines.has(\"ADAPTED_LUMINANCE\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables adaptive luminance.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset adaptive(value) {\r\n\r\n\t\tif(value) {\r\n\r\n\t\t\tthis.defines.set(\"ADAPTED_LUMINANCE\", \"1\");\r\n\t\t\tthis.uniforms.get(\"luminanceMap\").value = this.renderTargetAdapted.texture;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"ADAPTED_LUMINANCE\");\r\n\t\t\tthis.uniforms.get(\"luminanceMap\").value = null;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance adaptation rate.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget adaptationRate() {\r\n\r\n\t\treturn this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset adaptationRate(value) {\r\n\r\n\t\tthis.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance distinction factor.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget distinction() {\r\n\r\n\t\treturn this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset distinction(value = 1.0) {\r\n\r\n\t\tthis.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tif(this.adaptive) {\r\n\r\n\t\t\t// Render the luminance of the current scene into a mipmap render target.\r\n\t\t\tthis.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);\r\n\r\n\t\t\t// Use the frame delta to adapt the luminance over time.\r\n\t\t\tconst uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;\r\n\t\t\tuniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;\r\n\t\t\tuniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;\r\n\t\t\tuniforms.delta.value = delta;\r\n\t\t\tthis.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);\r\n\r\n\t\t\t// Save the adapted luminance for the next frame.\r\n\t\t\tthis.savePass.render(renderer, this.renderTargetAdapted);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.savePass.setSize(width, height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tconst clearPass = new ClearPass({ clearColor: new Color(0x7fffff) });\r\n\t\tclearPass.render(renderer, this.renderTargetPrevious);\r\n\t\tclearPass.dispose();\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tLinearMipMapLinearFilter,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { AdaptiveLuminanceMaterial, LuminanceMaterial } from \"../materials\";\r\nimport { ClearPass, SavePass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/tone-mapping/shader.frag\";\r\n\r\n/**\r\n * A tone mapping effect that supports adaptive luminosity.\r\n *\r\n * If adaptivity is enabled, this effect generates a texture that represents the\r\n * luminosity of the current scene and adjusts it over time to simulate the\r\n * optic nerve responding to the amount of light it is receiving.\r\n *\r\n * Reference:\r\n *  GDC2007 - Wolfgang Engel, Post-Processing Pipeline\r\n *  http://perso.univ-lyon1.fr/jean-claude.iehl/Public/educ/GAMA/2007/gdc07/Post-Processing_Pipeline.pdf\r\n */\r\n\r\nexport class ToneMappingEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new tone mapping effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.\r\n\t * @param {Number} [options.resolution=256] - The render texture resolution of the luminance map.\r\n\t * @param {Number} [options.distinction=1.0] - A luminance distinction factor.\r\n\t * @param {Number} [options.middleGrey=0.6] - The middle grey factor.\r\n\t * @param {Number} [options.maxLuminance=16.0] - The maximum luminance.\r\n\t * @param {Number} [options.averageLuminance=1.0] - The average luminance.\r\n\t * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.\r\n\t */\r\n\r\n\tconstructor(options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.NORMAL,\r\n\t\t\tadaptive: true,\r\n\t\t\tresolution: 256,\r\n\t\t\tdistinction: 1.0,\r\n\t\t\tmiddleGrey: 0.6,\r\n\t\t\tmaxLuminance: 16.0,\r\n\t\t\taverageLuminance: 1.0,\r\n\t\t\tadaptationRate: 2.0\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"ToneMappingEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"luminanceMap\", new Uniform(null)],\r\n\t\t\t\t[\"middleGrey\", new Uniform(settings.middleGrey)],\r\n\t\t\t\t[\"maxLuminance\", new Uniform(settings.maxLuminance)],\r\n\t\t\t\t[\"averageLuminance\", new Uniform(settings.averageLuminance)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The render target for the current luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t * @todo Use RED format in WebGL 2.0.\r\n\t\t */\r\n\r\n\t\tthis.renderTargetLuminance = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearMipMapLinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tformat: RGBFormat,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false\r\n\t\t});\r\n\r\n\t\tthis.renderTargetLuminance.texture.name = \"ToneMapping.Luminance\";\r\n\t\tthis.renderTargetLuminance.texture.generateMipmaps = true;\r\n\r\n\t\t/**\r\n\t\t * The render target for adapted luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetAdapted = this.renderTargetLuminance.clone();\r\n\r\n\t\tthis.renderTargetAdapted.texture.name = \"ToneMapping.AdaptedLuminance\";\r\n\t\tthis.renderTargetAdapted.texture.generateMipmaps = false;\r\n\t\tthis.renderTargetAdapted.texture.minFilter = LinearFilter;\r\n\r\n\t\t/**\r\n\t\t * A render target that holds a copy of the adapted luminance.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetPrevious = this.renderTargetAdapted.clone();\r\n\r\n\t\tthis.renderTargetPrevious.texture.name = \"ToneMapping.PreviousLuminance\";\r\n\r\n\t\t/**\r\n\t\t * A save pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.savePass = new SavePass(this.renderTargetPrevious, false);\r\n\r\n\t\t/**\r\n\t\t * A luminance shader pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.luminancePass = new ShaderPass(new LuminanceMaterial());\r\n\r\n\t\t/**\r\n\t\t * An adaptive luminance shader pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());\r\n\r\n\t\t// Apply settings.\r\n\t\tthis.adaptationRate = settings.adaptationRate;\r\n\t\tthis.distinction = settings.distinction;\r\n\t\tthis.resolution = settings.resolution;\r\n\t\tthis.adaptive = settings.adaptive;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The resolution of the render targets.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget resolution() {\r\n\r\n\t\treturn this.renderTargetLuminance.width;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution of the internal render targets.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset resolution(value) {\r\n\r\n\t\t// Round the given value to the next power of two.\r\n\t\tconst exponent = Math.max(0, Math.ceil(Math.log2(value)));\r\n\t\tvalue = Math.pow(2, exponent);\r\n\r\n\t\tthis.renderTargetLuminance.setSize(value, value);\r\n\t\tthis.renderTargetPrevious.setSize(value, value);\r\n\t\tthis.renderTargetAdapted.setSize(value, value);\r\n\r\n\t\tthis.adaptiveLuminancePass.getFullscreenMaterial().defines.MIP_LEVEL_1X1 = exponent.toFixed(1);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether this pass uses adaptive luminance.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget adaptive() {\r\n\r\n\t\treturn this.defines.has(\"ADAPTED_LUMINANCE\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables adaptive luminance.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset adaptive(value) {\r\n\r\n\t\tif(value) {\r\n\r\n\t\t\tthis.defines.set(\"ADAPTED_LUMINANCE\", \"1\");\r\n\t\t\tthis.uniforms.get(\"luminanceMap\").value = this.renderTargetAdapted.texture;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"ADAPTED_LUMINANCE\");\r\n\t\t\tthis.uniforms.get(\"luminanceMap\").value = null;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance adaptation rate.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget adaptationRate() {\r\n\r\n\t\treturn this.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset adaptationRate(value) {\r\n\r\n\t\tthis.adaptiveLuminancePass.getFullscreenMaterial().uniforms.tau.value = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The luminance distinction factor.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget distinction() {\r\n\r\n\t\treturn this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset distinction(value = 1.0) {\r\n\r\n\t\tthis.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tif(this.adaptive) {\r\n\r\n\t\t\t// Render the luminance of the current scene into a mipmap render target.\r\n\t\t\tthis.luminancePass.render(renderer, inputBuffer, this.renderTargetLuminance);\r\n\r\n\t\t\t// Use the frame delta to adapt the luminance over time.\r\n\t\t\tconst uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;\r\n\t\t\tuniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;\r\n\t\t\tuniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;\r\n\t\t\tuniforms.delta.value = delta;\r\n\t\t\tthis.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);\r\n\r\n\t\t\t// Save the adapted luminance for the next frame.\r\n\t\t\tthis.savePass.render(renderer, this.renderTargetAdapted);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.savePass.setSize(width, height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tconst clearPass = new ClearPass({ clearColor: new Color(0x7fffff) });\r\n\t\tclearPass.render(renderer, this.renderTargetPrevious);\r\n\t\tclearPass.dispose();\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/ToneMappingEffect.js",
     "access": "public",
@@ -8695,7 +8695,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#renderTargetAdapted",
     "access": "private",
     "description": "The render target for adapted luminance.",
-    "lineNumber": 96,
+    "lineNumber": 97,
     "type": {
       "nullable": null,
       "types": [
@@ -8714,7 +8714,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#renderTargetPrevious",
     "access": "private",
     "description": "A render target that holds a copy of the adapted luminance.",
-    "lineNumber": 109,
+    "lineNumber": 110,
     "type": {
       "nullable": null,
       "types": [
@@ -8733,7 +8733,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#savePass",
     "access": "private",
     "description": "A save pass.",
-    "lineNumber": 120,
+    "lineNumber": 121,
     "type": {
       "nullable": null,
       "types": [
@@ -8752,7 +8752,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#luminancePass",
     "access": "private",
     "description": "A luminance shader pass.",
-    "lineNumber": 129,
+    "lineNumber": 130,
     "type": {
       "nullable": null,
       "types": [
@@ -8771,7 +8771,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptiveLuminancePass",
     "access": "private",
     "description": "An adaptive luminance shader pass.",
-    "lineNumber": 138,
+    "lineNumber": 139,
     "type": {
       "nullable": null,
       "types": [
@@ -8792,7 +8792,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#resolution",
     "access": "public",
     "description": "The resolution of the render targets.",
-    "lineNumber": 154,
+    "lineNumber": 155,
     "type": {
       "nullable": null,
       "types": [
@@ -8813,7 +8813,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#resolution",
     "access": "public",
     "description": "Sets the resolution of the internal render targets.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 168,
+    "lineNumber": 169,
     "type": {
       "nullable": null,
       "types": [
@@ -8834,7 +8834,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "access": "public",
     "description": "Indicates whether this pass uses adaptive luminance.",
-    "lineNumber": 188,
+    "lineNumber": 189,
     "type": {
       "nullable": null,
       "types": [
@@ -8855,7 +8855,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "access": "public",
     "description": "Enables or disables adaptive luminance.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 202,
+    "lineNumber": 203,
     "type": {
       "nullable": null,
       "types": [
@@ -8876,7 +8876,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptationRate",
     "access": "public",
     "description": "The luminance adaptation rate.",
-    "lineNumber": 224,
+    "lineNumber": 225,
     "type": {
       "nullable": null,
       "types": [
@@ -8897,7 +8897,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptationRate",
     "access": "public",
     "description": "",
-    "lineNumber": 234,
+    "lineNumber": 235,
     "type": {
       "nullable": null,
       "types": [
@@ -8918,7 +8918,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "access": "public",
     "description": "The luminance distinction factor.",
-    "lineNumber": 246,
+    "lineNumber": 247,
     "type": {
       "nullable": null,
       "types": [
@@ -8939,7 +8939,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#distinction",
     "access": "public",
     "description": "",
-    "lineNumber": 256,
+    "lineNumber": 257,
     "type": {
       "nullable": null,
       "types": [
@@ -8960,7 +8960,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#update",
     "access": "public",
     "description": "Updates this effect.",
-    "lineNumber": 270,
+    "lineNumber": 271,
     "params": [
       {
         "nullable": null,
@@ -9006,7 +9006,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#setSize",
     "access": "public",
     "description": "Updates the size of internal render targets.",
-    "lineNumber": 298,
+    "lineNumber": 299,
     "params": [
       {
         "nullable": null,
@@ -9042,7 +9042,7 @@
     "longname": "src/effects/ToneMappingEffect.js~ToneMappingEffect#initialize",
     "access": "public",
     "description": "Performs initialization tasks.",
-    "lineNumber": 311,
+    "lineNumber": 312,
     "params": [
       {
         "nullable": null,
@@ -15728,7 +15728,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.2.2\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.98.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.98.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.3.0\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 <= 0.99.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.99.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.98.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,
