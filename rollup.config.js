@@ -70,7 +70,7 @@ export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
 			file: "public/demo/index.min.js"
 		}),
 
-		plugins: [resolve(), string({
+		plugins: [resolve(), commonjs(), string({
 			include: ["**/*.frag", "**/*.vert"]
 		})].concat([babel(), minify({
 			comments: false
