@@ -30,6 +30,6 @@ void main() {
 
 	float depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;
 
-	gl_FragColor.rgb = vec3(0.0, depthTest, 1.0);
+	gl_FragColor.rg = vec2(0.0, depthTest);
 
 }
