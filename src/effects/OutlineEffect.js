@@ -169,7 +169,6 @@ export class OutlineEffect extends Effect {
 		 *
 		 * @type {DepthPass}
 		 * @private
-		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.depthPass = new DepthPass(this.mainScene, this.mainCamera);
@@ -179,7 +178,6 @@ export class OutlineEffect extends Effect {
 		 *
 		 * @type {RenderPass}
 		 * @private
-		 * @todo Use multiple render targets in WebGL 2.0.
 		 */
 
 		this.maskPass = new RenderPass(this.mainScene, this.mainCamera, {
@@ -605,7 +603,6 @@ export class OutlineEffect extends Effect {
 		} else if(this.clear) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-			this.clearPass.render(renderer, this.renderTargetEdges);
 
 			this.clear = false;
 
