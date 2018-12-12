@@ -5235,7 +5235,7 @@
     "__docId__": 243,
     "kind": "file",
     "name": "src/effects/OutlineEffect.js",
-    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tVector2,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport {\r\n\tDepthComparisonMaterial,\r\n\tOutlineEdgesMaterial,\r\n\tKernelSize\r\n} from \"../materials\";\r\n\r\nimport { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/outline/shader.frag\";\r\nimport vertex from \"./glsl/outline/shader.vert\";\r\n\r\n/**\r\n * An outline effect.\r\n */\r\n\r\nexport class OutlineEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new outline effect.\r\n\t *\r\n\t * If you want dark outlines, remember to adjust the blend function.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.\r\n\t * @param {Number} [options.patternTexture=null] - A pattern texture.\r\n\t * @param {Number} [options.edgeStrength=1.0] - The edge strength.\r\n\t * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.\r\n\t * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.\r\n\t * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.\r\n\t * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.\r\n\t * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.\r\n\t */\r\n\r\n\tconstructor(scene, camera, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.SCREEN,\r\n\t\t\tpatternTexture: null,\r\n\t\t\tedgeStrength: 1.0,\r\n\t\t\tpulseSpeed: 0.0,\r\n\t\t\tvisibleEdgeColor: 0xffffff,\r\n\t\t\thiddenEdgeColor: 0x22090a,\r\n\t\t\tblur: false,\r\n\t\t\txRay: true\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"OutlineEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"maskTexture\", new Uniform(null)],\r\n\t\t\t\t[\"edgeTexture\", new Uniform(null)],\r\n\t\t\t\t[\"edgeStrength\", new Uniform(settings.edgeStrength)],\r\n\t\t\t\t[\"visibleEdgeColor\", new Uniform(new Color(settings.visibleEdgeColor))],\r\n\t\t\t\t[\"hiddenEdgeColor\", new Uniform(new Color(settings.hiddenEdgeColor))],\r\n\t\t\t\t[\"pulse\", new Uniform(1.0)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\tthis.setPatternTexture(settings.patternTexture);\r\n\t\tthis.xRay = settings.xRay;\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainScene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * A depth render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetDepth = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter\r\n\t\t});\r\n\r\n\t\tthis.renderTargetDepth.texture.name = \"Outline.Depth\";\r\n\t\tthis.renderTargetDepth.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A render target for the outline mask.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = this.renderTargetDepth.clone();\r\n\r\n\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\tthis.renderTargetMask.texture.name = \"Outline.Mask\";\r\n\r\n\t\tthis.uniforms.get(\"maskTexture\").value = this.renderTargetMask.texture;\r\n\r\n\t\t/**\r\n\t\t * A render target for the edge detection.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetEdges = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false,\r\n\t\t\tformat: RGBFormat\r\n\t\t});\r\n\r\n\t\tthis.renderTargetEdges.texture.name = \"Outline.Edges\";\r\n\t\tthis.renderTargetEdges.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A render target for the blurred outline overlay.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetBlurredEdges = this.renderTargetEdges.clone();\r\n\r\n\t\tthis.renderTargetBlurredEdges.texture.name = \"Outline.BlurredEdges\";\r\n\r\n\t\t/**\r\n\t\t * A clear pass.\r\n\t\t *\r\n\t\t * @type {ClearPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.clearPass = new ClearPass({\r\n\t\t\tclearColor: new Color(0xffffff),\r\n\t\t\tclearAlpha: 1.0\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A depth pass.\r\n\t\t *\r\n\t\t * @type {DepthPass}\r\n\t\t * @private\r\n\t\t * @todo Use multiple render targets in WebGL 2.0.\r\n\t\t */\r\n\r\n\t\tthis.depthPass = new DepthPass(this.mainScene, this.mainCamera);\r\n\r\n\t\t/**\r\n\t\t * A depth comparison mask pass.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t * @todo Use multiple render targets in WebGL 2.0.\r\n\t\t */\r\n\r\n\t\tthis.maskPass = new RenderPass(this.mainScene, this.mainCamera, {\r\n\t\t\toverrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),\r\n\t\t\tclearColor: new Color(0xffffff),\r\n\t\t\tclearAlpha: 1.0\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(settings);\r\n\r\n\t\tthis.kernelSize = settings.kernelSize;\r\n\t\tthis.blur = settings.blur;\r\n\r\n\t\t/**\r\n\t\t * The original resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * An outline edge detection pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial(settings));\r\n\t\tthis.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;\r\n\r\n\t\t/**\r\n\t\t * A list of objects to outline.\r\n\t\t *\r\n\t\t * @type {Object3D[]}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.selection = [];\r\n\r\n\t\t/**\r\n\t\t * The current animation time.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.time = 0.0;\r\n\r\n\t\t/**\r\n\t\t * The pulse speed. A value of zero disables the pulse effect.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.pulseSpeed = settings.pulseSpeed;\r\n\r\n\t\t/**\r\n\t\t * A dedicated render layer for selected objects.\r\n\t\t *\r\n\t\t * This layer is set to 10 by default. If this collides with your own custom\r\n\t\t * layers, please change it to a free layer before rendering!\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.selectionLayer = 10;\r\n\r\n\t\t/**\r\n\t\t * A clear flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.clear = false;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.blurPass.dithering;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tthis.blurPass.dithering = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tget kernelSize() {\r\n\r\n\t\treturn this.blurPass.kernelSize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(value = KernelSize.VERY_SMALL) {\r\n\r\n\t\tthis.blurPass.kernelSize = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the outlines should be blurred.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget blur() {\r\n\r\n\t\treturn this.blurPass.enabled;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset blur(value) {\r\n\r\n\t\tthis.blurPass.enabled = value;\r\n\r\n\t\tthis.uniforms.get(\"edgeTexture\").value = value ?\r\n\t\t\tthis.renderTargetBlurredEdges.texture :\r\n\t\t\tthis.renderTargetEdges.texture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether X-Ray outlines are enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget xRay() {\r\n\r\n\t\treturn this.defines.has(\"X_RAY\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables X-Ray outlines.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset xRay(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"X_RAY\", \"1\") : this.defines.delete(\"X_RAY\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the pattern texture.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing the\r\n\t * texture.\r\n\t *\r\n\t * @param {Texture} texture - The new texture.\r\n\t */\r\n\r\n\tsetPatternTexture(texture) {\r\n\r\n\t\tif(texture !== null) {\r\n\r\n\t\t\ttexture.wrapS = texture.wrapT = RepeatWrapping;\r\n\r\n\t\t\tthis.defines.set(\"USE_PATTERN\", \"1\");\r\n\t\t\tthis.uniforms.set(\"patternScale\", new Uniform(1.0));\r\n\t\t\tthis.uniforms.set(\"patternTexture\", new Uniform(texture));\r\n\t\t\tthis.vertexShader = vertex;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"USE_PATTERN\");\r\n\t\t\tthis.uniforms.delete(\"patternScale\");\r\n\t\t\tthis.uniforms.delete(\"patternTexture\");\r\n\t\t\tthis.vertexShader = null;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current resolution scale.\r\n\t *\r\n\t * @return {Number} The resolution scale.\r\n\t */\r\n\r\n\tgetResolutionScale() {\r\n\r\n\t\treturn this.blurPass.getResolutionScale();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution scale.\r\n\t *\r\n\t * @param {Number} scale - The new resolution scale.\r\n\t */\r\n\r\n\tsetResolutionScale(scale) {\r\n\r\n\t\tthis.blurPass.setResolutionScale(scale);\r\n\t\tthis.setSize(this.resolution.x, this.resolution.y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Clears the current selection and selects a list of objects.\r\n\t *\r\n\t * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tsetSelection(objects) {\r\n\r\n\t\tconst selection = objects.slice(0);\r\n\t\tconst selectionLayer = this.selectionLayer;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tthis.clearSelection();\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tselection[i].layers.enable(selectionLayer);\r\n\r\n\t\t}\r\n\r\n\t\tthis.selection = selection;\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Clears the list of selected objects.\r\n\t *\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tclearSelection() {\r\n\r\n\t\tconst selection = this.selection;\r\n\t\tconst selectionLayer = this.selectionLayer;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tselection[i].layers.disable(selectionLayer);\r\n\r\n\t\t}\r\n\r\n\t\tthis.selection = [];\r\n\t\tthis.time = 0.0;\r\n\t\tthis.clear = true;\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Selects an object.\r\n\t *\r\n\t * @param {Object3D} object - The object that should be outlined.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tselectObject(object) {\r\n\r\n\t\tobject.layers.enable(this.selectionLayer);\r\n\t\tthis.selection.push(object);\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Deselects an object.\r\n\t *\r\n\t * @param {Object3D} object - The object that should no longer be outlined.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tdeselectObject(object) {\r\n\r\n\t\tconst selection = this.selection;\r\n\t\tconst index = selection.indexOf(object);\r\n\r\n\t\tif(index >= 0) {\r\n\r\n\t\t\tselection[index].layers.disable(this.selectionLayer);\r\n\t\t\tselection.splice(index, 1);\r\n\r\n\t\t\tif(selection.length === 0) {\r\n\r\n\t\t\t\tthis.time = 0.0;\r\n\t\t\t\tthis.clear = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the visibility of all selected objects.\r\n\t *\r\n\t * @private\r\n\t * @param {Boolean} visible - Whether the selected objects should be visible.\r\n\t */\r\n\r\n\tsetSelectionVisible(visible) {\r\n\r\n\t\tconst selection = this.selection;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tif(visible) {\r\n\r\n\t\t\t\tselection[i].layers.enable(0);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tselection[i].layers.disable(0);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tconst mainScene = this.mainScene;\r\n\t\tconst mainCamera = this.mainCamera;\r\n\t\tconst pulse = this.uniforms.get(\"pulse\");\r\n\r\n\t\tconst background = mainScene.background;\r\n\t\tconst mask = mainCamera.layers.mask;\r\n\r\n\t\tif(this.selection.length > 0) {\r\n\r\n\t\t\tmainScene.background = null;\r\n\t\t\tpulse.value = 1.0;\r\n\r\n\t\t\tif(this.pulseSpeed > 0.0) {\r\n\r\n\t\t\t\tpulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;\r\n\t\t\t\tthis.time += delta;\r\n\r\n\t\t\t}\r\n\r\n\t\t\t// Render a custom depth texture and ignore selected objects.\r\n\t\t\tthis.setSelectionVisible(false);\r\n\t\t\tthis.depthPass.render(renderer);\r\n\t\t\tthis.setSelectionVisible(true);\r\n\r\n\t\t\t// Compare the depth of the selected objects with the depth texture.\r\n\t\t\tmainCamera.layers.mask = 1 << this.selectionLayer;\r\n\t\t\tthis.maskPass.render(renderer, this.renderTargetMask);\r\n\r\n\t\t\t// Restore the camera layer mask and the scene background.\r\n\t\t\tmainCamera.layers.mask = mask;\r\n\t\t\tmainScene.background = background;\r\n\r\n\t\t\t// Detect the outline.\r\n\t\t\tthis.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);\r\n\r\n\t\t\tif(this.blur) {\r\n\r\n\t\t\t\tthis.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);\r\n\r\n\t\t\t}\r\n\r\n\t\t} else if(this.clear) {\r\n\r\n\t\t\tthis.clearPass.render(renderer, this.renderTargetMask);\r\n\t\t\tthis.clearPass.render(renderer, this.renderTargetEdges);\r\n\r\n\t\t\tthis.clear = false;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\r\n\t\tthis.blurPass.setSize(width, height);\r\n\t\tthis.maskPass.setSize(width, height);\r\n\t\tthis.depthPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.width;\r\n\t\theight = this.blurPass.height;\r\n\r\n\t\tthis.renderTargetEdges.setSize(width, height);\r\n\t\tthis.renderTargetBlurredEdges.setSize(width, height);\r\n\r\n\t\tthis.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tthis.depthPass.initialize(renderer, alpha);\r\n\t\tthis.maskPass.initialize(renderer, alpha);\r\n\t\tthis.blurPass.initialize(renderer, alpha);\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tColor,\r\n\tLinearFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tVector2,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport {\r\n\tDepthComparisonMaterial,\r\n\tOutlineEdgesMaterial,\r\n\tKernelSize\r\n} from \"../materials\";\r\n\r\nimport { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from \"../passes\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragment from \"./glsl/outline/shader.frag\";\r\nimport vertex from \"./glsl/outline/shader.vert\";\r\n\r\n/**\r\n * An outline effect.\r\n */\r\n\r\nexport class OutlineEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new outline effect.\r\n\t *\r\n\t * If you want dark outlines, remember to adjust the blend function.\r\n\t *\r\n\t * @param {Scene} scene - The main scene.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.\r\n\t * @param {Number} [options.patternTexture=null] - A pattern texture.\r\n\t * @param {Number} [options.edgeStrength=1.0] - The edge strength.\r\n\t * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.\r\n\t * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.\r\n\t * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.\r\n\t * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.\r\n\t * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.\r\n\t */\r\n\r\n\tconstructor(scene, camera, options = {}) {\r\n\r\n\t\tconst settings = Object.assign({\r\n\t\t\tblendFunction: BlendFunction.SCREEN,\r\n\t\t\tpatternTexture: null,\r\n\t\t\tedgeStrength: 1.0,\r\n\t\t\tpulseSpeed: 0.0,\r\n\t\t\tvisibleEdgeColor: 0xffffff,\r\n\t\t\thiddenEdgeColor: 0x22090a,\r\n\t\t\tblur: false,\r\n\t\t\txRay: true\r\n\t\t}, options);\r\n\r\n\t\tsuper(\"OutlineEffect\", fragment, {\r\n\r\n\t\t\tblendFunction: settings.blendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"maskTexture\", new Uniform(null)],\r\n\t\t\t\t[\"edgeTexture\", new Uniform(null)],\r\n\t\t\t\t[\"edgeStrength\", new Uniform(settings.edgeStrength)],\r\n\t\t\t\t[\"visibleEdgeColor\", new Uniform(new Color(settings.visibleEdgeColor))],\r\n\t\t\t\t[\"hiddenEdgeColor\", new Uniform(new Color(settings.hiddenEdgeColor))],\r\n\t\t\t\t[\"pulse\", new Uniform(1.0)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\tthis.setPatternTexture(settings.patternTexture);\r\n\t\tthis.xRay = settings.xRay;\r\n\r\n\t\t/**\r\n\t\t * The main scene.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainScene = scene;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * A depth render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetDepth = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter\r\n\t\t});\r\n\r\n\t\tthis.renderTargetDepth.texture.name = \"Outline.Depth\";\r\n\t\tthis.renderTargetDepth.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A render target for the outline mask.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetMask = this.renderTargetDepth.clone();\r\n\r\n\t\tthis.renderTargetMask.texture.format = RGBFormat;\r\n\t\tthis.renderTargetMask.texture.name = \"Outline.Mask\";\r\n\r\n\t\tthis.uniforms.get(\"maskTexture\").value = this.renderTargetMask.texture;\r\n\r\n\t\t/**\r\n\t\t * A render target for the edge detection.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetEdges = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false,\r\n\t\t\tformat: RGBFormat\r\n\t\t});\r\n\r\n\t\tthis.renderTargetEdges.texture.name = \"Outline.Edges\";\r\n\t\tthis.renderTargetEdges.texture.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * A render target for the blurred outline overlay.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetBlurredEdges = this.renderTargetEdges.clone();\r\n\r\n\t\tthis.renderTargetBlurredEdges.texture.name = \"Outline.BlurredEdges\";\r\n\r\n\t\t/**\r\n\t\t * A clear pass.\r\n\t\t *\r\n\t\t * @type {ClearPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.clearPass = new ClearPass({\r\n\t\t\tclearColor: new Color(0x000000),\r\n\t\t\tclearAlpha: 1.0\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A depth pass.\r\n\t\t *\r\n\t\t * @type {DepthPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.depthPass = new DepthPass(this.mainScene, this.mainCamera);\r\n\r\n\t\t/**\r\n\t\t * A depth comparison mask pass.\r\n\t\t *\r\n\t\t * @type {RenderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.maskPass = new RenderPass(this.mainScene, this.mainCamera, {\r\n\t\t\toverrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),\r\n\t\t\tclearColor: new Color(0xffffff),\r\n\t\t\tclearAlpha: 1.0\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A blur pass.\r\n\t\t *\r\n\t\t * @type {BlurPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.blurPass = new BlurPass(settings);\r\n\r\n\t\tthis.kernelSize = settings.kernelSize;\r\n\t\tthis.blur = settings.blur;\r\n\r\n\t\t/**\r\n\t\t * The original resolution.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Vector2();\r\n\r\n\t\t/**\r\n\t\t * An outline edge detection pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial(settings));\r\n\t\tthis.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;\r\n\r\n\t\t/**\r\n\t\t * A list of objects to outline.\r\n\t\t *\r\n\t\t * @type {Object3D[]}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.selection = [];\r\n\r\n\t\t/**\r\n\t\t * The current animation time.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.time = 0.0;\r\n\r\n\t\t/**\r\n\t\t * The pulse speed. A value of zero disables the pulse effect.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.pulseSpeed = settings.pulseSpeed;\r\n\r\n\t\t/**\r\n\t\t * A dedicated render layer for selected objects.\r\n\t\t *\r\n\t\t * This layer is set to 10 by default. If this collides with your own custom\r\n\t\t * layers, please change it to a free layer before rendering!\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.selectionLayer = 10;\r\n\r\n\t\t/**\r\n\t\t * A clear flag.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.clear = false;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.blurPass.dithering;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tthis.blurPass.dithering = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The blur kernel size.\r\n\t *\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tget kernelSize() {\r\n\r\n\t\treturn this.blurPass.kernelSize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {KernelSize}\r\n\t */\r\n\r\n\tset kernelSize(value = KernelSize.VERY_SMALL) {\r\n\r\n\t\tthis.blurPass.kernelSize = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the outlines should be blurred.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget blur() {\r\n\r\n\t\treturn this.blurPass.enabled;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset blur(value) {\r\n\r\n\t\tthis.blurPass.enabled = value;\r\n\r\n\t\tthis.uniforms.get(\"edgeTexture\").value = value ?\r\n\t\t\tthis.renderTargetBlurredEdges.texture :\r\n\t\t\tthis.renderTargetEdges.texture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether X-Ray outlines are enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget xRay() {\r\n\r\n\t\treturn this.defines.has(\"X_RAY\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables X-Ray outlines.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset xRay(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"X_RAY\", \"1\") : this.defines.delete(\"X_RAY\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the pattern texture.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing the\r\n\t * texture.\r\n\t *\r\n\t * @param {Texture} texture - The new texture.\r\n\t */\r\n\r\n\tsetPatternTexture(texture) {\r\n\r\n\t\tif(texture !== null) {\r\n\r\n\t\t\ttexture.wrapS = texture.wrapT = RepeatWrapping;\r\n\r\n\t\t\tthis.defines.set(\"USE_PATTERN\", \"1\");\r\n\t\t\tthis.uniforms.set(\"patternScale\", new Uniform(1.0));\r\n\t\t\tthis.uniforms.set(\"patternTexture\", new Uniform(texture));\r\n\t\t\tthis.vertexShader = vertex;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"USE_PATTERN\");\r\n\t\t\tthis.uniforms.delete(\"patternScale\");\r\n\t\t\tthis.uniforms.delete(\"patternTexture\");\r\n\t\t\tthis.vertexShader = null;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current resolution scale.\r\n\t *\r\n\t * @return {Number} The resolution scale.\r\n\t */\r\n\r\n\tgetResolutionScale() {\r\n\r\n\t\treturn this.blurPass.getResolutionScale();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the resolution scale.\r\n\t *\r\n\t * @param {Number} scale - The new resolution scale.\r\n\t */\r\n\r\n\tsetResolutionScale(scale) {\r\n\r\n\t\tthis.blurPass.setResolutionScale(scale);\r\n\t\tthis.setSize(this.resolution.x, this.resolution.y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Clears the current selection and selects a list of objects.\r\n\t *\r\n\t * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tsetSelection(objects) {\r\n\r\n\t\tconst selection = objects.slice(0);\r\n\t\tconst selectionLayer = this.selectionLayer;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tthis.clearSelection();\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tselection[i].layers.enable(selectionLayer);\r\n\r\n\t\t}\r\n\r\n\t\tthis.selection = selection;\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Clears the list of selected objects.\r\n\t *\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tclearSelection() {\r\n\r\n\t\tconst selection = this.selection;\r\n\t\tconst selectionLayer = this.selectionLayer;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tselection[i].layers.disable(selectionLayer);\r\n\r\n\t\t}\r\n\r\n\t\tthis.selection = [];\r\n\t\tthis.time = 0.0;\r\n\t\tthis.clear = true;\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Selects an object.\r\n\t *\r\n\t * @param {Object3D} object - The object that should be outlined.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tselectObject(object) {\r\n\r\n\t\tobject.layers.enable(this.selectionLayer);\r\n\t\tthis.selection.push(object);\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Deselects an object.\r\n\t *\r\n\t * @param {Object3D} object - The object that should no longer be outlined.\r\n\t * @return {OutlinePass} This pass.\r\n\t */\r\n\r\n\tdeselectObject(object) {\r\n\r\n\t\tconst selection = this.selection;\r\n\t\tconst index = selection.indexOf(object);\r\n\r\n\t\tif(index >= 0) {\r\n\r\n\t\t\tselection[index].layers.disable(this.selectionLayer);\r\n\t\t\tselection.splice(index, 1);\r\n\r\n\t\t\tif(selection.length === 0) {\r\n\r\n\t\t\t\tthis.time = 0.0;\r\n\t\t\t\tthis.clear = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\treturn this;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the visibility of all selected objects.\r\n\t *\r\n\t * @private\r\n\t * @param {Boolean} visible - Whether the selected objects should be visible.\r\n\t */\r\n\r\n\tsetSelectionVisible(visible) {\r\n\r\n\t\tconst selection = this.selection;\r\n\r\n\t\tlet i, l;\r\n\r\n\t\tfor(i = 0, l = selection.length; i < l; ++i) {\r\n\r\n\t\t\tif(visible) {\r\n\r\n\t\t\t\tselection[i].layers.enable(0);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tselection[i].layers.disable(0);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, delta) {\r\n\r\n\t\tconst mainScene = this.mainScene;\r\n\t\tconst mainCamera = this.mainCamera;\r\n\t\tconst pulse = this.uniforms.get(\"pulse\");\r\n\r\n\t\tconst background = mainScene.background;\r\n\t\tconst mask = mainCamera.layers.mask;\r\n\r\n\t\tif(this.selection.length > 0) {\r\n\r\n\t\t\tmainScene.background = null;\r\n\t\t\tpulse.value = 1.0;\r\n\r\n\t\t\tif(this.pulseSpeed > 0.0) {\r\n\r\n\t\t\t\tpulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;\r\n\t\t\t\tthis.time += delta;\r\n\r\n\t\t\t}\r\n\r\n\t\t\t// Render a custom depth texture and ignore selected objects.\r\n\t\t\tthis.setSelectionVisible(false);\r\n\t\t\tthis.depthPass.render(renderer);\r\n\t\t\tthis.setSelectionVisible(true);\r\n\r\n\t\t\t// Compare the depth of the selected objects with the depth texture.\r\n\t\t\tmainCamera.layers.mask = 1 << this.selectionLayer;\r\n\t\t\tthis.maskPass.render(renderer, this.renderTargetMask);\r\n\r\n\t\t\t// Restore the camera layer mask and the scene background.\r\n\t\t\tmainCamera.layers.mask = mask;\r\n\t\t\tmainScene.background = background;\r\n\r\n\t\t\t// Detect the outline.\r\n\t\t\tthis.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);\r\n\r\n\t\t\tif(this.blur) {\r\n\r\n\t\t\t\tthis.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);\r\n\r\n\t\t\t}\r\n\r\n\t\t} else if(this.clear) {\r\n\r\n\t\t\tthis.clearPass.render(renderer, this.renderTargetMask);\r\n\r\n\t\t\tthis.clear = false;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of internal render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.resolution.set(width, height);\r\n\t\tthis.renderTargetMask.setSize(width, height);\r\n\r\n\t\tthis.blurPass.setSize(width, height);\r\n\t\tthis.maskPass.setSize(width, height);\r\n\t\tthis.depthPass.setSize(width, height);\r\n\r\n\t\twidth = this.blurPass.width;\r\n\t\theight = this.blurPass.height;\r\n\r\n\t\tthis.renderTargetEdges.setSize(width, height);\r\n\t\tthis.renderTargetBlurredEdges.setSize(width, height);\r\n\r\n\t\tthis.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tthis.depthPass.initialize(renderer, alpha);\r\n\t\tthis.maskPass.initialize(renderer, alpha);\r\n\t\tthis.blurPass.initialize(renderer, alpha);\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/OutlineEffect.js",
     "access": "public",
@@ -5543,10 +5543,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#depthPass",
     "access": "private",
     "description": "A depth pass.",
-    "lineNumber": 175,
-    "todo": [
-      "Use multiple render targets in WebGL 2.0."
-    ],
+    "lineNumber": 174,
     "type": {
       "nullable": null,
       "types": [
@@ -5565,10 +5562,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#maskPass",
     "access": "private",
     "description": "A depth comparison mask pass.",
-    "lineNumber": 185,
-    "todo": [
-      "Use multiple render targets in WebGL 2.0."
-    ],
+    "lineNumber": 183,
     "type": {
       "nullable": null,
       "types": [
@@ -5587,7 +5581,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#blurPass",
     "access": "private",
     "description": "A blur pass.",
-    "lineNumber": 198,
+    "lineNumber": 196,
     "type": {
       "nullable": null,
       "types": [
@@ -5606,7 +5600,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#resolution",
     "access": "private",
     "description": "The original resolution.",
-    "lineNumber": 210,
+    "lineNumber": 208,
     "type": {
       "nullable": null,
       "types": [
@@ -5625,7 +5619,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#outlineEdgesPass",
     "access": "private",
     "description": "An outline edge detection pass.",
-    "lineNumber": 219,
+    "lineNumber": 217,
     "type": {
       "nullable": null,
       "types": [
@@ -5644,7 +5638,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#selection",
     "access": "private",
     "description": "A list of objects to outline.",
-    "lineNumber": 229,
+    "lineNumber": 227,
     "type": {
       "nullable": null,
       "types": [
@@ -5663,7 +5657,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#time",
     "access": "private",
     "description": "The current animation time.",
-    "lineNumber": 238,
+    "lineNumber": 236,
     "type": {
       "nullable": null,
       "types": [
@@ -5682,7 +5676,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#pulseSpeed",
     "access": "public",
     "description": "The pulse speed. A value of zero disables the pulse effect.",
-    "lineNumber": 246,
+    "lineNumber": 244,
     "type": {
       "nullable": null,
       "types": [
@@ -5701,7 +5695,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#selectionLayer",
     "access": "public",
     "description": "A dedicated render layer for selected objects.\n\nThis layer is set to 10 by default. If this collides with your own custom\nlayers, please change it to a free layer before rendering!",
-    "lineNumber": 257,
+    "lineNumber": 255,
     "type": {
       "nullable": null,
       "types": [
@@ -5720,7 +5714,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#clear",
     "access": "private",
     "description": "A clear flag.",
-    "lineNumber": 266,
+    "lineNumber": 264,
     "type": {
       "nullable": null,
       "types": [
@@ -5741,7 +5735,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "access": "public",
     "description": "Indicates whether dithering is enabled.",
-    "lineNumber": 276,
+    "lineNumber": 274,
     "type": {
       "nullable": null,
       "types": [
@@ -5762,7 +5756,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "access": "public",
     "description": "Enables or disables dithering.",
-    "lineNumber": 288,
+    "lineNumber": 286,
     "type": {
       "nullable": null,
       "types": [
@@ -5783,7 +5777,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#kernelSize",
     "access": "public",
     "description": "The blur kernel size.",
-    "lineNumber": 300,
+    "lineNumber": 298,
     "type": {
       "nullable": null,
       "types": [
@@ -5804,7 +5798,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#kernelSize",
     "access": "public",
     "description": "",
-    "lineNumber": 310,
+    "lineNumber": 308,
     "type": {
       "nullable": null,
       "types": [
@@ -5825,7 +5819,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "access": "public",
     "description": "Indicates whether the outlines should be blurred.",
-    "lineNumber": 322,
+    "lineNumber": 320,
     "type": {
       "nullable": null,
       "types": [
@@ -5846,7 +5840,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "access": "public",
     "description": "",
-    "lineNumber": 332,
+    "lineNumber": 330,
     "type": {
       "nullable": null,
       "types": [
@@ -5867,7 +5861,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "access": "public",
     "description": "Indicates whether X-Ray outlines are enabled.",
-    "lineNumber": 348,
+    "lineNumber": 346,
     "type": {
       "nullable": null,
       "types": [
@@ -5888,7 +5882,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "access": "public",
     "description": "Enables or disables X-Ray outlines.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 362,
+    "lineNumber": 360,
     "type": {
       "nullable": null,
       "types": [
@@ -5909,7 +5903,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#setPatternTexture",
     "access": "public",
     "description": "Sets the pattern texture.\n\nYou'll need to call {@link EffectPass#recompile} after changing the\ntexture.",
-    "lineNumber": 377,
+    "lineNumber": 375,
     "params": [
       {
         "nullable": null,
@@ -5933,7 +5927,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#vertexShader",
     "access": "public",
     "description": null,
-    "lineNumber": 386,
+    "lineNumber": 384,
     "undocument": true,
     "type": {
       "types": [
@@ -5952,7 +5946,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#getResolutionScale",
     "access": "public",
     "description": "Returns the current resolution scale.",
-    "lineNumber": 405,
+    "lineNumber": 403,
     "return": {
       "nullable": null,
       "types": [
@@ -5974,7 +5968,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#setResolutionScale",
     "access": "public",
     "description": "Sets the resolution scale.",
-    "lineNumber": 417,
+    "lineNumber": 415,
     "params": [
       {
         "nullable": null,
@@ -6000,7 +5994,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#setSelection",
     "access": "public",
     "description": "Clears the current selection and selects a list of objects.",
-    "lineNumber": 431,
+    "lineNumber": 429,
     "params": [
       {
         "nullable": null,
@@ -6033,7 +6027,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#clearSelection",
     "access": "public",
     "description": "Clears the list of selected objects.",
-    "lineNumber": 458,
+    "lineNumber": 456,
     "return": {
       "nullable": null,
       "types": [
@@ -6055,7 +6049,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#selectObject",
     "access": "public",
     "description": "Selects an object.",
-    "lineNumber": 486,
+    "lineNumber": 484,
     "params": [
       {
         "nullable": null,
@@ -6088,7 +6082,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#deselectObject",
     "access": "public",
     "description": "Deselects an object.",
-    "lineNumber": 502,
+    "lineNumber": 500,
     "params": [
       {
         "nullable": null,
@@ -6121,7 +6115,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#setSelectionVisible",
     "access": "private",
     "description": "Sets the visibility of all selected objects.",
-    "lineNumber": 532,
+    "lineNumber": 530,
     "params": [
       {
         "nullable": null,
@@ -6147,7 +6141,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#update",
     "access": "public",
     "description": "Updates this effect.",
-    "lineNumber": 562,
+    "lineNumber": 560,
     "params": [
       {
         "nullable": null,
@@ -6193,7 +6187,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#setSize",
     "access": "public",
     "description": "Updates the size of internal render targets.",
-    "lineNumber": 623,
+    "lineNumber": 620,
     "params": [
       {
         "nullable": null,
@@ -6229,7 +6223,7 @@
     "longname": "src/effects/OutlineEffect.js~OutlineEffect#initialize",
     "access": "public",
     "description": "Performs initialization tasks.",
-    "lineNumber": 649,
+    "lineNumber": 646,
     "params": [
       {
         "nullable": null,
@@ -15728,7 +15722,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.3.1\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van R�schen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 < 0.100.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"rimraf\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.99.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.99.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"5.3.2\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"src/index.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\r\n\t\t\"src\",\r\n\t\t\"build\"\r\n\t],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test && inline-import\",\r\n\t\t\"postpublish\": \"inline-import -r\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.87.0 < 0.100.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"0.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"inline-import\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rollup\": \"0.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"6.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"3.x.x\",\r\n\t\t\"rollup-plugin-string\": \"2.x.x\",\r\n\t\t\"rimraf\": \"2.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.99.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.99.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,
