@@ -3519,7 +3519,7 @@
     return CopyMaterial;
   }(three.ShaderMaterial);
 
-  var fragment$4 = "#include <packing>\r\n#include <clipping_planes_pars_fragment>\r\n\r\nuniform sampler2D depthBuffer;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rgb = vec3(0.0, depthTest, 1.0);\r\n\r\n}\r\n";
+  var fragment$4 = "#include <packing>\r\n#include <clipping_planes_pars_fragment>\r\n\r\nuniform sampler2D depthBuffer;\r\nuniform float cameraNear;\r\nuniform float cameraFar;\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\t// Transform into Cartesian coordinate (not mirrored).\r\n\tvec2 projTexCoord = (vProjTexCoord.xy / vProjTexCoord.w) * 0.5 + 0.5;\r\n\tprojTexCoord = clamp(projTexCoord, 0.002, 0.998);\r\n\r\n\tfloat fragCoordZ = unpackRGBAToDepth(texture2D(depthBuffer, projTexCoord));\r\n\r\n\t#ifdef PERSPECTIVE_CAMERA\r\n\r\n\t\tfloat viewZ = perspectiveDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#else\r\n\r\n\t\tfloat viewZ = orthographicDepthToViewZ(fragCoordZ, cameraNear, cameraFar);\r\n\r\n\t#endif\r\n\r\n\tfloat depthTest = (-vViewZ > -viewZ) ? 1.0 : 0.0;\r\n\r\n\tgl_FragColor.rg = vec2(0.0, depthTest);\r\n\r\n}\r\n";
 
   var vertex$4 = "#include <common>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\n\r\nvarying float vViewZ;\r\nvarying vec4 vProjTexCoord;\r\n\r\nvoid main() {\r\n\r\n\t#include <skinbase_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <project_vertex>\r\n\r\n\tvViewZ = mvPosition.z;\r\n\tvProjTexCoord = gl_Position;\r\n\r\n\t#include <clipping_planes_vertex>\r\n\r\n}\r\n";
 
@@ -6279,7 +6279,7 @@
       _this.renderTargetBlurredEdges = _this.renderTargetEdges.clone();
       _this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
       _this.clearPass = new ClearPass({
-        clearColor: new three.Color(0xffffff),
+        clearColor: new three.Color(0x000000),
         clearAlpha: 1.0
       });
       _this.depthPass = new DepthPass(_this.mainScene, _this.mainCamera);
@@ -6431,7 +6431,6 @@
           }
         } else if (this.clear) {
           this.clearPass.render(renderer, this.renderTargetMask);
-          this.clearPass.render(renderer, this.renderTargetEdges);
           this.clear = false;
         }
       }
@@ -15583,10 +15582,15 @@
             uniforms.uvTransform.value.copy(uvScaleMap.matrix);
           }
 
-          uniforms.envMap.value = material.envMap;
-          uniforms.envMapIntensity.value = material.envMapIntensity;
-          uniforms.flipEnvMap.value = material.envMap && material.envMap.isCubeTexture ? -1 : 1;
-          uniforms.refractionRatio.value = material.refractionRatio;
+          if (material.envMap) {
+            uniforms.envMap.value = material.envMap;
+            uniforms.envMapIntensity.value = material.envMapIntensity;
+            uniforms.flipEnvMap.value = material.envMap.isCubeTexture ? -1 : 1;
+            uniforms.reflectivity.value = material.reflectivity;
+            uniforms.refractionRatio.value = material.refractionRatio;
+            uniforms.maxMipLevel.value = renderer.properties.get(material.envMap).__maxMipLevel;
+          }
+
           uniforms.specular.value.copy(material.specular);
           uniforms.glossiness.value = material.glossiness;
           uniforms.glossinessMap.value = material.glossinessMap;
@@ -15645,10 +15649,10 @@
       var ppp = pp * p;
       var offset1 = i1 * stride3;
       var offset0 = offset1 - stride3;
-      var s0 = 2 * ppp - 3 * pp + 1;
-      var s1 = ppp - 2 * pp + p;
       var s2 = -2 * ppp + 3 * pp;
       var s3 = ppp - pp;
+      var s0 = 1 - s2;
+      var s1 = s3 - pp + p;
 
       for (var i = 0; i !== stride; i++) {
         var p0 = values[offset0 + i + stride];
@@ -16645,6 +16649,7 @@
 
             if (primitive.mode === WEBGL_CONSTANTS.TRIANGLES || primitive.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP || primitive.mode === WEBGL_CONSTANTS.TRIANGLE_FAN || primitive.mode === undefined) {
               mesh = meshDef.isSkinnedMesh === true ? new three__default.SkinnedMesh(geometry, material) : new three__default.Mesh(geometry, material);
+              if (mesh.isSkinnedMesh === true) mesh.normalizeSkinWeights();
 
               if (primitive.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP) {
                 mesh.drawMode = three__default.TriangleStripDrawMode;
