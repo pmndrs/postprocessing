@@ -160,7 +160,7 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass({
-			clearColor: new Color(0xffffff),
+			clearColor: new Color(0x000000),
 			clearAlpha: 1.0
 		});
 
