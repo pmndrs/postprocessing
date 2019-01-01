@@ -1,13 +1,13 @@
 /**
- * postprocessing v5.3.2 build Wed Dec 12 2018
+ * postprocessing v5.4.0 build Tue Jan 01 2019
  * https://github.com/vanruesc/postprocessing
- * Copyright 2018 Raoul van Rüschen, Zlib
+ * Copyright 2019 Raoul van Rüschen, Zlib
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
   typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
-  (factory((global.POSTPROCESSING = {}),global.THREE));
-}(this, (function (exports,three) { 'use strict';
+  (global = global || self, factory(global.POSTPROCESSING = {}, global.THREE));
+}(this, function (exports, three) { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -4694,4 +4694,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));

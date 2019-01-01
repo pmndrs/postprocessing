@@ -811,13 +811,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#dithering",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-dithering",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-dithering",
     "src/effects/BloomEffect.js~BloomEffect#dithering",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#dithering",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-dithering",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-dithering",
     "src/effects/BloomEffect.js~BloomEffect#dithering",
     "member"
   ],
@@ -835,13 +835,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
     "member"
   ],
   [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-kernelSize",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
     "member"
   ],
@@ -1207,13 +1207,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#blur",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-blur",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-blur",
     "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#blur",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-blur",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-blur",
     "src/effects/GodRaysEffect.js~GodRaysEffect#blur",
     "member"
   ],
@@ -1489,13 +1489,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#blur",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
     "member"
   ],
@@ -1543,13 +1543,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#dithering",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-dithering",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-dithering",
     "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#dithering",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-dithering",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-dithering",
     "src/effects/OutlineEffect.js~OutlineEffect#dithering",
     "member"
   ],
@@ -1705,13 +1705,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#xray",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-xRay",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-xRay",
     "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#xray",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-xRay",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-xRay",
     "src/effects/OutlineEffect.js~OutlineEffect#xRay",
     "member"
   ],
@@ -1783,13 +1783,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#pentagon",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-pentagon",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-pentagon",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
     "member"
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#pentagon",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-pentagon",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-pentagon",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
     "member"
   ],
@@ -1819,13 +1819,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#showfocus",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-showFocus",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-showFocus",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "member"
   ],
   [
     "src/effects/realisticbokeheffect.js~realisticbokeheffect#showfocus",
-    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-get-showFocus",
+    "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html#instance-set-showFocus",
     "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "member"
   ],
@@ -1963,13 +1963,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#samples",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-samples",
     "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "member"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#samples",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-samples",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-samples",
     "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "member"
   ],
@@ -2167,13 +2167,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#adaptive",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-adaptive",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-adaptive",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "member"
   ],
   [
     "src/effects/tonemappingeffect.js~tonemappingeffect#adaptive",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-adaptive",
+    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-adaptive",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptive",
     "member"
   ],
@@ -2539,13 +2539,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/materials/effectmaterial.js~effectmaterial#depthpacking",
-    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-set-depthPacking",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-get-depthPacking",
     "src/materials/EffectMaterial.js~EffectMaterial#depthPacking",
     "member"
   ],
   [
     "src/materials/effectmaterial.js~effectmaterial#depthpacking",
-    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-get-depthPacking",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-set-depthPacking",
     "src/materials/EffectMaterial.js~EffectMaterial#depthPacking",
     "member"
   ],
@@ -2713,13 +2713,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#kernelsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-kernelSize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-kernelSize",
     "src/passes/BlurPass.js~BlurPass#kernelSize",
     "member"
   ],
@@ -2923,13 +2923,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/effectpass.js~effectpass#dithering",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-set-dithering",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-get-dithering",
     "src/passes/EffectPass.js~EffectPass#dithering",
     "member"
   ],
   [
     "src/passes/effectpass.js~effectpass#dithering",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-get-dithering",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-set-dithering",
     "src/passes/EffectPass.js~EffectPass#dithering",
     "member"
   ],
