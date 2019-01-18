@@ -40,7 +40,8 @@ export {
 	SSAOEffect,
 	TextureEffect,
 	ToneMappingEffect,
-	VignetteEffect
+	VignetteEffect,
+	WebGLExtension
 } from "./effects";
 
 export {

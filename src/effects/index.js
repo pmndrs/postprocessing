@@ -13,7 +13,7 @@ export { ColorAverageEffect } from "./ColorAverageEffect.js";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
 export { DepthEffect } from "./DepthEffect.js";
 export { DotScreenEffect } from "./DotScreenEffect.js";
-export { Effect, EffectAttribute } from "./Effect.js";
+export { Effect, EffectAttribute, WebGLExtension } from "./Effect.js";
 export { GammaCorrectionEffect } from "./GammaCorrectionEffect.js";
 export { GlitchEffect, GlitchMode } from "./GlitchEffect.js";
 export { GodRaysEffect } from "./GodRaysEffect.js";

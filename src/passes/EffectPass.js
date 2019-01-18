@@ -342,6 +342,7 @@ export class EffectPass extends Pass {
 		const blendModes = new Map();
 		const defines = new Map();
 		const uniforms = new Map();
+		const extensions = new Set();
 
 		let id = 0, varyings = 0, attributes = 0;
 		let transformedUv = false;
@@ -350,21 +351,32 @@ export class EffectPass extends Pass {
 
 		for(const effect of this.effects) {
 
-			if(effect.blendMode.blendFunction !== BlendFunction.SKIP) {
+			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
-				if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
+				continue;
 
-					console.error("Convolution effects cannot be merged", effect);
+			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
-				} else {
+				console.error("Convolution effects cannot be merged", effect);
 
-					attributes |= effect.attributes;
+			} else {
 
-					result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+				attributes |= effect.attributes;
 
-					varyings += result.varyings.length;
-					transformedUv = transformedUv || result.transformedUv;
-					readDepth = readDepth || result.readDepth;
+				result = integrateEffect(("e" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);
+
+				varyings += result.varyings.length;
+				transformedUv = transformedUv || result.transformedUv;
+				readDepth = readDepth || result.readDepth;
+
+				if(effect.extensions !== null) {
+
+					// Collect the WebGL extensions that are required by this effect.
+					for(const extension of effect.extensions) {
+
+						extensions.add(extension);
+
+					}
 
 				}
 
@@ -414,7 +426,20 @@ export class EffectPass extends Pass {
 		this.uniforms = uniforms.size;
 		this.varyings = varyings;
 
-		return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+		const material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+
+		if(extensions.size > 0) {
+
+			// Enable required WebGL extensions.
+			for(const extension of extensions) {
+
+				material.extensions[extension] = true;
+
+			}
+
+		}
+
+		return material;
 
 	}
 

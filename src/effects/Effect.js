@@ -23,6 +23,7 @@ export class Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Map<String, String>} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map<String, Uniform>} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
+	 * @param {Set<WebGLExtension>} [options.extensions] - WebGL extensions.
 	 * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don't need one.
 	 */
 
@@ -33,6 +34,7 @@ export class Effect {
 			blendFunction: BlendFunction.SCREEN,
 			defines: new Map(),
 			uniforms: new Map(),
+			extensions: null,
 			vertexShader: null
 		}, options);
 
@@ -91,6 +93,17 @@ export class Effect {
 		 */
 
 		this.uniforms = settings.uniforms;
+
+		/**
+		 * WebGL extensions that are required by this effect.
+		 *
+		 * You'll need to call {@link EffectPass#recompile} after adding or removing
+		 * an extension.
+		 *
+		 * @type {Set<WebGLExtension>}
+		 */
+
+		this.extensions = settings.extensions;
 
 		/**
 		 * The blend mode of this effect.
@@ -221,5 +234,24 @@ export const EffectAttribute = {
 	CONVOLUTION: 2,
 	DEPTH: 1,
 	NONE: 0
+
+};
+
+/**
+ * An enumeration of WebGL extensions.
+ *
+ * @type {Object}
+ * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
+ * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
+ * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
+ * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
+ */
+
+export const WebGLExtension = {
+
+	DERIVATIVES: "derivatives",
+	FRAG_DEPTH: "fragDepth",
+	DRAW_BUFFERS: "drawBuffers",
+	SHADER_TEXTURE_LOD: "shaderTextureLOD"
 
 };
