@@ -354,6 +354,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/effects/effect.js~webglextension",
+    "variable/index.html#static-variable-WebGLExtension",
+    "<span>WebGLExtension</span> <span class=\"search-result-import-path\">postprocessing/src/effects/Effect.js</span>",
+    "variable"
+  ],
+  [
     "src/.external-ecmascript.js~array",
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
     "src/.external-ecmascript.js~Array",
@@ -1030,6 +1036,12 @@ window.esdocSearchIndex = [
     "class/src/effects/Effect.js~Effect.html#instance-method-dispose",
     "src/effects/Effect.js~Effect#dispose",
     "method"
+  ],
+  [
+    "src/effects/effect.js~effect#extensions",
+    "class/src/effects/Effect.js~Effect.html#instance-member-extensions",
+    "src/effects/Effect.js~Effect#extensions",
+    "member"
   ],
   [
     "src/effects/effect.js~effect#fragmentshader",

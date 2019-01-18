@@ -59,6 +59,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
@@ -118,6 +119,7 @@ export class Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
 	 * @param {Map&lt;String, String&gt;} [options.defines] - Custom preprocessor macro definitions. Keys are names and values are code.
 	 * @param {Map&lt;String, Uniform&gt;} [options.uniforms] - Custom shader uniforms. Keys are names and values are uniforms.
+	 * @param {Set&lt;WebGLExtension&gt;} [options.extensions] - WebGL extensions.
 	 * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don&apos;t need one.
 	 */
 
@@ -128,6 +130,7 @@ export class Effect {
 			blendFunction: BlendFunction.SCREEN,
 			defines: new Map(),
 			uniforms: new Map(),
+			extensions: null,
 			vertexShader: null
 		}, options);
 
@@ -186,6 +189,17 @@ export class Effect {
 		 */
 
 		this.uniforms = settings.uniforms;
+
+		/**
+		 * WebGL extensions that are required by this effect.
+		 *
+		 * You&apos;ll need to call {@link EffectPass#recompile} after adding or removing
+		 * an extension.
+		 *
+		 * @type {Set&lt;WebGLExtension&gt;}
+		 */
+
+		this.extensions = settings.extensions;
 
 		/**
 		 * The blend mode of this effect.
@@ -316,6 +330,25 @@ export const EffectAttribute = {
 	CONVOLUTION: 2,
 	DEPTH: 1,
 	NONE: 0
+
+};
+
+/**
+ * An enumeration of WebGL extensions.
+ *
+ * @type {Object}
+ * @property {String} DERIVATIVES - Enables derivatives by adding the functions dFdx, dFdy and fwidth.
+ * @property {String} FRAG_DEPTH - Enables gl_FragDepthEXT to set a depth value of a fragment from within the fragment shader.
+ * @property {String} DRAW_BUFFERS - Enables multiple render targets (MRT) support.
+ * @property {String} SHADER_TEXTURE_LOD - Enables explicit control of texture LOD.
+ */
+
+export const WebGLExtension = {
+
+	DERIVATIVES: &quot;derivatives&quot;,
+	FRAG_DEPTH: &quot;fragDepth&quot;,
+	DRAW_BUFFERS: &quot;drawBuffers&quot;,
+	SHADER_TEXTURE_LOD: &quot;shaderTextureLOD&quot;
 
 };
 </code></pre>

@@ -59,6 +59,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html">ToneMappingEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/VignetteEffect.js~VignetteEffect.html">VignetteEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
@@ -282,6 +283,35 @@
         
         
         <div data-ice="description"><p>Preprocessor macro definitions.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-extensions">extensions</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a></span>&lt;<span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span>&gt;</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>WebGL extensions that are required by this effect.</p>
 </div>
       </div>
     </td>
@@ -581,7 +611,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber30">source</a></span></span>
     </span>
   </h3>
 
@@ -653,6 +683,13 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.extensions</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a></span>&lt;<span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span>&gt;</td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>WebGL extensions.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.vertexShader</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -697,7 +734,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -740,7 +777,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber56">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
@@ -786,7 +823,7 @@ which they were registered. Some attributes imply a higher priority.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber121">source</a></span></span>
     </span>
   </h3>
 
@@ -835,7 +872,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -844,6 +881,52 @@ function.</p>
   
   <div data-ice="description"><p>Preprocessor macro definitions.</p>
 <p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing a macro.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-extensions">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">extensions</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set">Set</a></span>&lt;<span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span>&gt;</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber106">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>WebGL extensions that are required by this effect.</p>
+<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after adding or removing
+an extension.</p>
 </div>
 
   
@@ -880,7 +963,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -924,7 +1007,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -968,7 +1051,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1014,7 +1097,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber72">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber74">source</a></span></span>
     </span>
   </h3>
 
@@ -1061,7 +1144,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber202">source</a></span></span>
     </span>
   </h3>
 
@@ -1114,7 +1197,7 @@ call this method directly.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -1196,7 +1279,7 @@ which happens after the size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber122">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -1267,7 +1350,7 @@ depth texture that is bound to the associated <span><a href="class/src/passes/Ef
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber154">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
@@ -1346,7 +1429,7 @@ and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 

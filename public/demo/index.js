@@ -2357,7 +2357,7 @@
     });
 
     if (Common.isUndefined(params.parent)) {
-      params.closed = false;
+      this.closed = params.closed || false;
       dom.addClass(this.domElement, GUI.CLASS_MAIN);
       dom.makeSelectable(this.domElement, false);
 
@@ -2809,7 +2809,7 @@
         max: controller.__max,
         step: controller.__step
       });
-      Common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step'], function (method) {
+      Common.each(['updateDisplay', 'onChange', 'onFinishChange', 'step', 'min', 'max'], function (method) {
         var pc = controller[method];
         var pb = box[method];
 
@@ -4386,6 +4386,7 @@
         blendFunction: BlendFunction.SCREEN,
         defines: new Map(),
         uniforms: new Map(),
+        extensions: null,
         vertexShader: null
       }, options);
       this.name = name;
@@ -4394,6 +4395,7 @@
       this.vertexShader = settings.vertexShader;
       this.defines = settings.defines;
       this.uniforms = settings.uniforms;
+      this.extensions = settings.extensions;
       this.blendMode = new BlendMode(settings.blendFunction);
     }
 
@@ -4607,6 +4609,7 @@
         var blendModes = new Map();
         var defines = new Map();
         var uniforms = new Map();
+        var extensions = new Set();
         var id = 0,
             varyings = 0,
             attributes = 0;
@@ -4621,15 +4624,41 @@
           for (var _iterator3 = this.effects[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var effect = _step3.value;
 
-            if (effect.blendMode.blendFunction !== BlendFunction.SKIP) {
-              if ((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
-                console.error("Convolution effects cannot be merged", effect);
-              } else {
-                attributes |= effect.attributes;
-                result = integrateEffect("e" + id++, effect, shaderParts, blendModes, defines, uniforms, attributes);
-                varyings += result.varyings.length;
-                transformedUv = transformedUv || result.transformedUv;
-                readDepth = readDepth || result.readDepth;
+            if (effect.blendMode.blendFunction === BlendFunction.SKIP) {
+              continue;
+            } else if ((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
+              console.error("Convolution effects cannot be merged", effect);
+            } else {
+              attributes |= effect.attributes;
+              result = integrateEffect("e" + id++, effect, shaderParts, blendModes, defines, uniforms, attributes);
+              varyings += result.varyings.length;
+              transformedUv = transformedUv || result.transformedUv;
+              readDepth = readDepth || result.readDepth;
+
+              if (effect.extensions !== null) {
+                var _iteratorNormalCompletion6 = true;
+                var _didIteratorError6 = false;
+                var _iteratorError6 = undefined;
+
+                try {
+                  for (var _iterator6 = effect.extensions[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var _extension = _step6.value;
+                    extensions.add(_extension);
+                  }
+                } catch (err) {
+                  _didIteratorError6 = true;
+                  _iteratorError6 = err;
+                } finally {
+                  try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+                      _iterator6.return();
+                    }
+                  } finally {
+                    if (_didIteratorError6) {
+                      throw _iteratorError6;
+                    }
+                  }
+                }
               }
             }
           }
@@ -4692,7 +4721,35 @@
         });
         this.uniforms = uniforms.size;
         this.varyings = varyings;
-        return new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+        var material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+
+        if (extensions.size > 0) {
+          var _iteratorNormalCompletion5 = true;
+          var _didIteratorError5 = false;
+          var _iteratorError5 = undefined;
+
+          try {
+            for (var _iterator5 = extensions[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+              var extension = _step5.value;
+              material.extensions[extension] = true;
+            }
+          } catch (err) {
+            _didIteratorError5 = true;
+            _iteratorError5 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+                _iterator5.return();
+              }
+            } finally {
+              if (_didIteratorError5) {
+                throw _iteratorError5;
+              }
+            }
+          }
+        }
+
+        return material;
       }
     }, {
       key: "recompile",
@@ -4733,69 +4790,6 @@
         material.uniforms.depthBuffer.value = depthTexture;
         material.depthPacking = depthPacking;
         material.needsUpdate = true;
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
-
-        try {
-          for (var _iterator5 = this.effects[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-            var effect = _step5.value;
-            effect.setDepthTexture(depthTexture, depthPacking);
-          }
-        } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
-              _iterator5.return();
-            }
-          } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
-            }
-          }
-        }
-
-        this.needsDepthTexture = depthTexture === null;
-      }
-    }, {
-      key: "render",
-      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
-        var material = this.getFullscreenMaterial();
-        var time = material.uniforms.time.value + delta;
-        var _iteratorNormalCompletion6 = true;
-        var _didIteratorError6 = false;
-        var _iteratorError6 = undefined;
-
-        try {
-          for (var _iterator6 = this.effects[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-            var effect = _step6.value;
-            effect.update(renderer, inputBuffer, delta);
-          }
-        } catch (err) {
-          _didIteratorError6 = true;
-          _iteratorError6 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
-              _iterator6.return();
-            }
-          } finally {
-            if (_didIteratorError6) {
-              throw _iteratorError6;
-            }
-          }
-        }
-
-        material.uniforms.inputBuffer.value = inputBuffer.texture;
-        material.uniforms.time.value = time <= this.maxTime ? time : this.minTime;
-        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
-      }
-    }, {
-      key: "setSize",
-      value: function setSize(width, height) {
-        this.getFullscreenMaterial().setSize(width, height);
         var _iteratorNormalCompletion7 = true;
         var _didIteratorError7 = false;
         var _iteratorError7 = undefined;
@@ -4803,7 +4797,7 @@
         try {
           for (var _iterator7 = this.effects[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
             var effect = _step7.value;
-            effect.setSize(width, height);
+            effect.setDepthTexture(depthTexture, depthPacking);
           }
         } catch (err) {
           _didIteratorError7 = true;
@@ -4816,6 +4810,69 @@
           } finally {
             if (_didIteratorError7) {
               throw _iteratorError7;
+            }
+          }
+        }
+
+        this.needsDepthTexture = depthTexture === null;
+      }
+    }, {
+      key: "render",
+      value: function render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+        var material = this.getFullscreenMaterial();
+        var time = material.uniforms.time.value + delta;
+        var _iteratorNormalCompletion8 = true;
+        var _didIteratorError8 = false;
+        var _iteratorError8 = undefined;
+
+        try {
+          for (var _iterator8 = this.effects[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+            var effect = _step8.value;
+            effect.update(renderer, inputBuffer, delta);
+          }
+        } catch (err) {
+          _didIteratorError8 = true;
+          _iteratorError8 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
+              _iterator8.return();
+            }
+          } finally {
+            if (_didIteratorError8) {
+              throw _iteratorError8;
+            }
+          }
+        }
+
+        material.uniforms.inputBuffer.value = inputBuffer.texture;
+        material.uniforms.time.value = time <= this.maxTime ? time : this.minTime;
+        renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        this.getFullscreenMaterial().setSize(width, height);
+        var _iteratorNormalCompletion9 = true;
+        var _didIteratorError9 = false;
+        var _iteratorError9 = undefined;
+
+        try {
+          for (var _iterator9 = this.effects[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+            var effect = _step9.value;
+            effect.setSize(width, height);
+          }
+        } catch (err) {
+          _didIteratorError9 = true;
+          _iteratorError9 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
+              _iterator9.return();
+            }
+          } finally {
+            if (_didIteratorError9) {
+              throw _iteratorError9;
             }
           }
         }
@@ -4836,26 +4893,26 @@
           console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
         }
 
-        var _iteratorNormalCompletion8 = true;
-        var _didIteratorError8 = false;
-        var _iteratorError8 = undefined;
+        var _iteratorNormalCompletion10 = true;
+        var _didIteratorError10 = false;
+        var _iteratorError10 = undefined;
 
         try {
-          for (var _iterator8 = this.effects[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-            var effect = _step8.value;
+          for (var _iterator10 = this.effects[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+            var effect = _step10.value;
             effect.initialize(renderer, alpha);
           }
         } catch (err) {
-          _didIteratorError8 = true;
-          _iteratorError8 = err;
+          _didIteratorError10 = true;
+          _iteratorError10 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
-              _iterator8.return();
+            if (!_iteratorNormalCompletion10 && _iterator10.return != null) {
+              _iterator10.return();
             }
           } finally {
-            if (_didIteratorError8) {
-              throw _iteratorError8;
+            if (_didIteratorError10) {
+              throw _iteratorError10;
             }
           }
         }
@@ -4865,26 +4922,26 @@
       value: function dispose() {
         _get(_getPrototypeOf(EffectPass.prototype), "dispose", this).call(this);
 
-        var _iteratorNormalCompletion9 = true;
-        var _didIteratorError9 = false;
-        var _iteratorError9 = undefined;
+        var _iteratorNormalCompletion11 = true;
+        var _didIteratorError11 = false;
+        var _iteratorError11 = undefined;
 
         try {
-          for (var _iterator9 = this.effects[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-            var effect = _step9.value;
+          for (var _iterator11 = this.effects[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+            var effect = _step11.value;
             effect.dispose();
           }
         } catch (err) {
-          _didIteratorError9 = true;
-          _iteratorError9 = err;
+          _didIteratorError11 = true;
+          _iteratorError11 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
-              _iterator9.return();
+            if (!_iteratorNormalCompletion11 && _iterator11.return != null) {
+              _iterator11.return();
             }
           } finally {
-            if (_didIteratorError9) {
-              throw _iteratorError9;
+            if (_didIteratorError11) {
+              throw _iteratorError11;
             }
           }
         }
@@ -15990,11 +16047,11 @@
         var itemSize = attribute.itemSize;
         var array = attribute.array.slice(0, count * itemSize);
 
-        for (var i = 0; i < count; ++i) {
-          array[i] = attribute.getX(i);
-          if (itemSize >= 2) array[i + 1] = attribute.getY(i);
-          if (itemSize >= 3) array[i + 2] = attribute.getZ(i);
-          if (itemSize >= 4) array[i + 3] = attribute.getW(i);
+        for (var i = 0, j = 0; i < count; ++i) {
+          array[j++] = attribute.getX(i);
+          if (itemSize >= 2) array[j++] = attribute.getY(i);
+          if (itemSize >= 3) array[j++] = attribute.getZ(i);
+          if (itemSize >= 4) array[j++] = attribute.getW(i);
         }
 
         return new three__default.BufferAttribute(array, itemSize, attribute.normalized);
@@ -16904,11 +16961,11 @@
       var meshReferences = json.meshReferences;
       var meshUses = json.meshUses;
       var nodeDef = json.nodes[nodeIndex];
-      return new Promise(function (resolve) {
+      return function () {
         if (nodeDef.isBone === true) {
-          resolve(new three__default.Bone());
+          return Promise.resolve(new three__default.Bone());
         } else if (nodeDef.mesh !== undefined) {
-          parser.getDependency('mesh', nodeDef.mesh).then(function (mesh) {
+          return parser.getDependency('mesh', nodeDef.mesh).then(function (mesh) {
             var node;
 
             if (meshReferences[nodeDef.mesh] > 1) {
@@ -16925,16 +16982,26 @@
               node = mesh;
             }
 
-            resolve(node);
+            if (nodeDef.weights !== undefined) {
+              node.traverse(function (o) {
+                if (!o.isMesh) return;
+
+                for (var i = 0, il = nodeDef.weights.length; i < il; i++) {
+                  o.morphTargetInfluences[i] = nodeDef.weights[i];
+                }
+              });
+            }
+
+            return node;
           });
         } else if (nodeDef.camera !== undefined) {
-          parser.getDependency('camera', nodeDef.camera).then(resolve);
+          return parser.getDependency('camera', nodeDef.camera);
         } else if (nodeDef.extensions && nodeDef.extensions[EXTENSIONS.KHR_LIGHTS_PUNCTUAL] && nodeDef.extensions[EXTENSIONS.KHR_LIGHTS_PUNCTUAL].light !== undefined) {
-          parser.getDependency('light', nodeDef.extensions[EXTENSIONS.KHR_LIGHTS_PUNCTUAL].light).then(resolve);
+          return parser.getDependency('light', nodeDef.extensions[EXTENSIONS.KHR_LIGHTS_PUNCTUAL].light);
         } else {
-          resolve(new three__default.Object3D());
+          return Promise.resolve(new three__default.Object3D());
         }
-      }).then(function (node) {
+      }().then(function (node) {
         if (nodeDef.name !== undefined) {
           node.name = three__default.PropertyBinding.sanitizeNodeName(nodeDef.name);
         }
