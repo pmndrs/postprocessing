@@ -11,6 +11,7 @@ import differenceBlendFunction from "./glsl/difference/shader.frag";
 import exclusionBlendFunction from "./glsl/exclusion/shader.frag";
 import lightenBlendFunction from "./glsl/lighten/shader.frag";
 import multiplyBlendFunction from "./glsl/multiply/shader.frag";
+import divideBlendFunction from "./glsl/divide/shader.frag";
 import negationBlendFunction from "./glsl/negation/shader.frag";
 import normalBlendFunction from "./glsl/normal/shader.frag";
 import overlayBlendFunction from "./glsl/overlay/shader.frag";
@@ -38,6 +39,7 @@ const blendFunctions = new Map([
 	[BlendFunction.EXCLUSION, exclusionBlendFunction],
 	[BlendFunction.LIGHTEN, lightenBlendFunction],
 	[BlendFunction.MULTIPLY, multiplyBlendFunction],
+	[BlendFunction.DIVIDE, divideBlendFunction],
 	[BlendFunction.NEGATION, negationBlendFunction],
 	[BlendFunction.NORMAL, normalBlendFunction],
 	[BlendFunction.OVERLAY, overlayBlendFunction],
