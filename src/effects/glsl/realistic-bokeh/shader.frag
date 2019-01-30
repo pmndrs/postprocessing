@@ -57,10 +57,12 @@ uniform float fringe;
 
 vec3 processTexel(const in vec2 coords, const in float blur) {
 
+	vec2 scale = texelSize * fringe * blur;
+
 	vec3 c = vec3(
-		texture2D(inputBuffer, coords + vec2(0.0, 1.0) * texelSize * fringe * blur).r,
-		texture2D(inputBuffer, coords + vec2(-0.866, -0.5) * texelSize * fringe * blur).g,
-		texture2D(inputBuffer, coords + vec2(0.866, -0.5) * texelSize * fringe * blur).b
+		texture2D(inputBuffer, coords + vec2(0.0, 1.0) * scale).r,
+		texture2D(inputBuffer, coords + vec2(-0.866, -0.5) * scale).g,
+		texture2D(inputBuffer, coords + vec2(0.866, -0.5) * scale).b
 	);
 
 	// Calculate the luminance of the constructed color.
@@ -121,18 +123,14 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	#endif
 
-	blur = clamp(blur, 0.0, 1.0);
-
-	vec2 blurFactor = vec2(
-		texelSize.x * blur * maxBlur,
-		texelSize.y * blur * maxBlur
-	);
-
 	const int MAX_RING_SAMPLES = RINGS_INT * SAMPLES_INT;
 
+	blur = clamp(blur, 0.0, 1.0);
 	vec3 color = inputColor.rgb;
 
 	if(blur >= 0.05) {
+
+		vec2 blurFactor = blur * maxBlur * texelSize;
 
 		float s = 1.0;
 		int ringSamples;
