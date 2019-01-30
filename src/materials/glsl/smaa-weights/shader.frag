@@ -31,11 +31,10 @@ float searchLength(vec2 e, float bias, float scale) {
 float searchXLeft(vec2 texCoord, float end) {
 
 	/* @PSEUDO_GATHER4
-	 * This texCoord has been offset by (-0.25, -0.125) in the vertex shader to
-	 * sample between edge, thus fetching four edges in a row.
-	 * Sampling with different offsets in each direction allows to disambiguate
-	 * which edges are active from the four fetched ones.
-	 */
+	This texCoord has been offset by (-0.25, -0.125) in the vertex shader to
+	sample between edge, thus fetching four edges in a row.
+	Sampling with different offsets in each direction allows to disambiguate
+	which edges are active from the four fetched ones. */
 
 	vec2 e = vec2(0.0, 1.0);
 

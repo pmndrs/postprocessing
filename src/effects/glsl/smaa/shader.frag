@@ -17,8 +17,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 	if(dot(a, vec4(1.0)) >= 1e-5) {
 
 		/* Up to four lines can be crossing a pixel (one through each edge).
-		 * The line with the maximum weight for each direction is favoured.
-		 */
+		The line with the maximum weight for each direction is favoured. */
 
 		vec2 offset = vec2(
 			a.a > a.b ? a.a : -a.b,	// Left vs. right.
