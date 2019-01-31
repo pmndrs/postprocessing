@@ -229,6 +229,17 @@ export class EffectPass extends Pass {
 		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
 
 		/**
+		 * Indicates whether this pass should skip rendering.
+		 *
+		 * Effects will still be updated, even if this flag is true.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.skipRendering = false;
+
+		/**
 		 * Indicates whether dithering is enabled.
 		 *
 		 * @type {Boolean}
@@ -426,6 +437,9 @@ export class EffectPass extends Pass {
 		this.uniforms = uniforms.size;
 		this.varyings = varyings;
 
+		this.skipRendering = (id === 0);
+		this.needsSwap = !this.skipRendering;
+
 		const material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
 
 		if(extensions.size > 0) {
@@ -536,9 +550,13 @@ export class EffectPass extends Pass {
 
 		}
 
-		material.uniforms.inputBuffer.value = inputBuffer.texture;
-		material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+		if(!this.skipRendering || this.renderToScreen) {
+
+			material.uniforms.inputBuffer.value = inputBuffer.texture;
+			material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
+			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+
+		}
 
 	}
 
