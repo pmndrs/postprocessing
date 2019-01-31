@@ -13,69 +13,102 @@ const banner = `/**
  * Copyright ${date.slice(-4)} ${pkg.author.name}, ${pkg.license}
  */`;
 
+const production = (process.env.NODE_ENV === "production");
+const globals = { three: "THREE" };
+const external = ["three"];
+
 const lib = {
 
-	input: pkg.module,
-	output: {
-		file: "build/" + pkg.name + ".js",
-		format: "umd",
-		name: pkg.name.replace(/-/g, "").toUpperCase(),
-		banner: banner,
-		globals: { three: "THREE" }
+	esm: {
+
+		input: "src/index.js",
+		output: {
+			file: pkg.module,
+			format: "esm",
+			banner: banner,
+			globals: globals
+		},
+
+		external: external,
+		plugins: [resolve(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})]
+
 	},
 
-	external: ["three"],
-	plugins: [resolve(), string({
-		include: ["**/*.frag", "**/*.vert"]
-	})].concat(process.env.NODE_ENV === "production" ? [babel()] : [])
+	umd: {
+
+		input: "src/index.js",
+		output: {
+			file: pkg.main,
+			format: "umd",
+			name: pkg.name.replace(/-/g, "").toUpperCase(),
+			banner: banner,
+			globals: globals
+		},
+
+		external: external,
+		plugins: [resolve(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})].concat(production ? [babel()] : [])
+
+	}
 
 };
 
 const demo = {
 
-	input: "demo/src/index.js",
-	output: {
-		file: "public/demo/index.js",
-		format: "iife",
-		globals: { three: "THREE" }
-	},
+	iife: {
 
-	external: ["three"],
-	plugins: [resolve(), commonjs(), string({
-		include: ["**/*.frag", "**/*.vert"]
-	})].concat(process.env.NODE_ENV === "production" ? [babel()] : [])
+		input: "demo/src/index.js",
+		output: {
+			file: "public/demo/index.js",
+			format: "iife",
+			globals: globals
+		},
+
+		external: external,
+		plugins: [resolve(), commonjs(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})].concat(production ? [babel()] : [])
+
+	}
 
 };
 
-export default [lib, demo].concat((process.env.NODE_ENV === "production") ? [
+export default [lib.esm, lib.umd, demo.iife].concat(production ? [{
 
-	Object.assign({}, lib, {
+		input: lib.umd.input,
+		output: {
+			file: lib.umd.output.file.replace(".js", ".min.js"),
+			format: "umd",
+			name: pkg.name.replace(/-/g, "").toUpperCase(),
+			banner: banner,
+			globals: globals
+		},
 
-		output: Object.assign({}, lib.output, {
-			file: "build/" + pkg.name + ".min.js"
-		}),
-
+		external: external,
 		plugins: [resolve(), string({
 			include: ["**/*.frag", "**/*.vert"]
-		})].concat([babel(), minify({
+		}), babel(), minify({
 			bannerNewLine: true,
 			comments: false
-		})])
+		})]
 
-	}),
+	}, {
 
-	Object.assign({}, demo, {
+		input: demo.iife.input,
+		output: {
+			file: demo.iife.output.file.replace(".js", ".min.js"),
+			format: "iife",
+			globals: globals
+		},
 
-		output: Object.assign({}, demo.output, {
-			file: "public/demo/index.min.js"
-		}),
-
+		external: external,
 		plugins: [resolve(), commonjs(), string({
 			include: ["**/*.frag", "**/*.vert"]
-		})].concat([babel(), minify({
+		}), babel(), minify({
 			comments: false
-		})])
+		})]
 
-	})
-
-] : []);
+}] : []);

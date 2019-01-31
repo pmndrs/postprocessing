@@ -3,8 +3,8 @@
 	"version": "5.5.0",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
-	"main": "build/postprocessing.js",
-	"module": "src/index.js",
+	"main": "build/postprocessing.umd.js",
+	"module": "build/postprocessing.esm.js",
 	"sideEffects": false,
 	"license": "Zlib",
 
@@ -39,10 +39,7 @@
 		"url": "https://github.com/vanruesc/postprocessing/issues"
 	},
 
-	"files": [
-		"src",
-		"build"
-	],
+	"files": ["build"],
 
 	"scripts": {
 		"ava": "ava",
@@ -57,8 +54,7 @@
 		"deploy": "cpx demo/assets/** public/demo",
 		"pretest": "npm run lint && npm run build:production",
 		"test": "npm run ava",
-		"prepack": "npm test && inline-import",
-		"postpublish": "inline-import -r"
+		"prepack": "npm test"
 	},
 
 	"ava": {
@@ -86,7 +82,6 @@
 		"esdoc-standard-plugin": "1.x.x",
 		"eslint": "5.x.x",
 		"eslint-config-delta": "0.x.x",
-		"inline-import": "1.x.x",
 		"math-ds": "1.x.x",
 		"rimraf": "2.x.x",
 		"rollup": "1.x.x",
