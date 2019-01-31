@@ -1,9 +1,3 @@
-/**
- * Exposure of the library components.
- *
- * @module postprocessing
- */
-
 export {
 	Disposable,
 	Initializable,

@@ -1,9 +1,3 @@
-/**
- * A compilation of the post processing passes.
- *
- * @module postprocessing/passes
- */
-
 export { BlurPass } from "./BlurPass.js";
 export { ClearMaskPass } from "./ClearMaskPass.js";
 export { ClearPass } from "./ClearPass.js";

@@ -1,9 +1,3 @@
-/**
- * A collection of effects.
- *
- * @module postprocessing/effects
- */
-
 export { BlendFunction, BlendMode } from "./blending";
 
 export { BloomEffect } from "./BloomEffect.js";
