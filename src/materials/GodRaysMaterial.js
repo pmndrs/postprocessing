@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
 import fragment from "./glsl/god-rays/shader.frag";
-import vertex from "./glsl/god-rays/shader.vert";
+import vertex from "./glsl/common/shader.vert";
 
 /**
  * A crepuscular rays shader material.

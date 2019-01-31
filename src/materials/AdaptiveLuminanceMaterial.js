@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform } from "three";
 
 import fragment from "./glsl/adaptive-luminance/shader.frag";
-import vertex from "./glsl/adaptive-luminance/shader.vert";
+import vertex from "./glsl/common/shader.vert";
 
 /**
  * An adaptive luminance shader material.
