@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthEffect } from "../../build/postprocessing.js";
+import { DepthEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

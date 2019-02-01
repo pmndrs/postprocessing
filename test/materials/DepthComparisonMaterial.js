@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthComparisonMaterial } from "../../build/postprocessing.js";
+import { DepthComparisonMaterial } from "../../build/postprocessing.umd.js";
 
 test("can be created", t => {
 

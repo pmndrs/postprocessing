@@ -1,5 +1,5 @@
 import test from "ava";
-import { OutlineEdgesMaterial } from "../../build/postprocessing.js";
+import { OutlineEdgesMaterial } from "../../build/postprocessing.umd.js";
 
 test("can be created", t => {
 

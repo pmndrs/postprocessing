@@ -1,5 +1,5 @@
 import test from "ava";
-import { BlurPass } from "../../build/postprocessing.js";
+import { BlurPass } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

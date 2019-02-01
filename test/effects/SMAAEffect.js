@@ -1,5 +1,5 @@
 import test from "ava";
-import { SMAAEffect } from "../../build/postprocessing.js";
+import { SMAAEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

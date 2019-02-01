@@ -1,5 +1,5 @@
 import test from "ava";
-import { HueSaturationEffect } from "../../build/postprocessing.js";
+import { HueSaturationEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

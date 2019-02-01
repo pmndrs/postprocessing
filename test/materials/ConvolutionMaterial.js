@@ -1,5 +1,5 @@
 import test from "ava";
-import { ConvolutionMaterial } from "../../build/postprocessing.js";
+import { ConvolutionMaterial } from "../../build/postprocessing.umd.js";
 
 test("can be created", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { VignetteEffect } from "../../build/postprocessing.js";
+import { VignetteEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

@@ -1,5 +1,5 @@
 import test from "ava";
-import { BloomEffect } from "../../build/postprocessing.js";
+import { BloomEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 

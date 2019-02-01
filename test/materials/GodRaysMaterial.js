@@ -1,5 +1,5 @@
 import test from "ava";
-import { GodRaysMaterial } from "../../build/postprocessing.js";
+import { GodRaysMaterial } from "../../build/postprocessing.umd.js";
 
 test("can be created", t => {
 

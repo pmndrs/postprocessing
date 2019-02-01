@@ -1,5 +1,5 @@
 import test from "ava";
-import { Pass } from "../../build/postprocessing.js";
+import { Pass } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 
