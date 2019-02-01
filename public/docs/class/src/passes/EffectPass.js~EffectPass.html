@@ -320,6 +320,34 @@
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-member-needsSwap">needsSwap</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 <table class="summary" data-ice="summary">
@@ -405,6 +433,35 @@
         
         
         <div data-ice="description"><p>Indicates whether dithering is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-member-skipRendering">skipRendering</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether this pass should skip rendering.</p>
 </div>
       </div>
     </td>
@@ -1314,7 +1371,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 
@@ -1359,7 +1416,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber304">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber315">source</a></span></span>
     </span>
   </h3>
 
@@ -1404,7 +1461,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber276">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber287">source</a></span></span>
     </span>
   </h3>
 
@@ -1449,7 +1506,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber277">source</a></span></span>
     </span>
   </h3>
 
@@ -1494,7 +1551,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber406">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -1508,6 +1565,53 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsDepthTexture">Pass#needsDepthTexture</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-needsSwap">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">needsSwap</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber441">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+buffers after this pass has finished rendering.</p>
+<p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
+the screen. Otherwise, the contents of the input buffer will be lost.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
 
   <div data-ice="properties">
 </div>
@@ -1631,7 +1735,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber238">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1639,6 +1743,51 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
   
   
   <div data-ice="description"><p>Indicates whether dithering is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-skipRendering">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">skipRendering</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber240">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether this pass should skip rendering.</p>
+<p>Effects will still be updated, even if this flag is true.</p>
 </div>
 
   
@@ -1675,7 +1824,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
@@ -1719,7 +1868,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber267">source</a></span></span>
     </span>
   </h3>
 
@@ -1766,7 +1915,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber605">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber623">source</a></span></span>
     </span>
   </h3>
 
@@ -1811,7 +1960,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber485">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber499">source</a></span></span>
     </span>
   </h3>
 
@@ -1868,7 +2017,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber571">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber589">source</a></span></span>
     </span>
   </h3>
 
@@ -1936,7 +2085,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber452">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -1981,7 +2130,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber528">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber542">source</a></span></span>
     </span>
   </h3>
 
@@ -2070,7 +2219,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber514">source</a></span></span>
     </span>
   </h3>
 
@@ -2139,7 +2288,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber570">source</a></span></span>
     </span>
   </h3>
 
@@ -2209,7 +2358,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/EffectPass.js.html#lineNumber341">source</a></span></span>
     </span>
   </h3>
 

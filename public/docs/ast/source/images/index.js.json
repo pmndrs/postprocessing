@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 322,
+  "end": 201,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 11,
+      "line": 5,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 322,
+    "end": 201,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 11,
+        "line": 5,
         "column": 0
       }
     },
@@ -30,15 +30,15 @@
     "body": [
       {
         "type": "ExportNamedDeclaration",
-        "start": 121,
-        "end": 191,
+        "start": 0,
+        "end": 70,
         "loc": {
           "start": {
-            "line": 7,
+            "line": 1,
             "column": 0
           },
           "end": {
-            "line": 7,
+            "line": 1,
             "column": 70
           }
         },
@@ -46,67 +46,65 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 130,
-            "end": 147,
+            "start": 9,
+            "end": 26,
             "loc": {
               "start": {
-                "line": 7,
+                "line": 1,
                 "column": 9
               },
               "end": {
-                "line": 7,
+                "line": 1,
                 "column": 26
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 130,
-              "end": 147,
+              "start": 9,
+              "end": 26,
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 1,
                   "column": 9
                 },
                 "end": {
-                  "line": 7,
-                  "column": 26
-                },
-                "identifierName": "SMAAAreaImageData"
-              },
-              "name": "SMAAAreaImageData",
-              "leadingComments": null
-            },
-            "exported": {
-              "type": "Identifier",
-              "start": 130,
-              "end": 147,
-              "loc": {
-                "start": {
-                  "line": 7,
-                  "column": 9
-                },
-                "end": {
-                  "line": 7,
+                  "line": 1,
                   "column": 26
                 },
                 "identifierName": "SMAAAreaImageData"
               },
               "name": "SMAAAreaImageData"
             },
-            "leadingComments": null
+            "exported": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                },
+                "identifierName": "SMAAAreaImageData"
+              },
+              "name": "SMAAAreaImageData"
+            }
           }
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 155,
-          "end": 190,
+          "start": 34,
+          "end": 69,
           "loc": {
             "start": {
-              "line": 7,
+              "line": 1,
               "column": 34
             },
             "end": {
-              "line": 7,
+              "line": 1,
               "column": 69
             }
           },
@@ -115,37 +113,19 @@
             "raw": "\"./smaa/utils/SMAAAreaImageData.js\""
           },
           "value": "./smaa/utils/SMAAAreaImageData.js"
-        },
-        "leadingComments": [
-          {
-            "type": "CommentBlock",
-            "value": "*\r\n * A collection of shader-specific data images and related utilities.\r\n *\r\n * @module postprocessing/images\r\n ",
-            "start": 0,
-            "end": 117,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 5,
-                "column": 3
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 193,
-        "end": 267,
+        "start": 72,
+        "end": 146,
         "loc": {
           "start": {
-            "line": 8,
+            "line": 2,
             "column": 0
           },
           "end": {
-            "line": 8,
+            "line": 2,
             "column": 74
           }
         },
@@ -153,29 +133,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 202,
-            "end": 221,
+            "start": 81,
+            "end": 100,
             "loc": {
               "start": {
-                "line": 8,
+                "line": 2,
                 "column": 9
               },
               "end": {
-                "line": 8,
+                "line": 2,
                 "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 202,
-              "end": 221,
+              "start": 81,
+              "end": 100,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 2,
                   "column": 9
                 },
                 "end": {
-                  "line": 8,
+                  "line": 2,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -184,15 +164,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 202,
-              "end": 221,
+              "start": 81,
+              "end": 100,
               "loc": {
                 "start": {
-                  "line": 8,
+                  "line": 2,
                   "column": 9
                 },
                 "end": {
-                  "line": 8,
+                  "line": 2,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -203,15 +183,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 229,
-          "end": 266,
+          "start": 108,
+          "end": 145,
           "loc": {
             "start": {
-              "line": 8,
+              "line": 2,
               "column": 36
             },
             "end": {
-              "line": 8,
+              "line": 2,
               "column": 73
             }
           },
@@ -224,15 +204,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 271,
-        "end": 320,
+        "start": 150,
+        "end": 199,
         "loc": {
           "start": {
-            "line": 10,
+            "line": 4,
             "column": 0
           },
           "end": {
-            "line": 10,
+            "line": 4,
             "column": 49
           }
         },
@@ -240,29 +220,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 280,
-            "end": 292,
+            "start": 159,
+            "end": 171,
             "loc": {
               "start": {
-                "line": 10,
+                "line": 4,
                 "column": 9
               },
               "end": {
-                "line": 10,
+                "line": 4,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 280,
-              "end": 292,
+              "start": 159,
+              "end": 171,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 10,
+                  "line": 4,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -271,15 +251,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 280,
-              "end": 292,
+              "start": 159,
+              "end": 171,
               "loc": {
                 "start": {
-                  "line": 10,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 10,
+                  "line": 4,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -290,15 +270,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 300,
-          "end": 319,
+          "start": 179,
+          "end": 198,
           "loc": {
             "start": {
-              "line": 10,
+              "line": 4,
               "column": 29
             },
             "end": {
-              "line": 10,
+              "line": 4,
               "column": 48
             }
           },
@@ -312,41 +292,8 @@
     ],
     "directives": []
   },
-  "comments": [
-    {
-      "type": "CommentBlock",
-      "value": "*\r\n * A collection of shader-specific data images and related utilities.\r\n *\r\n * @module postprocessing/images\r\n ",
-      "start": 0,
-      "end": 117,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 5,
-          "column": 3
-        }
-      }
-    }
-  ],
+  "comments": [],
   "tokens": [
-    {
-      "type": "CommentBlock",
-      "value": "*\r\n * A collection of shader-specific data images and related utilities.\r\n *\r\n * @module postprocessing/images\r\n ",
-      "start": 0,
-      "end": 117,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 5,
-          "column": 3
-        }
-      }
-    },
     {
       "type": {
         "label": "export",
@@ -362,15 +309,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 121,
-      "end": 127,
+      "start": 0,
+      "end": 6,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 0
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 6
         }
       }
@@ -387,15 +334,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 128,
-      "end": 129,
+      "start": 7,
+      "end": 8,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 7
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 8
         }
       }
@@ -413,15 +360,15 @@
         "binop": null
       },
       "value": "SMAAAreaImageData",
-      "start": 130,
-      "end": 147,
+      "start": 9,
+      "end": 26,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 9
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 26
         }
       }
@@ -438,15 +385,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 148,
-      "end": 149,
+      "start": 27,
+      "end": 28,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 27
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 28
         }
       }
@@ -464,15 +411,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 150,
-      "end": 154,
+      "start": 29,
+      "end": 33,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 29
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 33
         }
       }
@@ -491,15 +438,15 @@
         "updateContext": null
       },
       "value": "./smaa/utils/SMAAAreaImageData.js",
-      "start": 155,
-      "end": 190,
+      "start": 34,
+      "end": 69,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 34
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 69
         }
       }
@@ -517,15 +464,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 190,
-      "end": 191,
+      "start": 69,
+      "end": 70,
       "loc": {
         "start": {
-          "line": 7,
+          "line": 1,
           "column": 69
         },
         "end": {
-          "line": 7,
+          "line": 1,
           "column": 70
         }
       }
@@ -545,15 +492,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 193,
-      "end": 199,
+      "start": 72,
+      "end": 78,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 0
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 6
         }
       }
@@ -570,15 +517,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 200,
-      "end": 201,
+      "start": 79,
+      "end": 80,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 7
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 8
         }
       }
@@ -596,15 +543,15 @@
         "binop": null
       },
       "value": "SMAASearchImageData",
-      "start": 202,
-      "end": 221,
+      "start": 81,
+      "end": 100,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 9
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 28
         }
       }
@@ -621,15 +568,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 222,
-      "end": 223,
+      "start": 101,
+      "end": 102,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 29
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 30
         }
       }
@@ -647,15 +594,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 224,
-      "end": 228,
+      "start": 103,
+      "end": 107,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 31
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 35
         }
       }
@@ -674,15 +621,15 @@
         "updateContext": null
       },
       "value": "./smaa/utils/SMAASearchImageData.js",
-      "start": 229,
-      "end": 266,
+      "start": 108,
+      "end": 145,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 36
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 73
         }
       }
@@ -700,15 +647,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 266,
-      "end": 267,
+      "start": 145,
+      "end": 146,
       "loc": {
         "start": {
-          "line": 8,
+          "line": 2,
           "column": 73
         },
         "end": {
-          "line": 8,
+          "line": 2,
           "column": 74
         }
       }
@@ -728,15 +675,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 271,
-      "end": 277,
+      "start": 150,
+      "end": 156,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 6
         }
       }
@@ -753,15 +700,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 278,
-      "end": 279,
+      "start": 157,
+      "end": 158,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 7
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 8
         }
       }
@@ -779,15 +726,15 @@
         "binop": null
       },
       "value": "RawImageData",
-      "start": 280,
-      "end": 292,
+      "start": 159,
+      "end": 171,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 9
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 21
         }
       }
@@ -804,15 +751,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 293,
-      "end": 294,
+      "start": 172,
+      "end": 173,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 22
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 23
         }
       }
@@ -830,15 +777,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 295,
-      "end": 299,
+      "start": 174,
+      "end": 178,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 24
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 28
         }
       }
@@ -857,15 +804,15 @@
         "updateContext": null
       },
       "value": "./RawImageData.js",
-      "start": 300,
-      "end": 319,
+      "start": 179,
+      "end": 198,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 29
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 48
         }
       }
@@ -883,15 +830,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 319,
-      "end": 320,
+      "start": 198,
+      "end": 199,
       "loc": {
         "start": {
-          "line": 10,
+          "line": 4,
           "column": 48
         },
         "end": {
-          "line": 10,
+          "line": 4,
           "column": 49
         }
       }
@@ -909,15 +856,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 322,
-      "end": 322,
+      "start": 201,
+      "end": 201,
       "loc": {
         "start": {
-          "line": 11,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 11,
+          "line": 5,
           "column": 0
         }
       }

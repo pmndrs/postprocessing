@@ -109,6 +109,7 @@
  * @property {Number} EXCLUSION - Color exclusion.
  * @property {Number} LIGHTEN - Prioritize lighter colors.
  * @property {Number} MULTIPLY - Color multiplication.
+ * @property {Number} DIVIDE - Color division.
  * @property {Number} NEGATION - Color negation.
  * @property {Number} NORMAL - Normal blending. The new color overwrites the old one.
  * @property {Number} OVERLAY - Color overlay.
@@ -131,13 +132,14 @@ export const BlendFunction = {
 	EXCLUSION: 8,
 	LIGHTEN: 9,
 	MULTIPLY: 10,
-	NEGATION: 11,
-	NORMAL: 12,
-	OVERLAY: 13,
-	REFLECT: 14,
-	SCREEN: 15,
-	SOFT_LIGHT: 16,
-	SUBTRACT: 17
+	DIVIDE: 11,
+	NEGATION: 12,
+	NORMAL: 13,
+	OVERLAY: 14,
+	REFLECT: 15,
+	SCREEN: 16,
+	SOFT_LIGHT: 17,
+	SUBTRACT: 18
 
 };
 </code></pre>

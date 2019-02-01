@@ -2988,6 +2988,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/effectpass.js~effectpass#needsswap",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-needsSwap",
+    "src/passes/EffectPass.js~EffectPass#needsSwap",
+    "member"
+  ],
+  [
     "src/passes/effectpass.js~effectpass#quantize",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-member-quantize",
     "src/passes/EffectPass.js~EffectPass#quantize",
@@ -3016,6 +3022,12 @@ window.esdocSearchIndex = [
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-setSize",
     "src/passes/EffectPass.js~EffectPass#setSize",
     "method"
+  ],
+  [
+    "src/passes/effectpass.js~effectpass#skiprendering",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-skipRendering",
+    "src/passes/EffectPass.js~EffectPass#skipRendering",
+    "member"
   ],
   [
     "src/passes/effectpass.js~effectpass#uniforms",
