@@ -12,10 +12,6 @@ const color = new Color();
 
 /**
  * A pass that clears the input buffer or the screen.
- *
- * You can prevent specific bits from being cleared by setting either the
- * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
- * to false.
  */
 
 export class ClearPass extends Pass {
@@ -24,31 +20,66 @@ export class ClearPass extends Pass {
 	 * Constructs a new clear pass.
 	 *
 	 * @param {Object} [options] - Additional options.
+	 * @param {Boolean} [options.color=true] - Determines whether the color buffer should be cleared.
+	 * @param {Boolean} [options.depth=true] - Determines whether the depth buffer should be cleared.
+	 * @param {Boolean} [options.stencil=true] - Determines whether the stencil buffer should be cleared.
 	 * @param {Color} [options.clearColor=null] - An override clear color.
 	 * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
 	 */
 
 	constructor(options = {}) {
 
+		const settings = Object.assign({
+			color: true,
+			depth: true,
+			stencil: true,
+			clearColor: null,
+			clearAlpha: 0.0
+		}, options);
+
 		super("ClearPass", null, null);
 
 		this.needsSwap = false;
 
 		/**
-		 * The clear color.
+		 * Indicates whether the color buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.color = settings.color;
+
+		/**
+		 * Indicates whether the depth buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.depth = settings.depth;
+
+		/**
+		 * Indicates whether the stencil buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.stencil = settings.stencil;
+
+		/**
+		 * An override clear color.
 		 *
 		 * @type {Color}
 		 */
 
-		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
+		this.clearColor = settings.clearColor;
 
 		/**
-		 * The clear alpha.
+		 * An override clear alpha.
 		 *
 		 * @type {Number}
 		 */
 
-		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 0.0;
+		this.clearAlpha = settings.clearAlpha;
 
 	}
 
@@ -77,7 +108,7 @@ export class ClearPass extends Pass {
 		}
 
 		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
-		renderer.clear();
+		renderer.clear(this.color, this.depth, this.stencil);
 
 		if(clearColor !== null) {
 
