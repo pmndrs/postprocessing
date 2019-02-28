@@ -20,7 +20,7 @@ export class RealisticBokehEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
+	 * @param {Number} [options.focus=1.0] - The focus distance in world units.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
 	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
 	 * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.
@@ -38,7 +38,7 @@ export class RealisticBokehEffect extends Effect {
 
 		const settings = Object.assign({
 			blendFunction: BlendFunction.NORMAL,
-			focus: 0.5,
+			focus: 1.0,
 			focalLength: 24.0,
 			luminanceThreshold: 0.5,
 			luminanceGain: 2.0,
