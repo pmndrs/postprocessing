@@ -65,6 +65,8 @@ export class Pass {
 		 * Set this to `false` if this pass doesn't render to the output buffer or
 		 * the screen. Otherwise, the contents of the input buffer will be lost.
 		 *
+		 * This flag must not be changed at runtime.
+		 *
 		 * @type {Boolean}
 		 */
 
