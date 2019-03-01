@@ -127,7 +127,7 @@ export class DepthPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const renderTarget = this.renderToScreen ? null : this.renderTarget;
-		this.renderPass.render(renderer, renderTarget, renderTarget);
+		this.renderPass.render(renderer, renderTarget);
 
 	}
 
