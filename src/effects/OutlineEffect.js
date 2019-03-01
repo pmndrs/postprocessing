@@ -80,7 +80,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.mainScene = scene;
+		this.scene = scene;
 
 		/**
 		 * The main camera.
@@ -89,22 +89,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.mainCamera = camera;
-
-		/**
-		 * A depth render target.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetDepth = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter
-		});
-
-		this.renderTargetDepth.texture.name = "Outline.Depth";
-		this.renderTargetDepth.texture.generateMipmaps = false;
+		this.camera = camera;
 
 		/**
 		 * A render target for the outline mask.
@@ -113,9 +98,13 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetMask = this.renderTargetDepth.clone();
+		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			format: RGBFormat
+		});
 
-		this.renderTargetMask.texture.format = RGBFormat;
 		this.renderTargetMask.texture.name = "Outline.Mask";
 
 		this.uniforms.get("maskTexture").value = this.renderTargetMask.texture;
@@ -127,16 +116,9 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetEdges = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
-		});
-
+		this.renderTargetEdges = this.renderTargetMask.clone();
 		this.renderTargetEdges.texture.name = "Outline.Edges";
-		this.renderTargetEdges.texture.generateMipmaps = false;
+		this.renderTargetEdges.depthBuffer = false;
 
 		/**
 		 * A render target for the blurred outline overlay.
@@ -146,7 +128,6 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.renderTargetBlurredEdges = this.renderTargetEdges.clone();
-
 		this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
 
 		/**
@@ -167,7 +148,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.depthPass = new DepthPass(this.mainScene, this.mainCamera);
+		this.depthPass = new DepthPass(scene, camera, { resolutionScale });
 
 		/**
 		 * A depth comparison mask pass.
@@ -411,6 +392,7 @@ export class OutlineEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.blurPass.setResolutionScale(scale);
+		this.depthPass.setResolutionScale(scale);
 		this.setSize(this.resolution.x, this.resolution.y);
 
 	}
@@ -555,16 +537,16 @@ export class OutlineEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		const mainScene = this.mainScene;
-		const mainCamera = this.mainCamera;
+		const scene = this.scene;
+		const camera = this.camera;
 		const pulse = this.uniforms.get("pulse");
 
-		const background = mainScene.background;
-		const mask = mainCamera.layers.mask;
+		const background = scene.background;
+		const mask = camera.layers.mask;
 
 		if(this.selection.length > 0) {
 
-			mainScene.background = null;
+			scene.background = null;
 			pulse.value = 1.0;
 
 			if(this.pulseSpeed > 0.0) {
@@ -580,12 +562,12 @@ export class OutlineEffect extends Effect {
 			this.setSelectionVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			mainCamera.layers.mask = 1 << this.selectionLayer;
+			camera.layers.mask = 1 << this.selectionLayer;
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
-			mainCamera.layers.mask = mask;
-			mainScene.background = background;
+			camera.layers.mask = mask;
+			scene.background = background;
 
 			// Detect the outline.
 			this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);

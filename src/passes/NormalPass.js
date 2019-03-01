@@ -61,11 +61,11 @@ export class NormalPass extends Pass {
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: LinearFilter,
 				magFilter: LinearFilter,
-				format: RGBFormat
+				format: RGBFormat,
+				stencilBuffer: false
 			});
 
 			this.renderTarget.texture.name = "NormalPass.Target";
-			this.renderTarget.texture.generateMipmaps = false;
 
 		}
 

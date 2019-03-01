@@ -110,7 +110,7 @@ export class ToneMappingEffect extends Effect {
 		/**
 		 * A save pass.
 		 *
-		 * @type {ShaderPass}
+		 * @type {SavePass}
 		 * @private
 		 */
 

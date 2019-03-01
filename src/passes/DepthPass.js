@@ -61,11 +61,11 @@ export class DepthPass extends Pass {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: LinearFilter,
-				magFilter: LinearFilter
+				magFilter: LinearFilter,
+				stencilBuffer: false
 			});
 
 			this.renderTarget.texture.name = "DepthPass.Target";
-			this.renderTarget.texture.generateMipmaps = false;
 
 		}
 

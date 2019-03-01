@@ -66,7 +66,6 @@ export class SMAAEffect extends Effect {
 		});
 
 		this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
-		this.renderTargetColorEdges.texture.generateMipmaps = false;
 
 		/**
 		 * A render target for the SMAA weights.

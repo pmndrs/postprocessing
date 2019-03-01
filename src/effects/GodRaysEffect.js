@@ -132,7 +132,6 @@ export class GodRaysEffect extends Effect {
 		});
 
 		this.renderTargetX.texture.name = "GodRays.TargetX";
-		this.renderTargetX.texture.generateMipmaps = false;
 
 		this.uniforms.get("texture").value = this.renderTargetX.texture;
 
@@ -144,7 +143,6 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderTargetY = this.renderTargetX.clone();
-
 		this.renderTargetY.texture.name = "GodRays.TargetY";
 
 		/**
@@ -154,14 +152,9 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false
-		});
-
+		this.renderTargetMask = this.renderTargetX.clone();
 		this.renderTargetMask.texture.name = "GodRays.Mask";
-		this.renderTargetMask.texture.generateMipmaps = false;
+		this.renderTargetMask.texture.depthBuffer = true;
 
 		/**
 		 * A pass that only renders the light source.
@@ -180,13 +173,11 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderPassMask = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshBasicMaterial({
-				color: 0x000000,
-				morphTargets: true,
-				skinning: true
-			})
-		});
+		this.renderPassMask = new RenderPass(scene, camera, new MeshBasicMaterial({
+			color: 0x000000,
+			morphTargets: true,
+			skinning: true
+		}));
 
 		this.renderPassMask.clear = false;
 
