@@ -19,8 +19,7 @@ import { CopyMaterial } from "../materials";
  * unnecessary clear operations.
  *
  * It is common practice to use a {@link RenderPass} as the first pass to
- * automatically clear the screen and render the scene to a texture for further
- * processing.
+ * automatically clear the buffers and render a scene for further processing.
  *
  * @implements {Resizable}
  * @implements {Disposable}

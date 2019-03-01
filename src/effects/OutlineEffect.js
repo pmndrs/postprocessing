@@ -30,19 +30,21 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Constructs a new outline effect.
 	 *
-	 * If you want dark outlines, remember to adjust the blend function.
+	 * If you want dark outlines, remember to use an appropriate blend function.
 	 *
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.
+	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
-	 * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.
+	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
 
 	constructor(scene, camera, options = {}) {
@@ -301,6 +303,8 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * Sets the kernel size.
+	 *
 	 * @type {KernelSize}
 	 */
 

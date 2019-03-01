@@ -195,8 +195,8 @@ export class Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * You may override this method in case you want to be informed about the main
-	 * render size.
+	 * You may override this method in case you want to be informed about the size
+	 * of the main frame buffer.
 	 *
 	 * The {@link EffectComposer} calls this method before this pass is
 	 * initialized and every time its own size is updated.

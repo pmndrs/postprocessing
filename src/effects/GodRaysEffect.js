@@ -38,12 +38,12 @@ export class GodRaysEffect extends Effect {
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
 	 * @param {Object3D} lightSource - The main light source.
-	 * @param {Object} [options] - The options. See {@link GodRaysMaterial} for additional options.
+	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
 	 * @param {Number} [options.samples=60.0] - The number of samples per pixel.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
-	 * @param {Number} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 */
 
 	constructor(scene, camera, lightSource, options = {}) {

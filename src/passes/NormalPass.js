@@ -22,7 +22,7 @@ export class NormalPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.resolutionScale=1.0] - The render texture resolution scale, relative to the main frame buffer size.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 

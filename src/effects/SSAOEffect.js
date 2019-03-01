@@ -7,12 +7,10 @@ import fragment from "./glsl/ssao/shader.frag";
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
- * SSAO is a method to approximate ambient occlusion in screen space.
- *
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation uses a discrete spiral sampling pattern:
+ * This implementation uses a spiral sampling pattern:
  *  https://jsfiddle.net/a16ff1p7
  */
 

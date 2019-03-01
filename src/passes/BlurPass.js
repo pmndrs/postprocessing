@@ -14,8 +14,8 @@ export class BlurPass extends Pass {
 	 * Constructs a new blur pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
-	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor(options = {}) {

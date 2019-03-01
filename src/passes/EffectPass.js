@@ -307,7 +307,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Enables or disables dithering.
 	 *
-	 * Note that some effects like bloom have their own dithering setting.
+	 * Note that some effects have their own dithering setting.
 	 *
 	 * @type {Boolean}
 	 */
