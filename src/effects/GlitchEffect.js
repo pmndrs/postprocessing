@@ -284,10 +284,10 @@ export class GlitchEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		const mode = this.mode;
 		const breakPoint = this.breakPoint;
@@ -303,7 +303,7 @@ export class GlitchEffect extends Effect {
 
 			if(mode === GlitchMode.SPORADIC) {
 
-				time += delta;
+				time += deltaTime;
 				trigger = (time > breakPoint.x);
 
 				if(time >= (breakPoint.x + breakPoint.y)) {

@@ -1,7 +1,7 @@
 uniform sampler2D previousLuminanceBuffer;
 uniform sampler2D currentLuminanceBuffer;
 uniform float minLuminance;
-uniform float delta;
+uniform float deltaTime;
 uniform float tau;
 
 varying vec2 vUv;
@@ -15,7 +15,7 @@ void main() {
 	currentLuminance = max(minLuminance, currentLuminance);
 
 	// Adapt the luminance using Pattanaik's technique.
-	float adaptedLum = previousLuminance + (currentLuminance - previousLuminance) * (1.0 - exp(-delta * tau));
+	float adaptedLum = previousLuminance + (currentLuminance - previousLuminance) * (1.0 - exp(-deltaTime * tau));
 
 	gl_FragColor.r = adaptedLum;
 

@@ -533,18 +533,18 @@ export class EffectPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const material = this.getFullscreenMaterial();
-		const time = material.uniforms.time.value + delta;
+		const time = material.uniforms.time.value + deltaTime;
 
 		for(const effect of this.effects) {
 
-			effect.update(renderer, inputBuffer, delta);
+			effect.update(renderer, inputBuffer, deltaTime);
 
 		}
 

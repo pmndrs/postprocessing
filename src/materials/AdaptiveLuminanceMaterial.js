@@ -30,7 +30,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 				previousLuminanceBuffer: new Uniform(null),
 				currentLuminanceBuffer: new Uniform(null),
 				minLuminance: new Uniform(0.01),
-				delta: new Uniform(0.0),
+				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
 
 			},

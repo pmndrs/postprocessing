@@ -265,10 +265,10 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		if(this.adaptive) {
 
@@ -279,7 +279,7 @@ export class ToneMappingEffect extends Effect {
 			const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
 			uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
 			uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
-			uniforms.delta.value = delta;
+			uniforms.deltaTime.value = deltaTime;
 			this.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);
 
 			// Save the adapted luminance for the next frame.

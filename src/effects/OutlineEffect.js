@@ -554,10 +554,10 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		const mainScene = this.mainScene;
 		const mainCamera = this.mainCamera;
@@ -574,7 +574,7 @@ export class OutlineEffect extends Effect {
 			if(this.pulseSpeed > 0.0) {
 
 				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-				this.time += delta;
+				this.time += deltaTime;
 
 			}
 

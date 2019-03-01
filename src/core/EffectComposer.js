@@ -324,10 +324,10 @@ export class EffectComposer {
 	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} delta - The time between the last frame and the current one in seconds.
+	 * @param {Number} deltaTime - The time between the last frame and the current one in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		const renderer = this.renderer;
 		const copyPass = this.copyPass;
@@ -342,7 +342,7 @@ export class EffectComposer {
 
 			if(pass.enabled) {
 
-				pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
 				if(pass.needsSwap) {
 
@@ -355,7 +355,7 @@ export class EffectComposer {
 
 						// Preserve the unaffected pixels.
 						state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
