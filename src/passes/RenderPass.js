@@ -40,8 +40,41 @@ export class RenderPass extends Pass {
 
 		this.clearPass = new ClearPass();
 
+	}
 
-		this.clear = (options.clear !== undefined) ? options.clear : true;
+	/**
+	 * Indicates whether the target buffer should be cleared before rendering.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
+
+	/**
+	 * Enables or disables auto clear.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set clear(value) {
+
+		this.clearPass.enabled = value;
+
+	}
+
+	/**
+	 * Returns the clear pass.
+	 *
+	 * @return {ClearPass} The clear pass.
+	 */
+
+	getClearPass() {
+
+		return this.clearPass;
 
 	}
 
