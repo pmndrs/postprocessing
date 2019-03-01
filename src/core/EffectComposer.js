@@ -30,7 +30,7 @@ export class EffectComposer {
 	/**
 	 * Constructs a new effect composer.
 	 *
-	 * @param {WebGLRenderer} [renderer] - The renderer that should be used.
+	 * @param {WebGLRenderer} renderer - The renderer that should be used.
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
@@ -50,6 +50,7 @@ export class EffectComposer {
 		 * {@link EffectComposer#replaceRenderer}.
 		 *
 		 * @type {WebGLRenderer}
+		 * @private
 		 */
 
 		this.renderer = renderer;
@@ -100,6 +101,18 @@ export class EffectComposer {
 		 */
 
 		this.passes = [];
+
+	}
+
+	/**
+	 * Returns the WebGL renderer.
+	 *
+	 * @return {WebGLRenderer} The renderer.
+	 */
+
+	getRenderer(renderer) {
+
+		return this.renderer;
 
 	}
 
