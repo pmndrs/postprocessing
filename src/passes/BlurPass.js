@@ -207,7 +207,8 @@ export class BlurPass extends Pass {
 
 			uniforms.kernel.value = kernel[i];
 			uniforms.inputBuffer.value = lastRT.texture;
-			renderer.render(scene, camera, destRT);
+			renderer.setRenderTarget(destRT);
+			renderer.render(scene, camera);
 
 			lastRT = destRT;
 
@@ -223,7 +224,8 @@ export class BlurPass extends Pass {
 
 		uniforms.kernel.value = kernel[i];
 		uniforms.inputBuffer.value = lastRT.texture;
-		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+		renderer.render(scene, camera);
 
 	}
 

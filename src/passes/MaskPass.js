@@ -98,12 +98,15 @@ export class MaskPass extends Pass {
 		// Draw the mask.
 		if(this.renderToScreen) {
 
-			renderer.render(scene, camera, null);
+			renderer.setRenderTarget(null);
+			renderer.render(scene, camera);
 
 		} else {
 
-			renderer.render(scene, camera, inputBuffer);
-			renderer.render(scene, camera, outputBuffer);
+			renderer.setRenderTarget(inputBuffer);
+			renderer.render(scene, camera);
+			renderer.setRenderTarget(outputBuffer);
+			renderer.render(scene, camera);
 
 		}
 

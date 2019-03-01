@@ -554,7 +554,8 @@ export class EffectPass extends Pass {
 
 			material.uniforms.inputBuffer.value = inputBuffer.texture;
 			material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
-			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+			renderer.render(this.scene, this.camera);
 
 		}
 

@@ -94,7 +94,8 @@ export class RenderPass extends Pass {
 		}
 
 		scene.overrideMaterial = this.overrideMaterial;
-		renderer.render(scene, this.camera, renderTarget);
+		renderer.setRenderTarget(renderTarget);
+		renderer.render(scene, this.camera);
 		scene.overrideMaterial = overrideMaterial;
 
 	}
