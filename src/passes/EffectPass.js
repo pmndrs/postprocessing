@@ -525,8 +525,6 @@ export class EffectPass extends Pass {
 
 		}
 
-		this.needsDepthTexture = (depthTexture === null);
-
 	}
 
 	/**

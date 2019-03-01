@@ -148,42 +148,6 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Retrieves the most relevant depth texture for the pass at the given index.
-	 *
-	 * @private
-	 * @param {Number} index - The index of the pass that needs a depth texture.
-	 * @return {DepthTexture} The depth texture, or null if there is none.
-	 */
-
-	getDepthTexture(index) {
-
-		const passes = this.passes;
-
-		let depthTexture = null;
-		let inputBuffer = true;
-		let i, pass;
-
-		for(i = 0; i < index; ++i) {
-
-			pass = passes[i];
-
-			if(pass.needsSwap) {
-
-				inputBuffer = !inputBuffer;
-
-			} else if(pass instanceof RenderPass) {
-
-				depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
-
-			}
-
-		}
-
-		return depthTexture;
-
-	}
-
-	/**
 	 * Creates two depth texture attachments, one for the input buffer and one for
 	 * the output buffer.
 	 *
@@ -213,6 +177,52 @@ export class EffectComposer {
 
 		this.inputBuffer.depthTexture = depthTexture;
 		this.outputBuffer.depthTexture = depthTexture.clone();
+
+	}
+
+	/**
+	 * Sets the correct depth texture for each pass.
+	 *
+	 * @private
+	 */
+
+	updateDepthTextures() {
+
+		let depthTextureRequired = false;
+		let depthTexture = null;
+		let inputBuffer = true;
+
+		for(const pass of this.passes) {
+
+			if(pass.needsDepthTexture && pass.getDepthTexture() !== depthTexture) {
+
+				pass.setDepthTexture(depthTexture);
+
+			}
+
+			if(pass.needsSwap) {
+
+				inputBuffer = !inputBuffer;
+
+			} else if(pass instanceof RenderPass) {
+
+				depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
+
+			}
+
+			depthTextureRequired = (depthTextureRequired || pass.needsDepthTexture);
+
+		}
+
+		if(!depthTextureRequired) {
+
+			this.inputBuffer.depthTexture.dispose();
+			this.outputBuffer.depthTexture.dispose();
+
+			this.inputBuffer.depthTexture = null;
+			this.outputBuffer.depthTexture = null;
+
+		}
 
 	}
 
@@ -263,25 +273,31 @@ export class EffectComposer {
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
 
+		if(pass.needsDepthTexture && this.inputBuffer.depthTexture === null) {
+
+			this.createDepthTexture();
+
+		}
+
 		if(index !== undefined) {
 
 			this.passes.splice(index, 0, pass);
 
-		} else {
+			if(this.inputBuffer.depthTexture !== null) {
 
-			index = this.passes.push(pass) - 1;
-
-		}
-
-		if(pass.needsDepthTexture) {
-
-			if(this.inputBuffer.depthTexture === null) {
-
-				this.createDepthTexture();
+				this.updateDepthTextures();
 
 			}
 
-			pass.setDepthTexture(this.getDepthTexture(index));
+		} else {
+
+			this.passes.push(pass);
+
+			if(pass.needsDepthTexture) {
+
+				this.updateDepthTextures();
+
+			}
 
 		}
 
@@ -295,7 +311,13 @@ export class EffectComposer {
 
 	removePass(pass) {
 
-		this.passes.splice(this.passes.indexOf(pass), 1);
+		const removed = (this.passes.splice(this.passes.indexOf(pass), 1).length > 0);
+
+		if(removed && this.inputBuffer.depthTexture !== null) {
+
+			this.updateDepthTextures();
+
+		}
 
 	}
 
