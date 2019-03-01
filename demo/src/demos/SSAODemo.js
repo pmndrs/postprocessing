@@ -10,6 +10,7 @@ import {
 	PerspectiveCamera,
 	PlaneBufferGeometry,
 	PointLight,
+	Vector2,
 	WebGLRenderer
 } from "three";
 
@@ -145,7 +146,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const renderer = ((renderer) => {
 
-			const size = renderer.getSize();
+			const size = renderer.getSize(new Vector2());
 			const pixelRatio = renderer.getPixelRatio();
 
 			renderer = new WebGLRenderer({

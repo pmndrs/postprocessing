@@ -5,6 +5,7 @@ import {
 	RGBAFormat,
 	RGBFormat,
 	UnsignedInt248Type,
+	Vector2,
 	WebGLRenderTarget
 } from "three";
 
@@ -118,27 +119,25 @@ export class EffectComposer {
 
 		const oldRenderer = this.renderer;
 
-		let parent, oldSize, newSize;
-
 		if(oldRenderer !== null && oldRenderer !== renderer) {
+
+			const oldSize = oldRenderer.getSize(new Vector2());
+			const newSize = renderer.getSize(new Vector2());
+			const parent = oldRenderer.domElement.parentNode;
 
 			this.renderer = renderer;
 			this.renderer.autoClear = false;
 
-			parent = oldRenderer.domElement.parentNode;
-			oldSize = oldRenderer.getSize();
-			newSize = renderer.getSize();
+			if(!oldSize.equals(newSize)) {
+
+				this.setSize();
+
+			}
 
 			if(parent !== null) {
 
 				parent.removeChild(oldRenderer.domElement);
 				parent.appendChild(renderer.domElement);
-
-			}
-
-			if(oldSize.width !== newSize.width || oldSize.height !== newSize.height) {
-
-				this.setSize();
 
 			}
 
@@ -231,7 +230,7 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer) {
 
-		const drawingBufferSize = this.renderer.getDrawingBufferSize();
+		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.context.getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
@@ -259,7 +258,7 @@ export class EffectComposer {
 	addPass(pass, index) {
 
 		const renderer = this.renderer;
-		const drawingBufferSize = renderer.getDrawingBufferSize();
+		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
@@ -378,11 +377,9 @@ export class EffectComposer {
 
 		const renderer = this.renderer;
 
-		let size, drawingBufferSize;
-
 		if(width === undefined || height === undefined) {
 
-			size = renderer.getSize();
+			const size = renderer.getSize(new Vector2());
 			width = size.width; height = size.height;
 
 		}
@@ -391,7 +388,7 @@ export class EffectComposer {
 		renderer.setSize(width, height);
 
 		// The drawing buffer size takes the device pixel ratio into account.
-		drawingBufferSize = renderer.getDrawingBufferSize();
+		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);

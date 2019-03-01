@@ -1,5 +1,5 @@
 import { DemoManager } from "three-demo";
-import { WebGLRenderer } from "three";
+import { Vector2, WebGLRenderer } from "three";
 import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
@@ -75,7 +75,7 @@ function onChange(event) {
 	const demo = event.demo;
 
 	// Make sure that the main renderer is being used and update it just in case.
-	const size = composer.renderer.getSize();
+	const size = composer.renderer.getSize(new Vector2());
 	renderer.setSize(size.width, size.height);
 	composer.replaceRenderer(renderer);
 	composer.reset();

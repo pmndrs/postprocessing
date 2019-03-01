@@ -11,6 +11,7 @@ import {
 	PerspectiveCamera,
 	RepeatWrapping,
 	TextureLoader,
+	Vector2,
 	WebGLRenderer
 } from "three";
 
@@ -223,7 +224,7 @@ export class SMAADemo extends PostProcessingDemo {
 			return renderer;
 
 		})(
-			renderer.getSize(),
+			renderer.getSize(new Vector2()),
 			renderer.getClearColor(),
 			renderer.getPixelRatio()
 		);
@@ -421,7 +422,7 @@ export class SMAADemo extends PostProcessingDemo {
 
 		function swapRenderers(browser) {
 
-			const size = composer.renderer.getSize();
+			const size = composer.renderer.getSize(new Vector2());
 
 			if(browser && composer.renderer !== renderer2) {
 
