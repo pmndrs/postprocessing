@@ -39,15 +39,15 @@ export class DepthPass extends Pass {
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshDepthMaterial({
-				depthPacking: RGBADepthPacking,
-				morphTargets: true,
-				skinning: true
-			}),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.renderPass = new RenderPass(scene, camera, new MeshDepthMaterial({
+			depthPacking: RGBADepthPacking,
+			morphTargets: true,
+			skinning: true
+		}));
+
+		const clearPass = this.renderPass.getClearPass();
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A render target that contains the scene depth.

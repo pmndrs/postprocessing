@@ -311,7 +311,8 @@ export class ToneMappingEffect extends Effect {
 
 	initialize(renderer, alpha) {
 
-		const clearPass = new ClearPass({ clearColor: new Color(0x7fffff) });
+		const clearPass = new ClearPass(true, false, false);
+		clearPass.overrideClearColor = new Color(0x7fffff);
 		clearPass.render(renderer, this.renderTargetPrevious);
 		clearPass.dispose();
 

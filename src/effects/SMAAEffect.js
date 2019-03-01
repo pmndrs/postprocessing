@@ -89,10 +89,9 @@ export class SMAAEffect extends Effect {
 		 * @private
 		 */
 
-		this.clearPass = new ClearPass({
-			clearColor: new Color(0x000000),
-			clearAlpha: 1.0
-		});
+		this.clearPass = new ClearPass(true, false, false);
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A color edge detection pass.

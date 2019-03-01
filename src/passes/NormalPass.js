@@ -39,14 +39,14 @@ export class NormalPass extends Pass {
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshNormalMaterial({
-				morphTargets: true,
-				skinning: true
-			}),
-			clearColor: new Color(0x7777ff),
-			clearAlpha: 1.0
-		});
+		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial({
+			morphTargets: true,
+			skinning: true
+		}));
+
+		const clearPass = this.renderPass.getClearPass();
+		clearPass.overrideClearColor = new Color(0x7777ff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A render target that contains the scene normals.

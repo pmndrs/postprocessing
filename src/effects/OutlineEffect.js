@@ -159,10 +159,9 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.clearPass = new ClearPass({
-			clearColor: new Color(0x000000),
-			clearAlpha: 1.0
-		});
+		this.clearPass = new ClearPass();
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A depth pass.
@@ -180,11 +179,11 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.renderTarget.texture, camera));
+
+		const clearPass = this.maskPass.getClearPass();
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A blur pass.

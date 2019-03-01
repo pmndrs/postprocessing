@@ -19,23 +19,12 @@ export class ClearPass extends Pass {
 	/**
 	 * Constructs a new clear pass.
 	 *
-	 * @param {Object} [options] - Additional options.
-	 * @param {Boolean} [options.color=true] - Determines whether the color buffer should be cleared.
-	 * @param {Boolean} [options.depth=true] - Determines whether the depth buffer should be cleared.
-	 * @param {Boolean} [options.stencil=true] - Determines whether the stencil buffer should be cleared.
-	 * @param {Color} [options.clearColor=null] - An override clear color.
-	 * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
+	 * @param {Boolean} [color=true] - Determines whether the color buffer should be cleared.
+	 * @param {Boolean} [depth=true] - Determines whether the depth buffer should be cleared.
+	 * @param {Boolean} [stencil=false] - Determines whether the stencil buffer should be cleared.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			color: true,
-			depth: true,
-			stencil: true,
-			clearColor: null,
-			clearAlpha: 0.0
-		}, options);
+	constructor(color = true, depth = true, stencil = false) {
 
 		super("ClearPass", null, null);
 
@@ -47,7 +36,7 @@ export class ClearPass extends Pass {
 		 * @type {Boolean}
 		 */
 
-		this.color = settings.color;
+		this.color = color;
 
 		/**
 		 * Indicates whether the depth buffer should be cleared.
@@ -55,7 +44,7 @@ export class ClearPass extends Pass {
 		 * @type {Boolean}
 		 */
 
-		this.depth = settings.depth;
+		this.depth = depth;
 
 		/**
 		 * Indicates whether the stencil buffer should be cleared.
@@ -63,7 +52,7 @@ export class ClearPass extends Pass {
 		 * @type {Boolean}
 		 */
 
-		this.stencil = settings.stencil;
+		this.stencil = stencil;
 
 		/**
 		 * An override clear color.
@@ -71,7 +60,7 @@ export class ClearPass extends Pass {
 		 * @type {Color}
 		 */
 
-		this.clearColor = settings.clearColor;
+		this.overrideClearColor = null;
 
 		/**
 		 * An override clear alpha.
@@ -79,7 +68,7 @@ export class ClearPass extends Pass {
 		 * @type {Number}
 		 */
 
-		this.clearAlpha = settings.clearAlpha;
+		this.overrideClearAlpha = 0.0;
 
 	}
 
@@ -95,22 +84,22 @@ export class ClearPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const clearColor = this.clearColor;
+		const overrideClearColor = this.overrideClearColor;
 
 		let clearAlpha;
 
-		if(clearColor !== null) {
+		if(overrideClearColor !== null) {
 
 			color.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(clearColor, this.clearAlpha);
+			renderer.setClearColor(overrideClearColor, this.overrideClearAlpha);
 
 		}
 
 		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
 		renderer.clear(this.color, this.depth, this.stencil);
 
-		if(clearColor !== null) {
+		if(overrideClearColor !== null) {
 
 			renderer.setClearColor(color, clearAlpha);
 

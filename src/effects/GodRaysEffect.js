@@ -172,9 +172,8 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderPassLight = new RenderPass(this.lightScene, camera, {
-			clearColor: new Color(0x000000)
-		});
+		this.renderPassLight = new RenderPass(this.lightScene, camera);
+		this.renderPassLight.getClearPass().overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A pass that renders the masked scene over the light source.
