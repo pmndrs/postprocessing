@@ -54,14 +54,12 @@ export class ShockWaveEffect extends Effect {
 	 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 	 */
 
-	constructor(camera, epicenter = new Vector3(), options = {}) {
-
-		const settings = Object.assign({
-			speed: 2.0,
-			maxRadius: 1.0,
-			waveSize: 0.2,
-			amplitude: 0.05
-		}, options);
+	constructor(camera, epicenter = new Vector3(), {
+		speed = 2.0,
+		maxRadius = 1.0,
+		waveSize = 0.2,
+		amplitude = 0.05
+	} = {}) {
 
 		super("ShockWaveEffect", fragment, {
 
@@ -70,10 +68,10 @@ export class ShockWaveEffect extends Effect {
 				["center", new Uniform(new Vector2(0.5, 0.5))],
 				["cameraDistance", new Uniform(1.0)],
 				["size", new Uniform(1.0)],
-				["radius", new Uniform(-settings.waveSize)],
-				["maxRadius", new Uniform(settings.maxRadius)],
-				["waveSize", new Uniform(settings.waveSize)],
-				["amplitude", new Uniform(settings.amplitude)]
+				["radius", new Uniform(-waveSize)],
+				["maxRadius", new Uniform(maxRadius)],
+				["waveSize", new Uniform(waveSize)],
+				["amplitude", new Uniform(amplitude)]
 			]),
 
 			vertexShader: vertex
@@ -112,7 +110,7 @@ export class ShockWaveEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.speed = settings.speed;
+		this.speed = speed;
 
 		/**
 		 * A time accumulator.

@@ -40,8 +40,8 @@ export class SMAAEffect extends Effect {
 
 		super("SMAAEffect", fragment, {
 
-			attributes: EffectAttribute.CONVOLUTION,
 			blendFunction: BlendFunction.NORMAL,
+			attributes: EffectAttribute.CONVOLUTION,
 
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
@@ -60,9 +60,9 @@ export class SMAAEffect extends Effect {
 
 		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
-			format: RGBFormat,
 			stencilBuffer: false,
-			depthBuffer: false
+			depthBuffer: false,
+			format: RGBFormat
 		});
 
 		this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";

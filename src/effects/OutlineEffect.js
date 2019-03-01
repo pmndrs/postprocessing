@@ -8,12 +8,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import {
-	DepthComparisonMaterial,
-	OutlineEdgesMaterial,
-	KernelSize
-} from "../materials";
-
+import { DepthComparisonMaterial, OutlineEdgesMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
@@ -47,36 +42,36 @@ export class OutlineEffect extends Effect {
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
 
-	constructor(scene, camera, options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			patternTexture: null,
-			edgeStrength: 1.0,
-			pulseSpeed: 0.0,
-			visibleEdgeColor: 0xffffff,
-			hiddenEdgeColor: 0x22090a,
-			blur: false,
-			xRay: true
-		}, options);
+	constructor(scene, camera, {
+		blendFunction = BlendFunction.SCREEN,
+		patternTexture = null,
+		edgeStrength = 1.0,
+		pulseSpeed = 0.0,
+		visibleEdgeColor = 0xffffff,
+		hiddenEdgeColor = 0x22090a,
+		resolutionScale = 0.5,
+		kernelSize = KernelSize.VERY_SMALL,
+		blur = false,
+		xRay = true
+	} = {}) {
 
 		super("OutlineEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
-				["edgeStrength", new Uniform(settings.edgeStrength)],
-				["visibleEdgeColor", new Uniform(new Color(settings.visibleEdgeColor))],
-				["hiddenEdgeColor", new Uniform(new Color(settings.hiddenEdgeColor))],
+				["edgeStrength", new Uniform(edgeStrength)],
+				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
+				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
 				["pulse", new Uniform(1.0)]
 			])
 
 		});
 
-		this.setPatternTexture(settings.patternTexture);
-		this.xRay = settings.xRay;
+		this.setPatternTexture(patternTexture);
+		this.xRay = xRay;
 
 		/**
 		 * The main scene.
@@ -194,10 +189,8 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.blurPass = new BlurPass(settings);
-
-		this.kernelSize = settings.kernelSize;
-		this.blur = settings.blur;
+		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
+		this.blur = blur;
 
 		/**
 		 * The original resolution.
@@ -215,7 +208,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial(settings));
+		this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
 		this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		/**
@@ -242,7 +235,7 @@ export class OutlineEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.pulseSpeed = settings.pulseSpeed;
+		this.pulseSpeed = pulseSpeed;
 
 		/**
 		 * A dedicated render layer for selected objects.
@@ -308,7 +301,7 @@ export class OutlineEffect extends Effect {
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.VERY_SMALL) {
+	set kernelSize(value) {
 
 		this.blurPass.kernelSize = value;
 
@@ -606,7 +599,6 @@ export class OutlineEffect extends Effect {
 		} else if(this.clear) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-
 			this.clear = false;
 
 		}

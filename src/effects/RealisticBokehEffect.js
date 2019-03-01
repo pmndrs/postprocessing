@@ -34,46 +34,44 @@ export class RealisticBokehEffect extends Effect {
 	 * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			focus: 1.0,
-			focalLength: 24.0,
-			luminanceThreshold: 0.5,
-			luminanceGain: 2.0,
-			bias: 0.5,
-			fringe: 0.7,
-			maxBlur: 1.0,
-			rings: 3,
-			samples: 2,
-			showFocus: false,
-			manualDoF: false,
-			pentagon: false
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		focus = 1.0,
+		focalLength = 24.0,
+		luminanceThreshold = 0.5,
+		luminanceGain = 2.0,
+		bias = 0.5,
+		fringe = 0.7,
+		maxBlur = 1.0,
+		rings = 3,
+		samples = 2,
+		showFocus = false,
+		manualDoF = false,
+		pentagon = false
+	} = {}) {
 
 		super("RealisticBokehEffect", fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				["focus", new Uniform(settings.focus)],
-				["focalLength", new Uniform(settings.focalLength)],
-				["luminanceThreshold", new Uniform(settings.luminanceThreshold)],
-				["luminanceGain", new Uniform(settings.luminanceGain)],
-				["bias", new Uniform(settings.bias)],
-				["fringe", new Uniform(settings.fringe)],
-				["maxBlur", new Uniform(settings.maxBlur)]
+				["focus", new Uniform(focus)],
+				["focalLength", new Uniform(focalLength)],
+				["luminanceThreshold", new Uniform(luminanceThreshold)],
+				["luminanceGain", new Uniform(luminanceGain)],
+				["bias", new Uniform(bias)],
+				["fringe", new Uniform(fringe)],
+				["maxBlur", new Uniform(maxBlur)]
 			])
 
 		});
 
-		this.rings = settings.rings;
-		this.samples = settings.samples;
-		this.showFocus = settings.showFocus;
-		this.manualDoF = settings.manualDoF;
-		this.pentagon = settings.pentagon;
+		this.rings = rings;
+		this.samples = samples;
+		this.showFocus = showFocus;
+		this.manualDoF = manualDoF;
+		this.pentagon = pentagon;
 
 	}
 

@@ -18,7 +18,7 @@ export class BlurPass extends Pass {
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor(options = {}) {
+	constructor({ resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
 
 		super("BlurPass");
 
@@ -37,7 +37,6 @@ export class BlurPass extends Pass {
 		});
 
 		this.renderTargetX.texture.name = "Blur.TargetX";
-		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.
@@ -65,7 +64,7 @@ export class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
+		this.resolutionScale = resolutionScale;
 
 		/**
 		 * A convolution shader material.
@@ -94,7 +93,7 @@ export class BlurPass extends Pass {
 
 		this.dithering = false;
 
-		this.kernelSize = options.kernelSize;
+		this.kernelSize = kernelSize;
 
 	}
 
@@ -135,10 +134,12 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * Sets the kernel size.
+	 *
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) {
+	set kernelSize(value) {
 
 		this.convolutionMaterial.kernelSize = value;
 		this.ditheredConvolutionMaterial.kernelSize = value;

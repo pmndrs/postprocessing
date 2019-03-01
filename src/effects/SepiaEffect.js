@@ -18,19 +18,14 @@ export class SepiaEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity of the effect.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			intensity: 1.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, intensity = 1.0 } = {}) {
 
 		super("SepiaEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
-				["intensity", new Uniform(settings.intensity)]
+				["intensity", new Uniform(intensity)]
 			])
 
 		});

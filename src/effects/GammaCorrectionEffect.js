@@ -18,19 +18,14 @@ export class GammaCorrectionEffect extends Effect {
 	 * @param {Number} [options.gamma=2.0] - The gamma factor.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			gamma: 2.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, gamma = 2.0 } = {}) {
 
 		super("GammaCorrectionEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
-				["gamma", new Uniform(settings.gamma)]
+				["gamma", new Uniform(gamma)]
 			])
 
 		});

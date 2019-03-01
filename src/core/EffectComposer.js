@@ -36,12 +36,7 @@ export class EffectComposer {
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
 	 */
 
-	constructor(renderer = null, options = {}) {
-
-		const settings = Object.assign({
-			depthBuffer: true,
-			stencilBuffer: false
-		}, options);
+	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false } = {}) {
 
 		/**
 		 * The renderer.
@@ -79,7 +74,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(settings.depthBuffer, settings.stencilBuffer);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer);
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}

@@ -42,28 +42,26 @@ export class ToneMappingEffect extends Effect {
 	 * @param {Number} [options.adaptationRate=1.0] - The luminance adaptation rate.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			adaptive: true,
-			resolution: 256,
-			distinction: 1.0,
-			middleGrey: 0.6,
-			maxLuminance: 16.0,
-			averageLuminance: 1.0,
-			adaptationRate: 2.0
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		adaptive = true,
+		resolution = 256,
+		distinction = 1.0,
+		middleGrey = 0.6,
+		maxLuminance = 16.0,
+		averageLuminance = 1.0,
+		adaptationRate = 2.0
+	} = {}) {
 
 		super("ToneMappingEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["luminanceMap", new Uniform(null)],
-				["middleGrey", new Uniform(settings.middleGrey)],
-				["maxLuminance", new Uniform(settings.maxLuminance)],
-				["averageLuminance", new Uniform(settings.averageLuminance)]
+				["middleGrey", new Uniform(middleGrey)],
+				["maxLuminance", new Uniform(maxLuminance)],
+				["averageLuminance", new Uniform(averageLuminance)]
 			])
 
 		});
@@ -79,9 +77,9 @@ export class ToneMappingEffect extends Effect {
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
-			format: RGBFormat,
 			stencilBuffer: false,
-			depthBuffer: false
+			depthBuffer: false,
+			format: RGBFormat
 		});
 
 		this.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
@@ -95,7 +93,6 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.renderTargetAdapted = this.renderTargetLuminance.clone();
-
 		this.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminance";
 		this.renderTargetAdapted.texture.generateMipmaps = false;
 		this.renderTargetAdapted.texture.minFilter = LinearFilter;
@@ -108,7 +105,6 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.renderTargetPrevious = this.renderTargetAdapted.clone();
-
 		this.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminance";
 
 		/**
@@ -138,11 +134,10 @@ export class ToneMappingEffect extends Effect {
 
 		this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
 
-		// Apply settings.
-		this.adaptationRate = settings.adaptationRate;
-		this.distinction = settings.distinction;
-		this.resolution = settings.resolution;
-		this.adaptive = settings.adaptive;
+		this.adaptationRate = adaptationRate;
+		this.distinction = distinction;
+		this.resolution = resolution;
+		this.adaptive = adaptive;
 
 	}
 

@@ -46,19 +46,17 @@ export class GodRaysEffect extends Effect {
 	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
 
-	constructor(scene, camera, lightSource, options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			resolutionScale: 0.5,
-			samples: 60.0,
-			blur: true,
-			kernelSize: KernelSize.SMALL
-		}, options);
+	constructor(scene, camera, lightSource, {
+		blendFunction = BlendFunction.SCREEN,
+		samples = 60.0,
+		resolutionScale = 0.5,
+		kernelSize = KernelSize.SMALL,
+		blur = true
+	} = {}) {
 
 		super("GodRaysEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["texture", new Uniform(null)]
@@ -199,7 +197,7 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.blurPass = new BlurPass(settings);
+		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
 
 		/**
 		 * A god rays pass.
@@ -208,11 +206,10 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition, settings));
+		this.godRaysPass = new ShaderPass(new GodRaysMaterial(this.screenPosition));
 
-		this.blur = settings.blur;
-		this.kernelSize = settings.kernelSize;
-		this.samples = settings.samples;
+		this.blur = blur;
+		this.samples = samples;
 
 	}
 

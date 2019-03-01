@@ -64,27 +64,25 @@ export class GlitchEffect extends Effect {
 	 * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			chromaticAberrationOffset: null,
-			delay: new Vector2(1.5, 3.5),
-			duration: new Vector2(0.6, 1.0),
-			strength: new Vector2(0.3, 1.0),
-			columns: 0.05,
-			ratio: 0.85,
-			perturbationMap: null,
-			dtSize: 64
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		chromaticAberrationOffset = null,
+		delay = new Vector2(1.5, 3.5),
+		duration = new Vector2(0.6, 1.0),
+		strength = new Vector2(0.3, 1.0),
+		columns = 0.05,
+		ratio = 0.85,
+		perturbationMap = null,
+		dtSize = 64
+	} = {}) {
 
 		super("GlitchEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["perturbationMap", new Uniform(null)],
-				["columns", new Uniform(settings.columns)],
+				["columns", new Uniform(columns)],
 				["active", new Uniform(false)],
 				["random", new Uniform(0.02)],
 				["seed", new Uniform(new Vector2())],
@@ -102,9 +100,9 @@ export class GlitchEffect extends Effect {
 
 		this.perturbationMap = null;
 
-		this.setPerturbationMap((settings.perturbationMap === null) ?
-			this.generatePerturbationMap(settings.dtSize) :
-			settings.perturbationMap);
+		this.setPerturbationMap((perturbationMap === null) ?
+			this.generatePerturbationMap(dtSize) :
+			perturbationMap);
 
 		this.perturbationMap.generateMipmaps = false;
 
@@ -114,7 +112,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.delay = settings.delay;
+		this.delay = delay;
 
 		/**
 		 * The minimum and maximum duration of a glitch in seconds.
@@ -122,7 +120,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.duration = settings.duration;
+		this.duration = duration;
 
 		/**
 		 * A random glitch break point.
@@ -177,7 +175,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.strength = settings.strength;
+		this.strength = strength;
 
 		/**
 		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no
@@ -187,7 +185,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.ratio = settings.ratio;
+		this.ratio = ratio;
 
 		/**
 		 * The chromatic aberration offset.
@@ -195,7 +193,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
+		this.chromaticAberrationOffset = chromaticAberrationOffset;
 
 	}
 

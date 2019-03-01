@@ -17,16 +17,11 @@ export class NoiseEffect extends Effect {
 	 * @param {Boolean} [options.premultiply=false] - Whether the noise should be multiplied with the input color.
 	 */
 
-	constructor(options = {}) {
+	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
 
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			premultiply: false
-		}, options);
+		super("NoiseEffect", fragment, { blendFunction });
 
-		super("NoiseEffect", fragment, { blendFunction: settings.blendFunction });
-
-		this.premultiply = settings.premultiply;
+		this.premultiply = premultiply;
 
 	}
 

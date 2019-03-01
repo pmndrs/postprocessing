@@ -26,7 +26,7 @@ export class NormalPass extends Pass {
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
-	constructor(scene, camera, options = {}) {
+	constructor(scene, camera, { resolutionScale = 1.0, renderTarget } = {}) {
 
 		super("NormalPass");
 
@@ -54,7 +54,7 @@ export class NormalPass extends Pass {
 		 * @type {WebGLRenderTarget}
 		 */
 
-		this.renderTarget = options.renderTarget;
+		this.renderTarget = renderTarget;
 
 		if(this.renderTarget === undefined) {
 
@@ -70,6 +70,15 @@ export class NormalPass extends Pass {
 		}
 
 		/**
+		 * The current resolution scale.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.resolutionScale = resolutionScale;
+
+		/**
 		 * The original resolution.
 		 *
 		 * @type {Vector2}
@@ -77,15 +86,6 @@ export class NormalPass extends Pass {
 		 */
 
 		this.resolution = new Vector2();
-
-		/**
-		 * The current resolution scale.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
 
 	}
 

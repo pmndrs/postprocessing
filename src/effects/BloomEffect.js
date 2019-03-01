@@ -32,18 +32,11 @@ export class BloomEffect extends Effect {
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			resolutionScale: 0.5,
-			kernelSize: KernelSize.LARGE,
-			distinction: 1.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.SCREEN, distinction = 1.0, resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
 
 		super("BloomEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["texture", new Uniform(null)]
@@ -71,6 +64,15 @@ export class BloomEffect extends Effect {
 		this.uniforms.get("texture").value = this.renderTarget.texture;
 
 		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
+
+		/**
 		 * The original resolution.
 		 *
 		 * @type {Vector2}
@@ -78,15 +80,6 @@ export class BloomEffect extends Effect {
 		 */
 
 		this.resolution = new Vector2();
-
-		/**
-		 * A blur pass.
-		 *
-		 * @type {BlurPass}
-		 * @private
-		 */
-
-		this.blurPass = new BlurPass(settings);
 
 		/**
 		 * A luminance shader pass.
@@ -97,8 +90,7 @@ export class BloomEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
 
-		this.distinction = settings.distinction;
-		this.kernelSize = settings.kernelSize;
+		this.distinction = distinction;
 
 	}
 
