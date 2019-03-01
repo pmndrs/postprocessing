@@ -1,3 +1,4 @@
+import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 
 /**
@@ -23,6 +24,15 @@ export class MaskPass extends Pass {
 		this.needsSwap = false;
 
 		/**
+		 * A clear pass.
+		 *
+		 * @type {ClearPass}
+		 * @private
+		 */
+
+		this.clearPass = new ClearPass(false, false, true);
+
+		/**
 		 * Inverse flag.
 		 *
 		 * @type {Boolean}
@@ -30,13 +40,29 @@ export class MaskPass extends Pass {
 
 		this.inverse = false;
 
-		/**
-		 * Stencil buffer clear flag.
-		 *
-		 * @type {Boolean}
-		 */
+	}
 
-		this.clearStencil = true;
+	/**
+	 * Indicates whether this pass should clear the stencil buffer.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
+
+	/**
+	 * Enables or disables auto clear.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set clear(value) {
+
+		this.clearPass.enabled = value;
 
 	}
 
@@ -57,6 +83,7 @@ export class MaskPass extends Pass {
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const clearPass = this.clearPass;
 
 		const writeValue = this.inverse ? 0 : 1;
 		const clearValue = 1 - writeValue;
@@ -76,20 +103,16 @@ export class MaskPass extends Pass {
 		state.buffers.stencil.setClear(clearValue);
 
 		// Clear the stencil.
-		if(this.clearStencil) {
+		if(this.clear) {
 
 			if(this.renderToScreen) {
 
-				renderer.setRenderTarget(null);
-				renderer.clearStencil();
+				clearPass.render(renderer, null);
 
 			} else {
 
-				renderer.setRenderTarget(inputBuffer);
-				renderer.clearStencil();
-
-				renderer.setRenderTarget(outputBuffer);
-				renderer.clearStencil();
+				clearPass.render(renderer, inputBuffer);
+				clearPass.render(renderer, outputBuffer);
 
 			}
 
