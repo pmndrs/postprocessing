@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -116,7 +117,7 @@ export class RealisticBokehEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
-	 * @param {Number} [options.focus=0.5] - The focus distance ratio, ranging from 0.0 to 1.0.
+	 * @param {Number} [options.focus=1.0] - The focus distance in world units.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
 	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
 	 * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.
@@ -130,46 +131,44 @@ export class RealisticBokehEffect extends Effect {
 	 * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			focus: 0.5,
-			focalLength: 24.0,
-			luminanceThreshold: 0.5,
-			luminanceGain: 2.0,
-			bias: 0.5,
-			fringe: 0.7,
-			maxBlur: 1.0,
-			rings: 3,
-			samples: 2,
-			showFocus: false,
-			manualDoF: false,
-			pentagon: false
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		focus = 1.0,
+		focalLength = 24.0,
+		luminanceThreshold = 0.5,
+		luminanceGain = 2.0,
+		bias = 0.5,
+		fringe = 0.7,
+		maxBlur = 1.0,
+		rings = 3,
+		samples = 2,
+		showFocus = false,
+		manualDoF = false,
+		pentagon = false
+	} = {}) {
 
 		super(&quot;RealisticBokehEffect&quot;, fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				[&quot;focus&quot;, new Uniform(settings.focus)],
-				[&quot;focalLength&quot;, new Uniform(settings.focalLength)],
-				[&quot;luminanceThreshold&quot;, new Uniform(settings.luminanceThreshold)],
-				[&quot;luminanceGain&quot;, new Uniform(settings.luminanceGain)],
-				[&quot;bias&quot;, new Uniform(settings.bias)],
-				[&quot;fringe&quot;, new Uniform(settings.fringe)],
-				[&quot;maxBlur&quot;, new Uniform(settings.maxBlur)]
+				[&quot;focus&quot;, new Uniform(focus)],
+				[&quot;focalLength&quot;, new Uniform(focalLength)],
+				[&quot;luminanceThreshold&quot;, new Uniform(luminanceThreshold)],
+				[&quot;luminanceGain&quot;, new Uniform(luminanceGain)],
+				[&quot;bias&quot;, new Uniform(bias)],
+				[&quot;fringe&quot;, new Uniform(fringe)],
+				[&quot;maxBlur&quot;, new Uniform(maxBlur)]
 			])
 
 		});
 
-		this.rings = settings.rings;
-		this.samples = settings.samples;
-		this.showFocus = settings.showFocus;
-		this.manualDoF = settings.manualDoF;
-		this.pentagon = settings.pentagon;
+		this.rings = rings;
+		this.samples = samples;
+		this.showFocus = showFocus;
+		this.manualDoF = manualDoF;
+		this.pentagon = pentagon;
 
 	}
 

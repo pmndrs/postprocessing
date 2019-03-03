@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -94,13 +95,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ClearPass} from &apos;<span><a href="file/src/passes/ClearPass.js.html#lineNumber21">postprocessing/src/passes/ClearPass.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {ClearPass} from &apos;<span><a href="file/src/passes/ClearPass.js.html#lineNumber17">postprocessing/src/passes/ClearPass.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/passes/ClearPass.js.html#lineNumber21">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/passes/ClearPass.js.html#lineNumber17">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -121,9 +122,6 @@
   
   
   <div class="description" data-ice="description"><p>A pass that clears the input buffer or the screen.</p>
-<p>You can prevent specific bits from being cleared by setting either the
-autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
-to false.</p>
 </div>
   
 
@@ -156,7 +154,7 @@ to false.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(color: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, depth: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencil: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -192,13 +190,13 @@ to false.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-clearAlpha">clearAlpha</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-color">color</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The clear alpha.</p>
+        <div data-ice="description"><p>Indicates whether the color buffer should be cleared.</p>
 </div>
       </div>
     </td>
@@ -221,13 +219,13 @@ to false.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-clearColor">clearColor</a></span></span><span class="code" data-ice="signature">: <span>Color</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-depth">depth</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The clear color.</p>
+        <div data-ice="description"><p>Indicates whether the depth buffer should be cleared.</p>
 </div>
       </div>
     </td>
@@ -264,6 +262,93 @@ to false.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-overrideClearAlpha">overrideClearAlpha</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>An override clear alpha.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-overrideClearColor">overrideClearColor</a></span></span><span class="code" data-ice="signature">: <span>Color</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>An override clear color.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-member-stencil">stencil</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether the stencil buffer should be cleared.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -285,7 +370,7 @@ to false.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/ClearPass.js~ClearPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -700,7 +785,7 @@ buffers after this pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -765,8 +850,8 @@ buffers after this pass has finished rendering.</p>
         
         
         <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
-<p>You may override this method in case you want to be informed about the main
-render size.</p>
+<p>You may override this method in case you want to be informed about the size
+of the main frame buffer.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
 initialized and every time its own size is updated.</p>
 </div>
@@ -822,11 +907,11 @@ initialized and every time its own size is updated.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(color: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, depth: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencil: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber31">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber27">source</a></span></span>
     </span>
   </h3>
 
@@ -847,26 +932,27 @@ initialized and every time its own size is updated.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">options</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Additional options.</p>
+      <td data-ice="name" class="code" data-depth="0">color</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Determines whether the color buffer should be cleared.</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clearColor</td>
-      <td data-ice="type" class="code"><span>Color</span></td>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">depth</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>An override clear color.</p>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Determines whether the depth buffer should be cleared.</p>
 </td>
     </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clearAlpha</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">stencil</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 0.0</li></ul></td>
-      <td data-ice="description"><p>An override clear alpha.</p>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Determines whether the stencil buffer should be cleared.</p>
 </td>
     </tr>
 </tbody>
@@ -895,25 +981,25 @@ initialized and every time its own size is updated.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-clearAlpha">
+  <h3 data-ice="anchor" id="instance-member-color">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">clearAlpha</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="code" data-ice="name">color</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber51">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The clear alpha.</p>
+  <div data-ice="description"><p>Indicates whether the color buffer should be cleared.</p>
 </div>
 
   
@@ -939,25 +1025,25 @@ initialized and every time its own size is updated.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-clearColor">
+  <h3 data-ice="anchor" id="instance-member-depth">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">clearColor</span><span class="code" data-ice="signature">: <span>Color</span></span>
+    <span class="code" data-ice="name">depth</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber43">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>The clear color.</p>
+  <div data-ice="description"><p>Indicates whether the depth buffer should be cleared.</p>
 </div>
 
   
@@ -994,7 +1080,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber35">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -1005,9 +1091,142 @@ initialized and every time its own size is updated.</p>
 buffers after this pass has finished rendering.</p>
 <p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
 the screen. Otherwise, the contents of the input buffer will be lost.</p>
+<p>This flag must not be changed at runtime.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-overrideClearAlpha">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">overrideClearAlpha</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber71">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>An override clear alpha.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-overrideClearColor">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">overrideClearColor</span><span class="code" data-ice="signature">: <span>Color</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber63">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>An override clear color.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-stencil">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">stencil</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber55">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the stencil buffer should be cleared.</p>
+</div>
+
+  
 
   <div data-ice="properties">
 </div>
@@ -1040,11 +1259,11 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber65">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/ClearPass.js.html#lineNumber85">source</a></span></span>
     </span>
   </h3>
 
@@ -1086,7 +1305,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

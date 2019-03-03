@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -150,14 +151,12 @@ export class ShockWaveEffect extends Effect {
 	 * @param {Number} [options.amplitude=0.05] - The distortion amplitude.
 	 */
 
-	constructor(camera, epicenter = new Vector3(), options = {}) {
-
-		const settings = Object.assign({
-			speed: 2.0,
-			maxRadius: 1.0,
-			waveSize: 0.2,
-			amplitude: 0.05
-		}, options);
+	constructor(camera, epicenter = new Vector3(), {
+		speed = 2.0,
+		maxRadius = 1.0,
+		waveSize = 0.2,
+		amplitude = 0.05
+	} = {}) {
 
 		super(&quot;ShockWaveEffect&quot;, fragment, {
 
@@ -166,10 +165,10 @@ export class ShockWaveEffect extends Effect {
 				[&quot;center&quot;, new Uniform(new Vector2(0.5, 0.5))],
 				[&quot;cameraDistance&quot;, new Uniform(1.0)],
 				[&quot;size&quot;, new Uniform(1.0)],
-				[&quot;radius&quot;, new Uniform(-settings.waveSize)],
-				[&quot;maxRadius&quot;, new Uniform(settings.maxRadius)],
-				[&quot;waveSize&quot;, new Uniform(settings.waveSize)],
-				[&quot;amplitude&quot;, new Uniform(settings.amplitude)]
+				[&quot;radius&quot;, new Uniform(-waveSize)],
+				[&quot;maxRadius&quot;, new Uniform(maxRadius)],
+				[&quot;waveSize&quot;, new Uniform(waveSize)],
+				[&quot;amplitude&quot;, new Uniform(amplitude)]
 			]),
 
 			vertexShader: vertex
@@ -208,7 +207,7 @@ export class ShockWaveEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.speed = settings.speed;
+		this.speed = speed;
 
 		/**
 		 * A time accumulator.

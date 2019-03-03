@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -101,7 +102,7 @@ import { Effect, EffectAttribute } from &quot;./Effect.js&quot;;
 import fragment from &quot;./glsl/bokeh/shader.frag&quot;;
 
 /**
- * A depth of field (bokeh) shader effect.
+ * A depth of field (bokeh) effect.
  *
  * Original shader code by Martins Upitis:
  *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
@@ -120,26 +121,18 @@ export class BokehEffect extends Effect {
 	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			focus: 0.5,
-			dof: 0.02,
-			aperture: 0.015,
-			maxBlur: 1.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, focus = 0.5, dof = 0.02, aperture = 0.015, maxBlur = 1.0 } = {}) {
 
 		super(&quot;BokehEffect&quot;, fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				[&quot;focus&quot;, new Uniform(settings.focus)],
-				[&quot;dof&quot;, new Uniform(settings.dof)],
-				[&quot;aperture&quot;, new Uniform(settings.aperture)],
-				[&quot;maxBlur&quot;, new Uniform(settings.maxBlur)]
+				[&quot;focus&quot;, new Uniform(focus)],
+				[&quot;dof&quot;, new Uniform(dof)],
+				[&quot;aperture&quot;, new Uniform(aperture)],
+				[&quot;maxBlur&quot;, new Uniform(maxBlur)]
 			])
 
 		});

@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -94,13 +95,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {OutlineEffect} from &apos;<span><a href="file/src/effects/OutlineEffect.js.html#lineNumber28">postprocessing/src/effects/OutlineEffect.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {OutlineEffect} from &apos;<span><a href="file/src/effects/OutlineEffect.js.html#lineNumber23">postprocessing/src/effects/OutlineEffect.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/OutlineEffect.js.html#lineNumber28">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/OutlineEffect.js.html#lineNumber23">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -339,7 +340,8 @@
       <div>
         
         
-        
+        <div data-ice="description"><p>Sets the kernel size.</p>
+</div>
       </div>
     </td>
     <td>
@@ -540,6 +542,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-camera">camera</a></span></span><span class="code" data-ice="signature">: <span>Camera</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The main camera.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-clear">clear</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
@@ -605,64 +636,6 @@
         
         
         <div data-ice="description"><p>A depth pass.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-mainCamera">mainCamera</a></span></span><span class="code" data-ice="signature">: <span>Camera</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The main camera.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-mainScene">mainScene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The main scene.</p>
 </div>
       </div>
     </td>
@@ -772,35 +745,6 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetDepth">renderTargetDepth</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A depth render target.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetEdges">renderTargetEdges</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
         </p>
       </div>
@@ -866,6 +810,35 @@
         
         
         <div data-ice="description"><p>The original resolution.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The main scene.</p>
 </div>
       </div>
     </td>
@@ -1214,7 +1187,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1663,7 +1636,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1698,7 +1671,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber48">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1706,7 +1679,7 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Constructs a new outline effect.</p>
-<p>If you want dark outlines, remember to adjust the blend function.</p>
+<p>If you want dark outlines, remember to use an appropriate blend function.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/Effect.js~Effect.html#instance-constructor-constructor">Effect#constructor</a></span></div>
@@ -1737,7 +1710,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="0">options</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The options. See <span><a href="class/src/passes/BlurPass.js~BlurPass.html">BlurPass</a></span> and <span><a href="class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html">OutlineEdgesMaterial</a></span> for additional parameters.</p>
+      <td data-ice="description"><p>The options.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1789,6 +1762,22 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.5</li></ul></td>
+      <td data-ice="description"><p>The render texture resolution scale, relative to the main frame buffer size.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.kernelSize</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: KernelSize.VERY_SMALL</li></ul></td>
+      <td data-ice="description"><p>The blur kernel size.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.blur</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1801,7 +1790,7 @@ deletes them.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether hidden parts of selected objects should be visible.</p>
+      <td data-ice="description"><p>Whether occluded parts of selected objects should be visible.</p>
 </td>
     </tr>
 </tbody>
@@ -1841,7 +1830,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber320">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 
@@ -1885,7 +1874,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber330">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -1928,7 +1917,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber274">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1972,7 +1961,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber286">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -2016,7 +2005,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber298">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
@@ -2060,14 +2049,15 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber308">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Sets the kernel size.</p>
+</div>
 
   
 
@@ -2103,7 +2093,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -2147,7 +2137,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber255">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -2193,7 +2183,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber384">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber361">source</a></span></span>
     </span>
   </h3>
 
@@ -2237,7 +2227,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber346">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber323">source</a></span></span>
     </span>
   </h3>
 
@@ -2281,7 +2271,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber360">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber337">source</a></span></span>
     </span>
   </h3>
 
@@ -2328,7 +2318,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -2336,6 +2326,50 @@ layers, please change it to a free layer before rendering!</p>
   
   
   <div data-ice="description"><p>A blur pass.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-camera">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">camera</span><span class="code" data-ice="signature">: <span>Camera</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber92">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The main camera.</p>
 </div>
 
   
@@ -2372,7 +2406,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
@@ -2416,7 +2450,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber162">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber140">source</a></span></span>
     </span>
   </h3>
 
@@ -2460,7 +2494,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber151">source</a></span></span>
     </span>
   </h3>
 
@@ -2468,94 +2502,6 @@ layers, please change it to a free layer before rendering!</p>
   
   
   <div data-ice="description"><p>A depth pass.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-mainCamera">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">mainCamera</span><span class="code" data-ice="signature">: <span>Camera</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber95">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The main camera.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-mainScene">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">mainScene</span><span class="code" data-ice="signature">: <span>Scene</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber86">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The main scene.</p>
 </div>
 
   
@@ -2592,7 +2538,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber183">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber160">source</a></span></span>
     </span>
   </h3>
 
@@ -2636,7 +2582,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -2680,7 +2626,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber130">source</a></span></span>
     </span>
   </h3>
 
@@ -2688,50 +2634,6 @@ layers, please change it to a free layer before rendering!</p>
   
   
   <div data-ice="description"><p>A render target for the blurred outline overlay.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-renderTargetDepth">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">renderTargetDepth</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber104">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A depth render target.</p>
 </div>
 
   
@@ -2768,7 +2670,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -2812,7 +2714,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber119">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber101">source</a></span></span>
     </span>
   </h3>
 
@@ -2856,7 +2758,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber208">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber183">source</a></span></span>
     </span>
   </h3>
 
@@ -2864,6 +2766,50 @@ layers, please change it to a free layer before rendering!</p>
   
   
   <div data-ice="description"><p>The original resolution.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-scene">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">scene</span><span class="code" data-ice="signature">: <span>Scene</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber83">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The main scene.</p>
 </div>
 
   
@@ -2900,7 +2846,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber227">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber202">source</a></span></span>
     </span>
   </h3>
 
@@ -2944,7 +2890,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber236">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 
@@ -2991,7 +2937,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber456">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber434">source</a></span></span>
     </span>
   </h3>
 
@@ -3048,7 +2994,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber500">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber478">source</a></span></span>
     </span>
   </h3>
 
@@ -3122,7 +3068,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber403">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber380">source</a></span></span>
     </span>
   </h3>
 
@@ -3179,7 +3125,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber646">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber623">source</a></span></span>
     </span>
   </h3>
 
@@ -3247,7 +3193,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber484">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber462">source</a></span></span>
     </span>
   </h3>
 
@@ -3321,7 +3267,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber375">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber352">source</a></span></span>
     </span>
   </h3>
 
@@ -3384,7 +3330,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber415">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber392">source</a></span></span>
     </span>
   </h3>
 
@@ -3445,7 +3391,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber429">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber407">source</a></span></span>
     </span>
   </h3>
 
@@ -3519,7 +3465,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber620">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber597">source</a></span></span>
     </span>
   </h3>
 
@@ -3583,11 +3529,11 @@ texture.</p>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber560">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber538">source</a></span></span>
     </span>
   </h3>
 
@@ -3622,7 +3568,7 @@ texture.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
@@ -3664,7 +3610,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber530">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber508">source</a></span></span>
     </span>
   </h3>
 

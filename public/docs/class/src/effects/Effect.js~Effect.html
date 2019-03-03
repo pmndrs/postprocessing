@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -574,7 +575,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -734,7 +735,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -777,7 +778,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber58">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber56">source</a></span></span>
     </span>
   </h3>
 
@@ -823,7 +824,7 @@ which they were registered. Some attributes imply a higher priority.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber119">source</a></span></span>
     </span>
   </h3>
 
@@ -872,7 +873,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber84">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -917,7 +918,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber106">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -963,7 +964,7 @@ an extension.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber64">source</a></span></span>
     </span>
   </h3>
 
@@ -1007,7 +1008,7 @@ an extension.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber47">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
@@ -1051,7 +1052,7 @@ an extension.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -1097,7 +1098,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber74">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
@@ -1144,7 +1145,7 @@ uniforms must not be removed or added after the effect was created.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber202">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber200">source</a></span></span>
     </span>
   </h3>
 
@@ -1197,7 +1198,7 @@ call this method directly.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber185">source</a></span></span>
     </span>
   </h3>
 
@@ -1279,7 +1280,7 @@ which happens after the size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber135">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber133">source</a></span></span>
     </span>
   </h3>
 
@@ -1350,7 +1351,7 @@ depth texture that is bound to the associated <span><a href="class/src/passes/Ef
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -1425,11 +1426,11 @@ and every time its own size is updated.</p>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/Effect.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 
@@ -1468,7 +1469,7 @@ textures or update custom uniforms.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

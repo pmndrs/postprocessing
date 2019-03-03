@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -103,12 +104,10 @@ import fragment from &quot;./glsl/ssao/shader.frag&quot;;
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
- * SSAO is a method to approximate ambient occlusion in screen space.
- *
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation uses a discrete spiral sampling pattern:
+ * This implementation uses a spiral sampling pattern:
  *  https://jsfiddle.net/a16ff1p7
  */
 
@@ -133,26 +132,24 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.bias=0.5] - An occlusion bias.
 	 */
 
-	constructor(camera, normalBuffer, options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.MULTIPLY,
-			samples: 11,
-			rings: 4,
-			distanceThreshold: 0.65,
-			distanceFalloff: 0.1,
-			rangeThreshold: 0.0015,
-			rangeFalloff: 0.01,
-			luminanceInfluence: 0.7,
-			radius: 18.25,
-			scale: 1.0,
-			bias: 0.5
-		}, options);
+	constructor(camera, normalBuffer, {
+		blendFunction = BlendFunction.MULTIPLY,
+		samples = 11,
+		rings = 4,
+		distanceThreshold = 0.65,
+		distanceFalloff = 0.1,
+		rangeThreshold = 0.0015,
+		rangeFalloff = 0.01,
+		luminanceInfluence = 0.7,
+		radius = 18.25,
+		scale = 1.0,
+		bias = 0.5
+	} = {}) {
 
 		super(&quot;SSAOEffect&quot;, fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			defines: new Map([
 				[&quot;RINGS_INT&quot;, &quot;0&quot;],
@@ -168,9 +165,9 @@ export class SSAOEffect extends Effect {
 				[&quot;distanceCutoff&quot;, new Uniform(new Vector2())],
 				[&quot;proximityCutoff&quot;, new Uniform(new Vector2())],
 				[&quot;seed&quot;, new Uniform(Math.random())],
-				[&quot;luminanceInfluence&quot;, new Uniform(settings.luminanceInfluence)],
-				[&quot;scale&quot;, new Uniform(settings.scale)],
-				[&quot;bias&quot;, new Uniform(settings.bias)]
+				[&quot;luminanceInfluence&quot;, new Uniform(luminanceInfluence)],
+				[&quot;scale&quot;, new Uniform(scale)],
+				[&quot;bias&quot;, new Uniform(bias)]
 			])
 
 		});
@@ -202,12 +199,12 @@ export class SSAOEffect extends Effect {
 
 		this.camera = camera;
 
-		this.samples = settings.samples;
-		this.rings = settings.rings;
-		this.radius = settings.radius;
+		this.samples = samples;
+		this.rings = rings;
+		this.radius = radius;
 
-		this.setDistanceCutoff(settings.distanceThreshold, settings.distanceFalloff);
-		this.setProximityCutoff(settings.rangeThreshold, settings.rangeFalloff);
+		this.setDistanceCutoff(distanceThreshold, distanceFalloff);
+		this.setProximityCutoff(rangeThreshold, rangeFalloff);
 
 	}
 

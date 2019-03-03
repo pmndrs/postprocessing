@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -160,27 +161,25 @@ export class GlitchEffect extends Effect {
 	 * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			chromaticAberrationOffset: null,
-			delay: new Vector2(1.5, 3.5),
-			duration: new Vector2(0.6, 1.0),
-			strength: new Vector2(0.3, 1.0),
-			columns: 0.05,
-			ratio: 0.85,
-			perturbationMap: null,
-			dtSize: 64
-		}, options);
+	constructor({
+		blendFunction = BlendFunction.NORMAL,
+		chromaticAberrationOffset = null,
+		delay = new Vector2(1.5, 3.5),
+		duration = new Vector2(0.6, 1.0),
+		strength = new Vector2(0.3, 1.0),
+		columns = 0.05,
+		ratio = 0.85,
+		perturbationMap = null,
+		dtSize = 64
+	} = {}) {
 
 		super(&quot;GlitchEffect&quot;, fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				[&quot;perturbationMap&quot;, new Uniform(null)],
-				[&quot;columns&quot;, new Uniform(settings.columns)],
+				[&quot;columns&quot;, new Uniform(columns)],
 				[&quot;active&quot;, new Uniform(false)],
 				[&quot;random&quot;, new Uniform(0.02)],
 				[&quot;seed&quot;, new Uniform(new Vector2())],
@@ -198,9 +197,9 @@ export class GlitchEffect extends Effect {
 
 		this.perturbationMap = null;
 
-		this.setPerturbationMap((settings.perturbationMap === null) ?
-			this.generatePerturbationMap(settings.dtSize) :
-			settings.perturbationMap);
+		this.setPerturbationMap((perturbationMap === null) ?
+			this.generatePerturbationMap(dtSize) :
+			perturbationMap);
 
 		this.perturbationMap.generateMipmaps = false;
 
@@ -210,7 +209,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.delay = settings.delay;
+		this.delay = delay;
 
 		/**
 		 * The minimum and maximum duration of a glitch in seconds.
@@ -218,7 +217,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.duration = settings.duration;
+		this.duration = duration;
 
 		/**
 		 * A random glitch break point.
@@ -273,7 +272,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.strength = settings.strength;
+		this.strength = strength;
 
 		/**
 		 * The threshold for strong glitches, ranging from 0 to 1 where 0 means no
@@ -283,7 +282,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.ratio = settings.ratio;
+		this.ratio = ratio;
 
 		/**
 		 * The chromatic aberration offset.
@@ -291,7 +290,7 @@ export class GlitchEffect extends Effect {
 		 * @type {Vector2}
 		 */
 
-		this.chromaticAberrationOffset = settings.chromaticAberrationOffset;
+		this.chromaticAberrationOffset = chromaticAberrationOffset;
 
 	}
 
@@ -380,10 +379,10 @@ export class GlitchEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		const mode = this.mode;
 		const breakPoint = this.breakPoint;
@@ -399,7 +398,7 @@ export class GlitchEffect extends Effect {
 
 			if(mode === GlitchMode.SPORADIC) {
 
-				time += delta;
+				time += deltaTime;
 				trigger = (time &gt; breakPoint.x);
 
 				if(time &gt;= (breakPoint.x + breakPoint.y)) {

@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -588,7 +589,7 @@ buffers after this pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -653,8 +654,8 @@ buffers after this pass has finished rendering.</p>
         
         
         <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
-<p>You may override this method in case you want to be informed about the main
-render size.</p>
+<p>You may override this method in case you want to be informed about the size
+of the main frame buffer.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
 initialized and every time its own size is updated.</p>
 </div>
@@ -800,7 +801,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber258">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 
@@ -843,7 +844,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber99">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber101">source</a></span></span>
     </span>
   </h3>
 
@@ -931,7 +932,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber85">source</a></span></span>
     </span>
   </h3>
 
@@ -978,7 +979,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
@@ -989,6 +990,7 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
 buffers after this pass has finished rendering.</p>
 <p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
 the screen. Otherwise, the contents of the input buffer will be lost.</p>
+<p>This flag must not be changed at runtime.</p>
 </div>
 
   
@@ -1025,7 +1027,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber93">source</a></span></span>
     </span>
   </h3>
 
@@ -1208,7 +1210,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber245">source</a></span></span>
     </span>
   </h3>
 
@@ -1262,7 +1264,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber157">source</a></span></span>
     </span>
   </h3>
 
@@ -1319,7 +1321,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber109">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -1376,7 +1378,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber227">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber229">source</a></span></span>
     </span>
   </h3>
 
@@ -1454,11 +1456,11 @@ queue, but not before its size has been set.</p>
     <span class="abstract" data-ice="abstract">abstract</span>
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber187">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -1501,7 +1503,7 @@ queue, but not before its size has been set.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
@@ -1560,7 +1562,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber171">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -1631,7 +1633,7 @@ of a preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">Re
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber207">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber209">source</a></span></span>
     </span>
   </h3>
 
@@ -1639,8 +1641,8 @@ of a preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">Re
   
   
   <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
-<p>You may override this method in case you want to be informed about the main
-render size.</p>
+<p>You may override this method in case you want to be informed about the size
+of the main frame buffer.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
 initialized and every time its own size is updated.</p>
 </div>
@@ -1712,7 +1714,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 

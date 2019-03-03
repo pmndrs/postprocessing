@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -637,7 +638,7 @@ to blur bright highlights.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1051,7 +1052,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1122,27 +1123,27 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 0.5</li></ul></td>
-      <td data-ice="description"><p>The render texture resolution scale, relative to the screen render size.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.kernelSize</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: KernelSize.LARGE</li></ul></td>
-      <td data-ice="description"><p>The blur kernel size.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.distinction</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 1.0</li></ul></td>
       <td data-ice="description"><p>The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.5</li></ul></td>
+      <td data-ice="description"><p>The render texture resolution scale, relative to the main frame buffer size.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.kernelSize</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: KernelSize.LARGE</li></ul></td>
+      <td data-ice="description"><p>The blur kernel size.</p>
 </td>
     </tr>
 </tbody>
@@ -1182,7 +1183,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1226,7 +1227,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 
@@ -1269,7 +1270,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber126">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber118">source</a></span></span>
     </span>
   </h3>
 
@@ -1313,7 +1314,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber130">source</a></span></span>
     </span>
   </h3>
 
@@ -1357,7 +1358,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1401,7 +1402,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber160">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber152">source</a></span></span>
     </span>
   </h3>
 
@@ -1444,7 +1445,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber114">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
@@ -1492,7 +1493,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber73">source</a></span></span>
     </span>
   </h3>
 
@@ -1536,7 +1537,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber91">source</a></span></span>
     </span>
   </h3>
 
@@ -1580,7 +1581,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber61">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber54">source</a></span></span>
     </span>
   </h3>
 
@@ -1624,7 +1625,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber80">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber82">source</a></span></span>
     </span>
   </h3>
 
@@ -1671,7 +1672,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber194">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
@@ -1728,7 +1729,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
@@ -1796,7 +1797,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber206">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 
@@ -1857,7 +1858,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber229">source</a></span></span>
     </span>
   </h3>
 
@@ -1921,11 +1922,11 @@ is set to <code>SKIP</code>.</p>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber213">source</a></span></span>
     </span>
   </h3>
 
@@ -1960,7 +1961,7 @@ is set to <code>SKIP</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

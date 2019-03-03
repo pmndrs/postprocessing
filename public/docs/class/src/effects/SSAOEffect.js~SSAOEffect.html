@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -94,13 +95,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SSAOEffect} from &apos;<span><a href="file/src/effects/SSAOEffect.js.html#lineNumber19">postprocessing/src/effects/SSAOEffect.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SSAOEffect} from &apos;<span><a href="file/src/effects/SSAOEffect.js.html#lineNumber17">postprocessing/src/effects/SSAOEffect.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/SSAOEffect.js.html#lineNumber19">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/SSAOEffect.js.html#lineNumber17">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -121,10 +122,9 @@
   
   
   <div class="description" data-ice="description"><p>A Screen Space Ambient Occlusion (SSAO) effect.</p>
-<p>SSAO is a method to approximate ambient occlusion in screen space.</p>
 <p>For high quality visuals use two SSAO effect instances in a row with
 different radii, one for rough AO and one for fine details.</p>
-<p>This implementation uses a discrete spiral sampling pattern:
+<p>This implementation uses a spiral sampling pattern:
  <a href="https://jsfiddle.net/a16ff1p7">https://jsfiddle.net/a16ff1p7</a></p>
 </div>
   
@@ -1004,7 +1004,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1039,7 +1039,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber38">source</a></span></span>
     </span>
   </h3>
 
@@ -1205,7 +1205,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber211">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -1249,7 +1249,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber223">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1293,7 +1293,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber182">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber178">source</a></span></span>
     </span>
   </h3>
 
@@ -1337,7 +1337,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber196">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber192">source</a></span></span>
     </span>
   </h3>
 
@@ -1382,7 +1382,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
@@ -1426,7 +1426,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber161">source</a></span></span>
     </span>
   </h3>
 
@@ -1473,7 +1473,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber107">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber103">source</a></span></span>
     </span>
   </h3>
 
@@ -1517,7 +1517,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber89">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber85">source</a></span></span>
     </span>
   </h3>
 
@@ -1561,7 +1561,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber94">source</a></span></span>
     </span>
   </h3>
 
@@ -1608,7 +1608,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber237">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber233">source</a></span></span>
     </span>
   </h3>
 
@@ -1676,7 +1676,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber250">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -1744,7 +1744,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber263">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -1814,7 +1814,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -1858,7 +1858,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 

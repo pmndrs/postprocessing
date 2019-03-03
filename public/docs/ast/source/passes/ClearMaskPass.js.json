@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 951,
+  "end": 959,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 951,
+    "end": 959,
     "loc": {
       "start": {
         "line": 1,
@@ -135,7 +135,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 92,
-        "end": 949,
+        "end": 957,
         "loc": {
           "start": {
             "line": 7,
@@ -151,7 +151,7 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 99,
-          "end": 949,
+          "end": 957,
           "loc": {
             "start": {
               "line": 7,
@@ -200,7 +200,7 @@
           "body": {
             "type": "ClassBody",
             "start": 132,
-            "end": 949,
+            "end": 957,
             "loc": {
               "start": {
                 "line": 7,
@@ -484,9 +484,9 @@
                 "trailingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
+                    "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
                     "start": 287,
-                    "end": 816,
+                    "end": 820,
                     "loc": {
                       "start": {
                         "line": 21,
@@ -502,8 +502,8 @@
               },
               {
                 "type": "ClassMethod",
-                "start": 821,
-                "end": 944,
+                "start": 825,
+                "end": 952,
                 "loc": {
                   "start": {
                     "line": 31,
@@ -518,8 +518,8 @@
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 821,
-                  "end": 827,
+                  "start": 825,
+                  "end": 831,
                   "loc": {
                     "start": {
                       "line": 31,
@@ -542,8 +542,8 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 828,
-                    "end": 836,
+                    "start": 832,
+                    "end": 840,
                     "loc": {
                       "start": {
                         "line": 31,
@@ -559,8 +559,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 838,
-                    "end": 849,
+                    "start": 842,
+                    "end": 853,
                     "loc": {
                       "start": {
                         "line": 31,
@@ -576,8 +576,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 851,
-                    "end": 863,
+                    "start": 855,
+                    "end": 867,
                     "loc": {
                       "start": {
                         "line": 31,
@@ -593,8 +593,8 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 865,
-                    "end": 870,
+                    "start": 869,
+                    "end": 878,
                     "loc": {
                       "start": {
                         "line": 31,
@@ -602,24 +602,24 @@
                       },
                       "end": {
                         "line": 31,
-                        "column": 50
+                        "column": 54
                       },
-                      "identifierName": "delta"
+                      "identifierName": "deltaTime"
                     },
-                    "name": "delta"
+                    "name": "deltaTime"
                   },
                   {
                     "type": "Identifier",
-                    "start": 872,
-                    "end": 883,
+                    "start": 880,
+                    "end": 891,
                     "loc": {
                       "start": {
                         "line": 31,
-                        "column": 52
+                        "column": 56
                       },
                       "end": {
                         "line": 31,
-                        "column": 63
+                        "column": 67
                       },
                       "identifierName": "stencilTest"
                     },
@@ -628,12 +628,12 @@
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 885,
-                  "end": 944,
+                  "start": 893,
+                  "end": 952,
                   "loc": {
                     "start": {
                       "line": 31,
-                      "column": 65
+                      "column": 69
                     },
                     "end": {
                       "line": 35,
@@ -643,8 +643,8 @@
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 892,
-                      "end": 938,
+                      "start": 900,
+                      "end": 946,
                       "loc": {
                         "start": {
                           "line": 33,
@@ -657,8 +657,8 @@
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 892,
-                        "end": 937,
+                        "start": 900,
+                        "end": 945,
                         "loc": {
                           "start": {
                             "line": 33,
@@ -671,8 +671,8 @@
                         },
                         "callee": {
                           "type": "MemberExpression",
-                          "start": 892,
-                          "end": 930,
+                          "start": 900,
+                          "end": 938,
                           "loc": {
                             "start": {
                               "line": 33,
@@ -685,8 +685,8 @@
                           },
                           "object": {
                             "type": "MemberExpression",
-                            "start": 892,
-                            "end": 922,
+                            "start": 900,
+                            "end": 930,
                             "loc": {
                               "start": {
                                 "line": 33,
@@ -699,8 +699,8 @@
                             },
                             "object": {
                               "type": "MemberExpression",
-                              "start": 892,
-                              "end": 914,
+                              "start": 900,
+                              "end": 922,
                               "loc": {
                                 "start": {
                                   "line": 33,
@@ -713,8 +713,8 @@
                               },
                               "object": {
                                 "type": "MemberExpression",
-                                "start": 892,
-                                "end": 906,
+                                "start": 900,
+                                "end": 914,
                                 "loc": {
                                   "start": {
                                     "line": 33,
@@ -727,8 +727,8 @@
                                 },
                                 "object": {
                                   "type": "Identifier",
-                                  "start": 892,
-                                  "end": 900,
+                                  "start": 900,
+                                  "end": 908,
                                   "loc": {
                                     "start": {
                                       "line": 33,
@@ -744,8 +744,8 @@
                                 },
                                 "property": {
                                   "type": "Identifier",
-                                  "start": 901,
-                                  "end": 906,
+                                  "start": 909,
+                                  "end": 914,
                                   "loc": {
                                     "start": {
                                       "line": 33,
@@ -763,8 +763,8 @@
                               },
                               "property": {
                                 "type": "Identifier",
-                                "start": 907,
-                                "end": 914,
+                                "start": 915,
+                                "end": 922,
                                 "loc": {
                                   "start": {
                                     "line": 33,
@@ -782,8 +782,8 @@
                             },
                             "property": {
                               "type": "Identifier",
-                              "start": 915,
-                              "end": 922,
+                              "start": 923,
+                              "end": 930,
                               "loc": {
                                 "start": {
                                   "line": 33,
@@ -801,8 +801,8 @@
                           },
                           "property": {
                             "type": "Identifier",
-                            "start": 923,
-                            "end": 930,
+                            "start": 931,
+                            "end": 938,
                             "loc": {
                               "start": {
                                 "line": 33,
@@ -821,8 +821,8 @@
                         "arguments": [
                           {
                             "type": "BooleanLiteral",
-                            "start": 931,
-                            "end": 936,
+                            "start": 939,
+                            "end": 944,
                             "loc": {
                               "start": {
                                 "line": 33,
@@ -844,9 +844,9 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
+                    "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
                     "start": 287,
-                    "end": 816,
+                    "end": 820,
                     "loc": {
                       "start": {
                         "line": 21,
@@ -939,9 +939,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
+      "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
       "start": 287,
-      "end": 816,
+      "end": 820,
       "loc": {
         "start": {
           "line": 21,
@@ -1859,9 +1859,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [delta] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
+      "value": "*\r\n\t * Disables the global stencil test.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t ",
       "start": 287,
-      "end": 816,
+      "end": 820,
       "loc": {
         "start": {
           "line": 21,
@@ -1886,8 +1886,8 @@
         "binop": null
       },
       "value": "render",
-      "start": 821,
-      "end": 827,
+      "start": 825,
+      "end": 831,
       "loc": {
         "start": {
           "line": 31,
@@ -1911,8 +1911,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 827,
-      "end": 828,
+      "start": 831,
+      "end": 832,
       "loc": {
         "start": {
           "line": 31,
@@ -1937,8 +1937,8 @@
         "binop": null
       },
       "value": "renderer",
-      "start": 828,
-      "end": 836,
+      "start": 832,
+      "end": 840,
       "loc": {
         "start": {
           "line": 31,
@@ -1963,8 +1963,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 836,
-      "end": 837,
+      "start": 840,
+      "end": 841,
       "loc": {
         "start": {
           "line": 31,
@@ -1989,8 +1989,8 @@
         "binop": null
       },
       "value": "inputBuffer",
-      "start": 838,
-      "end": 849,
+      "start": 842,
+      "end": 853,
       "loc": {
         "start": {
           "line": 31,
@@ -2015,8 +2015,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 849,
-      "end": 850,
+      "start": 853,
+      "end": 854,
       "loc": {
         "start": {
           "line": 31,
@@ -2041,8 +2041,8 @@
         "binop": null
       },
       "value": "outputBuffer",
-      "start": 851,
-      "end": 863,
+      "start": 855,
+      "end": 867,
       "loc": {
         "start": {
           "line": 31,
@@ -2067,8 +2067,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 863,
-      "end": 864,
+      "start": 867,
+      "end": 868,
       "loc": {
         "start": {
           "line": 31,
@@ -2092,9 +2092,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "delta",
-      "start": 865,
-      "end": 870,
+      "value": "deltaTime",
+      "start": 869,
+      "end": 878,
       "loc": {
         "start": {
           "line": 31,
@@ -2102,7 +2102,7 @@
         },
         "end": {
           "line": 31,
-          "column": 50
+          "column": 54
         }
       }
     },
@@ -2119,16 +2119,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 870,
-      "end": 871,
+      "start": 878,
+      "end": 879,
       "loc": {
         "start": {
           "line": 31,
-          "column": 50
+          "column": 54
         },
         "end": {
           "line": 31,
-          "column": 51
+          "column": 55
         }
       }
     },
@@ -2145,16 +2145,16 @@
         "binop": null
       },
       "value": "stencilTest",
-      "start": 872,
-      "end": 883,
+      "start": 880,
+      "end": 891,
       "loc": {
         "start": {
           "line": 31,
-          "column": 52
+          "column": 56
         },
         "end": {
           "line": 31,
-          "column": 63
+          "column": 67
         }
       }
     },
@@ -2170,16 +2170,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 883,
-      "end": 884,
+      "start": 891,
+      "end": 892,
       "loc": {
         "start": {
           "line": 31,
-          "column": 63
+          "column": 67
         },
         "end": {
           "line": 31,
-          "column": 64
+          "column": 68
         }
       }
     },
@@ -2195,16 +2195,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 885,
-      "end": 886,
+      "start": 893,
+      "end": 894,
       "loc": {
         "start": {
           "line": 31,
-          "column": 65
+          "column": 69
         },
         "end": {
           "line": 31,
-          "column": 66
+          "column": 70
         }
       }
     },
@@ -2221,8 +2221,8 @@
         "binop": null
       },
       "value": "renderer",
-      "start": 892,
-      "end": 900,
+      "start": 900,
+      "end": 908,
       "loc": {
         "start": {
           "line": 33,
@@ -2247,8 +2247,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 900,
-      "end": 901,
+      "start": 908,
+      "end": 909,
       "loc": {
         "start": {
           "line": 33,
@@ -2273,8 +2273,8 @@
         "binop": null
       },
       "value": "state",
-      "start": 901,
-      "end": 906,
+      "start": 909,
+      "end": 914,
       "loc": {
         "start": {
           "line": 33,
@@ -2299,8 +2299,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 906,
-      "end": 907,
+      "start": 914,
+      "end": 915,
       "loc": {
         "start": {
           "line": 33,
@@ -2325,8 +2325,8 @@
         "binop": null
       },
       "value": "buffers",
-      "start": 907,
-      "end": 914,
+      "start": 915,
+      "end": 922,
       "loc": {
         "start": {
           "line": 33,
@@ -2351,8 +2351,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 914,
-      "end": 915,
+      "start": 922,
+      "end": 923,
       "loc": {
         "start": {
           "line": 33,
@@ -2377,8 +2377,8 @@
         "binop": null
       },
       "value": "stencil",
-      "start": 915,
-      "end": 922,
+      "start": 923,
+      "end": 930,
       "loc": {
         "start": {
           "line": 33,
@@ -2403,8 +2403,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 922,
-      "end": 923,
+      "start": 930,
+      "end": 931,
       "loc": {
         "start": {
           "line": 33,
@@ -2429,8 +2429,8 @@
         "binop": null
       },
       "value": "setTest",
-      "start": 923,
-      "end": 930,
+      "start": 931,
+      "end": 938,
       "loc": {
         "start": {
           "line": 33,
@@ -2454,8 +2454,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 930,
-      "end": 931,
+      "start": 938,
+      "end": 939,
       "loc": {
         "start": {
           "line": 33,
@@ -2482,8 +2482,8 @@
         "updateContext": null
       },
       "value": "false",
-      "start": 931,
-      "end": 936,
+      "start": 939,
+      "end": 944,
       "loc": {
         "start": {
           "line": 33,
@@ -2507,8 +2507,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 936,
-      "end": 937,
+      "start": 944,
+      "end": 945,
       "loc": {
         "start": {
           "line": 33,
@@ -2533,8 +2533,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 937,
-      "end": 938,
+      "start": 945,
+      "end": 946,
       "loc": {
         "start": {
           "line": 33,
@@ -2558,8 +2558,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 943,
-      "end": 944,
+      "start": 951,
+      "end": 952,
       "loc": {
         "start": {
           "line": 35,
@@ -2583,8 +2583,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 948,
-      "end": 949,
+      "start": 956,
+      "end": 957,
       "loc": {
         "start": {
           "line": 37,
@@ -2609,8 +2609,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 951,
-      "end": 951,
+      "start": 959,
+      "end": 959,
       "loc": {
         "start": {
           "line": 38,

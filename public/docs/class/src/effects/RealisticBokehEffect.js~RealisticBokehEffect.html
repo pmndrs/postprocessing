@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -868,7 +869,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -942,8 +943,8 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.focus</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 0.5</li></ul></td>
-      <td data-ice="description"><p>The focus distance ratio, ranging from 0.0 to 1.0.</p>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>The focus distance in world units.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1071,7 +1072,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber172">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 
@@ -1116,7 +1117,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber184">source</a></span></span>
     </span>
   </h3>
 
@@ -1161,7 +1162,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber208">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber206">source</a></span></span>
     </span>
   </h3>
 
@@ -1205,7 +1206,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1250,7 +1251,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -1294,7 +1295,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber100">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -1339,7 +1340,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber115">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -1383,7 +1384,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber127">source</a></span></span>
     </span>
   </h3>
 
@@ -1428,7 +1429,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber144">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber142">source</a></span></span>
     </span>
   </h3>
 
@@ -1472,7 +1473,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber158">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/RealisticBokehEffect.js.html#lineNumber156">source</a></span></span>
     </span>
   </h3>
 

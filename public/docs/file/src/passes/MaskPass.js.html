@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -94,7 +95,8 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/MaskPass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Pass } from &quot;./Pass.js&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ClearPass } from &quot;./ClearPass.js&quot;;
+import { Pass } from &quot;./Pass.js&quot;;
 
 /**
  * A mask pass.
@@ -119,6 +121,15 @@ export class MaskPass extends Pass {
 		this.needsSwap = false;
 
 		/**
+		 * A clear pass.
+		 *
+		 * @type {ClearPass}
+		 * @private
+		 */
+
+		this.clearPass = new ClearPass(false, false, true);
+
+		/**
 		 * Inverse flag.
 		 *
 		 * @type {Boolean}
@@ -126,13 +137,29 @@ export class MaskPass extends Pass {
 
 		this.inverse = false;
 
-		/**
-		 * Stencil buffer clear flag.
-		 *
-		 * @type {Boolean}
-		 */
+	}
 
-		this.clearStencil = true;
+	/**
+	 * Indicates whether this pass should clear the stencil buffer.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
+
+	/**
+	 * Enables or disables auto clear.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set clear(value) {
+
+		this.clearPass.enabled = value;
 
 	}
 
@@ -142,17 +169,18 @@ export class MaskPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const context = renderer.context;
 		const state = renderer.state;
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const clearPass = this.clearPass;
 
 		const writeValue = this.inverse ? 0 : 1;
 		const clearValue = 1 - writeValue;
@@ -172,20 +200,16 @@ export class MaskPass extends Pass {
 		state.buffers.stencil.setClear(clearValue);
 
 		// Clear the stencil.
-		if(this.clearStencil) {
+		if(this.clear) {
 
 			if(this.renderToScreen) {
 
-				renderer.setRenderTarget(null);
-				renderer.clearStencil();
+				clearPass.render(renderer, null);
 
 			} else {
 
-				renderer.setRenderTarget(inputBuffer);
-				renderer.clearStencil();
-
-				renderer.setRenderTarget(outputBuffer);
-				renderer.clearStencil();
+				clearPass.render(renderer, inputBuffer);
+				clearPass.render(renderer, outputBuffer);
 
 			}
 
@@ -194,12 +218,15 @@ export class MaskPass extends Pass {
 		// Draw the mask.
 		if(this.renderToScreen) {
 
-			renderer.render(scene, camera, null);
+			renderer.setRenderTarget(null);
+			renderer.render(scene, camera);
 
 		} else {
 
-			renderer.render(scene, camera, inputBuffer);
-			renderer.render(scene, camera, outputBuffer);
+			renderer.setRenderTarget(inputBuffer);
+			renderer.render(scene, camera);
+			renderer.setRenderTarget(outputBuffer);
+			renderer.render(scene, camera);
 
 		}
 

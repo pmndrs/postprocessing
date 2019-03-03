@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -137,7 +138,6 @@ export class SavePass extends Pass {
 			});
 
 			this.renderTarget.texture.name = &quot;SavePass.Target&quot;;
-			this.renderTarget.texture.generateMipmaps = false;
 
 		}
 
@@ -157,15 +157,16 @@ export class SavePass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		this.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;
 
-		renderer.render(this.scene, this.camera, this.renderToScreen ? null : this.renderTarget);
+		renderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);
+		renderer.render(this.scene, this.camera);
 
 	}
 

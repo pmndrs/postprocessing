@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -94,13 +95,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {RenderPass} from &apos;<span><a href="file/src/passes/RenderPass.js.html#lineNumber9">postprocessing/src/passes/RenderPass.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {RenderPass} from &apos;<span><a href="file/src/passes/RenderPass.js.html#lineNumber10">postprocessing/src/passes/RenderPass.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/passes/RenderPass.js.html#lineNumber9">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/passes/RenderPass.js.html#lineNumber10">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -120,8 +121,8 @@
 
   
   
-  <div class="description" data-ice="description"><p>A pass that renders a given scene directly on screen or into the read buffer
-for further processing.</p>
+  <div class="description" data-ice="description"><p>A pass that renders a given scene into the input buffer or to screen.</p>
+<p>This pass uses a <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span> to clear the target buffer.</p>
 </div>
   
 
@@ -154,7 +155,7 @@ for further processing.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, overrideMaterial: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -180,7 +181,7 @@ for further processing.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -190,13 +191,13 @@ for further processing.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-member-clear">clear</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-get-clear">clear</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the color, depth and stencil buffers should be cleared.</p>
+        <div data-ice="description"><p>Indicates whether the target buffer should be cleared before rendering.</p>
 </div>
       </div>
     </td>
@@ -209,36 +210,7 @@ for further processing.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-member-clearDepth">clearDepth</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Indicates whether the depth buffer should be cleared explicitly.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
+      <span class="kind" data-ice="kind">set</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -248,13 +220,13 @@ for further processing.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-member-clearPass">clearPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-set-clear">clear</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A clear pass.</p>
+        <div data-ice="description"><p>Enables or disables auto clear.</p>
 </div>
       </div>
     </td>
@@ -322,6 +294,41 @@ for further processing.</p>
   </tr>
 </tbody>
 </table>
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Private Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-member-clearPass">clearPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A clear pass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
 </div>
 <div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
@@ -341,7 +348,36 @@ for further processing.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-method-getClearPass">getClearPass</a></span></span><span class="code" data-ice="signature">(): <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the clear pass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/RenderPass.js~RenderPass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -756,7 +792,7 @@ buffers after this pass has finished rendering.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/passes/Pass.js~Pass.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -821,8 +857,8 @@ buffers after this pass has finished rendering.</p>
         
         
         <div data-ice="description"><p>Updates this pass with the renderer&apos;s size.</p>
-<p>You may override this method in case you want to be informed about the main
-render size.</p>
+<p>You may override this method in case you want to be informed about the size
+of the main frame buffer.</p>
 <p>The <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> calls this method before this pass is
 initialized and every time its own size is updated.</p>
 </div>
@@ -878,11 +914,11 @@ initialized and every time its own size is updated.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, overrideMaterial: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber24">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber20">source</a></span></span>
     </span>
   </h3>
 
@@ -917,50 +953,11 @@ initialized and every time its own size is updated.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">options</td>
+      <td data-ice="name" class="code" data-depth="0">overrideMaterial</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>Additional options.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.overrideMaterial</td>
-      <td data-ice="type" class="code"><span>Material</span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: null</li></ul></td>
       <td data-ice="description"><p>An override material for the scene.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clearColor</td>
-      <td data-ice="type" class="code"><span>Color</span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>An override clear color.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clearAlpha</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 1.0</li></ul></td>
-      <td data-ice="description"><p>An override clear alpha.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clearDepth</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether depth should be cleared explicitly.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.clear</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: true</li></ul></td>
-      <td data-ice="description"><p>Whether all buffers should be cleared.</p>
 </td>
     </tr>
 </tbody>
@@ -989,10 +986,10 @@ initialized and every time its own size is updated.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-clear">
+  <h3 data-ice="anchor" id="instance-get-clear">
     <span class="access" data-ice="access">public</span>
     
-    
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -1000,17 +997,14 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber64">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates whether the color, depth and stencil buffers should be cleared.</p>
-<p>Even with clear set to true you can prevent specific buffers from being
-cleared by setting either the autoClearColor, autoClearStencil or
-autoClearDepth properties of the renderer to false.</p>
+  <div data-ice="description"><p>Indicates whether the target buffer should be cleared before rendering.</p>
 </div>
 
   
@@ -1036,69 +1030,25 @@ autoClearDepth properties of the renderer to false.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-clearDepth">
+  <h3 data-ice="anchor" id="instance-set-clear">
     <span class="access" data-ice="access">public</span>
     
+    <span class="kind" data-ice="kind">set</span>
     
     
     
-    
-    <span class="code" data-ice="name">clearDepth</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">clear</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber52">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates whether the depth buffer should be cleared explicitly.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-clearPass">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">clearPass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber36">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A clear pass.</p>
+  <div data-ice="description"><p>Enables or disables auto clear.</p>
 </div>
 
   
@@ -1135,7 +1085,7 @@ autoClearDepth properties of the renderer to false.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber28">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber24">source</a></span></span>
     </span>
   </h3>
 
@@ -1146,6 +1096,7 @@ autoClearDepth properties of the renderer to false.</p>
 buffers after this pass has finished rendering.</p>
 <p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
 the screen. Otherwise, the contents of the input buffer will be lost.</p>
+<p>This flag must not be changed at runtime.</p>
 </div>
 
   <div data-ice="override"><h4>Override:</h4><span><a href="class/src/passes/Pass.js~Pass.html#instance-member-needsSwap">Pass#needsSwap</a></span></div>
@@ -1182,7 +1133,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber44">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber32">source</a></span></span>
     </span>
   </h3>
 
@@ -1214,9 +1165,112 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
   
   
 </div>
+<h2 data-ice="title">Private Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-clearPass">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">clearPass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber41">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A clear pass.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getClearPass">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getClearPass</span><span class="code" data-ice="signature">(): <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber75">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the clear pass.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The clear pass.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-render">
     <span class="access" data-ice="access">public</span>
@@ -1225,11 +1279,11 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, outputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, stencilTest: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/RenderPass.js.html#lineNumber91">source</a></span></span>
     </span>
   </h3>
 
@@ -1271,7 +1325,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

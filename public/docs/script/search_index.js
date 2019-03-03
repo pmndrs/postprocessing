@@ -96,6 +96,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/materials/depthmaskmaterial.js~depthmaskmaterial",
+    "class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html",
+    "<span>DepthMaskMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DepthMaskMaterial.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/passes/depthpass.js~depthpass",
     "class/src/passes/DepthPass.js~DepthPass.html",
     "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/DepthPass.js</span>",
@@ -696,9 +702,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/effectcomposer.js~effectcomposer#getdepthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-getDepthTexture",
-    "src/core/EffectComposer.js~EffectComposer#getDepthTexture",
+    "src/core/effectcomposer.js~effectcomposer#getrenderer",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-getRenderer",
+    "src/core/EffectComposer.js~EffectComposer#getRenderer",
     "method"
   ],
   [
@@ -753,6 +759,12 @@ window.esdocSearchIndex = [
     "src/core/effectcomposer.js~effectcomposer#setsize",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-setSize",
     "src/core/EffectComposer.js~EffectComposer#setSize",
+    "method"
+  ],
+  [
+    "src/core/effectcomposer.js~effectcomposer#updatedepthtextures",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-updateDepthTextures",
+    "src/core/EffectComposer.js~EffectComposer#updateDepthTextures",
     "method"
   ],
   [
@@ -1242,10 +1254,22 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/godrayseffect.js~godrayseffect#clearpass",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-clearPass",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#clearPass",
+    "member"
+  ],
+  [
     "src/effects/godrayseffect.js~godrayseffect#constructor",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-constructor-constructor",
     "src/effects/GodRaysEffect.js~GodRaysEffect#constructor",
     "method"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#depthmaskpass",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-depthMaskPass",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#depthMaskPass",
+    "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
@@ -1314,15 +1338,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/godrayseffect.js~godrayseffect#renderpassmask",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderPassMask",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderPassMask",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#rendertargetmask",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetMask",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderTargetMask",
+    "src/effects/godrayseffect.js~godrayseffect#rendertargetlight",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetLight",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#renderTargetLight",
     "member"
   ],
   [
@@ -1356,16 +1374,16 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/godrayseffect.js~godrayseffect#scene",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-scene",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#scene",
-    "member"
-  ],
-  [
     "src/effects/godrayseffect.js~godrayseffect#screenposition",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-screenPosition",
     "src/effects/GodRaysEffect.js~GodRaysEffect#screenPosition",
     "member"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#setdepthtexture",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-setDepthTexture",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#setDepthTexture",
+    "method"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#setresolutionscale",
@@ -1518,6 +1536,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#camera",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-camera",
+    "src/effects/OutlineEffect.js~OutlineEffect#camera",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#clear",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-clear",
     "src/effects/OutlineEffect.js~OutlineEffect#clear",
@@ -1590,18 +1614,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#maincamera",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-mainCamera",
-    "src/effects/OutlineEffect.js~OutlineEffect#mainCamera",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#mainscene",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-mainScene",
-    "src/effects/OutlineEffect.js~OutlineEffect#mainScene",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#maskpass",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-maskPass",
     "src/effects/OutlineEffect.js~OutlineEffect#maskPass",
@@ -1626,12 +1638,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#rendertargetdepth",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetDepth",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderTargetDepth",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#rendertargetedges",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetEdges",
     "src/effects/OutlineEffect.js~OutlineEffect#renderTargetEdges",
@@ -1647,6 +1653,12 @@ window.esdocSearchIndex = [
     "src/effects/outlineeffect.js~outlineeffect#resolution",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-resolution",
     "src/effects/OutlineEffect.js~OutlineEffect#resolution",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#scene",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-scene",
+    "src/effects/OutlineEffect.js~OutlineEffect#scene",
     "member"
   ],
   [
@@ -2532,6 +2544,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/depthmaskmaterial.js",
+    "file/src/materials/DepthMaskMaterial.js.html",
+    "src/materials/DepthMaskMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/depthmaskmaterial.js~depthmaskmaterial#constructor",
+    "class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html#instance-constructor-constructor",
+    "src/materials/DepthMaskMaterial.js~DepthMaskMaterial#constructor",
+    "method"
+  ],
+  [
     "src/materials/effectmaterial.js",
     "file/src/materials/EffectMaterial.js.html",
     "src/materials/EffectMaterial.js",
@@ -2814,15 +2838,9 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/passes/clearpass.js~clearpass#clearalpha",
-    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-clearAlpha",
-    "src/passes/ClearPass.js~ClearPass#clearAlpha",
-    "member"
-  ],
-  [
-    "src/passes/clearpass.js~clearpass#clearcolor",
-    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-clearColor",
-    "src/passes/ClearPass.js~ClearPass#clearColor",
+    "src/passes/clearpass.js~clearpass#color",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-color",
+    "src/passes/ClearPass.js~ClearPass#color",
     "member"
   ],
   [
@@ -2832,9 +2850,27 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/clearpass.js~clearpass#depth",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-depth",
+    "src/passes/ClearPass.js~ClearPass#depth",
+    "member"
+  ],
+  [
     "src/passes/clearpass.js~clearpass#needsswap",
     "class/src/passes/ClearPass.js~ClearPass.html#instance-member-needsSwap",
     "src/passes/ClearPass.js~ClearPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/clearpass.js~clearpass#overrideclearalpha",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-overrideClearAlpha",
+    "src/passes/ClearPass.js~ClearPass#overrideClearAlpha",
+    "member"
+  ],
+  [
+    "src/passes/clearpass.js~clearpass#overrideclearcolor",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-overrideClearColor",
+    "src/passes/ClearPass.js~ClearPass#overrideClearColor",
     "member"
   ],
   [
@@ -2842,6 +2878,12 @@ window.esdocSearchIndex = [
     "class/src/passes/ClearPass.js~ClearPass.html#instance-method-render",
     "src/passes/ClearPass.js~ClearPass#render",
     "method"
+  ],
+  [
+    "src/passes/clearpass.js~clearpass#stencil",
+    "class/src/passes/ClearPass.js~ClearPass.html#instance-member-stencil",
+    "src/passes/ClearPass.js~ClearPass#stencil",
+    "member"
   ],
   [
     "src/passes/depthpass.js",
@@ -3048,9 +3090,21 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/passes/maskpass.js~maskpass#clearstencil",
-    "class/src/passes/MaskPass.js~MaskPass.html#instance-member-clearStencil",
-    "src/passes/MaskPass.js~MaskPass#clearStencil",
+    "src/passes/maskpass.js~maskpass#clear",
+    "class/src/passes/MaskPass.js~MaskPass.html#instance-get-clear",
+    "src/passes/MaskPass.js~MaskPass#clear",
+    "member"
+  ],
+  [
+    "src/passes/maskpass.js~maskpass#clear",
+    "class/src/passes/MaskPass.js~MaskPass.html#instance-set-clear",
+    "src/passes/MaskPass.js~MaskPass#clear",
+    "member"
+  ],
+  [
+    "src/passes/maskpass.js~maskpass#clearpass",
+    "class/src/passes/MaskPass.js~MaskPass.html#instance-member-clearPass",
+    "src/passes/MaskPass.js~MaskPass#clearPass",
     "member"
   ],
   [
@@ -3265,14 +3319,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/renderpass.js~renderpass#clear",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-clear",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-get-clear",
     "src/passes/RenderPass.js~RenderPass#clear",
     "member"
   ],
   [
-    "src/passes/renderpass.js~renderpass#cleardepth",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-clearDepth",
-    "src/passes/RenderPass.js~RenderPass#clearDepth",
+    "src/passes/renderpass.js~renderpass#clear",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-set-clear",
+    "src/passes/RenderPass.js~RenderPass#clear",
     "member"
   ],
   [
@@ -3285,6 +3339,12 @@ window.esdocSearchIndex = [
     "src/passes/renderpass.js~renderpass#constructor",
     "class/src/passes/RenderPass.js~RenderPass.html#instance-constructor-constructor",
     "src/passes/RenderPass.js~RenderPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#getclearpass",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-method-getClearPass",
+    "src/passes/RenderPass.js~RenderPass#getClearPass",
     "method"
   ],
   [

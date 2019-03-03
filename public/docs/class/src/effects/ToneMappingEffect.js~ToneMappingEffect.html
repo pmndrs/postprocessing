@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -576,7 +577,7 @@ optic nerve responding to the amount of light it is receiving.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-savePass">savePass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-savePass">savePass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span>
         </p>
       </div>
       <div>
@@ -670,7 +671,7 @@ optic nerve responding to the amount of light it is receiving.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1084,7 +1085,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1247,7 +1248,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1291,7 +1292,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber235">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber230">source</a></span></span>
     </span>
   </h3>
 
@@ -1334,7 +1335,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber184">source</a></span></span>
     </span>
   </h3>
 
@@ -1378,7 +1379,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 
@@ -1423,7 +1424,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -1467,7 +1468,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber257">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber252">source</a></span></span>
     </span>
   </h3>
 
@@ -1510,7 +1511,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
@@ -1554,7 +1555,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1601,7 +1602,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber139">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -1645,7 +1646,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber126">source</a></span></span>
     </span>
   </h3>
 
@@ -1689,7 +1690,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1733,7 +1734,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -1777,7 +1778,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber110">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -1817,11 +1818,11 @@ deletes them.</p>
     
     
     
-    <span class="code" data-ice="name">savePass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+    <span class="code" data-ice="name">savePass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/SavePass.js~SavePass.html">SavePass</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber121">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1868,7 +1869,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -1936,7 +1937,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber299">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber294">source</a></span></span>
     </span>
   </h3>
 
@@ -2000,11 +2001,11 @@ deletes them.</p>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/ToneMappingEffect.js.html#lineNumber266">source</a></span></span>
     </span>
   </h3>
 
@@ -2039,7 +2040,7 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

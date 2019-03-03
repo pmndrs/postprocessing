@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -124,8 +125,7 @@
 <p>The auto clear behaviour of the provided renderer will be disabled to prevent
 unnecessary clear operations.</p>
 <p>It is common practice to use a <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span> as the first pass to
-automatically clear the screen and render the scene to a texture for further
-processing.</p>
+automatically clear the buffers and render a scene for further processing.</p>
 </div>
   
 
@@ -177,41 +177,6 @@ processing.</p>
 </table>
 </div>
 <div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-renderer">renderer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderer</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The renderer.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-<table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Private Members</td></tr></thead>
   <tbody>
   
@@ -331,6 +296,35 @@ processing.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-renderer">renderer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderer</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The renderer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -442,6 +436,35 @@ uses the alpha channel. Mipmaps are disabled.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-getRenderer">getRenderer</a></span></span><span class="code" data-ice="signature">(renderer: <span>*</span>): <span>WebGLRenderer</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the WebGL renderer.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-removePass">removePass</a></span></span><span class="code" data-ice="signature">(pass: <span><a href="class/src/passes/Pass.js~Pass.html">Pass</a></span>)</span>
         </p>
       </div>
@@ -471,7 +494,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-render">render</a></span></span><span class="code" data-ice="signature">(deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -625,13 +648,13 @@ the output buffer.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-getDepthTexture">getDepthTexture</a></span></span><span class="code" data-ice="signature">(index: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>DepthTexture</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-updateDepthTextures">updateDepthTextures</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Retrieves the most relevant depth texture for the pass at the given index.</p>
+        <div data-ice="description"><p>Sets the correct depth texture for each pass.</p>
 </div>
       </div>
     </td>
@@ -685,7 +708,7 @@ the output buffer.</p>
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">renderer</td>
       <td data-ice="type" class="code"><span>WebGLRenderer</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="appendix"></td>
       <td data-ice="description"><p>The renderer that should be used.</p>
 </td>
     </tr>
@@ -735,55 +758,7 @@ the output buffer.</p>
   
 </div>
 </div>
-<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
-
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-renderer">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">renderer</span><span class="code" data-ice="signature">: <span>WebGLRenderer</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber55">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The renderer.</p>
-<p>You may replace the renderer at any time by using
-<span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-replaceRenderer">EffectComposer#replaceRenderer</a></span>.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<h2 data-ice="title">Private Members</h2>
+<div data-ice="memberDetails"><h2 data-ice="title">Private Members</h2>
 
 <div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-copyPass">
@@ -797,7 +772,7 @@ the output buffer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber89">source</a></span></span>
     </span>
   </h3>
 
@@ -841,7 +816,7 @@ the output buffer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber67">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber63">source</a></span></span>
     </span>
   </h3>
 
@@ -887,7 +862,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber76">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber72">source</a></span></span>
     </span>
   </h3>
 
@@ -931,7 +906,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber98">source</a></span></span>
     </span>
   </h3>
 
@@ -939,6 +914,52 @@ Therefore, two seperate yet identical buffers are used.</p>
   
   
   <div data-ice="description"><p>The passes.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-renderer">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">renderer</span><span class="code" data-ice="signature">: <span>WebGLRenderer</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber51">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The renderer.</p>
+<p>You may replace the renderer at any time by using
+<span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-replaceRenderer">EffectComposer#replaceRenderer</a></span>.</p>
 </div>
 
   
@@ -978,7 +999,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber259">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber275">source</a></span></span>
     </span>
   </h3>
 
@@ -1046,7 +1067,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber248">source</a></span></span>
     </span>
   </h3>
 
@@ -1130,7 +1151,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber434">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber460">source</a></span></span>
     </span>
   </h3>
 
@@ -1165,6 +1186,79 @@ also deletes the main frame buffers of this composer.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-getRenderer">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">getRenderer</span><span class="code" data-ice="signature">(renderer: <span>*</span>): <span>WebGLRenderer</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber108">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Returns the WebGL renderer.</p>
+</div>
+
+  
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">renderer</td>
+      <td data-ice="type" class="code"><span>*</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"></td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>WebGLRenderer</span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The renderer.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
+</div>
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-removePass">
     <span class="access" data-ice="access">public</span>
     
@@ -1176,7 +1270,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -1233,11 +1327,11 @@ also deletes the main frame buffers of this composer.</p>
     
     
     
-    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">render</span><span class="code" data-ice="signature">(deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber309">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber337">source</a></span></span>
     </span>
   </h3>
 
@@ -1258,7 +1352,7 @@ also deletes the main frame buffers of this composer.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
@@ -1298,7 +1392,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber125">source</a></span></span>
     </span>
   </h3>
 
@@ -1375,7 +1469,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -1419,7 +1513,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber377">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber405">source</a></span></span>
     </span>
   </h3>
 
@@ -1493,7 +1587,7 @@ updated with the current size of the renderer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber174">source</a></span></span>
     </span>
   </h3>
 
@@ -1535,63 +1629,33 @@ separate depth textures are used.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-getDepthTexture">
+  <h3 data-ice="anchor" id="instance-method-updateDepthTextures">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">getDepthTexture</span><span class="code" data-ice="signature">(index: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>DepthTexture</span></span>
+    <span class="code" data-ice="name">updateDepthTextures</span><span class="code" data-ice="signature">()</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber159">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Retrieves the most relevant depth texture for the pass at the given index.</p>
+  <div data-ice="description"><p>Sets the correct depth texture for each pass.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">index</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The index of the pass that needs a depth texture.</p>
-</td>
-    </tr>
-</tbody>
-  </table>
-</div>
+  <div data-ice="properties">
 </div>
 
-  <div class="return-params" data-ice="returnParams">
-    <h4>Return:</h4>
-    <table>
-      <tbody>
-        <tr>
-          <td class="return-type code" data-ice="returnType"><span>DepthTexture</span></td>
-          <td class="return-desc" data-ice="returnDescription"><p>The depth texture, or null if there is none.</p>
-</td>
-        </tr>
-      </tbody>
-    </table>
-    <div data-ice="returnProperties">
-</div>
-  </div>
+  
 
   
 

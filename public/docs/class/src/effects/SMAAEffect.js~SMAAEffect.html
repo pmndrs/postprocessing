@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -494,7 +495,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -908,7 +909,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -941,7 +942,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber239">source</a></span></span>
     </span>
   </h3>
 
@@ -996,7 +997,7 @@ areaImage.src = SMAAEffect.areaImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1126,7 +1127,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber92">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber91">source</a></span></span>
     </span>
   </h3>
 
@@ -1170,7 +1171,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber104">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber102">source</a></span></span>
     </span>
   </h3>
 
@@ -1258,7 +1259,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber78">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber77">source</a></span></span>
     </span>
   </h3>
 
@@ -1302,7 +1303,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber113">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -1349,7 +1350,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber155">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber153">source</a></span></span>
     </span>
   </h3>
 
@@ -1411,7 +1412,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber169">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber167">source</a></span></span>
     </span>
   </h3>
 
@@ -1473,7 +1474,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber198">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -1537,11 +1538,11 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber183">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SMAAEffect.js.html#lineNumber181">source</a></span></span>
     </span>
   </h3>
 
@@ -1576,7 +1577,7 @@ searchImage.src = SMAAEffect.searchImageDataURL;</code></pre>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

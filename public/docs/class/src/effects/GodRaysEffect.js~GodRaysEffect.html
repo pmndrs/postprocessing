@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -153,7 +154,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, lightSource: <span>Object3D</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(camera: <span>Camera</span>, lightSource: <span>Mesh</span> | <span>Points</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
         </p>
       </div>
       <div>
@@ -368,35 +369,7 @@
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-lightSource">lightSource</a></span></span><span class="code" data-ice="signature">: <span>Object3D</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The light source.</p>
+        <div data-ice="description"><p>Sets the blur kernel size.</p>
 </div>
       </div>
     </td>
@@ -454,7 +427,7 @@
       <div>
         
         
-        <div data-ice="description"><p>This value must be carefully chosen.</p>
+        <div data-ice="description"><p>A higher sample count improves quality at the cost of performance.</p>
 </div>
       </div>
     </td>
@@ -570,13 +543,71 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-clearPass">clearPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A clear pass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-depthMaskPass">depthMaskPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A depth mask pass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-godRaysPass">godRaysPass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A god rays pass.</p>
+        <div data-ice="description"><p>A god rays blur pass.</p>
 </div>
       </div>
     </td>
@@ -628,6 +659,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-lightSource">lightSource</a></span></span><span class="code" data-ice="signature">: <span>Mesh</span> | <span>Points</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The light source.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderPassLight">renderPassLight</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span>
         </p>
       </div>
@@ -657,42 +717,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderPassMask">renderPassMask</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetLight">renderTargetLight</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A pass that renders the masked scene over the light source.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetMask">renderTargetMask</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A render target for the masked light scene.</p>
+        <div data-ice="description"><p>A render target for the light scene.</p>
 </div>
       </div>
     </td>
@@ -750,7 +781,7 @@
       <div>
         
         
-        <div data-ice="description"><p>A second render target.</p>
+        <div data-ice="description"><p>A render target.</p>
 </div>
       </div>
     </td>
@@ -780,35 +811,6 @@
         
         
         <div data-ice="description"><p>The original resolution.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-scene">scene</a></span></span><span class="code" data-ice="signature">: <span>Scene</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The main scene.</p>
 </div>
       </div>
     </td>
@@ -925,6 +927,35 @@
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-setDepthTexture">setDepthTexture</a></span></span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, depthPacking: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the depth texture.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-setResolutionScale">setResolutionScale</a></span></span><span class="code" data-ice="signature">(scale: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
@@ -983,7 +1014,7 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1397,7 +1428,7 @@ deletes them.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -1428,11 +1459,11 @@ deletes them.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(scene: <span>Scene</span>, camera: <span>Camera</span>, lightSource: <span>Object3D</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(camera: <span>Camera</span>, lightSource: <span>Mesh</span> | <span>Points</span>, options: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber53">source</a></span></span>
     </span>
   </h3>
 
@@ -1453,13 +1484,6 @@ deletes them.</p>
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">scene</td>
-      <td data-ice="type" class="code"><span>Scene</span></td>
-      <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The main scene.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">camera</td>
       <td data-ice="type" class="code"><span>Camera</span></td>
       <td data-ice="appendix"></td>
@@ -1468,16 +1492,16 @@ deletes them.</p>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">lightSource</td>
-      <td data-ice="type" class="code"><span>Object3D</span></td>
+      <td data-ice="type" class="code"><span>Mesh</span> | <span>Points</span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>The main light source.</p>
+      <td data-ice="description"><p>The light source. Must not write depth and has to be flagged as transparent.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" class="code" data-depth="0">options</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>The options. See <span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span> for additional options.</p>
+      <td data-ice="description"><p>The options.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1489,14 +1513,6 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: 0.5</li></ul></td>
-      <td data-ice="description"><p>The render texture resolution scale, relative to the screen render size.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.samples</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1505,19 +1521,67 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.density</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.96</li></ul></td>
+      <td data-ice="description"><p>The density of the light rays.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.decay</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.9</li></ul></td>
+      <td data-ice="description"><p>An illumination decay factor.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.weight</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.4</li></ul></td>
+      <td data-ice="description"><p>A light ray weight factor.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.exposure</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.6</li></ul></td>
+      <td data-ice="description"><p>A constant attenuation coefficient.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.clampMax</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>An upper bound for the saturation of the overall effect.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.5</li></ul></td>
+      <td data-ice="description"><p>The render texture resolution scale, relative to the screen render size.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.kernelSize</td>
+      <td data-ice="type" class="code"><span><a href="variable/index.html#static-variable-KernelSize">KernelSize</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: KernelSize.SMALL</li></ul></td>
+      <td data-ice="description"><p>The blur kernel size. Has no effect if blur is disabled.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.blur</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Whether the god rays should be blurred to reduce artifacts.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="1">
-      <td data-ice="name" class="code" data-depth="1">options.kernelSize</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: KernelSize.SMALL</li></ul></td>
-      <td data-ice="description"><p>The blur kernel size. Has no effect if blur is disabled.</p>
 </td>
     </tr>
 </tbody>
@@ -1557,7 +1621,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber280">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber285">source</a></span></span>
     </span>
   </h3>
 
@@ -1601,7 +1665,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber290">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber295">source</a></span></span>
     </span>
   </h3>
 
@@ -1644,7 +1708,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
@@ -1688,7 +1752,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber265">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber270">source</a></span></span>
     </span>
   </h3>
 
@@ -1732,7 +1796,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber241">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -1776,7 +1840,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber302">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
@@ -1820,57 +1884,14 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber312">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-lightSource">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">lightSource</span><span class="code" data-ice="signature">: <span>Object3D</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber93">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The light source.</p>
+  <div data-ice="description"><p>Sets the blur kernel size.</p>
 </div>
 
   
@@ -1907,7 +1928,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber349">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber356">source</a></span></span>
     </span>
   </h3>
 
@@ -1951,15 +1972,14 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber368">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>This value must be carefully chosen. A higher value improves quality but
-also increases the GPU load.</p>
+  <div data-ice="description"><p>A higher sample count improves quality at the cost of performance.</p>
 </div>
 
   
@@ -1996,7 +2016,7 @@ also increases the GPU load.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber234">source</a></span></span>
     </span>
   </h3>
 
@@ -2044,7 +2064,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber203">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber189">source</a></span></span>
     </span>
   </h3>
 
@@ -2088,7 +2108,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber84">source</a></span></span>
     </span>
   </h3>
 
@@ -2096,6 +2116,94 @@ is set to <code>SKIP</code>.</p>
   
   
   <div data-ice="description"><p>The main camera.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-clearPass">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">clearPass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ClearPass.js~ClearPass.html">ClearPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber180">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A clear pass.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-depthMaskPass">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">depthMaskPass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber198">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A depth mask pass.</p>
 </div>
 
   
@@ -2132,14 +2240,14 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber212">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A god rays pass.</p>
+  <div data-ice="description"><p>A god rays blur pass.</p>
 </div>
 
   
@@ -2176,7 +2284,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber102">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber104">source</a></span></span>
     </span>
   </h3>
 
@@ -2184,6 +2292,50 @@ is set to <code>SKIP</code>.</p>
   
   
   <div data-ice="description"><p>A scene that only contains the light source.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-lightSource">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">lightSource</span><span class="code" data-ice="signature">: <span>Mesh</span> | <span>Points</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber93">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The light source.</p>
 </div>
 
   
@@ -2220,7 +2372,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber175">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber170">source</a></span></span>
     </span>
   </h3>
 
@@ -2253,69 +2405,25 @@ is set to <code>SKIP</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-renderPassMask">
+  <h3 data-ice="anchor" id="instance-member-renderTargetLight">
     <span class="access" data-ice="access">private</span>
     
     
     
     
     
-    <span class="code" data-ice="name">renderPassMask</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span></span>
+    <span class="code" data-ice="name">renderTargetLight</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber186">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber158">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A pass that renders the masked scene over the light source.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-renderTargetMask">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">renderTargetMask</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber159">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>A render target for the masked light scene.</p>
+  <div data-ice="description"><p>A render target for the light scene.</p>
 </div>
 
   
@@ -2352,7 +2460,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber129">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber131">source</a></span></span>
     </span>
   </h3>
 
@@ -2396,14 +2504,14 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>A second render target.</p>
+  <div data-ice="description"><p>A render target.</p>
 </div>
 
   
@@ -2440,7 +2548,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber120">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber122">source</a></span></span>
     </span>
   </h3>
 
@@ -2448,50 +2556,6 @@ is set to <code>SKIP</code>.</p>
   
   
   <div data-ice="description"><p>The original resolution.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-scene">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">scene</span><span class="code" data-ice="signature">: <span>Scene</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber76">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The main scene.</p>
 </div>
 
   
@@ -2528,7 +2592,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -2575,7 +2639,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber324">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber331">source</a></span></span>
     </span>
   </h3>
 
@@ -2632,7 +2696,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber455">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber470">source</a></span></span>
     </span>
   </h3>
 
@@ -2689,6 +2753,75 @@ is set to <code>SKIP</code>.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-setDepthTexture">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">setDepthTexture</span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, depthPacking: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber381">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the depth texture.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setDepthTexture">Effect#setDepthTexture</a></span></div>
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">depthTexture</td>
+      <td data-ice="type" class="code"><span>Texture</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A depth texture.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">depthPacking</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>The depth packing.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-method-setResolutionScale">
     <span class="access" data-ice="access">public</span>
     
@@ -2700,7 +2833,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber336">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber343">source</a></span></span>
     </span>
   </h3>
 
@@ -2761,7 +2894,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber431">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber445">source</a></span></span>
     </span>
   </h3>
 
@@ -2825,11 +2958,11 @@ is set to <code>SKIP</code>.</p>
     
     
     
-    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, delta: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber376">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber398">source</a></span></span>
     </span>
   </h3>
 
@@ -2864,7 +2997,7 @@ is set to <code>SKIP</code>.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">delta</td>
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
       <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>

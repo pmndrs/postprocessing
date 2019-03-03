@@ -71,6 +71,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html">ConvolutionMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/CopyMaterial.js~CopyMaterial.html">CopyMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html">DepthComparisonMaterial</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html">DepthMaskMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/EffectMaterial.js~EffectMaterial.html">EffectMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html">GodRaysMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html">LuminanceMaterial</a></span></span></li>
@@ -123,16 +124,14 @@ export class Effect {
 	 * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don&apos;t need one.
 	 */
 
-	constructor(name, fragmentShader, options = {}) {
-
-		const settings = Object.assign({
-			attributes: EffectAttribute.NONE,
-			blendFunction: BlendFunction.SCREEN,
-			defines: new Map(),
-			uniforms: new Map(),
-			extensions: null,
-			vertexShader: null
-		}, options);
+	constructor(name, fragmentShader, {
+		attributes = EffectAttribute.NONE,
+		blendFunction = BlendFunction.SCREEN,
+		defines = new Map(),
+		uniforms = new Map(),
+		extensions = null,
+		vertexShader = null
+	} = {}) {
 
 		/**
 		 * The name of this effect.
@@ -151,7 +150,7 @@ export class Effect {
 		 * @type {EffectAttribute}
 		 */
 
-		this.attributes = settings.attributes;
+		this.attributes = attributes;
 
 		/**
 		 * The fragment shader.
@@ -167,7 +166,7 @@ export class Effect {
 		 * @type {String}
 		 */
 
-		this.vertexShader = settings.vertexShader;
+		this.vertexShader = vertexShader;
 
 		/**
 		 * Preprocessor macro definitions.
@@ -177,7 +176,7 @@ export class Effect {
 		 * @type {Map&lt;String, String&gt;}
 		 */
 
-		this.defines = settings.defines;
+		this.defines = defines;
 
 		/**
 		 * Shader uniforms.
@@ -188,7 +187,7 @@ export class Effect {
 		 * @type {Map&lt;String, Uniform&gt;}
 		 */
 
-		this.uniforms = settings.uniforms;
+		this.uniforms = uniforms;
 
 		/**
 		 * WebGL extensions that are required by this effect.
@@ -199,7 +198,7 @@ export class Effect {
 		 * @type {Set&lt;WebGLExtension&gt;}
 		 */
 
-		this.extensions = settings.extensions;
+		this.extensions = extensions;
 
 		/**
 		 * The blend mode of this effect.
@@ -214,7 +213,7 @@ export class Effect {
 		 * @type {BlendMode}
 		 */
 
-		this.blendMode = new BlendMode(settings.blendFunction);
+		this.blendMode = new BlendMode(blendFunction);
 
 	}
 
@@ -241,10 +240,10 @@ export class Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {}
+	update(renderer, inputBuffer, deltaTime) {}
 
 	/**
 	 * Updates the size of this effect.
