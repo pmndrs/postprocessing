@@ -3,6 +3,7 @@ export { ColorEdgesMaterial } from "./ColorEdgesMaterial.js";
 export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
 export { CopyMaterial } from "./CopyMaterial.js";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial.js";
+export { DepthMaskMaterial } from "./DepthMaskMaterial.js";
 export { EffectMaterial, Section } from "./EffectMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminanceMaterial } from "./LuminanceMaterial.js";
