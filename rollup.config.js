@@ -2,7 +2,7 @@ import babel from "rollup-plugin-babel";
 import minify from "rollup-plugin-babel-minify";
 import commonjs from "rollup-plugin-commonjs";
 import resolve from "rollup-plugin-node-resolve";
-import string from "rollup-plugin-string";
+import { string } from "rollup-plugin-string";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
