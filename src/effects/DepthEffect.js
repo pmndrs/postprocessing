@@ -19,21 +19,16 @@ export class DepthEffect extends Effect {
 	 * @param {Boolean} [options.inverted=false] - Whether the depth values should be inverted.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			inverted: false
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, inverted = false } = {}) {
 
 		super("DepthEffect", fragment, {
 
-			attributes: EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction
+			blendFunction,
+			attributes: EffectAttribute.DEPTH
 
 		});
 
-		this.inverted = settings.inverted;
+		this.inverted = inverted;
 
 	}
 

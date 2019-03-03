@@ -5,6 +5,7 @@ import {
 	RGBAFormat,
 	RGBFormat,
 	UnsignedInt248Type,
+	Vector2,
 	WebGLRenderTarget
 } from "three";
 
@@ -18,8 +19,7 @@ import { CopyMaterial } from "../materials";
  * unnecessary clear operations.
  *
  * It is common practice to use a {@link RenderPass} as the first pass to
- * automatically clear the screen and render the scene to a texture for further
- * processing.
+ * automatically clear the buffers and render a scene for further processing.
  *
  * @implements {Resizable}
  * @implements {Disposable}
@@ -30,18 +30,13 @@ export class EffectComposer {
 	/**
 	 * Constructs a new effect composer.
 	 *
-	 * @param {WebGLRenderer} [renderer] - The renderer that should be used.
+	 * @param {WebGLRenderer} renderer - The renderer that should be used.
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
 	 */
 
-	constructor(renderer = null, options = {}) {
-
-		const settings = Object.assign({
-			depthBuffer: true,
-			stencilBuffer: false
-		}, options);
+	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false } = {}) {
 
 		/**
 		 * The renderer.
@@ -50,6 +45,7 @@ export class EffectComposer {
 		 * {@link EffectComposer#replaceRenderer}.
 		 *
 		 * @type {WebGLRenderer}
+		 * @private
 		 */
 
 		this.renderer = renderer;
@@ -78,7 +74,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(settings.depthBuffer, settings.stencilBuffer);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer);
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
@@ -104,6 +100,18 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Returns the WebGL renderer.
+	 *
+	 * @return {WebGLRenderer} The renderer.
+	 */
+
+	getRenderer(renderer) {
+
+		return this.renderer;
+
+	}
+
+	/**
 	 * Replaces the current renderer with the given one. The DOM element of the
 	 * current renderer will automatically be removed from its parent node and the
 	 * DOM element of the new renderer will take its place.
@@ -118,16 +126,20 @@ export class EffectComposer {
 
 		const oldRenderer = this.renderer;
 
-		let parent, oldSize, newSize;
-
 		if(oldRenderer !== null && oldRenderer !== renderer) {
+
+			const oldSize = oldRenderer.getSize(new Vector2());
+			const newSize = renderer.getSize(new Vector2());
+			const parent = oldRenderer.domElement.parentNode;
 
 			this.renderer = renderer;
 			this.renderer.autoClear = false;
 
-			parent = oldRenderer.domElement.parentNode;
-			oldSize = oldRenderer.getSize();
-			newSize = renderer.getSize();
+			if(!oldSize.equals(newSize)) {
+
+				this.setSize();
+
+			}
 
 			if(parent !== null) {
 
@@ -136,51 +148,9 @@ export class EffectComposer {
 
 			}
 
-			if(oldSize.width !== newSize.width || oldSize.height !== newSize.height) {
-
-				this.setSize();
-
-			}
-
 		}
 
 		return oldRenderer;
-
-	}
-
-	/**
-	 * Retrieves the most relevant depth texture for the pass at the given index.
-	 *
-	 * @private
-	 * @param {Number} index - The index of the pass that needs a depth texture.
-	 * @return {DepthTexture} The depth texture, or null if there is none.
-	 */
-
-	getDepthTexture(index) {
-
-		const passes = this.passes;
-
-		let depthTexture = null;
-		let inputBuffer = true;
-		let i, pass;
-
-		for(i = 0; i < index; ++i) {
-
-			pass = passes[i];
-
-			if(pass.needsSwap) {
-
-				inputBuffer = !inputBuffer;
-
-			} else if(pass instanceof RenderPass) {
-
-				depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
-
-			}
-
-		}
-
-		return depthTexture;
 
 	}
 
@@ -218,6 +188,52 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Sets the correct depth texture for each pass.
+	 *
+	 * @private
+	 */
+
+	updateDepthTextures() {
+
+		let depthTextureRequired = false;
+		let depthTexture = null;
+		let inputBuffer = true;
+
+		for(const pass of this.passes) {
+
+			if(pass.needsDepthTexture && pass.getDepthTexture() !== depthTexture) {
+
+				pass.setDepthTexture(depthTexture);
+
+			}
+
+			if(pass.needsSwap) {
+
+				inputBuffer = !inputBuffer;
+
+			} else if(pass instanceof RenderPass) {
+
+				depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
+
+			}
+
+			depthTextureRequired = (depthTextureRequired || pass.needsDepthTexture);
+
+		}
+
+		if(!depthTextureRequired) {
+
+			this.inputBuffer.depthTexture.dispose();
+			this.outputBuffer.depthTexture.dispose();
+
+			this.inputBuffer.depthTexture = null;
+			this.outputBuffer.depthTexture = null;
+
+		}
+
+	}
+
+	/**
 	 * Creates a new render target by replicating the renderer's canvas.
 	 *
 	 * The created render target uses a linear filter for texel minification and
@@ -231,7 +247,7 @@ export class EffectComposer {
 
 	createBuffer(depthBuffer, stencilBuffer) {
 
-		const drawingBufferSize = this.renderer.getDrawingBufferSize();
+		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.context.getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
@@ -259,30 +275,36 @@ export class EffectComposer {
 	addPass(pass, index) {
 
 		const renderer = this.renderer;
-		const drawingBufferSize = renderer.getDrawingBufferSize();
+		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
+
+		if(pass.needsDepthTexture && this.inputBuffer.depthTexture === null) {
+
+			this.createDepthTexture();
+
+		}
 
 		if(index !== undefined) {
 
 			this.passes.splice(index, 0, pass);
 
-		} else {
+			if(this.inputBuffer.depthTexture !== null) {
 
-			index = this.passes.push(pass) - 1;
-
-		}
-
-		if(pass.needsDepthTexture) {
-
-			if(this.inputBuffer.depthTexture === null) {
-
-				this.createDepthTexture();
+				this.updateDepthTextures();
 
 			}
 
-			pass.setDepthTexture(this.getDepthTexture(index));
+		} else {
+
+			this.passes.push(pass);
+
+			if(pass.needsDepthTexture) {
+
+				this.updateDepthTextures();
+
+			}
 
 		}
 
@@ -296,17 +318,23 @@ export class EffectComposer {
 
 	removePass(pass) {
 
-		this.passes.splice(this.passes.indexOf(pass), 1);
+		const removed = (this.passes.splice(this.passes.indexOf(pass), 1).length > 0);
+
+		if(removed && this.inputBuffer.depthTexture !== null) {
+
+			this.updateDepthTextures();
+
+		}
 
 	}
 
 	/**
 	 * Renders all enabled passes in the order in which they were added.
 	 *
-	 * @param {Number} delta - The time between the last frame and the current one in seconds.
+	 * @param {Number} deltaTime - The time between the last frame and the current one in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
 
 		const renderer = this.renderer;
 		const copyPass = this.copyPass;
@@ -321,7 +349,7 @@ export class EffectComposer {
 
 			if(pass.enabled) {
 
-				pass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+				pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 
 				if(pass.needsSwap) {
 
@@ -334,7 +362,7 @@ export class EffectComposer {
 
 						// Preserve the unaffected pixels.
 						state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
-						copyPass.render(renderer, inputBuffer, outputBuffer, delta, stencilTest);
+						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
 						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
@@ -378,11 +406,9 @@ export class EffectComposer {
 
 		const renderer = this.renderer;
 
-		let size, drawingBufferSize;
-
 		if(width === undefined || height === undefined) {
 
-			size = renderer.getSize();
+			const size = renderer.getSize(new Vector2());
 			width = size.width; height = size.height;
 
 		}
@@ -391,7 +417,7 @@ export class EffectComposer {
 		renderer.setSize(width, height);
 
 		// The drawing buffer size takes the device pixel ratio into account.
-		drawingBufferSize = renderer.getDrawingBufferSize();
+		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);

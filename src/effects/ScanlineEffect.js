@@ -18,16 +18,11 @@ export class ScanlineEffect extends Effect {
 	 * @param {Number} [options.density=1.25] - The scanline density.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.OVERLAY,
-			density: 1.25
-		}, options);
+	constructor({ blendFunction = BlendFunction.OVERLAY, density = 1.25 } = {}) {
 
 		super("ScanlineEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["count", new Uniform(0.0)]
@@ -51,7 +46,7 @@ export class ScanlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.density = settings.density;
+		this.density = density;
 
 	}
 

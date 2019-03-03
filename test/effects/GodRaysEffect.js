@@ -3,7 +3,11 @@ import { GodRaysEffect } from "../../build/postprocessing.umd.js";
 
 test("can be created and destroyed", t => {
 
-	const object = new GodRaysEffect(null, null, null);
+	const lightSource = {
+		material: {}
+	};
+
+	const object = new GodRaysEffect(null, lightSource);
 	object.dispose();
 
 	t.truthy(object);

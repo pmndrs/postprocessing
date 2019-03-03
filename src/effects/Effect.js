@@ -27,16 +27,14 @@ export class Effect {
 	 * @param {String} [options.vertexShader=null] - The vertex shader. Most effects don't need one.
 	 */
 
-	constructor(name, fragmentShader, options = {}) {
-
-		const settings = Object.assign({
-			attributes: EffectAttribute.NONE,
-			blendFunction: BlendFunction.SCREEN,
-			defines: new Map(),
-			uniforms: new Map(),
-			extensions: null,
-			vertexShader: null
-		}, options);
+	constructor(name, fragmentShader, {
+		attributes = EffectAttribute.NONE,
+		blendFunction = BlendFunction.SCREEN,
+		defines = new Map(),
+		uniforms = new Map(),
+		extensions = null,
+		vertexShader = null
+	} = {}) {
 
 		/**
 		 * The name of this effect.
@@ -55,7 +53,7 @@ export class Effect {
 		 * @type {EffectAttribute}
 		 */
 
-		this.attributes = settings.attributes;
+		this.attributes = attributes;
 
 		/**
 		 * The fragment shader.
@@ -71,7 +69,7 @@ export class Effect {
 		 * @type {String}
 		 */
 
-		this.vertexShader = settings.vertexShader;
+		this.vertexShader = vertexShader;
 
 		/**
 		 * Preprocessor macro definitions.
@@ -81,7 +79,7 @@ export class Effect {
 		 * @type {Map<String, String>}
 		 */
 
-		this.defines = settings.defines;
+		this.defines = defines;
 
 		/**
 		 * Shader uniforms.
@@ -92,7 +90,7 @@ export class Effect {
 		 * @type {Map<String, Uniform>}
 		 */
 
-		this.uniforms = settings.uniforms;
+		this.uniforms = uniforms;
 
 		/**
 		 * WebGL extensions that are required by this effect.
@@ -103,7 +101,7 @@ export class Effect {
 		 * @type {Set<WebGLExtension>}
 		 */
 
-		this.extensions = settings.extensions;
+		this.extensions = extensions;
 
 		/**
 		 * The blend mode of this effect.
@@ -118,7 +116,7 @@ export class Effect {
 		 * @type {BlendMode}
 		 */
 
-		this.blendMode = new BlendMode(settings.blendFunction);
+		this.blendMode = new BlendMode(blendFunction);
 
 	}
 
@@ -145,10 +143,10 @@ export class Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {}
+	update(renderer, inputBuffer, deltaTime) {}
 
 	/**
 	 * Updates the size of this effect.

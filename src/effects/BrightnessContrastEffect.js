@@ -21,21 +21,15 @@ export class BrightnessContrastEffect extends Effect {
 	 * @param {Number} [options.contrast=0.0] - The contrast factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			brightness: 0.0,
-			contrast: 0.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, brightness = 0.0, contrast = 0.0 } = {}) {
 
 		super("BrightnessContrastEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
-				["brightness", new Uniform(settings.brightness)],
-				["contrast", new Uniform(settings.contrast)]
+				["brightness", new Uniform(brightness)],
+				["contrast", new Uniform(contrast)]
 			])
 
 		});

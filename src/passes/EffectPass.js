@@ -307,7 +307,7 @@ export class EffectPass extends Pass {
 	/**
 	 * Enables or disables dithering.
 	 *
-	 * Note that some effects like bloom have their own dithering setting.
+	 * Note that some effects have their own dithering setting.
 	 *
 	 * @type {Boolean}
 	 */
@@ -525,8 +525,6 @@ export class EffectPass extends Pass {
 
 		}
 
-		this.needsDepthTexture = (depthTexture === null);
-
 	}
 
 	/**
@@ -535,18 +533,18 @@ export class EffectPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const material = this.getFullscreenMaterial();
-		const time = material.uniforms.time.value + delta;
+		const time = material.uniforms.time.value + deltaTime;
 
 		for(const effect of this.effects) {
 
-			effect.update(renderer, inputBuffer, delta);
+			effect.update(renderer, inputBuffer, deltaTime);
 
 		}
 
@@ -554,7 +552,8 @@ export class EffectPass extends Pass {
 
 			material.uniforms.inputBuffer.value = inputBuffer.texture;
 			material.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;
-			renderer.render(this.scene, this.camera, this.renderToScreen ? null : outputBuffer);
+			renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+			renderer.render(this.scene, this.camera);
 
 		}
 

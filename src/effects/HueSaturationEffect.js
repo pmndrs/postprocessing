@@ -21,26 +21,20 @@ export class HueSaturationEffect extends Effect {
 	 * @param {Number} [options.saturation=0.0] - The saturation factor, ranging from -1 to 1, where 0 means no change.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			hue: 0.0,
-			saturation: 0.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, hue = 0.0, saturation = 0.0 } = {}) {
 
 		super("HueSaturationEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["hue", new Uniform(new Vector3())],
-				["saturation", new Uniform(settings.saturation)]
+				["saturation", new Uniform(saturation)]
 			])
 
 		});
 
-		this.setHue(settings.hue);
+		this.setHue(hue);
 
 	}
 

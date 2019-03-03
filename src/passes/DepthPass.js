@@ -11,7 +11,7 @@ import { Pass } from "./Pass.js";
 import { RenderPass } from "./RenderPass.js";
 
 /**
- * A pass that renders the depth of a given scene.
+ * A pass that renders the depth of a given scene into a color buffer.
  */
 
 export class DepthPass extends Pass {
@@ -22,11 +22,11 @@ export class DepthPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.resolutionScale=1.0] - The render texture resolution scale, relative to the main frame buffer size.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
-	constructor(scene, camera, options = {}) {
+	constructor(scene, camera, { resolutionScale = 1.0, renderTarget } = {}) {
 
 		super("DepthPass");
 
@@ -39,15 +39,15 @@ export class DepthPass extends Pass {
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera, {
-			overrideMaterial: new MeshDepthMaterial({
-				depthPacking: RGBADepthPacking,
-				morphTargets: true,
-				skinning: true
-			}),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.renderPass = new RenderPass(scene, camera, new MeshDepthMaterial({
+			depthPacking: RGBADepthPacking,
+			morphTargets: true,
+			skinning: true
+		}));
+
+		const clearPass = this.renderPass.getClearPass();
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A render target that contains the scene depth.
@@ -55,19 +55,28 @@ export class DepthPass extends Pass {
 		 * @type {WebGLRenderTarget}
 		 */
 
-		this.renderTarget = options.renderTarget;
+		this.renderTarget = renderTarget;
 
 		if(this.renderTarget === undefined) {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
 				minFilter: LinearFilter,
-				magFilter: LinearFilter
+				magFilter: LinearFilter,
+				stencilBuffer: false
 			});
 
 			this.renderTarget.texture.name = "DepthPass.Target";
-			this.renderTarget.texture.generateMipmaps = false;
 
 		}
+
+		/**
+		 * The current resolution scale.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.resolutionScale = resolutionScale;
 
 		/**
 		 * The original resolution.
@@ -77,15 +86,6 @@ export class DepthPass extends Pass {
 		 */
 
 		this.resolution = new Vector2();
-
-		/**
-		 * The current resolution scale.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
 
 	}
 
@@ -120,14 +120,14 @@ export class DepthPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const renderTarget = this.renderToScreen ? null : this.renderTarget;
-		this.renderPass.render(renderer, renderTarget, renderTarget);
+		this.renderPass.render(renderer, renderTarget);
 
 	}
 

@@ -12,10 +12,6 @@ const color = new Color();
 
 /**
  * A pass that clears the input buffer or the screen.
- *
- * You can prevent specific bits from being cleared by setting either the
- * autoClearColor, autoClearStencil or autoClearDepth properties of the renderer
- * to false.
  */
 
 export class ClearPass extends Pass {
@@ -23,32 +19,56 @@ export class ClearPass extends Pass {
 	/**
 	 * Constructs a new clear pass.
 	 *
-	 * @param {Object} [options] - Additional options.
-	 * @param {Color} [options.clearColor=null] - An override clear color.
-	 * @param {Number} [options.clearAlpha=0.0] - An override clear alpha.
+	 * @param {Boolean} [color=true] - Determines whether the color buffer should be cleared.
+	 * @param {Boolean} [depth=true] - Determines whether the depth buffer should be cleared.
+	 * @param {Boolean} [stencil=false] - Determines whether the stencil buffer should be cleared.
 	 */
 
-	constructor(options = {}) {
+	constructor(color = true, depth = true, stencil = false) {
 
 		super("ClearPass", null, null);
 
 		this.needsSwap = false;
 
 		/**
-		 * The clear color.
+		 * Indicates whether the color buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.color = color;
+
+		/**
+		 * Indicates whether the depth buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.depth = depth;
+
+		/**
+		 * Indicates whether the stencil buffer should be cleared.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.stencil = stencil;
+
+		/**
+		 * An override clear color.
 		 *
 		 * @type {Color}
 		 */
 
-		this.clearColor = (options.clearColor !== undefined) ? options.clearColor : null;
+		this.overrideClearColor = null;
 
 		/**
-		 * The clear alpha.
+		 * An override clear alpha.
 		 *
 		 * @type {Number}
 		 */
 
-		this.clearAlpha = (options.clearAlpha !== undefined) ? options.clearAlpha : 0.0;
+		this.overrideClearAlpha = 0.0;
 
 	}
 
@@ -58,28 +78,28 @@ export class ClearPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const clearColor = this.clearColor;
+		const overrideClearColor = this.overrideClearColor;
 
 		let clearAlpha;
 
-		if(clearColor !== null) {
+		if(overrideClearColor !== null) {
 
 			color.copy(renderer.getClearColor());
 			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(clearColor, this.clearAlpha);
+			renderer.setClearColor(overrideClearColor, this.overrideClearAlpha);
 
 		}
 
 		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
-		renderer.clear();
+		renderer.clear(this.color, this.depth, this.stencil);
 
-		if(clearColor !== null) {
+		if(overrideClearColor !== null) {
 
 			renderer.setClearColor(color, clearAlpha);
 

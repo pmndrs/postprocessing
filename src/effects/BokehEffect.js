@@ -5,7 +5,7 @@ import { Effect, EffectAttribute } from "./Effect.js";
 import fragment from "./glsl/bokeh/shader.frag";
 
 /**
- * A depth of field (bokeh) shader effect.
+ * A depth of field (bokeh) effect.
  *
  * Original shader code by Martins Upitis:
  *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
@@ -24,26 +24,18 @@ export class BokehEffect extends Effect {
 	 * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			focus: 0.5,
-			dof: 0.02,
-			aperture: 0.015,
-			maxBlur: 1.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, focus = 0.5, dof = 0.02, aperture = 0.015, maxBlur = 1.0 } = {}) {
 
 		super("BokehEffect", fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				["focus", new Uniform(settings.focus)],
-				["dof", new Uniform(settings.dof)],
-				["aperture", new Uniform(settings.aperture)],
-				["maxBlur", new Uniform(settings.maxBlur)]
+				["focus", new Uniform(focus)],
+				["dof", new Uniform(dof)],
+				["aperture", new Uniform(aperture)],
+				["maxBlur", new Uniform(maxBlur)]
 			])
 
 		});

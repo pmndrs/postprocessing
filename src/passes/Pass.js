@@ -65,6 +65,8 @@ export class Pass {
 		 * Set this to `false` if this pass doesn't render to the output buffer or
 		 * the screen. Otherwise, the contents of the input buffer will be lost.
 		 *
+		 * This flag must not be changed at runtime.
+		 *
 		 * @type {Boolean}
 		 */
 
@@ -180,11 +182,11 @@ export class Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		throw new Error("Render method not implemented!");
 
@@ -193,8 +195,8 @@ export class Pass {
 	/**
 	 * Updates this pass with the renderer's size.
 	 *
-	 * You may override this method in case you want to be informed about the main
-	 * render size.
+	 * You may override this method in case you want to be informed about the size
+	 * of the main frame buffer.
 	 *
 	 * The {@link EffectComposer} calls this method before this pass is
 	 * initialized and every time its own size is updated.

@@ -20,25 +20,19 @@ export class TextureEffect extends Effect {
 	 * @param {Boolean} [options.aspectCorrection=false] - Whether the texture coordinates should be affected by the aspect ratio.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			texture: null,
-			aspectCorrection: false
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
 
 		super("TextureEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
-				["texture", new Uniform(settings.texture)]
+				["texture", new Uniform(texture)]
 			])
 
 		});
 
-		this.aspectCorrection = settings.aspectCorrection;
+		this.aspectCorrection = aspectCorrection;
 
 	}
 

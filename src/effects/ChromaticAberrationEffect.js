@@ -19,20 +19,15 @@ export class ChromaticAberrationEffect extends Effect {
 	 * @param {Vector2} [options.offset] - The color offset.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.NORMAL,
-			offset: new Vector2(0.001, 0.0005)
-		}, options);
+	constructor({ blendFunction = BlendFunction.NORMAL, offset = new Vector2(0.001, 0.0005) } = {}) {
 
 		super("ChromaticAberrationEffect", fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION,
-			blendFunction: settings.blendFunction,
 
 			uniforms: new Map([
-				["offset", new Uniform(settings.offset)]
+				["offset", new Uniform(offset)]
 			]),
 
 			vertexShader: vertex

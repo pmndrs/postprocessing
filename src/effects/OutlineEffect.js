@@ -8,12 +8,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import {
-	DepthComparisonMaterial,
-	OutlineEdgesMaterial,
-	KernelSize
-} from "../materials";
-
+import { DepthComparisonMaterial, OutlineEdgesMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
@@ -30,51 +25,53 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Constructs a new outline effect.
 	 *
-	 * If you want dark outlines, remember to adjust the blend function.
+	 * If you want dark outlines, remember to use an appropriate blend function.
 	 *
 	 * @param {Scene} scene - The main scene.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Object} [options] - The options. See {@link BlurPass} and {@link OutlineEdgesMaterial} for additional parameters.
+	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function.  Set this to `BlendFunction.ALPHA` for dark outlines.
 	 * @param {Number} [options.patternTexture=null] - A pattern texture.
 	 * @param {Number} [options.edgeStrength=1.0] - The edge strength.
 	 * @param {Number} [options.pulseSpeed=0.0] - The pulse speed. A value of zero disables the pulse effect.
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
-	 * @param {Boolean} [options.xRay=true] - Whether hidden parts of selected objects should be visible.
+	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
 	 */
 
-	constructor(scene, camera, options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			patternTexture: null,
-			edgeStrength: 1.0,
-			pulseSpeed: 0.0,
-			visibleEdgeColor: 0xffffff,
-			hiddenEdgeColor: 0x22090a,
-			blur: false,
-			xRay: true
-		}, options);
+	constructor(scene, camera, {
+		blendFunction = BlendFunction.SCREEN,
+		patternTexture = null,
+		edgeStrength = 1.0,
+		pulseSpeed = 0.0,
+		visibleEdgeColor = 0xffffff,
+		hiddenEdgeColor = 0x22090a,
+		resolutionScale = 0.5,
+		kernelSize = KernelSize.VERY_SMALL,
+		blur = false,
+		xRay = true
+	} = {}) {
 
 		super("OutlineEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
-				["edgeStrength", new Uniform(settings.edgeStrength)],
-				["visibleEdgeColor", new Uniform(new Color(settings.visibleEdgeColor))],
-				["hiddenEdgeColor", new Uniform(new Color(settings.hiddenEdgeColor))],
+				["edgeStrength", new Uniform(edgeStrength)],
+				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
+				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
 				["pulse", new Uniform(1.0)]
 			])
 
 		});
 
-		this.setPatternTexture(settings.patternTexture);
-		this.xRay = settings.xRay;
+		this.setPatternTexture(patternTexture);
+		this.xRay = xRay;
 
 		/**
 		 * The main scene.
@@ -83,7 +80,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.mainScene = scene;
+		this.scene = scene;
 
 		/**
 		 * The main camera.
@@ -92,22 +89,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.mainCamera = camera;
-
-		/**
-		 * A depth render target.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetDepth = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter
-		});
-
-		this.renderTargetDepth.texture.name = "Outline.Depth";
-		this.renderTargetDepth.texture.generateMipmaps = false;
+		this.camera = camera;
 
 		/**
 		 * A render target for the outline mask.
@@ -116,9 +98,13 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetMask = this.renderTargetDepth.clone();
+		this.renderTargetMask = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			format: RGBFormat
+		});
 
-		this.renderTargetMask.texture.format = RGBFormat;
 		this.renderTargetMask.texture.name = "Outline.Mask";
 
 		this.uniforms.get("maskTexture").value = this.renderTargetMask.texture;
@@ -130,16 +116,9 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetEdges = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearFilter,
-			magFilter: LinearFilter,
-			stencilBuffer: false,
-			depthBuffer: false,
-			format: RGBFormat
-		});
-
+		this.renderTargetEdges = this.renderTargetMask.clone();
 		this.renderTargetEdges.texture.name = "Outline.Edges";
-		this.renderTargetEdges.texture.generateMipmaps = false;
+		this.renderTargetEdges.depthBuffer = false;
 
 		/**
 		 * A render target for the blurred outline overlay.
@@ -149,7 +128,6 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.renderTargetBlurredEdges = this.renderTargetEdges.clone();
-
 		this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
 
 		/**
@@ -159,10 +137,9 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.clearPass = new ClearPass({
-			clearColor: new Color(0x000000),
-			clearAlpha: 1.0
-		});
+		this.clearPass = new ClearPass();
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A depth pass.
@@ -171,7 +148,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.depthPass = new DepthPass(this.mainScene, this.mainCamera);
+		this.depthPass = new DepthPass(scene, camera, { resolutionScale });
 
 		/**
 		 * A depth comparison mask pass.
@@ -180,11 +157,11 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(this.mainScene, this.mainCamera, {
-			overrideMaterial: new DepthComparisonMaterial(this.depthPass.renderTarget.texture, this.mainCamera),
-			clearColor: new Color(0xffffff),
-			clearAlpha: 1.0
-		});
+		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.renderTarget.texture, camera));
+
+		const clearPass = this.maskPass.getClearPass();
+		clearPass.overrideClearColor = new Color(0xffffff);
+		clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A blur pass.
@@ -193,10 +170,8 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.blurPass = new BlurPass(settings);
-
-		this.kernelSize = settings.kernelSize;
-		this.blur = settings.blur;
+		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
+		this.blur = blur;
 
 		/**
 		 * The original resolution.
@@ -214,7 +189,7 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial(settings));
+		this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
 		this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		/**
@@ -241,7 +216,7 @@ export class OutlineEffect extends Effect {
 		 * @type {Number}
 		 */
 
-		this.pulseSpeed = settings.pulseSpeed;
+		this.pulseSpeed = pulseSpeed;
 
 		/**
 		 * A dedicated render layer for selected objects.
@@ -302,10 +277,12 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * Sets the kernel size.
+	 *
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.VERY_SMALL) {
+	set kernelSize(value) {
 
 		this.blurPass.kernelSize = value;
 
@@ -415,6 +392,7 @@ export class OutlineEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.blurPass.setResolutionScale(scale);
+		this.depthPass.setResolutionScale(scale);
 		this.setSize(this.resolution.x, this.resolution.y);
 
 	}
@@ -554,27 +532,27 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
-		const mainScene = this.mainScene;
-		const mainCamera = this.mainCamera;
+		const scene = this.scene;
+		const camera = this.camera;
 		const pulse = this.uniforms.get("pulse");
 
-		const background = mainScene.background;
-		const mask = mainCamera.layers.mask;
+		const background = scene.background;
+		const mask = camera.layers.mask;
 
 		if(this.selection.length > 0) {
 
-			mainScene.background = null;
+			scene.background = null;
 			pulse.value = 1.0;
 
 			if(this.pulseSpeed > 0.0) {
 
 				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-				this.time += delta;
+				this.time += deltaTime;
 
 			}
 
@@ -584,12 +562,12 @@ export class OutlineEffect extends Effect {
 			this.setSelectionVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			mainCamera.layers.mask = 1 << this.selectionLayer;
+			camera.layers.mask = 1 << this.selectionLayer;
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
-			mainCamera.layers.mask = mask;
-			mainScene.background = background;
+			camera.layers.mask = mask;
+			scene.background = background;
 
 			// Detect the outline.
 			this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);
@@ -603,7 +581,6 @@ export class OutlineEffect extends Effect {
 		} else if(this.clear) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-
 			this.clear = false;
 
 		}

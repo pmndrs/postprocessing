@@ -2,8 +2,9 @@ import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 
 /**
- * A pass that renders a given scene directly on screen or into the read buffer
- * for further processing.
+ * A pass that renders a given scene into the input buffer or to screen.
+ *
+ * This pass uses a {@link ClearPass} to clear the target buffer.
  */
 
 export class RenderPass extends Pass {
@@ -13,27 +14,14 @@ export class RenderPass extends Pass {
 	 *
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
-	 * @param {Object} [options] - Additional options.
-	 * @param {Material} [options.overrideMaterial=null] - An override material for the scene.
-	 * @param {Color} [options.clearColor=null] - An override clear color.
-	 * @param {Number} [options.clearAlpha=1.0] - An override clear alpha.
-	 * @param {Boolean} [options.clearDepth=false] - Whether depth should be cleared explicitly.
-	 * @param {Boolean} [options.clear=true] - Whether all buffers should be cleared.
+	 * @param {Object} [overrideMaterial=null] - An override material for the scene.
 	 */
 
-	constructor(scene, camera, options = {}) {
+	constructor(scene, camera, overrideMaterial = null) {
 
 		super("RenderPass", scene, camera);
 
 		this.needsSwap = false;
-
-		/**
-		 * A clear pass.
-		 *
-		 * @type {ClearPass}
-		 */
-
-		this.clearPass = new ClearPass(options);
 
 		/**
 		 * An override material.
@@ -41,27 +29,52 @@ export class RenderPass extends Pass {
 		 * @type {Material}
 		 */
 
-		this.overrideMaterial = (options.overrideMaterial !== undefined) ? options.overrideMaterial : null;
+		this.overrideMaterial = overrideMaterial;
 
 		/**
-		 * Indicates whether the depth buffer should be cleared explicitly.
+		 * A clear pass.
 		 *
-		 * @type {Boolean}
+		 * @type {ClearPass}
+		 * @private
 		 */
 
-		this.clearDepth = (options.clearDepth !== undefined) ? options.clearDepth : false;
+		this.clearPass = new ClearPass();
 
-		/**
-		 * Indicates whether the color, depth and stencil buffers should be cleared.
-		 *
-		 * Even with clear set to true you can prevent specific buffers from being
-		 * cleared by setting either the autoClearColor, autoClearStencil or
-		 * autoClearDepth properties of the renderer to false.
-		 *
-		 * @type {Boolean}
-		 */
+	}
 
-		this.clear = (options.clear !== undefined) ? options.clear : true;
+	/**
+	 * Indicates whether the target buffer should be cleared before rendering.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get clear() {
+
+		return this.clearPass.enabled;
+
+	}
+
+	/**
+	 * Enables or disables auto clear.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set clear(value) {
+
+		this.clearPass.enabled = value;
+
+	}
+
+	/**
+	 * Returns the clear pass.
+	 *
+	 * @return {ClearPass} The clear pass.
+	 */
+
+	getClearPass() {
+
+		return this.clearPass;
 
 	}
 
@@ -71,11 +84,11 @@ export class RenderPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const scene = this.scene;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
@@ -86,15 +99,11 @@ export class RenderPass extends Pass {
 			this.clearPass.renderToScreen = this.renderToScreen;
 			this.clearPass.render(renderer, inputBuffer);
 
-		} else if(this.clearDepth) {
-
-			renderer.setRenderTarget(renderTarget);
-			renderer.clearDepth();
-
 		}
 
 		scene.overrideMaterial = this.overrideMaterial;
-		renderer.render(scene, this.camera, renderTarget);
+		renderer.setRenderTarget(renderTarget);
+		renderer.render(scene, this.camera);
 		scene.overrideMaterial = overrideMaterial;
 
 	}

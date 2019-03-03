@@ -7,12 +7,10 @@ import fragment from "./glsl/ssao/shader.frag";
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
- * SSAO is a method to approximate ambient occlusion in screen space.
- *
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation uses a discrete spiral sampling pattern:
+ * This implementation uses a spiral sampling pattern:
  *  https://jsfiddle.net/a16ff1p7
  */
 
@@ -37,26 +35,24 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.bias=0.5] - An occlusion bias.
 	 */
 
-	constructor(camera, normalBuffer, options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.MULTIPLY,
-			samples: 11,
-			rings: 4,
-			distanceThreshold: 0.65,
-			distanceFalloff: 0.1,
-			rangeThreshold: 0.0015,
-			rangeFalloff: 0.01,
-			luminanceInfluence: 0.7,
-			radius: 18.25,
-			scale: 1.0,
-			bias: 0.5
-		}, options);
+	constructor(camera, normalBuffer, {
+		blendFunction = BlendFunction.MULTIPLY,
+		samples = 11,
+		rings = 4,
+		distanceThreshold = 0.65,
+		distanceFalloff = 0.1,
+		rangeThreshold = 0.0015,
+		rangeFalloff = 0.01,
+		luminanceInfluence = 0.7,
+		radius = 18.25,
+		scale = 1.0,
+		bias = 0.5
+	} = {}) {
 
 		super("SSAOEffect", fragment, {
 
+			blendFunction,
 			attributes: EffectAttribute.DEPTH,
-			blendFunction: settings.blendFunction,
 
 			defines: new Map([
 				["RINGS_INT", "0"],
@@ -72,9 +68,9 @@ export class SSAOEffect extends Effect {
 				["distanceCutoff", new Uniform(new Vector2())],
 				["proximityCutoff", new Uniform(new Vector2())],
 				["seed", new Uniform(Math.random())],
-				["luminanceInfluence", new Uniform(settings.luminanceInfluence)],
-				["scale", new Uniform(settings.scale)],
-				["bias", new Uniform(settings.bias)]
+				["luminanceInfluence", new Uniform(luminanceInfluence)],
+				["scale", new Uniform(scale)],
+				["bias", new Uniform(bias)]
 			])
 
 		});
@@ -106,12 +102,12 @@ export class SSAOEffect extends Effect {
 
 		this.camera = camera;
 
-		this.samples = settings.samples;
-		this.rings = settings.rings;
-		this.radius = settings.radius;
+		this.samples = samples;
+		this.rings = rings;
+		this.radius = radius;
 
-		this.setDistanceCutoff(settings.distanceThreshold, settings.distanceFalloff);
-		this.setProximityCutoff(settings.rangeThreshold, settings.rangeFalloff);
+		this.setDistanceCutoff(distanceThreshold, distanceFalloff);
+		this.setProximityCutoff(rangeThreshold, rangeFalloff);
 
 	}
 

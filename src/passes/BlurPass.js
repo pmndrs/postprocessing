@@ -14,11 +14,11 @@ export class BlurPass extends Pass {
 	 * Constructs a new blur pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
-	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor(options = {}) {
+	constructor({ resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
 
 		super("BlurPass");
 
@@ -37,7 +37,6 @@ export class BlurPass extends Pass {
 		});
 
 		this.renderTargetX.texture.name = "Blur.TargetX";
-		this.renderTargetX.texture.generateMipmaps = false;
 
 		/**
 		 * A second render target.
@@ -65,7 +64,7 @@ export class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.resolutionScale = (options.resolutionScale !== undefined) ? options.resolutionScale : 0.5;
+		this.resolutionScale = resolutionScale;
 
 		/**
 		 * A convolution shader material.
@@ -94,7 +93,7 @@ export class BlurPass extends Pass {
 
 		this.dithering = false;
 
-		this.kernelSize = options.kernelSize;
+		this.kernelSize = kernelSize;
 
 	}
 
@@ -135,10 +134,12 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * Sets the kernel size.
+	 *
 	 * @type {KernelSize}
 	 */
 
-	set kernelSize(value = KernelSize.LARGE) {
+	set kernelSize(value) {
 
 		this.convolutionMaterial.kernelSize = value;
 		this.ditheredConvolutionMaterial.kernelSize = value;
@@ -177,11 +178,11 @@ export class BlurPass extends Pass {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
 	 * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.
 	 */
 
-	render(renderer, inputBuffer, outputBuffer, delta, stencilTest) {
+	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const scene = this.scene;
 		const camera = this.camera;
@@ -207,7 +208,8 @@ export class BlurPass extends Pass {
 
 			uniforms.kernel.value = kernel[i];
 			uniforms.inputBuffer.value = lastRT.texture;
-			renderer.render(scene, camera, destRT);
+			renderer.setRenderTarget(destRT);
+			renderer.render(scene, camera);
 
 			lastRT = destRT;
 
@@ -223,7 +225,8 @@ export class BlurPass extends Pass {
 
 		uniforms.kernel.value = kernel[i];
 		uniforms.inputBuffer.value = lastRT.texture;
-		renderer.render(scene, camera, this.renderToScreen ? null : outputBuffer);
+		renderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);
+		renderer.render(scene, camera);
 
 	}
 

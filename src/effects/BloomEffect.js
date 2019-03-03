@@ -27,23 +27,16 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
-	 * @param {Number} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
+	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.SCREEN,
-			resolutionScale: 0.5,
-			kernelSize: KernelSize.LARGE,
-			distinction: 1.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.SCREEN, distinction = 1.0, resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
 
 		super("BloomEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["texture", new Uniform(null)]
@@ -71,6 +64,15 @@ export class BloomEffect extends Effect {
 		this.uniforms.get("texture").value = this.renderTarget.texture;
 
 		/**
+		 * A blur pass.
+		 *
+		 * @type {BlurPass}
+		 * @private
+		 */
+
+		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
+
+		/**
 		 * The original resolution.
 		 *
 		 * @type {Vector2}
@@ -78,15 +80,6 @@ export class BloomEffect extends Effect {
 		 */
 
 		this.resolution = new Vector2();
-
-		/**
-		 * A blur pass.
-		 *
-		 * @type {BlurPass}
-		 * @private
-		 */
-
-		this.blurPass = new BlurPass(settings);
 
 		/**
 		 * A luminance shader pass.
@@ -97,8 +90,7 @@ export class BloomEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
 
-		this.distinction = settings.distinction;
-		this.kernelSize = settings.kernelSize;
+		this.distinction = distinction;
 
 	}
 
@@ -215,10 +207,10 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		const renderTarget = this.renderTarget;
 

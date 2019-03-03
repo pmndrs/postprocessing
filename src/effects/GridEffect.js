@@ -19,21 +19,15 @@ export class GridEffect extends Effect {
 	 * @param {Number} [options.lineWidth=0.0] - The line width of the grid pattern.
 	 */
 
-	constructor(options = {}) {
-
-		const settings = Object.assign({
-			blendFunction: BlendFunction.OVERLAY,
-			scale: 1.0,
-			lineWidth: 0.0
-		}, options);
+	constructor({ blendFunction = BlendFunction.OVERLAY, scale = 1.0, lineWidth = 0.0 } = {}) {
 
 		super("GridEffect", fragment, {
 
-			blendFunction: settings.blendFunction,
+			blendFunction,
 
 			uniforms: new Map([
 				["scale", new Uniform(new Vector2())],
-				["lineWidth", new Uniform(settings.lineWidth)]
+				["lineWidth", new Uniform(lineWidth)]
 			])
 
 		});
@@ -54,7 +48,7 @@ export class GridEffect extends Effect {
 		 * @private
 		 */
 
-		this.scale = Math.max(settings.scale, 1e-6);
+		this.scale = Math.max(scale, 1e-6);
 
 		/**
 		 * The grid line width.
@@ -63,7 +57,7 @@ export class GridEffect extends Effect {
 		 * @private
 		 */
 
-		this.lineWidth = Math.max(settings.lineWidth, 0.0);
+		this.lineWidth = Math.max(lineWidth, 0.0);
 
 	}
 

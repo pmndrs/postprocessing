@@ -40,8 +40,8 @@ export class SMAAEffect extends Effect {
 
 		super("SMAAEffect", fragment, {
 
-			attributes: EffectAttribute.CONVOLUTION,
 			blendFunction: BlendFunction.NORMAL,
+			attributes: EffectAttribute.CONVOLUTION,
 
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
@@ -60,13 +60,12 @@ export class SMAAEffect extends Effect {
 
 		this.renderTargetColorEdges = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
-			format: RGBFormat,
 			stencilBuffer: false,
-			depthBuffer: false
+			depthBuffer: false,
+			format: RGBFormat
 		});
 
 		this.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
-		this.renderTargetColorEdges.texture.generateMipmaps = false;
 
 		/**
 		 * A render target for the SMAA weights.
@@ -89,10 +88,9 @@ export class SMAAEffect extends Effect {
 		 * @private
 		 */
 
-		this.clearPass = new ClearPass({
-			clearColor: new Color(0x000000),
-			clearAlpha: 1.0
-		});
+		this.clearPass = new ClearPass(true, false, false);
+		this.clearPass.overrideClearColor = new Color(0x000000);
+		this.clearPass.overrideClearAlpha = 1.0;
 
 		/**
 		 * A color edge detection pass.
@@ -177,10 +175,10 @@ export class SMAAEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
-	 * @param {Number} [delta] - The time between the last frame and the current one in seconds.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
 	 */
 
-	update(renderer, inputBuffer, delta) {
+	update(renderer, inputBuffer, deltaTime) {
 
 		this.clearPass.render(renderer, this.renderTargetColorEdges);
 		this.colorEdgesPass.render(renderer, inputBuffer, this.renderTargetColorEdges);

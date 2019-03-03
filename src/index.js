@@ -50,6 +50,7 @@ export {
 	ConvolutionMaterial,
 	CopyMaterial,
 	DepthComparisonMaterial,
+	DepthMaskMaterial,
 	EffectMaterial,
 	GodRaysMaterial,
 	KernelSize,

@@ -50,7 +50,6 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	float angle = rand(uv + seed) * PI2;
 	float occlusionSum = 0.0;
 
-	// Collect samples along a discrete spiral pattern.
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
 		vec2 coord = uv + vec2(cos(angle), sin(angle)) * radius;
