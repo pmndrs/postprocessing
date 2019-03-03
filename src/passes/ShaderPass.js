@@ -56,7 +56,7 @@ export class ShaderPass extends Pass {
 
 			const uniforms = material.uniforms;
 
-			if(uniforms[input] !== undefined) {
+			if(uniforms !== undefined && uniforms[input] !== undefined) {
 
 				this.uniform = uniforms[input];
 
