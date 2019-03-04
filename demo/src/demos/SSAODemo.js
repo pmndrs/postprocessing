@@ -346,14 +346,12 @@ export class SSAODemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const normalPass = this.normalPass;
 		const effectPass = this.effectPass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 		const uniforms = effect.uniforms;
 
 		const params = {
-			"normal res": normalPass.getResolutionScale(),
 			"distance": {
 				"threshold": uniforms.get("distanceCutoff").value.x,
 				"falloff": uniforms.get("distanceCutoff").value.y - uniforms.get("distanceCutoff").value.x
@@ -368,12 +366,6 @@ export class SSAODemo extends PostProcessingDemo {
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
-
-		menu.add(params, "normal res").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			normalPass.setResolutionScale(params["normal res"]);
-
-		});
 
 		menu.add(effect, "samples").min(1).max(32).step(1).onChange(() => effectPass.recompile());
 		menu.add(effect, "rings").min(1).max(16).step(1).onChange(() => effectPass.recompile());
