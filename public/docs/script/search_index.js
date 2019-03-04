@@ -696,6 +696,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#depthtexture",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-depthTexture",
+    "src/core/EffectComposer.js~EffectComposer#depthTexture",
+    "member"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#dispose",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-dispose",
     "src/core/EffectComposer.js~EffectComposer#dispose",
@@ -759,12 +765,6 @@ window.esdocSearchIndex = [
     "src/core/effectcomposer.js~effectcomposer#setsize",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-setSize",
     "src/core/EffectComposer.js~EffectComposer#setSize",
-    "method"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#updatedepthtextures",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-updateDepthTextures",
-    "src/core/EffectComposer.js~EffectComposer#updateDepthTextures",
     "method"
   ],
   [
@@ -3342,9 +3342,21 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/renderpass.js~renderpass#depthtexture",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-depthTexture",
+    "src/passes/RenderPass.js~RenderPass#depthTexture",
+    "member"
+  ],
+  [
     "src/passes/renderpass.js~renderpass#getclearpass",
     "class/src/passes/RenderPass.js~RenderPass.html#instance-method-getClearPass",
     "src/passes/RenderPass.js~RenderPass#getClearPass",
+    "method"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#getdepthtexture",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-method-getDepthTexture",
+    "src/passes/RenderPass.js~RenderPass#getDepthTexture",
     "method"
   ],
   [
@@ -3363,6 +3375,12 @@ window.esdocSearchIndex = [
     "src/passes/renderpass.js~renderpass#render",
     "class/src/passes/RenderPass.js~RenderPass.html#instance-method-render",
     "src/passes/RenderPass.js~RenderPass#render",
+    "method"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#setdepthtexture",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-method-setDepthTexture",
+    "src/passes/RenderPass.js~RenderPass#setDepthTexture",
     "method"
   ],
   [

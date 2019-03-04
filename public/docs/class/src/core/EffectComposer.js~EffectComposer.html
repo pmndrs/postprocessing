@@ -223,6 +223,35 @@ automatically clear the buffers and render a scene for further processing.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-depthTexture">depthTexture</a></span></span><span class="code" data-ice="signature">: <span>DepthTexture</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A depth texture.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">private</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-member-inputBuffer">inputBuffer</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
         </p>
       </div>
@@ -618,43 +647,13 @@ information is used.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createDepthTexture">createDepthTexture</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createDepthTexture">createDepthTexture</a></span></span><span class="code" data-ice="signature">(): <span>DepthTexture</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Creates two depth texture attachments, one for the input buffer and one for
-the output buffer.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">private</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-updateDepthTextures">updateDepthTextures</a></span></span><span class="code" data-ice="signature">()</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the correct depth texture for each pass.</p>
+        <div data-ice="description"><p>Creates a depth texture attachment that will be provided to all passes.</p>
 </div>
       </div>
     </td>
@@ -805,6 +804,50 @@ the output buffer.</p>
   
 </div>
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-depthTexture">
+    <span class="access" data-ice="access">private</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">depthTexture</span><span class="code" data-ice="signature">: <span>DepthTexture</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber98">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A depth texture.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-inputBuffer">
     <span class="access" data-ice="access">private</span>
     
@@ -906,7 +949,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber107">source</a></span></span>
     </span>
   </h3>
 
@@ -999,7 +1042,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber275">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -1067,7 +1110,7 @@ Therefore, two seperate yet identical buffers are used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber248">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber204">source</a></span></span>
     </span>
   </h3>
 
@@ -1151,7 +1194,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber460">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber438">source</a></span></span>
     </span>
   </h3>
 
@@ -1197,7 +1240,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber108">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber117">source</a></span></span>
     </span>
   </h3>
 
@@ -1270,7 +1313,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber278">source</a></span></span>
     </span>
   </h3>
 
@@ -1331,7 +1374,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber337">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber314">source</a></span></span>
     </span>
   </h3>
 
@@ -1392,7 +1435,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber125">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber134">source</a></span></span>
     </span>
   </h3>
 
@@ -1469,7 +1512,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber437">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber414">source</a></span></span>
     </span>
   </h3>
 
@@ -1513,7 +1556,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber405">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -1583,27 +1626,21 @@ updated with the current size of the renderer.</p>
     
     
     
-    <span class="code" data-ice="name">createDepthTexture</span><span class="code" data-ice="signature">()</span>
+    <span class="code" data-ice="name">createDepthTexture</span><span class="code" data-ice="signature">(): <span>DepthTexture</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber174">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber177">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Creates two depth texture attachments, one for the input buffer and one for
-the output buffer.</p>
-<p>Depth will be written to the depth texture when something is rendered into
-the respective render target and the involved materials have <code>depthWrite</code>
-enabled. Under normal circumstances, only a <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span> will render
-depth.</p>
-<p>When a shader reads from a depth texture and writes to a render target that
-uses the same depth texture attachment, the depth information will be lost.
-This happens even if <code>depthWrite</code> is disabled. For that reason, two
-separate depth textures are used.</p>
+  <div data-ice="description"><p>Creates a depth texture attachment that will be provided to all passes.</p>
+<p>Note: When a shader reads from a depth texture and writes to a render
+target that uses the same depth texture attachment, the depth information
+will be lost. This happens even if <code>depthWrite</code> is disabled.</p>
 </div>
 
   
@@ -1611,51 +1648,20 @@ separate depth textures are used.</p>
   <div data-ice="properties">
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
+  <div class="return-params" data-ice="returnParams">
+    <h4>Return:</h4>
+    <table>
+      <tbody>
+        <tr>
+          <td class="return-type code" data-ice="returnType"><span>DepthTexture</span></td>
+          <td class="return-desc" data-ice="returnDescription"><p>The depth texture.</p>
+</td>
+        </tr>
+      </tbody>
+    </table>
+    <div data-ice="returnProperties">
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-updateDepthTextures">
-    <span class="access" data-ice="access">private</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">updateDepthTextures</span><span class="code" data-ice="signature">()</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber196">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the correct depth texture for each pass.</p>
-</div>
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
+  </div>
 
   
 

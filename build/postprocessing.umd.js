@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.0.0 build Sun Mar 03 2019
+ * postprocessing v6.0.1 build Mon Mar 04 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -994,6 +994,7 @@
       _this.needsSwap = false;
       _this.overrideMaterial = overrideMaterial;
       _this.clearPass = new ClearPass();
+      _this.depthTexture = null;
       return _this;
     }
 
@@ -1003,11 +1004,26 @@
         return this.clearPass;
       }
     }, {
+      key: "getDepthTexture",
+      value: function getDepthTexture() {
+        return this.depthTexture;
+      }
+    }, {
+      key: "setDepthTexture",
+      value: function setDepthTexture(depthTexture) {
+        this.depthTexture = depthTexture;
+      }
+    }, {
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
         var scene = this.scene;
         var renderTarget = this.renderToScreen ? null : inputBuffer;
         var overrideMaterial = scene.overrideMaterial;
+
+        if (this.depthTexture !== null && !this.renderToScreen) {
+          inputBuffer.depthTexture = this.depthTexture;
+          outputBuffer.depthTexture = null;
+        }
 
         if (this.clear) {
           this.clearPass.renderToScreen = this.renderToScreen;
@@ -2052,6 +2068,7 @@
       }
 
       this.copyPass = new ShaderPass(new CopyMaterial());
+      this.depthTexture = null;
       this.passes = [];
     }
 
@@ -2087,63 +2104,14 @@
     }, {
       key: "createDepthTexture",
       value: function createDepthTexture() {
-        var depthTexture = new three.DepthTexture();
+        var depthTexture = this.depthTexture = new three.DepthTexture();
 
         if (this.inputBuffer.stencilBuffer) {
           depthTexture.format = three.DepthStencilFormat;
           depthTexture.type = three.UnsignedInt248Type;
         }
 
-        this.inputBuffer.depthTexture = depthTexture;
-        this.outputBuffer.depthTexture = depthTexture.clone();
-      }
-    }, {
-      key: "updateDepthTextures",
-      value: function updateDepthTextures() {
-        var depthTextureRequired = false;
-        var depthTexture = null;
-        var inputBuffer = true;
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-          for (var _iterator = this.passes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var pass = _step.value;
-
-            if (pass.needsDepthTexture && pass.getDepthTexture() !== depthTexture) {
-              pass.setDepthTexture(depthTexture);
-            }
-
-            if (pass.needsSwap) {
-              inputBuffer = !inputBuffer;
-            } else if (pass instanceof RenderPass) {
-              depthTexture = (inputBuffer ? this.inputBuffer : this.outputBuffer).depthTexture;
-            }
-
-            depthTextureRequired = depthTextureRequired || pass.needsDepthTexture;
-          }
-        } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator.return != null) {
-              _iterator.return();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
-        }
-
-        if (!depthTextureRequired) {
-          this.inputBuffer.depthTexture.dispose();
-          this.outputBuffer.depthTexture.dispose();
-          this.inputBuffer.depthTexture = null;
-          this.outputBuffer.depthTexture = null;
-        }
+        return depthTexture;
       }
     }, {
       key: "createBuffer",
@@ -2164,36 +2132,91 @@
     }, {
       key: "addPass",
       value: function addPass(pass, index) {
+        var passes = this.passes;
         var renderer = this.renderer;
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
         pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
         pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
 
-        if (pass.needsDepthTexture && this.inputBuffer.depthTexture === null) {
-          this.createDepthTexture();
+        if (index !== undefined) {
+          passes.splice(index, 0, pass);
+        } else {
+          passes.push(pass);
         }
 
-        if (index !== undefined) {
-          this.passes.splice(index, 0, pass);
+        if (pass.needsDepthTexture || this.depthTexture !== null) {
+          if (this.depthTexture === null) {
+            var depthTexture = this.createDepthTexture();
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-          if (this.inputBuffer.depthTexture !== null) {
-            this.updateDepthTextures();
-          }
-        } else {
-          this.passes.push(pass);
-
-          if (pass.needsDepthTexture) {
-            this.updateDepthTextures();
+            try {
+              for (var _iterator = passes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                pass = _step.value;
+                pass.setDepthTexture(depthTexture);
+              }
+            } catch (err) {
+              _didIteratorError = true;
+              _iteratorError = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion && _iterator.return != null) {
+                  _iterator.return();
+                }
+              } finally {
+                if (_didIteratorError) {
+                  throw _iteratorError;
+                }
+              }
+            }
+          } else {
+            pass.setDepthTexture(this.depthTexture);
           }
         }
       }
     }, {
       key: "removePass",
       value: function removePass(pass) {
-        var removed = this.passes.splice(this.passes.indexOf(pass), 1).length > 0;
+        var passes = this.passes;
+        var removed = passes.splice(passes.indexOf(pass), 1).length > 0;
 
-        if (removed && this.inputBuffer.depthTexture !== null) {
-          this.updateDepthTextures();
+        if (removed && this.depthTexture !== null) {
+          var reducer = function reducer(a, b) {
+            return a || b.needsDepthTexture;
+          };
+
+          var depthTextureRequired = passes.reduce(reducer, false);
+
+          if (!depthTextureRequired) {
+            this.depthTexture.dispose();
+            this.depthTexture = null;
+            this.inputBuffer.depthTexture = null;
+            this.outputBuffer.depthTexture = null;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+              for (var _iterator2 = passes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                pass = _step2.value;
+                pass.setDepthTexture(null);
+              }
+            } catch (err) {
+              _didIteratorError2 = true;
+              _iteratorError2 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                  _iterator2.return();
+                }
+              } finally {
+                if (_didIteratorError2) {
+                  throw _iteratorError2;
+                }
+              }
+            }
+          }
         }
       }
     }, {
@@ -2205,13 +2228,13 @@
         var outputBuffer = this.outputBuffer;
         var stencilTest = false;
         var context, state, buffer;
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iteratorNormalCompletion3 = true;
+        var _didIteratorError3 = false;
+        var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator2 = this.passes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var pass = _step2.value;
+          for (var _iterator3 = this.passes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var pass = _step3.value;
 
             if (pass.enabled) {
               pass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
@@ -2239,16 +2262,16 @@
             }
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _didIteratorError3 = true;
+          _iteratorError3 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
-              _iterator2.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+              _iterator3.return();
             }
           } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
+            if (_didIteratorError3) {
+              throw _iteratorError3;
             }
           }
         }
@@ -2268,42 +2291,6 @@
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
         this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
         this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-        var _iteratorNormalCompletion3 = true;
-        var _didIteratorError3 = false;
-        var _iteratorError3 = undefined;
-
-        try {
-          for (var _iterator3 = this.passes[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-            var pass = _step3.value;
-            pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-          }
-        } catch (err) {
-          _didIteratorError3 = true;
-          _iteratorError3 = err;
-        } finally {
-          try {
-            if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
-              _iterator3.return();
-            }
-          } finally {
-            if (_didIteratorError3) {
-              throw _iteratorError3;
-            }
-          }
-        }
-      }
-    }, {
-      key: "reset",
-      value: function reset() {
-        var renderTarget = this.createBuffer(this.inputBuffer.depthBuffer, this.inputBuffer.stencilBuffer);
-        this.dispose();
-        this.inputBuffer = renderTarget;
-        this.outputBuffer = renderTarget.clone();
-        this.copyPass = new ShaderPass(new CopyMaterial());
-      }
-    }, {
-      key: "dispose",
-      value: function dispose() {
         var _iteratorNormalCompletion4 = true;
         var _didIteratorError4 = false;
         var _iteratorError4 = undefined;
@@ -2311,7 +2298,7 @@
         try {
           for (var _iterator4 = this.passes[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
             var pass = _step4.value;
-            pass.dispose();
+            pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
           }
         } catch (err) {
           _didIteratorError4 = true;
@@ -2327,6 +2314,43 @@
             }
           }
         }
+      }
+    }, {
+      key: "reset",
+      value: function reset() {
+        var renderTarget = this.createBuffer(this.inputBuffer.depthBuffer, this.inputBuffer.stencilBuffer);
+        this.dispose();
+        this.inputBuffer = renderTarget;
+        this.outputBuffer = renderTarget.clone();
+        this.depthTexture = null;
+        this.copyPass = new ShaderPass(new CopyMaterial());
+      }
+    }, {
+      key: "dispose",
+      value: function dispose() {
+        var _iteratorNormalCompletion5 = true;
+        var _didIteratorError5 = false;
+        var _iteratorError5 = undefined;
+
+        try {
+          for (var _iterator5 = this.passes[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+            var pass = _step5.value;
+            pass.dispose();
+          }
+        } catch (err) {
+          _didIteratorError5 = true;
+          _iteratorError5 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+              _iterator5.return();
+            }
+          } finally {
+            if (_didIteratorError5) {
+              throw _iteratorError5;
+            }
+          }
+        }
 
         this.passes = [];
 
@@ -2338,6 +2362,10 @@
         if (this.outputBuffer !== null) {
           this.outputBuffer.dispose();
           this.outputBuffer = null;
+        }
+
+        if (this.depthTexture !== null) {
+          this.depthTexture.dispose();
         }
 
         this.copyPass.dispose();
