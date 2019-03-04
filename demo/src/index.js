@@ -75,7 +75,7 @@ function onChange(event) {
 	const demo = event.demo;
 
 	// Make sure that the main renderer is being used and update it just in case.
-	const size = composer.renderer.getSize(new Vector2());
+	const size = composer.getRenderer().getSize(new Vector2());
 	renderer.setSize(size.width, size.height);
 	composer.replaceRenderer(renderer);
 	composer.reset();
