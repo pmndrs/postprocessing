@@ -2,7 +2,7 @@ import { Color } from "three";
 import { Pass } from "./Pass.js";
 
 /**
- * Used for saving the original clear color of the renderer.
+ * Used to save the original clear color of the renderer.
  *
  * @type {Color}
  * @private
