@@ -678,28 +678,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/effectcomposer.js~effectcomposer#copypass",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-copyPass",
-    "src/core/EffectComposer.js~EffectComposer#copyPass",
-    "member"
-  ],
-  [
     "src/core/effectcomposer.js~effectcomposer#createbuffer",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createBuffer",
     "src/core/EffectComposer.js~EffectComposer#createBuffer",
     "method"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#createdepthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createDepthTexture",
-    "src/core/EffectComposer.js~EffectComposer#createDepthTexture",
-    "method"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#depthtexture",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-depthTexture",
-    "src/core/EffectComposer.js~EffectComposer#depthTexture",
-    "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#dispose",
@@ -714,24 +696,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/core/effectcomposer.js~effectcomposer#inputbuffer",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-inputBuffer",
-    "src/core/EffectComposer.js~EffectComposer#inputBuffer",
-    "member"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#outputbuffer",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-outputBuffer",
-    "src/core/EffectComposer.js~EffectComposer#outputBuffer",
-    "member"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#passes",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-passes",
-    "src/core/EffectComposer.js~EffectComposer#passes",
-    "member"
-  ],
-  [
     "src/core/effectcomposer.js~effectcomposer#removepass",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-removePass",
     "src/core/EffectComposer.js~EffectComposer#removePass",
@@ -742,12 +706,6 @@ window.esdocSearchIndex = [
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-render",
     "src/core/EffectComposer.js~EffectComposer#render",
     "method"
-  ],
-  [
-    "src/core/effectcomposer.js~effectcomposer#renderer",
-    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-renderer",
-    "src/core/EffectComposer.js~EffectComposer#renderer",
-    "member"
   ],
   [
     "src/core/effectcomposer.js~effectcomposer#replacerenderer",
@@ -804,12 +762,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/bloomeffect.js~bloomeffect#blurpass",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-blurPass",
-    "src/effects/BloomEffect.js~BloomEffect#blurPass",
-    "member"
-  ],
-  [
     "src/effects/bloomeffect.js~bloomeffect#constructor",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-constructor-constructor",
     "src/effects/BloomEffect.js~BloomEffect#constructor",
@@ -861,24 +813,6 @@ window.esdocSearchIndex = [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
-    "member"
-  ],
-  [
-    "src/effects/bloomeffect.js~bloomeffect#luminancepass",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-luminancePass",
-    "src/effects/BloomEffect.js~BloomEffect#luminancePass",
-    "member"
-  ],
-  [
-    "src/effects/bloomeffect.js~bloomeffect#rendertarget",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-renderTarget",
-    "src/effects/BloomEffect.js~BloomEffect#renderTarget",
-    "member"
-  ],
-  [
-    "src/effects/bloomeffect.js~bloomeffect#resolution",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-resolution",
-    "src/effects/BloomEffect.js~BloomEffect#resolution",
     "member"
   ],
   [
@@ -1014,12 +948,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/effect.js~effect#[key]",
-    "class/src/effects/Effect.js~Effect.html#instance-member-[key]",
-    "src/effects/Effect.js~Effect#[key]",
-    "member"
-  ],
-  [
     "src/effects/effect.js~effect#attributes",
     "class/src/effects/Effect.js~Effect.html#instance-member-attributes",
     "src/effects/Effect.js~Effect#attributes",
@@ -1128,12 +1056,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/glitcheffect.js~glitcheffect#breakpoint",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-breakPoint",
-    "src/effects/GlitchEffect.js~GlitchEffect#breakPoint",
-    "member"
-  ],
-  [
     "src/effects/glitcheffect.js~glitcheffect#chromaticaberrationoffset",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-chromaticAberrationOffset",
     "src/effects/GlitchEffect.js~GlitchEffect#chromaticAberrationOffset",
@@ -1149,12 +1071,6 @@ window.esdocSearchIndex = [
     "src/effects/glitcheffect.js~glitcheffect#delay",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-delay",
     "src/effects/GlitchEffect.js~GlitchEffect#delay",
-    "member"
-  ],
-  [
-    "src/effects/glitcheffect.js~glitcheffect#distortion",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-distortion",
-    "src/effects/GlitchEffect.js~GlitchEffect#distortion",
     "member"
   ],
   [
@@ -1182,21 +1098,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/glitcheffect.js~glitcheffect#perturbationmap",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-perturbationMap",
-    "src/effects/GlitchEffect.js~GlitchEffect#perturbationMap",
-    "member"
-  ],
-  [
     "src/effects/glitcheffect.js~glitcheffect#ratio",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-ratio",
     "src/effects/GlitchEffect.js~GlitchEffect#ratio",
-    "member"
-  ],
-  [
-    "src/effects/glitcheffect.js~glitcheffect#seed",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-seed",
-    "src/effects/GlitchEffect.js~GlitchEffect#seed",
     "member"
   ],
   [
@@ -1209,12 +1113,6 @@ window.esdocSearchIndex = [
     "src/effects/glitcheffect.js~glitcheffect#strength",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-strength",
     "src/effects/GlitchEffect.js~GlitchEffect#strength",
-    "member"
-  ],
-  [
-    "src/effects/glitcheffect.js~glitcheffect#time",
-    "class/src/effects/GlitchEffect.js~GlitchEffect.html#instance-member-time",
-    "src/effects/GlitchEffect.js~GlitchEffect#time",
     "member"
   ],
   [
@@ -1242,34 +1140,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/godrayseffect.js~godrayseffect#blurpass",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-blurPass",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#blurPass",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#camera",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-camera",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#camera",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#clearpass",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-clearPass",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#clearPass",
-    "member"
-  ],
-  [
     "src/effects/godrayseffect.js~godrayseffect#constructor",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-constructor-constructor",
     "src/effects/GodRaysEffect.js~GodRaysEffect#constructor",
     "method"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#depthmaskpass",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-depthMaskPass",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#depthMaskPass",
-    "member"
   ],
   [
     "src/effects/godrayseffect.js~godrayseffect#dithering",
@@ -1296,12 +1170,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/godrayseffect.js~godrayseffect#godrayspass",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-godRaysPass",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#godRaysPass",
-    "member"
-  ],
-  [
     "src/effects/godrayseffect.js~godrayseffect#initialize",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-initialize",
     "src/effects/GodRaysEffect.js~GodRaysEffect#initialize",
@@ -1320,48 +1188,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/godrayseffect.js~godrayseffect#lightscene",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-lightScene",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#lightScene",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#lightsource",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-lightSource",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#lightSource",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#renderpasslight",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderPassLight",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderPassLight",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#rendertargetlight",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetLight",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderTargetLight",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#rendertargetx",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetX",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderTargetX",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#rendertargety",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-renderTargetY",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#renderTargetY",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#resolution",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-resolution",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#resolution",
-    "member"
-  ],
-  [
     "src/effects/godrayseffect.js~godrayseffect#samples",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
@@ -1371,12 +1197,6 @@ window.esdocSearchIndex = [
     "src/effects/godrayseffect.js~godrayseffect#samples",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
-    "member"
-  ],
-  [
-    "src/effects/godrayseffect.js~godrayseffect#screenposition",
-    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-screenPosition",
-    "src/effects/GodRaysEffect.js~GodRaysEffect#screenPosition",
     "member"
   ],
   [
@@ -1432,24 +1252,6 @@ window.esdocSearchIndex = [
     "class/src/effects/GridEffect.js~GridEffect.html#instance-method-getScale",
     "src/effects/GridEffect.js~GridEffect#getScale",
     "method"
-  ],
-  [
-    "src/effects/grideffect.js~grideffect#linewidth",
-    "class/src/effects/GridEffect.js~GridEffect.html#instance-member-lineWidth",
-    "src/effects/GridEffect.js~GridEffect#lineWidth",
-    "member"
-  ],
-  [
-    "src/effects/grideffect.js~grideffect#resolution",
-    "class/src/effects/GridEffect.js~GridEffect.html#instance-member-resolution",
-    "src/effects/GridEffect.js~GridEffect#resolution",
-    "member"
-  ],
-  [
-    "src/effects/grideffect.js~grideffect#scale",
-    "class/src/effects/GridEffect.js~GridEffect.html#instance-member-scale",
-    "src/effects/GridEffect.js~GridEffect#scale",
-    "member"
   ],
   [
     "src/effects/grideffect.js~grideffect#setlinewidth",
@@ -1530,30 +1332,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#blurpass",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-blurPass",
-    "src/effects/OutlineEffect.js~OutlineEffect#blurPass",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#camera",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-camera",
-    "src/effects/OutlineEffect.js~OutlineEffect#camera",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#clear",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-clear",
-    "src/effects/OutlineEffect.js~OutlineEffect#clear",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#clearpass",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-clearPass",
-    "src/effects/OutlineEffect.js~OutlineEffect#clearPass",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#clearselection",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-clearSelection",
     "src/effects/OutlineEffect.js~OutlineEffect#clearSelection",
@@ -1564,12 +1342,6 @@ window.esdocSearchIndex = [
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-constructor-constructor",
     "src/effects/OutlineEffect.js~OutlineEffect#constructor",
     "method"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#depthpass",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-depthPass",
-    "src/effects/OutlineEffect.js~OutlineEffect#depthPass",
-    "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#deselectobject",
@@ -1614,51 +1386,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#maskpass",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-maskPass",
-    "src/effects/OutlineEffect.js~OutlineEffect#maskPass",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#outlineedgespass",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-outlineEdgesPass",
-    "src/effects/OutlineEffect.js~OutlineEffect#outlineEdgesPass",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#pulsespeed",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-pulseSpeed",
     "src/effects/OutlineEffect.js~OutlineEffect#pulseSpeed",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#rendertargetblurrededges",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetBlurredEdges",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderTargetBlurredEdges",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#rendertargetedges",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetEdges",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderTargetEdges",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#rendertargetmask",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-renderTargetMask",
-    "src/effects/OutlineEffect.js~OutlineEffect#renderTargetMask",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#resolution",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-resolution",
-    "src/effects/OutlineEffect.js~OutlineEffect#resolution",
-    "member"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#scene",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-scene",
-    "src/effects/OutlineEffect.js~OutlineEffect#scene",
     "member"
   ],
   [
@@ -1666,12 +1396,6 @@ window.esdocSearchIndex = [
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-selectObject",
     "src/effects/OutlineEffect.js~OutlineEffect#selectObject",
     "method"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#selection",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-selection",
-    "src/effects/OutlineEffect.js~OutlineEffect#selection",
-    "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#selectionlayer",
@@ -1698,22 +1422,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#setselectionvisible",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-setSelectionVisible",
-    "src/effects/OutlineEffect.js~OutlineEffect#setSelectionVisible",
-    "method"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#setsize",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-setSize",
     "src/effects/OutlineEffect.js~OutlineEffect#setSize",
     "method"
-  ],
-  [
-    "src/effects/outlineeffect.js~outlineeffect#time",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-time",
-    "src/effects/OutlineEffect.js~OutlineEffect#time",
-    "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#update",
@@ -1756,18 +1468,6 @@ window.esdocSearchIndex = [
     "class/src/effects/PixelationEffect.js~PixelationEffect.html#instance-method-getGranularity",
     "src/effects/PixelationEffect.js~PixelationEffect#getGranularity",
     "method"
-  ],
-  [
-    "src/effects/pixelationeffect.js~pixelationeffect#granularity",
-    "class/src/effects/PixelationEffect.js~PixelationEffect.html#instance-member-granularity",
-    "src/effects/PixelationEffect.js~PixelationEffect#granularity",
-    "member"
-  ],
-  [
-    "src/effects/pixelationeffect.js~pixelationeffect#resolution",
-    "class/src/effects/PixelationEffect.js~PixelationEffect.html#instance-member-resolution",
-    "src/effects/PixelationEffect.js~PixelationEffect#resolution",
-    "member"
   ],
   [
     "src/effects/pixelationeffect.js~pixelationeffect#setgranularity",
@@ -1860,34 +1560,10 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/smaaeffect.js~smaaeffect#clearpass",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-clearPass",
-    "src/effects/SMAAEffect.js~SMAAEffect#clearPass",
-    "member"
-  ],
-  [
-    "src/effects/smaaeffect.js~smaaeffect#coloredgespass",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-colorEdgesPass",
-    "src/effects/SMAAEffect.js~SMAAEffect#colorEdgesPass",
-    "member"
-  ],
-  [
     "src/effects/smaaeffect.js~smaaeffect#constructor",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-constructor-constructor",
     "src/effects/SMAAEffect.js~SMAAEffect#constructor",
     "method"
-  ],
-  [
-    "src/effects/smaaeffect.js~smaaeffect#rendertargetcoloredges",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-renderTargetColorEdges",
-    "src/effects/SMAAEffect.js~SMAAEffect#renderTargetColorEdges",
-    "member"
-  ],
-  [
-    "src/effects/smaaeffect.js~smaaeffect#rendertargetweights",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-renderTargetWeights",
-    "src/effects/SMAAEffect.js~SMAAEffect#renderTargetWeights",
-    "member"
   ],
   [
     "src/effects/smaaeffect.js~smaaeffect#setedgedetectionthreshold",
@@ -1914,12 +1590,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/smaaeffect.js~smaaeffect#weightspass",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-weightsPass",
-    "src/effects/SMAAEffect.js~SMAAEffect#weightsPass",
-    "member"
-  ],
-  [
     "src/effects/smaaeffect.js~smaaeffect.areaimagedataurl",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#static-get-areaImageDataURL",
     "src/effects/SMAAEffect.js~SMAAEffect.areaImageDataURL",
@@ -1938,22 +1608,10 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/ssaoeffect.js~ssaoeffect#camera",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-camera",
-    "src/effects/SSAOEffect.js~SSAOEffect#camera",
-    "member"
-  ],
-  [
     "src/effects/ssaoeffect.js~ssaoeffect#constructor",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-constructor-constructor",
     "src/effects/SSAOEffect.js~SSAOEffect#constructor",
     "method"
-  ],
-  [
-    "src/effects/ssaoeffect.js~ssaoeffect#r",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-r",
-    "src/effects/SSAOEffect.js~SSAOEffect#r",
-    "member"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#radius",
@@ -1965,12 +1623,6 @@ window.esdocSearchIndex = [
     "src/effects/ssaoeffect.js~ssaoeffect#radius",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-radius",
     "src/effects/SSAOEffect.js~SSAOEffect#radius",
-    "member"
-  ],
-  [
-    "src/effects/ssaoeffect.js~ssaoeffect#resolution",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-resolution",
-    "src/effects/SSAOEffect.js~SSAOEffect#resolution",
     "member"
   ],
   [
@@ -2016,18 +1668,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/ssaoeffect.js~ssaoeffect#updateanglestep",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-updateAngleStep",
-    "src/effects/SSAOEffect.js~SSAOEffect#updateAngleStep",
-    "method"
-  ],
-  [
-    "src/effects/ssaoeffect.js~ssaoeffect#updateradiusstep",
-    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-updateRadiusStep",
-    "src/effects/SSAOEffect.js~SSAOEffect#updateRadiusStep",
-    "method"
-  ],
-  [
     "src/effects/scanlineeffect.js",
     "file/src/effects/ScanlineEffect.js.html",
     "src/effects/ScanlineEffect.js",
@@ -2040,22 +1680,10 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/scanlineeffect.js~scanlineeffect#density",
-    "class/src/effects/ScanlineEffect.js~ScanlineEffect.html#instance-member-density",
-    "src/effects/ScanlineEffect.js~ScanlineEffect#density",
-    "member"
-  ],
-  [
     "src/effects/scanlineeffect.js~scanlineeffect#getdensity",
     "class/src/effects/ScanlineEffect.js~ScanlineEffect.html#instance-method-getDensity",
     "src/effects/ScanlineEffect.js~ScanlineEffect#getDensity",
     "method"
-  ],
-  [
-    "src/effects/scanlineeffect.js~scanlineeffect#resolution",
-    "class/src/effects/ScanlineEffect.js~ScanlineEffect.html#instance-member-resolution",
-    "src/effects/ScanlineEffect.js~ScanlineEffect#resolution",
-    "member"
   ],
   [
     "src/effects/scanlineeffect.js~scanlineeffect#setdensity",
@@ -2088,12 +1716,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/shockwaveeffect.js~shockwaveeffect#active",
-    "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html#instance-member-active",
-    "src/effects/ShockWaveEffect.js~ShockWaveEffect#active",
-    "member"
-  ],
-  [
     "src/effects/shockwaveeffect.js~shockwaveeffect#camera",
     "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html#instance-member-camera",
     "src/effects/ShockWaveEffect.js~ShockWaveEffect#camera",
@@ -2118,21 +1740,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/shockwaveeffect.js~shockwaveeffect#screenposition",
-    "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html#instance-member-screenPosition",
-    "src/effects/ShockWaveEffect.js~ShockWaveEffect#screenPosition",
-    "member"
-  ],
-  [
     "src/effects/shockwaveeffect.js~shockwaveeffect#speed",
     "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html#instance-member-speed",
     "src/effects/ShockWaveEffect.js~ShockWaveEffect#speed",
-    "member"
-  ],
-  [
-    "src/effects/shockwaveeffect.js~shockwaveeffect#time",
-    "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html#instance-member-time",
-    "src/effects/ShockWaveEffect.js~ShockWaveEffect#time",
     "member"
   ],
   [
@@ -2202,12 +1812,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#adaptiveluminancepass",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-adaptiveLuminancePass",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#adaptiveLuminancePass",
-    "member"
-  ],
-  [
     "src/effects/tonemappingeffect.js~tonemappingeffect#constructor",
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-constructor-constructor",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#constructor",
@@ -2232,30 +1836,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#luminancepass",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-luminancePass",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#luminancePass",
-    "member"
-  ],
-  [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#rendertargetadapted",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-renderTargetAdapted",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#renderTargetAdapted",
-    "member"
-  ],
-  [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#rendertargetluminance",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-renderTargetLuminance",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#renderTargetLuminance",
-    "member"
-  ],
-  [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#rendertargetprevious",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-renderTargetPrevious",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#renderTargetPrevious",
-    "member"
-  ],
-  [
     "src/effects/tonemappingeffect.js~tonemappingeffect#resolution",
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-get-resolution",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#resolution",
@@ -2265,12 +1845,6 @@ window.esdocSearchIndex = [
     "src/effects/tonemappingeffect.js~tonemappingeffect#resolution",
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-set-resolution",
     "src/effects/ToneMappingEffect.js~ToneMappingEffect#resolution",
-    "member"
-  ],
-  [
-    "src/effects/tonemappingeffect.js~tonemappingeffect#savepass",
-    "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html#instance-member-savePass",
-    "src/effects/ToneMappingEffect.js~ToneMappingEffect#savePass",
     "member"
   ],
   [
@@ -2712,18 +2286,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/blurpass.js~blurpass#convolutionmaterial",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-convolutionMaterial",
-    "src/passes/BlurPass.js~BlurPass#convolutionMaterial",
-    "member"
-  ],
-  [
-    "src/passes/blurpass.js~blurpass#ditheredconvolutionmaterial",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-ditheredConvolutionMaterial",
-    "src/passes/BlurPass.js~BlurPass#ditheredConvolutionMaterial",
-    "member"
-  ],
-  [
     "src/passes/blurpass.js~blurpass#dithering",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-member-dithering",
     "src/passes/BlurPass.js~BlurPass#dithering",
@@ -2764,30 +2326,6 @@ window.esdocSearchIndex = [
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-render",
     "src/passes/BlurPass.js~BlurPass#render",
     "method"
-  ],
-  [
-    "src/passes/blurpass.js~blurpass#rendertargetx",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-renderTargetX",
-    "src/passes/BlurPass.js~BlurPass#renderTargetX",
-    "member"
-  ],
-  [
-    "src/passes/blurpass.js~blurpass#rendertargety",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-renderTargetY",
-    "src/passes/BlurPass.js~BlurPass#renderTargetY",
-    "member"
-  ],
-  [
-    "src/passes/blurpass.js~blurpass#resolution",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-resolution",
-    "src/passes/BlurPass.js~BlurPass#resolution",
-    "member"
-  ],
-  [
-    "src/passes/blurpass.js~blurpass#resolutionscale",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-resolutionScale",
-    "src/passes/BlurPass.js~BlurPass#resolutionScale",
-    "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#setresolutionscale",
@@ -2916,27 +2454,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/depthpass.js~depthpass#renderpass",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-renderPass",
-    "src/passes/DepthPass.js~DepthPass#renderPass",
-    "member"
-  ],
-  [
     "src/passes/depthpass.js~depthpass#rendertarget",
     "class/src/passes/DepthPass.js~DepthPass.html#instance-member-renderTarget",
     "src/passes/DepthPass.js~DepthPass#renderTarget",
-    "member"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#resolution",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolution",
-    "src/passes/DepthPass.js~DepthPass#resolution",
-    "member"
-  ],
-  [
-    "src/passes/depthpass.js~depthpass#resolutionscale",
-    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolutionScale",
-    "src/passes/DepthPass.js~DepthPass#resolutionScale",
     "member"
   ],
   [
@@ -2964,12 +2484,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/effectpass.js~effectpass#creatematerial",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-method-createMaterial",
-    "src/passes/EffectPass.js~EffectPass#createMaterial",
-    "method"
-  ],
-  [
     "src/passes/effectpass.js~effectpass#dispose",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-dispose",
     "src/passes/EffectPass.js~EffectPass#dispose",
@@ -2988,12 +2502,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/effectpass.js~effectpass#effects",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-effects",
-    "src/passes/EffectPass.js~EffectPass#effects",
-    "member"
-  ],
-  [
     "src/passes/effectpass.js~effectpass#getdepthtexture",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-getDepthTexture",
     "src/passes/EffectPass.js~EffectPass#getDepthTexture",
@@ -3004,12 +2512,6 @@ window.esdocSearchIndex = [
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-initialize",
     "src/passes/EffectPass.js~EffectPass#initialize",
     "method"
-  ],
-  [
-    "src/passes/effectpass.js~effectpass#maincamera",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-mainCamera",
-    "src/passes/EffectPass.js~EffectPass#mainCamera",
-    "member"
   ],
   [
     "src/passes/effectpass.js~effectpass#maxtime",
@@ -3033,12 +2535,6 @@ window.esdocSearchIndex = [
     "src/passes/effectpass.js~effectpass#needsswap",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-member-needsSwap",
     "src/passes/EffectPass.js~EffectPass#needsSwap",
-    "member"
-  ],
-  [
-    "src/passes/effectpass.js~effectpass#quantize",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-quantize",
-    "src/passes/EffectPass.js~EffectPass#quantize",
     "member"
   ],
   [
@@ -3066,24 +2562,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/effectpass.js~effectpass#skiprendering",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-skipRendering",
-    "src/passes/EffectPass.js~EffectPass#skipRendering",
-    "member"
-  ],
-  [
-    "src/passes/effectpass.js~effectpass#uniforms",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-uniforms",
-    "src/passes/EffectPass.js~EffectPass#uniforms",
-    "member"
-  ],
-  [
-    "src/passes/effectpass.js~effectpass#varyings",
-    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-varyings",
-    "src/passes/EffectPass.js~EffectPass#varyings",
-    "member"
-  ],
-  [
     "src/passes/maskpass.js",
     "file/src/passes/MaskPass.js.html",
     "src/passes/MaskPass.js",
@@ -3099,12 +2577,6 @@ window.esdocSearchIndex = [
     "src/passes/maskpass.js~maskpass#clear",
     "class/src/passes/MaskPass.js~MaskPass.html#instance-set-clear",
     "src/passes/MaskPass.js~MaskPass#clear",
-    "member"
-  ],
-  [
-    "src/passes/maskpass.js~maskpass#clearpass",
-    "class/src/passes/MaskPass.js~MaskPass.html#instance-member-clearPass",
-    "src/passes/MaskPass.js~MaskPass#clearPass",
     "member"
   ],
   [
@@ -3162,27 +2634,9 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/passes/normalpass.js~normalpass#renderpass",
-    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-renderPass",
-    "src/passes/NormalPass.js~NormalPass#renderPass",
-    "member"
-  ],
-  [
     "src/passes/normalpass.js~normalpass#rendertarget",
     "class/src/passes/NormalPass.js~NormalPass.html#instance-member-renderTarget",
     "src/passes/NormalPass.js~NormalPass#renderTarget",
-    "member"
-  ],
-  [
-    "src/passes/normalpass.js~normalpass#resolution",
-    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolution",
-    "src/passes/NormalPass.js~NormalPass#resolution",
-    "member"
-  ],
-  [
-    "src/passes/normalpass.js~normalpass#resolutionscale",
-    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolutionScale",
-    "src/passes/NormalPass.js~NormalPass#resolutionScale",
     "member"
   ],
   [
@@ -3202,12 +2656,6 @@ window.esdocSearchIndex = [
     "file/src/passes/Pass.js.html",
     "src/passes/Pass.js",
     "file"
-  ],
-  [
-    "src/passes/pass.js~pass#[key]",
-    "class/src/passes/Pass.js~Pass.html#instance-member-[key]",
-    "src/passes/Pass.js~Pass#[key]",
-    "member"
   ],
   [
     "src/passes/pass.js~pass#camera",
@@ -3270,12 +2718,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/pass.js~pass#quad",
-    "class/src/passes/Pass.js~Pass.html#instance-member-quad",
-    "src/passes/Pass.js~Pass#quad",
-    "member"
-  ],
-  [
     "src/passes/pass.js~pass#render",
     "class/src/passes/Pass.js~Pass.html#instance-method-render",
     "src/passes/Pass.js~Pass#render",
@@ -3330,22 +2772,10 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/renderpass.js~renderpass#clearpass",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-clearPass",
-    "src/passes/RenderPass.js~RenderPass#clearPass",
-    "member"
-  ],
-  [
     "src/passes/renderpass.js~renderpass#constructor",
     "class/src/passes/RenderPass.js~RenderPass.html#instance-constructor-constructor",
     "src/passes/RenderPass.js~RenderPass#constructor",
     "method"
-  ],
-  [
-    "src/passes/renderpass.js~renderpass#depthtexture",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-depthTexture",
-    "src/passes/RenderPass.js~RenderPass#depthTexture",
-    "member"
   ],
   [
     "src/passes/renderpass.js~renderpass#getclearpass",
@@ -3448,12 +2878,6 @@ window.esdocSearchIndex = [
     "class/src/passes/ShaderPass.js~ShaderPass.html#instance-method-setInput",
     "src/passes/ShaderPass.js~ShaderPass#setInput",
     "method"
-  ],
-  [
-    "src/passes/shaderpass.js~shaderpass#uniform",
-    "class/src/passes/ShaderPass.js~ShaderPass.html#instance-member-uniform",
-    "src/passes/ShaderPass.js~ShaderPass#uniform",
-    "member"
   ],
   [
     "src/passes/index.js",
