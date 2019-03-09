@@ -203,8 +203,8 @@ export class Effect {
 
 			if(this[key] !== null && typeof this[key].dispose === "function") {
 
+				/** @ignore */
 				this[key].dispose();
-				this[key] = null;
 
 			}
 
