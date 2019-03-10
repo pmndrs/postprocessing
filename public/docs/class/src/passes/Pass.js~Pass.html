@@ -256,8 +256,7 @@ depth test and depth write in their respective shader materials.</p>
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
-texture for this pass.</p>
+        <div data-ice="description"><p>Only relevant for subclassing.</p>
 </div>
       </div>
     </td>
@@ -286,8 +285,7 @@ texture for this pass.</p>
       <div>
         
         
-        <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
-buffers after this pass has finished rendering.</p>
+        <div data-ice="description"><p>Only relevant for subclassing.</p>
 </div>
       </div>
     </td>
@@ -738,7 +736,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber101">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber103">source</a></span></span>
     </span>
   </h3>
 
@@ -826,14 +824,15 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber87">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
+  <div data-ice="description"><p>Only relevant for subclassing. </p>
+<p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should prepare a depth
 texture for this pass.</p>
 <p>Set this to <code>true</code> if this pass relies on depth information from a
 preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a></span>.</p>
@@ -880,11 +879,11 @@ preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">RenderP
   
   
   
-  <div data-ice="description"><p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
+  <div data-ice="description"><p>Only relevant for subclassing. </p>
+<p>Indicates whether the <span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span> should swap the frame
 buffers after this pass has finished rendering.</p>
 <p>Set this to <code>false</code> if this pass doesn&apos;t render to the output buffer or
 the screen. Otherwise, the contents of the input buffer will be lost.</p>
-<p>This flag must not be changed at runtime.</p>
 </div>
 
   
@@ -921,7 +920,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber93">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber95">source</a></span></span>
     </span>
   </h3>
 
@@ -1058,7 +1057,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber245">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -1112,7 +1111,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber157">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber159">source</a></span></span>
     </span>
   </h3>
 
@@ -1169,7 +1168,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber113">source</a></span></span>
     </span>
   </h3>
 
@@ -1226,7 +1225,7 @@ that you don&apos;t need this pass anymore.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -1308,7 +1307,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber189">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber191">source</a></span></span>
     </span>
   </h3>
 
@@ -1410,7 +1409,7 @@ queue, but not before its size has been set.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber173">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber175">source</a></span></span>
     </span>
   </h3>
 
@@ -1481,7 +1480,7 @@ of a preceding <span><a href="class/src/passes/RenderPass.js~RenderPass.html">Re
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber209">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber211">source</a></span></span>
     </span>
   </h3>
 
@@ -1562,7 +1561,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/Pass.js.html#lineNumber129">source</a></span></span>
     </span>
   </h3>
 

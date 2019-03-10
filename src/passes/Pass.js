@@ -59,13 +59,13 @@ export class Pass {
 		this.quad = null;
 
 		/**
+		 * Only relevant for subclassing. 
+		 *
 		 * Indicates whether the {@link EffectComposer} should swap the frame
 		 * buffers after this pass has finished rendering.
 		 *
 		 * Set this to `false` if this pass doesn't render to the output buffer or
 		 * the screen. Otherwise, the contents of the input buffer will be lost.
-		 *
-		 * This flag must not be changed at runtime.
 		 *
 		 * @type {Boolean}
 		 */
@@ -73,6 +73,8 @@ export class Pass {
 		this.needsSwap = true;
 
 		/**
+		 * Only relevant for subclassing. 
+		 *
 		 * Indicates whether the {@link EffectComposer} should prepare a depth
 		 * texture for this pass.
 		 *
