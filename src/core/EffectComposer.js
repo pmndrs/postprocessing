@@ -114,7 +114,7 @@ export class EffectComposer {
 	 * @return {WebGLRenderer} The renderer.
 	 */
 
-	getRenderer(renderer) {
+	getRenderer() {
 
 		return this.renderer;
 
