@@ -57,6 +57,8 @@ export class ClearPass extends Pass {
 		/**
 		 * An override clear color.
 		 *
+		 * The default value is null.
+		 *
 		 * @type {Color}
 		 */
 
@@ -65,10 +67,12 @@ export class ClearPass extends Pass {
 		/**
 		 * An override clear alpha.
 		 *
+		 * The default value is -1.
+		 *
 		 * @type {Number}
 		 */
 
-		this.overrideClearAlpha = 0.0;
+		this.overrideClearAlpha = -1.0;
 
 	}
 
@@ -85,23 +89,34 @@ export class ClearPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const overrideClearColor = this.overrideClearColor;
+		const overrideClearAlpha = this.overrideClearAlpha;
+		const clearAlpha = renderer.getClearAlpha();
 
-		let clearAlpha;
+		const hasOverrideClearColor = (overrideClearColor !== null);
+		const hasOverrideClearAlpha = (overrideClearAlpha >= 0.0);
 
-		if(overrideClearColor !== null) {
+		if(hasOverrideClearColor) {
 
 			color.copy(renderer.getClearColor());
-			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(overrideClearColor, this.overrideClearAlpha);
+			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ?
+				overrideClearAlpha : clearAlpha);
+
+		} else if(hasOverrideClearAlpha) {
+
+			renderer.setClearAlpha(overrideClearAlpha);
 
 		}
 
 		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
 		renderer.clear(this.color, this.depth, this.stencil);
 
-		if(overrideClearColor !== null) {
+		if(hasOverrideClearColor) {
 
 			renderer.setClearColor(color, clearAlpha);
+
+		} else if(hasOverrideClearAlpha) {
+
+			renderer.setClearAlpha(clearAlpha);
 
 		}
 
