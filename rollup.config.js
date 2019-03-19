@@ -22,35 +22,39 @@ const lib = {
 	esm: {
 
 		input: "src/index.js",
-		output: {
+		external: external,
+		plugins: [resolve(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})],
+		output: [{
 			file: pkg.module,
 			format: "esm",
 			banner: banner,
 			globals: globals
-		},
-
-		external: external,
-		plugins: [resolve(), string({
-			include: ["**/*.frag", "**/*.vert"]
-		})]
+		}, {
+			file: pkg.main,
+			format: "esm",
+			globals: globals
+		}, {
+			file: pkg.main.replace(".js", ".min.js"),
+			format: "esm",
+			globals: globals
+		}]
 
 	},
 
 	umd: {
 
-		input: "src/index.js",
+		input: pkg.main,
+		external: external,
+		plugins: production ? [babel()] : [],
 		output: {
 			file: pkg.main,
 			format: "umd",
 			name: pkg.name.replace(/-/g, "").toUpperCase(),
 			banner: banner,
 			globals: globals
-		},
-
-		external: external,
-		plugins: [resolve(), string({
-			include: ["**/*.frag", "**/*.vert"]
-		})].concat(production ? [babel()] : [])
+		}
 
 	}
 
@@ -58,57 +62,68 @@ const lib = {
 
 const demo = {
 
-	iife: {
+	esm: {
 
 		input: "demo/src/index.js",
+		external: external,
+		plugins: [resolve(), commonjs(), string({
+			include: ["**/*.frag", "**/*.vert"]
+		})],
+		output: [{
+				file: "public/demo/index.js",
+				format: "esm",
+				globals: globals
+			}, {
+				file: "public/demo/index.min.js",
+				format: "esm",
+				globals: globals
+			}
+		]
+
+	},
+
+	iife: {
+
+		input: "public/demo/index.js",
+		external: external,
+		plugins: production ? [babel()] : [],
 		output: {
 			file: "public/demo/index.js",
 			format: "iife",
 			globals: globals
-		},
-
-		external: external,
-		plugins: [resolve(), commonjs(), string({
-			include: ["**/*.frag", "**/*.vert"]
-		})].concat(production ? [babel()] : [])
+		}
 
 	}
 
 };
 
-export default [lib.esm, lib.umd, demo.iife].concat(production ? [{
+export default [lib.esm, lib.umd, demo.esm, demo.iife].concat(production ? [{
 
-		input: lib.umd.input,
+		input: lib.esm.output[2].file,
+		external: external,
+		plugins: [babel(), minify({
+			bannerNewLine: true,
+			comments: false
+		})],
 		output: {
-			file: lib.umd.output.file.replace(".js", ".min.js"),
+			file: lib.esm.output[2].file,
 			format: "umd",
 			name: pkg.name.replace(/-/g, "").toUpperCase(),
 			banner: banner,
 			globals: globals
-		},
-
-		external: external,
-		plugins: [resolve(), string({
-			include: ["**/*.frag", "**/*.vert"]
-		}), babel(), minify({
-			bannerNewLine: true,
-			comments: false
-		})]
+		}
 
 	}, {
 
-		input: demo.iife.input,
+		input: demo.esm.output[1].file,
+		external: external,
+		plugins: [babel(), minify({
+			comments: false
+		})],
 		output: {
-			file: demo.iife.output.file.replace(".js", ".min.js"),
+			file: demo.esm.output[1].file,
 			format: "iife",
 			globals: globals
-		},
-
-		external: external,
-		plugins: [resolve(), commonjs(), string({
-			include: ["**/*.frag", "**/*.vert"]
-		}), babel(), minify({
-			comments: false
-		})]
+		}
 
 }] : []);
