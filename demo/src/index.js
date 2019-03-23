@@ -123,7 +123,7 @@ window.addEventListener("load", function main(event) {
 
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
-	renderer.setClearColor(0x000000);
+	renderer.setClearColor(0x000000, 0.0);
 
 	// Create an effect composer.
 	composer = new EffectComposer(renderer, {

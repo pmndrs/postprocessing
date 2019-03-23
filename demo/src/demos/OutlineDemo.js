@@ -273,7 +273,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		// Fog.
 
 		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
+		renderer.setClearColor(scene.fog.color, 0.0);
 
 		// Sky.
 
@@ -344,6 +344,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		smaaEffect.setEdgeDetectionThreshold(0.05);
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
+			blendFunction: BlendFunction.SCREEN,
 			edgeStrength: 2.5,
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
