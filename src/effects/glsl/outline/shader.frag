@@ -49,6 +49,18 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	#endif
 
-	outputColor = vec4(color, max(max(edge.x, edge.y), visibilityFactor));
+	float alpha = max(max(edge.x, edge.y), visibilityFactor);
+
+	#ifdef ALPHA
+
+		// Alpha blending already accounts for input alpha.
+		outputColor = vec4(color, alpha);
+
+	#else
+
+		// Preserve input alpha.
+		outputColor = vec4(color, max(alpha, inputColor.a));
+
+	#endif
 
 }
