@@ -1320,6 +1320,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#blendmode",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-blendMode",
+    "src/effects/OutlineEffect.js~OutlineEffect#blendMode",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#blur",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",

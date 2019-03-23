@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.0.1 build Mon Mar 04 2019
+ * postprocessing v6.0.2 build Sat Mar 23 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1017,13 +1017,13 @@ class Pass {
 		this.quad = null;
 
 		/**
+		 * Only relevant for subclassing.
+		 *
 		 * Indicates whether the {@link EffectComposer} should swap the frame
 		 * buffers after this pass has finished rendering.
 		 *
 		 * Set this to `false` if this pass doesn't render to the output buffer or
 		 * the screen. Otherwise, the contents of the input buffer will be lost.
-		 *
-		 * This flag must not be changed at runtime.
 		 *
 		 * @type {Boolean}
 		 */
@@ -1031,6 +1031,8 @@ class Pass {
 		this.needsSwap = true;
 
 		/**
+		 * Only relevant for subclassing.
+		 *
 		 * Indicates whether the {@link EffectComposer} should prepare a depth
 		 * texture for this pass.
 		 *
@@ -1214,8 +1216,8 @@ class Pass {
 
 			if(this[key] !== null && typeof this[key].dispose === "function") {
 
+				/** @ignore */
 				this[key].dispose();
-				this[key] = null;
 
 			}
 
@@ -1532,7 +1534,7 @@ class ClearMaskPass extends Pass {
 }
 
 /**
- * Used for saving the original clear color of the renderer.
+ * Stores the original clear color of the renderer.
  *
  * @type {Color}
  * @private
@@ -1587,6 +1589,8 @@ class ClearPass extends Pass {
 		/**
 		 * An override clear color.
 		 *
+		 * The default value is null.
+		 *
 		 * @type {Color}
 		 */
 
@@ -1595,10 +1599,12 @@ class ClearPass extends Pass {
 		/**
 		 * An override clear alpha.
 		 *
+		 * The default value is -1.
+		 *
 		 * @type {Number}
 		 */
 
-		this.overrideClearAlpha = 0.0;
+		this.overrideClearAlpha = -1.0;
 
 	}
 
@@ -1615,23 +1621,34 @@ class ClearPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const overrideClearColor = this.overrideClearColor;
+		const overrideClearAlpha = this.overrideClearAlpha;
+		const clearAlpha = renderer.getClearAlpha();
 
-		let clearAlpha;
+		const hasOverrideClearColor = (overrideClearColor !== null);
+		const hasOverrideClearAlpha = (overrideClearAlpha >= 0.0);
 
-		if(overrideClearColor !== null) {
+		if(hasOverrideClearColor) {
 
 			color.copy(renderer.getClearColor());
-			clearAlpha = renderer.getClearAlpha();
-			renderer.setClearColor(overrideClearColor, this.overrideClearAlpha);
+			renderer.setClearColor(overrideClearColor, hasOverrideClearAlpha ?
+				overrideClearAlpha : clearAlpha);
+
+		} else if(hasOverrideClearAlpha) {
+
+			renderer.setClearAlpha(overrideClearAlpha);
 
 		}
 
 		renderer.setRenderTarget(this.renderToScreen ? null : inputBuffer);
 		renderer.clear(this.color, this.depth, this.stencil);
 
-		if(overrideClearColor !== null) {
+		if(hasOverrideClearColor) {
 
 			renderer.setClearColor(color, clearAlpha);
+
+		} else if(hasOverrideClearAlpha) {
+
+			renderer.setClearAlpha(clearAlpha);
 
 		}
 
@@ -1984,7 +2001,7 @@ const BlendFunction = {
 
 var addBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn min(x + y, 1.0) * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
-var alphaBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn y * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, y.a), x.a);\r\n\r\n}\r\n";
+var alphaBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn y * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\tfloat a = min(y.a, opacity);\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, a), max(x.a, a));\r\n\r\n}\r\n";
 
 var averageBlendFunction = "vec3 blend(const in vec3 x, const in vec3 y, const in float opacity) {\r\n\r\n\treturn (x + y) * 0.5 * opacity + x * (1.0 - opacity);\r\n\r\n}\r\n\r\nvec4 blend(const in vec4 x, const in vec4 y, const in float opacity) {\r\n\r\n\treturn vec4(blend(x.rgb, y.rgb, opacity), y.a);\r\n\r\n}\r\n";
 
@@ -2296,8 +2313,8 @@ class Effect {
 
 			if(this[key] !== null && typeof this[key].dispose === "function") {
 
+				/** @ignore */
 				this[key].dispose();
-				this[key] = null;
 
 			}
 
@@ -3548,7 +3565,7 @@ class EffectComposer {
 	 * @return {WebGLRenderer} The renderer.
 	 */
 
-	getRenderer(renderer) {
+	getRenderer() {
 
 		return this.renderer;
 
@@ -5551,7 +5568,7 @@ class NoiseEffect extends Effect {
 
 }
 
-var fragment$m = "uniform sampler2D edgeTexture;\r\nuniform sampler2D maskTexture;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D patternTexture;\r\n\tvarying vec2 vUvPattern;\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec2 edge = texture2D(edgeTexture, uv).rg;\r\n\tvec2 mask = texture2D(maskTexture, uv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\tedge.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\tedge *= (edgeStrength * mask.x * pulse);\r\n\tvec3 color = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;\r\n\r\n\tfloat visibilityFactor = 0.0;\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec4 patternColor = texture2D(patternTexture, vUvPattern);\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tvisibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\t\tvisibilityFactor *= (1.0 - mask.x) * patternColor.a;\r\n\t\tcolor += visibilityFactor * patternColor.rgb;\r\n\r\n\t#endif\r\n\r\n\toutputColor = vec4(color, max(max(edge.x, edge.y), visibilityFactor));\r\n\r\n}\r\n";
+var fragment$m = "uniform sampler2D edgeTexture;\r\nuniform sampler2D maskTexture;\r\n\r\nuniform vec3 visibleEdgeColor;\r\nuniform vec3 hiddenEdgeColor;\r\nuniform float pulse;\r\nuniform float edgeStrength;\r\n\r\n#ifdef USE_PATTERN\r\n\r\n\tuniform sampler2D patternTexture;\r\n\tvarying vec2 vUvPattern;\r\n\r\n#endif\r\n\r\nvoid mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {\r\n\r\n\tvec2 edge = texture2D(edgeTexture, uv).rg;\r\n\tvec2 mask = texture2D(maskTexture, uv).rg;\r\n\r\n\t#ifndef X_RAY\r\n\r\n\t\tedge.y = 0.0;\r\n\r\n\t#endif\r\n\r\n\tedge *= (edgeStrength * mask.x * pulse);\r\n\tvec3 color = edge.x * visibleEdgeColor + edge.y * hiddenEdgeColor;\r\n\r\n\tfloat visibilityFactor = 0.0;\r\n\r\n\t#ifdef USE_PATTERN\r\n\r\n\t\tvec4 patternColor = texture2D(patternTexture, vUvPattern);\r\n\r\n\t\t#ifdef X_RAY\r\n\r\n\t\t\tfloat hiddenFactor = 0.5;\r\n\r\n\t\t#else\r\n\r\n\t\t\tfloat hiddenFactor = 0.0;\r\n\r\n\t\t#endif\r\n\r\n\t\tvisibilityFactor = (1.0 - mask.y > 0.0) ? 1.0 : hiddenFactor;\r\n\t\tvisibilityFactor *= (1.0 - mask.x) * patternColor.a;\r\n\t\tcolor += visibilityFactor * patternColor.rgb;\r\n\r\n\t#endif\r\n\r\n\tfloat alpha = max(max(edge.x, edge.y), visibilityFactor);\r\n\r\n\t#ifdef ALPHA\r\n\r\n\t\t// Alpha blending already accounts for input alpha.\r\n\t\toutputColor = vec4(color, alpha);\r\n\r\n\t#else\r\n\r\n\t\t// Preserve input alpha.\r\n\t\toutputColor = vec4(color, max(alpha, inputColor.a));\r\n\r\n\t#endif\r\n\r\n}\r\n";
 
 var vertex$7 = "uniform float patternScale;\r\n\r\nvarying vec2 vUvPattern;\r\n\r\nvoid mainSupport() {\r\n\r\n\tvUvPattern = uv * vec2(aspect, 1.0) * patternScale;\r\n\r\n}\r\n";
 
@@ -5596,8 +5613,6 @@ class OutlineEffect extends Effect {
 
 		super("OutlineEffect", fragment$m, {
 
-			blendFunction,
-
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
 				["edgeTexture", new Uniform(null)],
@@ -5609,6 +5624,30 @@ class OutlineEffect extends Effect {
 
 		});
 
+		// Intercept blend function changes.
+		this.blendMode = ((defines) => (new Proxy(this.blendMode, {
+
+			set(target, name, value) {
+
+				if(value === BlendFunction.ALPHA) {
+
+					defines.set("ALPHA", "1");
+
+				} else {
+
+					defines.delete("ALPHA");
+
+				}
+
+				target[name] = value;
+
+				return true;
+
+			}
+
+		})))(this.defines);
+
+		this.blendMode.blendFunction = blendFunction;
 		this.setPatternTexture(patternTexture);
 		this.xRay = xRay;
 
@@ -9324,4 +9363,4 @@ class SMAASearchImageData {
 
 }
 
-export { Disposable, Initializable, EffectComposer, Resizable, BlendFunction, BlendMode, BloomEffect, BokehEffect, BrightnessContrastEffect, ColorAverageEffect, ChromaticAberrationEffect, DepthEffect, DotScreenEffect, Effect, EffectAttribute, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GridEffect, HueSaturationEffect, NoiseEffect, OutlineEffect, PixelationEffect, RealisticBokehEffect, ScanlineEffect, ShockWaveEffect, SepiaEffect, SMAAEffect, SSAOEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension, RawImageData, SMAAAreaImageData, SMAASearchImageData, AdaptiveLuminanceMaterial, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthMaskMaterial, EffectMaterial, GodRaysMaterial, KernelSize, LuminanceMaterial, OutlineEdgesMaterial, SMAAWeightsMaterial, BlurPass, ClearPass, ClearMaskPass, DepthPass, EffectPass, MaskPass, NormalPass, Pass, RenderPass, SavePass, ShaderPass };
+export { AdaptiveLuminanceMaterial, BlendFunction, BlendMode, BloomEffect, BlurPass, BokehEffect, BrightnessContrastEffect, ChromaticAberrationEffect, ClearMaskPass, ClearPass, ColorAverageEffect, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthEffect, DepthMaskMaterial, DepthPass, Disposable, DotScreenEffect, Effect, EffectAttribute, EffectComposer, EffectMaterial, EffectPass, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GodRaysMaterial, GridEffect, HueSaturationEffect, Initializable, KernelSize, LuminanceMaterial, MaskPass, NoiseEffect, NormalPass, OutlineEdgesMaterial, OutlineEffect, Pass, PixelationEffect, RawImageData, RealisticBokehEffect, RenderPass, Resizable, SMAAAreaImageData, SMAAEffect, SMAASearchImageData, SMAAWeightsMaterial, SSAOEffect, SavePass, ScanlineEffect, SepiaEffect, ShaderPass, ShockWaveEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension };

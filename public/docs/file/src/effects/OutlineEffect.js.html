@@ -154,8 +154,6 @@ export class OutlineEffect extends Effect {
 
 		super(&quot;OutlineEffect&quot;, fragment, {
 
-			blendFunction,
-
 			uniforms: new Map([
 				[&quot;maskTexture&quot;, new Uniform(null)],
 				[&quot;edgeTexture&quot;, new Uniform(null)],
@@ -167,6 +165,30 @@ export class OutlineEffect extends Effect {
 
 		});
 
+		// Intercept blend function changes.
+		this.blendMode = ((defines) =&gt; (new Proxy(this.blendMode, {
+
+			set(target, name, value) {
+
+				if(value === BlendFunction.ALPHA) {
+
+					defines.set(&quot;ALPHA&quot;, &quot;1&quot;);
+
+				} else {
+
+					defines.delete(&quot;ALPHA&quot;);
+
+				}
+
+				target[name] = value;
+
+				return true;
+
+			}
+
+		})))(this.defines);
+
+		this.blendMode.blendFunction = blendFunction;
 		this.setPatternTexture(patternTexture);
 		this.xRay = xRay;
 
