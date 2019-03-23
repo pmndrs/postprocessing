@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShockWaveEffect } from "../../build/postprocessing.umd.js";
+import { ShockWaveEffect } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

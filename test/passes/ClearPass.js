@@ -1,5 +1,5 @@
 import test from "ava";
-import { ClearPass } from "../../build/postprocessing.umd.js";
+import { ClearPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

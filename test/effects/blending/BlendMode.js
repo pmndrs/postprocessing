@@ -1,5 +1,5 @@
 import test from "ava";
-import { BlendFunction, BlendMode } from "../../../build/postprocessing.umd.js";
+import { BlendFunction, BlendMode } from "../../../build/postprocessing.js";
 
 test("can be created", t => {
 

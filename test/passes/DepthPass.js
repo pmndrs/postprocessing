@@ -1,5 +1,5 @@
 import test from "ava";
-import { DepthPass } from "../../build/postprocessing.umd.js";
+import { DepthPass } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

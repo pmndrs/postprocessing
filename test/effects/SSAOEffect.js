@@ -1,5 +1,5 @@
 import test from "ava";
-import { SSAOEffect } from "../../build/postprocessing.umd.js";
+import { SSAOEffect } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 

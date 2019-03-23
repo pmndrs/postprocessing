@@ -1,5 +1,5 @@
 import test from "ava";
-import { PixelationEffect } from "../../build/postprocessing.umd.js";
+import { PixelationEffect } from "../../build/postprocessing.js";
 
 test("can be created and destroyed", t => {
 
