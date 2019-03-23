@@ -6,9 +6,7 @@ module.exports = function(api) {
 		compact: false,
 		comments: false,
 		presets: [
-			["@babel/preset-env", {
-				"modules": false
-			}]
+			["@babel/preset-env"]
 		]
 	};
 
