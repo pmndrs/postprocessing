@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.1.0 build Sat Mar 30 2019
+ * postprocessing v6.1.1 build Sat Mar 30 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
