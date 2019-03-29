@@ -3177,13 +3177,15 @@
     function DemoManager(viewport) {
       var _this4;
 
-      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      var _ref3 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref3$aside = _ref3.aside,
+          aside = _ref3$aside === void 0 ? viewport : _ref3$aside,
+          renderer = _ref3.renderer;
 
       _classCallCheck(this, DemoManager);
 
-      var aside = options.aside !== undefined ? options.aside : viewport;
       _this4 = _possibleConstructorReturn(this, _getPrototypeOf(DemoManager).call(this));
-      _this4.renderer = options.renderer !== undefined ? options.renderer : function () {
+      _this4.renderer = renderer !== undefined ? renderer : function () {
         var renderer = new three.WebGLRenderer();
         renderer.setSize(viewport.clientWidth, viewport.clientHeight);
         renderer.setPixelRatio(window.devicePixelRatio);
@@ -3989,11 +3991,11 @@
     function BlurPass() {
       var _this12;
 
-      var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref3$resolutionScale = _ref3.resolutionScale,
-          resolutionScale = _ref3$resolutionScale === void 0 ? 0.5 : _ref3$resolutionScale,
-          _ref3$kernelSize = _ref3.kernelSize,
-          kernelSize = _ref3$kernelSize === void 0 ? KernelSize.LARGE : _ref3$kernelSize;
+      var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref4$resolutionScale = _ref4.resolutionScale,
+          resolutionScale = _ref4$resolutionScale === void 0 ? 0.5 : _ref4$resolutionScale,
+          _ref4$kernelSize = _ref4.kernelSize,
+          kernelSize = _ref4$kernelSize === void 0 ? KernelSize.LARGE : _ref4$kernelSize;
 
       _classCallCheck(this, BlurPass);
 
@@ -4257,10 +4259,10 @@
     function DepthPass(scene, camera) {
       var _this16;
 
-      var _ref4 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref4$resolutionScale = _ref4.resolutionScale,
-          resolutionScale = _ref4$resolutionScale === void 0 ? 1.0 : _ref4$resolutionScale,
-          renderTarget = _ref4.renderTarget;
+      var _ref5 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref5$resolutionScale = _ref5.resolutionScale,
+          resolutionScale = _ref5$resolutionScale === void 0 ? 1.0 : _ref5$resolutionScale,
+          renderTarget = _ref5.renderTarget;
 
       _classCallCheck(this, DepthPass);
 
@@ -4383,19 +4385,19 @@
 
   var Effect = function () {
     function Effect(name, fragmentShader) {
-      var _ref5 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref5$attributes = _ref5.attributes,
-          attributes = _ref5$attributes === void 0 ? EffectAttribute.NONE : _ref5$attributes,
-          _ref5$blendFunction = _ref5.blendFunction,
-          blendFunction = _ref5$blendFunction === void 0 ? BlendFunction.SCREEN : _ref5$blendFunction,
-          _ref5$defines = _ref5.defines,
-          defines = _ref5$defines === void 0 ? new Map() : _ref5$defines,
-          _ref5$uniforms = _ref5.uniforms,
-          uniforms = _ref5$uniforms === void 0 ? new Map() : _ref5$uniforms,
-          _ref5$extensions = _ref5.extensions,
-          extensions = _ref5$extensions === void 0 ? null : _ref5$extensions,
-          _ref5$vertexShader = _ref5.vertexShader,
-          vertexShader = _ref5$vertexShader === void 0 ? null : _ref5$vertexShader;
+      var _ref6 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref6$attributes = _ref6.attributes,
+          attributes = _ref6$attributes === void 0 ? EffectAttribute.NONE : _ref6$attributes,
+          _ref6$blendFunction = _ref6.blendFunction,
+          blendFunction = _ref6$blendFunction === void 0 ? BlendFunction.SCREEN : _ref6$blendFunction,
+          _ref6$defines = _ref6.defines,
+          defines = _ref6$defines === void 0 ? new Map() : _ref6$defines,
+          _ref6$uniforms = _ref6.uniforms,
+          uniforms = _ref6$uniforms === void 0 ? new Map() : _ref6$uniforms,
+          _ref6$extensions = _ref6.extensions,
+          extensions = _ref6$extensions === void 0 ? null : _ref6$extensions,
+          _ref6$vertexShader = _ref6.vertexShader,
+          vertexShader = _ref6$vertexShader === void 0 ? null : _ref6$vertexShader;
 
       _classCallCheck(this, Effect);
 
@@ -5059,10 +5061,10 @@
     function NormalPass(scene, camera) {
       var _this19;
 
-      var _ref6 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref6$resolutionScale = _ref6.resolutionScale,
-          resolutionScale = _ref6$resolutionScale === void 0 ? 1.0 : _ref6$resolutionScale,
-          renderTarget = _ref6.renderTarget;
+      var _ref7 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref7$resolutionScale = _ref7.resolutionScale,
+          resolutionScale = _ref7$resolutionScale === void 0 ? 1.0 : _ref7$resolutionScale,
+          renderTarget = _ref7.renderTarget;
 
       _classCallCheck(this, NormalPass);
 
@@ -5228,11 +5230,11 @@
     function EffectComposer() {
       var renderer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 
-      var _ref7 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
-          _ref7$depthBuffer = _ref7.depthBuffer,
-          depthBuffer = _ref7$depthBuffer === void 0 ? true : _ref7$depthBuffer,
-          _ref7$stencilBuffer = _ref7.stencilBuffer,
-          stencilBuffer = _ref7$stencilBuffer === void 0 ? false : _ref7$stencilBuffer;
+      var _ref8 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+          _ref8$depthBuffer = _ref8.depthBuffer,
+          depthBuffer = _ref8$depthBuffer === void 0 ? true : _ref8$depthBuffer,
+          _ref8$stencilBuffer = _ref8.stencilBuffer,
+          stencilBuffer = _ref8$stencilBuffer === void 0 ? false : _ref8$stencilBuffer;
 
       _classCallCheck(this, EffectComposer);
 
@@ -5562,15 +5564,15 @@
     function BloomEffect() {
       var _this22;
 
-      var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref8$blendFunction = _ref8.blendFunction,
-          blendFunction = _ref8$blendFunction === void 0 ? BlendFunction.SCREEN : _ref8$blendFunction,
-          _ref8$distinction = _ref8.distinction,
-          distinction = _ref8$distinction === void 0 ? 1.0 : _ref8$distinction,
-          _ref8$resolutionScale = _ref8.resolutionScale,
-          resolutionScale = _ref8$resolutionScale === void 0 ? 0.5 : _ref8$resolutionScale,
-          _ref8$kernelSize = _ref8.kernelSize,
-          kernelSize = _ref8$kernelSize === void 0 ? KernelSize.LARGE : _ref8$kernelSize;
+      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref9$blendFunction = _ref9.blendFunction,
+          blendFunction = _ref9$blendFunction === void 0 ? BlendFunction.SCREEN : _ref9$blendFunction,
+          _ref9$distinction = _ref9.distinction,
+          distinction = _ref9$distinction === void 0 ? 1.0 : _ref9$distinction,
+          _ref9$resolutionScale = _ref9.resolutionScale,
+          resolutionScale = _ref9$resolutionScale === void 0 ? 0.5 : _ref9$resolutionScale,
+          _ref9$kernelSize = _ref9.kernelSize,
+          kernelSize = _ref9$kernelSize === void 0 ? KernelSize.LARGE : _ref9$kernelSize;
 
       _classCallCheck(this, BloomEffect);
 
@@ -5674,17 +5676,17 @@
     _inherits(BokehEffect, _Effect2);
 
     function BokehEffect() {
-      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref9$blendFunction = _ref9.blendFunction,
-          blendFunction = _ref9$blendFunction === void 0 ? BlendFunction.NORMAL : _ref9$blendFunction,
-          _ref9$focus = _ref9.focus,
-          focus = _ref9$focus === void 0 ? 0.5 : _ref9$focus,
-          _ref9$dof = _ref9.dof,
-          dof = _ref9$dof === void 0 ? 0.02 : _ref9$dof,
-          _ref9$aperture = _ref9.aperture,
-          aperture = _ref9$aperture === void 0 ? 0.015 : _ref9$aperture,
-          _ref9$maxBlur = _ref9.maxBlur,
-          maxBlur = _ref9$maxBlur === void 0 ? 1.0 : _ref9$maxBlur;
+      var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref10$blendFunction = _ref10.blendFunction,
+          blendFunction = _ref10$blendFunction === void 0 ? BlendFunction.NORMAL : _ref10$blendFunction,
+          _ref10$focus = _ref10.focus,
+          focus = _ref10$focus === void 0 ? 0.5 : _ref10$focus,
+          _ref10$dof = _ref10.dof,
+          dof = _ref10$dof === void 0 ? 0.02 : _ref10$dof,
+          _ref10$aperture = _ref10.aperture,
+          aperture = _ref10$aperture === void 0 ? 0.015 : _ref10$aperture,
+          _ref10$maxBlur = _ref10.maxBlur,
+          maxBlur = _ref10$maxBlur === void 0 ? 1.0 : _ref10$maxBlur;
 
       _classCallCheck(this, BokehEffect);
 
@@ -5704,13 +5706,13 @@
     _inherits(BrightnessContrastEffect, _Effect3);
 
     function BrightnessContrastEffect() {
-      var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref10$blendFunction = _ref10.blendFunction,
-          blendFunction = _ref10$blendFunction === void 0 ? BlendFunction.NORMAL : _ref10$blendFunction,
-          _ref10$brightness = _ref10.brightness,
-          brightness = _ref10$brightness === void 0 ? 0.0 : _ref10$brightness,
-          _ref10$contrast = _ref10.contrast,
-          contrast = _ref10$contrast === void 0 ? 0.0 : _ref10$contrast;
+      var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref11$blendFunction = _ref11.blendFunction,
+          blendFunction = _ref11$blendFunction === void 0 ? BlendFunction.NORMAL : _ref11$blendFunction,
+          _ref11$brightness = _ref11.brightness,
+          brightness = _ref11$brightness === void 0 ? 0.0 : _ref11$brightness,
+          _ref11$contrast = _ref11.contrast,
+          contrast = _ref11$contrast === void 0 ? 0.0 : _ref11$contrast;
 
       _classCallCheck(this, BrightnessContrastEffect);
 
@@ -5748,11 +5750,11 @@
     _inherits(ChromaticAberrationEffect, _Effect5);
 
     function ChromaticAberrationEffect() {
-      var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref11$blendFunction = _ref11.blendFunction,
-          blendFunction = _ref11$blendFunction === void 0 ? BlendFunction.NORMAL : _ref11$blendFunction,
-          _ref11$offset = _ref11.offset,
-          offset = _ref11$offset === void 0 ? new three.Vector2(0.001, 0.0005) : _ref11$offset;
+      var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref12$blendFunction = _ref12.blendFunction,
+          blendFunction = _ref12$blendFunction === void 0 ? BlendFunction.NORMAL : _ref12$blendFunction,
+          _ref12$offset = _ref12.offset,
+          offset = _ref12$offset === void 0 ? new three.Vector2(0.001, 0.0005) : _ref12$offset;
 
       _classCallCheck(this, ChromaticAberrationEffect);
 
@@ -5785,11 +5787,11 @@
     function DepthEffect() {
       var _this23;
 
-      var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref12$blendFunction = _ref12.blendFunction,
-          blendFunction = _ref12$blendFunction === void 0 ? BlendFunction.NORMAL : _ref12$blendFunction,
-          _ref12$inverted = _ref12.inverted,
-          inverted = _ref12$inverted === void 0 ? false : _ref12$inverted;
+      var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref13$blendFunction = _ref13.blendFunction,
+          blendFunction = _ref13$blendFunction === void 0 ? BlendFunction.NORMAL : _ref13$blendFunction,
+          _ref13$inverted = _ref13.inverted,
+          inverted = _ref13$inverted === void 0 ? false : _ref13$inverted;
 
       _classCallCheck(this, DepthEffect);
 
@@ -5822,13 +5824,13 @@
     function DotScreenEffect() {
       var _this24;
 
-      var _ref13 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref13$blendFunction = _ref13.blendFunction,
-          blendFunction = _ref13$blendFunction === void 0 ? BlendFunction.NORMAL : _ref13$blendFunction,
-          _ref13$angle = _ref13.angle,
-          angle = _ref13$angle === void 0 ? Math.PI * 0.5 : _ref13$angle,
-          _ref13$scale = _ref13.scale,
-          scale = _ref13$scale === void 0 ? 1.0 : _ref13$scale;
+      var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref14$blendFunction = _ref14.blendFunction,
+          blendFunction = _ref14$blendFunction === void 0 ? BlendFunction.NORMAL : _ref14$blendFunction,
+          _ref14$angle = _ref14.angle,
+          angle = _ref14$angle === void 0 ? Math.PI * 0.5 : _ref14$angle,
+          _ref14$scale = _ref14.scale,
+          scale = _ref14$scale === void 0 ? 1.0 : _ref14$scale;
 
       _classCallCheck(this, DotScreenEffect);
 
@@ -5858,11 +5860,11 @@
     _inherits(GammaCorrectionEffect, _Effect8);
 
     function GammaCorrectionEffect() {
-      var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref14$blendFunction = _ref14.blendFunction,
-          blendFunction = _ref14$blendFunction === void 0 ? BlendFunction.NORMAL : _ref14$blendFunction,
-          _ref14$gamma = _ref14.gamma,
-          gamma = _ref14$gamma === void 0 ? 2.0 : _ref14$gamma;
+      var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref15$blendFunction = _ref15.blendFunction,
+          blendFunction = _ref15$blendFunction === void 0 ? BlendFunction.NORMAL : _ref15$blendFunction,
+          _ref15$gamma = _ref15.gamma,
+          gamma = _ref15$gamma === void 0 ? 2.0 : _ref15$gamma;
 
       _classCallCheck(this, GammaCorrectionEffect);
 
@@ -5888,25 +5890,25 @@
     function GlitchEffect() {
       var _this25;
 
-      var _ref15 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref15$blendFunction = _ref15.blendFunction,
-          blendFunction = _ref15$blendFunction === void 0 ? BlendFunction.NORMAL : _ref15$blendFunction,
-          _ref15$chromaticAberr = _ref15.chromaticAberrationOffset,
-          chromaticAberrationOffset = _ref15$chromaticAberr === void 0 ? null : _ref15$chromaticAberr,
-          _ref15$delay = _ref15.delay,
-          delay = _ref15$delay === void 0 ? new three.Vector2(1.5, 3.5) : _ref15$delay,
-          _ref15$duration = _ref15.duration,
-          duration = _ref15$duration === void 0 ? new three.Vector2(0.6, 1.0) : _ref15$duration,
-          _ref15$strength = _ref15.strength,
-          strength = _ref15$strength === void 0 ? new three.Vector2(0.3, 1.0) : _ref15$strength,
-          _ref15$columns = _ref15.columns,
-          columns = _ref15$columns === void 0 ? 0.05 : _ref15$columns,
-          _ref15$ratio = _ref15.ratio,
-          ratio = _ref15$ratio === void 0 ? 0.85 : _ref15$ratio,
-          _ref15$perturbationMa = _ref15.perturbationMap,
-          perturbationMap = _ref15$perturbationMa === void 0 ? null : _ref15$perturbationMa,
-          _ref15$dtSize = _ref15.dtSize,
-          dtSize = _ref15$dtSize === void 0 ? 64 : _ref15$dtSize;
+      var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref16$blendFunction = _ref16.blendFunction,
+          blendFunction = _ref16$blendFunction === void 0 ? BlendFunction.NORMAL : _ref16$blendFunction,
+          _ref16$chromaticAberr = _ref16.chromaticAberrationOffset,
+          chromaticAberrationOffset = _ref16$chromaticAberr === void 0 ? null : _ref16$chromaticAberr,
+          _ref16$delay = _ref16.delay,
+          delay = _ref16$delay === void 0 ? new three.Vector2(1.5, 3.5) : _ref16$delay,
+          _ref16$duration = _ref16.duration,
+          duration = _ref16$duration === void 0 ? new three.Vector2(0.6, 1.0) : _ref16$duration,
+          _ref16$strength = _ref16.strength,
+          strength = _ref16$strength === void 0 ? new three.Vector2(0.3, 1.0) : _ref16$strength,
+          _ref16$columns = _ref16.columns,
+          columns = _ref16$columns === void 0 ? 0.05 : _ref16$columns,
+          _ref16$ratio = _ref16.ratio,
+          ratio = _ref16$ratio === void 0 ? 0.85 : _ref16$ratio,
+          _ref16$perturbationMa = _ref16.perturbationMap,
+          perturbationMap = _ref16$perturbationMa === void 0 ? null : _ref16$perturbationMa,
+          _ref16$dtSize = _ref16.dtSize,
+          dtSize = _ref16$dtSize === void 0 ? 64 : _ref16$dtSize;
 
       _classCallCheck(this, GlitchEffect);
 
@@ -6047,27 +6049,27 @@
     function GodRaysEffect(camera, lightSource) {
       var _this26;
 
-      var _ref16 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref16$blendFunction = _ref16.blendFunction,
-          blendFunction = _ref16$blendFunction === void 0 ? BlendFunction.SCREEN : _ref16$blendFunction,
-          _ref16$samples = _ref16.samples,
-          samples = _ref16$samples === void 0 ? 60.0 : _ref16$samples,
-          _ref16$density = _ref16.density,
-          density = _ref16$density === void 0 ? 0.96 : _ref16$density,
-          _ref16$decay = _ref16.decay,
-          decay = _ref16$decay === void 0 ? 0.9 : _ref16$decay,
-          _ref16$weight = _ref16.weight,
-          weight = _ref16$weight === void 0 ? 0.4 : _ref16$weight,
-          _ref16$exposure = _ref16.exposure,
-          exposure = _ref16$exposure === void 0 ? 0.6 : _ref16$exposure,
-          _ref16$clampMax = _ref16.clampMax,
-          clampMax = _ref16$clampMax === void 0 ? 1.0 : _ref16$clampMax,
-          _ref16$resolutionScal = _ref16.resolutionScale,
-          resolutionScale = _ref16$resolutionScal === void 0 ? 0.5 : _ref16$resolutionScal,
-          _ref16$kernelSize = _ref16.kernelSize,
-          kernelSize = _ref16$kernelSize === void 0 ? KernelSize.SMALL : _ref16$kernelSize,
-          _ref16$blur = _ref16.blur,
-          blur = _ref16$blur === void 0 ? true : _ref16$blur;
+      var _ref17 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref17$blendFunction = _ref17.blendFunction,
+          blendFunction = _ref17$blendFunction === void 0 ? BlendFunction.SCREEN : _ref17$blendFunction,
+          _ref17$samples = _ref17.samples,
+          samples = _ref17$samples === void 0 ? 60.0 : _ref17$samples,
+          _ref17$density = _ref17.density,
+          density = _ref17$density === void 0 ? 0.96 : _ref17$density,
+          _ref17$decay = _ref17.decay,
+          decay = _ref17$decay === void 0 ? 0.9 : _ref17$decay,
+          _ref17$weight = _ref17.weight,
+          weight = _ref17$weight === void 0 ? 0.4 : _ref17$weight,
+          _ref17$exposure = _ref17.exposure,
+          exposure = _ref17$exposure === void 0 ? 0.6 : _ref17$exposure,
+          _ref17$clampMax = _ref17.clampMax,
+          clampMax = _ref17$clampMax === void 0 ? 1.0 : _ref17$clampMax,
+          _ref17$resolutionScal = _ref17.resolutionScale,
+          resolutionScale = _ref17$resolutionScal === void 0 ? 0.5 : _ref17$resolutionScal,
+          _ref17$kernelSize = _ref17.kernelSize,
+          kernelSize = _ref17$kernelSize === void 0 ? KernelSize.SMALL : _ref17$kernelSize,
+          _ref17$blur = _ref17.blur,
+          blur = _ref17$blur === void 0 ? true : _ref17$blur;
 
       _classCallCheck(this, GodRaysEffect);
 
@@ -6248,13 +6250,13 @@
     function GridEffect() {
       var _this27;
 
-      var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref17$blendFunction = _ref17.blendFunction,
-          blendFunction = _ref17$blendFunction === void 0 ? BlendFunction.OVERLAY : _ref17$blendFunction,
-          _ref17$scale = _ref17.scale,
-          scale = _ref17$scale === void 0 ? 1.0 : _ref17$scale,
-          _ref17$lineWidth = _ref17.lineWidth,
-          lineWidth = _ref17$lineWidth === void 0 ? 0.0 : _ref17$lineWidth;
+      var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref18$blendFunction = _ref18.blendFunction,
+          blendFunction = _ref18$blendFunction === void 0 ? BlendFunction.OVERLAY : _ref18$blendFunction,
+          _ref18$scale = _ref18.scale,
+          scale = _ref18$scale === void 0 ? 1.0 : _ref18$scale,
+          _ref18$lineWidth = _ref18.lineWidth,
+          lineWidth = _ref18$lineWidth === void 0 ? 0.0 : _ref18$lineWidth;
 
       _classCallCheck(this, GridEffect);
 
@@ -6312,13 +6314,13 @@
     function HueSaturationEffect() {
       var _this28;
 
-      var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref18$blendFunction = _ref18.blendFunction,
-          blendFunction = _ref18$blendFunction === void 0 ? BlendFunction.NORMAL : _ref18$blendFunction,
-          _ref18$hue = _ref18.hue,
-          hue = _ref18$hue === void 0 ? 0.0 : _ref18$hue,
-          _ref18$saturation = _ref18.saturation,
-          saturation = _ref18$saturation === void 0 ? 0.0 : _ref18$saturation;
+      var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref19$blendFunction = _ref19.blendFunction,
+          blendFunction = _ref19$blendFunction === void 0 ? BlendFunction.NORMAL : _ref19$blendFunction,
+          _ref19$hue = _ref19.hue,
+          hue = _ref19$hue === void 0 ? 0.0 : _ref19$hue,
+          _ref19$saturation = _ref19.saturation,
+          saturation = _ref19$saturation === void 0 ? 0.0 : _ref19$saturation;
 
       _classCallCheck(this, HueSaturationEffect);
 
@@ -6352,11 +6354,11 @@
     function NoiseEffect() {
       var _this29;
 
-      var _ref19 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref19$blendFunction = _ref19.blendFunction,
-          blendFunction = _ref19$blendFunction === void 0 ? BlendFunction.SCREEN : _ref19$blendFunction,
-          _ref19$premultiply = _ref19.premultiply,
-          premultiply = _ref19$premultiply === void 0 ? false : _ref19$premultiply;
+      var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref20$blendFunction = _ref20.blendFunction,
+          blendFunction = _ref20$blendFunction === void 0 ? BlendFunction.SCREEN : _ref20$blendFunction,
+          _ref20$premultiply = _ref20.premultiply,
+          premultiply = _ref20$premultiply === void 0 ? false : _ref20$premultiply;
 
       _classCallCheck(this, NoiseEffect);
 
@@ -6389,27 +6391,27 @@
     function OutlineEffect(scene, camera) {
       var _this30;
 
-      var _ref20 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref20$blendFunction = _ref20.blendFunction,
-          blendFunction = _ref20$blendFunction === void 0 ? BlendFunction.SCREEN : _ref20$blendFunction,
-          _ref20$patternTexture = _ref20.patternTexture,
-          patternTexture = _ref20$patternTexture === void 0 ? null : _ref20$patternTexture,
-          _ref20$edgeStrength = _ref20.edgeStrength,
-          edgeStrength = _ref20$edgeStrength === void 0 ? 1.0 : _ref20$edgeStrength,
-          _ref20$pulseSpeed = _ref20.pulseSpeed,
-          pulseSpeed = _ref20$pulseSpeed === void 0 ? 0.0 : _ref20$pulseSpeed,
-          _ref20$visibleEdgeCol = _ref20.visibleEdgeColor,
-          visibleEdgeColor = _ref20$visibleEdgeCol === void 0 ? 0xffffff : _ref20$visibleEdgeCol,
-          _ref20$hiddenEdgeColo = _ref20.hiddenEdgeColor,
-          hiddenEdgeColor = _ref20$hiddenEdgeColo === void 0 ? 0x22090a : _ref20$hiddenEdgeColo,
-          _ref20$resolutionScal = _ref20.resolutionScale,
-          resolutionScale = _ref20$resolutionScal === void 0 ? 0.5 : _ref20$resolutionScal,
-          _ref20$kernelSize = _ref20.kernelSize,
-          kernelSize = _ref20$kernelSize === void 0 ? KernelSize.VERY_SMALL : _ref20$kernelSize,
-          _ref20$blur = _ref20.blur,
-          blur = _ref20$blur === void 0 ? false : _ref20$blur,
-          _ref20$xRay = _ref20.xRay,
-          xRay = _ref20$xRay === void 0 ? true : _ref20$xRay;
+      var _ref21 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref21$blendFunction = _ref21.blendFunction,
+          blendFunction = _ref21$blendFunction === void 0 ? BlendFunction.SCREEN : _ref21$blendFunction,
+          _ref21$patternTexture = _ref21.patternTexture,
+          patternTexture = _ref21$patternTexture === void 0 ? null : _ref21$patternTexture,
+          _ref21$edgeStrength = _ref21.edgeStrength,
+          edgeStrength = _ref21$edgeStrength === void 0 ? 1.0 : _ref21$edgeStrength,
+          _ref21$pulseSpeed = _ref21.pulseSpeed,
+          pulseSpeed = _ref21$pulseSpeed === void 0 ? 0.0 : _ref21$pulseSpeed,
+          _ref21$visibleEdgeCol = _ref21.visibleEdgeColor,
+          visibleEdgeColor = _ref21$visibleEdgeCol === void 0 ? 0xffffff : _ref21$visibleEdgeCol,
+          _ref21$hiddenEdgeColo = _ref21.hiddenEdgeColor,
+          hiddenEdgeColor = _ref21$hiddenEdgeColo === void 0 ? 0x22090a : _ref21$hiddenEdgeColo,
+          _ref21$resolutionScal = _ref21.resolutionScale,
+          resolutionScale = _ref21$resolutionScal === void 0 ? 0.5 : _ref21$resolutionScal,
+          _ref21$kernelSize = _ref21.kernelSize,
+          kernelSize = _ref21$kernelSize === void 0 ? KernelSize.VERY_SMALL : _ref21$kernelSize,
+          _ref21$blur = _ref21.blur,
+          blur = _ref21$blur === void 0 ? false : _ref21$blur,
+          _ref21$xRay = _ref21.xRay,
+          xRay = _ref21$xRay === void 0 ? true : _ref21$xRay;
 
       _classCallCheck(this, OutlineEffect);
 
@@ -6730,33 +6732,33 @@
     function RealisticBokehEffect() {
       var _this32;
 
-      var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref21$blendFunction = _ref21.blendFunction,
-          blendFunction = _ref21$blendFunction === void 0 ? BlendFunction.NORMAL : _ref21$blendFunction,
-          _ref21$focus = _ref21.focus,
-          focus = _ref21$focus === void 0 ? 1.0 : _ref21$focus,
-          _ref21$focalLength = _ref21.focalLength,
-          focalLength = _ref21$focalLength === void 0 ? 24.0 : _ref21$focalLength,
-          _ref21$luminanceThres = _ref21.luminanceThreshold,
-          luminanceThreshold = _ref21$luminanceThres === void 0 ? 0.5 : _ref21$luminanceThres,
-          _ref21$luminanceGain = _ref21.luminanceGain,
-          luminanceGain = _ref21$luminanceGain === void 0 ? 2.0 : _ref21$luminanceGain,
-          _ref21$bias = _ref21.bias,
-          bias = _ref21$bias === void 0 ? 0.5 : _ref21$bias,
-          _ref21$fringe = _ref21.fringe,
-          fringe = _ref21$fringe === void 0 ? 0.7 : _ref21$fringe,
-          _ref21$maxBlur = _ref21.maxBlur,
-          maxBlur = _ref21$maxBlur === void 0 ? 1.0 : _ref21$maxBlur,
-          _ref21$rings = _ref21.rings,
-          rings = _ref21$rings === void 0 ? 3 : _ref21$rings,
-          _ref21$samples = _ref21.samples,
-          samples = _ref21$samples === void 0 ? 2 : _ref21$samples,
-          _ref21$showFocus = _ref21.showFocus,
-          showFocus = _ref21$showFocus === void 0 ? false : _ref21$showFocus,
-          _ref21$manualDoF = _ref21.manualDoF,
-          manualDoF = _ref21$manualDoF === void 0 ? false : _ref21$manualDoF,
-          _ref21$pentagon = _ref21.pentagon,
-          pentagon = _ref21$pentagon === void 0 ? false : _ref21$pentagon;
+      var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref22$blendFunction = _ref22.blendFunction,
+          blendFunction = _ref22$blendFunction === void 0 ? BlendFunction.NORMAL : _ref22$blendFunction,
+          _ref22$focus = _ref22.focus,
+          focus = _ref22$focus === void 0 ? 1.0 : _ref22$focus,
+          _ref22$focalLength = _ref22.focalLength,
+          focalLength = _ref22$focalLength === void 0 ? 24.0 : _ref22$focalLength,
+          _ref22$luminanceThres = _ref22.luminanceThreshold,
+          luminanceThreshold = _ref22$luminanceThres === void 0 ? 0.5 : _ref22$luminanceThres,
+          _ref22$luminanceGain = _ref22.luminanceGain,
+          luminanceGain = _ref22$luminanceGain === void 0 ? 2.0 : _ref22$luminanceGain,
+          _ref22$bias = _ref22.bias,
+          bias = _ref22$bias === void 0 ? 0.5 : _ref22$bias,
+          _ref22$fringe = _ref22.fringe,
+          fringe = _ref22$fringe === void 0 ? 0.7 : _ref22$fringe,
+          _ref22$maxBlur = _ref22.maxBlur,
+          maxBlur = _ref22$maxBlur === void 0 ? 1.0 : _ref22$maxBlur,
+          _ref22$rings = _ref22.rings,
+          rings = _ref22$rings === void 0 ? 3 : _ref22$rings,
+          _ref22$samples = _ref22.samples,
+          samples = _ref22$samples === void 0 ? 2 : _ref22$samples,
+          _ref22$showFocus = _ref22.showFocus,
+          showFocus = _ref22$showFocus === void 0 ? false : _ref22$showFocus,
+          _ref22$manualDoF = _ref22.manualDoF,
+          manualDoF = _ref22$manualDoF === void 0 ? false : _ref22$manualDoF,
+          _ref22$pentagon = _ref22.pentagon,
+          pentagon = _ref22$pentagon === void 0 ? false : _ref22$pentagon;
 
       _classCallCheck(this, RealisticBokehEffect);
 
@@ -6836,11 +6838,11 @@
     function ScanlineEffect() {
       var _this33;
 
-      var _ref22 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref22$blendFunction = _ref22.blendFunction,
-          blendFunction = _ref22$blendFunction === void 0 ? BlendFunction.OVERLAY : _ref22$blendFunction,
-          _ref22$density = _ref22.density,
-          density = _ref22$density === void 0 ? 1.25 : _ref22$density;
+      var _ref23 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref23$blendFunction = _ref23.blendFunction,
+          blendFunction = _ref23$blendFunction === void 0 ? BlendFunction.OVERLAY : _ref23$blendFunction,
+          _ref23$density = _ref23.density,
+          density = _ref23$density === void 0 ? 1.25 : _ref23$density;
 
       _classCallCheck(this, ScanlineEffect);
 
@@ -6889,15 +6891,15 @@
 
       var epicenter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector3();
 
-      var _ref23 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref23$speed = _ref23.speed,
-          speed = _ref23$speed === void 0 ? 2.0 : _ref23$speed,
-          _ref23$maxRadius = _ref23.maxRadius,
-          maxRadius = _ref23$maxRadius === void 0 ? 1.0 : _ref23$maxRadius,
-          _ref23$waveSize = _ref23.waveSize,
-          waveSize = _ref23$waveSize === void 0 ? 0.2 : _ref23$waveSize,
-          _ref23$amplitude = _ref23.amplitude,
-          amplitude = _ref23$amplitude === void 0 ? 0.05 : _ref23$amplitude;
+      var _ref24 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref24$speed = _ref24.speed,
+          speed = _ref24$speed === void 0 ? 2.0 : _ref24$speed,
+          _ref24$maxRadius = _ref24.maxRadius,
+          maxRadius = _ref24$maxRadius === void 0 ? 1.0 : _ref24$maxRadius,
+          _ref24$waveSize = _ref24.waveSize,
+          waveSize = _ref24$waveSize === void 0 ? 0.2 : _ref24$waveSize,
+          _ref24$amplitude = _ref24.amplitude,
+          amplitude = _ref24$amplitude === void 0 ? 0.05 : _ref24$amplitude;
 
       _classCallCheck(this, ShockWaveEffect);
 
@@ -6961,11 +6963,11 @@
     _inherits(SepiaEffect, _Effect19);
 
     function SepiaEffect() {
-      var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref24$blendFunction = _ref24.blendFunction,
-          blendFunction = _ref24$blendFunction === void 0 ? BlendFunction.NORMAL : _ref24$blendFunction,
-          _ref24$intensity = _ref24.intensity,
-          intensity = _ref24$intensity === void 0 ? 1.0 : _ref24$intensity;
+      var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref25$blendFunction = _ref25.blendFunction,
+          blendFunction = _ref25$blendFunction === void 0 ? BlendFunction.NORMAL : _ref25$blendFunction,
+          _ref25$intensity = _ref25.intensity,
+          intensity = _ref25$intensity === void 0 ? 1.0 : _ref25$intensity;
 
       _classCallCheck(this, SepiaEffect);
 
@@ -7087,29 +7089,29 @@
     function SSAOEffect(camera, normalBuffer) {
       var _this36;
 
-      var _ref25 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
-          _ref25$blendFunction = _ref25.blendFunction,
-          blendFunction = _ref25$blendFunction === void 0 ? BlendFunction.MULTIPLY : _ref25$blendFunction,
-          _ref25$samples = _ref25.samples,
-          samples = _ref25$samples === void 0 ? 11 : _ref25$samples,
-          _ref25$rings = _ref25.rings,
-          rings = _ref25$rings === void 0 ? 4 : _ref25$rings,
-          _ref25$distanceThresh = _ref25.distanceThreshold,
-          distanceThreshold = _ref25$distanceThresh === void 0 ? 0.65 : _ref25$distanceThresh,
-          _ref25$distanceFallof = _ref25.distanceFalloff,
-          distanceFalloff = _ref25$distanceFallof === void 0 ? 0.1 : _ref25$distanceFallof,
-          _ref25$rangeThreshold = _ref25.rangeThreshold,
-          rangeThreshold = _ref25$rangeThreshold === void 0 ? 0.0015 : _ref25$rangeThreshold,
-          _ref25$rangeFalloff = _ref25.rangeFalloff,
-          rangeFalloff = _ref25$rangeFalloff === void 0 ? 0.01 : _ref25$rangeFalloff,
-          _ref25$luminanceInflu = _ref25.luminanceInfluence,
-          luminanceInfluence = _ref25$luminanceInflu === void 0 ? 0.7 : _ref25$luminanceInflu,
-          _ref25$radius = _ref25.radius,
-          radius = _ref25$radius === void 0 ? 18.25 : _ref25$radius,
-          _ref25$scale = _ref25.scale,
-          scale = _ref25$scale === void 0 ? 1.0 : _ref25$scale,
-          _ref25$bias = _ref25.bias,
-          bias = _ref25$bias === void 0 ? 0.5 : _ref25$bias;
+      var _ref26 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
+          _ref26$blendFunction = _ref26.blendFunction,
+          blendFunction = _ref26$blendFunction === void 0 ? BlendFunction.MULTIPLY : _ref26$blendFunction,
+          _ref26$samples = _ref26.samples,
+          samples = _ref26$samples === void 0 ? 11 : _ref26$samples,
+          _ref26$rings = _ref26.rings,
+          rings = _ref26$rings === void 0 ? 4 : _ref26$rings,
+          _ref26$distanceThresh = _ref26.distanceThreshold,
+          distanceThreshold = _ref26$distanceThresh === void 0 ? 0.65 : _ref26$distanceThresh,
+          _ref26$distanceFallof = _ref26.distanceFalloff,
+          distanceFalloff = _ref26$distanceFallof === void 0 ? 0.1 : _ref26$distanceFallof,
+          _ref26$rangeThreshold = _ref26.rangeThreshold,
+          rangeThreshold = _ref26$rangeThreshold === void 0 ? 0.0015 : _ref26$rangeThreshold,
+          _ref26$rangeFalloff = _ref26.rangeFalloff,
+          rangeFalloff = _ref26$rangeFalloff === void 0 ? 0.01 : _ref26$rangeFalloff,
+          _ref26$luminanceInflu = _ref26.luminanceInfluence,
+          luminanceInfluence = _ref26$luminanceInflu === void 0 ? 0.7 : _ref26$luminanceInflu,
+          _ref26$radius = _ref26.radius,
+          radius = _ref26$radius === void 0 ? 18.25 : _ref26$radius,
+          _ref26$scale = _ref26.scale,
+          scale = _ref26$scale === void 0 ? 1.0 : _ref26$scale,
+          _ref26$bias = _ref26.bias,
+          bias = _ref26$bias === void 0 ? 0.5 : _ref26$bias;
 
       _classCallCheck(this, SSAOEffect);
 
@@ -7206,13 +7208,13 @@
     function TextureEffect() {
       var _this37;
 
-      var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref26$blendFunction = _ref26.blendFunction,
-          blendFunction = _ref26$blendFunction === void 0 ? BlendFunction.NORMAL : _ref26$blendFunction,
-          _ref26$texture = _ref26.texture,
-          texture = _ref26$texture === void 0 ? null : _ref26$texture,
-          _ref26$aspectCorrecti = _ref26.aspectCorrection,
-          aspectCorrection = _ref26$aspectCorrecti === void 0 ? false : _ref26$aspectCorrecti;
+      var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref27$blendFunction = _ref27.blendFunction,
+          blendFunction = _ref27$blendFunction === void 0 ? BlendFunction.NORMAL : _ref27$blendFunction,
+          _ref27$texture = _ref27.texture,
+          texture = _ref27$texture === void 0 ? null : _ref27$texture,
+          _ref27$aspectCorrecti = _ref27.aspectCorrection,
+          aspectCorrection = _ref27$aspectCorrecti === void 0 ? false : _ref27$aspectCorrecti;
 
       _classCallCheck(this, TextureEffect);
 
@@ -7253,23 +7255,23 @@
     function ToneMappingEffect() {
       var _this38;
 
-      var _ref27 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref27$blendFunction = _ref27.blendFunction,
-          blendFunction = _ref27$blendFunction === void 0 ? BlendFunction.NORMAL : _ref27$blendFunction,
-          _ref27$adaptive = _ref27.adaptive,
-          adaptive = _ref27$adaptive === void 0 ? true : _ref27$adaptive,
-          _ref27$resolution = _ref27.resolution,
-          resolution = _ref27$resolution === void 0 ? 256 : _ref27$resolution,
-          _ref27$distinction = _ref27.distinction,
-          distinction = _ref27$distinction === void 0 ? 1.0 : _ref27$distinction,
-          _ref27$middleGrey = _ref27.middleGrey,
-          middleGrey = _ref27$middleGrey === void 0 ? 0.6 : _ref27$middleGrey,
-          _ref27$maxLuminance = _ref27.maxLuminance,
-          maxLuminance = _ref27$maxLuminance === void 0 ? 16.0 : _ref27$maxLuminance,
-          _ref27$averageLuminan = _ref27.averageLuminance,
-          averageLuminance = _ref27$averageLuminan === void 0 ? 1.0 : _ref27$averageLuminan,
-          _ref27$adaptationRate = _ref27.adaptationRate,
-          adaptationRate = _ref27$adaptationRate === void 0 ? 2.0 : _ref27$adaptationRate;
+      var _ref28 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref28$blendFunction = _ref28.blendFunction,
+          blendFunction = _ref28$blendFunction === void 0 ? BlendFunction.NORMAL : _ref28$blendFunction,
+          _ref28$adaptive = _ref28.adaptive,
+          adaptive = _ref28$adaptive === void 0 ? true : _ref28$adaptive,
+          _ref28$resolution = _ref28.resolution,
+          resolution = _ref28$resolution === void 0 ? 256 : _ref28$resolution,
+          _ref28$distinction = _ref28.distinction,
+          distinction = _ref28$distinction === void 0 ? 1.0 : _ref28$distinction,
+          _ref28$middleGrey = _ref28.middleGrey,
+          middleGrey = _ref28$middleGrey === void 0 ? 0.6 : _ref28$middleGrey,
+          _ref28$maxLuminance = _ref28.maxLuminance,
+          maxLuminance = _ref28$maxLuminance === void 0 ? 16.0 : _ref28$maxLuminance,
+          _ref28$averageLuminan = _ref28.averageLuminance,
+          averageLuminance = _ref28$averageLuminan === void 0 ? 1.0 : _ref28$averageLuminan,
+          _ref28$adaptationRate = _ref28.adaptationRate,
+          adaptationRate = _ref28$adaptationRate === void 0 ? 2.0 : _ref28$adaptationRate;
 
       _classCallCheck(this, ToneMappingEffect);
 
@@ -12062,19 +12064,7 @@
           crossOrigin: this.crossOrigin,
           manager: this.manager
         });
-        parser.parse(function (scene, scenes, cameras, animations, json) {
-          var glTF = {
-            scene: scene,
-            scenes: scenes,
-            cameras: cameras,
-            animations: animations,
-            asset: json.asset,
-            parser: parser,
-            userData: {}
-          };
-          addUnknownExtensionsToUserData(extensions, glTF, json);
-          onLoad(glTF);
-        }, onError);
+        parser.parse(onLoad, onError);
       }
     };
 
@@ -12249,7 +12239,6 @@
       this.name = EXTENSIONS.KHR_DRACO_MESH_COMPRESSION;
       this.json = json;
       this.dracoLoader = dracoLoader;
-      three__default.DRACOLoader.getDecoderModule();
     }
 
     GLTFDracoMeshCompressionExtension.prototype.decodePrimitive = function (primitive, parser) {
@@ -12262,16 +12251,18 @@
       var attributeTypeMap = {};
 
       for (var attributeName in gltfAttributeMap) {
-        if (!(attributeName in ATTRIBUTES)) continue;
-        threeAttributeMap[ATTRIBUTES[attributeName]] = gltfAttributeMap[attributeName];
+        var threeAttributeName = ATTRIBUTES[attributeName] || attributeName.toLowerCase();
+        threeAttributeMap[threeAttributeName] = gltfAttributeMap[attributeName];
       }
 
       for (attributeName in primitive.attributes) {
-        if (ATTRIBUTES[attributeName] !== undefined && gltfAttributeMap[attributeName] !== undefined) {
+        var threeAttributeName = ATTRIBUTES[attributeName] || attributeName.toLowerCase();
+
+        if (gltfAttributeMap[attributeName] !== undefined) {
           var accessorDef = json.accessors[primitive.attributes[attributeName]];
           var componentType = WEBGL_COMPONENT_TYPES[accessorDef.componentType];
-          attributeTypeMap[ATTRIBUTES[attributeName]] = componentType;
-          attributeNormalizedMap[ATTRIBUTES[attributeName]] = accessorDef.normalized === true;
+          attributeTypeMap[threeAttributeName] = componentType;
+          attributeNormalizedMap[threeAttributeName] = accessorDef.normalized === true;
         }
       }
 
@@ -12676,7 +12667,7 @@
       weights: 'morphTargetInfluences'
     };
     var INTERPOLATION = {
-      CUBICSPLINE: three__default.InterpolateSmooth,
+      CUBICSPLINE: undefined,
       LINEAR: three__default.InterpolateLinear,
       STEP: three__default.InterpolateDiscrete
     };
@@ -12698,8 +12689,10 @@
       return path + url;
     }
 
+    var defaultMaterial;
+
     function createDefaultMaterial() {
-      return new three__default.MeshStandardMaterial({
+      defaultMaterial = defaultMaterial || new three__default.MeshStandardMaterial({
         color: 0xFFFFFF,
         emissive: 0x000000,
         metalness: 1,
@@ -12708,6 +12701,7 @@
         depthTest: true,
         side: three__default.FrontSide
       });
+      return defaultMaterial;
     }
 
     function addUnknownExtensionsToUserData(knownExtensions, object, objectDef) {
@@ -12748,23 +12742,29 @@
         var target = targets[i];
 
         if (hasMorphPosition) {
-          var accessor = target.POSITION !== undefined ? parser.getDependency('accessor', target.POSITION).then(function (accessor) {
-            return cloneBufferAttribute(accessor);
-          }) : geometry.attributes.position;
-          pendingPositionAccessors.push(accessor);
+          var pendingAccessor = target.POSITION !== undefined ? parser.getDependency('accessor', target.POSITION) : geometry.attributes.position;
+          pendingPositionAccessors.push(pendingAccessor);
         }
 
         if (hasMorphNormal) {
-          var accessor = target.NORMAL !== undefined ? parser.getDependency('accessor', target.NORMAL).then(function (accessor) {
-            return cloneBufferAttribute(accessor);
-          }) : geometry.attributes.normal;
-          pendingNormalAccessors.push(accessor);
+          var pendingAccessor = target.NORMAL !== undefined ? parser.getDependency('accessor', target.NORMAL) : geometry.attributes.normal;
+          pendingNormalAccessors.push(pendingAccessor);
         }
       }
 
       return Promise.all([Promise.all(pendingPositionAccessors), Promise.all(pendingNormalAccessors)]).then(function (accessors) {
         var morphPositions = accessors[0];
         var morphNormals = accessors[1];
+
+        for (var i = 0, il = morphPositions.length; i < il; i++) {
+          if (geometry.attributes.position === morphPositions[i]) continue;
+          morphPositions[i] = cloneBufferAttribute(morphPositions[i]);
+        }
+
+        for (var i = 0, il = morphNormals.length; i < il; i++) {
+          if (geometry.attributes.normal === morphNormals[i]) continue;
+          morphNormals[i] = cloneBufferAttribute(morphNormals[i]);
+        }
 
         for (var i = 0, il = targets.length; i < il; i++) {
           var target = targets[i];
@@ -12825,16 +12825,6 @@
       }
     }
 
-    function isObjectEqual(a, b) {
-      if (Object.keys(a).length !== Object.keys(b).length) return false;
-
-      for (var key in a) {
-        if (a[key] !== b[key]) return false;
-      }
-
-      return true;
-    }
-
     function createPrimitiveKey(primitiveDef) {
       var dracoExtension = primitiveDef.extensions && primitiveDef.extensions[EXTENSIONS.KHR_DRACO_MESH_COMPRESSION];
       var geometryKey;
@@ -12859,26 +12849,6 @@
       return attributesKey;
     }
 
-    function createArrayKeyBufferGeometry(a) {
-      var arrayKey = '';
-
-      for (var i = 0, il = a.length; i < il; i++) {
-        arrayKey += ':' + a[i].uuid;
-      }
-
-      return arrayKey;
-    }
-
-    function createMultiPassGeometryKey(geometry, primitives) {
-      var key = geometry.uuid;
-
-      for (var i = 0, il = primitives.length; i < il; i++) {
-        key += i + createPrimitiveKey(primitives[i]);
-      }
-
-      return key;
-    }
-
     function cloneBufferAttribute(attribute) {
       if (attribute.isInterleavedBufferAttribute) {
         var count = attribute.count;
@@ -12898,37 +12868,12 @@
       return attribute.clone();
     }
 
-    function isMultiPassGeometry(primitives) {
-      if (primitives.length < 2) return false;
-      var primitive0 = primitives[0];
-      var targets0 = primitive0.targets || [];
-      if (primitive0.indices === undefined) return false;
-
-      for (var i = 1, il = primitives.length; i < il; i++) {
-        var primitive = primitives[i];
-        if (primitive0.mode !== primitive.mode) return false;
-        if (primitive.indices === undefined) return false;
-        if (primitive.extensions && primitive.extensions[EXTENSIONS.KHR_DRACO_MESH_COMPRESSION]) return false;
-        if (!isObjectEqual(primitive0.attributes, primitive.attributes)) return false;
-        var targets = primitive.targets || [];
-        if (targets0.length !== targets.length) return false;
-
-        for (var j = 0, jl = targets0.length; j < jl; j++) {
-          if (!isObjectEqual(targets0[j], targets[j])) return false;
-        }
-      }
-
-      return true;
-    }
-
     function GLTFParser(json, extensions, options) {
       this.json = json || {};
       this.extensions = extensions || {};
       this.options = options || {};
       this.cache = new GLTFRegistry();
       this.primitiveCache = {};
-      this.multiplePrimitivesCache = {};
-      this.multiPassGeometryCache = {};
       this.textureLoader = new three__default.TextureLoader(this.options.manager);
       this.textureLoader.setCrossOrigin(this.options.crossOrigin);
       this.fileLoader = new three__default.FileLoader(this.options.manager);
@@ -12936,15 +12881,23 @@
     }
 
     GLTFParser.prototype.parse = function (onLoad, onError) {
+      var parser = this;
       var json = this.json;
+      var extensions = this.extensions;
       this.cache.removeAll();
       this.markDefs();
-      this.getMultiDependencies(['scene', 'animation', 'camera']).then(function (dependencies) {
-        var scenes = dependencies.scenes || [];
-        var scene = scenes[json.scene || 0];
-        var animations = dependencies.animations || [];
-        var cameras = dependencies.cameras || [];
-        onLoad(scene, scenes, cameras, animations, json);
+      Promise.all([this.getDependencies('scene'), this.getDependencies('animation'), this.getDependencies('camera')]).then(function (dependencies) {
+        var result = {
+          scene: dependencies[0][json.scene || 0],
+          scenes: dependencies[0],
+          animations: dependencies[1],
+          cameras: dependencies[2],
+          asset: json.asset,
+          parser: parser,
+          userData: {}
+        };
+        addUnknownExtensionsToUserData(extensions, result, json);
+        onLoad(result);
       }).catch(onError);
     };
 
@@ -13060,24 +13013,6 @@
       }
 
       return dependencies;
-    };
-
-    GLTFParser.prototype.getMultiDependencies = function (types) {
-      var results = {};
-      var pending = [];
-
-      for (var i = 0, il = types.length; i < il; i++) {
-        var type = types[i];
-        var value = this.getDependencies(type);
-        value = value.then(function (key, value) {
-          results[key] = value;
-        }.bind(this, type + (type === 'mesh' ? 'es' : 's')));
-        pending.push(value);
-      }
-
-      return Promise.all(pending).then(function () {
-        return results;
-      });
     };
 
     GLTFParser.prototype.loadBuffer = function (bufferIndex) {
@@ -13276,6 +13211,83 @@
       });
     };
 
+    GLTFParser.prototype.assignFinalMaterial = function (mesh) {
+      var geometry = mesh.geometry;
+      var material = mesh.material;
+      var extensions = this.extensions;
+      var useVertexTangents = geometry.attributes.tangent !== undefined;
+      var useVertexColors = geometry.attributes.color !== undefined;
+      var useFlatShading = geometry.attributes.normal === undefined;
+      var useSkinning = mesh.isSkinnedMesh === true;
+      var useMorphTargets = Object.keys(geometry.morphAttributes).length > 0;
+      var useMorphNormals = useMorphTargets && geometry.morphAttributes.normal !== undefined;
+
+      if (mesh.isPoints) {
+        var cacheKey = 'PointsMaterial:' + material.uuid;
+        var pointsMaterial = this.cache.get(cacheKey);
+
+        if (!pointsMaterial) {
+          pointsMaterial = new three__default.PointsMaterial();
+          three__default.Material.prototype.copy.call(pointsMaterial, material);
+          pointsMaterial.color.copy(material.color);
+          pointsMaterial.map = material.map;
+          pointsMaterial.lights = false;
+          this.cache.add(cacheKey, pointsMaterial);
+        }
+
+        material = pointsMaterial;
+      } else if (mesh.isLine) {
+        var cacheKey = 'LineBasicMaterial:' + material.uuid;
+        var lineMaterial = this.cache.get(cacheKey);
+
+        if (!lineMaterial) {
+          lineMaterial = new three__default.LineBasicMaterial();
+          three__default.Material.prototype.copy.call(lineMaterial, material);
+          lineMaterial.color.copy(material.color);
+          lineMaterial.lights = false;
+          this.cache.add(cacheKey, lineMaterial);
+        }
+
+        material = lineMaterial;
+      }
+
+      if (useVertexTangents || useVertexColors || useFlatShading || useSkinning || useMorphTargets) {
+        var cacheKey = 'ClonedMaterial:' + material.uuid + ':';
+        if (material.isGLTFSpecularGlossinessMaterial) cacheKey += 'specular-glossiness:';
+        if (useSkinning) cacheKey += 'skinning:';
+        if (useVertexTangents) cacheKey += 'vertex-tangents:';
+        if (useVertexColors) cacheKey += 'vertex-colors:';
+        if (useFlatShading) cacheKey += 'flat-shading:';
+        if (useMorphTargets) cacheKey += 'morph-targets:';
+        if (useMorphNormals) cacheKey += 'morph-normals:';
+        var cachedMaterial = this.cache.get(cacheKey);
+
+        if (!cachedMaterial) {
+          cachedMaterial = material.isGLTFSpecularGlossinessMaterial ? extensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS].cloneMaterial(material) : material.clone();
+          if (useSkinning) cachedMaterial.skinning = true;
+          if (useVertexTangents) cachedMaterial.vertexTangents = true;
+          if (useVertexColors) cachedMaterial.vertexColors = three__default.VertexColors;
+          if (useFlatShading) cachedMaterial.flatShading = true;
+          if (useMorphTargets) cachedMaterial.morphTargets = true;
+          if (useMorphNormals) cachedMaterial.morphNormals = true;
+          this.cache.add(cacheKey, cachedMaterial);
+        }
+
+        material = cachedMaterial;
+      }
+
+      if (material.aoMap && geometry.attributes.uv2 === undefined && geometry.attributes.uv !== undefined) {
+        console.log('THREE.GLTFLoader: Duplicating UVs to support aoMap.');
+        geometry.addAttribute('uv2', new three__default.BufferAttribute(geometry.attributes.uv.array, 2));
+      }
+
+      if (material.isGLTFSpecularGlossinessMaterial) {
+        mesh.onBeforeRender = extensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS].refreshUniforms;
+      }
+
+      mesh.material = material;
+    };
+
     GLTFParser.prototype.loadMaterial = function (materialIndex) {
       var parser = this;
       var json = this.json;
@@ -13390,8 +13402,7 @@
       }
 
       for (var gltfAttributeName in attributes) {
-        var threeAttributeName = ATTRIBUTES[gltfAttributeName];
-        if (!threeAttributeName) continue;
+        var threeAttributeName = ATTRIBUTES[gltfAttributeName] || gltfAttributeName.toLowerCase();
         if (threeAttributeName in geometry.attributes) continue;
         pending.push(assignAttributeAccessor(attributes[gltfAttributeName], threeAttributeName));
       }
@@ -13413,13 +13424,6 @@
       var parser = this;
       var extensions = this.extensions;
       var cache = this.primitiveCache;
-      var isMultiPass = isMultiPassGeometry(primitives);
-      var originalPrimitives;
-
-      if (isMultiPass) {
-        originalPrimitives = primitives;
-        primitives = [primitives[0]];
-      }
 
       function createDracoPrimitive(primitive) {
         return extensions[EXTENSIONS.KHR_DRACO_MESH_COMPRESSION].decodePrimitive(primitive, parser).then(function (geometry) {
@@ -13453,77 +13457,7 @@
         }
       }
 
-      return Promise.all(pending).then(function (geometries) {
-        if (isMultiPass) {
-          var baseGeometry = geometries[0];
-          var cache = parser.multiPassGeometryCache;
-          var cacheKey = createMultiPassGeometryKey(baseGeometry, originalPrimitives);
-          var cached = cache[cacheKey];
-          if (cached !== null) return [cached.geometry];
-          var geometry = new three__default.BufferGeometry();
-          geometry.name = baseGeometry.name;
-          geometry.userData = baseGeometry.userData;
-
-          for (var key in baseGeometry.attributes) {
-            geometry.addAttribute(key, baseGeometry.attributes[key]);
-          }
-
-          for (var key in baseGeometry.morphAttributes) {
-            geometry.morphAttributes[key] = baseGeometry.morphAttributes[key];
-          }
-
-          var pendingIndices = [];
-
-          for (var i = 0, il = originalPrimitives.length; i < il; i++) {
-            pendingIndices.push(parser.getDependency('accessor', originalPrimitives[i].indices));
-          }
-
-          return Promise.all(pendingIndices).then(function (accessors) {
-            var indices = [];
-            var offset = 0;
-
-            for (var i = 0, il = originalPrimitives.length; i < il; i++) {
-              var accessor = accessors[i];
-
-              for (var j = 0, jl = accessor.count; j < jl; j++) {
-                indices.push(accessor.array[j]);
-              }
-
-              geometry.addGroup(offset, accessor.count, i);
-              offset += accessor.count;
-            }
-
-            geometry.setIndex(indices);
-            cache[cacheKey] = {
-              geometry: geometry,
-              baseGeometry: baseGeometry,
-              primitives: originalPrimitives
-            };
-            return [geometry];
-          });
-        } else if (geometries.length > 1 && three__default.BufferGeometryUtils !== undefined) {
-          for (var i = 1, il = primitives.length; i < il; i++) {
-            if (primitives[0].mode !== primitives[i].mode) return geometries;
-          }
-
-          var cache = parser.multiplePrimitivesCache;
-          var cacheKey = createArrayKeyBufferGeometry(geometries);
-          var cached = cache[cacheKey];
-
-          if (cached) {
-            if (cached.geometry !== null) return [cached.geometry];
-          } else {
-            var geometry = three__default.BufferGeometryUtils.mergeBufferGeometries(geometries, true);
-            cache[cacheKey] = {
-              geometry: geometry,
-              baseGeometries: geometries
-            };
-            if (geometry !== null) return [geometry];
-          }
-        }
-
-        return geometries;
-      });
+      return Promise.all(pending);
     };
 
     GLTFParser.prototype.loadMesh = function (meshIndex) {
@@ -13541,14 +13475,13 @@
 
       return Promise.all(pending).then(function (originalMaterials) {
         return parser.loadGeometries(primitives).then(function (geometries) {
-          var isMultiMaterial = geometries.length === 1 && geometries[0].groups.length > 0;
           var meshes = [];
 
           for (var i = 0, il = geometries.length; i < il; i++) {
             var geometry = geometries[i];
             var primitive = primitives[i];
             var mesh;
-            var material = isMultiMaterial ? originalMaterials : originalMaterials[i];
+            var material = originalMaterials[i];
 
             if (primitive.mode === WEBGL_CONSTANTS.TRIANGLES || primitive.mode === WEBGL_CONSTANTS.TRIANGLE_STRIP || primitive.mode === WEBGL_CONSTANTS.TRIANGLE_FAN || primitive.mode === undefined) {
               mesh = meshDef.isSkinnedMesh === true ? new three__default.SkinnedMesh(geometry, material) : new three__default.Mesh(geometry, material);
@@ -13578,85 +13511,8 @@
             mesh.name = meshDef.name || 'mesh_' + meshIndex;
             if (geometries.length > 1) mesh.name += '_' + i;
             assignExtrasToUserData(mesh, meshDef);
+            parser.assignFinalMaterial(mesh);
             meshes.push(mesh);
-            var materials = isMultiMaterial ? mesh.material : [mesh.material];
-            var useVertexTangents = geometry.attributes.tangent !== undefined;
-            var useVertexColors = geometry.attributes.color !== undefined;
-            var useFlatShading = geometry.attributes.normal === undefined;
-            var useSkinning = mesh.isSkinnedMesh === true;
-            var useMorphTargets = Object.keys(geometry.morphAttributes).length > 0;
-            var useMorphNormals = useMorphTargets && geometry.morphAttributes.normal !== undefined;
-
-            for (var j = 0, jl = materials.length; j < jl; j++) {
-              var material = materials[j];
-
-              if (mesh.isPoints) {
-                var cacheKey = 'PointsMaterial:' + material.uuid;
-                var pointsMaterial = parser.cache.get(cacheKey);
-
-                if (!pointsMaterial) {
-                  pointsMaterial = new three__default.PointsMaterial();
-                  three__default.Material.prototype.copy.call(pointsMaterial, material);
-                  pointsMaterial.color.copy(material.color);
-                  pointsMaterial.map = material.map;
-                  pointsMaterial.lights = false;
-                  parser.cache.add(cacheKey, pointsMaterial);
-                }
-
-                material = pointsMaterial;
-              } else if (mesh.isLine) {
-                var cacheKey = 'LineBasicMaterial:' + material.uuid;
-                var lineMaterial = parser.cache.get(cacheKey);
-
-                if (!lineMaterial) {
-                  lineMaterial = new three__default.LineBasicMaterial();
-                  three__default.Material.prototype.copy.call(lineMaterial, material);
-                  lineMaterial.color.copy(material.color);
-                  lineMaterial.lights = false;
-                  parser.cache.add(cacheKey, lineMaterial);
-                }
-
-                material = lineMaterial;
-              }
-
-              if (useVertexTangents || useVertexColors || useFlatShading || useSkinning || useMorphTargets) {
-                var cacheKey = 'ClonedMaterial:' + material.uuid + ':';
-                if (material.isGLTFSpecularGlossinessMaterial) cacheKey += 'specular-glossiness:';
-                if (useSkinning) cacheKey += 'skinning:';
-                if (useVertexTangents) cacheKey += 'vertex-tangents:';
-                if (useVertexColors) cacheKey += 'vertex-colors:';
-                if (useFlatShading) cacheKey += 'flat-shading:';
-                if (useMorphTargets) cacheKey += 'morph-targets:';
-                if (useMorphNormals) cacheKey += 'morph-normals:';
-                var cachedMaterial = parser.cache.get(cacheKey);
-
-                if (!cachedMaterial) {
-                  cachedMaterial = material.isGLTFSpecularGlossinessMaterial ? extensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS].cloneMaterial(material) : material.clone();
-                  if (useSkinning) cachedMaterial.skinning = true;
-                  if (useVertexTangents) cachedMaterial.vertexTangents = true;
-                  if (useVertexColors) cachedMaterial.vertexColors = three__default.VertexColors;
-                  if (useFlatShading) cachedMaterial.flatShading = true;
-                  if (useMorphTargets) cachedMaterial.morphTargets = true;
-                  if (useMorphNormals) cachedMaterial.morphNormals = true;
-                  parser.cache.add(cacheKey, cachedMaterial);
-                }
-
-                material = cachedMaterial;
-              }
-
-              materials[j] = material;
-
-              if (material.aoMap && geometry.attributes.uv2 === undefined && geometry.attributes.uv !== undefined) {
-                console.log('THREE.GLTFLoader: Duplicating UVs to support aoMap.');
-                geometry.addAttribute('uv2', new three__default.BufferAttribute(geometry.attributes.uv.array, 2));
-              }
-
-              if (material.isGLTFSpecularGlossinessMaterial) {
-                mesh.onBeforeRender = extensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS].refreshUniforms;
-              }
-            }
-
-            mesh.material = isMultiMaterial ? materials : materials[0];
           }
 
           if (meshes.length === 1) {
@@ -13784,7 +13640,7 @@
           }
 
           for (var j = 0, jl = targetNames.length; j < jl; j++) {
-            var track = new TypedKeyframeTrack(targetNames[j] + '.' + PATH_PROPERTIES[target.path], three__default.AnimationUtils.arraySlice(inputAccessor.array, 0), three__default.AnimationUtils.arraySlice(outputAccessor.array, 0), interpolation);
+            var track = new TypedKeyframeTrack(targetNames[j] + '.' + PATH_PROPERTIES[target.path], inputAccessor.array, outputAccessor.array, interpolation);
 
             if (sampler.interpolation === 'CUBICSPLINE') {
               track.createInterpolant = function InterpolantFactoryMethodGLTFCubicSpline(result) {
