@@ -173,7 +173,7 @@ export class BlurPass extends Pass {
 
 	/**
 	 * Blurs the input buffer and writes the result to the output buffer. The
-	 * input buffer remains intact, unless its also the output buffer.
+	 * input buffer remains intact, unless it's also the output buffer.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
