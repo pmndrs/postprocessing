@@ -4,7 +4,7 @@
  * @type {Object}
  * @property {Number} SKIP - No blending. The effect will not be included in the final shader.
  * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.
- * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color. Opacity will be ignored.
+ * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color.
  * @property {Number} AVERAGE - Average blending.
  * @property {Number} COLOR_BURN - Color dodge.
  * @property {Number} COLOR_DODGE - Color burn.
