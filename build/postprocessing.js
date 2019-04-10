@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.2.0 build Thu Apr 11 2019
+ * postprocessing v6.2.1 build Thu Apr 11 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -2557,10 +2557,11 @@
   var ColorDepthEffect = function (_Effect5) {
     _inherits(ColorDepthEffect, _Effect5);
 
-    function ColorDepthEffect(_ref9) {
+    function ColorDepthEffect() {
       var _this17;
 
-      var _ref9$blendFunction = _ref9.blendFunction,
+      var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref9$blendFunction = _ref9.blendFunction,
           blendFunction = _ref9$blendFunction === void 0 ? BlendFunction.NORMAL : _ref9$blendFunction,
           _ref9$bits = _ref9.bits,
           bits = _ref9$bits === void 0 ? 16 : _ref9$bits;

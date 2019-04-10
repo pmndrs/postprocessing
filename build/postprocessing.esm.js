@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.2.0 build Thu Apr 11 2019
+ * postprocessing v6.2.1 build Thu Apr 11 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -4309,7 +4309,7 @@ class ColorDepthEffect extends Effect {
 	 * @param {Number} [options.bits=16] - The color bit depth.
 	 */
 
-	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 }) {
+	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 } = {}) {
 
 		super("ColorDepthEffect", fragment$e, {
 

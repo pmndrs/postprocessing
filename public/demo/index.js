@@ -5750,10 +5750,11 @@
   var ColorDepthEffect = function (_Effect5) {
     _inherits(ColorDepthEffect, _Effect5);
 
-    function ColorDepthEffect(_ref12) {
+    function ColorDepthEffect() {
       var _this23;
 
-      var _ref12$blendFunction = _ref12.blendFunction,
+      var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref12$blendFunction = _ref12.blendFunction,
           blendFunction = _ref12$blendFunction === void 0 ? BlendFunction.NORMAL : _ref12$blendFunction,
           _ref12$bits = _ref12.bits,
           bits = _ref12$bits === void 0 ? 16 : _ref12$bits;
