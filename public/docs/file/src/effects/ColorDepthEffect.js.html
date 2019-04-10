@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">src/effects/index.js | postprocessing</title>
+  <title data-ice="title">src/effects/ColorDepthEffect.js | postprocessing</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -95,35 +95,76 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1 data-ice="title">src/effects/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export { BlendFunction, BlendMode } from &quot;./blending&quot;;
+<div class="content" data-ice="content"><h1 data-ice="title">src/effects/ColorDepthEffect.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Uniform } from &quot;three&quot;;
+import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
+import { Effect } from &quot;./Effect.js&quot;;
 
-export { BloomEffect } from &quot;./BloomEffect.js&quot;;
-export { BokehEffect } from &quot;./BokehEffect.js&quot;;
-export { BrightnessContrastEffect } from &quot;./BrightnessContrastEffect.js&quot;;
-export { ColorAverageEffect } from &quot;./ColorAverageEffect.js&quot;;
-export { ColorDepthEffect } from &quot;./ColorDepthEffect.js&quot;;
-export { ChromaticAberrationEffect } from &quot;./ChromaticAberrationEffect.js&quot;;
-export { DepthEffect } from &quot;./DepthEffect.js&quot;;
-export { DotScreenEffect } from &quot;./DotScreenEffect.js&quot;;
-export { Effect, EffectAttribute, WebGLExtension } from &quot;./Effect.js&quot;;
-export { GammaCorrectionEffect } from &quot;./GammaCorrectionEffect.js&quot;;
-export { GlitchEffect, GlitchMode } from &quot;./GlitchEffect.js&quot;;
-export { GodRaysEffect } from &quot;./GodRaysEffect.js&quot;;
-export { GridEffect } from &quot;./GridEffect.js&quot;;
-export { HueSaturationEffect } from &quot;./HueSaturationEffect.js&quot;;
-export { NoiseEffect } from &quot;./NoiseEffect.js&quot;;
-export { OutlineEffect } from &quot;./OutlineEffect.js&quot;;
-export { PixelationEffect } from &quot;./PixelationEffect.js&quot;;
-export { RealisticBokehEffect } from &quot;./RealisticBokehEffect.js&quot;;
-export { ScanlineEffect } from &quot;./ScanlineEffect.js&quot;;
-export { ShockWaveEffect } from &quot;./ShockWaveEffect.js&quot;;
-export { SepiaEffect } from &quot;./SepiaEffect.js&quot;;
-export { SMAAEffect } from &quot;./SMAAEffect.js&quot;;
-export { SSAOEffect } from &quot;./SSAOEffect.js&quot;;
-export { TextureEffect } from &quot;./TextureEffect.js&quot;;
-export { ToneMappingEffect } from &quot;./ToneMappingEffect.js&quot;;
-export { VignetteEffect } from &quot;./VignetteEffect.js&quot;;
+import fragment from &quot;./glsl/color-depth/shader.frag&quot;;
+
+/**
+ * A color depth effect.
+ *
+ * Simulates a hardware limitation to achieve a retro feel.
+ */
+
+export class ColorDepthEffect extends Effect {
+
+	/**
+	 * Constructs a new color depth effect.
+	 *
+	 * @param {Object} [options] - The options.
+	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
+	 * @param {Number} [options.bits=16] - The color bit depth.
+	 */
+
+	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 }) {
+
+		super(&quot;ColorDepthEffect&quot;, fragment, {
+
+			blendFunction,
+
+			uniforms: new Map([
+				[&quot;factor&quot;, new Uniform(1.0)]
+			])
+
+		});
+
+		this.setBitDepth(bits);
+
+	}
+
+	/**
+	 * Returns the current color bit depth.
+	 *
+	 * @return {Number} The color bit depth.
+	 */
+
+	getBitDepth() {
+
+		return this.bits;
+
+	}
+
+	/**
+	 * Sets the virtual amount of color bits.
+	 *
+	 * Each color channel will use a third of the available bits. The alpha
+	 * channel remains unaffected.
+	 *
+	 * Note that the real color depth will not be altered by this effect.
+	 *
+	 * @param {Number} bits - The new color bit depth.
+	 */
+
+	setBitDepth(bits) {
+
+		this.bits = bits;
+		this.uniforms.get(&quot;factor&quot;).value = Math.pow(2.0, bits / 3.0);
+
+	}
+
+}
 </code></pre>
 
 </div>

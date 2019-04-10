@@ -66,6 +66,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/effects/colordeptheffect.js~colordeptheffect",
+    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html",
+    "<span>ColorDepthEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ColorDepthEffect.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/materials/coloredgesmaterial.js~coloredgesmaterial",
     "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html",
     "<span>ColorEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ColorEdgesMaterial.js</span>",
@@ -897,6 +903,36 @@ window.esdocSearchIndex = [
     "src/effects/coloraverageeffect.js~coloraverageeffect#constructor",
     "class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html#instance-constructor-constructor",
     "src/effects/ColorAverageEffect.js~ColorAverageEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/colordeptheffect.js",
+    "file/src/effects/ColorDepthEffect.js.html",
+    "src/effects/ColorDepthEffect.js",
+    "file"
+  ],
+  [
+    "src/effects/colordeptheffect.js~colordeptheffect#bits",
+    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-member-bits",
+    "src/effects/ColorDepthEffect.js~ColorDepthEffect#bits",
+    "member"
+  ],
+  [
+    "src/effects/colordeptheffect.js~colordeptheffect#constructor",
+    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-constructor-constructor",
+    "src/effects/ColorDepthEffect.js~ColorDepthEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/colordeptheffect.js~colordeptheffect#getbitdepth",
+    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-method-getBitDepth",
+    "src/effects/ColorDepthEffect.js~ColorDepthEffect#getBitDepth",
+    "method"
+  ],
+  [
+    "src/effects/colordeptheffect.js~colordeptheffect#setbitdepth",
+    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-method-setBitDepth",
+    "src/effects/ColorDepthEffect.js~ColorDepthEffect#setBitDepth",
     "method"
   ],
   [
