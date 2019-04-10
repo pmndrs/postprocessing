@@ -63,6 +63,7 @@ This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/
    - Brightness & Contrast
    - Gamma Correction
    - Hue & Saturation
+ - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)
  - [Dot Screen](http://vanruesc.github.io/postprocessing/public/demo/#dot-screen)
  - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
    - Chromatic Aberration
