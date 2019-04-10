@@ -4,6 +4,7 @@ export { BloomEffect } from "./BloomEffect.js";
 export { BokehEffect } from "./BokehEffect.js";
 export { BrightnessContrastEffect } from "./BrightnessContrastEffect.js";
 export { ColorAverageEffect } from "./ColorAverageEffect.js";
+export { ColorDepthEffect } from "./ColorDepthEffect.js";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
 export { DepthEffect } from "./DepthEffect.js";
 export { DotScreenEffect } from "./DotScreenEffect.js";

@@ -12,6 +12,7 @@ export {
 	BokehEffect,
 	BrightnessContrastEffect,
 	ColorAverageEffect,
+	ColorDepthEffect,
 	ChromaticAberrationEffect,
 	DepthEffect,
 	DotScreenEffect,
