@@ -32,6 +32,15 @@ export class ColorDepthEffect extends Effect {
 
 		});
 
+		/**
+		 * The current amount of bits.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.bits = 0;
+
 		this.setBitDepth(bits);
 
 	}
