@@ -5,27 +5,29 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import {
 	BlendFunction,
 	BrightnessContrastEffect,
+	ColorAverageEffect,
 	EffectPass,
 	GammaCorrectionEffect,
 	HueSaturationEffect,
+	SepiaEffect,
 	SMAAEffect
 } from "../../../src";
 
 /**
- * A color correction demo setup.
+ * A color grading demo setup.
  */
 
-export class ColorCorrectionDemo extends PostProcessingDemo {
+export class ColorGradingDemo extends PostProcessingDemo {
 
 	/**
-	 * Constructs a new color correction demo.
+	 * Constructs a new color grading demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super("color-correction", composer);
+		super("color-grading", composer);
 
 		/**
 		 * A brightness/contrast effect.
@@ -35,6 +37,15 @@ export class ColorCorrectionDemo extends PostProcessingDemo {
 		 */
 
 		this.brightnessContrastEffect = null;
+
+		/**
+		 * A color average effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.colorAverageEffect = null;
 
 		/**
 		 * A gamma correction effect.
@@ -53,6 +64,15 @@ export class ColorCorrectionDemo extends PostProcessingDemo {
 		 */
 
 		this.hueSaturationEffect = null;
+
+		/**
+		 * A sepia effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.sepiaEffect = null;
 
 		/**
 		 * A pass.
@@ -153,23 +173,32 @@ export class ColorCorrectionDemo extends PostProcessingDemo {
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 
-		const brightnessContrastEffect = new BrightnessContrastEffect();
+		const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
+		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.SKIP });
 
-		const gammaCorrectionEffect = new GammaCorrectionEffect({
-			blendFunction: BlendFunction.NORMAL,
-			gamma: 0.65
-		});
+		const brightnessContrastEffect = new BrightnessContrastEffect({ contrast: 0.25 });
+		const gammaCorrectionEffect = new GammaCorrectionEffect({ gamma: 0.65 });
+		const hueSaturationEffect = new HueSaturationEffect({ saturation: -0.375 });
 
-		const hueSaturationEffect = new HueSaturationEffect(BlendFunction.NORMAL);
+		const pass = new EffectPass(camera,
+			smaaEffect,
+			colorAverageEffect,
+			sepiaEffect,
+			brightnessContrastEffect,
+			gammaCorrectionEffect,
+			hueSaturationEffect
+		);
 
-		const pass = new EffectPass(camera, smaaEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect);
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
 		pass.dithering = true;
 
 		this.brightnessContrastEffect = brightnessContrastEffect;
+		this.colorAverageEffect = colorAverageEffect;
 		this.gammaCorrectionEffect = gammaCorrectionEffect;
 		this.hueSaturationEffect = hueSaturationEffect;
+		this.sepiaEffect = sepiaEffect;
+
 		this.pass = pass;
 
 		composer.addPass(pass);
@@ -185,11 +214,23 @@ export class ColorCorrectionDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const pass = this.pass;
+
 		const brightnessContrastEffect = this.brightnessContrastEffect;
+		const colorAverageEffect = this.colorAverageEffect;
 		const gammaCorrectionEffect = this.gammaCorrectionEffect;
 		const hueSaturationEffect = this.hueSaturationEffect;
+		const sepiaEffect = this.sepiaEffect;
 
 		const params = {
+			colorAverage: {
+				"opacity": colorAverageEffect.blendMode.opacity.value,
+				"blend mode": colorAverageEffect.blendMode.blendFunction
+			},
+			sepia: {
+				"intensity": sepiaEffect.uniforms.get("intensity").value,
+				"opacity": sepiaEffect.blendMode.opacity.value,
+				"blend mode": sepiaEffect.blendMode.blendFunction
+			},
 			brightnessContrast: {
 				"brightness": brightnessContrastEffect.uniforms.get("brightness").value,
 				"contrast": brightnessContrastEffect.uniforms.get("contrast").value,
@@ -209,7 +250,43 @@ export class ColorCorrectionDemo extends PostProcessingDemo {
 			}
 		};
 
-		let folder = menu.addFolder("Brightness & Contrast");
+		let folder = menu.addFolder("Color Average");
+
+		folder.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
+
+		});
+
+		folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(() => {
+
+			colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
+			pass.recompile();
+
+		});
+
+		folder = menu.addFolder("Sepia");
+
+		folder.add(params.sepia, "intensity").min(0.0).max(4.0).step(0.001).onChange(() => {
+
+			sepiaEffect.uniforms.get("intensity").value = params.sepia.intensity;
+
+		});
+
+		folder.add(params.sepia, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			sepiaEffect.blendMode.opacity.value = params.sepia.opacity;
+
+		});
+
+		folder.add(params.sepia, "blend mode", BlendFunction).onChange(() => {
+
+			sepiaEffect.blendMode.blendFunction = Number.parseInt(params.sepia["blend mode"]);
+			pass.recompile();
+
+		});
+
+		folder = menu.addFolder("Brightness & Contrast");
 
 		folder.add(params.brightnessContrast, "brightness").min(-1.0).max(1.0).step(0.001).onChange(() => {
 

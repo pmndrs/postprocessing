@@ -4,11 +4,11 @@ import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
-import { ColorCorrectionDemo } from "./demos/ColorCorrectionDemo.js";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
 import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { DotScreenDemo } from "./demos/DotScreenDemo.js";
+import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
 import { GridDemo } from "./demos/GridDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
@@ -146,9 +146,9 @@ window.addEventListener("load", function main(event) {
 		new BlurDemo(composer),
 		new BokehDemo(composer),
 		new RealisticBokehDemo(composer),
-		new ColorCorrectionDemo(composer),
 		new ColorDepthDemo(composer),
 		new DotScreenDemo(composer),
+		new ColorGradingDemo(composer),
 		new GlitchDemo(composer),
 		new GodRaysDemo(composer),
 		new GridDemo(composer),
