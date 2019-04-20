@@ -19,6 +19,7 @@ import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 import { VignetteDemo } from "./demos/VignetteDemo.js";
+import { PerformanceDemo } from "./demos/PerformanceDemo.js";
 
 /**
  * A renderer.
@@ -156,6 +157,7 @@ window.addEventListener("load", function main(event) {
 		new TextureDemo(composer),
 		new ToneMappingDemo(composer),
 		new VignetteDemo(composer),
+		new PerformanceDemo(composer)
 	];
 
 	if(demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1)) === -1) {
