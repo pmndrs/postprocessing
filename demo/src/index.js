@@ -3,19 +3,16 @@ import { Vector2, WebGLRenderer } from "three";
 import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
-import { BokehDemo } from "./demos/BokehDemo.js";
-import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
-import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
-import { DotScreenDemo } from "./demos/DotScreenDemo.js";
+import { BokehDemo } from "./demos/BokehDemo.js";
+import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
+import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
-import { GridDemo } from "./demos/GridDemo.js";
-import { OutlineDemo } from "./demos/OutlineDemo.js";
-import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
-import { ScanlineDemo } from "./demos/ScanlineDemo.js";
-import { SepiaDemo } from "./demos/SepiaDemo.js";
+import { OutlineDemo } from "./demos/OutlineDemo.js";
+import { PatternDemo } from "./demos/PatternDemo.js";
+import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
 import { SMAADemo } from "./demos/SMAADemo.js";
 import { SSAODemo } from "./demos/SSAODemo.js";
@@ -147,21 +144,18 @@ window.addEventListener("load", function main(event) {
 		new BokehDemo(composer),
 		new RealisticBokehDemo(composer),
 		new ColorDepthDemo(composer),
-		new DotScreenDemo(composer),
 		new ColorGradingDemo(composer),
 		new GlitchDemo(composer),
 		new GodRaysDemo(composer),
-		new GridDemo(composer),
 		new OutlineDemo(composer),
+		new PatternDemo(composer),
 		new PixelationDemo(composer),
-		new ScanlineDemo(composer),
-		new SepiaDemo(composer),
 		new ShockWaveDemo(composer),
 		new SMAADemo(composer),
 		new SSAODemo(composer),
 		new TextureDemo(composer),
 		new ToneMappingDemo(composer),
-		new VignetteDemo(composer)
+		new VignetteDemo(composer),
 	];
 
 	if(demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1)) === -1) {

@@ -7,9 +7,9 @@
 
 A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
 
-*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo) &there4;
-[Sandbox](https://jsfiddle.net/27d0qn5g/1/) &there4;
-[API Reference](https://vanruesc.github.io/postprocessing/public/docs) &there4;
+*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo) &bullet;
+[Sandbox](https://jsfiddle.net/27d0qn5g/1/) &bullet;
+[API Reference](https://vanruesc.github.io/postprocessing/public/docs) &bullet;
 [Wiki](https://github.com/vanruesc/postprocessing/wiki)*
 
 
@@ -61,21 +61,24 @@ This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/
  - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
  - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
  - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh) & [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)
- - [Color Correction](http://vanruesc.github.io/postprocessing/public/demo/#color-correction)
+ - [Color Grading](http://vanruesc.github.io/postprocessing/public/demo/#color-grading)
+   - Color Average
+   - Sepia
    - Brightness & Contrast
    - Gamma Correction
    - Hue & Saturation
  - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)
- - [Dot Screen](http://vanruesc.github.io/postprocessing/public/demo/#dot-screen)
  - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
    - Chromatic Aberration
    - Noise
  - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)
- - [Grid](http://vanruesc.github.io/postprocessing/public/demo/#grid)
- - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)
+ - [Pattern](http://vanruesc.github.io/postprocessing/public/demo/#pattern)
+   - Dot-Screen
+   - Grid
+   - Scanline
  - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)
- - [Scanline](http://vanruesc.github.io/postprocessing/public/demo/#scanline)
- - [Sepia](http://vanruesc.github.io/postprocessing/public/demo/#sepia)
+   - Masking
+ - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)
  - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
  - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)
  - [SSAO](http://vanruesc.github.io/postprocessing/public/demo/#ssao)

@@ -15,35 +15,54 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	DotScreenEffect,
+	GridEffect,
 	EffectPass,
-	ScanlineEffect,
-	SMAAEffect
+	ScanlineEffect
 } from "../../../src";
 
 /**
- * A scanline demo setup.
+ * A pattern demo setup.
  */
 
-export class ScanlineDemo extends PostProcessingDemo {
+export class PatternDemo extends PostProcessingDemo {
 
 	/**
-	 * Constructs a new scanline demo.
+	 * Constructs a new pattern demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super("scanline", composer);
+		super("pattern", composer);
 
 		/**
-		 * An effect.
+		 * A dot-screen effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.effect = null;
+		this.dotScreenEffect = null;
+
+		/**
+		 * A grid effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.gridEffect = null;
+
+		/**
+		 * A scanline effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.scanlineEffect = null;
 
 		/**
 		 * A pass.
@@ -105,8 +124,6 @@ export class ScanlineDemo extends PostProcessingDemo {
 					assets.set("sky", textureCube);
 
 				});
-
-				this.loadSMAAImages();
 
 			} else {
 
@@ -194,18 +211,33 @@ export class ScanlineDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const dotScreenEffect = new DotScreenEffect({
+			blendFunction: BlendFunction.OVERLAY,
+			scale: 0.9,
+			angle: Math.PI * 0.58
+		});
+
+		const gridEffect = new GridEffect({
+			blendFunction: BlendFunction.SKIP,
+			scale: 1.75,
+			lineWidth: 0.25
+		});
+
 		const scanlineEffect = new ScanlineEffect({
+			blendFunction: BlendFunction.SKIP,
 			density: 1.5
 		});
 
-		const pass = new EffectPass(camera, smaaEffect, scanlineEffect);
+		const pass = new EffectPass(camera, dotScreenEffect, gridEffect, scanlineEffect);
+
+		this.dotScreenEffect = dotScreenEffect;
+		this.gridEffect = gridEffect;
+		this.scanlineEffect = scanlineEffect;
+
+		this.pass = pass;
+
 		this.renderPass.renderToScreen = false;
 		pass.renderToScreen = true;
-		pass.dithering = true;
-
-		this.effect = scanlineEffect;
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -222,8 +254,8 @@ export class ScanlineDemo extends PostProcessingDemo {
 		const object = this.object;
 		const twoPI = 2.0 * Math.PI;
 
-		object.rotation.x += 0.001;
-		object.rotation.y += 0.005;
+		object.rotation.x += 0.0005;
+		object.rotation.y += 0.001;
 
 		if(object.rotation.x >= twoPI) {
 
@@ -250,35 +282,110 @@ export class ScanlineDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const pass = this.pass;
-		const effect = this.effect;
-		const blendMode = effect.blendMode;
+		const dotScreenEffect = this.dotScreenEffect;
+		const gridEffect = this.gridEffect;
+		const scanlineEffect = this.scanlineEffect;
 
 		const params = {
-			"density": effect.getDensity(),
-			"opacity": blendMode.opacity.value,
-			"blend mode": blendMode.blendFunction
+			dotScreen: {
+				"angle": Math.PI * 0.58,
+				"scale": dotScreenEffect.uniforms.get("scale").value,
+				"opacity": dotScreenEffect.blendMode.opacity.value,
+				"blend mode": dotScreenEffect.blendMode.blendFunction
+			},
+			grid: {
+				"scale": gridEffect.getScale(),
+				"line width": gridEffect.getLineWidth(),
+				"opacity": gridEffect.blendMode.opacity.value,
+				"blend mode": gridEffect.blendMode.blendFunction
+			},
+			scanline: {
+				"density": scanlineEffect.getDensity(),
+				"opacity": scanlineEffect.blendMode.opacity.value,
+				"blend mode": scanlineEffect.blendMode.blendFunction
+			}
 		};
 
-		menu.add(params, "density").min(0.001).max(2.0).step(0.001).onChange(() => {
+		let folder = menu.addFolder("Dot Screen");
 
-			effect.setDensity(params.density);
+		folder.add(params.dotScreen, "angle").min(0.0).max(Math.PI).step(0.001).onChange(() => {
 
-		});
-
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			blendMode.opacity.value = params.opacity;
+			dotScreenEffect.setAngle(params.dotScreen.angle);
 
 		});
 
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
+		folder.add(params.dotScreen, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			dotScreenEffect.uniforms.get("scale").value = params.dotScreen.scale;
+
+		});
+
+		folder.add(params.dotScreen, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			dotScreenEffect.blendMode.opacity.value = params.dotScreen.opacity;
+
+		});
+
+		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(() => {
+
+			dotScreenEffect.blendMode.blendFunction = Number.parseInt(params.dotScreen["blend mode"]);
 			pass.recompile();
 
 		});
 
-		menu.add(pass, "dithering");
+		folder.open();
+
+		folder = menu.addFolder("Grid");
+
+		folder.add(params.grid, "scale").min(0.01).max(3.0).step(0.01).onChange(() => {
+
+			gridEffect.setScale(params.grid.scale);
+
+		});
+
+		folder.add(params.grid, "line width").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			gridEffect.setLineWidth(params.grid["line width"]);
+
+		});
+
+		folder.add(params.grid, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			gridEffect.blendMode.opacity.value = params.grid.opacity;
+
+		});
+
+		folder.add(params.grid, "blend mode", BlendFunction).onChange(() => {
+
+			gridEffect.blendMode.blendFunction = Number.parseInt(params.grid["blend mode"]);
+			pass.recompile();
+
+		});
+
+		folder.open();
+
+		folder = menu.addFolder("Scanline");
+
+		folder.add(params.scanline, "density").min(0.001).max(2.0).step(0.001).onChange(() => {
+
+			scanlineEffect.setDensity(params.scanline.density);
+
+		});
+
+		folder.add(params.scanline, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			scanlineEffect.blendMode.opacity.value = params.scanline.opacity;
+
+		});
+
+		folder.add(params.scanline, "blend mode", BlendFunction).onChange(() => {
+
+			scanlineEffect.blendMode.blendFunction = Number.parseInt(params.scanline["blend mode"]);
+			pass.recompile();
+
+		});
+
+		folder.open();
 
 	}
 
