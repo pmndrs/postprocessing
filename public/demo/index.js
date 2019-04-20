@@ -70,6 +70,36 @@
     return _setPrototypeOf(o, p);
   }
 
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
   function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -5765,6 +5795,7 @@
         blendFunction: blendFunction,
         uniforms: new Map([["factor", new three.Uniform(1.0)]])
       }));
+      _this23.bits = 0;
 
       _this23.setBitDepth(bits);
 
@@ -10361,25 +10392,190 @@
     return BloomDemo;
   }(PostProcessingDemo);
 
-  var BokehDemo = function (_PostProcessingDemo2) {
-    _inherits(BokehDemo, _PostProcessingDemo2);
+  var BlurDemo = function (_PostProcessingDemo2) {
+    _inherits(BlurDemo, _PostProcessingDemo2);
+
+    function BlurDemo(composer) {
+      var _this46;
+
+      _classCallCheck(this, BlurDemo);
+
+      _this46 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
+      _this46.blurPass = null;
+      _this46.texturePass = null;
+      _this46.effect = null;
+      _this46.object = null;
+      return _this46;
+    }
+
+    _createClass(BlurDemo, [{
+      key: "load",
+      value: function load() {
+        var _this47 = this;
+
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/sunset/";
+        var format = ".png";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+
+            _this47.loadSMAAImages();
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(-15, 0, -15);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x666666);
+        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        directionalLight.position.set(1440, 200, 2000);
+        directionalLight.target.position.copy(scene.position);
+        scene.add(directionalLight);
+        scene.add(ambientLight);
+        var object = new three.Object3D();
+        var geometry = new three.SphereBufferGeometry(1, 4, 4);
+        var material;
+        var i, mesh;
+
+        for (i = 0; i < 100; ++i) {
+          material = new three.MeshPhongMaterial({
+            color: 0xffffff * Math.random(),
+            flatShading: true
+          });
+          mesh = new three.Mesh(geometry, material);
+          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+          mesh.position.multiplyScalar(Math.random() * 10);
+          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
+          mesh.scale.multiplyScalar(Math.random());
+          object.add(mesh);
+        }
+
+        this.object = object;
+        scene.add(object);
+        var savePass = new SavePass();
+        var blurPass = new BlurPass();
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var textureEffect = new TextureEffect({
+          texture: savePass.renderTarget.texture
+        });
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var texturePass = new EffectPass(camera, textureEffect);
+        textureEffect.blendMode.opacity.value = 0.0;
+        this.renderPass.renderToScreen = false;
+        texturePass.renderToScreen = true;
+        this.blurPass = blurPass;
+        this.texturePass = texturePass;
+        this.effect = textureEffect;
+        composer.addPass(smaaPass);
+        composer.addPass(savePass);
+        composer.addPass(blurPass);
+        composer.addPass(texturePass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var twoPI = 2.0 * Math.PI;
+        object.rotation.x += 0.001;
+        object.rotation.y += 0.005;
+
+        if (object.rotation.x >= twoPI) {
+          object.rotation.x -= twoPI;
+        }
+
+        if (object.rotation.y >= twoPI) {
+          object.rotation.y -= twoPI;
+        }
+
+        _get(_getPrototypeOf(BlurDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var effect = this.effect;
+        var pass = this.texturePass;
+        var blurPass = this.blurPass;
+        var blendMode = effect.blendMode;
+        var params = {
+          "enabled": blurPass.enabled,
+          "resolution": blurPass.getResolutionScale(),
+          "kernel size": blurPass.kernelSize,
+          "opacity": 1.0 - blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
+          blurPass.setResolutionScale(params.resolution);
+        });
+        menu.add(params, "kernel size", KernelSize).onChange(function () {
+          blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+        });
+        menu.add(blurPass, "dithering");
+        menu.add(blurPass, "enabled");
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = 1.0 - params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+      }
+    }]);
+
+    return BlurDemo;
+  }(PostProcessingDemo);
+
+  var BokehDemo = function (_PostProcessingDemo3) {
+    _inherits(BokehDemo, _PostProcessingDemo3);
 
     function BokehDemo(composer) {
-      var _this46;
+      var _this48;
 
       _classCallCheck(this, BokehDemo);
 
-      _this46 = _possibleConstructorReturn(this, _getPrototypeOf(BokehDemo).call(this, "bokeh", composer));
-      _this46.effect = null;
-      _this46.bokehPass = null;
-      _this46.depthPass = null;
-      return _this46;
+      _this48 = _possibleConstructorReturn(this, _getPrototypeOf(BokehDemo).call(this, "bokeh", composer));
+      _this48.effect = null;
+      _this48.bokehPass = null;
+      _this48.depthPass = null;
+      return _this48;
     }
 
     _createClass(BokehDemo, [{
       key: "load",
       value: function load() {
-        var _this47 = this;
+        var _this49 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -10401,7 +10597,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this47.loadSMAAImages();
+            _this49.loadSMAAImages();
           } else {
             resolve();
           }
@@ -10511,178 +10707,21 @@
     return BokehDemo;
   }(PostProcessingDemo);
 
-  var ColorCorrectionDemo = function (_PostProcessingDemo3) {
-    _inherits(ColorCorrectionDemo, _PostProcessingDemo3);
+  var RealisticBokehDemo = function (_PostProcessingDemo4) {
+    _inherits(RealisticBokehDemo, _PostProcessingDemo4);
 
-    function ColorCorrectionDemo(composer) {
-      var _this48;
-
-      _classCallCheck(this, ColorCorrectionDemo);
-
-      _this48 = _possibleConstructorReturn(this, _getPrototypeOf(ColorCorrectionDemo).call(this, "color-correction", composer));
-      _this48.brightnessContrastEffect = null;
-      _this48.gammaCorrectionEffect = null;
-      _this48.hueSaturationEffect = null;
-      _this48.pass = null;
-      return _this48;
-    }
-
-    _createClass(ColorCorrectionDemo, [{
-      key: "load",
-      value: function load() {
-        var _this49 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/sunset/";
-        var format = ".png";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-
-            _this49.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(-0.75, -0.1, -1);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.background = assets.get("sky");
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var brightnessContrastEffect = new BrightnessContrastEffect();
-        var gammaCorrectionEffect = new GammaCorrectionEffect({
-          blendFunction: BlendFunction.NORMAL,
-          gamma: 0.65
-        });
-        var hueSaturationEffect = new HueSaturationEffect(BlendFunction.NORMAL);
-        var pass = new EffectPass(camera, smaaEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect);
-        this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        pass.dithering = true;
-        this.brightnessContrastEffect = brightnessContrastEffect;
-        this.gammaCorrectionEffect = gammaCorrectionEffect;
-        this.hueSaturationEffect = hueSaturationEffect;
-        this.pass = pass;
-        composer.addPass(pass);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var pass = this.pass;
-        var brightnessContrastEffect = this.brightnessContrastEffect;
-        var gammaCorrectionEffect = this.gammaCorrectionEffect;
-        var hueSaturationEffect = this.hueSaturationEffect;
-        var params = {
-          brightnessContrast: {
-            "brightness": brightnessContrastEffect.uniforms.get("brightness").value,
-            "contrast": brightnessContrastEffect.uniforms.get("contrast").value,
-            "opacity": brightnessContrastEffect.blendMode.opacity.value,
-            "blend mode": brightnessContrastEffect.blendMode.blendFunction
-          },
-          gammaCorrection: {
-            "gamma": gammaCorrectionEffect.uniforms.get("gamma").value,
-            "opacity": gammaCorrectionEffect.blendMode.opacity.value,
-            "blend mode": gammaCorrectionEffect.blendMode.blendFunction
-          },
-          hueSaturation: {
-            "hue": 0.0,
-            "saturation": hueSaturationEffect.uniforms.get("saturation").value,
-            "opacity": hueSaturationEffect.blendMode.opacity.value,
-            "blend mode": hueSaturationEffect.blendMode.blendFunction
-          }
-        };
-        var folder = menu.addFolder("Brightness & Contrast");
-        folder.add(params.brightnessContrast, "brightness").min(-1.0).max(1.0).step(0.001).onChange(function () {
-          brightnessContrastEffect.uniforms.get("brightness").value = params.brightnessContrast.brightness;
-        });
-        folder.add(params.brightnessContrast, "contrast").min(-1.0).max(1.0).step(0.001).onChange(function () {
-          brightnessContrastEffect.uniforms.get("contrast").value = params.brightnessContrast.contrast;
-        });
-        folder.add(params.brightnessContrast, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          brightnessContrastEffect.blendMode.opacity.value = params.brightnessContrast.opacity;
-        });
-        folder.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(function () {
-          brightnessContrastEffect.blendMode.blendFunction = Number.parseInt(params.brightnessContrast["blend mode"]);
-          pass.recompile();
-        });
-        folder.open();
-        folder = menu.addFolder("Gamma Correction");
-        folder.add(params.gammaCorrection, "gamma").min(0.01).max(1.5).step(0.001).onChange(function () {
-          gammaCorrectionEffect.uniforms.get("gamma").value = params.gammaCorrection.gamma;
-        });
-        folder.add(params.gammaCorrection, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          gammaCorrectionEffect.blendMode.opacity.value = params.gammaCorrection.opacity;
-        });
-        folder.add(params.gammaCorrection, "blend mode", BlendFunction).onChange(function () {
-          gammaCorrectionEffect.blendMode.blendFunction = Number.parseInt(params.gammaCorrection["blend mode"]);
-          pass.recompile();
-        });
-        folder.open();
-        folder = menu.addFolder("Hue & Saturation");
-        folder.add(params.hueSaturation, "hue").min(-Math.PI).max(Math.PI).step(0.001).onChange(function () {
-          hueSaturationEffect.setHue(params.hueSaturation.hue);
-        });
-        folder.add(params.hueSaturation, "saturation").min(-1.0).max(1.0).step(0.001).onChange(function () {
-          hueSaturationEffect.uniforms.get("saturation").value = params.hueSaturation.saturation;
-        });
-        folder.add(params.hueSaturation, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          hueSaturationEffect.blendMode.opacity.value = params.hueSaturation.opacity;
-        });
-        folder.add(params.hueSaturation, "blend mode", BlendFunction).onChange(function () {
-          hueSaturationEffect.blendMode.blendFunction = Number.parseInt(params.hueSaturation["blend mode"]);
-          pass.recompile();
-        });
-        folder.open();
-        menu.add(pass, "dithering");
-      }
-    }]);
-
-    return ColorCorrectionDemo;
-  }(PostProcessingDemo);
-
-  var ColorDepthDemo = function (_PostProcessingDemo4) {
-    _inherits(ColorDepthDemo, _PostProcessingDemo4);
-
-    function ColorDepthDemo(composer) {
+    function RealisticBokehDemo(composer) {
       var _this50;
 
-      _classCallCheck(this, ColorDepthDemo);
+      _classCallCheck(this, RealisticBokehDemo);
 
-      _this50 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
+      _this50 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehDemo).call(this, "realistic-bokeh", composer));
       _this50.effect = null;
       _this50.pass = null;
       return _this50;
     }
 
-    _createClass(ColorDepthDemo, [{
+    _createClass(RealisticBokehDemo, [{
       key: "load",
       value: function load() {
         var _this51 = this;
@@ -10708,109 +10747,6 @@
             });
 
             _this51.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(10, 1, 10);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
-        scene.background = assets.get("sky");
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var colorDepthEffect = new ColorDepthEffect({
-          bits: 12
-        });
-        var pass = new EffectPass(camera, smaaEffect, colorDepthEffect);
-        this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.effect = colorDepthEffect;
-        this.pass = pass;
-        composer.addPass(pass);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var pass = this.pass;
-        var effect = this.effect;
-        var blendMode = effect.blendMode;
-        var params = {
-          "bits": effect.getBitDepth(),
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
-        };
-        menu.add(params, "bits").min(1).max(24).step(1).onChange(function () {
-          effect.setBitDepth(params.bits);
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
-      }
-    }]);
-
-    return ColorDepthDemo;
-  }(PostProcessingDemo);
-
-  var RealisticBokehDemo = function (_PostProcessingDemo5) {
-    _inherits(RealisticBokehDemo, _PostProcessingDemo5);
-
-    function RealisticBokehDemo(composer) {
-      var _this52;
-
-      _classCallCheck(this, RealisticBokehDemo);
-
-      _this52 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehDemo).call(this, "realistic-bokeh", composer));
-      _this52.effect = null;
-      _this52.pass = null;
-      return _this52;
-    }
-
-    _createClass(RealisticBokehDemo, [{
-      key: "load",
-      value: function load() {
-        var _this53 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/space3/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-
-            _this53.loadSMAAImages();
           } else {
             resolve();
           }
@@ -10973,23 +10909,128 @@
     return RealisticBokehDemo;
   }(PostProcessingDemo);
 
-  var BlurDemo = function (_PostProcessingDemo6) {
-    _inherits(BlurDemo, _PostProcessingDemo6);
+  var ColorDepthDemo = function (_PostProcessingDemo5) {
+    _inherits(ColorDepthDemo, _PostProcessingDemo5);
 
-    function BlurDemo(composer) {
+    function ColorDepthDemo(composer) {
+      var _this52;
+
+      _classCallCheck(this, ColorDepthDemo);
+
+      _this52 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
+      _this52.effect = null;
+      _this52.pass = null;
+      return _this52;
+    }
+
+    _createClass(ColorDepthDemo, [{
+      key: "load",
+      value: function load() {
+        var _this53 = this;
+
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/space3/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+
+            _this53.loadSMAAImages();
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(10, 1, 10);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var colorDepthEffect = new ColorDepthEffect({
+          bits: 12
+        });
+        var pass = new EffectPass(camera, smaaEffect, colorDepthEffect);
+        this.renderPass.renderToScreen = false;
+        pass.renderToScreen = true;
+        this.effect = colorDepthEffect;
+        this.pass = pass;
+        composer.addPass(pass);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var pass = this.pass;
+        var effect = this.effect;
+        var blendMode = effect.blendMode;
+        var params = {
+          "bits": effect.getBitDepth(),
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "bits").min(1).max(24).step(1).onChange(function () {
+          effect.setBitDepth(params.bits);
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+      }
+    }]);
+
+    return ColorDepthDemo;
+  }(PostProcessingDemo);
+
+  var ColorGradingDemo = function (_PostProcessingDemo6) {
+    _inherits(ColorGradingDemo, _PostProcessingDemo6);
+
+    function ColorGradingDemo(composer) {
       var _this54;
 
-      _classCallCheck(this, BlurDemo);
+      _classCallCheck(this, ColorGradingDemo);
 
-      _this54 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
-      _this54.blurPass = null;
-      _this54.texturePass = null;
-      _this54.effect = null;
-      _this54.object = null;
+      _this54 = _possibleConstructorReturn(this, _getPrototypeOf(ColorGradingDemo).call(this, "color-grading", composer));
+      _this54.brightnessContrastEffect = null;
+      _this54.colorAverageEffect = null;
+      _this54.gammaCorrectionEffect = null;
+      _this54.hueSaturationEffect = null;
+      _this54.sepiaEffect = null;
+      _this54.pass = null;
       return _this54;
     }
 
-    _createClass(BlurDemo, [{
+    _createClass(ColorGradingDemo, [{
       key: "load",
       value: function load() {
         var _this55 = this;
@@ -11028,7 +11069,7 @@
         var composer = this.composer;
         var renderer = composer.renderer;
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(-15, 0, -15);
+        camera.position.set(-0.75, -0.1, -1);
         camera.lookAt(scene.position);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -11037,263 +11078,70 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(1440, 200, 2000);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var object = new three.Object3D();
-        var geometry = new three.SphereBufferGeometry(1, 4, 4);
-        var material;
-        var i, mesh;
-
-        for (i = 0; i < 100; ++i) {
-          material = new three.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
-            flatShading: true
-          });
-          mesh = new three.Mesh(geometry, material);
-          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-          mesh.position.multiplyScalar(Math.random() * 10);
-          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-          mesh.scale.multiplyScalar(Math.random());
-          object.add(mesh);
-        }
-
-        this.object = object;
-        scene.add(object);
-        var savePass = new SavePass();
-        var blurPass = new BlurPass();
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var textureEffect = new TextureEffect({
-          texture: savePass.renderTarget.texture
+        var colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
+        var sepiaEffect = new SepiaEffect({
+          blendFunction: BlendFunction.SKIP
         });
-        var smaaPass = new EffectPass(camera, smaaEffect);
-        var texturePass = new EffectPass(camera, textureEffect);
-        textureEffect.blendMode.opacity.value = 0.0;
-        this.renderPass.renderToScreen = false;
-        texturePass.renderToScreen = true;
-        this.blurPass = blurPass;
-        this.texturePass = texturePass;
-        this.effect = textureEffect;
-        composer.addPass(smaaPass);
-        composer.addPass(savePass);
-        composer.addPass(blurPass);
-        composer.addPass(texturePass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        _get(_getPrototypeOf(BlurDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var effect = this.effect;
-        var pass = this.texturePass;
-        var blurPass = this.blurPass;
-        var blendMode = effect.blendMode;
-        var params = {
-          "enabled": blurPass.enabled,
-          "resolution": blurPass.getResolutionScale(),
-          "kernel size": blurPass.kernelSize,
-          "opacity": 1.0 - blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
-        };
-        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
-          blurPass.setResolutionScale(params.resolution);
+        var brightnessContrastEffect = new BrightnessContrastEffect({
+          contrast: 0.25
         });
-        menu.add(params, "kernel size", KernelSize).onChange(function () {
-          blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+        var gammaCorrectionEffect = new GammaCorrectionEffect({
+          gamma: 0.65
         });
-        menu.add(blurPass, "dithering");
-        menu.add(blurPass, "enabled");
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = 1.0 - params.opacity;
+        var hueSaturationEffect = new HueSaturationEffect({
+          saturation: -0.375
         });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
-      }
-    }]);
-
-    return BlurDemo;
-  }(PostProcessingDemo);
-
-  var DotScreenDemo = function (_PostProcessingDemo7) {
-    _inherits(DotScreenDemo, _PostProcessingDemo7);
-
-    function DotScreenDemo(composer) {
-      var _this56;
-
-      _classCallCheck(this, DotScreenDemo);
-
-      _this56 = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenDemo).call(this, "dot-screen", composer));
-      _this56.dotScreenEffect = null;
-      _this56.colorAverageEffect = null;
-      _this56.pass = null;
-      _this56.object = null;
-      return _this56;
-    }
-
-    _createClass(DotScreenDemo, [{
-      key: "load",
-      value: function load() {
-        var _this57 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/space3/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-
-            _this57.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(10, 1, 10);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
-        scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(-1, 1, 1);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var object = new three.Object3D();
-        var geometry = new three.SphereBufferGeometry(1, 4, 4);
-        var material, mesh;
-        var i;
-
-        for (i = 0; i < 100; ++i) {
-          material = new three.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
-            flatShading: true
-          });
-          mesh = new three.Mesh(geometry, material);
-          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-          mesh.position.multiplyScalar(Math.random() * 10);
-          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-          mesh.scale.multiplyScalar(Math.random());
-          object.add(mesh);
-        }
-
-        this.object = object;
-        scene.add(object);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var colorAverageEffect = new ColorAverageEffect();
-        var dotScreenEffect = new DotScreenEffect({
-          blendFunction: BlendFunction.OVERLAY,
-          scale: 1.0,
-          angle: Math.PI * 0.58
-        });
-        dotScreenEffect.blendMode.opacity.value = 0.21;
-        var pass = new EffectPass(camera, smaaEffect, dotScreenEffect, colorAverageEffect);
-        this.dotScreenEffect = dotScreenEffect;
-        this.colorAverageEffect = colorAverageEffect;
-        this.pass = pass;
+        var pass = new EffectPass(camera, smaaEffect, colorAverageEffect, sepiaEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect);
         this.renderPass.renderToScreen = false;
         pass.renderToScreen = true;
+        pass.dithering = true;
+        this.brightnessContrastEffect = brightnessContrastEffect;
+        this.colorAverageEffect = colorAverageEffect;
+        this.gammaCorrectionEffect = gammaCorrectionEffect;
+        this.hueSaturationEffect = hueSaturationEffect;
+        this.sepiaEffect = sepiaEffect;
+        this.pass = pass;
         composer.addPass(pass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.0005;
-        object.rotation.y += 0.001;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        _get(_getPrototypeOf(DotScreenDemo.prototype), "render", this).call(this, delta);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
         var pass = this.pass;
-        var dotScreenEffect = this.dotScreenEffect;
+        var brightnessContrastEffect = this.brightnessContrastEffect;
         var colorAverageEffect = this.colorAverageEffect;
+        var gammaCorrectionEffect = this.gammaCorrectionEffect;
+        var hueSaturationEffect = this.hueSaturationEffect;
+        var sepiaEffect = this.sepiaEffect;
         var params = {
-          "angle": Math.PI * 0.58,
-          "scale": dotScreenEffect.uniforms.get("scale").value,
-          "opacity": dotScreenEffect.blendMode.opacity.value,
-          "blend mode": dotScreenEffect.blendMode.blendFunction,
-          "colorAverage": {
+          colorAverage: {
             "opacity": colorAverageEffect.blendMode.opacity.value,
             "blend mode": colorAverageEffect.blendMode.blendFunction
+          },
+          sepia: {
+            "intensity": sepiaEffect.uniforms.get("intensity").value,
+            "opacity": sepiaEffect.blendMode.opacity.value,
+            "blend mode": sepiaEffect.blendMode.blendFunction
+          },
+          brightnessContrast: {
+            "brightness": brightnessContrastEffect.uniforms.get("brightness").value,
+            "contrast": brightnessContrastEffect.uniforms.get("contrast").value,
+            "opacity": brightnessContrastEffect.blendMode.opacity.value,
+            "blend mode": brightnessContrastEffect.blendMode.blendFunction
+          },
+          gammaCorrection: {
+            "gamma": gammaCorrectionEffect.uniforms.get("gamma").value,
+            "opacity": gammaCorrectionEffect.blendMode.opacity.value,
+            "blend mode": gammaCorrectionEffect.blendMode.blendFunction
+          },
+          hueSaturation: {
+            "hue": 0.0,
+            "saturation": hueSaturationEffect.uniforms.get("saturation").value,
+            "opacity": hueSaturationEffect.blendMode.opacity.value,
+            "blend mode": hueSaturationEffect.blendMode.blendFunction
           }
         };
-        menu.add(params, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
-          dotScreenEffect.setAngle(params.angle);
-        });
-        menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
-          dotScreenEffect.uniforms.get("scale").value = params.scale;
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          dotScreenEffect.blendMode.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          dotScreenEffect.blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
         var folder = menu.addFolder("Color Average");
         folder.add(params.colorAverage, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
           colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
@@ -11302,31 +11150,85 @@
           colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
           pass.recompile();
         });
+        folder = menu.addFolder("Sepia");
+        folder.add(params.sepia, "intensity").min(0.0).max(4.0).step(0.001).onChange(function () {
+          sepiaEffect.uniforms.get("intensity").value = params.sepia.intensity;
+        });
+        folder.add(params.sepia, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          sepiaEffect.blendMode.opacity.value = params.sepia.opacity;
+        });
+        folder.add(params.sepia, "blend mode", BlendFunction).onChange(function () {
+          sepiaEffect.blendMode.blendFunction = Number.parseInt(params.sepia["blend mode"]);
+          pass.recompile();
+        });
+        folder = menu.addFolder("Brightness & Contrast");
+        folder.add(params.brightnessContrast, "brightness").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          brightnessContrastEffect.uniforms.get("brightness").value = params.brightnessContrast.brightness;
+        });
+        folder.add(params.brightnessContrast, "contrast").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          brightnessContrastEffect.uniforms.get("contrast").value = params.brightnessContrast.contrast;
+        });
+        folder.add(params.brightnessContrast, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          brightnessContrastEffect.blendMode.opacity.value = params.brightnessContrast.opacity;
+        });
+        folder.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(function () {
+          brightnessContrastEffect.blendMode.blendFunction = Number.parseInt(params.brightnessContrast["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        folder = menu.addFolder("Gamma Correction");
+        folder.add(params.gammaCorrection, "gamma").min(0.01).max(1.5).step(0.001).onChange(function () {
+          gammaCorrectionEffect.uniforms.get("gamma").value = params.gammaCorrection.gamma;
+        });
+        folder.add(params.gammaCorrection, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          gammaCorrectionEffect.blendMode.opacity.value = params.gammaCorrection.opacity;
+        });
+        folder.add(params.gammaCorrection, "blend mode", BlendFunction).onChange(function () {
+          gammaCorrectionEffect.blendMode.blendFunction = Number.parseInt(params.gammaCorrection["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        folder = menu.addFolder("Hue & Saturation");
+        folder.add(params.hueSaturation, "hue").min(-Math.PI).max(Math.PI).step(0.001).onChange(function () {
+          hueSaturationEffect.setHue(params.hueSaturation.hue);
+        });
+        folder.add(params.hueSaturation, "saturation").min(-1.0).max(1.0).step(0.001).onChange(function () {
+          hueSaturationEffect.uniforms.get("saturation").value = params.hueSaturation.saturation;
+        });
+        folder.add(params.hueSaturation, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          hueSaturationEffect.blendMode.opacity.value = params.hueSaturation.opacity;
+        });
+        folder.add(params.hueSaturation, "blend mode", BlendFunction).onChange(function () {
+          hueSaturationEffect.blendMode.blendFunction = Number.parseInt(params.hueSaturation["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        menu.add(pass, "dithering");
       }
     }]);
 
-    return DotScreenDemo;
+    return ColorGradingDemo;
   }(PostProcessingDemo);
 
-  var GlitchDemo = function (_PostProcessingDemo8) {
-    _inherits(GlitchDemo, _PostProcessingDemo8);
+  var GlitchDemo = function (_PostProcessingDemo7) {
+    _inherits(GlitchDemo, _PostProcessingDemo7);
 
     function GlitchDemo(composer) {
-      var _this58;
+      var _this56;
 
       _classCallCheck(this, GlitchDemo);
 
-      _this58 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
-      _this58.effect = null;
-      _this58.pass = null;
-      _this58.object = null;
-      return _this58;
+      _this56 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
+      _this56.effect = null;
+      _this56.pass = null;
+      _this56.object = null;
+      return _this56;
     }
 
     _createClass(GlitchDemo, [{
       key: "load",
       value: function load() {
-        var _this59 = this;
+        var _this57 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11352,7 +11254,7 @@
               assets.set("perturbation-map", texture);
             });
 
-            _this59.loadSMAAImages();
+            _this57.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11502,575 +11404,6 @@
     }]);
 
     return GlitchDemo;
-  }(PostProcessingDemo);
-
-  var GridDemo = function (_PostProcessingDemo9) {
-    _inherits(GridDemo, _PostProcessingDemo9);
-
-    function GridDemo(composer) {
-      var _this60;
-
-      _classCallCheck(this, GridDemo);
-
-      _this60 = _possibleConstructorReturn(this, _getPrototypeOf(GridDemo).call(this, "grid", composer));
-      _this60.effect = null;
-      _this60.pass = null;
-      _this60.object = null;
-      return _this60;
-    }
-
-    _createClass(GridDemo, [{
-      key: "load",
-      value: function load() {
-        var _this61 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/space/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-
-            _this61.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(10, 1, 10);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
-        scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(-1, 1, 1);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var object = new three.Object3D();
-        var geometry = new three.SphereBufferGeometry(1, 4, 4);
-        var material, mesh;
-        var i;
-
-        for (i = 0; i < 100; ++i) {
-          material = new three.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
-            flatShading: true
-          });
-          mesh = new three.Mesh(geometry, material);
-          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-          mesh.position.multiplyScalar(Math.random() * 10);
-          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-          mesh.scale.multiplyScalar(Math.random());
-          object.add(mesh);
-        }
-
-        this.object = object;
-        scene.add(object);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var gridEffect = new GridEffect({
-          scale: 2.0,
-          lineWidth: 0.1
-        });
-        var pass = new EffectPass(camera, smaaEffect, gridEffect);
-        this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        this.effect = gridEffect;
-        this.pass = pass;
-        composer.addPass(pass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        _get(_getPrototypeOf(GridDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var pass = this.pass;
-        var effect = this.effect;
-        var blendMode = effect.blendMode;
-        var params = {
-          "scale": effect.getScale(),
-          "line width": effect.getLineWidth(),
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
-        };
-        menu.add(params, "scale").min(0.01).max(3.0).step(0.01).onChange(function () {
-          effect.setScale(params.scale);
-        });
-        menu.add(params, "line width").min(0.0).max(1.0).step(0.01).onChange(function () {
-          effect.setLineWidth(params["line width"]);
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
-        menu.add(pass, "dithering");
-      }
-    }]);
-
-    return GridDemo;
-  }(PostProcessingDemo);
-
-  var mouse = new three.Vector2();
-
-  var OutlineDemo = function (_PostProcessingDemo10) {
-    _inherits(OutlineDemo, _PostProcessingDemo10);
-
-    function OutlineDemo(composer) {
-      var _this62;
-
-      _classCallCheck(this, OutlineDemo);
-
-      _this62 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
-      _this62.raycaster = null;
-      _this62.selectedObject = null;
-      _this62.effect = null;
-      _this62.pass = null;
-      return _this62;
-    }
-
-    _createClass(OutlineDemo, [{
-      key: "raycast",
-      value: function raycast(event) {
-        var raycaster = this.raycaster;
-        var intersects, x;
-        mouse.x = event.clientX / window.innerWidth * 2 - 1;
-        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-        raycaster.setFromCamera(mouse, this.camera);
-        intersects = raycaster.intersectObjects(this.scene.children);
-
-        if (this.selectedObject !== null) {
-          this.selectedObject = null;
-        }
-
-        if (intersects.length > 0) {
-          x = intersects[0];
-
-          if (x.object !== undefined) {
-            this.selectedObject = x.object;
-          } else {
-            console.warn("Encountered an undefined object", intersects);
-          }
-        }
-      }
-    }, {
-      key: "handleSelection",
-      value: function handleSelection() {
-        var effect = this.effect;
-        var selection = effect.selection;
-        var selectedObject = this.selectedObject;
-
-        if (selectedObject !== null) {
-          if (selection.indexOf(selectedObject) >= 0) {
-            effect.deselectObject(selectedObject);
-          } else {
-            effect.selectObject(selectedObject);
-          }
-        }
-      }
-    }, {
-      key: "handleEvent",
-      value: function handleEvent(event) {
-        switch (event.type) {
-          case "mousemove":
-            this.raycast(event);
-            break;
-
-          case "mousedown":
-            this.handleSelection();
-            break;
-        }
-      }
-    }, {
-      key: "load",
-      value: function load() {
-        var _this63 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var textureLoader = new three.TextureLoader(loadingManager);
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/sunset/";
-        var format = ".png";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-            textureLoader.load("textures/pattern.png", function (texture) {
-              assets.set("pattern-color", texture);
-            });
-
-            _this63.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(-4, 1.25, -5);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color, 0.0);
-        scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x404040);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(1440, 200, 2000);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var mesh = new three.Mesh(new three.SphereBufferGeometry(1, 32, 32), new three.MeshPhongMaterial({
-          color: 0xffff00
-        }));
-        mesh.position.set(2, 0, -2);
-        scene.add(mesh);
-        mesh = new three.Mesh(new three.ConeBufferGeometry(1, 1, 32), new three.MeshPhongMaterial({
-          color: 0x00ff00
-        }));
-        mesh.position.set(-2, 0, 2);
-        scene.add(mesh);
-        mesh = new three.Mesh(new three.OctahedronBufferGeometry(), new three.MeshPhongMaterial({
-          color: 0xff00ff
-        }));
-        mesh.position.set(2, 0, 2);
-        scene.add(mesh);
-        mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
-          color: 0x00ffff
-        }));
-        mesh.position.set(-2, 0, -2);
-        scene.add(mesh);
-        this.raycaster = new three.Raycaster();
-        renderer.domElement.addEventListener("mousemove", this);
-        renderer.domElement.addEventListener("mousedown", this);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.05);
-        var outlineEffect = new OutlineEffect(scene, camera, {
-          blendFunction: BlendFunction.SCREEN,
-          edgeStrength: 2.5,
-          pulseSpeed: 0.0,
-          visibleEdgeColor: 0xffffff,
-          hiddenEdgeColor: 0x22090a,
-          blur: false,
-          xRay: true
-        });
-        outlineEffect.setSelection(scene.children);
-        outlineEffect.deselectObject(mesh);
-        var smaaPass = new EffectPass(camera, smaaEffect);
-        var outlinePass = new EffectPass(camera, outlineEffect);
-        this.renderPass.renderToScreen = false;
-        smaaPass.renderToScreen = true;
-        this.effect = outlineEffect;
-        this.pass = outlinePass;
-        composer.addPass(outlinePass);
-        composer.addPass(smaaPass);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var assets = this.assets;
-        var pass = this.pass;
-        var effect = this.effect;
-        var uniforms = effect.uniforms;
-        var blendMode = effect.blendMode;
-        var params = {
-          "resolution": effect.getResolutionScale(),
-          "blurriness": 0,
-          "use pattern": false,
-          "pattern scale": 60.0,
-          "pulse speed": effect.pulseSpeed,
-          "edge strength": uniforms.get("edgeStrength").value,
-          "visible edge": uniforms.get("visibleEdgeColor").value.getHex(),
-          "hidden edge": uniforms.get("hiddenEdgeColor").value.getHex(),
-          "x-ray": true,
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
-        };
-        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
-          effect.setResolutionScale(params.resolution);
-        });
-        menu.add(effect, "dithering");
-        menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
-          effect.blur = params.blurriness > 0;
-          effect.kernelSize = params.blurriness - 1;
-        });
-        menu.add(params, "use pattern").onChange(function () {
-          if (params["use pattern"]) {
-            effect.setPatternTexture(assets.get("pattern-color"));
-            uniforms.get("patternScale").value = params["pattern scale"];
-          } else {
-            effect.setPatternTexture(null);
-          }
-
-          pass.recompile();
-        });
-        menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(function () {
-          if (uniforms.has("patternScale")) {
-            uniforms.get("patternScale").value = params["pattern scale"];
-          }
-        });
-        menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(function () {
-          uniforms.get("edgeStrength").value = params["edge strength"];
-        });
-        menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(function () {
-          effect.pulseSpeed = params["pulse speed"];
-        });
-        menu.addColor(params, "visible edge").onChange(function () {
-          uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]);
-        });
-        menu.addColor(params, "hidden edge").onChange(function () {
-          uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]);
-        });
-        menu.add(effect, "xRay").onChange(function () {
-          return pass.recompile();
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
-      }
-    }, {
-      key: "reset",
-      value: function reset() {
-        _get(_getPrototypeOf(OutlineDemo.prototype), "reset", this).call(this);
-
-        var dom = this.composer.renderer.domElement;
-        dom.removeEventListener("mousemove", this);
-        dom.removeEventListener("mousedown", this);
-        return this;
-      }
-    }]);
-
-    return OutlineDemo;
-  }(PostProcessingDemo);
-
-  var PixelationDemo = function (_PostProcessingDemo11) {
-    _inherits(PixelationDemo, _PostProcessingDemo11);
-
-    function PixelationDemo(composer) {
-      var _this64;
-
-      _classCallCheck(this, PixelationDemo);
-
-      _this64 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
-      _this64.effect = null;
-      _this64.object = null;
-      _this64.maskPass = null;
-      _this64.maskObject = null;
-      return _this64;
-    }
-
-    _createClass(PixelationDemo, [{
-      key: "load",
-      value: function load() {
-        var _this65 = this;
-
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var path = "textures/skies/space/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
-            });
-
-            _this65.loadSMAAImages();
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-        camera.position.set(10, 1, 10);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
-        scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
-        directionalLight.position.set(-1, 1, 1);
-        directionalLight.target.position.copy(scene.position);
-        scene.add(directionalLight);
-        scene.add(ambientLight);
-        var object = new three.Object3D();
-        var geometry = new three.SphereBufferGeometry(1, 4, 4);
-        var material, mesh;
-        var i;
-
-        for (i = 0; i < 100; ++i) {
-          material = new three.MeshPhongMaterial({
-            color: 0xffffff * Math.random(),
-            flatShading: true
-          });
-          mesh = new three.Mesh(geometry, material);
-          mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-          mesh.position.multiplyScalar(Math.random() * 10);
-          mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-          mesh.scale.multiplyScalar(Math.random());
-          object.add(mesh);
-        }
-
-        this.object = object;
-        scene.add(object);
-        var maskScene = new three.Scene();
-        mesh = new three.Mesh(new three.BoxBufferGeometry(4, 4, 4));
-        this.maskObject = mesh;
-        maskScene.add(mesh);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var pixelationEffect = new PixelationEffect(5.0);
-        var effectPass = new EffectPass(camera, pixelationEffect);
-        var maskPass = new MaskPass(maskScene, camera);
-        var smaaPass = new EffectPass(camera, smaaEffect);
-        this.renderPass.renderToScreen = false;
-        smaaPass.renderToScreen = true;
-        composer.addPass(maskPass);
-        composer.addPass(effectPass);
-        composer.addPass(new ClearMaskPass());
-        composer.addPass(smaaPass);
-        this.effect = pixelationEffect;
-        this.maskPass = maskPass;
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var maskObject = this.maskObject;
-        var twoPI = 2.0 * Math.PI;
-        var time = performance.now() * 0.001;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
-
-        if (object.rotation.x >= twoPI) {
-          object.rotation.x -= twoPI;
-        }
-
-        if (object.rotation.y >= twoPI) {
-          object.rotation.y -= twoPI;
-        }
-
-        maskObject.position.x = Math.cos(time / 1.5) * 4;
-        maskObject.position.y = Math.sin(time) * 4;
-        maskObject.rotation.x = time;
-        maskObject.rotation.y = time * 0.5;
-
-        _get(_getPrototypeOf(PixelationDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var effect = this.effect;
-        var maskPass = this.maskPass;
-        var params = {
-          "use mask": maskPass.enabled,
-          "granularity": effect.getGranularity()
-        };
-        menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(function () {
-          effect.setGranularity(params.granularity);
-        });
-        menu.add(params, "use mask").onChange(function () {
-          maskPass.enabled = params["use mask"];
-        });
-      }
-    }]);
-
-    return PixelationDemo;
   }(PostProcessingDemo);
 
   var _GLTFLoader = function () {
@@ -13972,26 +13305,26 @@
 
   var threeGltfLoader = _GLTFLoader;
 
-  var GodRaysDemo = function (_PostProcessingDemo12) {
-    _inherits(GodRaysDemo, _PostProcessingDemo12);
+  var GodRaysDemo = function (_PostProcessingDemo8) {
+    _inherits(GodRaysDemo, _PostProcessingDemo8);
 
     function GodRaysDemo(composer) {
-      var _this66;
+      var _this58;
 
       _classCallCheck(this, GodRaysDemo);
 
-      _this66 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
-      _this66.pass = null;
-      _this66.effect = null;
-      _this66.sun = null;
-      _this66.light = null;
-      return _this66;
+      _this58 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
+      _this58.pass = null;
+      _this58.effect = null;
+      _this58.sun = null;
+      _this58.light = null;
+      return _this58;
     }
 
     _createClass(GodRaysDemo, [{
       key: "load",
       value: function load() {
-        var _this67 = this;
+        var _this59 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14024,7 +13357,7 @@
               assets.set("sun-diffuse", texture);
             });
 
-            _this67.loadSMAAImages();
+            _this59.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14156,26 +13489,284 @@
     return GodRaysDemo;
   }(PostProcessingDemo);
 
-  var ScanlineDemo = function (_PostProcessingDemo13) {
-    _inherits(ScanlineDemo, _PostProcessingDemo13);
+  var mouse = new three.Vector2();
 
-    function ScanlineDemo(composer) {
-      var _this68;
+  var OutlineDemo = function (_PostProcessingDemo9) {
+    _inherits(OutlineDemo, _PostProcessingDemo9);
 
-      _classCallCheck(this, ScanlineDemo);
+    function OutlineDemo(composer) {
+      var _this60;
 
-      _this68 = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineDemo).call(this, "scanline", composer));
-      _this68.effect = null;
-      _this68.pass = null;
-      _this68.object = null;
-      return _this68;
+      _classCallCheck(this, OutlineDemo);
+
+      _this60 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
+      _this60.raycaster = null;
+      _this60.selectedObject = null;
+      _this60.effect = null;
+      _this60.pass = null;
+      return _this60;
     }
 
-    _createClass(ScanlineDemo, [{
+    _createClass(OutlineDemo, [{
+      key: "raycast",
+      value: function raycast(event) {
+        var raycaster = this.raycaster;
+        var intersects, x;
+        mouse.x = event.clientX / window.innerWidth * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        raycaster.setFromCamera(mouse, this.camera);
+        intersects = raycaster.intersectObjects(this.scene.children);
+
+        if (this.selectedObject !== null) {
+          this.selectedObject = null;
+        }
+
+        if (intersects.length > 0) {
+          x = intersects[0];
+
+          if (x.object !== undefined) {
+            this.selectedObject = x.object;
+          } else {
+            console.warn("Encountered an undefined object", intersects);
+          }
+        }
+      }
+    }, {
+      key: "handleSelection",
+      value: function handleSelection() {
+        var effect = this.effect;
+        var selection = effect.selection;
+        var selectedObject = this.selectedObject;
+
+        if (selectedObject !== null) {
+          if (selection.indexOf(selectedObject) >= 0) {
+            effect.deselectObject(selectedObject);
+          } else {
+            effect.selectObject(selectedObject);
+          }
+        }
+      }
+    }, {
+      key: "handleEvent",
+      value: function handleEvent(event) {
+        switch (event.type) {
+          case "mousemove":
+            this.raycast(event);
+            break;
+
+          case "mousedown":
+            this.handleSelection();
+            break;
+        }
+      }
+    }, {
       key: "load",
       value: function load() {
-        var _this69 = this;
+        var _this61 = this;
 
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var textureLoader = new three.TextureLoader(loadingManager);
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var path = "textures/skies/sunset/";
+        var format = ".png";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            textureLoader.load("textures/pattern.png", function (texture) {
+              assets.set("pattern-color", texture);
+            });
+
+            _this61.loadSMAAImages();
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(-4, 1.25, -5);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color, 0.0);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x404040);
+        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        directionalLight.position.set(1440, 200, 2000);
+        directionalLight.target.position.copy(scene.position);
+        scene.add(directionalLight);
+        scene.add(ambientLight);
+        var mesh = new three.Mesh(new three.SphereBufferGeometry(1, 32, 32), new three.MeshPhongMaterial({
+          color: 0xffff00
+        }));
+        mesh.position.set(2, 0, -2);
+        scene.add(mesh);
+        mesh = new three.Mesh(new three.ConeBufferGeometry(1, 1, 32), new three.MeshPhongMaterial({
+          color: 0x00ff00
+        }));
+        mesh.position.set(-2, 0, 2);
+        scene.add(mesh);
+        mesh = new three.Mesh(new three.OctahedronBufferGeometry(), new three.MeshPhongMaterial({
+          color: 0xff00ff
+        }));
+        mesh.position.set(2, 0, 2);
+        scene.add(mesh);
+        mesh = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), new three.MeshPhongMaterial({
+          color: 0x00ffff
+        }));
+        mesh.position.set(-2, 0, -2);
+        scene.add(mesh);
+        this.raycaster = new three.Raycaster();
+        renderer.domElement.addEventListener("mousemove", this);
+        renderer.domElement.addEventListener("mousedown", this);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.05);
+        var outlineEffect = new OutlineEffect(scene, camera, {
+          blendFunction: BlendFunction.SCREEN,
+          edgeStrength: 2.5,
+          pulseSpeed: 0.0,
+          visibleEdgeColor: 0xffffff,
+          hiddenEdgeColor: 0x22090a,
+          blur: false,
+          xRay: true
+        });
+        outlineEffect.setSelection(scene.children);
+        outlineEffect.deselectObject(mesh);
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var outlinePass = new EffectPass(camera, outlineEffect);
+        this.renderPass.renderToScreen = false;
+        smaaPass.renderToScreen = true;
+        this.effect = outlineEffect;
+        this.pass = outlinePass;
+        composer.addPass(outlinePass);
+        composer.addPass(smaaPass);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var assets = this.assets;
+        var pass = this.pass;
+        var effect = this.effect;
+        var uniforms = effect.uniforms;
+        var blendMode = effect.blendMode;
+        var params = {
+          "resolution": effect.getResolutionScale(),
+          "blurriness": 0,
+          "use pattern": false,
+          "pattern scale": 60.0,
+          "pulse speed": effect.pulseSpeed,
+          "edge strength": uniforms.get("edgeStrength").value,
+          "visible edge": uniforms.get("visibleEdgeColor").value.getHex(),
+          "hidden edge": uniforms.get("hiddenEdgeColor").value.getHex(),
+          "x-ray": true,
+          "opacity": blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(function () {
+          effect.setResolutionScale(params.resolution);
+        });
+        menu.add(effect, "dithering");
+        menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
+          effect.blur = params.blurriness > 0;
+          effect.kernelSize = params.blurriness - 1;
+        });
+        menu.add(params, "use pattern").onChange(function () {
+          if (params["use pattern"]) {
+            effect.setPatternTexture(assets.get("pattern-color"));
+            uniforms.get("patternScale").value = params["pattern scale"];
+          } else {
+            effect.setPatternTexture(null);
+          }
+
+          pass.recompile();
+        });
+        menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(function () {
+          if (uniforms.has("patternScale")) {
+            uniforms.get("patternScale").value = params["pattern scale"];
+          }
+        });
+        menu.add(params, "edge strength").min(0.0).max(10.0).step(0.01).onChange(function () {
+          uniforms.get("edgeStrength").value = params["edge strength"];
+        });
+        menu.add(params, "pulse speed").min(0.0).max(2.0).step(0.01).onChange(function () {
+          effect.pulseSpeed = params["pulse speed"];
+        });
+        menu.addColor(params, "visible edge").onChange(function () {
+          uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]);
+        });
+        menu.addColor(params, "hidden edge").onChange(function () {
+          uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]);
+        });
+        menu.add(effect, "xRay").onChange(function () {
+          return pass.recompile();
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          pass.recompile();
+        });
+      }
+    }, {
+      key: "reset",
+      value: function reset() {
+        _get(_getPrototypeOf(OutlineDemo.prototype), "reset", this).call(this);
+
+        var dom = this.composer.renderer.domElement;
+        dom.removeEventListener("mousemove", this);
+        dom.removeEventListener("mousedown", this);
+        return this;
+      }
+    }]);
+
+    return OutlineDemo;
+  }(PostProcessingDemo);
+
+  var PatternDemo = function (_PostProcessingDemo10) {
+    _inherits(PatternDemo, _PostProcessingDemo10);
+
+    function PatternDemo(composer) {
+      var _this62;
+
+      _classCallCheck(this, PatternDemo);
+
+      _this62 = _possibleConstructorReturn(this, _getPrototypeOf(PatternDemo).call(this, "pattern", composer));
+      _this62.dotScreenEffect = null;
+      _this62.gridEffect = null;
+      _this62.scanlineEffect = null;
+      _this62.pass = null;
+      _this62.object = null;
+      return _this62;
+    }
+
+    _createClass(PatternDemo, [{
+      key: "load",
+      value: function load() {
         var assets = this.assets;
         var loadingManager = this.loadingManager;
         var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
@@ -14195,8 +13786,6 @@
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
-
-            _this69.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14248,16 +13837,27 @@
 
         this.object = object;
         scene.add(object);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        var dotScreenEffect = new DotScreenEffect({
+          blendFunction: BlendFunction.OVERLAY,
+          scale: 0.9,
+          angle: Math.PI * 0.58
+        });
+        var gridEffect = new GridEffect({
+          blendFunction: BlendFunction.SKIP,
+          scale: 1.75,
+          lineWidth: 0.25
+        });
         var scanlineEffect = new ScanlineEffect({
+          blendFunction: BlendFunction.SKIP,
           density: 1.5
         });
-        var pass = new EffectPass(camera, smaaEffect, scanlineEffect);
+        var pass = new EffectPass(camera, dotScreenEffect, gridEffect, scanlineEffect);
+        this.dotScreenEffect = dotScreenEffect;
+        this.gridEffect = gridEffect;
+        this.scanlineEffect = scanlineEffect;
+        this.pass = pass;
         this.renderPass.renderToScreen = false;
         pass.renderToScreen = true;
-        pass.dithering = true;
-        this.effect = scanlineEffect;
-        this.pass = pass;
         composer.addPass(pass);
       }
     }, {
@@ -14265,8 +13865,8 @@
       value: function render(delta) {
         var object = this.object;
         var twoPI = 2.0 * Math.PI;
-        object.rotation.x += 0.001;
-        object.rotation.y += 0.005;
+        object.rotation.x += 0.0005;
+        object.rotation.y += 0.001;
 
         if (object.rotation.x >= twoPI) {
           object.rotation.x -= twoPI;
@@ -14276,55 +13876,102 @@
           object.rotation.y -= twoPI;
         }
 
-        _get(_getPrototypeOf(ScanlineDemo.prototype), "render", this).call(this, delta);
+        _get(_getPrototypeOf(PatternDemo.prototype), "render", this).call(this, delta);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
         var pass = this.pass;
-        var effect = this.effect;
-        var blendMode = effect.blendMode;
+        var dotScreenEffect = this.dotScreenEffect;
+        var gridEffect = this.gridEffect;
+        var scanlineEffect = this.scanlineEffect;
         var params = {
-          "density": effect.getDensity(),
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
+          dotScreen: {
+            "angle": Math.PI * 0.58,
+            "scale": dotScreenEffect.uniforms.get("scale").value,
+            "opacity": dotScreenEffect.blendMode.opacity.value,
+            "blend mode": dotScreenEffect.blendMode.blendFunction
+          },
+          grid: {
+            "scale": gridEffect.getScale(),
+            "line width": gridEffect.getLineWidth(),
+            "opacity": gridEffect.blendMode.opacity.value,
+            "blend mode": gridEffect.blendMode.blendFunction
+          },
+          scanline: {
+            "density": scanlineEffect.getDensity(),
+            "opacity": scanlineEffect.blendMode.opacity.value,
+            "blend mode": scanlineEffect.blendMode.blendFunction
+          }
         };
-        menu.add(params, "density").min(0.001).max(2.0).step(0.001).onChange(function () {
-          effect.setDensity(params.density);
+        var folder = menu.addFolder("Dot Screen");
+        folder.add(params.dotScreen, "angle").min(0.0).max(Math.PI).step(0.001).onChange(function () {
+          dotScreenEffect.setAngle(params.dotScreen.angle);
         });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
+        folder.add(params.dotScreen, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
+          dotScreenEffect.uniforms.get("scale").value = params.dotScreen.scale;
         });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+        folder.add(params.dotScreen, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          dotScreenEffect.blendMode.opacity.value = params.dotScreen.opacity;
+        });
+        folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(function () {
+          dotScreenEffect.blendMode.blendFunction = Number.parseInt(params.dotScreen["blend mode"]);
           pass.recompile();
         });
-        menu.add(pass, "dithering");
+        folder.open();
+        folder = menu.addFolder("Grid");
+        folder.add(params.grid, "scale").min(0.01).max(3.0).step(0.01).onChange(function () {
+          gridEffect.setScale(params.grid.scale);
+        });
+        folder.add(params.grid, "line width").min(0.0).max(1.0).step(0.01).onChange(function () {
+          gridEffect.setLineWidth(params.grid["line width"]);
+        });
+        folder.add(params.grid, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          gridEffect.blendMode.opacity.value = params.grid.opacity;
+        });
+        folder.add(params.grid, "blend mode", BlendFunction).onChange(function () {
+          gridEffect.blendMode.blendFunction = Number.parseInt(params.grid["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
+        folder = menu.addFolder("Scanline");
+        folder.add(params.scanline, "density").min(0.001).max(2.0).step(0.001).onChange(function () {
+          scanlineEffect.setDensity(params.scanline.density);
+        });
+        folder.add(params.scanline, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          scanlineEffect.blendMode.opacity.value = params.scanline.opacity;
+        });
+        folder.add(params.scanline, "blend mode", BlendFunction).onChange(function () {
+          scanlineEffect.blendMode.blendFunction = Number.parseInt(params.scanline["blend mode"]);
+          pass.recompile();
+        });
+        folder.open();
       }
     }]);
 
-    return ScanlineDemo;
+    return PatternDemo;
   }(PostProcessingDemo);
 
-  var SepiaDemo = function (_PostProcessingDemo14) {
-    _inherits(SepiaDemo, _PostProcessingDemo14);
+  var PixelationDemo = function (_PostProcessingDemo11) {
+    _inherits(PixelationDemo, _PostProcessingDemo11);
 
-    function SepiaDemo(composer) {
-      var _this70;
+    function PixelationDemo(composer) {
+      var _this63;
 
-      _classCallCheck(this, SepiaDemo);
+      _classCallCheck(this, PixelationDemo);
 
-      _this70 = _possibleConstructorReturn(this, _getPrototypeOf(SepiaDemo).call(this, "sepia", composer));
-      _this70.effect = null;
-      _this70.pass = null;
-      _this70.object = null;
-      return _this70;
+      _this63 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
+      _this63.effect = null;
+      _this63.object = null;
+      _this63.maskPass = null;
+      _this63.maskObject = null;
+      return _this63;
     }
 
-    _createClass(SepiaDemo, [{
+    _createClass(PixelationDemo, [{
       key: "load",
       value: function load() {
-        var _this71 = this;
+        var _this64 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14346,7 +13993,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this71.loadSMAAImages();
+            _this64.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14398,21 +14045,31 @@
 
         this.object = object;
         scene.add(object);
+        var maskScene = new three.Scene();
+        mesh = new three.Mesh(new three.BoxBufferGeometry(4, 4, 4));
+        this.maskObject = mesh;
+        maskScene.add(mesh);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        var sepiaEffect = new SepiaEffect();
-        var pass = new EffectPass(camera, smaaEffect, sepiaEffect);
+        var pixelationEffect = new PixelationEffect(5.0);
+        var effectPass = new EffectPass(camera, pixelationEffect);
+        var maskPass = new MaskPass(maskScene, camera);
+        var smaaPass = new EffectPass(camera, smaaEffect);
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        pass.dithering = true;
-        this.effect = sepiaEffect;
-        this.pass = pass;
-        composer.addPass(pass);
+        smaaPass.renderToScreen = true;
+        composer.addPass(maskPass);
+        composer.addPass(effectPass);
+        composer.addPass(new ClearMaskPass());
+        composer.addPass(smaaPass);
+        this.effect = pixelationEffect;
+        this.maskPass = maskPass;
       }
     }, {
       key: "render",
       value: function render(delta) {
         var object = this.object;
+        var maskObject = this.maskObject;
         var twoPI = 2.0 * Math.PI;
+        var time = performance.now() * 0.001;
         object.rotation.x += 0.001;
         object.rotation.y += 0.005;
 
@@ -14424,53 +14081,51 @@
           object.rotation.y -= twoPI;
         }
 
-        _get(_getPrototypeOf(SepiaDemo.prototype), "render", this).call(this, delta);
+        maskObject.position.x = Math.cos(time / 1.5) * 4;
+        maskObject.position.y = Math.sin(time) * 4;
+        maskObject.rotation.x = time;
+        maskObject.rotation.y = time * 0.5;
+
+        _get(_getPrototypeOf(PixelationDemo.prototype), "render", this).call(this, delta);
       }
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.pass;
         var effect = this.effect;
-        var blendMode = effect.blendMode;
+        var maskPass = this.maskPass;
         var params = {
-          "intensity": effect.uniforms.get("intensity").value,
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
+          "use mask": maskPass.enabled,
+          "granularity": effect.getGranularity()
         };
-        menu.add(params, "intensity").min(0.0).max(4.0).step(0.01).onChange(function () {
-          effect.uniforms.get("intensity").value = params.intensity;
+        menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(function () {
+          effect.setGranularity(params.granularity);
         });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
+        menu.add(params, "use mask").onChange(function () {
+          maskPass.enabled = params["use mask"];
         });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
-        });
-        menu.add(pass, "dithering");
       }
     }]);
 
-    return SepiaDemo;
+    return PixelationDemo;
   }(PostProcessingDemo);
 
-  var ShockWaveDemo = function (_PostProcessingDemo15) {
-    _inherits(ShockWaveDemo, _PostProcessingDemo15);
+  var ShockWaveDemo = function (_PostProcessingDemo12) {
+    _inherits(ShockWaveDemo, _PostProcessingDemo12);
 
     function ShockWaveDemo(composer) {
-      var _this72;
+      var _this65;
 
       _classCallCheck(this, ShockWaveDemo);
 
-      _this72 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
-      _this72.effect = null;
-      return _this72;
+      _this65 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
+      _this65.effect = null;
+      return _this65;
     }
 
     _createClass(ShockWaveDemo, [{
       key: "load",
       value: function load() {
-        var _this73 = this;
+        var _this66 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14492,7 +14147,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this73.loadSMAAImages();
+            _this66.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14577,31 +14232,31 @@
     return ShockWaveDemo;
   }(PostProcessingDemo);
 
-  var SMAADemo = function (_PostProcessingDemo16) {
-    _inherits(SMAADemo, _PostProcessingDemo16);
+  var SMAADemo = function (_PostProcessingDemo13) {
+    _inherits(SMAADemo, _PostProcessingDemo13);
 
     function SMAADemo(composer) {
-      var _this74;
+      var _this67;
 
       _classCallCheck(this, SMAADemo);
 
-      _this74 = _possibleConstructorReturn(this, _getPrototypeOf(SMAADemo).call(this, "smaa", composer));
-      _this74.originalRenderer = null;
-      _this74.rendererAA = null;
-      _this74.controls2 = null;
-      _this74.smaaEffect = null;
-      _this74.pass = null;
-      _this74.textureEffect = null;
-      _this74.objectA = null;
-      _this74.objectB = null;
-      _this74.objectC = null;
-      return _this74;
+      _this67 = _possibleConstructorReturn(this, _getPrototypeOf(SMAADemo).call(this, "smaa", composer));
+      _this67.originalRenderer = null;
+      _this67.rendererAA = null;
+      _this67.controls2 = null;
+      _this67.smaaEffect = null;
+      _this67.pass = null;
+      _this67.textureEffect = null;
+      _this67.objectA = null;
+      _this67.objectB = null;
+      _this67.objectC = null;
+      return _this67;
     }
 
     _createClass(SMAADemo, [{
       key: "load",
       value: function load() {
-        var _this75 = this;
+        var _this68 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14628,7 +14283,7 @@
               assets.set("crate-color", texture);
             });
 
-            _this75.loadSMAAImages();
+            _this68.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14841,26 +14496,26 @@
     return SMAADemo;
   }(PostProcessingDemo);
 
-  var SSAODemo = function (_PostProcessingDemo17) {
-    _inherits(SSAODemo, _PostProcessingDemo17);
+  var SSAODemo = function (_PostProcessingDemo14) {
+    _inherits(SSAODemo, _PostProcessingDemo14);
 
     function SSAODemo(composer) {
-      var _this76;
+      var _this69;
 
       _classCallCheck(this, SSAODemo);
 
-      _this76 = _possibleConstructorReturn(this, _getPrototypeOf(SSAODemo).call(this, "ssao", composer));
-      _this76.renderer = null;
-      _this76.effect = null;
-      _this76.effectPass = null;
-      _this76.normalPass = null;
-      return _this76;
+      _this69 = _possibleConstructorReturn(this, _getPrototypeOf(SSAODemo).call(this, "ssao", composer));
+      _this69.renderer = null;
+      _this69.effect = null;
+      _this69.effectPass = null;
+      _this69.normalPass = null;
+      return _this69;
     }
 
     _createClass(SSAODemo, [{
       key: "load",
       value: function load() {
-        var _this77 = this;
+        var _this70 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14882,7 +14537,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this77.loadSMAAImages();
+            _this70.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15111,24 +14766,24 @@
     return SSAODemo;
   }(PostProcessingDemo);
 
-  var TextureDemo = function (_PostProcessingDemo18) {
-    _inherits(TextureDemo, _PostProcessingDemo18);
+  var TextureDemo = function (_PostProcessingDemo15) {
+    _inherits(TextureDemo, _PostProcessingDemo15);
 
     function TextureDemo(composer) {
-      var _this78;
+      var _this71;
 
       _classCallCheck(this, TextureDemo);
 
-      _this78 = _possibleConstructorReturn(this, _getPrototypeOf(TextureDemo).call(this, "texture", composer));
-      _this78.effect = null;
-      _this78.pass = null;
-      return _this78;
+      _this71 = _possibleConstructorReturn(this, _getPrototypeOf(TextureDemo).call(this, "texture", composer));
+      _this71.effect = null;
+      _this71.pass = null;
+      return _this71;
     }
 
     _createClass(TextureDemo, [{
       key: "load",
       value: function load() {
-        var _this79 = this;
+        var _this72 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15155,7 +14810,7 @@
               assets.set("scratches-color", texture);
             });
 
-            _this79.loadSMAAImages();
+            _this72.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15216,25 +14871,25 @@
     return TextureDemo;
   }(PostProcessingDemo);
 
-  var ToneMappingDemo = function (_PostProcessingDemo19) {
-    _inherits(ToneMappingDemo, _PostProcessingDemo19);
+  var ToneMappingDemo = function (_PostProcessingDemo16) {
+    _inherits(ToneMappingDemo, _PostProcessingDemo16);
 
     function ToneMappingDemo(composer) {
-      var _this80;
+      var _this73;
 
       _classCallCheck(this, ToneMappingDemo);
 
-      _this80 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingDemo).call(this, "tone-mapping", composer));
-      _this80.effect = null;
-      _this80.pass = null;
-      _this80.object = null;
-      return _this80;
+      _this73 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingDemo).call(this, "tone-mapping", composer));
+      _this73.effect = null;
+      _this73.pass = null;
+      _this73.object = null;
+      return _this73;
     }
 
     _createClass(ToneMappingDemo, [{
       key: "load",
       value: function load() {
-        var _this81 = this;
+        var _this74 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15261,7 +14916,7 @@
               assets.set("crate-color", texture);
             });
 
-            _this81.loadSMAAImages();
+            _this74.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15392,25 +15047,25 @@
     return ToneMappingDemo;
   }(PostProcessingDemo);
 
-  var VignetteDemo = function (_PostProcessingDemo20) {
-    _inherits(VignetteDemo, _PostProcessingDemo20);
+  var VignetteDemo = function (_PostProcessingDemo17) {
+    _inherits(VignetteDemo, _PostProcessingDemo17);
 
     function VignetteDemo(composer) {
-      var _this82;
+      var _this75;
 
       _classCallCheck(this, VignetteDemo);
 
-      _this82 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteDemo).call(this, "vignette", composer));
-      _this82.effect = null;
-      _this82.pass = null;
-      _this82.object = null;
-      return _this82;
+      _this75 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteDemo).call(this, "vignette", composer));
+      _this75.effect = null;
+      _this75.pass = null;
+      _this75.object = null;
+      return _this75;
     }
 
     _createClass(VignetteDemo, [{
       key: "load",
       value: function load() {
-        var _this83 = this;
+        var _this76 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15432,7 +15087,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this83.loadSMAAImages();
+            _this76.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15550,6 +15205,270 @@
     return VignetteDemo;
   }(PostProcessingDemo);
 
+  var PerformanceDemo = function (_PostProcessingDemo18) {
+    _inherits(PerformanceDemo, _PostProcessingDemo18);
+
+    function PerformanceDemo(composer) {
+      var _this77;
+
+      _classCallCheck(this, PerformanceDemo);
+
+      _this77 = _possibleConstructorReturn(this, _getPrototypeOf(PerformanceDemo).call(this, "performance", composer));
+      _this77.effects = null;
+      _this77.effectPass = null;
+      _this77.passes = null;
+      _this77.sun = null;
+      _this77.light = null;
+      _this77.fps = "0";
+      _this77.acc0 = 0;
+      _this77.acc1 = 0;
+      _this77.frames = 0;
+      return _this77;
+    }
+
+    _createClass(PerformanceDemo, [{
+      key: "load",
+      value: function load() {
+        var _this78 = this;
+
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
+        var textureLoader = new three.TextureLoader(loadingManager);
+        var path = "textures/skies/space5/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onError = reject;
+
+            loadingManager.onProgress = function (item, loaded, total) {
+              if (loaded === total) {
+                resolve();
+              }
+            };
+
+            cubeTextureLoader.load(urls, function (textureCube) {
+              assets.set("sky", textureCube);
+            });
+            textureLoader.load("textures/sun.png", function (texture) {
+              assets.set("sun-diffuse", texture);
+            });
+
+            _this78.loadSMAAImages();
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.renderer;
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 2000);
+        camera.position.set(-10, 1.125, 0);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        scene.fog = new three.FogExp2(0x000000, 0.0025);
+        renderer.setClearColor(scene.fog.color);
+        scene.background = assets.get("sky");
+        var ambientLight = new three.AmbientLight(0x666666);
+        var pointLight = new three.PointLight(0xffbbaa, 4, 10);
+        scene.add(ambientLight);
+        scene.add(pointLight);
+        this.light = pointLight;
+        var material = new three.MeshPhongMaterial({
+          color: 0xffaaaa,
+          flatShading: true,
+          envMap: assets.get("sky")
+        });
+        var cylinderGeometry = new three.CylinderBufferGeometry(1, 1, 20, 6);
+        var cylinderMesh = new three.Mesh(cylinderGeometry, material);
+        cylinderMesh.rotation.set(0, 0, Math.PI / 2);
+        scene.add(cylinderMesh);
+        var torusGeometry = new three.TorusBufferGeometry(1, 0.4, 16, 100);
+        var torusMeshes = [new three.Mesh(torusGeometry, material), new three.Mesh(torusGeometry, material), new three.Mesh(torusGeometry, material)];
+        torusMeshes[0].position.set(0, 2.5, -5);
+        torusMeshes[1].position.set(0, 2.5, 0);
+        torusMeshes[2].position.set(0, 2.5, 5);
+        scene.add(torusMeshes[0]);
+        scene.add(torusMeshes[1]);
+        scene.add(torusMeshes[2]);
+        var sunMaterial = new three.PointsMaterial({
+          map: assets.get("sun-diffuse"),
+          size: 5,
+          sizeAttenuation: true,
+          color: 0xffddaa,
+          alphaTest: 0,
+          transparent: true,
+          fog: false
+        });
+        var sunGeometry = new three.BufferGeometry();
+        sunGeometry.addAttribute("position", new three.BufferAttribute(new Float32Array(3), 3));
+        var sun = new three.Points(sunGeometry, sunMaterial);
+        sun.frustumCulled = false;
+        this.sun = sun;
+        scene.add(sun);
+        this.renderPass.renderToScreen = false;
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+        smaaEffect.setEdgeDetectionThreshold(0.06);
+        var bloomEffect = new BloomEffect({
+          blendFunction: BlendFunction.SCREEN,
+          resolutionScale: 1.0,
+          distinction: 2.0
+        });
+        var godRaysEffect = new GodRaysEffect(camera, sun, {
+          resolutionScale: 1.0,
+          kernelSize: KernelSize.SMALL,
+          density: 0.96,
+          decay: 0.93,
+          weight: 0.3,
+          exposure: 0.55,
+          samples: 60,
+          clampMax: 1.0
+        });
+        var dotScreenEffect = new DotScreenEffect({
+          blendFunction: BlendFunction.OVERLAY
+        });
+        var gridEffect = new GridEffect({
+          blendFunction: BlendFunction.DARKEN,
+          scale: 2.4,
+          lineWidth: 0.0
+        });
+        var scanlineEffect = new ScanlineEffect({
+          blendFunction: BlendFunction.OVERLAY,
+          density: 1.04
+        });
+        var colorAverageEffect = new ColorAverageEffect(BlendFunction.COLOR_DODGE);
+        var colorDepthEffect = new ColorDepthEffect({
+          bits: 16
+        });
+        var sepiaEffect = new SepiaEffect({
+          blendFunction: BlendFunction.NORMAL
+        });
+        var brightnessContrastEffect = new BrightnessContrastEffect({
+          contrast: 0.0
+        });
+        var gammaCorrectionEffect = new GammaCorrectionEffect({
+          gamma: 1.1
+        });
+        var hueSaturationEffect = new HueSaturationEffect({
+          saturation: 0.125
+        });
+        var noiseEffect = new NoiseEffect({
+          premultiply: true
+        });
+        var vignetteEffect = new VignetteEffect();
+        godRaysEffect.dithering = true;
+        bloomEffect.blendMode.opacity.value = 2.0;
+        colorAverageEffect.blendMode.opacity.value = 0.01;
+        sepiaEffect.blendMode.opacity.value = 0.01;
+        dotScreenEffect.blendMode.opacity.value = 0.01;
+        gridEffect.blendMode.opacity.value = 0.01;
+        scanlineEffect.blendMode.opacity.value = 0.01;
+        noiseEffect.blendMode.opacity.value = 0.25;
+        var effects = [smaaEffect, bloomEffect, godRaysEffect, colorAverageEffect, colorDepthEffect, dotScreenEffect, gridEffect, scanlineEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect, sepiaEffect, noiseEffect, vignetteEffect];
+
+        var effectPass = _construct(EffectPass, [camera].concat(effects));
+
+        effectPass.renderToScreen = true;
+        var passes = effects.map(function (effect) {
+          return new EffectPass(camera, effect);
+        });
+        passes[passes.length - 1].renderToScreen = true;
+        var _iteratorNormalCompletion21 = true;
+        var _didIteratorError21 = false;
+        var _iteratorError21 = undefined;
+
+        try {
+          for (var _iterator21 = passes[Symbol.iterator](), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
+            var pass = _step21.value;
+            pass.enabled = false;
+            composer.addPass(pass);
+          }
+        } catch (err) {
+          _didIteratorError21 = true;
+          _iteratorError21 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion21 && _iterator21["return"] != null) {
+              _iterator21["return"]();
+            }
+          } finally {
+            if (_didIteratorError21) {
+              throw _iteratorError21;
+            }
+          }
+        }
+
+        composer.addPass(effectPass);
+        this.effectPass = effectPass;
+        this.effects = effects;
+        this.passes = passes;
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        this.acc0 += delta;
+        this.acc1 += delta;
+
+        if (this.acc0 >= 1.0) {
+          this.fps = this.frames;
+          this.acc0 = 0.0;
+          this.frames = 0;
+        } else {
+          ++this.frames;
+        }
+
+        this.acc1 += delta;
+        this.sun.position.set(0, 2.5, Math.sin(this.acc1 * 0.2) * 8);
+        this.light.position.copy(this.sun.position);
+
+        _get(_getPrototypeOf(PerformanceDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var _this79 = this;
+
+        var params = {
+          "merge effects": true,
+          "firefox": function firefox() {
+            window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank");
+          },
+          "chrome": function chrome() {
+            window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank");
+          }
+        };
+        menu.add(params, "merge effects").onChange(function () {
+          _this79.effectPass.enabled = params["merge effects"];
+
+          _this79.passes.forEach(function (pass) {
+            pass.enabled = !params["merge effects"];
+          });
+        });
+        menu.add(this, "fps").listen();
+        var folder = menu.addFolder("Disable VSync");
+        folder.add(params, "firefox");
+        folder.add(params, "chrome");
+      }
+    }, {
+      key: "reset",
+      value: function reset() {
+        _get(_getPrototypeOf(PerformanceDemo.prototype), "reset", this).call(this);
+
+        this.acc0 = 0.0;
+        this.acc1 = 0.0;
+        this.frames = 0;
+      }
+    }]);
+
+    return PerformanceDemo;
+  }(PostProcessingDemo);
+
   var renderer;
   var composer;
   var manager;
@@ -15593,7 +15512,7 @@
     });
     manager.addEventListener("change", onChange);
     manager.addEventListener("load", onLoad);
-    var demos = [new BloomDemo(composer), new BlurDemo(composer), new BokehDemo(composer), new RealisticBokehDemo(composer), new ColorCorrectionDemo(composer), new ColorDepthDemo(composer), new DotScreenDemo(composer), new GlitchDemo(composer), new GodRaysDemo(composer), new GridDemo(composer), new OutlineDemo(composer), new PixelationDemo(composer), new ScanlineDemo(composer), new SepiaDemo(composer), new ShockWaveDemo(composer), new SMAADemo(composer), new SSAODemo(composer), new TextureDemo(composer), new ToneMappingDemo(composer), new VignetteDemo(composer)];
+    var demos = [new BloomDemo(composer), new BlurDemo(composer), new BokehDemo(composer), new RealisticBokehDemo(composer), new ColorDepthDemo(composer), new ColorGradingDemo(composer), new GlitchDemo(composer), new GodRaysDemo(composer), new OutlineDemo(composer), new PatternDemo(composer), new PixelationDemo(composer), new ShockWaveDemo(composer), new SMAADemo(composer), new SSAODemo(composer), new TextureDemo(composer), new ToneMappingDemo(composer), new VignetteDemo(composer), new PerformanceDemo(composer)];
 
     if (demos.map(function (demo) {
       return demo.id;

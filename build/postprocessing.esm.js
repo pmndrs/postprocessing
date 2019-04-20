@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.2.1 build Thu Apr 11 2019
+ * postprocessing v6.2.1 build Sat Apr 20 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -4320,6 +4320,15 @@ class ColorDepthEffect extends Effect {
 			])
 
 		});
+
+		/**
+		 * The current amount of bits.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.bits = 0;
 
 		this.setBitDepth(bits);
 

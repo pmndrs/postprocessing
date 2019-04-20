@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.2.1 build Thu Apr 11 2019
+ * postprocessing v6.2.1 build Sat Apr 20 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -2572,6 +2572,7 @@
         blendFunction: blendFunction,
         uniforms: new Map([["factor", new three.Uniform(1.0)]])
       }));
+      _this17.bits = 0;
 
       _this17.setBitDepth(bits);
 
