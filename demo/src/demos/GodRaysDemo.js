@@ -4,6 +4,7 @@ import {
 	BufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
+	Group,
 	PerspectiveCamera,
 	Points,
 	PointsMaterial,
@@ -212,10 +213,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 		sunGeometry.addAttribute("position", new BufferAttribute(new Float32Array(3), 3));
 		const sun = new Points(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
-		sun.position.copy(this.light.position);
 
+		const group = new Group();
+		group.position.copy(this.light.position);
+		group.add(sun);
 		this.sun = sun;
-		scene.add(sun);
+		scene.add(group);
 
 		// Passes.
 
