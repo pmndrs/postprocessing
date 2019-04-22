@@ -6117,6 +6117,7 @@
     CONSTANT_WILD: 3
   };
   var v = new three.Vector3();
+  var m = new three.Matrix4();
 
   var GodRaysEffect = function (_Effect11) {
     _inherits(GodRaysEffect, _Effect11);
@@ -6219,20 +6220,35 @@
       value: function update(renderer, inputBuffer, deltaTime) {
         var lightSource = this.lightSource;
         var parent = lightSource.parent;
+        var matrixAutoUpdate = lightSource.matrixAutoUpdate;
         var renderTargetX = this.renderTargetX;
         var renderTargetLight = this.renderTargetLight;
-        v.copy(lightSource.position).project(this.camera);
-        this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
+
+        if (!matrixAutoUpdate) {
+          m.copy(lightSource.matrix);
+        }
+
         lightSource.material.depthWrite = true;
+        lightSource.matrixAutoUpdate = false;
+        lightSource.updateMatrixWorld();
+        lightSource.matrix.copy(lightSource.matrixWorld);
         this.lightScene.add(lightSource);
         this.renderPassLight.render(renderer, renderTargetLight);
         this.clearPass.render(renderer, renderTargetX);
         this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
         lightSource.material.depthWrite = false;
+        lightSource.matrixAutoUpdate = matrixAutoUpdate;
+
+        if (!matrixAutoUpdate) {
+          lightSource.matrix.copy(m);
+        }
 
         if (parent !== null) {
           parent.add(lightSource);
         }
+
+        v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
+        this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
 
         if (this.blur) {
           this.blurPass.render(renderer, renderTargetX, renderTargetX);
@@ -9075,7 +9091,7 @@
   };
   var TWO_PI = Math.PI * 2;
   var v$2 = new Vector3();
-  var m = new Matrix4();
+  var m$1 = new Matrix4();
 
   var RotationManager = function () {
     function RotationManager(position, quaternion, target, settings) {
@@ -9113,12 +9129,12 @@
         var rotation = settings.rotation;
 
         if (settings.general.orbit) {
-          m.lookAt(v$2.subVectors(this.position, this.target), rotation.pivotOffset, rotation.up);
+          m$1.lookAt(v$2.subVectors(this.position, this.target), rotation.pivotOffset, rotation.up);
         } else {
-          m.lookAt(v$2.set(0, 0, 0), this.target.setFromSpherical(this.spherical), rotation.up);
+          m$1.lookAt(v$2.set(0, 0, 0), this.target.setFromSpherical(this.spherical), rotation.up);
         }
 
-        this.quaternion.setFromRotationMatrix(m);
+        this.quaternion.setFromRotationMatrix(m$1);
         return this;
       }
     }, {
@@ -13403,9 +13419,11 @@
         sunGeometry.addAttribute("position", new three.BufferAttribute(new Float32Array(3), 3));
         var sun = new three.Points(sunGeometry, sunMaterial);
         sun.frustumCulled = false;
-        sun.position.copy(this.light.position);
+        var group = new three.Group();
+        group.position.copy(this.light.position);
+        group.add(sun);
         this.sun = sun;
-        scene.add(sun);
+        scene.add(group);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
         smaaEffect.setEdgeDetectionThreshold(0.065);
         var godRaysEffect = new GodRaysEffect(camera, sun, {

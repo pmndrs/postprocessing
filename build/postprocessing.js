@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.2.1 build Sat Apr 20 2019
+ * postprocessing v6.2.2 build Mon Apr 22 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -2894,6 +2894,7 @@
     CONSTANT_WILD: 3
   };
   var v = new three.Vector3();
+  var m = new three.Matrix4();
 
   var GodRaysEffect = function (_Effect11) {
     _inherits(GodRaysEffect, _Effect11);
@@ -2996,20 +2997,35 @@
       value: function update(renderer, inputBuffer, deltaTime) {
         var lightSource = this.lightSource;
         var parent = lightSource.parent;
+        var matrixAutoUpdate = lightSource.matrixAutoUpdate;
         var renderTargetX = this.renderTargetX;
         var renderTargetLight = this.renderTargetLight;
-        v.copy(lightSource.position).project(this.camera);
-        this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
+
+        if (!matrixAutoUpdate) {
+          m.copy(lightSource.matrix);
+        }
+
         lightSource.material.depthWrite = true;
+        lightSource.matrixAutoUpdate = false;
+        lightSource.updateMatrixWorld();
+        lightSource.matrix.copy(lightSource.matrixWorld);
         this.lightScene.add(lightSource);
         this.renderPassLight.render(renderer, renderTargetLight);
         this.clearPass.render(renderer, renderTargetX);
         this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
         lightSource.material.depthWrite = false;
+        lightSource.matrixAutoUpdate = matrixAutoUpdate;
+
+        if (!matrixAutoUpdate) {
+          lightSource.matrix.copy(m);
+        }
 
         if (parent !== null) {
           parent.add(lightSource);
         }
+
+        v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
+        this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
 
         if (this.blur) {
           this.blurPass.render(renderer, renderTargetX, renderTargetX);

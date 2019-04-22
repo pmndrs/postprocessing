@@ -96,12 +96,11 @@
 </nav>
 
 <div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="post-processing">Post Processing</h1><p><a href="https://travis-ci.org/vanruesc/postprocessing"><img src="https://travis-ci.org/vanruesc/postprocessing.svg?branch=master" alt="Build status"></a>
-<a href="http://badge.fury.io/js/postprocessing"><img src="https://badge.fury.io/js/postprocessing.svg" alt="npm version"></a>
-<a href="https://david-dm.org/vanruesc/postprocessing?type=peer"><img src="https://david-dm.org/vanruesc/postprocessing/peer-status.svg" alt="Peer dependencies"></a></p>
+<a href="https://www.npmjs.com/package/postprocessing"><img src="https://badgen.net/npm/v/postprocessing?color=green" alt="npm version"></a>
+<a href="https://david-dm.org/vanruesc/postprocessing?type=peer"><img src="https://david-dm.org/vanruesc/postprocessing/peer-status.svg" alt="Peer dependencies"></a>
+<a href="https://www.jsdelivr.com/package/npm/postprocessing"><img src="https://badgen.net/jsdelivr/hits/npm/postprocessing" alt="CDN"></a></p>
 <p>A post processing library that provides the means to implement image filter effects for <a href="https://threejs.org/">three.js</a>.</p>
-<p><em><a href="https://vanruesc.github.io/postprocessing/public/demo">Extensive Demo</a> &#x2234;
-<a href="https://vanruesc.github.io/postprocessing/public/docs">API Reference</a> &#x2234;
-<a href="https://github.com/vanruesc/postprocessing/wiki">Wiki</a></em></p>
+<p><em><a href="https://vanruesc.github.io/postprocessing/public/demo">Extensive Demo</a>&#x2002;&#xB7;&#x2002;<a href="https://jsfiddle.net/27d0qn5g/1/">Sandbox</a>&#x2002;&#xB7;&#x2002;<a href="https://vanruesc.github.io/postprocessing/public/docs">API Reference</a>&#x2002;&#xB7;&#x2002;<a href="https://github.com/vanruesc/postprocessing/wiki">Wiki</a></em></p>
 <h2 id="installation">Installation</h2><p>This library requires the peer dependency <a href="https://github.com/mrdoob/three.js/">three</a>.</p>
 <pre><code class="lang-sh"><code class="source-code prettyprint">npm install three postprocessing</code>
 </code></pre>
@@ -128,29 +127,38 @@ const clock = new Clock();
 
 }());</code>
 </code></pre>
-<h2 id="performance">Performance</h2><p>This library provides an <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a> which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own blend function from a list of <a href="https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction">built-in functions</a>.</p>
+<h2 id="performance">Performance</h2><p>This library provides an <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a> which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own <a href="https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction">blend function</a>.</p>
+<p><a href="http://vanruesc.github.io/postprocessing/public/demo/#performance">Performance Test</a></p>
 <h2 id="included-effects">Included Effects</h2><ul>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bloom">Bloom</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#blur">Blur</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bokeh">Bokeh</a> &amp; <a href="http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh">Realistic Bokeh</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-correction">Color Correction</a><ul>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-grading">Color Grading</a><ul>
+<li>Color Average</li>
+<li>Sepia</li>
 <li>Brightness &amp; Contrast</li>
 <li>Gamma Correction</li>
 <li>Hue &amp; Saturation</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#dot-screen">Dot Screen</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-depth">Color Depth</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a><ul>
 <li>Chromatic Aberration</li>
 <li>Noise</li>
 </ul>
 </li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#god-rays">God Rays</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#grid">Grid</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pattern">Pattern</a><ul>
+<li>Dot-Screen</li>
+<li>Grid</li>
+<li>Scanline</li>
+</ul>
+</li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a><ul>
+<li>Masking</li>
+</ul>
+</li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#outline">Outline</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#scanline">Scanline</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#sepia">Sepia</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#shock-wave">Shock Wave</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#smaa">SMAA</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#ssao">SSAO</a></li>

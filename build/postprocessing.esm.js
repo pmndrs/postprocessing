@@ -1,9 +1,9 @@
 /**
- * postprocessing v6.2.1 build Sat Apr 20 2019
+ * postprocessing v6.2.2 build Mon Apr 22 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
-import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, PlaneBufferGeometry, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Vector4, Texture, Matrix4, LinearMipMapLinearFilter, Box2 } from 'three';
+import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, PlaneBufferGeometry, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, Texture, LinearMipMapLinearFilter, Box2 } from 'three';
 
 /**
  * The Disposable contract.
@@ -4948,6 +4948,15 @@ const GlitchMode = {
 const v = new Vector3();
 
 /**
+ * A matrix.
+ *
+ * @type {Matrix4}
+ * @private
+ */
+
+const m = new Matrix4();
+
+/**
  * A god rays effect.
  */
 
@@ -5320,29 +5329,54 @@ class GodRaysEffect extends Effect {
 
 		const lightSource = this.lightSource;
 		const parent = lightSource.parent;
+		const matrixAutoUpdate = lightSource.matrixAutoUpdate;
+
 		const renderTargetX = this.renderTargetX;
 		const renderTargetLight = this.renderTargetLight;
 
-		// Compute the screen light position and translate it to [0.0, 1.0].
-		v.copy(lightSource.position).project(this.camera);
-		this.screenPosition.set(
-			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
-			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),
-		);
+		if(!matrixAutoUpdate) {
+
+			// Remember the local transformation to restore it later.
+			m.copy(lightSource.matrix);
+
+		}
+
+		// Enable depth write for the light scene render pass.
+		lightSource.material.depthWrite = true;
+
+		// The light source may be inside a group; apply all transformations.
+		lightSource.matrixAutoUpdate = false;
+		lightSource.updateMatrixWorld();
+		lightSource.matrix.copy(lightSource.matrixWorld);
 
 		// Render the light source and mask it based on depth.
-		lightSource.material.depthWrite = true;
 		this.lightScene.add(lightSource);
 		this.renderPassLight.render(renderer, renderTargetLight);
 		this.clearPass.render(renderer, renderTargetX);
 		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
+
+		// Restore the original values.
 		lightSource.material.depthWrite = false;
+		lightSource.matrixAutoUpdate = matrixAutoUpdate;
+
+		if(!matrixAutoUpdate) {
+
+			lightSource.matrix.copy(m);
+
+		}
 
 		if(parent !== null) {
 
 			parent.add(lightSource);
 
 		}
+
+		// Calculate the screen light position and translate it to [0.0, 1.0].
+		v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
+		this.screenPosition.set(
+			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
+			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),
+		);
 
 		if(this.blur) {
 

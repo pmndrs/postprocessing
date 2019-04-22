@@ -912,12 +912,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/colordeptheffect.js~colordeptheffect#bits",
-    "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-member-bits",
-    "src/effects/ColorDepthEffect.js~ColorDepthEffect#bits",
-    "member"
-  ],
-  [
     "src/effects/colordeptheffect.js~colordeptheffect#constructor",
     "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html#instance-constructor-constructor",
     "src/effects/ColorDepthEffect.js~ColorDepthEffect#constructor",
