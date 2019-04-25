@@ -394,7 +394,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		if(this.acc0 >= 1.0) {
 
-			this.fps = this.frames;
+			this.fps = this.frames.toFixed();
 			this.acc0 = 0.0;
 			this.frames = 0;
 
@@ -404,8 +404,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		}
 
-		this.acc1 += delta;
-		this.sun.position.set(0, 2.5, Math.sin(this.acc1 * 0.2) * 8);
+		this.sun.position.set(0, 2.5, Math.sin(this.acc1 * 0.4) * 8);
 		this.light.position.copy(this.sun.position);
 
 		super.render(delta);
