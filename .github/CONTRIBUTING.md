@@ -17,7 +17,7 @@ Thank you for considering to contribute! :speech_balloon:
 ## Pull Request Process :sparkles:
 
 When contributing to this repository, please first discuss the change you wish to make with the owners of this repository via the issue tracker.
-A proposed change should be focused and concise. Do not include generated build files in your commits.
+A proposed change should be focused and concise. __Do not include generated build files in your commits.__
 
 1. Create a feature branch.
 2. Implement your patch or feature on that branch. Maintain the existing coding style.
@@ -35,8 +35,8 @@ The following table provides an overview of the most important scripts:
 | Task  | Description                           |
 |-------|---------------------------------------|
 | lint  | Checks source files for syntax errors |
-| build | Generates the final bundle            |
-| test  | Runs unit tests                       |
+| build | Generates the final bundles           |
+| ava   | Runs unit tests                       |
 
 __Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process.
 
