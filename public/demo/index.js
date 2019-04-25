@@ -11649,19 +11649,19 @@
       return Promise.resolve(lightNode);
     };
 
-    function GLTFMaterialsUnlitExtension(json) {
+    function GLTFMaterialsUnlitExtension() {
       this.name = EXTENSIONS.KHR_MATERIALS_UNLIT;
     }
 
-    GLTFMaterialsUnlitExtension.prototype.getMaterialType = function (material) {
+    GLTFMaterialsUnlitExtension.prototype.getMaterialType = function () {
       return three__default.MeshBasicMaterial;
     };
 
-    GLTFMaterialsUnlitExtension.prototype.extendParams = function (materialParams, material, parser) {
+    GLTFMaterialsUnlitExtension.prototype.extendParams = function (materialParams, materialDef, parser) {
       var pending = [];
       materialParams.color = new three__default.Color(1.0, 1.0, 1.0);
       materialParams.opacity = 1.0;
-      var metallicRoughness = material.pbrMetallicRoughness;
+      var metallicRoughness = materialDef.pbrMetallicRoughness;
 
       if (metallicRoughness) {
         if (Array.isArray(metallicRoughness.baseColorFactor)) {
@@ -11777,7 +11777,7 @@
       });
     };
 
-    function GLTFTextureTransformExtension(json) {
+    function GLTFTextureTransformExtension() {
       this.name = EXTENSIONS.KHR_TEXTURE_TRANSFORM;
     }
 
@@ -11811,8 +11811,8 @@
         getMaterialType: function getMaterialType() {
           return three__default.ShaderMaterial;
         },
-        extendParams: function extendParams(params, material, parser) {
-          var pbrSpecularGlossiness = material.extensions[this.name];
+        extendParams: function extendParams(materialParams, materialDef, parser) {
+          var pbrSpecularGlossiness = materialDef.extensions[this.name];
           var shader = three__default.ShaderLib['standard'];
           var uniforms = three__default.UniformsUtils.clone(shader.uniforms);
           var specularMapParsFragmentChunk = ['#ifdef USE_SPECULARMAP', '	uniform sampler2D specularMap;', '#endif'].join('\n');
@@ -11837,38 +11837,38 @@
           uniforms.glossinessMap = {
             value: null
           };
-          params.vertexShader = shader.vertexShader;
-          params.fragmentShader = fragmentShader;
-          params.uniforms = uniforms;
-          params.defines = {
+          materialParams.vertexShader = shader.vertexShader;
+          materialParams.fragmentShader = fragmentShader;
+          materialParams.uniforms = uniforms;
+          materialParams.defines = {
             'STANDARD': ''
           };
-          params.color = new three__default.Color(1.0, 1.0, 1.0);
-          params.opacity = 1.0;
+          materialParams.color = new three__default.Color(1.0, 1.0, 1.0);
+          materialParams.opacity = 1.0;
           var pending = [];
 
           if (Array.isArray(pbrSpecularGlossiness.diffuseFactor)) {
             var array = pbrSpecularGlossiness.diffuseFactor;
-            params.color.fromArray(array);
-            params.opacity = array[3];
+            materialParams.color.fromArray(array);
+            materialParams.opacity = array[3];
           }
 
           if (pbrSpecularGlossiness.diffuseTexture !== undefined) {
-            pending.push(parser.assignTexture(params, 'map', pbrSpecularGlossiness.diffuseTexture));
+            pending.push(parser.assignTexture(materialParams, 'map', pbrSpecularGlossiness.diffuseTexture));
           }
 
-          params.emissive = new three__default.Color(0.0, 0.0, 0.0);
-          params.glossiness = pbrSpecularGlossiness.glossinessFactor !== undefined ? pbrSpecularGlossiness.glossinessFactor : 1.0;
-          params.specular = new three__default.Color(1.0, 1.0, 1.0);
+          materialParams.emissive = new three__default.Color(0.0, 0.0, 0.0);
+          materialParams.glossiness = pbrSpecularGlossiness.glossinessFactor !== undefined ? pbrSpecularGlossiness.glossinessFactor : 1.0;
+          materialParams.specular = new three__default.Color(1.0, 1.0, 1.0);
 
           if (Array.isArray(pbrSpecularGlossiness.specularFactor)) {
-            params.specular.fromArray(pbrSpecularGlossiness.specularFactor);
+            materialParams.specular.fromArray(pbrSpecularGlossiness.specularFactor);
           }
 
           if (pbrSpecularGlossiness.specularGlossinessTexture !== undefined) {
             var specGlossMapDef = pbrSpecularGlossiness.specularGlossinessTexture;
-            pending.push(parser.assignTexture(params, 'glossinessMap', specGlossMapDef));
-            pending.push(parser.assignTexture(params, 'specularMap', specGlossMapDef));
+            pending.push(parser.assignTexture(materialParams, 'glossinessMap', specGlossMapDef));
+            pending.push(parser.assignTexture(materialParams, 'specularMap', specGlossMapDef));
           }
 
           return Promise.all(pending);
@@ -12685,14 +12685,16 @@
     GLTFParser.prototype.assignTexture = function (materialParams, mapName, mapDef) {
       var parser = this;
       return this.getDependency('texture', mapDef.index).then(function (texture) {
-        switch (mapName) {
-          case 'aoMap':
-          case 'emissiveMap':
-          case 'metalnessMap':
-          case 'normalMap':
-          case 'roughnessMap':
-            texture.format = three__default.RGBFormat;
-            break;
+        if (!texture.isCompressedTexture) {
+          switch (mapName) {
+            case 'aoMap':
+            case 'emissiveMap':
+            case 'metalnessMap':
+            case 'normalMap':
+            case 'roughnessMap':
+              texture.format = three__default.RGBFormat;
+              break;
+          }
         }
 
         if (parser.extensions[EXTENSIONS.KHR_TEXTURE_TRANSFORM]) {
@@ -12796,11 +12798,11 @@
 
       if (materialExtensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS]) {
         var sgExtension = extensions[EXTENSIONS.KHR_MATERIALS_PBR_SPECULAR_GLOSSINESS];
-        materialType = sgExtension.getMaterialType(materialDef);
+        materialType = sgExtension.getMaterialType();
         pending.push(sgExtension.extendParams(materialParams, materialDef, parser));
       } else if (materialExtensions[EXTENSIONS.KHR_MATERIALS_UNLIT]) {
         var kmuExtension = extensions[EXTENSIONS.KHR_MATERIALS_UNLIT];
-        materialType = kmuExtension.getMaterialType(materialDef);
+        materialType = kmuExtension.getMaterialType();
         pending.push(kmuExtension.extendParams(materialParams, materialDef, parser));
       } else {
         materialType = three__default.MeshStandardMaterial;
