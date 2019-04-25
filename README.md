@@ -7,7 +7,7 @@
 
 A post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).
 
-*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://jsfiddle.net/58jcfr1p/)&ensp;&middot;&ensp;[API Reference](https://vanruesc.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/vanruesc/postprocessing/wiki)*
+*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://jsfiddle.net/7om52vgL/)&ensp;&middot;&ensp;[API Reference](https://vanruesc.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/vanruesc/postprocessing/wiki)*
 
 
 ## Installation
