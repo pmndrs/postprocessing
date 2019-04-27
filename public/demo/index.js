@@ -4670,7 +4670,7 @@
             var effect = _step7.value;
 
             if (effect.blendMode.blendFunction === BlendFunction.SKIP) {
-              continue;
+              attributes |= effect.attributes & EffectAttribute.DEPTH;
             } else if ((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
               console.error("Convolution effects cannot be merged", effect);
             } else {

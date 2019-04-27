@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.3.0 build Thu Apr 25 2019
+ * postprocessing v6.3.1 build Sat Apr 27 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -2725,7 +2725,8 @@ class EffectPass extends Pass {
 
 			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
-				continue;
+				// Check if this effect relies on depth and then continue.
+				attributes |= (effect.attributes & EffectAttribute.DEPTH);
 
 			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
