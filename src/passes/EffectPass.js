@@ -364,7 +364,8 @@ export class EffectPass extends Pass {
 
 			if(effect.blendMode.blendFunction === BlendFunction.SKIP) {
 
-				continue;
+				// Check if this effect relies on depth and then continue.
+				attributes |= (effect.attributes & EffectAttribute.DEPTH);
 
 			} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {
 
