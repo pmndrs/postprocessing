@@ -524,7 +524,7 @@ export class GodRaysEffect extends Effect {
 
 		// The light source may be inside a group; apply all transformations.
 		lightSource.matrixAutoUpdate = false;
-		lightSource.updateMatrixWorld();
+		lightSource.updateWorldMatrix(true, false);
 		lightSource.matrix.copy(lightSource.matrixWorld);
 
 		// Render the light source and mask it based on depth.
