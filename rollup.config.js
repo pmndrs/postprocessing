@@ -1,8 +1,8 @@
 import babel from "rollup-plugin-babel";
 import minify from "rollup-plugin-babel-minify";
 import commonjs from "rollup-plugin-commonjs";
+import glsl from "rollup-plugin-glsl";
 import resolve from "rollup-plugin-node-resolve";
-import { string } from "rollup-plugin-string";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
@@ -23,23 +23,27 @@ const lib = {
 
 		input: "src/index.js",
 		external: external,
-		plugins: [resolve(), string({
-			include: ["**/*.frag", "**/*.vert"]
+		plugins: [resolve(), glsl({
+			include: ["**/*.frag", "**/*.vert"],
+			compress: production,
+			sourceMap: false
 		})],
 		output: [{
-			file: pkg.module,
-			format: "esm",
-			banner: banner,
-			globals: globals
-		}, {
 			file: pkg.main,
 			format: "esm",
 			globals: globals
-		}, {
-			file: pkg.main.replace(".js", ".min.js"),
-			format: "esm",
-			globals: globals
-		}]
+		}].concat(!production ? [] : [
+			{
+				file: pkg.module,
+				format: "esm",
+				banner: banner,
+				globals: globals
+			}, {
+				file: pkg.main.replace(".js", ".min.js"),
+				format: "esm",
+				globals: globals
+			}
+		])
 
 	},
 
@@ -66,19 +70,19 @@ const demo = {
 
 		input: "demo/src/index.js",
 		external: external,
-		plugins: [resolve(), commonjs(), string({
-			include: ["**/*.frag", "**/*.vert"]
+		plugins: [resolve(), commonjs(), glsl({
+			include: ["**/*.frag", "**/*.vert"],
+			sourceMap: false
 		})],
 		output: [{
-				file: "public/demo/index.js",
-				format: "esm",
-				globals: globals
-			}, {
-				file: "public/demo/index.min.js",
-				format: "esm",
-				globals: globals
-			}
-		]
+			file: "public/demo/index.js",
+			format: "esm",
+			globals: globals
+		}].concat(!production ? [] : [{
+			file: "public/demo/index.min.js",
+			format: "esm",
+			globals: globals
+		}])
 
 	},
 
