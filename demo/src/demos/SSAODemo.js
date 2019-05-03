@@ -150,7 +150,8 @@ export class SSAODemo extends PostProcessingDemo {
 			const pixelRatio = renderer.getPixelRatio();
 
 			renderer = new WebGLRenderer({
-				logarithmicDepthBuffer: true
+				logarithmicDepthBuffer: true,
+				antialias: false
 			});
 
 			renderer.setSize(size.width, size.height);
