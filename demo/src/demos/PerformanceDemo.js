@@ -12,7 +12,9 @@ import {
 	Points,
 	PointsMaterial,
 	TextureLoader,
-	TorusBufferGeometry
+	TorusBufferGeometry,
+	Vector2,
+	WebGLRenderer
 } from "three";
 
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
@@ -52,6 +54,15 @@ export class PerformanceDemo extends PostProcessingDemo {
 	constructor(composer) {
 
 		super("performance", composer);
+
+		/**
+		 * A renderer that uses a high-performance context.
+		 *
+		 * @type {WebGLRenderer}
+		 * @private
+		 */
+
+		this.renderer = null;
 
 		/**
 		 * A list of effect.
@@ -204,7 +215,29 @@ export class PerformanceDemo extends PostProcessingDemo {
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
-		const renderer = composer.renderer;
+
+		// Create a renderer that uses a high-performance context.
+
+		const renderer = ((renderer) => {
+
+			const size = renderer.getSize(new Vector2());
+			const pixelRatio = renderer.getPixelRatio();
+
+			renderer = new WebGLRenderer({
+				powerPreference: "high-performance",
+				logarithmicDepthBuffer: true,
+				antialias: false
+			});
+
+			renderer.setSize(size.width, size.height);
+			renderer.setPixelRatio(pixelRatio);
+
+			return renderer;
+
+		})(composer.renderer);
+
+		composer.replaceRenderer(renderer);
+		this.renderer = renderer;
 
 		// Camera.
 
