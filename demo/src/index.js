@@ -120,6 +120,7 @@ window.addEventListener("load", function main(event) {
 		antialias: false
 	});
 
+	renderer.debug.checkShaderErrors = true;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
