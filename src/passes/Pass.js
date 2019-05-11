@@ -1,10 +1,52 @@
-import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from "three";
+import {
+	BufferAttribute,
+	BufferGeometry,
+	Scene,
+	Mesh,
+	OrthographicCamera
+} from "three";
+
+/**
+ * Shared fullscreen geometry.
+ *
+ * @type {BufferGeometry}
+ * @private
+ */
+
+let geometry = null;
+
+/**
+ * Returns a shared fullscreen triangle.
+ *
+ * The size of the screen is 2x2 units (NDC). A triangle that fills the screen
+ * needs to be 4 units wide and 4 units tall.
+ *
+ * @private
+ * @return {BufferGeometry} The fullscreen geometry.
+ */
+
+function getFullscreenTriangle() {
+
+	if(geometry === null) {
+
+		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
+		geometry = new BufferGeometry();
+		geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+
+	}
+
+	return geometry;
+
+}
 
 /**
  * An abstract pass.
  *
  * Passes that do not rely on the depth buffer should explicitly disable the
- * depth test and depth write in their respective shader materials.
+ * depth test and depth write flags of their fullscreen shader material.
+ *
+ * Fullscreen passes use a shared fullscreen triangle:
+ * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
  *
  * @implements {Initializable}
  * @implements {Resizable}
@@ -50,13 +92,13 @@ export class Pass {
 		this.camera = camera;
 
 		/**
-		 * A quad mesh that fills the screen.
+		 * A mesh that fills the screen.
 		 *
 		 * @type {Mesh}
 		 * @private
 		 */
 
-		this.quad = null;
+		this.screen = null;
 
 		/**
 		 * Only relevant for subclassing.
@@ -112,15 +154,15 @@ export class Pass {
 
 	getFullscreenMaterial() {
 
-		return (this.quad !== null) ? this.quad.material : null;
+		return (this.screen !== null) ? this.screen.material : null;
 
 	}
 
 	/**
 	 * Sets the fullscreen material.
 	 *
-	 * The material will be assigned to the quad mesh that fills the screen. The
-	 * screen quad will be created once a material is assigned via this method.
+	 * The material will be assigned to a mesh that fills the screen. The mesh
+	 * will be created once a material is assigned via this method.
 	 *
 	 * @protected
 	 * @param {Material} material - A fullscreen material.
@@ -128,21 +170,21 @@ export class Pass {
 
 	setFullscreenMaterial(material) {
 
-		let quad = this.quad;
+		let screen = this.screen;
 
-		if(quad !== null) {
+		if(screen !== null) {
 
-			quad.material = material;
+			screen.material = material;
 
 		} else {
 
-			quad = new Mesh(new PlaneBufferGeometry(2, 2), material);
-			quad.frustumCulled = false;
+			screen = new Mesh(getFullscreenTriangle(), material);
+			screen.frustumCulled = false;
 
 			if(this.scene !== null) {
 
-				this.scene.add(quad);
-				this.quad = quad;
+				this.scene.add(screen);
+				this.screen = screen;
 
 			}
 
