@@ -10,11 +10,15 @@ varying vec2 vUv;
 varying vec4 vOffset[3];
 varying vec2 vPixCoord;
 
-vec2 round(vec2 x) {
+#if __VERSION__ < 300
 
-	return sign(x) * floor(abs(x) + 0.5);
+	vec2 round(vec2 x) {
 
-}
+		return sign(x) * floor(abs(x) + 0.5);
+
+	}
+
+#endif
 
 float searchLength(vec2 e, float bias, float scale) {
 
