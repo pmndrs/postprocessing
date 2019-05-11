@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/DepthComparisonMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { PerspectiveCamera, ShaderMaterial, Uniform } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/depth-comparison/shader.frag&quot;;
-import vertex from &quot;./glsl/depth-comparison/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/depth-comparison/shader.frag&quot;;
+import vertexShader from &quot;./glsl/depth-comparison/shader.vert&quot;;
 
 /**
  * A depth comparison shader material.
@@ -128,8 +128,8 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false,

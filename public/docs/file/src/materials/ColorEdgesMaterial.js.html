@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/ColorEdgesMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/color-edges/shader.frag&quot;;
-import vertex from &quot;./glsl/color-edges/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/color-edges/shader.frag&quot;;
+import vertexShader from &quot;./glsl/color-edges/shader.vert&quot;;
 
 /**
  * A material that detects edges in a color texture.
@@ -134,8 +134,8 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false

@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/DepthMaskMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/depth-mask/shader.frag&quot;;
-import vertex from &quot;./glsl/common/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/depth-mask/shader.frag&quot;;
+import vertexShader from &quot;./glsl/common/shader.vert&quot;;
 
 /**
  * A depth mask shader material.
@@ -127,8 +127,8 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false

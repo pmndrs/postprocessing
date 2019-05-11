@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/OutlineEdgesMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/outline-edges/shader.frag&quot;;
-import vertex from &quot;./glsl/outline-edges/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/outline-edges/shader.frag&quot;;
+import vertexShader from &quot;./glsl/outline-edges/shader.vert&quot;;
 
 /**
  * An outline edge detection shader material.
@@ -126,8 +126,8 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false

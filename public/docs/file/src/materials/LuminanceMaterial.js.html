@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/LuminanceMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/luminance/shader.frag&quot;;
-import vertex from &quot;./glsl/common/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/luminance/shader.frag&quot;;
+import vertexShader from &quot;./glsl/common/shader.vert&quot;;
 
 /**
  * A luminance shader material.
@@ -146,8 +146,11 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex
+			fragmentShader,
+			vertexShader,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 

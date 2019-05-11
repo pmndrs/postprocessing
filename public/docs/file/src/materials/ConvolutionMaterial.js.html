@@ -98,8 +98,8 @@
 <div class="content" data-ice="content"><h1 data-ice="title">src/materials/ConvolutionMaterial.js</h1>
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { ShaderMaterial, Uniform, Vector2 } from &quot;three&quot;;
 
-import fragment from &quot;./glsl/convolution/shader.frag&quot;;
-import vertex from &quot;./glsl/convolution/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/convolution/shader.frag&quot;;
+import vertexShader from &quot;./glsl/convolution/shader.vert&quot;;
 
 /**
  * An optimised convolution shader material.
@@ -138,8 +138,8 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false
