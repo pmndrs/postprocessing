@@ -22,7 +22,7 @@ void main() {
 	// A decreasing illumination factor.
 	float illuminationDecay = 1.0;
 
-	vec4 sample;
+	vec4 texel;
 	vec4 color = vec4(0.0);
 
 	/* Estimate the probability of occlusion at each pixel by summing samples
@@ -30,11 +30,11 @@ void main() {
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
 		coord -= delta;
-		sample = texture2D(inputBuffer, coord);
+		texel = texture2D(inputBuffer, coord);
 
 		// Apply the sample attenuation scale/decay factors.
-		sample *= illuminationDecay * weight;
-		color += sample;
+		texel *= illuminationDecay * weight;
+		color += texel;
 
 		// Update the exponential decay factor.
 		illuminationDecay *= decay;
