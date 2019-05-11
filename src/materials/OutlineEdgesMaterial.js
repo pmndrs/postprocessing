@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/outline-edges/shader.frag";
-import vertex from "./glsl/outline-edges/shader.vert";
+import fragmentShader from "./glsl/outline-edges/shader.frag";
+import vertexShader from "./glsl/outline-edges/shader.vert";
 
 /**
  * An outline edge detection shader material.
@@ -28,8 +28,8 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false

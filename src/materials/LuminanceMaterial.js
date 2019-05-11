@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/luminance/shader.frag";
-import vertex from "./glsl/common/shader.vert";
+import fragmentShader from "./glsl/luminance/shader.frag";
+import vertexShader from "./glsl/common/shader.vert";
 
 /**
  * A luminance shader material.
@@ -48,8 +48,11 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex
+			fragmentShader,
+			vertexShader,
+
+			depthWrite: false,
+			depthTest: false
 
 		});
 

@@ -1,7 +1,7 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragment from "./glsl/convolution/shader.frag";
-import vertex from "./glsl/convolution/shader.vert";
+import fragmentShader from "./glsl/convolution/shader.frag";
+import vertexShader from "./glsl/convolution/shader.vert";
 
 /**
  * An optimised convolution shader material.
@@ -40,8 +40,8 @@ export class ConvolutionMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragment,
-			vertexShader: vertex,
+			fragmentShader,
+			vertexShader,
 
 			depthWrite: false,
 			depthTest: false
