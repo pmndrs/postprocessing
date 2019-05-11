@@ -5,7 +5,7 @@ varying vec2 vUvB;
 
 void mainSupport() {
 
-	vUvR = uv + offset;
-	vUvB = uv - offset;
+	vUvR = vUv + offset;
+	vUvB = vUv - offset;
 
 }

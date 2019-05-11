@@ -4,6 +4,6 @@ varying vec2 vUvPattern;
 
 void mainSupport() {
 
-	vUvPattern = uv * vec2(aspect, 1.0) * patternScale;
+	vUvPattern = vUv * vec2(aspect, 1.0) * patternScale;
 
 }
