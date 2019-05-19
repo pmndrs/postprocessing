@@ -119,8 +119,19 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(shaders.get("vertex") !== null && shaders.get("vertex").indexOf("mainSupport") >= 0) {
 
-			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) +
-				"\t" + prefix + "MainSupport();\n");
+			let string = "\t" + prefix + "MainSupport(";
+
+			// Check if the vertex shader expects uv coordinates.
+			if(shaders.get("vertex").indexOf("uv") >= 0) {
+
+				string += "vUv";
+
+			}
+
+			string += ");\n";
+
+			shaderParts.set(Section.VERTEX_MAIN_SUPPORT,
+				shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
 
 			varyings = varyings.concat(findSubstrings(varyingRegExp, shaders.get("vertex")));
 			names = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get("vertex")));

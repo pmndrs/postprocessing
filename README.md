@@ -52,6 +52,8 @@ const clock = new Clock();
 
 This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own [blend function](https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction).
 
+Furthermore, all fullscreen render operations use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal which is especially beneficial for GPGPU passes and effects that use complex fragment shaders.
+
 [Performance Test](http://vanruesc.github.io/postprocessing/public/demo/#performance)
 
 ## Included Effects

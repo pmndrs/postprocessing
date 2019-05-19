@@ -72,6 +72,7 @@ const demo = {
 		external: external,
 		plugins: [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
+			compress: production,
 			sourceMap: false
 		})],
 		output: [{
