@@ -217,8 +217,19 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(shaders.get(&quot;vertex&quot;) !== null &amp;&amp; shaders.get(&quot;vertex&quot;).indexOf(&quot;mainSupport&quot;) &gt;= 0) {
 
-			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) +
-				&quot;\t&quot; + prefix + &quot;MainSupport();\n&quot;);
+			let string = &quot;\t&quot; + prefix + &quot;MainSupport(&quot;;
+
+			// Check if the vertex shader expects uv coordinates.
+			if(shaders.get(&quot;vertex&quot;).indexOf(&quot;uv&quot;) &gt;= 0) {
+
+				string += &quot;vUv&quot;;
+
+			}
+
+			string += &quot;);\n&quot;;
+
+			shaderParts.set(Section.VERTEX_MAIN_SUPPORT,
+				shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
 
 			varyings = varyings.concat(findSubstrings(varyingRegExp, shaders.get(&quot;vertex&quot;)));
 			names = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get(&quot;vertex&quot;)));

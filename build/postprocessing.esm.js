@@ -1,9 +1,9 @@
 /**
- * postprocessing v6.3.3 build Sat May 11 2019
+ * postprocessing v6.4.0 build Sun May 19 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
-import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, PlaneBufferGeometry, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, Texture, LinearMipMapLinearFilter, Box2 } from 'three';
+import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, Texture, LinearMipMapLinearFilter, Box2 } from 'three';
 
 /**
  * The Disposable contract.
@@ -962,10 +962,48 @@ class SMAAWeightsMaterial extends ShaderMaterial {
 }
 
 /**
+ * Shared fullscreen geometry.
+ *
+ * @type {BufferGeometry}
+ * @private
+ */
+
+let geometry = null;
+
+/**
+ * Returns a shared fullscreen triangle.
+ *
+ * The size of the screen is 2x2 units (NDC). A triangle that fills the screen
+ * needs to be 4 units wide and 4 units tall.
+ *
+ * @private
+ * @return {BufferGeometry} The fullscreen geometry.
+ */
+
+function getFullscreenTriangle() {
+
+	if(geometry === null) {
+
+		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
+		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
+		geometry = new BufferGeometry();
+		geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+		geometry.addAttribute("uv", new BufferAttribute(uvs, 2));
+
+	}
+
+	return geometry;
+
+}
+
+/**
  * An abstract pass.
  *
  * Passes that do not rely on the depth buffer should explicitly disable the
- * depth test and depth write in their respective shader materials.
+ * depth test and depth write flags of their fullscreen shader material.
+ *
+ * Fullscreen passes use a shared fullscreen triangle:
+ * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/
  *
  * @implements {Initializable}
  * @implements {Resizable}
@@ -1011,13 +1049,13 @@ class Pass {
 		this.camera = camera;
 
 		/**
-		 * A quad mesh that fills the screen.
+		 * A mesh that fills the screen.
 		 *
 		 * @type {Mesh}
 		 * @private
 		 */
 
-		this.quad = null;
+		this.screen = null;
 
 		/**
 		 * Only relevant for subclassing.
@@ -1073,15 +1111,15 @@ class Pass {
 
 	getFullscreenMaterial() {
 
-		return (this.quad !== null) ? this.quad.material : null;
+		return (this.screen !== null) ? this.screen.material : null;
 
 	}
 
 	/**
 	 * Sets the fullscreen material.
 	 *
-	 * The material will be assigned to the quad mesh that fills the screen. The
-	 * screen quad will be created once a material is assigned via this method.
+	 * The material will be assigned to a mesh that fills the screen. The mesh
+	 * will be created once a material is assigned via this method.
 	 *
 	 * @protected
 	 * @param {Material} material - A fullscreen material.
@@ -1089,21 +1127,21 @@ class Pass {
 
 	setFullscreenMaterial(material) {
 
-		let quad = this.quad;
+		let screen = this.screen;
 
-		if(quad !== null) {
+		if(screen !== null) {
 
-			quad.material = material;
+			screen.material = material;
 
 		} else {
 
-			quad = new Mesh(new PlaneBufferGeometry(2, 2), material);
-			quad.frustumCulled = false;
+			screen = new Mesh(getFullscreenTriangle(), material);
+			screen.frustumCulled = false;
 
 			if(this.scene !== null) {
 
-				this.scene.add(quad);
-				this.quad = quad;
+				this.scene.add(screen);
+				this.screen = screen;
 
 			}
 
@@ -2483,8 +2521,19 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		if(shaders.get("vertex") !== null && shaders.get("vertex").indexOf("mainSupport") >= 0) {
 
-			shaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) +
-				"\t" + prefix + "MainSupport();\n");
+			let string = "\t" + prefix + "MainSupport(";
+
+			// Check if the vertex shader expects uv coordinates.
+			if(shaders.get("vertex").indexOf("uv") >= 0) {
+
+				string += "vUv";
+
+			}
+
+			string += ");\n";
+
+			shaderParts.set(Section.VERTEX_MAIN_SUPPORT,
+				shaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);
 
 			varyings = varyings.concat(findSubstrings(varyingRegExp, shaders.get("vertex")));
 			names = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get("vertex")));
@@ -4372,7 +4421,7 @@ class ColorDepthEffect extends Effect {
 
 var fragment$5 = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;color.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;outputColor=color;}";
 
-var vertex = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(){vUvR=vUv+offset;vUvB=vUv-offset;}";
+var vertex = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(const in vec2 uv){vUvR=uv+offset;vUvB=uv-offset;}";
 
 /**
  * A chromatic aberration effect.
@@ -5683,7 +5732,7 @@ class NoiseEffect extends Effect {
 
 var fragment$d = "uniform sampler2D edgeTexture;uniform sampler2D maskTexture;uniform vec3 visibleEdgeColor;uniform vec3 hiddenEdgeColor;uniform float pulse;uniform float edgeStrength;\n#ifdef USE_PATTERN\nuniform sampler2D patternTexture;varying vec2 vUvPattern;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec2 edge=texture2D(edgeTexture,uv).rg;vec2 mask=texture2D(maskTexture,uv).rg;\n#ifndef X_RAY\nedge.y=0.0;\n#endif\nedge*=(edgeStrength*mask.x*pulse);vec3 color=edge.x*visibleEdgeColor+edge.y*hiddenEdgeColor;float visibilityFactor=0.0;\n#ifdef USE_PATTERN\nvec4 patternColor=texture2D(patternTexture,vUvPattern);\n#ifdef X_RAY\nfloat hiddenFactor=0.5;\n#else\nfloat hiddenFactor=0.0;\n#endif\nvisibilityFactor=(1.0-mask.y>0.0)? 1.0 : hiddenFactor;visibilityFactor*=(1.0-mask.x)*patternColor.a;color+=visibilityFactor*patternColor.rgb;\n#endif\nfloat alpha=max(max(edge.x,edge.y),visibilityFactor);\n#ifdef ALPHA\noutputColor=vec4(color,alpha);\n#else\noutputColor=vec4(color,max(alpha,inputColor.a));\n#endif\n}";
 
-var vertex$1 = "uniform float patternScale;varying vec2 vUvPattern;void mainSupport(){vUvPattern=vUv*vec2(aspect,1.0)*patternScale;}";
+var vertex$1 = "uniform float patternScale;varying vec2 vUvPattern;void mainSupport(const in vec2 uv){vUvPattern=uv*vec2(aspect,1.0)*patternScale;}";
 
 /**
  * An outline effect.
@@ -6974,7 +7023,7 @@ var areaImageDataURL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAAIwCA
 
 var fragment$j = "uniform sampler2D weightMap;varying vec2 vOffset0;varying vec2 vOffset1;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 a;a.rb=texture2D(weightMap,uv).rb;a.g=texture2D(weightMap,vOffset1).g;a.a=texture2D(weightMap,vOffset0).a;vec4 color=inputColor;if(dot(a,vec4(1.0))>=1e-5){/*Up to four lines can be crossing a pixel(one through each edge).The line with the maximum weight for each direction is favoured.*/vec2 offset=vec2(a.a>a.b ? a.a :-a.b,a.g>a.r ?-a.g : a.r);if(abs(offset.x)>abs(offset.y)){offset.y=0.0;}else{offset.x=0.0;}vec4 oppositeColor=texture2D(inputBuffer,uv+sign(offset)*texelSize);float s=abs(offset.x)>abs(offset.y)? abs(offset.x): abs(offset.y);color.rgb=pow(abs(color.rgb),vec3(2.2));oppositeColor.rgb=pow(abs(oppositeColor.rgb),vec3(2.2));color=mix(color,oppositeColor,s);color.rgb=pow(abs(color.rgb),vec3(1.0/2.2));}outputColor=color;}";
 
-var vertex$3 = "varying vec2 vOffset0;varying vec2 vOffset1;void mainSupport(){vOffset0=vUv+texelSize*vec2(1.0,0.0);vOffset1=vUv+texelSize*vec2(0.0,-1.0);}";
+var vertex$3 = "varying vec2 vOffset0;varying vec2 vOffset1;void mainSupport(const in vec2 uv){vOffset0=uv+texelSize*vec2(1.0,0.0);vOffset1=uv+texelSize*vec2(0.0,-1.0);}";
 
 /**
  * Subpixel Morphological Antialiasing (SMAA) v2.8.
@@ -7466,7 +7515,7 @@ class SSAOEffect extends Effect {
 
 }
 
-var vertex$4 = "uniform float scale;varying vec2 vUv2;void mainSupport(){vUv2=vUv*vec2(aspect,1.0)*scale;}";
+var vertex$4 = "uniform float scale;varying vec2 vUv2;void mainSupport(const in vec2 uv){vUv2=uv*vec2(aspect,1.0)*scale;}";
 
 /**
  * A texture effect.

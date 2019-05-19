@@ -13727,7 +13727,7 @@
     "__docId__": 588,
     "kind": "file",
     "name": "src/passes/EffectPass.js",
-    "content": "import { BlendFunction } from \"../effects/blending\";\r\nimport { EffectAttribute } from \"../effects/Effect.js\";\r\nimport { EffectMaterial, Section } from \"../materials\";\r\nimport { Pass } from \"./Pass.js\";\r\n\r\n/**\r\n * Finds and collects substrings that match the given regular expression.\r\n *\r\n * @private\r\n * @param {RegExp} regExp - A regular expression.\r\n * @param {String} string - A string.\r\n * @return {String[]} The matching substrings.\r\n */\r\n\r\nfunction findSubstrings(regExp, string) {\r\n\r\n\tconst substrings = [];\r\n\tlet result;\r\n\r\n\twhile((result = regExp.exec(string)) !== null) {\r\n\r\n\t\tsubstrings.push(result[1]);\r\n\r\n\t}\r\n\r\n\treturn substrings;\r\n\r\n}\r\n\r\n/**\r\n * Prefixes substrings within the given strings.\r\n *\r\n * @private\r\n * @param {String} prefix - A prefix.\r\n * @param {String[]} substrings - The substrings.\r\n * @param {Map<String, String>} strings - A collection of named strings.\r\n */\r\n\r\nfunction prefixSubstrings(prefix, substrings, strings) {\r\n\r\n\tlet prefixed, regExp;\r\n\r\n\tfor(const substring of substrings) {\r\n\r\n\t\tprefixed = \"$1\" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);\r\n\t\tregExp = new RegExp(\"([^\\\\.])(\\\\b\" + substring + \"\\\\b)\", \"g\");\r\n\r\n\t\tfor(const entry of strings.entries()) {\r\n\r\n\t\t\tif(entry[1] !== null) {\r\n\r\n\t\t\t\tstrings.set(entry[0], entry[1].replace(regExp, prefixed));\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * Integrates the given effect.\r\n *\r\n * @private\r\n * @param {String} prefix - A prefix.\r\n * @param {Effect} effect - An effect.\r\n * @param {Map<String, String>} shaderParts - The shader parts.\r\n * @param {Map<BlendFunction, BlendMode>} blendModes - The blend modes.\r\n * @param {Map<String, String>} defines - The macro definitions.\r\n * @param {Map<String, Uniform>} uniforms - The uniforms.\r\n * @param {EffectAttribute} attributes - The global, collective attributes.\r\n * @return {Object} The results.\r\n * @property {String[]} varyings - The varyings used by the given effect.\r\n * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.\r\n * @property {Boolean} readDepth - Indicates whether the effect actually uses depth in the fragment shader.\r\n */\r\n\r\nfunction integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {\r\n\r\n\tconst functionRegExp = /(?:\\w+\\s+(\\w+)\\([\\w\\s,]*\\)\\s*{[^}]+})/g;\r\n\tconst varyingRegExp = /(?:varying\\s+\\w+\\s+(\\w*))/g;\r\n\r\n\tconst blendMode = effect.blendMode;\r\n\tconst shaders = new Map([\r\n\t\t[\"fragment\", effect.fragmentShader],\r\n\t\t[\"vertex\", effect.vertexShader]\r\n\t]);\r\n\r\n\tconst mainImageExists = (shaders.get(\"fragment\") !== undefined && shaders.get(\"fragment\").indexOf(\"mainImage\") >= 0);\r\n\tconst mainUvExists = (shaders.get(\"fragment\") !== undefined && shaders.get(\"fragment\").indexOf(\"mainUv\") >= 0);\r\n\r\n\tlet varyings = [], names = [];\r\n\tlet transformedUv = false;\r\n\tlet readDepth = false;\r\n\r\n\tif(shaders.get(\"fragment\") === undefined) {\r\n\r\n\t\tconsole.error(\"Missing fragment shader\", effect);\r\n\r\n\t} else if(mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {\r\n\r\n\t\tconsole.error(\"Effects that transform UV coordinates are incompatible with convolution effects\", effect);\r\n\r\n\t} else if(!mainImageExists && !mainUvExists) {\r\n\r\n\t\tconsole.error(\"The fragment shader contains neither a mainImage nor a mainUv function\", effect);\r\n\r\n\t} else {\r\n\r\n\t\tif(mainUvExists) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) +\r\n\t\t\t\t\"\\t\" + prefix + \"MainUv(UV);\\n\");\r\n\r\n\t\t\ttransformedUv = true;\r\n\r\n\t\t}\r\n\r\n\t\tif(shaders.get(\"vertex\") !== null && shaders.get(\"vertex\").indexOf(\"mainSupport\") >= 0) {\r\n\r\n\t\t\tshaderParts.set(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT) +\r\n\t\t\t\t\"\\t\" + prefix + \"MainSupport();\\n\");\r\n\r\n\t\t\tvaryings = varyings.concat(findSubstrings(varyingRegExp, shaders.get(\"vertex\")));\r\n\t\t\tnames = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get(\"vertex\")));\r\n\r\n\t\t}\r\n\r\n\t\tnames = names.concat(findSubstrings(functionRegExp, shaders.get(\"fragment\")))\r\n\t\t\t.concat(Array.from(effect.uniforms.keys()))\r\n\t\t\t.concat(Array.from(effect.defines.keys()));\r\n\r\n\t\t// Store prefixed uniforms and macros.\r\n\t\teffect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));\r\n\t\teffect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));\r\n\r\n\t\t// Prefix varyings, functions, uniforms and macros.\r\n\t\tprefixSubstrings(prefix, names, defines);\r\n\t\tprefixSubstrings(prefix, names, shaders);\r\n\r\n\t\t// Collect unique blend modes.\r\n\t\tblendModes.set(blendMode.blendFunction, blendMode);\r\n\r\n\t\tif(mainImageExists) {\r\n\r\n\t\t\tlet string = prefix + \"MainImage(color0, UV, \";\r\n\r\n\t\t\t// The effect may sample depth in a different shader.\r\n\t\t\tif((attributes & EffectAttribute.DEPTH) !== 0 && shaders.get(\"fragment\").indexOf(\"depth\") >= 0) {\r\n\r\n\t\t\t\tstring += \"depth, \";\r\n\t\t\t\treadDepth = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tstring += \"color1);\\n\\t\";\r\n\r\n\t\t\t// Include the blend opacity uniform of this effect.\r\n\t\t\tconst blendOpacity = prefix + \"BlendOpacity\";\r\n\t\t\tuniforms.set(blendOpacity, blendMode.opacity);\r\n\r\n\t\t\t// Blend the result of this effect with the input color.\r\n\t\t\tstring += \"color0 = blend\" + blendMode.blendFunction +\r\n\t\t\t\t\"(color0, color1, \" + blendOpacity + \");\\n\\n\\t\";\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_IMAGE,\r\n\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\t\t\"uniform float \" + blendOpacity + \";\\n\\n\");\r\n\r\n\t\t}\r\n\r\n\t\t// Include the modified code in the final shader.\r\n\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\tshaders.get(\"fragment\") + \"\\n\");\r\n\r\n\t\tif(shaders.get(\"vertex\") !== null) {\r\n\r\n\t\t\tshaderParts.set(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) +\r\n\t\t\t\tshaders.get(\"vertex\") + \"\\n\");\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\treturn { varyings, transformedUv, readDepth };\r\n\r\n}\r\n\r\n/**\r\n * An effect pass.\r\n *\r\n * Use this pass to combine {@link Effect} instances.\r\n */\r\n\r\nexport class EffectPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new effect pass.\r\n\t *\r\n\t * The provided effects will be organized and merged for optimal performance.\r\n\t *\r\n\t * @param {Camera} camera - The main camera. The camera's type and settings will be available to all effects.\r\n\t * @param {...Effect} effects - The effects that will be rendered by this pass.\r\n\t */\r\n\r\n\tconstructor(camera, ...effects) {\r\n\r\n\t\tsuper(\"EffectPass\");\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * The effects, sorted by attribute priority, DESC.\r\n\t\t *\r\n\t\t * @type {Effect[]}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.effects = effects.sort((a, b) => (b.attributes - a.attributes));\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should skip rendering.\r\n\t\t *\r\n\t\t * Effects will still be updated, even if this flag is true.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.skipRendering = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether dithering is enabled.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.quantize = false;\r\n\r\n\t\t/**\r\n\t\t * The amount of shader uniforms that this pass uses.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.uniforms = 0;\r\n\r\n\t\t/**\r\n\t\t * The amount of shader varyings that this pass uses.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.varyings = 0;\r\n\r\n\t\t/**\r\n\t\t * A time offset.\r\n\t\t *\r\n\t\t * Elapsed time will start at this value.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.minTime = 1.0;\r\n\r\n\t\t/**\r\n\t\t * The maximum time.\r\n\t\t *\r\n\t\t * If the elapsed time exceeds this value, it will be reset.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.maxTime = 1e3;\r\n\r\n\t\tthis.setFullscreenMaterial(this.createMaterial());\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * Color quantization reduces banding artifacts but degrades performance.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.quantize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * Note that some effects have their own dithering setting.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tif(this.quantize !== value) {\r\n\r\n\t\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\t\tif(material !== null) {\r\n\r\n\t\t\t\tmaterial.dithering = value;\r\n\t\t\t\tmaterial.needsUpdate = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.quantize = value;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Creates a compound shader material.\r\n\t *\r\n\t * @private\r\n\t * @return {Material} The new material.\r\n\t */\r\n\r\n\tcreateMaterial() {\r\n\r\n\t\tconst blendRegExp = /\\bblend\\b/g;\r\n\r\n\t\tconst shaderParts = new Map([\r\n\t\t\t[Section.FRAGMENT_HEAD, \"\"],\r\n\t\t\t[Section.FRAGMENT_MAIN_UV, \"\"],\r\n\t\t\t[Section.FRAGMENT_MAIN_IMAGE, \"\"],\r\n\t\t\t[Section.VERTEX_HEAD, \"\"],\r\n\t\t\t[Section.VERTEX_MAIN_SUPPORT, \"\"]\r\n\t\t]);\r\n\r\n\t\tconst blendModes = new Map();\r\n\t\tconst defines = new Map();\r\n\t\tconst uniforms = new Map();\r\n\t\tconst extensions = new Set();\r\n\r\n\t\tlet id = 0, varyings = 0, attributes = 0;\r\n\t\tlet transformedUv = false;\r\n\t\tlet readDepth = false;\r\n\t\tlet result;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\tif(effect.blendMode.blendFunction === BlendFunction.SKIP) {\r\n\r\n\t\t\t\t// Check if this effect relies on depth and then continue.\r\n\t\t\t\tattributes |= (effect.attributes & EffectAttribute.DEPTH);\r\n\r\n\t\t\t} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {\r\n\r\n\t\t\t\tconsole.error(\"Convolution effects cannot be merged\", effect);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tattributes |= effect.attributes;\r\n\r\n\t\t\t\tresult = integrateEffect((\"e\" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);\r\n\r\n\t\t\t\tvaryings += result.varyings.length;\r\n\t\t\t\ttransformedUv = transformedUv || result.transformedUv;\r\n\t\t\t\treadDepth = readDepth || result.readDepth;\r\n\r\n\t\t\t\tif(effect.extensions !== null) {\r\n\r\n\t\t\t\t\t// Collect the WebGL extensions that are required by this effect.\r\n\t\t\t\t\tfor(const extension of effect.extensions) {\r\n\r\n\t\t\t\t\t\textensions.add(extension);\r\n\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t// Integrate the relevant blend functions.\r\n\t\tfor(const blendMode of blendModes.values()) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\t\tblendMode.getShaderCode().replace(blendRegExp, \"blend\" + blendMode.blendFunction) + \"\\n\");\r\n\r\n\t\t}\r\n\r\n\t\t// Check if any effect relies on depth.\r\n\t\tif((attributes & EffectAttribute.DEPTH) !== 0) {\r\n\r\n\t\t\t// Only read depth if any effect actually uses this information.\r\n\t\t\tif(readDepth) {\r\n\r\n\t\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_IMAGE, \"float depth = readDepth(UV);\\n\\n\\t\" +\r\n\t\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_IMAGE));\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.needsDepthTexture = true;\r\n\r\n\t\t}\r\n\r\n\t\t// Check if any effect transforms UVs in the fragment shader.\r\n\t\tif(transformedUv) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_UV, \"vec2 transformedUv = vUv;\\n\" +\r\n\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_UV));\r\n\r\n\t\t\tdefines.set(\"UV\", \"transformedUv\");\r\n\r\n\t\t} else {\r\n\r\n\t\t\tdefines.set(\"UV\", \"vUv\");\r\n\r\n\t\t}\r\n\r\n\t\tshaderParts.forEach((value, key, map) => map.set(key, value.trim()));\r\n\r\n\t\tthis.uniforms = uniforms.size;\r\n\t\tthis.varyings = varyings;\r\n\r\n\t\tthis.skipRendering = (id === 0);\r\n\t\tthis.needsSwap = !this.skipRendering;\r\n\r\n\t\tconst material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);\r\n\r\n\t\tif(extensions.size > 0) {\r\n\r\n\t\t\t// Enable required WebGL extensions.\r\n\t\t\tfor(const extension of extensions) {\r\n\r\n\t\t\t\tmaterial.extensions[extension] = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\treturn material;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Destroys the current fullscreen shader material and builds a new one.\r\n\t *\r\n\t * Warning: This method performs a relatively expensive shader recompilation.\r\n\t */\r\n\r\n\trecompile() {\r\n\r\n\t\tlet material = this.getFullscreenMaterial();\r\n\t\tlet width = 0, height = 0;\r\n\t\tlet depthTexture = null;\r\n\t\tlet depthPacking = 0;\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tconst resolution = material.uniforms.resolution.value;\r\n\t\t\twidth = resolution.x; height = resolution.y;\r\n\t\t\tdepthTexture = material.uniforms.depthBuffer.value;\r\n\t\t\tdepthPacking = material.depthPacking;\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t\tthis.uniforms = 0;\r\n\t\t\tthis.varyings = 0;\r\n\r\n\t\t}\r\n\r\n\t\tmaterial = this.createMaterial();\r\n\t\tmaterial.setSize(width, height);\r\n\t\tthis.setFullscreenMaterial(material);\r\n\t\tthis.setDepthTexture(depthTexture, depthPacking);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\treturn (material !== null) ? material.uniforms.depthBuffer.value : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tmaterial.uniforms.depthBuffer.value = depthTexture;\r\n\t\tmaterial.depthPacking = depthPacking;\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.setDepthTexture(depthTexture, depthPacking);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\t\tconst time = material.uniforms.time.value + deltaTime;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.update(renderer, inputBuffer, deltaTime);\r\n\r\n\t\t}\r\n\r\n\t\tif(!this.skipRendering || this.renderToScreen) {\r\n\r\n\t\t\tmaterial.uniforms.inputBuffer.value = inputBuffer.texture;\r\n\t\t\tmaterial.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;\r\n\t\t\trenderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);\r\n\t\t\trenderer.render(this.scene, this.camera);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of this pass.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.getFullscreenMaterial().setSize(width, height);\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.setSize(width, height);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tconst capabilities = renderer.capabilities;\r\n\r\n\t\tlet max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);\r\n\r\n\t\tif(this.uniforms > max) {\r\n\r\n\t\t\tconsole.warn(\"The current rendering context doesn't support more than \" + max + \" uniforms, but \" + this.uniforms + \" were defined\");\r\n\r\n\t\t}\r\n\r\n\t\tmax = capabilities.maxVaryings;\r\n\r\n\t\tif(this.varyings > max) {\r\n\r\n\t\t\tconsole.warn(\"The current rendering context doesn't support more than \" + max + \" varyings, but \" + this.varyings + \" were defined\");\r\n\r\n\t\t}\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.initialize(renderer, alpha);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Deletes disposable objects.\r\n\t *\r\n\t * This pass will be inoperative after this method was called!\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tsuper.dispose();\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.dispose();\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import { BlendFunction } from \"../effects/blending\";\r\nimport { EffectAttribute } from \"../effects/Effect.js\";\r\nimport { EffectMaterial, Section } from \"../materials\";\r\nimport { Pass } from \"./Pass.js\";\r\n\r\n/**\r\n * Finds and collects substrings that match the given regular expression.\r\n *\r\n * @private\r\n * @param {RegExp} regExp - A regular expression.\r\n * @param {String} string - A string.\r\n * @return {String[]} The matching substrings.\r\n */\r\n\r\nfunction findSubstrings(regExp, string) {\r\n\r\n\tconst substrings = [];\r\n\tlet result;\r\n\r\n\twhile((result = regExp.exec(string)) !== null) {\r\n\r\n\t\tsubstrings.push(result[1]);\r\n\r\n\t}\r\n\r\n\treturn substrings;\r\n\r\n}\r\n\r\n/**\r\n * Prefixes substrings within the given strings.\r\n *\r\n * @private\r\n * @param {String} prefix - A prefix.\r\n * @param {String[]} substrings - The substrings.\r\n * @param {Map<String, String>} strings - A collection of named strings.\r\n */\r\n\r\nfunction prefixSubstrings(prefix, substrings, strings) {\r\n\r\n\tlet prefixed, regExp;\r\n\r\n\tfor(const substring of substrings) {\r\n\r\n\t\tprefixed = \"$1\" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);\r\n\t\tregExp = new RegExp(\"([^\\\\.])(\\\\b\" + substring + \"\\\\b)\", \"g\");\r\n\r\n\t\tfor(const entry of strings.entries()) {\r\n\r\n\t\t\tif(entry[1] !== null) {\r\n\r\n\t\t\t\tstrings.set(entry[0], entry[1].replace(regExp, prefixed));\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * Integrates the given effect.\r\n *\r\n * @private\r\n * @param {String} prefix - A prefix.\r\n * @param {Effect} effect - An effect.\r\n * @param {Map<String, String>} shaderParts - The shader parts.\r\n * @param {Map<BlendFunction, BlendMode>} blendModes - The blend modes.\r\n * @param {Map<String, String>} defines - The macro definitions.\r\n * @param {Map<String, Uniform>} uniforms - The uniforms.\r\n * @param {EffectAttribute} attributes - The global, collective attributes.\r\n * @return {Object} The results.\r\n * @property {String[]} varyings - The varyings used by the given effect.\r\n * @property {Boolean} transformedUv - Indicates whether the effect transforms UV coordinates in the fragment shader.\r\n * @property {Boolean} readDepth - Indicates whether the effect actually uses depth in the fragment shader.\r\n */\r\n\r\nfunction integrateEffect(prefix, effect, shaderParts, blendModes, defines, uniforms, attributes) {\r\n\r\n\tconst functionRegExp = /(?:\\w+\\s+(\\w+)\\([\\w\\s,]*\\)\\s*{[^}]+})/g;\r\n\tconst varyingRegExp = /(?:varying\\s+\\w+\\s+(\\w*))/g;\r\n\r\n\tconst blendMode = effect.blendMode;\r\n\tconst shaders = new Map([\r\n\t\t[\"fragment\", effect.fragmentShader],\r\n\t\t[\"vertex\", effect.vertexShader]\r\n\t]);\r\n\r\n\tconst mainImageExists = (shaders.get(\"fragment\") !== undefined && shaders.get(\"fragment\").indexOf(\"mainImage\") >= 0);\r\n\tconst mainUvExists = (shaders.get(\"fragment\") !== undefined && shaders.get(\"fragment\").indexOf(\"mainUv\") >= 0);\r\n\r\n\tlet varyings = [], names = [];\r\n\tlet transformedUv = false;\r\n\tlet readDepth = false;\r\n\r\n\tif(shaders.get(\"fragment\") === undefined) {\r\n\r\n\t\tconsole.error(\"Missing fragment shader\", effect);\r\n\r\n\t} else if(mainUvExists && (attributes & EffectAttribute.CONVOLUTION) !== 0) {\r\n\r\n\t\tconsole.error(\"Effects that transform UV coordinates are incompatible with convolution effects\", effect);\r\n\r\n\t} else if(!mainImageExists && !mainUvExists) {\r\n\r\n\t\tconsole.error(\"The fragment shader contains neither a mainImage nor a mainUv function\", effect);\r\n\r\n\t} else {\r\n\r\n\t\tif(mainUvExists) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV) +\r\n\t\t\t\t\"\\t\" + prefix + \"MainUv(UV);\\n\");\r\n\r\n\t\t\ttransformedUv = true;\r\n\r\n\t\t}\r\n\r\n\t\tif(shaders.get(\"vertex\") !== null && shaders.get(\"vertex\").indexOf(\"mainSupport\") >= 0) {\r\n\r\n\t\t\tlet string = \"\\t\" + prefix + \"MainSupport(\";\r\n\r\n\t\t\t// Check if the vertex shader expects uv coordinates.\r\n\t\t\tif(shaders.get(\"vertex\").indexOf(\"uv\") >= 0) {\r\n\r\n\t\t\t\tstring += \"vUv\";\r\n\r\n\t\t\t}\r\n\r\n\t\t\tstring += \");\\n\";\r\n\r\n\t\t\tshaderParts.set(Section.VERTEX_MAIN_SUPPORT,\r\n\t\t\t\tshaderParts.get(Section.VERTEX_MAIN_SUPPORT) + string);\r\n\r\n\t\t\tvaryings = varyings.concat(findSubstrings(varyingRegExp, shaders.get(\"vertex\")));\r\n\t\t\tnames = names.concat(varyings).concat(findSubstrings(functionRegExp, shaders.get(\"vertex\")));\r\n\r\n\t\t}\r\n\r\n\t\tnames = names.concat(findSubstrings(functionRegExp, shaders.get(\"fragment\")))\r\n\t\t\t.concat(Array.from(effect.uniforms.keys()))\r\n\t\t\t.concat(Array.from(effect.defines.keys()));\r\n\r\n\t\t// Store prefixed uniforms and macros.\r\n\t\teffect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));\r\n\t\teffect.defines.forEach((value, key) => defines.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));\r\n\r\n\t\t// Prefix varyings, functions, uniforms and macros.\r\n\t\tprefixSubstrings(prefix, names, defines);\r\n\t\tprefixSubstrings(prefix, names, shaders);\r\n\r\n\t\t// Collect unique blend modes.\r\n\t\tblendModes.set(blendMode.blendFunction, blendMode);\r\n\r\n\t\tif(mainImageExists) {\r\n\r\n\t\t\tlet string = prefix + \"MainImage(color0, UV, \";\r\n\r\n\t\t\t// The effect may sample depth in a different shader.\r\n\t\t\tif((attributes & EffectAttribute.DEPTH) !== 0 && shaders.get(\"fragment\").indexOf(\"depth\") >= 0) {\r\n\r\n\t\t\t\tstring += \"depth, \";\r\n\t\t\t\treadDepth = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tstring += \"color1);\\n\\t\";\r\n\r\n\t\t\t// Include the blend opacity uniform of this effect.\r\n\t\t\tconst blendOpacity = prefix + \"BlendOpacity\";\r\n\t\t\tuniforms.set(blendOpacity, blendMode.opacity);\r\n\r\n\t\t\t// Blend the result of this effect with the input color.\r\n\t\t\tstring += \"color0 = blend\" + blendMode.blendFunction +\r\n\t\t\t\t\"(color0, color1, \" + blendOpacity + \");\\n\\n\\t\";\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_IMAGE,\r\n\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_IMAGE) + string);\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\t\t\"uniform float \" + blendOpacity + \";\\n\\n\");\r\n\r\n\t\t}\r\n\r\n\t\t// Include the modified code in the final shader.\r\n\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\tshaders.get(\"fragment\") + \"\\n\");\r\n\r\n\t\tif(shaders.get(\"vertex\") !== null) {\r\n\r\n\t\t\tshaderParts.set(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD) +\r\n\t\t\t\tshaders.get(\"vertex\") + \"\\n\");\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\treturn { varyings, transformedUv, readDepth };\r\n\r\n}\r\n\r\n/**\r\n * An effect pass.\r\n *\r\n * Use this pass to combine {@link Effect} instances.\r\n */\r\n\r\nexport class EffectPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new effect pass.\r\n\t *\r\n\t * The provided effects will be organized and merged for optimal performance.\r\n\t *\r\n\t * @param {Camera} camera - The main camera. The camera's type and settings will be available to all effects.\r\n\t * @param {...Effect} effects - The effects that will be rendered by this pass.\r\n\t */\r\n\r\n\tconstructor(camera, ...effects) {\r\n\r\n\t\tsuper(\"EffectPass\");\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.mainCamera = camera;\r\n\r\n\t\t/**\r\n\t\t * The effects, sorted by attribute priority, DESC.\r\n\t\t *\r\n\t\t * @type {Effect[]}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.effects = effects.sort((a, b) => (b.attributes - a.attributes));\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should skip rendering.\r\n\t\t *\r\n\t\t * Effects will still be updated, even if this flag is true.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.skipRendering = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether dithering is enabled.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.quantize = false;\r\n\r\n\t\t/**\r\n\t\t * The amount of shader uniforms that this pass uses.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.uniforms = 0;\r\n\r\n\t\t/**\r\n\t\t * The amount of shader varyings that this pass uses.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.varyings = 0;\r\n\r\n\t\t/**\r\n\t\t * A time offset.\r\n\t\t *\r\n\t\t * Elapsed time will start at this value.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.minTime = 1.0;\r\n\r\n\t\t/**\r\n\t\t * The maximum time.\r\n\t\t *\r\n\t\t * If the elapsed time exceeds this value, it will be reset.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.maxTime = 1e3;\r\n\r\n\t\tthis.setFullscreenMaterial(this.createMaterial());\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether dithering is enabled.\r\n\t *\r\n\t * Color quantization reduces banding artifacts but degrades performance.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget dithering() {\r\n\r\n\t\treturn this.quantize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables dithering.\r\n\t *\r\n\t * Note that some effects have their own dithering setting.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset dithering(value) {\r\n\r\n\t\tif(this.quantize !== value) {\r\n\r\n\t\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\t\tif(material !== null) {\r\n\r\n\t\t\t\tmaterial.dithering = value;\r\n\t\t\t\tmaterial.needsUpdate = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.quantize = value;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Creates a compound shader material.\r\n\t *\r\n\t * @private\r\n\t * @return {Material} The new material.\r\n\t */\r\n\r\n\tcreateMaterial() {\r\n\r\n\t\tconst blendRegExp = /\\bblend\\b/g;\r\n\r\n\t\tconst shaderParts = new Map([\r\n\t\t\t[Section.FRAGMENT_HEAD, \"\"],\r\n\t\t\t[Section.FRAGMENT_MAIN_UV, \"\"],\r\n\t\t\t[Section.FRAGMENT_MAIN_IMAGE, \"\"],\r\n\t\t\t[Section.VERTEX_HEAD, \"\"],\r\n\t\t\t[Section.VERTEX_MAIN_SUPPORT, \"\"]\r\n\t\t]);\r\n\r\n\t\tconst blendModes = new Map();\r\n\t\tconst defines = new Map();\r\n\t\tconst uniforms = new Map();\r\n\t\tconst extensions = new Set();\r\n\r\n\t\tlet id = 0, varyings = 0, attributes = 0;\r\n\t\tlet transformedUv = false;\r\n\t\tlet readDepth = false;\r\n\t\tlet result;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\tif(effect.blendMode.blendFunction === BlendFunction.SKIP) {\r\n\r\n\t\t\t\t// Check if this effect relies on depth and then continue.\r\n\t\t\t\tattributes |= (effect.attributes & EffectAttribute.DEPTH);\r\n\r\n\t\t\t} else if((attributes & EffectAttribute.CONVOLUTION) !== 0 && (effect.attributes & EffectAttribute.CONVOLUTION) !== 0) {\r\n\r\n\t\t\t\tconsole.error(\"Convolution effects cannot be merged\", effect);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tattributes |= effect.attributes;\r\n\r\n\t\t\t\tresult = integrateEffect((\"e\" + id++), effect, shaderParts, blendModes, defines, uniforms, attributes);\r\n\r\n\t\t\t\tvaryings += result.varyings.length;\r\n\t\t\t\ttransformedUv = transformedUv || result.transformedUv;\r\n\t\t\t\treadDepth = readDepth || result.readDepth;\r\n\r\n\t\t\t\tif(effect.extensions !== null) {\r\n\r\n\t\t\t\t\t// Collect the WebGL extensions that are required by this effect.\r\n\t\t\t\t\tfor(const extension of effect.extensions) {\r\n\r\n\t\t\t\t\t\textensions.add(extension);\r\n\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\t// Integrate the relevant blend functions.\r\n\t\tfor(const blendMode of blendModes.values()) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) +\r\n\t\t\t\tblendMode.getShaderCode().replace(blendRegExp, \"blend\" + blendMode.blendFunction) + \"\\n\");\r\n\r\n\t\t}\r\n\r\n\t\t// Check if any effect relies on depth.\r\n\t\tif((attributes & EffectAttribute.DEPTH) !== 0) {\r\n\r\n\t\t\t// Only read depth if any effect actually uses this information.\r\n\t\t\tif(readDepth) {\r\n\r\n\t\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_IMAGE, \"float depth = readDepth(UV);\\n\\n\\t\" +\r\n\t\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_IMAGE));\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.needsDepthTexture = true;\r\n\r\n\t\t}\r\n\r\n\t\t// Check if any effect transforms UVs in the fragment shader.\r\n\t\tif(transformedUv) {\r\n\r\n\t\t\tshaderParts.set(Section.FRAGMENT_MAIN_UV, \"vec2 transformedUv = vUv;\\n\" +\r\n\t\t\t\tshaderParts.get(Section.FRAGMENT_MAIN_UV));\r\n\r\n\t\t\tdefines.set(\"UV\", \"transformedUv\");\r\n\r\n\t\t} else {\r\n\r\n\t\t\tdefines.set(\"UV\", \"vUv\");\r\n\r\n\t\t}\r\n\r\n\t\tshaderParts.forEach((value, key, map) => map.set(key, value.trim()));\r\n\r\n\t\tthis.uniforms = uniforms.size;\r\n\t\tthis.varyings = varyings;\r\n\r\n\t\tthis.skipRendering = (id === 0);\r\n\t\tthis.needsSwap = !this.skipRendering;\r\n\r\n\t\tconst material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);\r\n\r\n\t\tif(extensions.size > 0) {\r\n\r\n\t\t\t// Enable required WebGL extensions.\r\n\t\t\tfor(const extension of extensions) {\r\n\r\n\t\t\t\tmaterial.extensions[extension] = true;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\treturn material;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Destroys the current fullscreen shader material and builds a new one.\r\n\t *\r\n\t * Warning: This method performs a relatively expensive shader recompilation.\r\n\t */\r\n\r\n\trecompile() {\r\n\r\n\t\tlet material = this.getFullscreenMaterial();\r\n\t\tlet width = 0, height = 0;\r\n\t\tlet depthTexture = null;\r\n\t\tlet depthPacking = 0;\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tconst resolution = material.uniforms.resolution.value;\r\n\t\t\twidth = resolution.x; height = resolution.y;\r\n\t\t\tdepthTexture = material.uniforms.depthBuffer.value;\r\n\t\t\tdepthPacking = material.depthPacking;\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t\tthis.uniforms = 0;\r\n\t\t\tthis.varyings = 0;\r\n\r\n\t\t}\r\n\r\n\t\tmaterial = this.createMaterial();\r\n\t\tmaterial.setSize(width, height);\r\n\t\tthis.setFullscreenMaterial(material);\r\n\t\tthis.setDepthTexture(depthTexture, depthPacking);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\treturn (material !== null) ? material.uniforms.depthBuffer.value : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tmaterial.uniforms.depthBuffer.value = depthTexture;\r\n\t\tmaterial.depthPacking = depthPacking;\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.setDepthTexture(depthTexture, depthPacking);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\t\tconst time = material.uniforms.time.value + deltaTime;\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.update(renderer, inputBuffer, deltaTime);\r\n\r\n\t\t}\r\n\r\n\t\tif(!this.skipRendering || this.renderToScreen) {\r\n\r\n\t\t\tmaterial.uniforms.inputBuffer.value = inputBuffer.texture;\r\n\t\t\tmaterial.uniforms.time.value = (time <= this.maxTime) ? time : this.minTime;\r\n\t\t\trenderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);\r\n\t\t\trenderer.render(this.scene, this.camera);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of this pass.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tthis.getFullscreenMaterial().setSize(width, height);\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.setSize(width, height);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {\r\n\r\n\t\tconst capabilities = renderer.capabilities;\r\n\r\n\t\tlet max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);\r\n\r\n\t\tif(this.uniforms > max) {\r\n\r\n\t\t\tconsole.warn(\"The current rendering context doesn't support more than \" + max + \" uniforms, but \" + this.uniforms + \" were defined\");\r\n\r\n\t\t}\r\n\r\n\t\tmax = capabilities.maxVaryings;\r\n\r\n\t\tif(this.varyings > max) {\r\n\r\n\t\t\tconsole.warn(\"The current rendering context doesn't support more than \" + max + \" varyings, but \" + this.varyings + \" were defined\");\r\n\r\n\t\t}\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.initialize(renderer, alpha);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Deletes disposable objects.\r\n\t *\r\n\t * This pass will be inoperative after this method was called!\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tsuper.dispose();\r\n\r\n\t\tfor(const effect of this.effects) {\r\n\r\n\t\t\teffect.dispose();\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/passes/EffectPass.js",
     "access": "public",
@@ -13972,7 +13972,7 @@
     "importPath": "postprocessing/src/passes/EffectPass.js",
     "importStyle": "{EffectPass}",
     "description": "An effect pass.\n\nUse this pass to combine {@link Effect} instances.",
-    "lineNumber": 198,
+    "lineNumber": 209,
     "interface": false,
     "extends": [
       "src/passes/Pass.js~Pass"
@@ -13989,7 +13989,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#constructor",
     "access": "public",
     "description": "Constructs a new effect pass.\n\nThe provided effects will be organized and merged for optimal performance.",
-    "lineNumber": 209,
+    "lineNumber": 220,
     "params": [
       {
         "nullable": null,
@@ -14022,7 +14022,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#mainCamera",
     "access": "private",
     "description": "The main camera.",
-    "lineNumber": 220,
+    "lineNumber": 231,
     "type": {
       "nullable": null,
       "types": [
@@ -14042,7 +14042,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#effects",
     "access": "private",
     "description": "The effects, sorted by attribute priority, DESC.",
-    "lineNumber": 229,
+    "lineNumber": 240,
     "type": {
       "nullable": null,
       "types": [
@@ -14062,7 +14062,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#skipRendering",
     "access": "private",
     "description": "Indicates whether this pass should skip rendering.\n\nEffects will still be updated, even if this flag is true.",
-    "lineNumber": 240,
+    "lineNumber": 251,
     "type": {
       "nullable": null,
       "types": [
@@ -14082,7 +14082,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#quantize",
     "access": "private",
     "description": "Indicates whether dithering is enabled.",
-    "lineNumber": 249,
+    "lineNumber": 260,
     "type": {
       "nullable": null,
       "types": [
@@ -14102,7 +14102,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#uniforms",
     "access": "private",
     "description": "The amount of shader uniforms that this pass uses.",
-    "lineNumber": 258,
+    "lineNumber": 269,
     "type": {
       "nullable": null,
       "types": [
@@ -14122,7 +14122,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#varyings",
     "access": "private",
     "description": "The amount of shader varyings that this pass uses.",
-    "lineNumber": 267,
+    "lineNumber": 278,
     "type": {
       "nullable": null,
       "types": [
@@ -14142,7 +14142,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#minTime",
     "access": "public",
     "description": "A time offset.\n\nElapsed time will start at this value.",
-    "lineNumber": 277,
+    "lineNumber": 288,
     "type": {
       "nullable": null,
       "types": [
@@ -14161,7 +14161,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#maxTime",
     "access": "public",
     "description": "The maximum time.\n\nIf the elapsed time exceeds this value, it will be reset.",
-    "lineNumber": 287,
+    "lineNumber": 298,
     "type": {
       "nullable": null,
       "types": [
@@ -14182,7 +14182,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#dithering",
     "access": "public",
     "description": "Indicates whether dithering is enabled.\n\nColor quantization reduces banding artifacts but degrades performance.",
-    "lineNumber": 301,
+    "lineNumber": 312,
     "type": {
       "nullable": null,
       "types": [
@@ -14203,7 +14203,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#dithering",
     "access": "public",
     "description": "Enables or disables dithering.\n\nNote that some effects have their own dithering setting.",
-    "lineNumber": 315,
+    "lineNumber": 326,
     "type": {
       "nullable": null,
       "types": [
@@ -14224,7 +14224,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#createMaterial",
     "access": "private",
     "description": "Creates a compound shader material.",
-    "lineNumber": 341,
+    "lineNumber": 352,
     "return": {
       "nullable": null,
       "types": [
@@ -14245,7 +14245,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#needsDepthTexture",
     "access": "public",
     "description": null,
-    "lineNumber": 418,
+    "lineNumber": 429,
     "undocument": true,
     "type": {
       "types": [
@@ -14262,7 +14262,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#needsSwap",
     "access": "public",
     "description": null,
-    "lineNumber": 442,
+    "lineNumber": 453,
     "undocument": true,
     "type": {
       "types": [
@@ -14281,7 +14281,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#recompile",
     "access": "public",
     "description": "Destroys the current fullscreen shader material and builds a new one.\n\nWarning: This method performs a relatively expensive shader recompilation.",
-    "lineNumber": 467,
+    "lineNumber": 478,
     "params": [],
     "return": null
   },
@@ -14296,7 +14296,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#getDepthTexture",
     "access": "public",
     "description": "Returns the current depth texture.",
-    "lineNumber": 500,
+    "lineNumber": 511,
     "return": {
       "nullable": null,
       "types": [
@@ -14318,7 +14318,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#setDepthTexture",
     "access": "public",
     "description": "Sets the depth texture.",
-    "lineNumber": 515,
+    "lineNumber": 526,
     "params": [
       {
         "nullable": null,
@@ -14356,7 +14356,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#render",
     "access": "public",
     "description": "Renders the effect.",
-    "lineNumber": 541,
+    "lineNumber": 552,
     "params": [
       {
         "nullable": null,
@@ -14422,7 +14422,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#setSize",
     "access": "public",
     "description": "Updates the size of this pass.",
-    "lineNumber": 570,
+    "lineNumber": 581,
     "params": [
       {
         "nullable": null,
@@ -14458,7 +14458,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#initialize",
     "access": "public",
     "description": "Performs initialization tasks.",
-    "lineNumber": 589,
+    "lineNumber": 600,
     "params": [
       {
         "nullable": null,
@@ -14494,7 +14494,7 @@
     "longname": "src/passes/EffectPass.js~EffectPass#dispose",
     "access": "public",
     "description": "Deletes disposable objects.\n\nThis pass will be inoperative after this method was called!",
-    "lineNumber": 623,
+    "lineNumber": 634,
     "params": [],
     "return": null
   },
@@ -15083,7 +15083,7 @@
     "__docId__": 644,
     "kind": "file",
     "name": "src/passes/Pass.js",
-    "content": "import { Scene, Mesh, OrthographicCamera, PlaneBufferGeometry } from \"three\";\r\n\r\n/**\r\n * An abstract pass.\r\n *\r\n * Passes that do not rely on the depth buffer should explicitly disable the\r\n * depth test and depth write in their respective shader materials.\r\n *\r\n * @implements {Initializable}\r\n * @implements {Resizable}\r\n * @implements {Disposable}\r\n */\r\n\r\nexport class Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pass.\r\n\t *\r\n\t * @param {String} [name] - The name of this pass. Does not have to be unique.\r\n\t * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.\r\n\t * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.\r\n\t */\r\n\r\n\tconstructor(name = \"Pass\", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t */\r\n\r\n\t\tthis.name = name;\r\n\r\n\t\t/**\r\n\t\t * The scene to render.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * A quad mesh that fills the screen.\r\n\t\t *\r\n\t\t * @type {Mesh}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.quad = null;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should swap the frame\r\n\t\t * buffers after this pass has finished rendering.\r\n\t\t *\r\n\t\t * Set this to `false` if this pass doesn't render to the output buffer or\r\n\t\t * the screen. Otherwise, the contents of the input buffer will be lost.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should prepare a depth\r\n\t\t * texture for this pass.\r\n\t\t *\r\n\t\t * Set this to `true` if this pass relies on depth information from a\r\n\t\t * preceding {@link RenderPass}.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsDepthTexture = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should render to screen.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.renderToScreen = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should be executed.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current fullscreen material.\r\n\t *\r\n\t * @return {Material} The current fullscreen material, or null if there is none.\r\n\t */\r\n\r\n\tgetFullscreenMaterial() {\r\n\r\n\t\treturn (this.quad !== null) ? this.quad.material : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the fullscreen material.\r\n\t *\r\n\t * The material will be assigned to the quad mesh that fills the screen. The\r\n\t * screen quad will be created once a material is assigned via this method.\r\n\t *\r\n\t * @protected\r\n\t * @param {Material} material - A fullscreen material.\r\n\t */\r\n\r\n\tsetFullscreenMaterial(material) {\r\n\r\n\t\tlet quad = this.quad;\r\n\r\n\t\tif(quad !== null) {\r\n\r\n\t\t\tquad.material = material;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tquad = new Mesh(new PlaneBufferGeometry(2, 2), material);\r\n\t\t\tquad.frustumCulled = false;\r\n\r\n\t\t\tif(this.scene !== null) {\r\n\r\n\t\t\t\tthis.scene.add(quad);\r\n\t\t\t\tthis.quad = quad;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\treturn null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * You may override this method if your pass relies on the depth information\r\n\t * of a preceding {@link RenderPass}.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * This is an abstract method that must be overridden.\r\n\t *\r\n\t * @abstract\r\n\t * @throws {Error} An error is thrown if the method is not overridden.\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tthrow new Error(\"Render method not implemented!\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * You may override this method in case you want to be informed about the size\r\n\t * of the main frame buffer.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method before this pass is\r\n\t * initialized and every time its own size is updated.\r\n\t *\r\n\t * @param {Number} width - The renderer's width.\r\n\t * @param {Number} height - The renderer's height.\r\n\t * @example this.myRenderTarget.setSize(width, height);\r\n\t */\r\n\r\n\tsetSize(width, height) {}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * By overriding this method you gain access to the renderer. You'll also be\r\n\t * able to configure your custom render targets to use the appropriate format\r\n\t * (RGB or RGBA).\r\n\t *\r\n\t * The provided renderer can be used to warm up special off-screen render\r\n\t * targets by performing a preliminary render operation.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when this pass is added to its\r\n\t * queue, but not before its size has been set.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {}\r\n\r\n\t/**\r\n\t * Performs a shallow search for disposable properties and deletes them. The\r\n\t * pass will be inoperative after this method was called!\r\n\t *\r\n\t * Disposable objects:\r\n\t *  - WebGLRenderTarget\r\n\t *  - Material\r\n\t *  - Texture\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when it is being destroyed.\r\n\t * You may, however, use it independently to free memory when you are certain\r\n\t * that you don't need this pass anymore.\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tfor(const key of Object.keys(this)) {\r\n\r\n\t\t\tif(this[key] !== null && typeof this[key].dispose === \"function\") {\r\n\r\n\t\t\t\t/** @ignore */\r\n\t\t\t\tthis[key].dispose();\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tBufferAttribute,\r\n\tBufferGeometry,\r\n\tScene,\r\n\tMesh,\r\n\tOrthographicCamera\r\n} from \"three\";\r\n\r\n/**\r\n * Shared fullscreen geometry.\r\n *\r\n * @type {BufferGeometry}\r\n * @private\r\n */\r\n\r\nlet geometry = null;\r\n\r\n/**\r\n * Returns a shared fullscreen triangle.\r\n *\r\n * The size of the screen is 2x2 units (NDC). A triangle that fills the screen\r\n * needs to be 4 units wide and 4 units tall.\r\n *\r\n * @private\r\n * @return {BufferGeometry} The fullscreen geometry.\r\n */\r\n\r\nfunction getFullscreenTriangle() {\r\n\r\n\tif(geometry === null) {\r\n\r\n\t\tconst vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);\r\n\t\tconst uvs = new Float32Array([0, 0, 2, 0, 0, 2]);\r\n\t\tgeometry = new BufferGeometry();\r\n\t\tgeometry.addAttribute(\"position\", new BufferAttribute(vertices, 3));\r\n\t\tgeometry.addAttribute(\"uv\", new BufferAttribute(uvs, 2));\r\n\r\n\t}\r\n\r\n\treturn geometry;\r\n\r\n}\r\n\r\n/**\r\n * An abstract pass.\r\n *\r\n * Passes that do not rely on the depth buffer should explicitly disable the\r\n * depth test and depth write flags of their fullscreen shader material.\r\n *\r\n * Fullscreen passes use a shared fullscreen triangle:\r\n * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/\r\n *\r\n * @implements {Initializable}\r\n * @implements {Resizable}\r\n * @implements {Disposable}\r\n */\r\n\r\nexport class Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pass.\r\n\t *\r\n\t * @param {String} [name] - The name of this pass. Does not have to be unique.\r\n\t * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.\r\n\t * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.\r\n\t */\r\n\r\n\tconstructor(name = \"Pass\", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t */\r\n\r\n\t\tthis.name = name;\r\n\r\n\t\t/**\r\n\t\t * The scene to render.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * A mesh that fills the screen.\r\n\t\t *\r\n\t\t * @type {Mesh}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screen = null;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should swap the frame\r\n\t\t * buffers after this pass has finished rendering.\r\n\t\t *\r\n\t\t * Set this to `false` if this pass doesn't render to the output buffer or\r\n\t\t * the screen. Otherwise, the contents of the input buffer will be lost.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should prepare a depth\r\n\t\t * texture for this pass.\r\n\t\t *\r\n\t\t * Set this to `true` if this pass relies on depth information from a\r\n\t\t * preceding {@link RenderPass}.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsDepthTexture = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should render to screen.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.renderToScreen = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should be executed.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current fullscreen material.\r\n\t *\r\n\t * @return {Material} The current fullscreen material, or null if there is none.\r\n\t */\r\n\r\n\tgetFullscreenMaterial() {\r\n\r\n\t\treturn (this.screen !== null) ? this.screen.material : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the fullscreen material.\r\n\t *\r\n\t * The material will be assigned to a mesh that fills the screen. The mesh\r\n\t * will be created once a material is assigned via this method.\r\n\t *\r\n\t * @protected\r\n\t * @param {Material} material - A fullscreen material.\r\n\t */\r\n\r\n\tsetFullscreenMaterial(material) {\r\n\r\n\t\tlet screen = this.screen;\r\n\r\n\t\tif(screen !== null) {\r\n\r\n\t\t\tscreen.material = material;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tscreen = new Mesh(getFullscreenTriangle(), material);\r\n\t\t\tscreen.frustumCulled = false;\r\n\r\n\t\t\tif(this.scene !== null) {\r\n\r\n\t\t\t\tthis.scene.add(screen);\r\n\t\t\t\tthis.screen = screen;\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\treturn null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * You may override this method if your pass relies on the depth information\r\n\t * of a preceding {@link RenderPass}.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * This is an abstract method that must be overridden.\r\n\t *\r\n\t * @abstract\r\n\t * @throws {Error} An error is thrown if the method is not overridden.\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tthrow new Error(\"Render method not implemented!\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * You may override this method in case you want to be informed about the size\r\n\t * of the main frame buffer.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method before this pass is\r\n\t * initialized and every time its own size is updated.\r\n\t *\r\n\t * @param {Number} width - The renderer's width.\r\n\t * @param {Number} height - The renderer's height.\r\n\t * @example this.myRenderTarget.setSize(width, height);\r\n\t */\r\n\r\n\tsetSize(width, height) {}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * By overriding this method you gain access to the renderer. You'll also be\r\n\t * able to configure your custom render targets to use the appropriate format\r\n\t * (RGB or RGBA).\r\n\t *\r\n\t * The provided renderer can be used to warm up special off-screen render\r\n\t * targets by performing a preliminary render operation.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when this pass is added to its\r\n\t * queue, but not before its size has been set.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {}\r\n\r\n\t/**\r\n\t * Performs a shallow search for disposable properties and deletes them. The\r\n\t * pass will be inoperative after this method was called!\r\n\t *\r\n\t * Disposable objects:\r\n\t *  - WebGLRenderTarget\r\n\t *  - Material\r\n\t *  - Texture\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when it is being destroyed.\r\n\t * You may, however, use it independently to free memory when you are certain\r\n\t * that you don't need this pass anymore.\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tfor(const key of Object.keys(this)) {\r\n\r\n\t\t\tif(this[key] !== null && typeof this[key].dispose === \"function\") {\r\n\r\n\t\t\t\t/** @ignore */\r\n\t\t\t\tthis[key].dispose();\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/passes/Pass.js",
     "access": "public",
@@ -15092,6 +15092,55 @@
   },
   {
     "__docId__": 645,
+    "kind": "variable",
+    "name": "geometry",
+    "memberof": "src/passes/Pass.js",
+    "static": true,
+    "longname": "src/passes/Pass.js~geometry",
+    "access": "private",
+    "export": false,
+    "importPath": "postprocessing/src/passes/Pass.js",
+    "importStyle": null,
+    "description": "Shared fullscreen geometry.",
+    "lineNumber": 16,
+    "type": {
+      "nullable": null,
+      "types": [
+        "BufferGeometry"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "ignore": true
+  },
+  {
+    "__docId__": 646,
+    "kind": "function",
+    "name": "getFullscreenTriangle",
+    "memberof": "src/passes/Pass.js",
+    "generator": false,
+    "async": false,
+    "static": true,
+    "longname": "src/passes/Pass.js~getFullscreenTriangle",
+    "access": "private",
+    "export": false,
+    "importPath": "postprocessing/src/passes/Pass.js",
+    "importStyle": null,
+    "description": "Returns a shared fullscreen triangle.\n\nThe size of the screen is 2x2 units (NDC). A triangle that fills the screen\nneeds to be 4 units wide and 4 units tall.",
+    "lineNumber": 28,
+    "return": {
+      "nullable": null,
+      "types": [
+        "BufferGeometry"
+      ],
+      "spread": false,
+      "description": "The fullscreen geometry."
+    },
+    "ignore": true,
+    "params": []
+  },
+  {
+    "__docId__": 647,
     "kind": "class",
     "name": "Pass",
     "memberof": "src/passes/Pass.js",
@@ -15101,8 +15150,8 @@
     "export": true,
     "importPath": "postprocessing/src/passes/Pass.js",
     "importStyle": "{Pass}",
-    "description": "An abstract pass.\n\nPasses that do not rely on the depth buffer should explicitly disable the\ndepth test and depth write in their respective shader materials.",
-    "lineNumber": 14,
+    "description": "An abstract pass.\n\nPasses that do not rely on the depth buffer should explicitly disable the\ndepth test and depth write flags of their fullscreen shader material.\n\nFullscreen passes use a shared fullscreen triangle:\nhttps://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/",
+    "lineNumber": 58,
     "interface": false,
     "implements": [
       "Initializable",
@@ -15111,7 +15160,7 @@
     ]
   },
   {
-    "__docId__": 646,
+    "__docId__": 648,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15121,7 +15170,7 @@
     "longname": "src/passes/Pass.js~Pass#constructor",
     "access": "public",
     "description": "Constructs a new pass.",
-    "lineNumber": 24,
+    "lineNumber": 68,
     "params": [
       {
         "nullable": null,
@@ -15156,7 +15205,7 @@
     ]
   },
   {
-    "__docId__": 647,
+    "__docId__": 649,
     "kind": "member",
     "name": "name",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15164,7 +15213,7 @@
     "longname": "src/passes/Pass.js~Pass#name",
     "access": "public",
     "description": "The name of this pass.",
-    "lineNumber": 32,
+    "lineNumber": 76,
     "type": {
       "nullable": null,
       "types": [
@@ -15175,7 +15224,7 @@
     }
   },
   {
-    "__docId__": 648,
+    "__docId__": 650,
     "kind": "member",
     "name": "scene",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15183,7 +15232,7 @@
     "longname": "src/passes/Pass.js~Pass#scene",
     "access": "protected",
     "description": "The scene to render.",
-    "lineNumber": 41,
+    "lineNumber": 85,
     "type": {
       "nullable": null,
       "types": [
@@ -15194,7 +15243,7 @@
     }
   },
   {
-    "__docId__": 649,
+    "__docId__": 651,
     "kind": "member",
     "name": "camera",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15202,7 +15251,7 @@
     "longname": "src/passes/Pass.js~Pass#camera",
     "access": "protected",
     "description": "The camera.",
-    "lineNumber": 50,
+    "lineNumber": 94,
     "type": {
       "nullable": null,
       "types": [
@@ -15213,15 +15262,15 @@
     }
   },
   {
-    "__docId__": 650,
+    "__docId__": 652,
     "kind": "member",
-    "name": "quad",
+    "name": "screen",
     "memberof": "src/passes/Pass.js~Pass",
     "static": false,
-    "longname": "src/passes/Pass.js~Pass#quad",
+    "longname": "src/passes/Pass.js~Pass#screen",
     "access": "private",
-    "description": "A quad mesh that fills the screen.",
-    "lineNumber": 59,
+    "description": "A mesh that fills the screen.",
+    "lineNumber": 103,
     "type": {
       "nullable": null,
       "types": [
@@ -15233,7 +15282,7 @@
     "ignore": true
   },
   {
-    "__docId__": 651,
+    "__docId__": 653,
     "kind": "member",
     "name": "needsSwap",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15241,45 +15290,7 @@
     "longname": "src/passes/Pass.js~Pass#needsSwap",
     "access": "public",
     "description": "Only relevant for subclassing.\n\nIndicates whether the {@link EffectComposer} should swap the frame\nbuffers after this pass has finished rendering.\n\nSet this to `false` if this pass doesn't render to the output buffer or\nthe screen. Otherwise, the contents of the input buffer will be lost.",
-    "lineNumber": 73,
-    "type": {
-      "nullable": null,
-      "types": [
-        "Boolean"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 652,
-    "kind": "member",
-    "name": "needsDepthTexture",
-    "memberof": "src/passes/Pass.js~Pass",
-    "static": false,
-    "longname": "src/passes/Pass.js~Pass#needsDepthTexture",
-    "access": "public",
-    "description": "Only relevant for subclassing.\n\nIndicates whether the {@link EffectComposer} should prepare a depth\ntexture for this pass.\n\nSet this to `true` if this pass relies on depth information from a\npreceding {@link RenderPass}.",
-    "lineNumber": 87,
-    "type": {
-      "nullable": null,
-      "types": [
-        "Boolean"
-      ],
-      "spread": false,
-      "description": null
-    }
-  },
-  {
-    "__docId__": 653,
-    "kind": "member",
-    "name": "renderToScreen",
-    "memberof": "src/passes/Pass.js~Pass",
-    "static": false,
-    "longname": "src/passes/Pass.js~Pass#renderToScreen",
-    "access": "public",
-    "description": "Indicates whether this pass should render to screen.",
-    "lineNumber": 95,
+    "lineNumber": 117,
     "type": {
       "nullable": null,
       "types": [
@@ -15292,13 +15303,13 @@
   {
     "__docId__": 654,
     "kind": "member",
-    "name": "enabled",
+    "name": "needsDepthTexture",
     "memberof": "src/passes/Pass.js~Pass",
     "static": false,
-    "longname": "src/passes/Pass.js~Pass#enabled",
+    "longname": "src/passes/Pass.js~Pass#needsDepthTexture",
     "access": "public",
-    "description": "Indicates whether this pass should be executed.",
-    "lineNumber": 103,
+    "description": "Only relevant for subclassing.\n\nIndicates whether the {@link EffectComposer} should prepare a depth\ntexture for this pass.\n\nSet this to `true` if this pass relies on depth information from a\npreceding {@link RenderPass}.",
+    "lineNumber": 131,
     "type": {
       "nullable": null,
       "types": [
@@ -15310,6 +15321,44 @@
   },
   {
     "__docId__": 655,
+    "kind": "member",
+    "name": "renderToScreen",
+    "memberof": "src/passes/Pass.js~Pass",
+    "static": false,
+    "longname": "src/passes/Pass.js~Pass#renderToScreen",
+    "access": "public",
+    "description": "Indicates whether this pass should render to screen.",
+    "lineNumber": 139,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 656,
+    "kind": "member",
+    "name": "enabled",
+    "memberof": "src/passes/Pass.js~Pass",
+    "static": false,
+    "longname": "src/passes/Pass.js~Pass#enabled",
+    "access": "public",
+    "description": "Indicates whether this pass should be executed.",
+    "lineNumber": 147,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 657,
     "kind": "method",
     "name": "getFullscreenMaterial",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15319,7 +15368,7 @@
     "longname": "src/passes/Pass.js~Pass#getFullscreenMaterial",
     "access": "public",
     "description": "Returns the current fullscreen material.",
-    "lineNumber": 113,
+    "lineNumber": 157,
     "return": {
       "nullable": null,
       "types": [
@@ -15331,7 +15380,7 @@
     "params": []
   },
   {
-    "__docId__": 656,
+    "__docId__": 658,
     "kind": "method",
     "name": "setFullscreenMaterial",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15340,8 +15389,8 @@
     "static": false,
     "longname": "src/passes/Pass.js~Pass#setFullscreenMaterial",
     "access": "protected",
-    "description": "Sets the fullscreen material.\n\nThe material will be assigned to the quad mesh that fills the screen. The\nscreen quad will be created once a material is assigned via this method.",
-    "lineNumber": 129,
+    "description": "Sets the fullscreen material.\n\nThe material will be assigned to a mesh that fills the screen. The mesh\nwill be created once a material is assigned via this method.",
+    "lineNumber": 173,
     "params": [
       {
         "nullable": null,
@@ -15357,7 +15406,7 @@
     "return": null
   },
   {
-    "__docId__": 658,
+    "__docId__": 660,
     "kind": "method",
     "name": "getDepthTexture",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15367,7 +15416,7 @@
     "longname": "src/passes/Pass.js~Pass#getDepthTexture",
     "access": "public",
     "description": "Returns the current depth texture.",
-    "lineNumber": 159,
+    "lineNumber": 203,
     "return": {
       "nullable": null,
       "types": [
@@ -15379,7 +15428,7 @@
     "params": []
   },
   {
-    "__docId__": 659,
+    "__docId__": 661,
     "kind": "method",
     "name": "setDepthTexture",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15389,7 +15438,7 @@
     "longname": "src/passes/Pass.js~Pass#setDepthTexture",
     "access": "public",
     "description": "Sets the depth texture.\n\nYou may override this method if your pass relies on the depth information\nof a preceding {@link RenderPass}.",
-    "lineNumber": 175,
+    "lineNumber": 219,
     "params": [
       {
         "nullable": null,
@@ -15417,7 +15466,7 @@
     "return": null
   },
   {
-    "__docId__": 660,
+    "__docId__": 662,
     "kind": "method",
     "name": "render",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15427,7 +15476,7 @@
     "longname": "src/passes/Pass.js~Pass#render",
     "access": "public",
     "description": "Renders the effect.\n\nThis is an abstract method that must be overridden.",
-    "lineNumber": 191,
+    "lineNumber": 235,
     "params": [
       {
         "nullable": null,
@@ -15492,7 +15541,7 @@
     "return": null
   },
   {
-    "__docId__": 661,
+    "__docId__": 663,
     "kind": "method",
     "name": "setSize",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15505,7 +15554,7 @@
     "examples": [
       "this.myRenderTarget.setSize(width, height);"
     ],
-    "lineNumber": 211,
+    "lineNumber": 255,
     "params": [
       {
         "nullable": null,
@@ -15531,7 +15580,7 @@
     "return": null
   },
   {
-    "__docId__": 662,
+    "__docId__": 664,
     "kind": "method",
     "name": "initialize",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15544,7 +15593,7 @@
     "examples": [
       "if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }"
     ],
-    "lineNumber": 231,
+    "lineNumber": 275,
     "params": [
       {
         "nullable": null,
@@ -15570,7 +15619,7 @@
     "return": null
   },
   {
-    "__docId__": 663,
+    "__docId__": 665,
     "kind": "method",
     "name": "dispose",
     "memberof": "src/passes/Pass.js~Pass",
@@ -15580,12 +15629,12 @@
     "longname": "src/passes/Pass.js~Pass#dispose",
     "access": "public",
     "description": "Performs a shallow search for disposable properties and deletes them. The\npass will be inoperative after this method was called!\n\nDisposable objects:\n - WebGLRenderTarget\n - Material\n - Texture\n\nThe {@link EffectComposer} calls this method when it is being destroyed.\nYou may, however, use it independently to free memory when you are certain\nthat you don't need this pass anymore.",
-    "lineNumber": 247,
+    "lineNumber": 291,
     "params": [],
     "return": null
   },
   {
-    "__docId__": 664,
+    "__docId__": 666,
     "kind": "file",
     "name": "src/passes/RenderPass.js",
     "content": "import { ClearPass } from \"./ClearPass.js\";\r\nimport { Pass } from \"./Pass.js\";\r\n\r\n/**\r\n * A pass that renders a given scene into the input buffer or to screen.\r\n *\r\n * This pass uses a {@link ClearPass} to clear the target buffer.\r\n */\r\n\r\nexport class RenderPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new render pass.\r\n\t *\r\n\t * @param {Scene} scene - The scene to render.\r\n\t * @param {Camera} camera - The camera to use to render the scene.\r\n\t * @param {Object} [overrideMaterial=null] - An override material for the scene.\r\n\t */\r\n\r\n\tconstructor(scene, camera, overrideMaterial = null) {\r\n\r\n\t\tsuper(\"RenderPass\", scene, camera);\r\n\r\n\t\tthis.needsSwap = false;\r\n\r\n\t\t/**\r\n\t\t * An override material.\r\n\t\t *\r\n\t\t * @type {Material}\r\n\t\t */\r\n\r\n\t\tthis.overrideMaterial = overrideMaterial;\r\n\r\n\t\t/**\r\n\t\t * A clear pass.\r\n\t\t *\r\n\t\t * @type {ClearPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.clearPass = new ClearPass();\r\n\r\n\t\t/**\r\n\t\t * A depth texture.\r\n\t\t *\r\n\t\t * @type {DepthTexture}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.depthTexture = null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the target buffer should be cleared before rendering.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget clear() {\r\n\r\n\t\treturn this.clearPass.enabled;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables auto clear.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset clear(value) {\r\n\r\n\t\tthis.clearPass.enabled = value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the clear pass.\r\n\t *\r\n\t * @return {ClearPass} The clear pass.\r\n\t */\r\n\r\n\tgetClearPass() {\r\n\r\n\t\treturn this.clearPass;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\treturn this.depthTexture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * The provided texture will be attached to the input buffer unless this pass\r\n\t * renders to screen.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {\r\n\r\n\t\tthis.depthTexture = depthTexture;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the scene.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tconst scene = this.scene;\r\n\t\tconst renderTarget = this.renderToScreen ? null : inputBuffer;\r\n\t\tconst overrideMaterial = scene.overrideMaterial;\r\n\r\n\t\tif(this.depthTexture !== null && !this.renderToScreen) {\r\n\r\n\t\t\tinputBuffer.depthTexture = this.depthTexture;\r\n\t\t\toutputBuffer.depthTexture = null;\r\n\r\n\t\t}\r\n\r\n\t\tif(this.clear) {\r\n\r\n\t\t\tthis.clearPass.renderToScreen = this.renderToScreen;\r\n\t\t\tthis.clearPass.render(renderer, inputBuffer);\r\n\r\n\t\t}\r\n\r\n\t\tscene.overrideMaterial = this.overrideMaterial;\r\n\t\trenderer.setRenderTarget(renderTarget);\r\n\t\trenderer.render(scene, this.camera);\r\n\t\tscene.overrideMaterial = overrideMaterial;\r\n\r\n\t}\r\n\r\n}\r\n",
@@ -15596,7 +15645,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 665,
+    "__docId__": 667,
     "kind": "class",
     "name": "RenderPass",
     "memberof": "src/passes/RenderPass.js",
@@ -15614,7 +15663,7 @@
     ]
   },
   {
-    "__docId__": 666,
+    "__docId__": 668,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15661,7 +15710,7 @@
     ]
   },
   {
-    "__docId__": 667,
+    "__docId__": 669,
     "kind": "member",
     "name": "needsSwap",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15678,7 +15727,7 @@
     }
   },
   {
-    "__docId__": 668,
+    "__docId__": 670,
     "kind": "member",
     "name": "overrideMaterial",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15697,7 +15746,7 @@
     }
   },
   {
-    "__docId__": 669,
+    "__docId__": 671,
     "kind": "member",
     "name": "clearPass",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15717,7 +15766,7 @@
     "ignore": true
   },
   {
-    "__docId__": 670,
+    "__docId__": 672,
     "kind": "member",
     "name": "depthTexture",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15737,7 +15786,7 @@
     "ignore": true
   },
   {
-    "__docId__": 671,
+    "__docId__": 673,
     "kind": "get",
     "name": "clear",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15758,7 +15807,7 @@
     }
   },
   {
-    "__docId__": 672,
+    "__docId__": 674,
     "kind": "set",
     "name": "clear",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15779,7 +15828,7 @@
     }
   },
   {
-    "__docId__": 673,
+    "__docId__": 675,
     "kind": "method",
     "name": "getClearPass",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15801,7 +15850,7 @@
     "params": []
   },
   {
-    "__docId__": 674,
+    "__docId__": 676,
     "kind": "method",
     "name": "getDepthTexture",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15823,7 +15872,7 @@
     "params": []
   },
   {
-    "__docId__": 675,
+    "__docId__": 677,
     "kind": "method",
     "name": "setDepthTexture",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15861,7 +15910,7 @@
     "return": null
   },
   {
-    "__docId__": 677,
+    "__docId__": 679,
     "kind": "method",
     "name": "render",
     "memberof": "src/passes/RenderPass.js~RenderPass",
@@ -15927,7 +15976,7 @@
     "return": null
   },
   {
-    "__docId__": 678,
+    "__docId__": 680,
     "kind": "file",
     "name": "src/passes/SavePass.js",
     "content": "import { LinearFilter, WebGLRenderTarget } from \"three\";\r\nimport { CopyMaterial } from \"../materials\";\r\nimport { Pass } from \"./Pass.js\";\r\n\r\n/**\r\n * A pass that renders the result from a previous pass to another render target.\r\n */\r\n\r\nexport class SavePass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new save pass.\r\n\t *\r\n\t * @param {WebGLRenderTarget} [renderTarget] - A render target.\r\n\t * @param {Boolean} [resize=true] - Whether the render target should adjust to the size of the input buffer.\r\n\t */\r\n\r\n\tconstructor(renderTarget, resize = true) {\r\n\r\n\t\tsuper(\"SavePass\");\r\n\r\n\t\tthis.setFullscreenMaterial(new CopyMaterial());\r\n\r\n\t\tthis.needsSwap = false;\r\n\r\n\t\t/**\r\n\t\t * The render target.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t */\r\n\r\n\t\tthis.renderTarget = renderTarget;\r\n\r\n\t\tif(renderTarget === undefined) {\r\n\r\n\t\t\tthis.renderTarget = new WebGLRenderTarget(1, 1, {\r\n\t\t\t\tminFilter: LinearFilter,\r\n\t\t\t\tmagFilter: LinearFilter,\r\n\t\t\t\tstencilBuffer: false,\r\n\t\t\t\tdepthBuffer: false\r\n\t\t\t});\r\n\r\n\t\t\tthis.renderTarget.texture.name = \"SavePass.Target\";\r\n\r\n\t\t}\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the render target should be resized automatically.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.resize = resize;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Saves the input buffer.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tthis.getFullscreenMaterial().uniforms.inputBuffer.value = inputBuffer.texture;\r\n\r\n\t\trenderer.setRenderTarget(this.renderToScreen ? null : this.renderTarget);\r\n\t\trenderer.render(this.scene, this.camera);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the size of this pass.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tif(this.resize) {\r\n\r\n\t\t\twidth = Math.max(1, width);\r\n\t\t\theight = Math.max(1, height);\r\n\r\n\t\t\tthis.renderTarget.setSize(width, height);\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
@@ -15938,7 +15987,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 679,
+    "__docId__": 681,
     "kind": "class",
     "name": "SavePass",
     "memberof": "src/passes/SavePass.js",
@@ -15956,7 +16005,7 @@
     ]
   },
   {
-    "__docId__": 680,
+    "__docId__": 682,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -15993,7 +16042,7 @@
     ]
   },
   {
-    "__docId__": 681,
+    "__docId__": 683,
     "kind": "member",
     "name": "needsSwap",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -16010,7 +16059,7 @@
     }
   },
   {
-    "__docId__": 682,
+    "__docId__": 684,
     "kind": "member",
     "name": "renderTarget",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -16029,7 +16078,7 @@
     }
   },
   {
-    "__docId__": 684,
+    "__docId__": 686,
     "kind": "member",
     "name": "resize",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -16048,7 +16097,7 @@
     }
   },
   {
-    "__docId__": 685,
+    "__docId__": 687,
     "kind": "method",
     "name": "render",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -16114,7 +16163,7 @@
     "return": null
   },
   {
-    "__docId__": 686,
+    "__docId__": 688,
     "kind": "method",
     "name": "setSize",
     "memberof": "src/passes/SavePass.js~SavePass",
@@ -16150,7 +16199,7 @@
     "return": null
   },
   {
-    "__docId__": 687,
+    "__docId__": 689,
     "kind": "file",
     "name": "src/passes/ShaderPass.js",
     "content": "import { Pass } from \"./Pass.js\";\r\n\r\n/**\r\n * A shader pass.\r\n *\r\n * Renders any shader material as a fullscreen effect.\r\n *\r\n * This pass should not be used to create multiple chained effects. For a more\r\n * efficient solution, please refer to the {@link EffectPass}.\r\n */\r\n\r\nexport class ShaderPass extends Pass {\r\n\r\n\t/**\r\n\t * Constructs a new shader pass.\r\n\t *\r\n\t * @param {ShaderMaterial} material - A shader material.\r\n\t * @param {String} [input=\"inputBuffer\"] - The name of the input buffer uniform.\r\n\t */\r\n\r\n\tconstructor(material, input = \"inputBuffer\") {\r\n\r\n\t\tsuper(\"ShaderPass\");\r\n\r\n\t\tthis.setFullscreenMaterial(material);\r\n\r\n\t\t/**\r\n\t\t * The input buffer uniform.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.uniform = null;\r\n\t\tthis.setInput(input);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the name of the input buffer uniform.\r\n\t *\r\n\t * Most fullscreen materials modify texels from an input texture. This pass\r\n\t * automatically assigns the main input buffer to the uniform identified by\r\n\t * the given name.\r\n\t *\r\n\t * @param {String} input - The name of the input buffer uniform.\r\n\t */\r\n\r\n\tsetInput(input) {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tthis.uniform = null;\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tconst uniforms = material.uniforms;\r\n\r\n\t\t\tif(uniforms !== undefined && uniforms[input] !== undefined) {\r\n\r\n\t\t\t\tthis.uniform = uniforms[input];\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tif(this.uniform !== null) {\r\n\r\n\t\t\tthis.uniform.value = inputBuffer.texture;\r\n\r\n\t\t}\r\n\r\n\t\trenderer.setRenderTarget(this.renderToScreen ? null : outputBuffer);\r\n\t\trenderer.render(this.scene, this.camera);\r\n\r\n\t}\r\n\r\n}\r\n",
@@ -16161,7 +16210,7 @@
     "lineNumber": 1
   },
   {
-    "__docId__": 688,
+    "__docId__": 690,
     "kind": "class",
     "name": "ShaderPass",
     "memberof": "src/passes/ShaderPass.js",
@@ -16179,7 +16228,7 @@
     ]
   },
   {
-    "__docId__": 689,
+    "__docId__": 691,
     "kind": "constructor",
     "name": "constructor",
     "memberof": "src/passes/ShaderPass.js~ShaderPass",
@@ -16216,7 +16265,7 @@
     ]
   },
   {
-    "__docId__": 690,
+    "__docId__": 692,
     "kind": "member",
     "name": "uniform",
     "memberof": "src/passes/ShaderPass.js~ShaderPass",
@@ -16236,7 +16285,7 @@
     "ignore": true
   },
   {
-    "__docId__": 691,
+    "__docId__": 693,
     "kind": "method",
     "name": "setInput",
     "memberof": "src/passes/ShaderPass.js~ShaderPass",
@@ -16262,7 +16311,7 @@
     "return": null
   },
   {
-    "__docId__": 694,
+    "__docId__": 696,
     "kind": "method",
     "name": "render",
     "memberof": "src/passes/ShaderPass.js~ShaderPass",
@@ -16329,7 +16378,7 @@
   },
   {
     "kind": "index",
-    "content": "# Post Processing\r\n\r\n[![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing)\r\n[![npm version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)\r\n[![Peer dependencies](https://david-dm.org/vanruesc/postprocessing/peer-status.svg)](https://david-dm.org/vanruesc/postprocessing?type=peer)\r\n[![CDN](https://badgen.net/jsdelivr/hits/npm/postprocessing)](https://www.jsdelivr.com/package/npm/postprocessing)\r\n\r\nA post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).\r\n\r\n*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://jsfiddle.net/9g4eh651/)&ensp;&middot;&ensp;[API Reference](https://vanruesc.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/vanruesc/postprocessing/wiki)*\r\n\r\n\r\n## Installation\r\n\r\nThis library requires the peer dependency [three](https://github.com/mrdoob/three.js/).\r\n\r\n```sh\r\nnpm install three postprocessing\r\n```\r\n\r\n\r\n## Usage\r\n\r\nPlease refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information about how to setup the renderer, scene and camera.\r\n\r\n```javascript\r\nimport { Clock, PerspectiveCamera, Scene, WebGLRenderer } from \"three\";\r\nimport { BloomEffect, EffectComposer, EffectPass, RenderPass } from \"postprocessing\";\r\n\r\nconst composer = new EffectComposer(new WebGLRenderer());\r\nconst camera = new PerspectiveCamera();\r\nconst scene = new Scene();\r\n\r\nconst effectPass = new EffectPass(camera, new BloomEffect());\r\neffectPass.renderToScreen = true;\r\n\r\ncomposer.addPass(new RenderPass(scene, camera));\r\ncomposer.addPass(effectPass);\r\n\r\nconst clock = new Clock();\r\n\r\n(function render() {\r\n\r\n\trequestAnimationFrame(render);\r\n\tcomposer.render(clock.getDelta());\r\n\r\n}());\r\n```\r\n\r\n\r\n## Performance\r\n\r\nThis library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own [blend function](https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction).\r\n\r\n[Performance Test](http://vanruesc.github.io/postprocessing/public/demo/#performance)\r\n\r\n## Included Effects\r\n\r\n - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)\r\n - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)\r\n - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh) & [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)\r\n - [Color Grading](http://vanruesc.github.io/postprocessing/public/demo/#color-grading)\r\n   - Color Average\r\n   - Sepia\r\n   - Brightness & Contrast\r\n   - Gamma Correction\r\n   - Hue & Saturation\r\n - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)\r\n - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)\r\n   - Chromatic Aberration\r\n   - Noise\r\n - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)\r\n - [Pattern](http://vanruesc.github.io/postprocessing/public/demo/#pattern)\r\n   - Dot-Screen\r\n   - Grid\r\n   - Scanline\r\n - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)\r\n   - Masking\r\n - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)\r\n - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)\r\n - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)\r\n - [SSAO](http://vanruesc.github.io/postprocessing/public/demo/#ssao)\r\n - [Texture](http://vanruesc.github.io/postprocessing/public/demo/#texture)\r\n - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)\r\n - [Vignette](http://vanruesc.github.io/postprocessing/public/demo/#vignette)\r\n\r\n\r\n## Custom Effects\r\n\r\nIf you want to learn how to create custom effects or passes, please check the [Wiki](https://github.com/vanruesc/postprocessing/wiki).\r\n\r\n\r\n## Contributing\r\n\r\nPlease refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md) for details.\r\n\r\n\r\n## License\r\n\r\nThis library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).\r\n\r\nThe original code that this library is based on, was written by [mrdoob](http://mrdoob.com) and the\r\n[three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors)\r\nand is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).\r\n\r\nThe noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the\r\n[Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).\r\n",
+    "content": "# Post Processing\r\n\r\n[![Build status](https://travis-ci.org/vanruesc/postprocessing.svg?branch=master)](https://travis-ci.org/vanruesc/postprocessing)\r\n[![npm version](https://badgen.net/npm/v/postprocessing?color=green)](https://www.npmjs.com/package/postprocessing)\r\n[![Peer dependencies](https://david-dm.org/vanruesc/postprocessing/peer-status.svg)](https://david-dm.org/vanruesc/postprocessing?type=peer)\r\n[![CDN](https://badgen.net/jsdelivr/hits/npm/postprocessing)](https://www.jsdelivr.com/package/npm/postprocessing)\r\n\r\nA post processing library that provides the means to implement image filter effects for [three.js](https://threejs.org/).\r\n\r\n*[Extensive Demo](https://vanruesc.github.io/postprocessing/public/demo)&ensp;&middot;&ensp;[Sandbox](https://jsfiddle.net/9g4eh651/)&ensp;&middot;&ensp;[API Reference](https://vanruesc.github.io/postprocessing/public/docs)&ensp;&middot;&ensp;[Wiki](https://github.com/vanruesc/postprocessing/wiki)*\r\n\r\n\r\n## Installation\r\n\r\nThis library requires the peer dependency [three](https://github.com/mrdoob/three.js/).\r\n\r\n```sh\r\nnpm install three postprocessing\r\n```\r\n\r\n\r\n## Usage\r\n\r\nPlease refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for information about how to setup the renderer, scene and camera.\r\n\r\n```javascript\r\nimport { Clock, PerspectiveCamera, Scene, WebGLRenderer } from \"three\";\r\nimport { BloomEffect, EffectComposer, EffectPass, RenderPass } from \"postprocessing\";\r\n\r\nconst composer = new EffectComposer(new WebGLRenderer());\r\nconst camera = new PerspectiveCamera();\r\nconst scene = new Scene();\r\n\r\nconst effectPass = new EffectPass(camera, new BloomEffect());\r\neffectPass.renderToScreen = true;\r\n\r\ncomposer.addPass(new RenderPass(scene, camera));\r\ncomposer.addPass(effectPass);\r\n\r\nconst clock = new Clock();\r\n\r\n(function render() {\r\n\r\n\trequestAnimationFrame(render);\r\n\tcomposer.render(clock.getDelta());\r\n\r\n}());\r\n```\r\n\r\n\r\n## Performance\r\n\r\nThis library provides an [EffectPass](https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html) which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own [blend function](https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction).\r\n\r\nFurthermore, all fullscreen render operations use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal which is especially beneficial for GPGPU passes and effects that use complex fragment shaders.\r\n\r\n[Performance Test](http://vanruesc.github.io/postprocessing/public/demo/#performance)\r\n\r\n## Included Effects\r\n\r\n - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)\r\n - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)\r\n - [Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#bokeh) & [Realistic Bokeh](http://vanruesc.github.io/postprocessing/public/demo/#realistic-bokeh)\r\n - [Color Grading](http://vanruesc.github.io/postprocessing/public/demo/#color-grading)\r\n   - Color Average\r\n   - Sepia\r\n   - Brightness & Contrast\r\n   - Gamma Correction\r\n   - Hue & Saturation\r\n - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)\r\n - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)\r\n   - Chromatic Aberration\r\n   - Noise\r\n - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)\r\n - [Pattern](http://vanruesc.github.io/postprocessing/public/demo/#pattern)\r\n   - Dot-Screen\r\n   - Grid\r\n   - Scanline\r\n - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)\r\n   - Masking\r\n - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)\r\n - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)\r\n - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)\r\n - [SSAO](http://vanruesc.github.io/postprocessing/public/demo/#ssao)\r\n - [Texture](http://vanruesc.github.io/postprocessing/public/demo/#texture)\r\n - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)\r\n - [Vignette](http://vanruesc.github.io/postprocessing/public/demo/#vignette)\r\n\r\n\r\n## Custom Effects\r\n\r\nIf you want to learn how to create custom effects or passes, please check the [Wiki](https://github.com/vanruesc/postprocessing/wiki).\r\n\r\n\r\n## Contributing\r\n\r\nPlease refer to the [contribution guidelines](https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md) for details.\r\n\r\n\r\n## License\r\n\r\nThis library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).\r\n\r\nThe original code that this library is based on, was written by [mrdoob](http://mrdoob.com) and the\r\n[three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors)\r\nand is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).\r\n\r\nThe noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the\r\n[Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\README.md",
     "name": "./README.md",
     "static": true,
@@ -16337,7 +16386,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.3.3\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"threejs\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\"build\"],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.105.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"1.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"2.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"8.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"9.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"4.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.104.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.104.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.4.0\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\r\n\t\"keywords\": [\r\n\t\t\"2d\",\r\n\t\t\"3d\",\r\n\t\t\"rendering\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"threejs\"\r\n\t],\r\n\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\r\n\t\"files\": [\"build\"],\r\n\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"deploy\": \"cpx demo/assets/** public/demo\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\"test/**/*.js\"]\r\n\t},\r\n\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.105.0\"\r\n\t},\r\n\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"1.x.x\",\r\n\t\t\"cpx\": \"1.x.x\",\r\n\t\t\"cross-env\": \"5.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"5.x.x\",\r\n\t\t\"eslint-config-delta\": \"0.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"2.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"8.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"0.x.x\",\r\n\t\t\"three\": \"0.104.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.104.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,
