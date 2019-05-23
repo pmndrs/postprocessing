@@ -1,19 +1,14 @@
-html {
-	width: 100%;
+html, body {
 	height: 100%;
+	width: 100%;
 }
 
 body {
 	background-color: black;
 	color: rgb(175, 170, 160);
 	font-family: sans-serif;
-	font-weight: 100;
-	font-size: 100%;
 	line-height: 150%;
 	margin: 0;
-	overflow: hidden;
-	width: 100%;
-	height: 100%;
 }
 
 a {
@@ -21,35 +16,16 @@ a {
 	transition: color 0.2s;
 }
 
-a:hover,
-a:active,
-.active {
+a:hover, a:active {
 	color: white;
 }
 
-h1, h2, h3, h4 {
-	font-size: 150%;
-	font-weight: normal;
-	padding: 0;
-	margin: 20px 0 10px 0px;
-}
-
-h2 {
-	font-size: 100%;
-	margin: 0 0 20px 0px;
+canvas {
+	display: block;
 }
 
 p {
 	margin: 0;
-}
-
-p ul {
-	padding: 0;
-}
-
-p ul li {
-	color: rgb(255, 100, 80);
-	padding: 0 5px;
 }
 
 div[role="main"] {
@@ -57,31 +33,30 @@ div[role="main"] {
 }
 
 div[role="complementary"] {
-	background-color: transparent;
-	display: flex;
-	-webkit-justify-content: space-between;
-	justify-content: space-between;
-	-webkit-align-items: center;
-	align-items: center;
 	padding: 0 5px;
 	position: fixed;
 	right: 0;
 	top: 0;
 }
 
-div[role="complementary"] h3 {
-	font-size: 90%;
-	margin: 0;
-}
-
-div[role="complementary"] p,
-div[role="complementary"] h4 {
-	font-size: 75%;
-	margin: 0;
-}
-
-div[role="complementary"] p {
+.info {
 	color: rgb(90, 95, 90);
+	font-size: 75%;
+	left: 5px;
+	position: fixed;
+	top: 5px;
+}
+
+.github {
+	left: 5px;
+	opacity: 0.25;
+	position: relative;
+	top: 5px;
+	transition: opacity 0.2s;
+}
+
+.github:active, .github:hover {
+	opacity: 0.65;
 }
 
 #viewport p {
@@ -90,13 +65,5 @@ div[role="complementary"] p {
 	right: 0;
 	text-align: center;
 	top: 50%;
-	-webkit-transform: translateY(-50%);
 	transform: translateY(-50%);
-}
-
-#info {
-	font-size: 90%;
-	position: fixed;
-	left: 5px;
-	top: 5px;
 }
