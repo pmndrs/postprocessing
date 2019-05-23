@@ -6,8 +6,8 @@
  * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.
  * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color.
  * @property {Number} AVERAGE - Average blending.
- * @property {Number} COLOR_BURN - Color dodge.
- * @property {Number} COLOR_DODGE - Color burn.
+ * @property {Number} COLOR_BURN - Color burn.
+ * @property {Number} COLOR_DODGE - Color dodge.
  * @property {Number} DARKEN - Prioritize darker colors.
  * @property {Number} DIFFERENCE - Color difference.
  * @property {Number} EXCLUSION - Color exclusion.

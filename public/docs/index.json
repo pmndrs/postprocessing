@@ -1227,7 +1227,7 @@
     "__docId__": 88,
     "kind": "file",
     "name": "src/effects/blending/BlendFunction.js",
-    "content": "/**\r\n * A blend function enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} SKIP - No blending. The effect will not be included in the final shader.\r\n * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.\r\n * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color.\r\n * @property {Number} AVERAGE - Average blending.\r\n * @property {Number} COLOR_BURN - Color dodge.\r\n * @property {Number} COLOR_DODGE - Color burn.\r\n * @property {Number} DARKEN - Prioritize darker colors.\r\n * @property {Number} DIFFERENCE - Color difference.\r\n * @property {Number} EXCLUSION - Color exclusion.\r\n * @property {Number} LIGHTEN - Prioritize lighter colors.\r\n * @property {Number} MULTIPLY - Color multiplication.\r\n * @property {Number} DIVIDE - Color division.\r\n * @property {Number} NEGATION - Color negation.\r\n * @property {Number} NORMAL - Normal blending. The new color overwrites the old one.\r\n * @property {Number} OVERLAY - Color overlay.\r\n * @property {Number} REFLECT - Color reflection.\r\n * @property {Number} SCREEN - Screen blending. The two colors are effectively projected on a white screen simultaneously.\r\n * @property {Number} SOFT_LIGHT - Soft light blending.\r\n * @property {Number} SUBTRACT - Color subtraction.\r\n */\r\n\r\nexport const BlendFunction = {\r\n\r\n\tSKIP: 0,\r\n\tADD: 1,\r\n\tALPHA: 2,\r\n\tAVERAGE: 3,\r\n\tCOLOR_BURN: 4,\r\n\tCOLOR_DODGE: 5,\r\n\tDARKEN: 6,\r\n\tDIFFERENCE: 7,\r\n\tEXCLUSION: 8,\r\n\tLIGHTEN: 9,\r\n\tMULTIPLY: 10,\r\n\tDIVIDE: 11,\r\n\tNEGATION: 12,\r\n\tNORMAL: 13,\r\n\tOVERLAY: 14,\r\n\tREFLECT: 15,\r\n\tSCREEN: 16,\r\n\tSOFT_LIGHT: 17,\r\n\tSUBTRACT: 18\r\n\r\n};\r\n",
+    "content": "/**\r\n * A blend function enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} SKIP - No blending. The effect will not be included in the final shader.\r\n * @property {Number} ADD - Additive blending. Fast, but may produce washed out results.\r\n * @property {Number} ALPHA - Alpha blending. Blends based on the alpha value of the new color.\r\n * @property {Number} AVERAGE - Average blending.\r\n * @property {Number} COLOR_BURN - Color burn.\r\n * @property {Number} COLOR_DODGE - Color dodge.\r\n * @property {Number} DARKEN - Prioritize darker colors.\r\n * @property {Number} DIFFERENCE - Color difference.\r\n * @property {Number} EXCLUSION - Color exclusion.\r\n * @property {Number} LIGHTEN - Prioritize lighter colors.\r\n * @property {Number} MULTIPLY - Color multiplication.\r\n * @property {Number} DIVIDE - Color division.\r\n * @property {Number} NEGATION - Color negation.\r\n * @property {Number} NORMAL - Normal blending. The new color overwrites the old one.\r\n * @property {Number} OVERLAY - Color overlay.\r\n * @property {Number} REFLECT - Color reflection.\r\n * @property {Number} SCREEN - Screen blending. The two colors are effectively projected on a white screen simultaneously.\r\n * @property {Number} SOFT_LIGHT - Soft light blending.\r\n * @property {Number} SUBTRACT - Color subtraction.\r\n */\r\n\r\nexport const BlendFunction = {\r\n\r\n\tSKIP: 0,\r\n\tADD: 1,\r\n\tALPHA: 2,\r\n\tAVERAGE: 3,\r\n\tCOLOR_BURN: 4,\r\n\tCOLOR_DODGE: 5,\r\n\tDARKEN: 6,\r\n\tDIFFERENCE: 7,\r\n\tEXCLUSION: 8,\r\n\tLIGHTEN: 9,\r\n\tMULTIPLY: 10,\r\n\tDIVIDE: 11,\r\n\tNEGATION: 12,\r\n\tNORMAL: 13,\r\n\tOVERLAY: 14,\r\n\tREFLECT: 15,\r\n\tSCREEN: 16,\r\n\tSOFT_LIGHT: 17,\r\n\tSUBTRACT: 18\r\n\r\n};\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/blending/BlendFunction.js",
     "access": "public",
@@ -1296,7 +1296,7 @@
         "spread": false,
         "optional": false,
         "name": "COLOR_BURN",
-        "description": "Color dodge."
+        "description": "Color burn."
       },
       {
         "nullable": null,
@@ -1306,7 +1306,7 @@
         "spread": false,
         "optional": false,
         "name": "COLOR_DODGE",
-        "description": "Color burn."
+        "description": "Color dodge."
       },
       {
         "nullable": null,
