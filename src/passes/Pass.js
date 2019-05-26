@@ -183,12 +183,14 @@ export class Pass {
 			screen = new Mesh(getFullscreenTriangle(), material);
 			screen.frustumCulled = false;
 
-			if(this.scene !== null) {
+			if(this.scene === null) {
 
-				this.scene.add(screen);
-				this.screen = screen;
+				this.scene = new Scene();
 
 			}
+
+			this.scene.add(screen);
+			this.screen = screen;
 
 		}
 
