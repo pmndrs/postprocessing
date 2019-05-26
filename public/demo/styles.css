@@ -48,15 +48,15 @@ div[role="complementary"] {
 }
 
 .github {
-	left: 5px;
-	opacity: 0.25;
-	position: relative;
-	top: 5px;
+	bottom: 15px;
+	left: 15px;
+	opacity: 0.075;
+	position: fixed;
 	transition: opacity 0.2s;
 }
 
 .github:active, .github:hover {
-	opacity: 0.65;
+	opacity: 0.25;
 }
 
 #viewport p {
