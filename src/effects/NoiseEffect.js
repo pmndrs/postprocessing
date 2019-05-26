@@ -1,7 +1,7 @@
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/noise/shader.frag";
+import fragmentShader from "./glsl/noise/shader.frag";
 
 /**
  * A noise effect.
@@ -19,7 +19,7 @@ export class NoiseEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.SCREEN, premultiply = false } = {}) {
 
-		super("NoiseEffect", fragment, { blendFunction });
+		super("NoiseEffect", fragmentShader, { blendFunction });
 
 		this.premultiply = premultiply;
 

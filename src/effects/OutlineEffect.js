@@ -13,8 +13,8 @@ import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passe
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/outline/shader.frag";
-import vertex from "./glsl/outline/shader.vert";
+import fragmentShader from "./glsl/outline/shader.frag";
+import vertexShader from "./glsl/outline/shader.vert";
 
 /**
  * An outline effect.
@@ -55,7 +55,7 @@ export class OutlineEffect extends Effect {
 		xRay = true
 	} = {}) {
 
-		super("OutlineEffect", fragment, {
+		super("OutlineEffect", fragmentShader, {
 
 			uniforms: new Map([
 				["maskTexture", new Uniform(null)],
@@ -380,7 +380,7 @@ export class OutlineEffect extends Effect {
 			this.defines.set("USE_PATTERN", "1");
 			this.uniforms.set("patternScale", new Uniform(1.0));
 			this.uniforms.set("patternTexture", new Uniform(texture));
-			this.vertexShader = vertex;
+			this.vertexShader = vertexShader;
 
 		} else {
 

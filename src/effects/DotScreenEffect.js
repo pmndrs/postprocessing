@@ -2,7 +2,7 @@ import { Uniform, Vector2 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/dot-screen/shader.frag";
+import fragmentShader from "./glsl/dot-screen/shader.frag";
 
 /**
  * A dot screen effect.
@@ -21,7 +21,7 @@ export class DotScreenEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, angle = Math.PI * 0.5, scale = 1.0 } = {}) {
 
-		super("DotScreenEffect", fragment, {
+		super("DotScreenEffect", fragmentShader, {
 
 			blendFunction,
 

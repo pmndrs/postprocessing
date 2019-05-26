@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/bokeh/shader.frag";
+import fragmentShader from "./glsl/bokeh/shader.frag";
 
 /**
  * A depth of field (bokeh) effect.
@@ -26,7 +26,7 @@ export class BokehEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, focus = 0.5, dof = 0.02, aperture = 0.015, maxBlur = 1.0 } = {}) {
 
-		super("BokehEffect", fragment, {
+		super("BokehEffect", fragmentShader, {
 
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,

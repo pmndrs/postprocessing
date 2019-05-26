@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/color-depth/shader.frag";
+import fragmentShader from "./glsl/color-depth/shader.frag";
 
 /**
  * A color depth effect.
@@ -22,7 +22,7 @@ export class ColorDepthEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, bits = 16 } = {}) {
 
-		super("ColorDepthEffect", fragment, {
+		super("ColorDepthEffect", fragmentShader, {
 
 			blendFunction,
 

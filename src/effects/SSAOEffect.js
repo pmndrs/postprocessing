@@ -2,7 +2,7 @@ import { Matrix4, Uniform, Vector2 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/ssao/shader.frag";
+import fragmentShader from "./glsl/ssao/shader.frag";
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
@@ -49,7 +49,7 @@ export class SSAOEffect extends Effect {
 		bias = 0.5
 	} = {}) {
 
-		super("SSAOEffect", fragment, {
+		super("SSAOEffect", fragmentShader, {
 
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,

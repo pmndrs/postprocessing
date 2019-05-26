@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/sepia/shader.frag";
+import fragmentShader from "./glsl/sepia/shader.frag";
 
 /**
  * A sepia effect.
@@ -20,7 +20,7 @@ export class SepiaEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, intensity = 1.0 } = {}) {
 
-		super("SepiaEffect", fragment, {
+		super("SepiaEffect", fragmentShader, {
 
 			blendFunction,
 

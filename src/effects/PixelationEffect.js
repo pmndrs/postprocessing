@@ -1,7 +1,7 @@
 import { Uniform, Vector2 } from "three";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/pixelation/shader.frag";
+import fragmentShader from "./glsl/pixelation/shader.frag";
 
 /**
  * A pixelation effect.
@@ -19,7 +19,7 @@ export class PixelationEffect extends Effect {
 
 	constructor(granularity = 30.0) {
 
-		super("PixelationEffect", fragment, {
+		super("PixelationEffect", fragmentShader, {
 
 			uniforms: new Map([
 				["active", new Uniform(false)],

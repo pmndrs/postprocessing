@@ -2,8 +2,8 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/texture/shader.frag";
-import vertex from "./glsl/texture/shader.vert";
+import fragmentShader from "./glsl/texture/shader.frag";
+import vertexShader from "./glsl/texture/shader.vert";
 
 /**
  * A texture effect.
@@ -22,7 +22,7 @@ export class TextureEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
 
-		super("TextureEffect", fragment, {
+		super("TextureEffect", fragmentShader, {
 
 			blendFunction,
 
@@ -64,7 +64,7 @@ export class TextureEffect extends Effect {
 
 			this.defines.set("ASPECT_CORRECTION", "1");
 			this.uniforms.set("scale", new Uniform(1.0));
-			this.vertexShader = vertex;
+			this.vertexShader = vertexShader;
 
 		} else {
 

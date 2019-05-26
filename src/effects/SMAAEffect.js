@@ -17,14 +17,13 @@ import { Effect, EffectAttribute } from "./Effect.js";
 import searchImageDataURL from "../images/smaa/searchImageDataURL.js";
 import areaImageDataURL from "../images/smaa/areaImageDataURL.js";
 
-import fragment from "./glsl/smaa/shader.frag";
-import vertex from "./glsl/smaa/shader.vert";
+import fragmentShader from "./glsl/smaa/shader.frag";
+import vertexShader from "./glsl/smaa/shader.vert";
 
 /**
- * Subpixel Morphological Antialiasing (SMAA) v2.8.
+ * Subpixel Morphological Antialiasing (SMAA).
  *
- * Preset: SMAA 1x Medium (with color edge detection).
- *  https://github.com/iryoku/smaa/releases/tag/v2.8
+ * https://github.com/iryoku/smaa/releases/tag/v2.8
  */
 
 export class SMAAEffect extends Effect {
@@ -38,16 +37,15 @@ export class SMAAEffect extends Effect {
 
 	constructor(searchImage, areaImage) {
 
-		super("SMAAEffect", fragment, {
+		super("SMAAEffect", fragmentShader, {
 
+			vertexShader,
 			blendFunction: BlendFunction.NORMAL,
 			attributes: EffectAttribute.CONVOLUTION,
 
 			uniforms: new Map([
 				["weightMap", new Uniform(null)]
-			]),
-
-			vertexShader: vertex
+			])
 
 		});
 

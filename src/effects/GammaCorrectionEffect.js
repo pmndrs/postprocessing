@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/gamma-correction/shader.frag";
+import fragmentShader from "./glsl/gamma-correction/shader.frag";
 
 /**
  * A gamma correction effect.
@@ -20,7 +20,7 @@ export class GammaCorrectionEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, gamma = 2.0 } = {}) {
 
-		super("GammaCorrectionEffect", fragment, {
+		super("GammaCorrectionEffect", fragmentShader, {
 
 			blendFunction,
 

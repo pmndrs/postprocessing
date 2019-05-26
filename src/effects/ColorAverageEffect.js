@@ -1,7 +1,7 @@
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/color-average/shader.frag";
+import fragmentShader from "./glsl/color-average/shader.frag";
 
 /**
  * A color average effect.
@@ -17,7 +17,7 @@ export class ColorAverageEffect extends Effect {
 
 	constructor(blendFunction = BlendFunction.NORMAL) {
 
-		super("ColorAverageEffect", fragment, { blendFunction });
+		super("ColorAverageEffect", fragmentShader, { blendFunction });
 
 	}
 

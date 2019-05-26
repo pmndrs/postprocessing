@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/vignette/shader.frag";
+import fragmentShader from "./glsl/vignette/shader.frag";
 
 /**
  * A vignette effect.
@@ -29,7 +29,7 @@ export class VignetteEffect extends Effect {
 			darkness: 0.5
 		}, options);
 
-		super("VignetteEffect", fragment, {
+		super("VignetteEffect", fragmentShader, {
 
 			blendFunction: settings.blendFunction,
 

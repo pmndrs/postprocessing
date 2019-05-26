@@ -12,7 +12,7 @@ import { ClearPass, SavePass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/tone-mapping/shader.frag";
+import fragmentShader from "./glsl/tone-mapping/shader.frag";
 
 /**
  * A tone mapping effect that supports adaptive luminosity.
@@ -53,7 +53,7 @@ export class ToneMappingEffect extends Effect {
 		adaptationRate = 2.0
 	} = {}) {
 
-		super("ToneMappingEffect", fragment, {
+		super("ToneMappingEffect", fragmentShader, {
 
 			blendFunction,
 

@@ -2,7 +2,7 @@ import { Uniform, Vector2 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/scanlines/shader.frag";
+import fragmentShader from "./glsl/scanlines/shader.frag";
 
 /**
  * A scanline effect.
@@ -20,7 +20,7 @@ export class ScanlineEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.OVERLAY, density = 1.25 } = {}) {
 
-		super("ScanlineEffect", fragment, {
+		super("ScanlineEffect", fragmentShader, {
 
 			blendFunction,
 

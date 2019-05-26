@@ -2,7 +2,7 @@ import { Uniform, Vector4 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/realistic-bokeh/shader.frag";
+import fragmentShader from "./glsl/realistic-bokeh/shader.frag";
 
 /**
  * Depth of Field shader v2.4.
@@ -50,7 +50,7 @@ export class RealisticBokehEffect extends Effect {
 		pentagon = false
 	} = {}) {
 
-		super("RealisticBokehEffect", fragment, {
+		super("RealisticBokehEffect", fragmentShader, {
 
 			blendFunction,
 			attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,

@@ -2,7 +2,7 @@ import { Uniform, Vector3 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/hue-saturation/shader.frag";
+import fragmentShader from "./glsl/hue-saturation/shader.frag";
 
 /**
  * A hue/saturation effect.
@@ -23,7 +23,7 @@ export class HueSaturationEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, hue = 0.0, saturation = 0.0 } = {}) {
 
-		super("HueSaturationEffect", fragment, {
+		super("HueSaturationEffect", fragmentShader, {
 
 			blendFunction,
 

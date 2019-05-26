@@ -2,7 +2,7 @@ import { Uniform, Vector2 } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/grid/shader.frag";
+import fragmentShader from "./glsl/grid/shader.frag";
 
 /**
  * A grid effect.
@@ -21,7 +21,7 @@ export class GridEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.OVERLAY, scale = 1.0, lineWidth = 0.0 } = {}) {
 
-		super("GridEffect", fragment, {
+		super("GridEffect", fragmentShader, {
 
 			blendFunction,
 

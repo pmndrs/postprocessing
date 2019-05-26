@@ -11,7 +11,7 @@ import { BlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/texture/shader.frag";
+import fragmentShader from "./glsl/texture/shader.frag";
 
 /**
  * A bloom effect.
@@ -34,7 +34,7 @@ export class BloomEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.SCREEN, distinction = 1.0, resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
 
-		super("BloomEffect", fragment, {
+		super("BloomEffect", fragmentShader, {
 
 			blendFunction,
 

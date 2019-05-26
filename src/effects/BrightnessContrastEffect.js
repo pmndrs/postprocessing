@@ -2,7 +2,7 @@ import { Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/brightness-contrast/shader.frag";
+import fragmentShader from "./glsl/brightness-contrast/shader.frag";
 
 /**
  * A brightness/contrast effect.
@@ -23,7 +23,7 @@ export class BrightnessContrastEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, brightness = 0.0, contrast = 0.0 } = {}) {
 
-		super("BrightnessContrastEffect", fragment, {
+		super("BrightnessContrastEffect", fragmentShader, {
 
 			blendFunction,
 

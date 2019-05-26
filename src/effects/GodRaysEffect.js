@@ -16,7 +16,7 @@ import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/texture/shader.frag";
+import fragmentShader from "./glsl/texture/shader.frag";
 
 /**
  * A vector.
@@ -73,7 +73,7 @@ export class GodRaysEffect extends Effect {
 		blur = true
 	} = {}) {
 
-		super("GodRaysEffect", fragment, {
+		super("GodRaysEffect", fragmentShader, {
 
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,

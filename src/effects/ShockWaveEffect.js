@@ -1,8 +1,8 @@
 import { Uniform, Vector2, Vector3 } from "three";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/shock-wave/shader.frag";
-import vertex from "./glsl/shock-wave/shader.vert";
+import fragmentShader from "./glsl/shock-wave/shader.frag";
+import vertexShader from "./glsl/shock-wave/shader.vert";
 
 /**
  * Half PI.
@@ -61,7 +61,9 @@ export class ShockWaveEffect extends Effect {
 		amplitude = 0.05
 	} = {}) {
 
-		super("ShockWaveEffect", fragment, {
+		super("ShockWaveEffect", fragmentShader, {
+
+			vertexShader,
 
 			uniforms: new Map([
 				["active", new Uniform(false)],
@@ -72,9 +74,7 @@ export class ShockWaveEffect extends Effect {
 				["maxRadius", new Uniform(maxRadius)],
 				["waveSize", new Uniform(waveSize)],
 				["amplitude", new Uniform(amplitude)]
-			]),
-
-			vertexShader: vertex
+			])
 
 		});
 

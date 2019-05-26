@@ -1,7 +1,7 @@
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragment from "./glsl/depth/shader.frag";
+import fragmentShader from "./glsl/depth/shader.frag";
 
 /**
  * A depth visualization effect.
@@ -21,7 +21,7 @@ export class DepthEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.NORMAL, inverted = false } = {}) {
 
-		super("DepthEffect", fragment, {
+		super("DepthEffect", fragmentShader, {
 
 			blendFunction,
 			attributes: EffectAttribute.DEPTH

@@ -11,7 +11,7 @@ import {
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragment from "./glsl/glitch/shader.frag";
+import fragmentShader from "./glsl/glitch/shader.frag";
 
 /**
  * A label for generated data textures.
@@ -76,7 +76,7 @@ export class GlitchEffect extends Effect {
 		dtSize = 64
 	} = {}) {
 
-		super("GlitchEffect", fragment, {
+		super("GlitchEffect", fragmentShader, {
 
 			blendFunction,
 
