@@ -28,7 +28,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new luminance material.
 	 *
-	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colours scaled with their luminance value.
+	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colors scaled with their luminance value.
 	 * @param {Vector2} [luminanceRange] - If provided, the shader will mask out texels that aren't in the specified luminance range.
 	 */
 
@@ -56,28 +56,73 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 		});
 
-		this.setColorOutputEnabled(colorOutput);
-		this.setLuminanceRangeEnabled(maskLuminance);
+		this.colorOutput = colorOutput;
+		this.luminanceRange = maskLuminance;
+
+	}
+
+	/**
+	 * Indicates whether color output is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get colorOutput() {
+
+		return (this.defines.COLOR !== undefined);
 
 	}
 
 	/**
 	 * Enables or disables color output.
 	 *
+	 * @type {Boolean}
+	 */
+
+	set colorOutput(value) {
+
+		value ? (this.defines.COLOR = "1") : (delete this.defines.COLOR);
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables color output.
+	 *
+	 * @deprecated Use colorOutput instead.
 	 * @param {Boolean} enabled - Whether color output should be enabled.
 	 */
 
 	setColorOutputEnabled(enabled) {
 
-		if(enabled) {
+		enabled ? (this.defines.COLOR = "1") : (delete this.defines.COLOR);
 
-			this.defines.COLOR = "1";
+		this.needsUpdate = true;
 
-		} else {
+	}
 
-			delete this.defines.COLOR;
+	/**
+	 * Indicates whether luminance masking is enabled.
+	 *
+	 * @type {Boolean}
+	 */
 
-		}
+	get luminanceRange() {
+
+		return (this.defines.RANGE !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables luminance masking.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set luminanceRange(value) {
+
+		value ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
 
 		this.needsUpdate = true;
 
@@ -86,20 +131,13 @@ export class LuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables the luminance mask.
 	 *
+	 * @deprecated Use luminanceRange instead.
 	 * @param {Boolean} enabled - Whether the luminance mask should be enabled.
 	 */
 
 	setLuminanceRangeEnabled(enabled) {
 
-		if(enabled) {
-
-			this.defines.RANGE = "1";
-
-		} else {
-
-			delete this.defines.RANGE;
-
-		}
+		enabled ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
 
 		this.needsUpdate = true;
 
