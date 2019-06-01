@@ -57,7 +57,7 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	 * that if there is too much contrast in a direction, the perceptual contrast
 	 * in the other neighbors will be hidden.
 	 *
-	 * @param {Number} threshold - The local contrast adaptation factor. Default is 2.0.
+	 * @param {Number} factor - The local contrast adaptation factor. Default is 2.0.
 	 */
 
 	setLocalContrastAdaptationFactor(factor) {
