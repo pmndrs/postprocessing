@@ -33,9 +33,10 @@ export class SMAAEffect extends Effect {
 	 *
 	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
 	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
+	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
 	 */
 
-	constructor(searchImage, areaImage) {
+	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH) {
 
 		super("SMAAEffect", fragmentShader, {
 
@@ -136,6 +137,8 @@ export class SMAAEffect extends Effect {
 			return areaTexture;
 
 		})();
+
+		this.applyPreset(preset);
 
 	}
 
