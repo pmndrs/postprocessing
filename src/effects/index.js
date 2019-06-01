@@ -21,7 +21,7 @@ export { RealisticBokehEffect } from "./RealisticBokehEffect.js";
 export { ScanlineEffect } from "./ScanlineEffect.js";
 export { ShockWaveEffect } from "./ShockWaveEffect.js";
 export { SepiaEffect } from "./SepiaEffect.js";
-export { SMAAEffect } from "./SMAAEffect.js";
+export { SMAAEffect, SMAAPreset } from "./SMAAEffect.js";
 export { SSAOEffect } from "./SSAOEffect.js";
 export { TextureEffect } from "./TextureEffect.js";
 export { ToneMappingEffect } from "./ToneMappingEffect.js";

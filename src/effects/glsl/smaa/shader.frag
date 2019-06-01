@@ -3,47 +3,53 @@ uniform sampler2D weightMap;
 varying vec2 vOffset0;
 varying vec2 vOffset1;
 
+/**
+ * Moves values to a target vector based on a given conditional vector.
+ */
+
+void movec(const in bvec2 c, inout vec2 variable, const in vec2 value) {
+
+	if(c.x) { variable.x = value.x; }
+	if(c.y) { variable.y = value.y; }
+
+}
+
+void movec(const in bvec4 c, inout vec4 variable, const in vec4 value) {
+
+	movec(c.xy, variable.xy, value.xy);
+	movec(c.zw, variable.zw, value.zw);
+
+}
+
 void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
 
 	// Fetch the blending weights for the current pixel.
 	vec4 a;
-	a.rb = texture2D(weightMap, uv).rb;
-	a.g = texture2D(weightMap, vOffset1).g;
-	a.a = texture2D(weightMap, vOffset0).a;
+	a.x = texture2D(weightMap, vOffset0).a;
+	a.y = texture2D(weightMap, vOffset1).g;
+	a.wz = texture2D(weightMap, uv).rb;
 
 	vec4 color = inputColor;
 
 	// Ignore tiny blending weights.
 	if(dot(a, vec4(1.0)) >= 1e-5) {
 
-		/* Up to four lines can be crossing a pixel (one through each edge).
-		The line with the maximum weight for each direction is favoured. */
+		// max(horizontal) > max(vertical)
+		bool h = max(a.x, a.z) > max(a.y, a.w);
 
-		vec2 offset = vec2(
-			a.a > a.b ? a.a : -a.b,	// Left vs. right.
-			a.g > a.r ? -a.g : a.r	// Top vs. bottom (changed signs).
-		);
+		// Calculate the blending offsets.
+		vec4 blendingOffset = vec4(0.0, a.y, 0.0, a.w);
+		vec2 blendingWeight = a.yw;
+		movec(bvec4(h), blendingOffset, vec4(a.x, 0.0, a.z, 0.0));
+		movec(bvec2(h), blendingWeight, a.xz);
+		blendingWeight /= dot(blendingWeight, vec2(1.0));
 
-		// Go in the direction with the maximum weight (horizontal vs. vertical).
-		if(abs(offset.x) > abs(offset.y)) {
+		// Calculate the texture coordinates.
+		vec4 blendingCoord = blendingOffset * vec4(texelSize, -texelSize) + uv.xyxy;
 
-			offset.y = 0.0;
-
-		} else {
-
-			offset.x = 0.0;
-
-		}
-
-		// Fetch the opposite color and lerp by hand.
-		vec4 oppositeColor = texture2D(inputBuffer, uv + sign(offset) * texelSize);
-		float s = abs(offset.x) > abs(offset.y) ? abs(offset.x) : abs(offset.y);
-
-		// Gamma correction.
-		color.rgb = pow(abs(color.rgb), vec3(2.2));
-		oppositeColor.rgb = pow(abs(oppositeColor.rgb), vec3(2.2));
-		color = mix(color, oppositeColor, s);
-		color.rgb = pow(abs(color.rgb), vec3(1.0 / 2.2));
+		// Rely on bilinear filtering to mix the current pixel with the neighbor.
+		color = blendingWeight.x * texture2D(inputBuffer, blendingCoord.xy);
+		color += blendingWeight.y * texture2D(inputBuffer, blendingCoord.zw);
 
 	}
 
