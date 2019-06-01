@@ -25,6 +25,7 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 
 			defines: {
 
+				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1"
 
 			},
@@ -47,6 +48,26 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * Sets the local contrast adaptation factor.
+	 *
+	 * If there is a neighbor edge that has _factor_ times bigger contrast than
+	 * the current edge, the edge will be discarded.
+	 *
+	 * This allows to eliminate spurious crossing edges and is based on the fact
+	 * that if there is too much contrast in a direction, the perceptual contrast
+	 * in the other neighbors will be hidden.
+	 *
+	 * @param {Number} threshold - The local contrast adaptation factor. Default is 2.0.
+	 */
+
+	setLocalContrastAdaptationFactor(factor) {
+
+		this.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR = factor.toFixed("2");
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Sets the edge detection sensitivity.
 	 *
 	 * A lower value results in more edges being detected at the expense of
@@ -55,13 +76,15 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 	 * 0.1 is a reasonable value, and allows to catch most visible edges.
 	 * 0.05 is a rather overkill value, that allows to catch 'em all.
 	 *
-	 * If temporal supersampling is used, 0.2 could be a reasonable value,
-	 * as low contrast edges are properly filtered by just 2x.
+	 * If temporal supersampling is used, 0.2 could be a reasonable value, as low
+	 * contrast edges are properly filtered by just 2x.
 	 *
 	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
 	setEdgeDetectionThreshold(threshold) {
+
+		threshold = Math.min(Math.max(threshold, 0.05), 0.5);
 
 		this.defines.EDGE_THRESHOLD = threshold.toFixed("2");
 		this.needsUpdate = true;

@@ -33,9 +33,10 @@ export class SMAAEffect extends Effect {
 	 *
 	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
 	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
+	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
 	 */
 
-	constructor(searchImage, areaImage) {
+	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH) {
 
 		super("SMAAEffect", fragmentShader, {
 
@@ -117,7 +118,7 @@ export class SMAAEffect extends Effect {
 			searchTexture.format = RGBAFormat;
 			searchTexture.generateMipmaps = false;
 			searchTexture.needsUpdate = true;
-			searchTexture.flipY = false;
+			searchTexture.flipY = true;
 
 			return searchTexture;
 
@@ -126,7 +127,6 @@ export class SMAAEffect extends Effect {
 		this.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = (() => {
 
 			const areaTexture = new Texture(areaImage);
-
 			areaTexture.name = "SMAA.Area";
 			areaTexture.minFilter = LinearFilter;
 			areaTexture.format = RGBAFormat;
@@ -138,6 +138,32 @@ export class SMAAEffect extends Effect {
 
 		})();
 
+		this.applyPreset(preset);
+
+	}
+
+	/**
+	 * The internal color edge detection material.
+	 *
+	 * @type {ColorEdgesMaterial}
+	 */
+
+	get colorEdgesMaterial() {
+
+		return this.colorEdgesPass.getFullscreenMaterial();
+
+	}
+
+	/**
+	 * The internal edge weights material.
+	 *
+	 * @type {SMAAWeightsMaterial}
+	 */
+
+	get weightsMaterial() {
+
+		return this.weightsPass.getFullscreenMaterial();
+
 	}
 
 	/**
@@ -145,6 +171,7 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link ColorEdgesMaterial#setEdgeDetectionThreshold} for more details.
 	 *
+	 * @deprecated Use applyPreset or colorEdgesMaterial instead.
 	 * @param {Number} threshold - The edge detection sensitivity. Range: [0.05, 0.5].
 	 */
 
@@ -159,12 +186,62 @@ export class SMAAEffect extends Effect {
 	 *
 	 * See {@link SMAAWeightsMaterial#setOrthogonalSearchSteps} for more details.
 	 *
+	 * @deprecated Use applyPreset or weightsMaterial instead.
 	 * @param {Number} steps - The search steps. Range: [0, 112].
 	 */
 
 	setOrthogonalSearchSteps(steps) {
 
 		this.weightsPass.getFullscreenMaterial().setOrthogonalSearchSteps(steps);
+
+	}
+
+	/**
+	 * Applies the given quality preset.
+	 *
+	 * @param {SMAAPreset} preset - The preset.
+	 */
+
+	applyPreset(preset) {
+
+		const colorEdgesMaterial = this.colorEdgesMaterial;
+		const weightsMaterial = this.weightsMaterial;
+
+		switch(preset) {
+
+			case SMAAPreset.LOW:
+				colorEdgesMaterial.setEdgeDetectionThreshold(0.15);
+				weightsMaterial.setOrthogonalSearchSteps(4);
+				weightsMaterial.diagonalDetection = false;
+				weightsMaterial.cornerRounding = false;
+				break;
+
+			case SMAAPreset.MEDIUM:
+				colorEdgesMaterial.setEdgeDetectionThreshold(0.1);
+				weightsMaterial.setOrthogonalSearchSteps(8);
+				weightsMaterial.diagonalDetection = false;
+				weightsMaterial.cornerRounding = false;
+				break;
+
+			case SMAAPreset.HIGH:
+				colorEdgesMaterial.setEdgeDetectionThreshold(0.1);
+				weightsMaterial.setOrthogonalSearchSteps(16);
+				weightsMaterial.setDiagonalSearchSteps(8);
+				weightsMaterial.setCornerRounding(25);
+				weightsMaterial.diagonalDetection = true;
+				weightsMaterial.cornerRounding = true;
+				break;
+
+			case SMAAPreset.ULTRA:
+				colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+				weightsMaterial.setOrthogonalSearchSteps(32);
+				weightsMaterial.setDiagonalSearchSteps(16);
+				weightsMaterial.setCornerRounding(25);
+				weightsMaterial.diagonalDetection = true;
+				weightsMaterial.cornerRounding = true;
+				break;
+
+		}
 
 	}
 
@@ -193,12 +270,15 @@ export class SMAAEffect extends Effect {
 
 	setSize(width, height) {
 
+		const colorEdgesMaterial = this.colorEdgesPass.getFullscreenMaterial();
+		const weightsMaterial = this.weightsPass.getFullscreenMaterial();
+
 		this.renderTargetColorEdges.setSize(width, height);
 		this.renderTargetWeights.setSize(width, height);
 
-		this.colorEdgesPass.getFullscreenMaterial().uniforms.texelSize.value.copy(
-			this.weightsPass.getFullscreenMaterial().uniforms.texelSize.value.set(
-				1.0 / width, 1.0 / height));
+		weightsMaterial.uniforms.resolution.value.set(width, height);
+		weightsMaterial.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		colorEdgesMaterial.uniforms.texelSize.value.copy(weightsMaterial.uniforms.texelSize.value);
 
 	}
 
@@ -241,3 +321,22 @@ export class SMAAEffect extends Effect {
 	}
 
 }
+
+/**
+ * An enumeration of SMAA presets.
+ *
+ * @type {Object}
+ * @property {Number} LOW - Results in around 60% of the maximum quality.
+ * @property {Number} MEDIUM - Results in around 80% of the maximum quality.
+ * @property {Number} HIGH - Results in around 95% of the maximum quality.
+ * @property {Number} ULTRA - Results in around 99% of the maximum quality.
+ */
+
+export const SMAAPreset = {
+
+	LOW: 0,
+	MEDIUM: 1,
+	HIGH: 2,
+	ULTRA: 3
+
+};
