@@ -294,6 +294,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing/src/effects/smaaeffect.js~smaapreset",
+    "variable/index.html#static-variable-SMAAPreset",
+    "<span>SMAAPreset</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SMAAEffect.js</span>",
+    "variable"
+  ],
+  [
     "postprocessing/src/images/smaa/utils/smaasearchimagedata.js~smaasearchimagedata",
     "class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html",
     "<span>SMAASearchImageData</span> <span class=\"search-result-import-path\">postprocessing/src/images/smaa/utils/SMAASearchImageData.js</span>",
@@ -1596,6 +1602,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/effects/smaaeffect.js~smaaeffect#applypreset",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-applyPreset",
+    "src/effects/SMAAEffect.js~SMAAEffect#applyPreset",
+    "method"
+  ],
+  [
+    "src/effects/smaaeffect.js~smaaeffect#coloredgesmaterial",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-get-colorEdgesMaterial",
+    "src/effects/SMAAEffect.js~SMAAEffect#colorEdgesMaterial",
+    "member"
+  ],
+  [
     "src/effects/smaaeffect.js~smaaeffect#constructor",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-constructor-constructor",
     "src/effects/SMAAEffect.js~SMAAEffect#constructor",
@@ -1624,6 +1642,12 @@ window.esdocSearchIndex = [
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-update",
     "src/effects/SMAAEffect.js~SMAAEffect#update",
     "method"
+  ],
+  [
+    "src/effects/smaaeffect.js~smaaeffect#weightsmaterial",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-get-weightsMaterial",
+    "src/effects/SMAAEffect.js~SMAAEffect#weightsMaterial",
+    "member"
   ],
   [
     "src/effects/smaaeffect.js~smaaeffect.areaimagedataurl",
@@ -2094,6 +2118,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/coloredgesmaterial.js~coloredgesmaterial#setlocalcontrastadaptationfactor",
+    "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html#instance-method-setLocalContrastAdaptationFactor",
+    "src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial#setLocalContrastAdaptationFactor",
+    "method"
+  ],
+  [
     "src/materials/convolutionmaterial.js",
     "file/src/materials/ConvolutionMaterial.js.html",
     "src/materials/ConvolutionMaterial.js",
@@ -2238,10 +2268,34 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/materials/luminancematerial.js~luminancematerial#coloroutput",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-colorOutput",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#colorOutput",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#coloroutput",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-colorOutput",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#colorOutput",
+    "member"
+  ],
+  [
     "src/materials/luminancematerial.js~luminancematerial#constructor",
     "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-constructor-constructor",
     "src/materials/LuminanceMaterial.js~LuminanceMaterial#constructor",
     "method"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#luminancerange",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-luminanceRange",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#luminanceRange",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#luminancerange",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-luminanceRange",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#luminanceRange",
+    "member"
   ],
   [
     "src/materials/luminancematerial.js~luminancematerial#needsupdate",
@@ -2292,10 +2346,46 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#cornerrounding",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-get-cornerRounding",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#cornerRounding",
+    "member"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#cornerrounding",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-set-cornerRounding",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#cornerRounding",
+    "member"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#diagonaldetection",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-get-diagonalDetection",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#diagonalDetection",
+    "member"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#diagonaldetection",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-set-diagonalDetection",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#diagonalDetection",
+    "member"
+  ],
+  [
     "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#needsupdate",
     "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-member-needsUpdate",
     "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#needsUpdate",
     "member"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#setcornerrounding",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-method-setCornerRounding",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#setCornerRounding",
+    "method"
+  ],
+  [
+    "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#setdiagonalsearchsteps",
+    "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html#instance-method-setDiagonalSearchSteps",
+    "src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial#setDiagonalSearchSteps",
+    "method"
   ],
   [
     "src/materials/smaaweightsmaterial.js~smaaweightsmaterial#setorthogonalsearchsteps",

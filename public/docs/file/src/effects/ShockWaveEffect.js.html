@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
@@ -99,8 +100,8 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Uniform, Vector2, Vector3 } from &quot;three&quot;;
 import { Effect } from &quot;./Effect.js&quot;;
 
-import fragment from &quot;./glsl/shock-wave/shader.frag&quot;;
-import vertex from &quot;./glsl/shock-wave/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/shock-wave/shader.frag&quot;;
+import vertexShader from &quot;./glsl/shock-wave/shader.vert&quot;;
 
 /**
  * Half PI.
@@ -159,7 +160,9 @@ export class ShockWaveEffect extends Effect {
 		amplitude = 0.05
 	} = {}) {
 
-		super(&quot;ShockWaveEffect&quot;, fragment, {
+		super(&quot;ShockWaveEffect&quot;, fragmentShader, {
+
+			vertexShader,
 
 			uniforms: new Map([
 				[&quot;active&quot;, new Uniform(false)],
@@ -170,9 +173,7 @@ export class ShockWaveEffect extends Effect {
 				[&quot;maxRadius&quot;, new Uniform(maxRadius)],
 				[&quot;waveSize&quot;, new Uniform(waveSize)],
 				[&quot;amplitude&quot;, new Uniform(amplitude)]
-			]),
-
-			vertexShader: vertex
+			])
 
 		});
 

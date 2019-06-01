@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
@@ -100,7 +101,7 @@
 import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
 import { Effect } from &quot;./Effect.js&quot;;
 
-import fragment from &quot;./glsl/grid/shader.frag&quot;;
+import fragmentShader from &quot;./glsl/grid/shader.frag&quot;;
 
 /**
  * A grid effect.
@@ -119,7 +120,7 @@ export class GridEffect extends Effect {
 
 	constructor({ blendFunction = BlendFunction.OVERLAY, scale = 1.0, lineWidth = 0.0 } = {}) {
 
-		super(&quot;GridEffect&quot;, fragment, {
+		super(&quot;GridEffect&quot;, fragmentShader, {
 
 			blendFunction,
 

@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
@@ -126,7 +127,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new luminance material.
 	 *
-	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colours scaled with their luminance value.
+	 * @param {Boolean} [colorOutput=false] - Defines whether the shader should output colors scaled with their luminance value.
 	 * @param {Vector2} [luminanceRange] - If provided, the shader will mask out texels that aren&apos;t in the specified luminance range.
 	 */
 
@@ -154,28 +155,73 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 		});
 
-		this.setColorOutputEnabled(colorOutput);
-		this.setLuminanceRangeEnabled(maskLuminance);
+		this.colorOutput = colorOutput;
+		this.luminanceRange = maskLuminance;
+
+	}
+
+	/**
+	 * Indicates whether color output is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get colorOutput() {
+
+		return (this.defines.COLOR !== undefined);
 
 	}
 
 	/**
 	 * Enables or disables color output.
 	 *
+	 * @type {Boolean}
+	 */
+
+	set colorOutput(value) {
+
+		value ? (this.defines.COLOR = &quot;1&quot;) : (delete this.defines.COLOR);
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Enables or disables color output.
+	 *
+	 * @deprecated Use colorOutput instead.
 	 * @param {Boolean} enabled - Whether color output should be enabled.
 	 */
 
 	setColorOutputEnabled(enabled) {
 
-		if(enabled) {
+		enabled ? (this.defines.COLOR = &quot;1&quot;) : (delete this.defines.COLOR);
 
-			this.defines.COLOR = &quot;1&quot;;
+		this.needsUpdate = true;
 
-		} else {
+	}
 
-			delete this.defines.COLOR;
+	/**
+	 * Indicates whether luminance masking is enabled.
+	 *
+	 * @type {Boolean}
+	 */
 
-		}
+	get luminanceRange() {
+
+		return (this.defines.RANGE !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables luminance masking.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set luminanceRange(value) {
+
+		value ? (this.defines.RANGE = &quot;1&quot;) : (delete this.defines.RANGE);
 
 		this.needsUpdate = true;
 
@@ -184,20 +230,13 @@ export class LuminanceMaterial extends ShaderMaterial {
 	/**
 	 * Enables or disables the luminance mask.
 	 *
+	 * @deprecated Use luminanceRange instead.
 	 * @param {Boolean} enabled - Whether the luminance mask should be enabled.
 	 */
 
 	setLuminanceRangeEnabled(enabled) {
 
-		if(enabled) {
-
-			this.defines.RANGE = &quot;1&quot;;
-
-		} else {
-
-			delete this.defines.RANGE;
-
-		}
+		enabled ? (this.defines.RANGE = &quot;1&quot;) : (delete this.defines.RANGE);
 
 		this.needsUpdate = true;
 

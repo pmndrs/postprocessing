@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 299,
+  "end": 381,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 299,
+    "end": 381,
     "loc": {
       "start": {
         "line": 1,
@@ -30,8 +30,8 @@
     "body": [
       {
         "type": "ExportDefaultDeclaration",
-        "start": 106,
-        "end": 297,
+        "start": 103,
+        "end": 379,
         "loc": {
           "start": {
             "line": 2,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 2,
-            "column": 191
+            "column": 276
           }
         },
         "declaration": {
           "type": "StringLiteral",
-          "start": 121,
-          "end": 296,
+          "start": 118,
+          "end": 378,
           "loc": {
             "start": {
               "line": 2,
@@ -53,20 +53,20 @@
             },
             "end": {
               "line": 2,
-              "column": 190
+              "column": 275
             }
           },
           "extra": {
-            "rawValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII",
-            "raw": "\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII\""
+            "rawValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAAAeElEQVRYR+2XSwqAMAxEJ168ePEqwRSKhIIiuHjJqiU0gWE+1CQdApcVAMUAuARaMGCX1MIL/Ow13++9lW2s3mW9MWvsnWc/2fvGygwPAN4E8QzAA4CXAB6AHjG4JTHYI1ey3pcx6FHnEfhLDOIBKAmUBK6/ANUDTlROXAHd9EC1AAAAAElFTkSuQmCC",
+            "raw": "\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAAAeElEQVRYR+2XSwqAMAxEJ168ePEqwRSKhIIiuHjJqiU0gWE+1CQdApcVAMUAuARaMGCX1MIL/Ow13++9lW2s3mW9MWvsnWc/2fvGygwPAN4E8QzAA4CXAB6AHjG4JTHYI1ey3pcx6FHnEfhLDOIBKAmUBK6/ANUDTlROXAHd9EC1AAAAAElFTkSuQmCC\""
           },
-          "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII",
+          "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAAAeElEQVRYR+2XSwqAMAxEJ168ePEqwRSKhIIiuHjJqiU0gWE+1CQdApcVAMUAuARaMGCX1MIL/Ow13++9lW2s3mW9MWvsnWc/2fvGygwPAN4E8QzAA4CXAB6AHjG4JTHYI1ey3pcx6FHnEfhLDOIBKAmUBK6/ANUDTlROXAHd9EC1AAAAAElFTkSuQmCC",
           "leadingComments": [
             {
               "type": "CommentLine",
-              "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), not cropped, low dynamic range.",
+              "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), cropped, high dynamic range.",
               "start": 0,
-              "end": 104,
+              "end": 101,
               "loc": {
                 "start": {
                   "line": 1,
@@ -74,7 +74,7 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 104
+                  "column": 101
                 }
               }
             }
@@ -84,9 +84,9 @@
         "leadingComments": [
           {
             "type": "CommentLine",
-            "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), not cropped, low dynamic range.",
+            "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), cropped, high dynamic range.",
             "start": 0,
-            "end": 104,
+            "end": 101,
             "loc": {
               "start": {
                 "line": 1,
@@ -94,7 +94,7 @@
               },
               "end": {
                 "line": 1,
-                "column": 104
+                "column": 101
               }
             }
           }
@@ -106,9 +106,9 @@
   "comments": [
     {
       "type": "CommentLine",
-      "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), not cropped, low dynamic range.",
+      "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), cropped, high dynamic range.",
       "start": 0,
-      "end": 104,
+      "end": 101,
       "loc": {
         "start": {
           "line": 1,
@@ -116,7 +116,7 @@
         },
         "end": {
           "line": 1,
-          "column": 104
+          "column": 101
         }
       }
     }
@@ -124,9 +124,9 @@
   "tokens": [
     {
       "type": "CommentLine",
-      "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), not cropped, low dynamic range.",
+      "value": " Generated with SMAASearchImageData.generate().toCanvas().toDataURL(), cropped, high dynamic range.",
       "start": 0,
-      "end": 104,
+      "end": 101,
       "loc": {
         "start": {
           "line": 1,
@@ -134,7 +134,7 @@
         },
         "end": {
           "line": 1,
-          "column": 104
+          "column": 101
         }
       }
     },
@@ -153,8 +153,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 106,
-      "end": 112,
+      "start": 103,
+      "end": 109,
       "loc": {
         "start": {
           "line": 2,
@@ -181,8 +181,8 @@
         "updateContext": null
       },
       "value": "default",
-      "start": 113,
-      "end": 120,
+      "start": 110,
+      "end": 117,
       "loc": {
         "start": {
           "line": 2,
@@ -207,9 +207,9 @@
         "binop": null,
         "updateContext": null
       },
-      "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAAAhCAAAAABIXyLAAAAAOElEQVRIx2NgGAWjYBSMglEwEICREYRgFBZBqDCSLA2MGPUIVQETE9iNUAqLR5gIeoQKRgwXjwAAGn4AtaFeYLEAAAAASUVORK5CYII",
-      "start": 121,
-      "end": 296,
+      "value": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAAAQCAYAAACm53kpAAAAeElEQVRYR+2XSwqAMAxEJ168ePEqwRSKhIIiuHjJqiU0gWE+1CQdApcVAMUAuARaMGCX1MIL/Ow13++9lW2s3mW9MWvsnWc/2fvGygwPAN4E8QzAA4CXAB6AHjG4JTHYI1ey3pcx6FHnEfhLDOIBKAmUBK6/ANUDTlROXAHd9EC1AAAAAElFTkSuQmCC",
+      "start": 118,
+      "end": 378,
       "loc": {
         "start": {
           "line": 2,
@@ -217,7 +217,7 @@
         },
         "end": {
           "line": 2,
-          "column": 190
+          "column": 275
         }
       }
     },
@@ -234,16 +234,16 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 296,
-      "end": 297,
+      "start": 378,
+      "end": 379,
       "loc": {
         "start": {
           "line": 2,
-          "column": 190
+          "column": 275
         },
         "end": {
           "line": 2,
-          "column": 191
+          "column": 276
         }
       }
     },
@@ -260,8 +260,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 299,
-      "end": 299,
+      "start": 381,
+      "end": 381,
       "loc": {
         "start": {
           "line": 3,

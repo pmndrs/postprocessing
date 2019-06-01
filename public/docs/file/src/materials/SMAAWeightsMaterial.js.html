@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
@@ -113,9 +114,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 	 * Constructs a new SMAA weights material.
 	 *
 	 * @param {Vector2} [texelSize] - The absolute screen texel size.
+	 * @param {Vector2} [resolution] - The resolution.
 	 */
 
-	constructor(texelSize = new Vector2()) {
+	constructor(texelSize = new Vector2(), resolution = new Vector2()) {
 
 		super({
 
@@ -124,11 +126,16 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			defines: {
 
 				// Configurable settings:
-				MAX_SEARCH_STEPS_INT: &quot;8&quot;,
-				MAX_SEARCH_STEPS_FLOAT: &quot;8.0&quot;,
+				MAX_SEARCH_STEPS_INT: &quot;16&quot;,
+				MAX_SEARCH_STEPS_FLOAT: &quot;16.0&quot;,
+				MAX_SEARCH_STEPS_DIAG_INT: &quot;8&quot;,
+				MAX_SEARCH_STEPS_DIAG_FLOAT: &quot;8.0&quot;,
+				CORNER_ROUNDING: &quot;25&quot;,
+				CORNER_ROUNDING_NORM: &quot;0.25&quot;,
 
 				// Non-configurable settings:
 				AREATEX_MAX_DISTANCE: &quot;16.0&quot;,
+				AREATEX_MAX_DISTANCE_DIAG: &quot;20.0&quot;,
 				AREATEX_PIXEL_SIZE: &quot;(1.0 / vec2(160.0, 560.0))&quot;,
 				AREATEX_SUBTEX_SIZE: &quot;(1.0 / 7.0)&quot;,
 				SEARCHTEX_SIZE: &quot;vec2(66.0, 33.0)&quot;,
@@ -141,7 +148,8 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				areaTexture: new Uniform(null),
 				searchTexture: new Uniform(null),
-				texelSize: new Uniform(texelSize)
+				texelSize: new Uniform(texelSize),
+				resolution: new Uniform(resolution)
 
 			},
 
@@ -168,8 +176,100 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	setOrthogonalSearchSteps(steps) {
 
+		steps = Math.min(Math.max(steps, 0), 112);
+
 		this.defines.MAX_SEARCH_STEPS_INT = steps.toFixed(&quot;0&quot;);
 		this.defines.MAX_SEARCH_STEPS_FLOAT = steps.toFixed(&quot;1&quot;);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Specifies the maximum steps performed in the diagonal pattern searches, at
+	 * each side of the pixel. This search jumps one pixel at time.
+	 *
+	 * On high-end machines this search is cheap (between 0.8x and 0.9x slower for
+	 * 16 steps), but it can have a significant impact on older machines.
+	 *
+	 * @param {Number} steps - The search steps. Range: [0, 20].
+	 */
+
+	setDiagonalSearchSteps(steps) {
+
+		steps = Math.min(Math.max(steps, 0), 20);
+
+		this.defines.MAX_SEARCH_STEPS_DIAG_INT = steps.toFixed(&quot;0&quot;);
+		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = steps.toFixed(&quot;1&quot;);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Specifies how much sharp corners will be rounded.
+	 *
+	 * @param {Number} rounding - The corner rounding amount. Range: [0, 100].
+	 */
+
+	setCornerRounding(rounding) {
+
+		rounding = Math.min(Math.max(rounding, 0), 100);
+
+		this.defines.CORNER_ROUNDING = rounding.toFixed(&quot;4&quot;);
+		this.defines.CORNER_ROUNDING_NORM = (rounding / 100.0).toFixed(&quot;4&quot;);
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether diagonal pattern detection is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get diagonalDetection() {
+
+		return (this.defines.DISABLE_DIAG_DETECTION === undefined);
+
+	}
+
+	/**
+	 * Enables or disables diagonal pattern detection.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set diagonalDetection(value) {
+
+		value ? (delete this.defines.DISABLE_DIAG_DETECTION) :
+			(this.defines.DISABLE_DIAG_DETECTION = &quot;1&quot;);
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether corner rounding is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get cornerRounding() {
+
+		return (this.defines.DISABLE_CORNER_DETECTION === undefined);
+
+	}
+
+	/**
+	 * Enables or disables corner rounding.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set cornerRounding(value) {
+
+		value ? (delete this.defines.DISABLE_CORNER_DETECTION) :
+			(this.defines.DISABLE_CORNER_DETECTION = &quot;1&quot;);
+
 		this.needsUpdate = true;
 
 	}

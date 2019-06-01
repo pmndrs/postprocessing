@@ -62,6 +62,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WebGLExtension">WebGLExtension</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-GlitchMode">GlitchMode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-SMAAPreset">SMAAPreset</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#effects-blending">effects/blending</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
@@ -111,8 +112,8 @@ import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from &quot;../
 import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
 import { Effect } from &quot;./Effect.js&quot;;
 
-import fragment from &quot;./glsl/outline/shader.frag&quot;;
-import vertex from &quot;./glsl/outline/shader.vert&quot;;
+import fragmentShader from &quot;./glsl/outline/shader.frag&quot;;
+import vertexShader from &quot;./glsl/outline/shader.vert&quot;;
 
 /**
  * An outline effect.
@@ -153,7 +154,7 @@ export class OutlineEffect extends Effect {
 		xRay = true
 	} = {}) {
 
-		super(&quot;OutlineEffect&quot;, fragment, {
+		super(&quot;OutlineEffect&quot;, fragmentShader, {
 
 			uniforms: new Map([
 				[&quot;maskTexture&quot;, new Uniform(null)],
@@ -478,7 +479,7 @@ export class OutlineEffect extends Effect {
 			this.defines.set(&quot;USE_PATTERN&quot;, &quot;1&quot;);
 			this.uniforms.set(&quot;patternScale&quot;, new Uniform(1.0));
 			this.uniforms.set(&quot;patternTexture&quot;, new Uniform(texture));
-			this.vertexShader = vertex;
+			this.vertexShader = vertexShader;
 
 		} else {
 
