@@ -60,8 +60,8 @@ void main() {
 	maxDelta = max(max(maxDelta, delta.z), delta.w);
 
 	// Local contrast adaptation.
-	edges *= step(0.5 * maxDelta, delta.xy);
+	edges *= step(maxDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
-	gl_FragColor = vec4(edges, 0.0, 0.0);
+	gl_FragColor = vec4(edges, 0.0, 1.0);
 
 }
