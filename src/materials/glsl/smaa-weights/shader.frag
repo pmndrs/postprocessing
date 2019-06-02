@@ -294,27 +294,27 @@ float searchXLeft(in vec2 texCoord, const in float end) {
 
 	}
 
-  float offset = -(255.0 / 127.0) * searchLength(e, 0.0) + 3.25;
+	float offset = -(255.0 / 127.0) * searchLength(e, 0.0) + 3.25;
 
-  return texelSize.x * offset + texCoord.x;
+	return texelSize.x * offset + texCoord.x;
 
-  // Non-optimized version:
-  // Correct the previous (-0.25, -0.125) offset.
-  // texCoord.x += 0.25 * texelSize.x;
-  // The searches are biased by 1, so adjust the coords accordingly.
-  // texCoord.x += texelSize.x;
-  // Disambiguate the length added by the last step.
-  // texCoord.x += 2.0 * texelSize.x; // Undo last step.
-  // texCoord.x -= texelSize.x * (255.0 / 127.0) * searchLength(e, 0.0);
-  // return texelSize.x * offset + texCoord.x);
+	// Non-optimized version:
+	// Correct the previous (-0.25, -0.125) offset.
+	// texCoord.x += 0.25 * texelSize.x;
+	// The searches are biased by 1, so adjust the coords accordingly.
+	// texCoord.x += texelSize.x;
+	// Disambiguate the length added by the last step.
+	// texCoord.x += 2.0 * texelSize.x; // Undo last step.
+	// texCoord.x -= texelSize.x * (255.0 / 127.0) * searchLength(e, 0.0);
+	// return texelSize.x * offset + texCoord.x);
 
 }
 
 float searchXRight(vec2 texCoord, const in float end) {
 
-  vec2 e = vec2(0.0, 1.0);
+	vec2 e = vec2(0.0, 1.0);
 
-  for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
 		if(!(texCoord.x < end && e.g > 0.8281 && e.r == 0.0)) {
 
@@ -322,14 +322,14 @@ float searchXRight(vec2 texCoord, const in float end) {
 
 		}
 
-    e = texture2D(inputBuffer, texCoord).rg;
-    texCoord = vec2(2.0, 0.0) * texelSize.xy + texCoord;
+		e = texture2D(inputBuffer, texCoord).rg;
+		texCoord = vec2(2.0, 0.0) * texelSize.xy + texCoord;
 
-  }
+	}
 
-  float offset = -(255.0 / 127.0) * searchLength(e, 0.5) + 3.25;
+	float offset = -(255.0 / 127.0) * searchLength(e, 0.5) + 3.25;
 
-  return -texelSize.x * offset + texCoord.x;
+	return -texelSize.x * offset + texCoord.x;
 
 }
 
@@ -339,9 +339,9 @@ float searchXRight(vec2 texCoord, const in float end) {
 
 float searchYUp(vec2 texCoord, const in float end) {
 
-  vec2 e = vec2(1.0, 0.0);
+	vec2 e = vec2(1.0, 0.0);
 
-  for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; ++i) {
 
 		if(!(texCoord.y > end && e.r > 0.8281 && e.g == 0.0)) {
 
@@ -349,22 +349,22 @@ float searchYUp(vec2 texCoord, const in float end) {
 
 		}
 
-    e = texture2D(inputBuffer, texCoord).rg;
-    texCoord = -vec2(0.0, 2.0) * texelSize.xy + texCoord;
+		e = texture2D(inputBuffer, texCoord).rg;
+		texCoord = -vec2(0.0, 2.0) * texelSize.xy + texCoord;
 
-  }
+	}
 
-  float offset = -(255.0 / 127.0) * searchLength(e.gr, 0.0) + 3.25;
+	float offset = -(255.0 / 127.0) * searchLength(e.gr, 0.0) + 3.25;
 
-  return texelSize.y * offset + texCoord.y;
+	return texelSize.y * offset + texCoord.y;
 
 }
 
 float searchYDown(vec2 texCoord, const in float end) {
 
-  vec2 e = vec2(1.0, 0.0);
+	vec2 e = vec2(1.0, 0.0);
 
-  for(int i = 0; i < MAX_SEARCH_STEPS_INT; i++) {
+	for(int i = 0; i < MAX_SEARCH_STEPS_INT; i++) {
 
 		if(!(texCoord.y < end && e.r > 0.8281 && e.g == 0.0)) {
 
@@ -372,14 +372,14 @@ float searchYDown(vec2 texCoord, const in float end) {
 
 		}
 
-    e = texture2D(inputBuffer, texCoord).rg;
-    texCoord = vec2(0.0, 2.0) * texelSize.xy + texCoord;
+		e = texture2D(inputBuffer, texCoord).rg;
+		texCoord = vec2(0.0, 2.0) * texelSize.xy + texCoord;
 
-  }
+	}
 
-  float offset = -(255.0 / 127.0) * searchLength(e.gr, 0.5) + 3.25;
+	float offset = -(255.0 / 127.0) * searchLength(e.gr, 0.5) + 3.25;
 
-  return -texelSize.y * offset + texCoord.y;
+	return -texelSize.y * offset + texCoord.y;
 
 }
 
@@ -389,16 +389,16 @@ float searchYDown(vec2 texCoord, const in float end) {
 
 vec2 area(const in vec2 dist, const in float e1, const in float e2, const in float offset) {
 
-  // Rounding prevents precision errors of bilinear filtering.
-  vec2 texCoord = vec2(AREATEX_MAX_DISTANCE) * round(4.0 * vec2(e1, e2)) + dist;
+	// Rounding prevents precision errors of bilinear filtering.
+	vec2 texCoord = vec2(AREATEX_MAX_DISTANCE) * round(4.0 * vec2(e1, e2)) + dist;
 
-  // Apply a scale and bias for mapping to texel space.
-  texCoord = AREATEX_PIXEL_SIZE * texCoord + 0.5 * AREATEX_PIXEL_SIZE;
+	// Apply a scale and bias for mapping to texel space.
+	texCoord = AREATEX_PIXEL_SIZE * texCoord + 0.5 * AREATEX_PIXEL_SIZE;
 
-  // Move to the proper place, according to the subpixel offset.
-  texCoord.y = AREATEX_SUBTEX_SIZE * offset + texCoord.y;
+	// Move to the proper place, according to the subpixel offset.
+	texCoord.y = AREATEX_SUBTEX_SIZE * offset + texCoord.y;
 
-  return texture2D(areaTexture, texCoord).rg;
+	return texture2D(areaTexture, texCoord).rg;
 
 }
 
@@ -408,7 +408,7 @@ vec2 area(const in vec2 dist, const in float e1, const in float e2, const in flo
 
 void detectHorizontalCornerPattern(inout vec2 weights, const in vec4 texCoord, const in vec2 d) {
 
-  #if !defined(DISABLE_CORNER_DETECTION)
+	#if !defined(DISABLE_CORNER_DETECTION)
 
 		vec2 leftRight = step(d.xy, d.yx);
 		vec2 rounding = (1.0 - CORNER_ROUNDING_NORM) * leftRight;
@@ -424,13 +424,13 @@ void detectHorizontalCornerPattern(inout vec2 weights, const in vec4 texCoord, c
 
 		weights *= saturate(factor);
 
-  #endif
+	#endif
 
 }
 
 void detectVerticalCornerPattern(inout vec2 weights, const in vec4 texCoord, const in vec2 d) {
 
-  #if !defined(DISABLE_CORNER_DETECTION)
+	#if !defined(DISABLE_CORNER_DETECTION)
 
 		vec2 leftRight = step(d.xy, d.yx);
 		vec2 rounding = (1.0 - CORNER_ROUNDING_NORM) * leftRight;
@@ -445,7 +445,7 @@ void detectVerticalCornerPattern(inout vec2 weights, const in vec4 texCoord, con
 
 		weights *= saturate(factor);
 
-  #endif
+	#endif
 
 }
 
@@ -459,7 +459,7 @@ void main() {
 
 		// Edge at north.
 
-    #if !defined(DISABLE_DIAG_DETECTION)
+		#if !defined(DISABLE_DIAG_DETECTION)
 
 			/* Diagonals have both north and west edges, so searching for them in one of
 			the boundaries is enough. */
@@ -468,7 +468,7 @@ void main() {
 			// Skip horizontal/vertical processing if there is a diagonal.
 			if(weights.r == -weights.g) { // weights.r + weights.g == 0.0
 
-    #endif
+		#endif
 
 		vec2 d;
 
@@ -500,11 +500,11 @@ void main() {
 		// Pattern recognized, now get the actual area.
 		weights.rg = area(sqrtD, e1, e2, subsampleIndices.y);
 
-    // Fix corners.
-    coords.y = vUv.y;
-    detectHorizontalCornerPattern(weights.rg, coords.xyzy, d);
+		// Fix corners.
+		coords.y = vUv.y;
+		detectHorizontalCornerPattern(weights.rg, coords.xyzy, d);
 
-    #if !defined(DISABLE_DIAG_DETECTION)
+		#if !defined(DISABLE_DIAG_DETECTION)
 
 			} else {
 
@@ -513,7 +513,7 @@ void main() {
 
 			}
 
-    #endif
+		#endif
 
 	}
 
@@ -548,9 +548,9 @@ void main() {
 		// Get the area for this direction.
 		weights.ba = area(sqrtD, e1, e2, subsampleIndices.x);
 
-    // Fix corners.
-    coords.x = vUv.x;
-    detectVerticalCornerPattern(weights.ba, coords.xyxz, d);
+		// Fix corners.
+		coords.x = vUv.x;
+		detectVerticalCornerPattern(weights.ba, coords.xyxz, d);
 
 	}
 
