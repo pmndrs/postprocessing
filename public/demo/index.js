@@ -14579,6 +14579,7 @@
         var edgesTextureEffect = this.edgesTextureEffect;
         var weightsTextureEffect = this.weightsTextureEffect;
         var blendMode = smaaEffect.blendMode;
+        var colorEdgesMaterial = smaaEffect.colorEdgesMaterial;
         var renderer1 = this.originalRenderer;
         var renderer2 = this.rendererAA;
         var controls1 = this.controls;
@@ -14593,6 +14594,7 @@
         var params = {
           "AA mode": AAMode.SMAA,
           "preset": SMAAPreset.HIGH,
+          "contrast factor": Number.parseFloat(colorEdgesMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
           "opacity": blendMode.opacity.value,
           "blend mode": blendMode.blendFunction
         };
@@ -14626,6 +14628,9 @@
         menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
         menu.add(params, "preset", SMAAPreset).onChange(function () {
           smaaEffect.applyPreset(Number.parseInt(params.preset));
+        });
+        menu.add(params, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(function () {
+          colorEdgesMaterial.setLocalContrastAdaptationFactor(Number.parseFloat(params["contrast factor"]));
         });
         menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
           blendMode.opacity.value = params.opacity;
