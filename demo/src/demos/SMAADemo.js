@@ -418,6 +418,7 @@ export class SMAADemo extends PostProcessingDemo {
 		const edgesTextureEffect = this.edgesTextureEffect;
 		const weightsTextureEffect = this.weightsTextureEffect;
 		const blendMode = smaaEffect.blendMode;
+		const colorEdgesMaterial = smaaEffect.colorEdgesMaterial;
 
 		const renderer1 = this.originalRenderer;
 		const renderer2 = this.rendererAA;
@@ -436,6 +437,7 @@ export class SMAADemo extends PostProcessingDemo {
 		const params = {
 			"AA mode": AAMode.SMAA,
 			"preset": SMAAPreset.HIGH,
+			"contrast factor": Number.parseFloat(colorEdgesMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -480,6 +482,12 @@ export class SMAADemo extends PostProcessingDemo {
 		menu.add(params, "preset", SMAAPreset).onChange(() => {
 
 			smaaEffect.applyPreset(Number.parseInt(params.preset));
+
+		});
+
+		menu.add(params, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
+
+			colorEdgesMaterial.setLocalContrastAdaptationFactor(Number.parseFloat(params["contrast factor"]));
 
 		});
 
