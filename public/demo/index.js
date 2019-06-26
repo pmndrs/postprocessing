@@ -10471,13 +10471,14 @@
         object.add(o2);
         scene.add(object);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.065);
+        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var bloomEffect = new BloomEffect({
           blendFunction: BlendFunction.SCREEN,
+          kernelSize: KernelSize.MEDIUM,
           resolutionScale: 0.5,
-          distinction: 4.0
+          distinction: 3.0
         });
-        bloomEffect.blendMode.opacity.value = 2.1;
+        bloomEffect.blendMode.opacity.value = 2.3;
         this.effect = bloomEffect;
         var pass = new EffectPass(camera, smaaEffect, bloomEffect);
         this.pass = pass;
@@ -10787,7 +10788,7 @@
         mesh.rotation.set(0, 0, Math.PI / 2);
         scene.add(mesh);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.06);
+        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var bokehEffect = new BokehEffect({
           focus: 0.32,
           dof: 0.02,
@@ -10936,7 +10937,7 @@
         mesh.rotation.set(0, 0, Math.PI / 2);
         scene.add(mesh);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.06);
+        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var bokehEffect = new RealisticBokehEffect({
           focus: 1.55,
           focalLength: camera.getFocalLength(),
@@ -13559,7 +13560,7 @@
         this.sun = sun;
         scene.add(group);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.065);
+        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.065);
         var godRaysEffect = new GodRaysEffect(camera, sun, {
           resolutionScale: 0.75,
           kernelSize: KernelSize.SMALL,
@@ -13796,7 +13797,7 @@
         renderer.domElement.addEventListener("mousemove", this);
         renderer.domElement.addEventListener("mousedown", this);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.setEdgeDetectionThreshold(0.05);
+        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var outlineEffect = new OutlineEffect(scene, camera, {
           blendFunction: BlendFunction.SCREEN,
           edgeStrength: 2.5,
