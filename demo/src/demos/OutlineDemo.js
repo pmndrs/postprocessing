@@ -341,7 +341,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.05);
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
 			blendFunction: BlendFunction.SCREEN,

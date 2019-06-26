@@ -184,7 +184,7 @@ export class BokehDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.06);
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bokehEffect = new BokehEffect({
 			focus: 0.32,

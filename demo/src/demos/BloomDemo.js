@@ -237,15 +237,16 @@ export class BloomDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.065);
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.SCREEN,
+			kernelSize: KernelSize.MEDIUM,
 			resolutionScale: 0.5,
-			distinction: 4.0
+			distinction: 3.0
 		});
 
-		bloomEffect.blendMode.opacity.value = 2.1;
+		bloomEffect.blendMode.opacity.value = 2.3;
 		this.effect = bloomEffect;
 
 		const pass = new EffectPass(camera, smaaEffect, bloomEffect);

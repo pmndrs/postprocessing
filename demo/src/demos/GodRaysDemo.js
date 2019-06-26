@@ -223,7 +223,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.065);
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.065);
 
 		const godRaysEffect = new GodRaysEffect(camera, sun, {
 			resolutionScale: 0.75,
