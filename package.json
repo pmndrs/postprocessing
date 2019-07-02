@@ -50,6 +50,7 @@
 		"lint:test": "eslint test",
 		"build": "rollup -c",
 		"build:production": "cross-env NODE_ENV=production npm run build",
+		"watch": "rollup -c --watch",
 		"doc": "rimraf public/docs && esdoc",
 		"deploy": "cpx demo/assets/** public/demo",
 		"pretest": "npm run lint && npm run build:production",
