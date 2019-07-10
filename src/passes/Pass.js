@@ -302,7 +302,7 @@ export class Pass {
 
 		for(const key of Object.keys(this)) {
 
-			if(this[key] !== null && typeof this[key].dispose === "function") {
+			if(this[key] && this[key] !== null && typeof this[key].dispose === "function") {
 
 				/** @ignore */
 				this[key].dispose();
