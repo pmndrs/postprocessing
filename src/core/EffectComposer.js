@@ -121,17 +121,21 @@ export class EffectComposer {
 	}
 
 	/**
-	 * Replaces the current renderer with the given one. The DOM element of the
-	 * current renderer will automatically be removed from its parent node and the
-	 * DOM element of the new renderer will take its place.
+	 * Replaces the current renderer with the given one.
 	 *
-	 * The auto clear mechanism of the provided renderer will be disabled.
+	 * The auto clear mechanism of the provided renderer will be disabled. If the
+	 * new render size differs from the previous one, all passes will be updated.
+	 *
+	 * By default, the DOM element of the current renderer will automatically be
+	 * removed from its parent node and the DOM element of the new renderer will
+	 * take its place.
 	 *
 	 * @param {WebGLRenderer} renderer - The new renderer.
+	 * @param {Boolean} updateDOM - Indicates whether the DOM elements of the renderers should be swapped as well.
 	 * @return {WebGLRenderer} The old renderer.
 	 */
 
-	replaceRenderer(renderer) {
+	replaceRenderer(renderer, updateDOM = true) {
 
 		const oldRenderer = this.renderer;
 
@@ -150,7 +154,7 @@ export class EffectComposer {
 
 			}
 
-			if(parent !== null) {
+			if(updateDOM && parent !== null) {
 
 				parent.removeChild(oldRenderer.domElement);
 				parent.appendChild(renderer.domElement);
