@@ -36,7 +36,8 @@ export class ConvolutionMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
 				halfTexelSize: new Uniform(new Vector2()),
-				kernel: new Uniform(0.0)
+				kernel: new Uniform(0.0),
+				scale: new Uniform(1.0)
 
 			},
 

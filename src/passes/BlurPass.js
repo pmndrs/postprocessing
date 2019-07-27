@@ -122,6 +122,38 @@ export class BlurPass extends Pass {
 	}
 
 	/**
+	 * The current blur scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.convolutionMaterial.uniforms.scale.value;
+
+	}
+
+	/**
+	 * Sets the blur scale.
+	 *
+	 * This value influences the overall blur strength and should not be greater
+	 * than 1. For larger blurs please increase the {@link kernelSize}!
+	 *
+	 * Note that the blur strength is closely tied to the resolution scale.
+	 * For a smooth transition from no blur to full blur, set the resolution scale
+	 * to 1 or adjust it based on the blur scale.
+	 *
+	 * @type {Number}
+	 */
+
+	set scale(value) {
+
+		this.convolutionMaterial.uniforms.scale.value = value;
+		this.ditheredConvolutionMaterial.uniforms.scale.value = value;
+
+	}
+
+	/**
 	 * The kernel size.
 	 *
 	 * @type {KernelSize}

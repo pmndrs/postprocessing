@@ -281,6 +281,7 @@ export class BlurDemo extends PostProcessingDemo {
 			"enabled": blurPass.enabled,
 			"resolution": blurPass.getResolutionScale(),
 			"kernel size": blurPass.kernelSize,
+			"scale": blurPass.scale,
 			"opacity": 1.0 - blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -294,6 +295,12 @@ export class BlurDemo extends PostProcessingDemo {
 		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
 			blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+
+		});
+
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			blurPass.scale = Number.parseFloat(params.scale);
 
 		});
 
