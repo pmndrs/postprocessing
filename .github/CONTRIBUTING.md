@@ -8,7 +8,7 @@ Thank you for considering to contribute! :speech_balloon:
 1. Search the issue tracker for similar bug reports before submitting a new one.
 2. Specify the version of the library where the bug occurred.
 3. Specify your browser version, operating system, and graphics card  
-   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 0 (64-bit), NVIDIA GTX 0000`).
+   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 7 (64-bit), NVIDIA GTX 1050`).
 4. Describe the problem in detail. Explain what happened, and what you expected would happen.
 5. Provide a minimal test case (http://jsfiddle.net) or a link to a live version of your application.
 6. If helpful, include a screenshot. Annotate the screenshot for clarity.
@@ -17,7 +17,9 @@ Thank you for considering to contribute! :speech_balloon:
 ## Pull Request Process :sparkles:
 
 When contributing to this repository, please first discuss the change you wish to make with the owners of this repository via the issue tracker.
-A proposed change should be focused and concise. __Do not include generated build files in your commits.__
+A proposed change should be focused and concise.
+
+__Do not include generated build files in your commits.__
 
 1. Create a feature branch.
 2. Implement your patch or feature on that branch. Maintain the existing coding style.
@@ -32,13 +34,15 @@ A proposed change should be focused and concise. __Do not include generated buil
 This project contains scripts that will help you during development. All scripts can be executed with `npm run [script]`.
 The following table provides an overview of the most important scripts:
 
-| Task  | Description                           |
-|-------|---------------------------------------|
-| lint  | Checks source files for syntax errors |
-| build | Generates the final bundles           |
-| ava   | Runs unit tests                       |
+| Task  | Description                                    |
+|-------|------------------------------------------------|
+| lint  | Checks source files for syntax errors          |
+| build | Builds the demo bundle                         |
+| watch | Builds the demo bundle and listens for changes |
+| ava   | Runs unit tests                                |
+| test  | Generates the final bundles                    |
 
-__Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process.
+__Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process. The `test` script does this automatically.
 
 
 ### Testing :heavy_check_mark:
