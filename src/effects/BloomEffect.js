@@ -27,12 +27,19 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Number} [options.distinction=1.0] - The luminance distinction factor. Raise this value to bring out the brighter elements in the scene.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
+	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
+	 * @param {Number} [options.resolutionScale=0.5] - The bloom texture resolution scale, relative to the main frame buffer size.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor({ blendFunction = BlendFunction.SCREEN, distinction = 1.0, resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
+	constructor({
+		blendFunction = BlendFunction.SCREEN,
+		luminanceThreshold = 0.9,
+		luminanceSmoothing = 0.025,
+		resolutionScale = 0.5,
+		kernelSize = KernelSize.LARGE
+	} = {}) {
 
 		super("BloomEffect", fragmentShader, {
 
@@ -90,7 +97,8 @@ export class BloomEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
 
-		this.distinction = distinction;
+		this.luminanceThreshold = luminanceThreshold;
+		this.luminanceSmoothing = luminanceSmoothing;
 
 	}
 
@@ -156,14 +164,14 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
-	 * The luminance distinction factor.
+	 * The luminance threshold.
 	 *
 	 * @type {Number}
 	 */
 
-	get distinction() {
+	get luminanceThreshold() {
 
-		return this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;
+		return this.luminancePass.getFullscreenMaterial().uniforms.threshold.value;
 
 	}
 
@@ -171,9 +179,57 @@ export class BloomEffect extends Effect {
 	 * @type {Number}
 	 */
 
-	set distinction(value = 1.0) {
+	set luminanceThreshold(value) {
 
-		this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
+		const material = this.luminancePass.getFullscreenMaterial();
+		material.uniforms.threshold.value = Math.min(Math.max(value, 0.0), 1.0);
+
+	}
+
+	/**
+	 * The smoothness of the luminance threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	get luminanceSmoothing() {
+
+		return this.luminancePass.getFullscreenMaterial().uniforms.smoothWidth.value;
+
+	}
+
+	/**
+	 * @type {Number}
+	 */
+
+	set luminanceSmoothing(value) {
+
+		const material = this.luminancePass.getFullscreenMaterial();
+		material.uniforms.smoothWidth.value = Math.min(Math.max(value, 0.0), 1.0);
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use luminanceThreshold instead.
+	 */
+
+	get distinction() {
+
+		console.warn(this.name, "The distinction field is deprecated, use luminanceThreshold and luminanceSmoothing instead.");
+
+		return 1.0;
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use luminanceThreshold instead.
+	 */
+
+	set distinction(value) {
+
+		console.warn(this.name, "The distinction field is deprecated, use luminanceThreshold and luminanceSmoothing instead.");
 
 	}
 
