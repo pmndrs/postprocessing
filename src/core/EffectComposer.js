@@ -208,7 +208,7 @@ export class EffectComposer {
 	createBuffer(depthBuffer, stencilBuffer) {
 
 		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
-		const alpha = this.renderer.context.getContextAttributes().alpha;
+		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
 			minFilter: LinearFilter,
@@ -239,7 +239,7 @@ export class EffectComposer {
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
+		pass.initialize(renderer, renderer.getContext().getContextAttributes().alpha);
 
 		if(index !== undefined) {
 
