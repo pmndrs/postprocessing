@@ -197,7 +197,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.NORMAL,
 			adaptive: true,
 			resolution: 256,
-			distinction: 2.0,
 			middleGrey: 0.6,
 			maxLuminance: 16.0,
 			averageLuminance: 1.0,
@@ -284,8 +283,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			pass.recompile();
 
 		});
-
-		f.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
 
 		f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(() => {
 

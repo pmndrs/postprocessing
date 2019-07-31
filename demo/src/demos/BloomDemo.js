@@ -243,7 +243,8 @@ export class BloomDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.SCREEN,
 			kernelSize: KernelSize.MEDIUM,
 			resolutionScale: 0.5,
-			distinction: 3.0
+			luminanceThreshold: 0.825,
+			luminanceSmoothing: 0.075
 		});
 
 		bloomEffect.blendMode.opacity.value = 2.3;
@@ -304,6 +305,10 @@ export class BloomDemo extends PostProcessingDemo {
 		const params = {
 			"resolution": effect.getResolutionScale(),
 			"kernel size": effect.kernelSize,
+			"luminance": {
+				"threshold": effect.luminanceThreshold,
+				"smoothing": effect.luminanceSmoothing
+			},
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -321,7 +326,19 @@ export class BloomDemo extends PostProcessingDemo {
 		});
 
 		const folder = menu.addFolder("Luminance");
-		folder.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
+
+		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.luminanceThreshold = Number.parseFloat(params.luminance.threshold);
+
+		});
+
+		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.luminanceSmoothing = Number.parseFloat(params.luminance.smoothing);
+
+		});
+
 		folder.open();
 
 		menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(() => {
