@@ -11,7 +11,7 @@ import vertexShader from "./glsl/common/shader.vert";
  * colours that are scaled with their respective luminance value. Additionally,
  * a range may be provided to mask out undesired texels.
  *
- * The alpha channel will remain unaffected in all cases.
+ * The alpha channel always contains the luminance value.
  *
  * On luminance coefficients:
  *  http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9
@@ -43,7 +43,8 @@ export class LuminanceMaterial extends ShaderMaterial {
 			uniforms: {
 
 				inputBuffer: new Uniform(null),
-				distinction: new Uniform(1.0),
+				threshold: new Uniform(0.0),
+				smoothWidth: new Uniform(1.0),
 				range: new Uniform(maskLuminance ? luminanceRange : new Vector2())
 
 			},
