@@ -324,7 +324,7 @@ export class EffectComposer {
 		let outputBuffer = this.outputBuffer;
 
 		let stencilTest = false;
-		let context, state, buffer;
+		let context, stencil, buffer;
 
 		for(const pass of this.passes) {
 
@@ -337,14 +337,13 @@ export class EffectComposer {
 					if(stencilTest) {
 
 						copyPass.renderToScreen = pass.renderToScreen;
-
-						context = renderer.context;
-						state = renderer.state;
+						context = renderer.getContext();
+						stencil = renderer.state.buffers.stencil;
 
 						// Preserve the unaffected pixels.
-						state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
 						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
-						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
 
