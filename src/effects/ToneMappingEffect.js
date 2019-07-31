@@ -124,6 +124,10 @@ export class ToneMappingEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial());
 
+		const luminanceMaterial = this.luminancePass.getFullscreenMaterial();
+		luminanceMaterial.uniforms.threshold.value = 0.0;
+		luminanceMaterial.uniforms.smoothWidth.value = 1.0;
+
 		/**
 		 * An adaptive luminance shader pass.
 		 *
