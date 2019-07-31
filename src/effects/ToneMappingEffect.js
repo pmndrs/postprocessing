@@ -2,6 +2,7 @@ import {
 	Color,
 	LinearFilter,
 	LinearMipMapLinearFilter,
+	LinearMipmapLinearFilter,
 	RGBFormat,
 	Uniform,
 	WebGLRenderTarget
@@ -71,11 +72,11 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Use RED format in WebGL 2.0.
+		 * @todo Use RED format in WebGL 2.0 and remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearMipMapLinearFilter,
+			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false,
