@@ -774,6 +774,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/effects/bloomeffect.js~bloomeffect#blurpass",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-blurPass",
+    "src/effects/BloomEffect.js~BloomEffect#blurPass",
+    "member"
+  ],
+  [
     "src/effects/bloomeffect.js~bloomeffect#constructor",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-constructor-constructor",
     "src/effects/BloomEffect.js~BloomEffect#constructor",
@@ -810,6 +816,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/bloomeffect.js~bloomeffect#height",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-height",
+    "src/effects/BloomEffect.js~BloomEffect#height",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#height",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-height",
+    "src/effects/BloomEffect.js~BloomEffect#height",
+    "member"
+  ],
+  [
     "src/effects/bloomeffect.js~bloomeffect#initialize",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-method-initialize",
     "src/effects/BloomEffect.js~BloomEffect#initialize",
@@ -825,6 +843,12 @@ window.esdocSearchIndex = [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#luminancematerial",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-luminanceMaterial",
+    "src/effects/BloomEffect.js~BloomEffect#luminanceMaterial",
     "member"
   ],
   [
@@ -850,6 +874,18 @@ window.esdocSearchIndex = [
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-method-update",
     "src/effects/BloomEffect.js~BloomEffect#update",
     "method"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#width",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-width",
+    "src/effects/BloomEffect.js~BloomEffect#width",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#width",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-width",
+    "src/effects/BloomEffect.js~BloomEffect#width",
+    "member"
   ],
   [
     "src/effects/bokeheffect.js",
@@ -1176,6 +1212,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/godrayseffect.js~godrayseffect#blurpass",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-member-blurPass",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#blurPass",
+    "member"
+  ],
+  [
     "src/effects/godrayseffect.js~godrayseffect#constructor",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-constructor-constructor",
     "src/effects/GodRaysEffect.js~GodRaysEffect#constructor",
@@ -1203,6 +1245,18 @@ window.esdocSearchIndex = [
     "src/effects/godrayseffect.js~godrayseffect#godraysmaterial",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-godRaysMaterial",
     "src/effects/GodRaysEffect.js~GodRaysEffect#godRaysMaterial",
+    "member"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#height",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-height",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#height",
+    "member"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#height",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-height",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#height",
     "member"
   ],
   [
@@ -1264,6 +1318,18 @@ window.esdocSearchIndex = [
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-method-update",
     "src/effects/GodRaysEffect.js~GodRaysEffect#update",
     "method"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#width",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-width",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#width",
+    "member"
+  ],
+  [
+    "src/effects/godrayseffect.js~godrayseffect#width",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-set-width",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#width",
+    "member"
   ],
   [
     "src/effects/grideffect.js",
@@ -1374,6 +1440,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#blurpass",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-blurPass",
+    "src/effects/OutlineEffect.js~OutlineEffect#blurPass",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#clearselection",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-clearSelection",
     "src/effects/OutlineEffect.js~OutlineEffect#clearSelection",
@@ -1408,6 +1480,18 @@ window.esdocSearchIndex = [
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-method-getResolutionScale",
     "src/effects/OutlineEffect.js~OutlineEffect#getResolutionScale",
     "method"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#height",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-height",
+    "src/effects/OutlineEffect.js~OutlineEffect#height",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#height",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-height",
+    "src/effects/OutlineEffect.js~OutlineEffect#height",
+    "member"
   ],
   [
     "src/effects/outlineeffect.js~outlineeffect#initialize",
@@ -1479,6 +1563,18 @@ window.esdocSearchIndex = [
     "src/effects/outlineeffect.js~outlineeffect#vertexshader",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-vertexShader",
     "src/effects/OutlineEffect.js~OutlineEffect#vertexShader",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#width",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-width",
+    "src/effects/OutlineEffect.js~OutlineEffect#width",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#width",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-width",
+    "src/effects/OutlineEffect.js~OutlineEffect#width",
     "member"
   ],
   [
@@ -2316,6 +2412,54 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/luminancematerial.js~luminancematerial#smoothing",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-smoothing",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#smoothing",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#smoothing",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-smoothing",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#smoothing",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#threshold",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-threshold",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#threshold",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#threshold",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-threshold",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#threshold",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#userange",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-useRange",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#useRange",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#userange",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-useRange",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#useRange",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#usethreshold",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-useThreshold",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#useThreshold",
+    "member"
+  ],
+  [
+    "src/materials/luminancematerial.js~luminancematerial#usethreshold",
+    "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-useThreshold",
+    "src/materials/LuminanceMaterial.js~LuminanceMaterial#useThreshold",
+    "member"
+  ],
+  [
     "src/materials/outlineedgesmaterial.js",
     "file/src/materials/OutlineEdgesMaterial.js.html",
     "src/materials/OutlineEdgesMaterial.js",
@@ -2418,6 +2562,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/blurpass.js~blurpass#getoriginalsize",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-method-getOriginalSize",
+    "src/passes/BlurPass.js~BlurPass#getOriginalSize",
+    "method"
+  ],
+  [
     "src/passes/blurpass.js~blurpass#getresolutionscale",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-getResolutionScale",
     "src/passes/BlurPass.js~BlurPass#getResolutionScale",
@@ -2426,6 +2576,12 @@ window.esdocSearchIndex = [
   [
     "src/passes/blurpass.js~blurpass#height",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-get-height",
+    "src/passes/BlurPass.js~BlurPass#height",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#height",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-height",
     "src/passes/BlurPass.js~BlurPass#height",
     "member"
   ],
@@ -2454,6 +2610,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/blurpass.js~blurpass#scale",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-get-scale",
+    "src/passes/BlurPass.js~BlurPass#scale",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#scale",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-scale",
+    "src/passes/BlurPass.js~BlurPass#scale",
+    "member"
+  ],
+  [
     "src/passes/blurpass.js~blurpass#setresolutionscale",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-setResolutionScale",
     "src/passes/BlurPass.js~BlurPass#setResolutionScale",
@@ -2469,6 +2637,18 @@ window.esdocSearchIndex = [
     "src/passes/blurpass.js~blurpass#width",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-get-width",
     "src/passes/BlurPass.js~BlurPass#width",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#width",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-set-width",
+    "src/passes/BlurPass.js~BlurPass#width",
+    "member"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass.auto_size",
+    "class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE",
+    "src/passes/BlurPass.js~BlurPass.AUTO_SIZE",
     "member"
   ],
   [

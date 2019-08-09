@@ -128,7 +128,7 @@
 amount of light emitted by a scene. It can also be configured to output
 colours that are scaled with their respective luminance value. Additionally,
 a range may be provided to mask out undesired texels.</p>
-<p>The alpha channel will remain unaffected in all cases.</p>
+<p>The alpha channel always contains the luminance value.</p>
 <p>On luminance coefficients:
  <a href="http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9">http://www.poynton.com/notes/colour_and_gamma/ColorFAQ.html#RTFToC9</a></p>
 <p>Coefficients for different colour spaces:
@@ -265,7 +265,7 @@ a range may be provided to mask out undesired texels.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use useRange instead.</div>
         
         <div data-ice="description"><p>Indicates whether luminance masking is enabled.</p>
 </div>
@@ -294,7 +294,7 @@ a range may be provided to mask out undesired texels.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use useRange instead.</div>
         
         <div data-ice="description"><p>Enables or disables luminance masking.</p>
 </div>
@@ -326,6 +326,238 @@ a range may be provided to mask out undesired texels.</p>
         
         
         
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-smoothing">smoothing</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The luminance threshold smoothing.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-smoothing">smoothing</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the luminance threshold smoothing.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-threshold">threshold</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The luminance threshold.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-threshold">threshold</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the luminance threshold.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-useRange">useRange</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether luminance masking is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-useRange">useRange</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables luminance masking.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-get-useThreshold">useThreshold</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether the luminance threshold is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html#instance-set-useThreshold">useThreshold</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables the luminance threshold.</p>
+</div>
       </div>
     </td>
     <td>
@@ -492,7 +724,7 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber146">source</a></span></span>
     </span>
   </h3>
 
@@ -536,7 +768,7 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber82">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber158">source</a></span></span>
     </span>
   </h3>
 
@@ -580,12 +812,12 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber216">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use useRange instead.</div>
   
   <div data-ice="description"><p>Indicates whether luminance masking is enabled.</p>
 </div>
@@ -624,12 +856,12 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber229">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use useRange instead.</div>
   
   <div data-ice="description"><p>Enables or disables luminance masking.</p>
 </div>
@@ -668,7 +900,7 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber86">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber136">source</a></span></span>
     </span>
   </h3>
 
@@ -676,6 +908,359 @@ a range may be provided to mask out undesired texels.</p>
   
   
   
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-smoothing">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">smoothing</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber96">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The luminance threshold smoothing.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-smoothing">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">smoothing</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber108">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the luminance threshold smoothing.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-threshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">threshold</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber72">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The luminance threshold.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-threshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">threshold</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber84">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the luminance threshold.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-useRange">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">useRange</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber187">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether luminance masking is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-useRange">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">useRange</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber201">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables luminance masking.</p>
+<p>If enabled, the threshold will be ignored.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-useThreshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">useThreshold</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber120">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the luminance threshold is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-useThreshold">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">useThreshold</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber132">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables the luminance threshold.</p>
+</div>
 
   
 
@@ -714,7 +1299,7 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
@@ -775,7 +1360,7 @@ a range may be provided to mask out undesired texels.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber138">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/LuminanceMaterial.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 

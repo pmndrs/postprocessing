@@ -374,7 +374,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-replaceRenderer">replaceRenderer</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>): <span>WebGLRenderer</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-replaceRenderer">replaceRenderer</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, updateDOM: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span>WebGLRenderer</span></span>
         </p>
       </div>
       <div>
@@ -559,7 +559,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber231">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
@@ -627,7 +627,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber204">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber208">source</a></span></span>
     </span>
   </h3>
 
@@ -711,7 +711,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber441">source</a></span></span>
     </span>
   </h3>
 
@@ -814,7 +814,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber282">source</a></span></span>
     </span>
   </h3>
 
@@ -875,7 +875,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber318">source</a></span></span>
     </span>
   </h3>
 
@@ -932,21 +932,23 @@ also deletes the main frame buffers of this composer.</p>
     
     
     
-    <span class="code" data-ice="name">replaceRenderer</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>): <span>WebGLRenderer</span></span>
+    <span class="code" data-ice="name">replaceRenderer</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, updateDOM: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>): <span>WebGLRenderer</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber134">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber138">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Replaces the current renderer with the given one. The DOM element of the
-current renderer will automatically be removed from its parent node and the
-DOM element of the new renderer will take its place.</p>
-<p>The auto clear mechanism of the provided renderer will be disabled.</p>
+  <div data-ice="description"><p>Replaces the current renderer with the given one.</p>
+<p>The auto clear mechanism of the provided renderer will be disabled. If the
+new render size differs from the previous one, all passes will be updated.</p>
+<p>By default, the DOM element of the current renderer will automatically be
+removed from its parent node and the DOM element of the new renderer will
+take its place.</p>
 </div>
 
   
@@ -964,6 +966,13 @@ DOM element of the new renderer will take its place.</p>
       <td data-ice="type" class="code"><span>WebGLRenderer</span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The new renderer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">updateDOM</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>Indicates whether the old canvas should be replaced by the new one in the DOM.</p>
 </td>
     </tr>
 </tbody>
@@ -1013,7 +1022,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber414">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber417">source</a></span></span>
     </span>
   </h3>
 
@@ -1057,7 +1066,7 @@ DOM element of the new renderer will take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber385">source</a></span></span>
     </span>
   </h3>
 
