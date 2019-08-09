@@ -214,6 +214,7 @@ export class BloomEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -224,6 +225,7 @@ export class BloomEffect extends Effect {
 
 	/**
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	set kernelSize(value) {
