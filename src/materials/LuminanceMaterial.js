@@ -63,6 +63,54 @@ export class LuminanceMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The luminance threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	get threshold() {
+
+		return this.uniforms.threshold.value;
+
+	}
+
+	/**
+	 * Sets the luminance threshold.
+	 *
+	 * @type {Number}
+	 */
+
+	set threshold(value) {
+
+		this.uniforms.threshold.value = value;
+
+	}
+
+	/**
+	 * The luminance threshold smoothing.
+	 *
+	 * @type {Number}
+	 */
+
+	get smoothing() {
+
+		return this.uniforms.smoothing.value;
+
+	}
+
+	/**
+	 * Sets the luminance threshold smoothing.
+	 *
+	 * @type {Number}
+	 */
+
+	set smoothing(value) {
+
+		this.uniforms.smoothing.value = value;
+
+	}
+
+	/**
 	 * Indicates whether color output is enabled.
 	 *
 	 * @type {Boolean}
