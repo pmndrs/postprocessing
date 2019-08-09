@@ -55,7 +55,9 @@ export class GodRaysEffect extends Effect {
 	 * @param {Number} [options.weight=0.4] - A light ray weight factor.
 	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
 	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the screen render size.
+	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
+	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
@@ -69,6 +71,8 @@ export class GodRaysEffect extends Effect {
 		exposure = 0.6,
 		clampMax = 1.0,
 		resolutionScale = 0.5,
+		width = BlurPass.AUTO_SIZE,
+		height = BlurPass.AUTO_SIZE,
 		kernelSize = KernelSize.SMALL,
 		blur = true
 	} = {}) {
@@ -121,15 +125,6 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.screenPosition = new Vector2();
-
-		/**
-		 * The original resolution.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.resolution = new Vector2();
 
 		/**
 		 * A render target.
@@ -190,13 +185,14 @@ export class GodRaysEffect extends Effect {
 		this.clearPass = new ClearPass(true, false, false);
 
 		/**
-		 * A blur pass.
+		 * A blur pass that reduces aliasing artifacts and makes the light softer.
+		 *
+		 * Disable this pass to improve performance.
 		 *
 		 * @type {BlurPass}
-		 * @private
 		 */
 
-		this.blurPass = new BlurPass({ resolutionScale, kernelSize });
+		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
 
 		/**
 		 * A depth mask pass.
@@ -260,6 +256,70 @@ export class GodRaysEffect extends Effect {
 	}
 
 	/**
+	 * The current width of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get width() {
+
+		return this.blurPass.width;
+
+	}
+
+	/**
+	 * Sets the render width.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render height and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set width(value) {
+
+		const blurPass = this.blurPass;
+		blurPass.width = value;
+
+		this.renderTargetX.setSize(blurPass.width, blurPass.height);
+		this.renderTargetY.setSize(blurPass.width, blurPass.height);
+		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+
+	}
+
+	/**
+	 * The current height of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get height() {
+
+		return this.blurPass.height;
+
+	}
+
+	/**
+	 * Sets the render height.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render width and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set height(value) {
+
+		const blurPass = this.blurPass;
+		blurPass.height = value;
+
+		this.renderTargetX.setSize(blurPass.width, blurPass.height);
+		this.renderTargetY.setSize(blurPass.width, blurPass.height);
+		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
@@ -312,6 +372,7 @@ export class GodRaysEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -324,6 +385,7 @@ export class GodRaysEffect extends Effect {
 	 * Sets the blur kernel size.
 	 *
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	set kernelSize(value) {
@@ -336,6 +398,7 @@ export class GodRaysEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
+	 * @deprecated Adjust the width or height instead.
 	 */
 
 	getResolutionScale() {
@@ -348,12 +411,14 @@ export class GodRaysEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
+	 * @deprecated Adjust the width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
+		const originalSize = this.blurPass.getOriginalSize();
 		this.blurPass.setResolutionScale(scale);
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(originalSize.x, originalSize.y);
 
 	}
 
@@ -479,10 +544,9 @@ export class GodRaysEffect extends Effect {
 
 	setSize(width, height) {
 
-		this.resolution.set(width, height);
+		this.blurPass.setSize(width, height);
 
 		this.renderPassLight.setSize(width, height);
-		this.blurPass.setSize(width, height);
 		this.depthMaskPass.setSize(width, height);
 		this.godRaysPass.setSize(width, height);
 
@@ -504,8 +568,8 @@ export class GodRaysEffect extends Effect {
 
 	initialize(renderer, alpha) {
 
-		this.renderPassLight.initialize(renderer, alpha);
 		this.blurPass.initialize(renderer, alpha);
+		this.renderPassLight.initialize(renderer, alpha);
 		this.depthMaskPass.initialize(renderer, alpha);
 		this.godRaysPass.initialize(renderer, alpha);
 

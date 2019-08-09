@@ -1,17 +1,15 @@
 import {
 	AmbientLight,
-	BufferAttribute,
-	BufferGeometry,
 	CubeTextureLoader,
 	CylinderBufferGeometry,
 	FogExp2,
 	Mesh,
+	MeshBasicMaterial,
 	MeshPhongMaterial,
 	PerspectiveCamera,
 	PointLight,
-	Points,
-	PointsMaterial,
 	TextureLoader,
+	SphereBufferGeometry,
 	TorusBufferGeometry,
 	Vector2,
 	WebGLRenderer
@@ -258,7 +256,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		// Lights.
 
 		const ambientLight = new AmbientLight(0x666666);
-		const pointLight = new PointLight(0xffbbaa, 4, 10);
+		const pointLight = new PointLight(0xffbbaa, 5.5, 12);
 
 		scene.add(ambientLight);
 		scene.add(pointLight);
@@ -295,23 +293,16 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		// Sun.
 
-		const sunMaterial = new PointsMaterial({
-			map: assets.get("sun-diffuse"),
-			size: 5,
-			sizeAttenuation: true,
+		const sunMaterial = new MeshBasicMaterial({
 			color: 0xffddaa,
-			alphaTest: 0,
 			transparent: true,
 			fog: false
 		});
 
-		const sunGeometry = new BufferGeometry();
-		sunGeometry.addAttribute("position", new BufferAttribute(new Float32Array(3), 3));
-		const sun = new Points(sunGeometry, sunMaterial);
+		const sunGeometry = new SphereBufferGeometry(0.65, 32, 32);
+		const sun = new Mesh(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
-
 		this.sun = sun;
-		scene.add(sun);
 
 		// Passes.
 
@@ -322,15 +313,17 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.SCREEN,
-			resolutionScale: 1.0,
-			distinction: 2.0
+			kernelSize: KernelSize.MEDIUM,
+			luminanceThreshold: 0.825,
+			luminanceSmoothing: 0.075,
+			height: 480
 		});
 
 		const godRaysEffect = new GodRaysEffect(camera, sun, {
-			resolutionScale: 1.0,
 			kernelSize: KernelSize.SMALL,
+			height: 720,
 			density: 0.96,
-			decay: 0.93,
+			decay: 0.92,
 			weight: 0.3,
 			exposure: 0.55,
 			samples: 60,
@@ -365,7 +358,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		godRaysEffect.dithering = true;
 
-		bloomEffect.blendMode.opacity.value = 2.0;
+		bloomEffect.blendMode.opacity.value = 2.3;
 		colorAverageEffect.blendMode.opacity.value = 0.01;
 		sepiaEffect.blendMode.opacity.value = 0.01;
 		dotScreenEffect.blendMode.opacity.value = 0.01;
@@ -438,6 +431,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		}
 
 		this.sun.position.set(0, 2.5, Math.sin(this.acc1 * 0.4) * 8);
+		this.sun.updateWorldMatrix(true, false);
 		this.light.position.copy(this.sun.position);
 
 		super.render(delta);

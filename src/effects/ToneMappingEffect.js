@@ -2,6 +2,7 @@ import {
 	Color,
 	LinearFilter,
 	LinearMipMapLinearFilter,
+	LinearMipmapLinearFilter,
 	RGBFormat,
 	Uniform,
 	WebGLRenderTarget
@@ -35,7 +36,6 @@ export class ToneMappingEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Boolean} [options.adaptive=true] - Whether the tone mapping should use an adaptive luminance map.
 	 * @param {Number} [options.resolution=256] - The render texture resolution of the luminance map.
-	 * @param {Number} [options.distinction=1.0] - A luminance distinction factor.
 	 * @param {Number} [options.middleGrey=0.6] - The middle grey factor.
 	 * @param {Number} [options.maxLuminance=16.0] - The maximum luminance.
 	 * @param {Number} [options.averageLuminance=1.0] - The average luminance.
@@ -46,7 +46,6 @@ export class ToneMappingEffect extends Effect {
 		blendFunction = BlendFunction.NORMAL,
 		adaptive = true,
 		resolution = 256,
-		distinction = 1.0,
 		middleGrey = 0.6,
 		maxLuminance = 16.0,
 		averageLuminance = 1.0,
@@ -71,11 +70,11 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Use RED format in WebGL 2.0.
+		 * @todo Use RED format in WebGL 2.0 and remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
-			minFilter: LinearMipMapLinearFilter,
+			minFilter: (LinearMipmapLinearFilter !== undefined) ? LinearMipmapLinearFilter : LinearMipMapLinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false,
@@ -125,6 +124,10 @@ export class ToneMappingEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial());
 
+		const luminanceMaterial = this.luminancePass.getFullscreenMaterial();
+		luminanceMaterial.uniforms.threshold.value = 0.0;
+		luminanceMaterial.uniforms.smoothing.value = 1.0;
+
 		/**
 		 * An adaptive luminance shader pass.
 		 *
@@ -135,7 +138,6 @@ export class ToneMappingEffect extends Effect {
 		this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
 
 		this.adaptationRate = adaptationRate;
-		this.distinction = distinction;
 		this.resolution = resolution;
 		this.adaptive = adaptive;
 
@@ -234,24 +236,26 @@ export class ToneMappingEffect extends Effect {
 	}
 
 	/**
-	 * The luminance distinction factor.
-	 *
 	 * @type {Number}
+	 * @deprecated
 	 */
 
 	get distinction() {
 
-		return this.luminancePass.getFullscreenMaterial().uniforms.distinction.value;
+		console.warn(this.name, "The distinction field has been removed.");
+
+		return 1.0;
 
 	}
 
 	/**
 	 * @type {Number}
+	 * @deprecated
 	 */
 
-	set distinction(value = 1.0) {
+	set distinction(value) {
 
-		this.luminancePass.getFullscreenMaterial().uniforms.distinction.value = value;
+		console.warn(this.name, "The distinction field has been removed.");
 
 	}
 

@@ -30,7 +30,10 @@ export class ClearMaskPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		renderer.state.buffers.stencil.setTest(false);
+		const stencil = renderer.state.buffers.stencil;
+
+		stencil.setLocked(false);
+		stencil.setTest(false);
 
 	}
 

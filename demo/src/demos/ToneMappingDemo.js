@@ -197,7 +197,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.NORMAL,
 			adaptive: true,
 			resolution: 256,
-			distinction: 2.0,
 			middleGrey: 0.6,
 			maxLuminance: 16.0,
 			averageLuminance: 1.0,
@@ -258,22 +257,20 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"resolution": Math.log2(effect.resolution),
+			"resolution": effect.resolution,
 			"adaptation rate": effect.adaptationRate,
 			"average lum": effect.uniforms.get("averageLuminance").value,
 			"max lum": effect.uniforms.get("maxLuminance").value,
 			"middle grey": effect.uniforms.get("middleGrey").value,
 			"opacity": blendMode.opacity.value,
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(6).max(11).step(1).onChange(() => {
+		menu.add(params, "resolution", [64, 128, 256, 512, 1024]).onChange(() => {
 
-			effect.resolution = Math.pow(2, params.resolution);
-			pass.recompile();
+			effect.resolution = Number.parseInt(params.resolution);
 
 		});
 
@@ -284,8 +281,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 			pass.recompile();
 
 		});
-
-		f.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
 
 		f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(() => {
 
@@ -319,9 +314,9 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
 			pass.recompile();
 
 		});

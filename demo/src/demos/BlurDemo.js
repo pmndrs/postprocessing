@@ -208,7 +208,9 @@ export class BlurDemo extends PostProcessingDemo {
 		// Passes.
 
 		const savePass = new SavePass();
-		const blurPass = new BlurPass();
+		const blurPass = new BlurPass({
+			height: 480
+		});
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 		const textureEffect = new TextureEffect({
@@ -279,16 +281,16 @@ export class BlurDemo extends PostProcessingDemo {
 
 		const params = {
 			"enabled": blurPass.enabled,
-			"resolution": blurPass.getResolutionScale(),
+			"resolution": blurPass.height,
 			"kernel size": blurPass.kernelSize,
 			"scale": blurPass.scale,
 			"opacity": 1.0 - blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			blurPass.setResolutionScale(params.resolution);
+			blurPass.height = Number.parseInt(params.resolution);
 
 		});
 

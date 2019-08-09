@@ -85,7 +85,7 @@ export class NormalPass extends Pass {
 		 * @private
 		 */
 
-		this.resolution = new Vector2();
+		this.originalSize = new Vector2();
 
 	}
 
@@ -110,7 +110,7 @@ export class NormalPass extends Pass {
 	setResolutionScale(scale) {
 
 		this.resolutionScale = scale;
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(this.originalSize.x, this.originalSize.y);
 
 	}
 
@@ -140,11 +140,11 @@ export class NormalPass extends Pass {
 
 	setSize(width, height) {
 
-		this.resolution.set(width, height);
+		this.originalSize.set(width, height);
 
 		this.renderTarget.setSize(
-			Math.max(1, Math.floor(width * this.resolutionScale)),
-			Math.max(1, Math.floor(height * this.resolutionScale))
+			Math.max(1, Math.round(width * this.resolutionScale)),
+			Math.max(1, Math.round(height * this.resolutionScale))
 		);
 
 	}

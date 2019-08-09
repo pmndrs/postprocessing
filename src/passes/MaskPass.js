@@ -78,8 +78,8 @@ export class MaskPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		const context = renderer.context;
-		const state = renderer.state;
+		const context = renderer.getContext();
+		const buffers = renderer.state.buffers;
 
 		const scene = this.scene;
 		const camera = this.camera;
@@ -89,18 +89,19 @@ export class MaskPass extends Pass {
 		const clearValue = 1 - writeValue;
 
 		// Don't update color or depth.
-		state.buffers.color.setMask(false);
-		state.buffers.depth.setMask(false);
+		buffers.color.setMask(false);
+		buffers.depth.setMask(false);
 
 		// Lock the buffers.
-		state.buffers.color.setLocked(true);
-		state.buffers.depth.setLocked(true);
+		buffers.color.setLocked(true);
+		buffers.depth.setLocked(true);
 
 		// Configure the stencil.
-		state.buffers.stencil.setTest(true);
-		state.buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);
-		state.buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
-		state.buffers.stencil.setClear(clearValue);
+		buffers.stencil.setTest(true);
+		buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);
+		buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
+		buffers.stencil.setClear(clearValue);
+		buffers.stencil.setLocked(true);
 
 		// Clear the stencil.
 		if(this.clear) {
@@ -134,12 +135,14 @@ export class MaskPass extends Pass {
 		}
 
 		// Unlock the buffers.
-		state.buffers.color.setLocked(false);
-		state.buffers.depth.setLocked(false);
+		buffers.color.setLocked(false);
+		buffers.depth.setLocked(false);
 
 		// Only render where the stencil is set to 1.
-		state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
-		state.buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
+		buffers.stencil.setLocked(false);
+		buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+		buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
+		buffers.stencil.setLocked(true);
 
 	}
 

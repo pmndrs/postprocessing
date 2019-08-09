@@ -242,8 +242,10 @@ export class BloomDemo extends PostProcessingDemo {
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.SCREEN,
 			kernelSize: KernelSize.MEDIUM,
-			resolutionScale: 0.5,
-			distinction: 3.0
+			useLuminanceFilter: true,
+			luminanceThreshold: 0.825,
+			luminanceSmoothing: 0.075,
+			height: 480
 		});
 
 		bloomEffect.blendMode.opacity.value = 2.3;
@@ -302,26 +304,49 @@ export class BloomDemo extends PostProcessingDemo {
 		const blendMode = effect.blendMode;
 
 		const params = {
-			"resolution": effect.getResolutionScale(),
-			"kernel size": effect.kernelSize,
+			"resolution": effect.height,
+			"kernel size": effect.blurPass.kernelSize,
+			"scale": effect.blurPass.scale,
+			"luminance": {
+				"threshold": effect.luminanceMaterial.threshold,
+				"smoothing": effect.luminanceMaterial.smoothing
+			},
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effect.setResolutionScale(params.resolution);
+			effect.height = Number.parseInt(params.resolution);
 
 		});
 
 		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			effect.kernelSize = Number.parseInt(params["kernel size"]);
+			effect.blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+
+		});
+
+		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			effect.blurPass.scale = Number.parseFloat(params.scale);
 
 		});
 
 		const folder = menu.addFolder("Luminance");
-		folder.add(effect, "distinction").min(1.0).max(10.0).step(0.1);
+
+		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.luminanceMaterial.threshold = Number.parseFloat(params.luminance.threshold);
+
+		});
+
+		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			effect.luminanceMaterial.smoothing = Number.parseFloat(params.luminance.smoothing);
+
+		});
+
 		folder.open();
 
 		menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(() => {

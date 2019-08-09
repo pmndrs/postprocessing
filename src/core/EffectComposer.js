@@ -131,7 +131,7 @@ export class EffectComposer {
 	 * take its place.
 	 *
 	 * @param {WebGLRenderer} renderer - The new renderer.
-	 * @param {Boolean} updateDOM - Indicates whether the DOM elements of the renderers should be swapped as well.
+	 * @param {Boolean} updateDOM - Indicates whether the old canvas should be replaced by the new one in the DOM.
 	 * @return {WebGLRenderer} The old renderer.
 	 */
 
@@ -208,7 +208,7 @@ export class EffectComposer {
 	createBuffer(depthBuffer, stencilBuffer) {
 
 		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
-		const alpha = this.renderer.context.getContextAttributes().alpha;
+		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
 			minFilter: LinearFilter,
@@ -239,7 +239,7 @@ export class EffectComposer {
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		pass.initialize(renderer, renderer.context.getContextAttributes().alpha);
+		pass.initialize(renderer, renderer.getContext().getContextAttributes().alpha);
 
 		if(index !== undefined) {
 
@@ -324,7 +324,7 @@ export class EffectComposer {
 		let outputBuffer = this.outputBuffer;
 
 		let stencilTest = false;
-		let context, state, buffer;
+		let context, stencil, buffer;
 
 		for(const pass of this.passes) {
 
@@ -337,14 +337,13 @@ export class EffectComposer {
 					if(stencilTest) {
 
 						copyPass.renderToScreen = pass.renderToScreen;
-
-						context = renderer.context;
-						state = renderer.state;
+						context = renderer.getContext();
+						stencil = renderer.state.buffers.stencil;
 
 						// Preserve the unaffected pixels.
-						state.buffers.stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+						stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
 						copyPass.render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest);
-						state.buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+						stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 
 					}
 
