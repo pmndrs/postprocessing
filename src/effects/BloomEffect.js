@@ -188,6 +188,7 @@ export class BloomEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.dithering instead.
 	 */
 
 	get dithering() {
@@ -200,6 +201,7 @@ export class BloomEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use blurPass.dithering instead.
 	 */
 
 	set dithering(value) {
