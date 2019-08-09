@@ -3,7 +3,7 @@
 uniform sampler2D inputBuffer;
 uniform vec2 range;
 uniform float threshold;
-uniform float smoothWidth;
+uniform float smoothing;
 
 varying vec2 vUv;
 
@@ -22,7 +22,7 @@ void main() {
 
 	#else
 
-		l = smoothstep(threshold, threshold + smoothWidth, l);
+		l = smoothstep(threshold, threshold + smoothing, l);
 
 	#endif
 
