@@ -1,9 +1,17 @@
 #include <common>
 
 uniform sampler2D inputBuffer;
-uniform vec2 range;
-uniform float threshold;
-uniform float smoothing;
+
+#ifdef RANGE
+
+	uniform vec2 range;
+
+#elif defined(THRESHOLD)
+
+	uniform float threshold;
+	uniform float smoothing;
+
+#endif
 
 varying vec2 vUv;
 
@@ -20,7 +28,7 @@ void main() {
 
 		l *= low * high;
 
-	#else
+	#elif defined(THRESHOLD)
 
 		l = smoothstep(threshold, threshold + smoothing, l);
 
