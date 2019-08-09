@@ -257,22 +257,20 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
-		const blendFunctions = Object.keys(BlendFunction).map((value) => value.toLowerCase());
 
 		const params = {
-			"resolution": Math.log2(effect.resolution),
+			"resolution": effect.resolution,
 			"adaptation rate": effect.adaptationRate,
 			"average lum": effect.uniforms.get("averageLuminance").value,
 			"max lum": effect.uniforms.get("maxLuminance").value,
 			"middle grey": effect.uniforms.get("middleGrey").value,
 			"opacity": blendMode.opacity.value,
-			"blend mode": blendFunctions[blendMode.blendFunction]
+			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(6).max(11).step(1).onChange(() => {
+		menu.add(params, "resolution", [64, 128, 256, 512, 1024]).onChange(() => {
 
-			effect.resolution = Math.pow(2, params.resolution);
-			pass.recompile();
+			effect.resolution = Number.parseInt(params.resolution);
 
 		});
 
@@ -316,9 +314,9 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "blend mode", blendFunctions).onChange(() => {
+		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = blendFunctions.indexOf(params["blend mode"]);
+			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
 			pass.recompile();
 
 		});

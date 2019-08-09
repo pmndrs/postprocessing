@@ -349,6 +349,8 @@ export class OutlineDemo extends PostProcessingDemo {
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
 			hiddenEdgeColor: 0x22090a,
+			resolutionScale: 1.0,
+			height: 480,
 			blur: false,
 			xRay: true
 		});
@@ -385,7 +387,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		const blendMode = effect.blendMode;
 
 		const params = {
-			"resolution": effect.getResolutionScale(),
+			"resolution": effect.height,
 			"blurriness": 0,
 			"use pattern": false,
 			"pattern scale": 60.0,
@@ -398,9 +400,9 @@ export class OutlineDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "resolution").min(0.01).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effect.setResolutionScale(params.resolution);
+			effect.height = Number.parseInt(params.resolution);
 
 		});
 
@@ -409,7 +411,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
 
 			effect.blur = (params.blurriness > 0);
-			effect.kernelSize = params.blurriness - 1;
+			effect.blurPass.kernelSize = params.blurriness - 1;
 
 		});
 
