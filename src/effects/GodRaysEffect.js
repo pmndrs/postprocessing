@@ -372,6 +372,7 @@ export class GodRaysEffect extends Effect {
 	 * The blur kernel size.
 	 *
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	get kernelSize() {
@@ -384,6 +385,7 @@ export class GodRaysEffect extends Effect {
 	 * Sets the blur kernel size.
 	 *
 	 * @type {KernelSize}
+	 * @deprecated Use blurPass.kernelSize instead.
 	 */
 
 	set kernelSize(value) {
