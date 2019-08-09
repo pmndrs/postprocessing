@@ -66,6 +66,7 @@ export class BlurPass extends Pass {
 		 * The current main render size.
 		 *
 		 * @type {Vector2}
+		 * @private
 		 */
 
 		this.originalSize = new Vector2();
@@ -233,6 +234,19 @@ export class BlurPass extends Pass {
 
 		this.convolutionMaterial.kernelSize = value;
 		this.ditheredConvolutionMaterial.kernelSize = value;
+
+	}
+
+	/**
+	 * Returns the original resolution.
+	 *
+	 * @return {Vector2} The original resolution received via {@link setSize}.
+	 * @deprecated Added for internal use only.
+	 */
+
+	getOriginalSize() {
+
+		return this.originalSize;
 
 	}
 

@@ -476,9 +476,10 @@ export class OutlineEffect extends Effect {
 
 	setResolutionScale(scale) {
 
+		const originalSize = this.blurPass.getOriginalSize();
 		this.blurPass.setResolutionScale(scale);
 		this.depthPass.setResolutionScale(scale);
-		this.setSize(this.blurPass.originalSize.x, this.blurPass.originalSize.y);
+		this.setSize(originalSize.x, originalSize.y);
 
 	}
 
