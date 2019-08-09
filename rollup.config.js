@@ -34,7 +34,6 @@ const lib = {
 		}, {
 			file: pkg.main,
 			format: "esm",
-			banner: banner,
 			globals: globals
 		}, {
 			file: pkg.main.replace(".js", ".min.js"),
