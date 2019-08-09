@@ -26,7 +26,6 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.SCREEN] - The blend function of this effect.
-	 * @param {Number} [options.useLuminanceFilter=true] - Determines whether a luminance filter should be applied to the input colors.
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
@@ -37,7 +36,6 @@ export class BloomEffect extends Effect {
 
 	constructor({
 		blendFunction = BlendFunction.SCREEN,
-		useLuminanceFilter = true,
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
 		resolutionScale = 0.5,
@@ -92,11 +90,11 @@ export class BloomEffect extends Effect {
 		 * You may disable this pass to deactivate luminance filtering.
 		 *
 		 * @type {ShaderPass}
+		 * @private
 		 */
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
 
-		this.luminancePass.enabled = useLuminanceFilter;
 		this.luminanceMaterial.threshold = luminanceThreshold;
 		this.luminanceMaterial.smoothing = luminanceSmoothing;
 
@@ -287,7 +285,6 @@ export class BloomEffect extends Effect {
 		blurPass.setResolutionScale(scale);
 		this.renderTarget.setSize(blurPass.width, blurPass.height);
 
-
 	}
 
 	/**
@@ -302,16 +299,8 @@ export class BloomEffect extends Effect {
 
 		const renderTarget = this.renderTarget;
 
-		if(this.luminancePass.enabled) {
-
-			this.luminancePass.render(renderer, inputBuffer, renderTarget);
-			this.blurPass.render(renderer, renderTarget, renderTarget);
-
-		} else {
-
-			this.blurPass.render(renderer, inputBuffer, renderTarget);
-
-		}
+		this.luminancePass.render(renderer, inputBuffer, renderTarget);
+		this.blurPass.render(renderer, renderTarget, renderTarget);
 
 	}
 
