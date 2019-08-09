@@ -78,6 +78,9 @@ export class BloomEffect extends Effect {
 		/**
 		 * A blur pass.
 		 *
+		 * Do not adjust the width or height of this pass directly. Use
+		 * {@link width} or {@link height} instead.
+		 *
 		 * @type {BlurPass}
 		 */
 
