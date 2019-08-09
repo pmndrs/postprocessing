@@ -101,6 +101,7 @@ export class MaskPass extends Pass {
 		buffers.stencil.setOp(context.REPLACE, context.REPLACE, context.REPLACE);
 		buffers.stencil.setFunc(context.ALWAYS, writeValue, 0xffffffff);
 		buffers.stencil.setClear(clearValue);
+		buffers.stencil.setLocked(true);
 
 		// Clear the stencil.
 		if(this.clear) {
@@ -138,8 +139,10 @@ export class MaskPass extends Pass {
 		buffers.depth.setLocked(false);
 
 		// Only render where the stencil is set to 1.
+		buffers.stencil.setLocked(false);
 		buffers.stencil.setFunc(context.EQUAL, 1, 0xffffffff);
 		buffers.stencil.setOp(context.KEEP, context.KEEP, context.KEEP);
+		buffers.stencil.setLocked(true);
 
 	}
 
