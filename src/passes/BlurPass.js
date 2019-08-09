@@ -21,11 +21,18 @@ export class BlurPass extends Pass {
 	 * Constructs a new blur pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=0.5] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
+	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The blur render width.
+	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The blur render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
-	constructor({ resolutionScale = 0.5, kernelSize = KernelSize.LARGE } = {}) {
+	constructor({
+		resolutionScale = 0.5,
+		width = BlurPass.AUTO_SIZE,
+		height = BlurPass.AUTO_SIZE,
+		kernelSize = KernelSize.LARGE
+	} = {}) {
 
 		super("BlurPass");
 
@@ -56,19 +63,28 @@ export class BlurPass extends Pass {
 		this.renderTargetY.texture.name = "Blur.TargetY";
 
 		/**
-		 * The original resolution.
+		 * The current main render size.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.originalSize = new Vector2();
+
+		/**
+		 * The absolute render resolution.
 		 *
 		 * @type {Vector2}
 		 * @private
 		 */
 
-		this.resolution = new Vector2();
+		this.resolution = new Vector2(width, height);
 
 		/**
 		 * The current resolution scale.
 		 *
 		 * @type {Number}
 		 * @private
+		 * @deprecated
 		 */
 
 		this.resolutionScale = resolutionScale;
@@ -105,7 +121,7 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * The absolute width of the internal render targets.
+	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
 	 */
@@ -117,7 +133,23 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * The absolute height of the internal render targets.
+	 * Sets the render width.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render height and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set width(value) {
+
+		this.resolution.x = value;
+		this.setSize(this.originalSize.x, this.originalSize.y);
+
+	}
+
+	/**
+	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
 	 */
@@ -125,6 +157,22 @@ export class BlurPass extends Pass {
 	get height() {
 
 		return this.renderTargetX.height;
+
+	}
+
+	/**
+	 * Sets the render height.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render width and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set height(value) {
+
+		this.resolution.y = value;
+		this.setSize(this.originalSize.x, this.originalSize.y);
 
 	}
 
@@ -146,9 +194,9 @@ export class BlurPass extends Pass {
 	 * This value influences the overall blur strength and should not be greater
 	 * than 1. For larger blurs please increase the {@link kernelSize}!
 	 *
-	 * Note that the blur strength is closely tied to the resolution scale.
-	 * For a smooth transition from no blur to full blur, set the resolution scale
-	 * to 1 or adjust it based on the blur scale.
+	 * Note that the blur strength is closely tied to the resolution. For a smooth
+	 * transition from no blur to full blur, set the width or the height to a high
+	 * enough value.
 	 *
 	 * @type {Number}
 	 */
@@ -175,6 +223,9 @@ export class BlurPass extends Pass {
 	/**
 	 * Sets the kernel size.
 	 *
+	 * Larger kernels require more processing power but scale well with larger
+	 * render resolutions.
+	 *
 	 * @type {KernelSize}
 	 */
 
@@ -189,6 +240,7 @@ export class BlurPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
+	 * @deprecated Adjust the width or height instead.
 	 */
 
 	getResolutionScale() {
@@ -201,12 +253,13 @@ export class BlurPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
+	 * @deprecated Adjust the width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
 		this.resolutionScale = scale;
-		this.setSize(this.resolution.x, this.resolution.y);
+		this.setSize(this.originalSize.x, this.originalSize.y);
 
 	}
 
@@ -278,10 +331,32 @@ export class BlurPass extends Pass {
 
 	setSize(width, height) {
 
-		this.resolution.set(width, height);
+		const resolution = this.resolution;
+		const aspect = width / height;
 
-		width = Math.max(1, Math.floor(width * this.resolutionScale));
-		height = Math.max(1, Math.floor(height * this.resolutionScale));
+		this.originalSize.set(width, height);
+
+		if(resolution.x !== AUTO_SIZE && resolution.y !== AUTO_SIZE) {
+
+			width = Math.max(1, resolution.x);
+			height = Math.max(1, resolution.y);
+
+		} else if(resolution.x !== AUTO_SIZE) {
+
+			width = Math.max(1, resolution.x);
+			height = Math.round(Math.max(1, resolution.y) / aspect);
+
+		} else if(resolution.y !== AUTO_SIZE) {
+
+			width = Math.round(Math.max(1, resolution.y) * aspect);
+			height = Math.max(1, resolution.y);
+
+		} else {
+
+			width = Math.max(1, Math.round(width * this.resolutionScale));
+			height = Math.max(1, Math.round(height * this.resolutionScale));
+
+		}
 
 		this.renderTargetX.setSize(width, height);
 		this.renderTargetY.setSize(width, height);
