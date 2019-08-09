@@ -3,9 +3,16 @@ import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Pass } from "./Pass.js";
 
 /**
- * An efficient, incremental blur pass.
+ * An auto sizing constant.
  *
- * Note: This pass allows the input and output buffer to be the same.
+ * @type {Number}
+ * @private
+ */
+
+const AUTO_SIZE = -1;
+
+/**
+ * An efficient, incremental blur pass.
  */
 
 export class BlurPass extends Pass {
@@ -299,6 +306,22 @@ export class BlurPass extends Pass {
 			this.renderTargetY.texture.format = RGBFormat;
 
 		}
+
+	}
+
+	/**
+	 * An auto sizing flag that can be used for the render {@link width} and
+	 * {@link height}.
+	 *
+	 * It's recommended to set the height or the width to an absolute value for
+	 * consistent blur results across different devices and resolutions.
+	 *
+	 * @type {Number}
+	 */
+
+	static get AUTO_SIZE() {
+
+		return AUTO_SIZE;
 
 	}
 
