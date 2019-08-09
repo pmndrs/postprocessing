@@ -131,7 +131,7 @@ export class EffectComposer {
 	 * take its place.
 	 *
 	 * @param {WebGLRenderer} renderer - The new renderer.
-	 * @param {Boolean} updateDOM - Indicates whether the DOM elements of the renderers should be swapped as well.
+	 * @param {Boolean} updateDOM - Indicates whether the old canvas should be replaced by the new one in the DOM.
 	 * @return {WebGLRenderer} The old renderer.
 	 */
 
