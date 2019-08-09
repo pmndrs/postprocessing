@@ -34,7 +34,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	constructor(colorOutput = false, luminanceRange = null) {
 
-		const maskLuminance = (luminanceRange !== null);
+		const useRange = (luminanceRange !== null);
 
 		super({
 
@@ -45,7 +45,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),
 				smoothing: new Uniform(1.0),
-				range: new Uniform(maskLuminance ? luminanceRange : new Vector2())
+				range: new Uniform(useRange ? luminanceRange : new Vector2())
 
 			},
 
@@ -58,7 +58,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 		});
 
 		this.colorOutput = colorOutput;
-		this.luminanceRange = maskLuminance;
+		this.useRange = useRange;
 
 	}
 
@@ -157,6 +157,35 @@ export class LuminanceMaterial extends ShaderMaterial {
 	 * @type {Boolean}
 	 */
 
+	get useRange() {
+
+		return (this.defines.RANGE !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables luminance masking.
+	 *
+	 * If enabled, the threshold will be ignored.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set useRange(value) {
+
+		value ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
+
+		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether luminance masking is enabled.
+	 *
+	 * @type {Boolean}
+	 * @deprecated Use useRange instead.
+	 */
+
 	get luminanceRange() {
 
 		return (this.defines.RANGE !== undefined);
@@ -167,6 +196,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 	 * Enables or disables luminance masking.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Use useRange instead.
 	 */
 
 	set luminanceRange(value) {
