@@ -58,6 +58,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 		});
 
 		this.colorOutput = colorOutput;
+		this.useThreshold = true;
 		this.useRange = useRange;
 
 	}
@@ -107,6 +108,32 @@ export class LuminanceMaterial extends ShaderMaterial {
 	set smoothing(value) {
 
 		this.uniforms.smoothing.value = value;
+
+	}
+
+	/**
+	 * Indicates whether the luminance threshold is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get useThreshold() {
+
+		return (this.defines.THRESHOLD !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables the luminance threshold.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set useThreshold(value) {
+
+		value ? (this.defines.THRESHOLD = "1") : (delete this.defines.THRESHOLD);
+
+		this.needsUpdate = true;
 
 	}
 
