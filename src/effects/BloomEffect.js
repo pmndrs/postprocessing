@@ -97,8 +97,8 @@ export class BloomEffect extends Effect {
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
 
-		this.luminanceThreshold = luminanceThreshold;
-		this.luminanceSmoothing = luminanceSmoothing;
+		this.luminanceMaterial.threshold = luminanceThreshold;
+		this.luminanceMaterial.smoothing = luminanceSmoothing;
 
 	}
 

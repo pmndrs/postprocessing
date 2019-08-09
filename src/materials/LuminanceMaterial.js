@@ -44,7 +44,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),
-				smoothWidth: new Uniform(1.0),
+				smoothing: new Uniform(1.0),
 				range: new Uniform(maskLuminance ? luminanceRange : new Vector2())
 
 			},
