@@ -29,8 +29,8 @@ export class BlurPass extends Pass {
 
 	constructor({
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = AUTO_SIZE,
+		height = AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -399,8 +399,8 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * An auto sizing flag that can be used for the render {@link width} and
-	 * {@link height}.
+	 * An auto sizing flag that can be used for the render {@link BlurPass.width}
+	 * and {@link BlurPass.height}.
 	 *
 	 * It's recommended to set the height or the width to an absolute value for
 	 * consistent blur results across different devices and resolutions.
