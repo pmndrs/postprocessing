@@ -1,7 +1,7 @@
 import babel from "rollup-plugin-babel";
-import minify from "rollup-plugin-babel-minify";
 import commonjs from "rollup-plugin-commonjs";
 import glsl from "rollup-plugin-glsl";
+import minify from "rollup-plugin-babel-minify";
 import resolve from "rollup-plugin-node-resolve";
 
 const pkg = require("./package.json");
