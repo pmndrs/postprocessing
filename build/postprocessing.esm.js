@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.6.0 build Fri Aug 09 2019
+ * postprocessing v6.6.1 build Tue Sep 03 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1564,8 +1564,8 @@ class BlurPass extends Pass {
 
 	constructor({
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = AUTO_SIZE,
+		height = AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -1934,8 +1934,8 @@ class BlurPass extends Pass {
 	}
 
 	/**
-	 * An auto sizing flag that can be used for the render {@link width} and
-	 * {@link height}.
+	 * An auto sizing flag that can be used for the render {@link BlurPass.width}
+	 * and {@link BlurPass.height}.
 	 *
 	 * It's recommended to set the height or the width to an absolute value for
 	 * consistent blur results across different devices and resolutions.

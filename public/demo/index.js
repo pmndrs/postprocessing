@@ -4139,9 +4139,9 @@
           _ref4$resolutionScale = _ref4.resolutionScale,
           resolutionScale = _ref4$resolutionScale === void 0 ? 0.5 : _ref4$resolutionScale,
           _ref4$width = _ref4.width,
-          width = _ref4$width === void 0 ? BlurPass.AUTO_SIZE : _ref4$width,
+          width = _ref4$width === void 0 ? AUTO_SIZE : _ref4$width,
           _ref4$height = _ref4.height,
-          height = _ref4$height === void 0 ? BlurPass.AUTO_SIZE : _ref4$height,
+          height = _ref4$height === void 0 ? AUTO_SIZE : _ref4$height,
           _ref4$kernelSize = _ref4.kernelSize,
           kernelSize = _ref4$kernelSize === void 0 ? KernelSize.LARGE : _ref4$kernelSize;
 
@@ -13041,6 +13041,7 @@
           pointsMaterial.color.copy(material.color);
           pointsMaterial.map = material.map;
           pointsMaterial.lights = false;
+          pointsMaterial.sizeAttenuation = false;
           this.cache.add(cacheKey, pointsMaterial);
         }
 

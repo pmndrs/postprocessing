@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.6.0 build Fri Aug 09 2019
+ * postprocessing v6.6.1 build Tue Sep 03 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -899,9 +899,9 @@
           _ref$resolutionScale = _ref.resolutionScale,
           resolutionScale = _ref$resolutionScale === void 0 ? 0.5 : _ref$resolutionScale,
           _ref$width = _ref.width,
-          width = _ref$width === void 0 ? BlurPass.AUTO_SIZE : _ref$width,
+          width = _ref$width === void 0 ? AUTO_SIZE : _ref$width,
           _ref$height = _ref.height,
-          height = _ref$height === void 0 ? BlurPass.AUTO_SIZE : _ref$height,
+          height = _ref$height === void 0 ? AUTO_SIZE : _ref$height,
           _ref$kernelSize = _ref.kernelSize,
           kernelSize = _ref$kernelSize === void 0 ? KernelSize.LARGE : _ref$kernelSize;
 
