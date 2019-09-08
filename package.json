@@ -51,7 +51,6 @@
 		"build:production": "cross-env NODE_ENV=production npm run build",
 		"watch": "rollup -c --watch",
 		"doc": "rimraf public/docs && esdoc",
-		"deploy": "cpx demo/assets/** public/demo",
 		"pretest": "npm run lint && npm run build:production",
 		"test": "npm run ava",
 		"prepack": "npm test"
@@ -74,7 +73,6 @@
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
 		"ava": "2.x.x",
-		"cpx": "1.x.x",
 		"cross-env": "5.x.x",
 		"dat.gui": "0.x.x",
 		"delta-controls": "2.x.x",
