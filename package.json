@@ -7,7 +7,6 @@
 	"module": "build/postprocessing.esm.js",
 	"sideEffects": false,
 	"license": "Zlib",
-
 	"keywords": [
 		"rendering",
 		"image",
@@ -23,23 +22,20 @@
 		"rendertarget",
 		"three"
 	],
-
 	"author": {
 		"name": "Raoul van Rüschen",
 		"email": "vanruesc@outlook.de"
 	},
-
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/vanruesc/postprocessing.git"
 	},
-
 	"bugs": {
 		"url": "https://github.com/vanruesc/postprocessing/issues"
 	},
-
-	"files": ["build"],
-
+	"files": [
+		"build"
+	],
 	"scripts": {
 		"ava": "ava",
 		"lint": "npm run lint:lib && npm run lint:demo && npm run lint:test",
@@ -55,20 +51,18 @@
 		"test": "npm run ava",
 		"prepack": "npm test"
 	},
-
 	"ava": {
 		"failFast": true,
-		"files": ["test/**/*.js"]
+		"files": [
+			"test/**/*.js"
+		]
 	},
-
 	"eslintConfig": {
 		"extends": "delta"
 	},
-
 	"peerDependencies": {
 		"three": ">= 0.102.0 < 0.109.0"
 	},
-
 	"devDependencies": {
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
