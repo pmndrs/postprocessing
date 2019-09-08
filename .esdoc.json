@@ -1,0 +1,16 @@
+{
+
+	"source": "src",
+	"destination": "public/docs",
+
+	"plugins": [{
+		"name": "esdoc-standard-plugin",
+		"option": {
+			"accessor": {
+				"access": ["public", "protected"],
+				"autoPrivate": true
+			}
+		}
+	}]
+
+}
