@@ -2,7 +2,8 @@ export {
 	Disposable,
 	Initializable,
 	EffectComposer,
-	Resizable
+	Resizable,
+	Selection
 } from "./core";
 
 export {
