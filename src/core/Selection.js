@@ -8,9 +8,10 @@ export class Selection extends Set {
 	 * Constructs a new selection.
 	 *
 	 * @param {Iterable<Object3D>} iterable - A collection of objects that should be added to this selection.
+	 * @param {Number} [layer=10] - A dedicated render layer for selected objects.
 	 */
 
-	constructor(iterable) {
+	constructor(iterable, layer = 10) {
 
 		super();
 
@@ -21,7 +22,7 @@ export class Selection extends Set {
 		 * @private
 		 */
 
-		this.currentLayer = 10;
+		this.currentLayer = layer;
 
 		if(iterable !== undefined) {
 
