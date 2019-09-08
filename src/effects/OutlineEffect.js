@@ -7,6 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { Selection } from "../core";
 import { DepthComparisonMaterial, OutlineEdgesMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
@@ -208,15 +209,6 @@ export class OutlineEffect extends Effect {
 		this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		/**
-		 * A list of objects to outline.
-		 *
-		 * @type {Object3D[]}
-		 * @private
-		 */
-
-		this.selection = [];
-
-		/**
 		 * The current animation time.
 		 *
 		 * @type {Number}
@@ -226,32 +218,20 @@ export class OutlineEffect extends Effect {
 		this.time = 0.0;
 
 		/**
+		 * A selection of objects that will be outlined.
+		 *
+		 * @type {Selection}
+		 */
+
+		this.selection = new Selection();
+
+		/**
 		 * The pulse speed. A value of zero disables the pulse effect.
 		 *
 		 * @type {Number}
 		 */
 
 		this.pulseSpeed = pulseSpeed;
-
-		/**
-		 * A dedicated render layer for selected objects.
-		 *
-		 * This layer is set to 10 by default. If this collides with your own custom
-		 * layers, please change it to a free layer before rendering!
-		 *
-		 * @type {Number}
-		 */
-
-		this.selectionLayer = 10;
-
-		/**
-		 * A clear flag.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.clear = false;
 
 	}
 
@@ -316,6 +296,28 @@ export class OutlineEffect extends Effect {
 		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
 		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
 		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use selection.layer instead.
+	 */
+
+	get selectionLayer() {
+
+		return this.selection.layer;
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use selection.layer instead.
+	 */
+
+	set selectionLayer(value) {
+
+		this.selection.layer = value;
 
 	}
 
@@ -488,24 +490,12 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.set instead.
 	 */
 
 	setSelection(objects) {
 
-		const selection = objects.slice(0);
-		const selectionLayer = this.selectionLayer;
-
-		let i, l;
-
-		this.clearSelection();
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			selection[i].layers.enable(selectionLayer);
-
-		}
-
-		this.selection = selection;
+		this.selection.set(objects);
 
 		return this;
 
@@ -515,24 +505,12 @@ export class OutlineEffect extends Effect {
 	 * Clears the list of selected objects.
 	 *
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.clear instead.
 	 */
 
 	clearSelection() {
 
-		const selection = this.selection;
-		const selectionLayer = this.selectionLayer;
-
-		let i, l;
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			selection[i].layers.disable(selectionLayer);
-
-		}
-
-		this.selection = [];
-		this.time = 0.0;
-		this.clear = true;
+		this.selection.clear();
 
 		return this;
 
@@ -543,12 +521,12 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should be outlined.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.add instead.
 	 */
 
 	selectObject(object) {
 
-		object.layers.enable(this.selectionLayer);
-		this.selection.push(object);
+		this.selection.add(object);
 
 		return this;
 
@@ -559,57 +537,14 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should no longer be outlined.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.delete instead.
 	 */
 
 	deselectObject(object) {
 
-		const selection = this.selection;
-		const index = selection.indexOf(object);
-
-		if(index >= 0) {
-
-			selection[index].layers.disable(this.selectionLayer);
-			selection.splice(index, 1);
-
-			if(selection.length === 0) {
-
-				this.time = 0.0;
-				this.clear = true;
-
-			}
-
-		}
+		this.selection.delete(object);
 
 		return this;
-
-	}
-
-	/**
-	 * Sets the visibility of all selected objects.
-	 *
-	 * @private
-	 * @param {Boolean} visible - Whether the selected objects should be visible.
-	 */
-
-	setSelectionVisible(visible) {
-
-		const selection = this.selection;
-
-		let i, l;
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			if(visible) {
-
-				selection[i].layers.enable(0);
-
-			} else {
-
-				selection[i].layers.disable(0);
-
-			}
-
-		}
 
 	}
 
@@ -625,12 +560,13 @@ export class OutlineEffect extends Effect {
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const selection = this.selection;
 		const pulse = this.uniforms.get("pulse");
 
 		const background = scene.background;
 		const mask = camera.layers.mask;
 
-		if(this.selection.length > 0) {
+		if(selection.size > 0) {
 
 			scene.background = null;
 			pulse.value = 1.0;
@@ -638,17 +574,18 @@ export class OutlineEffect extends Effect {
 			if(this.pulseSpeed > 0.0) {
 
 				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-				this.time += deltaTime;
 
 			}
 
+			this.time += deltaTime;
+
 			// Render a custom depth texture and ignore selected objects.
-			this.setSelectionVisible(false);
+			selection.setVisible(false);
 			this.depthPass.render(renderer);
-			this.setSelectionVisible(true);
+			selection.setVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			camera.layers.mask = 1 << this.selectionLayer;
+			camera.layers.set(selection.layer);
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
@@ -664,10 +601,10 @@ export class OutlineEffect extends Effect {
 
 			}
 
-		} else if(this.clear) {
+		} else if(this.time > 0.0) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-			this.clear = false;
+			this.time = 0.0;
 
 		}
 
