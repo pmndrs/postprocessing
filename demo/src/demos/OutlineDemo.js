@@ -101,23 +101,17 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		const raycaster = this.raycaster;
 
-		let intersects, x;
-
-		mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-		mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+		mouse.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
+		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
 		raycaster.setFromCamera(mouse, this.camera);
-		intersects = raycaster.intersectObjects(this.scene.children);
+		const intersects = raycaster.intersectObjects(this.scene.children);
 
-		if(this.selectedObject !== null) {
-
-			this.selectedObject = null;
-
-		}
+		this.selectedObject = null;
 
 		if(intersects.length > 0) {
 
-			x = intersects[0];
+			const x = intersects[0];
 
 			if(x.object !== undefined) {
 
@@ -141,19 +135,18 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	handleSelection() {
 
-		const effect = this.effect;
-		const selection = effect.selection;
+		const selection = this.effect.selection;
 		const selectedObject = this.selectedObject;
 
 		if(selectedObject !== null) {
 
-			if(selection.indexOf(selectedObject) >= 0) {
+			if(selection.has(selectedObject)) {
 
-				effect.deselectObject(selectedObject);
+				selection.delete(selectedObject);
 
 			} else {
 
-				effect.selectObject(selectedObject);
+				selection.add(selectedObject);
 
 			}
 
@@ -292,6 +285,8 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Objects.
 
+		const selection = [];
+
 		let mesh = new Mesh(
 			new SphereBufferGeometry(1, 32, 32),
 			new MeshPhongMaterial({
@@ -301,6 +296,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		mesh.position.set(2, 0, -2);
 		scene.add(mesh);
+		selection.push(mesh);
 
 		mesh = new Mesh(
 			new ConeBufferGeometry(1, 1, 32),
@@ -311,6 +307,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		mesh.position.set(-2, 0, 2);
 		scene.add(mesh);
+		selection.push(mesh);
 
 		mesh = new Mesh(
 			new OctahedronBufferGeometry(),
@@ -321,6 +318,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		mesh.position.set(2, 0, 2);
 		scene.add(mesh);
+		selection.push(mesh);
 
 		mesh = new Mesh(
 			new BoxBufferGeometry(1, 1, 1),
@@ -355,8 +353,7 @@ export class OutlineDemo extends PostProcessingDemo {
 			xRay: true
 		});
 
-		outlineEffect.setSelection(scene.children);
-		outlineEffect.deselectObject(mesh);
+		outlineEffect.selection.set(selection);
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const outlinePass = new EffectPass(camera, outlineEffect);
