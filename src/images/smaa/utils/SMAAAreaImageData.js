@@ -1053,6 +1053,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 /**
  * Calculates orthogonal or diagonal patterns for a given offset.
  *
+ * @private
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Number|Float32Array} offset - A pattern offset. Diagonal offsets are pairs.
  * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
@@ -1106,6 +1107,7 @@ function generatePatterns(patterns, offset, orthogonal) {
 /**
  * Assembles orthogonal or diagonal patterns into the final area image.
  *
+ * @private
  * @param {Vector2} base - A base position.
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
