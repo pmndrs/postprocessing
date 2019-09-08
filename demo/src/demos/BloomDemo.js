@@ -9,7 +9,9 @@ import {
 	MeshLambertMaterial,
 	Object3D,
 	PerspectiveCamera,
-	SphereBufferGeometry
+	Raycaster,
+	SphereBufferGeometry,
+	Vector2
 } from "three";
 
 import { DeltaControls } from "delta-controls";
@@ -17,14 +19,25 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
-	BloomEffect,
 	EffectPass,
 	KernelSize,
+	SelectiveBloomEffect,
 	SMAAEffect
 } from "../../../src";
 
 /**
+ * A mouse position.
+ *
+ * @type {Vector2}
+ * @private
+ */
+
+const mouse = new Vector2();
+
+/**
  * A bloom demo setup.
+ *
+ * @implements {EventListener}
  */
 
 export class BloomDemo extends PostProcessingDemo {
@@ -38,6 +51,24 @@ export class BloomDemo extends PostProcessingDemo {
 	constructor(composer) {
 
 		super("bloom", composer);
+
+		/**
+		 * A raycaster.
+		 *
+		 * @type {Raycaster}
+		 * @private
+		 */
+
+		this.raycaster = null;
+
+		/**
+		 * A selected object.
+		 *
+		 * @type {Object3D}
+		 * @private
+		 */
+
+		this.selectedObject = null;
 
 		/**
 		 * An effect.
@@ -65,6 +96,91 @@ export class BloomDemo extends PostProcessingDemo {
 		 */
 
 		this.object = null;
+
+	}
+
+	/**
+	 * Raycasts the scene.
+	 *
+	 * @param {PointerEvent} event - A pointer event.
+	 */
+
+	raycast(event) {
+
+		const raycaster = this.raycaster;
+
+		mouse.x = (event.clientX / window.innerWidth) * 2.0 - 1.0;
+		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
+
+		raycaster.setFromCamera(mouse, this.camera);
+		const intersects = raycaster.intersectObjects(this.object.children);
+
+		this.selectedObject = null;
+
+		if(intersects.length > 0) {
+
+			const x = intersects[0];
+
+			if(x.object !== undefined) {
+
+				this.selectedObject = x.object;
+
+			} else {
+
+				console.warn("Encountered an undefined object", intersects);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Handles the current selection.
+	 *
+	 * @private
+	 */
+
+	handleSelection() {
+
+		const selection = this.effect.selection;
+		const selectedObject = this.selectedObject;
+
+		if(selectedObject !== null) {
+
+			if(selection.has(selectedObject)) {
+
+				selection.delete(selectedObject);
+
+			} else {
+
+				selection.add(selectedObject);
+
+			}
+
+		}
+
+	}
+
+	/**
+	 * Raycasts on mouse move events.
+	 *
+	 * @param {Event} event - An event.
+	 */
+
+	handleEvent(event) {
+
+		switch(event.type) {
+
+			case "mousemove":
+				this.raycast(event);
+				break;
+
+			case "mousedown":
+				this.handleSelection();
+				break;
+
+		}
 
 	}
 
@@ -234,20 +350,28 @@ export class BloomDemo extends PostProcessingDemo {
 
 		scene.add(object);
 
+		// Raycaster.
+
+		this.raycaster = new Raycaster();
+		renderer.domElement.addEventListener("mousemove", this);
+		renderer.domElement.addEventListener("mousedown", this);
+
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
 		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
-		const bloomEffect = new BloomEffect({
+		/* If you don't need to limit bloom to a subset of objects, consider using
+		the BloomEffect instead for better performance.*/
+		const bloomEffect = new SelectiveBloomEffect(scene, camera, {
 			blendFunction: BlendFunction.SCREEN,
 			kernelSize: KernelSize.MEDIUM,
-			useLuminanceFilter: true,
 			luminanceThreshold: 0.825,
 			luminanceSmoothing: 0.075,
 			height: 480
 		});
 
+		bloomEffect.inverted = true;
 		bloomEffect.blendMode.opacity.value = 2.3;
 		this.effect = bloomEffect;
 
@@ -258,6 +382,10 @@ export class BloomDemo extends PostProcessingDemo {
 		pass.renderToScreen = true;
 
 		composer.addPass(pass);
+
+		// Important: Make sure your lights are visible!
+		ambientLight.layers.enable(bloomEffect.selection.layer);
+		directionalLight.layers.enable(bloomEffect.selection.layer);
 
 	}
 
@@ -308,8 +436,13 @@ export class BloomDemo extends PostProcessingDemo {
 			"kernel size": effect.blurPass.kernelSize,
 			"scale": effect.blurPass.scale,
 			"luminance": {
+				"filter": effect.luminancePass.enabled,
 				"threshold": effect.luminanceMaterial.threshold,
 				"smoothing": effect.luminanceMaterial.smoothing
+			},
+			"selection": {
+				"inverted": effect.inverted,
+				"ignore bg": effect.ignoreBackground
 			},
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
@@ -333,7 +466,13 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		const folder = menu.addFolder("Luminance");
+		let folder = menu.addFolder("Luminance");
+
+		folder.add(params.luminance, "filter").onChange(() => {
+
+			effect.luminancePass.enabled = params.luminance.filter;
+
+		});
 
 		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -344,6 +483,22 @@ export class BloomDemo extends PostProcessingDemo {
 		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			effect.luminanceMaterial.smoothing = Number.parseFloat(params.luminance.smoothing);
+
+		});
+
+		folder.open();
+
+		folder = menu.addFolder("Selection");
+
+		folder.add(params.selection, "inverted").onChange(() => {
+
+			effect.inverted = params.selection.inverted;
+
+		});
+
+		folder.add(params.selection, "ignore bg").onChange(() => {
+
+			effect.ignoreBackground = params.selection["ignore bg"];
 
 		});
 
@@ -363,6 +518,24 @@ export class BloomDemo extends PostProcessingDemo {
 		});
 
 		menu.add(effect, "dithering");
+
+	}
+
+	/**
+	 * Resets this demo.
+	 *
+	 * @return {Demo} This demo.
+	 */
+
+	reset() {
+
+		super.reset();
+
+		const dom = this.composer.renderer.domElement;
+		dom.removeEventListener("mousemove", this);
+		dom.removeEventListener("mousedown", this);
+
+		return this;
 
 	}
 
