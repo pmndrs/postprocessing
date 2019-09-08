@@ -336,6 +336,18 @@ window.esdocSearchIndex = [
     "variable"
   ],
   [
+    "postprocessing/src/core/selection.js~selection",
+    "class/src/core/Selection.js~Selection.html",
+    "<span>Selection</span> <span class=\"search-result-import-path\">postprocessing/src/core/Selection.js</span>",
+    "class"
+  ],
+  [
+    "postprocessing/src/effects/selectivebloomeffect.js~selectivebloomeffect",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html",
+    "<span>SelectiveBloomEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SelectiveBloomEffect.js</span>",
+    "class"
+  ],
+  [
     "postprocessing/src/effects/sepiaeffect.js~sepiaeffect",
     "class/src/effects/SepiaEffect.js~SepiaEffect.html",
     "<span>SepiaEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SepiaEffect.js</span>",
@@ -762,6 +774,66 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/selection.js",
+    "file/src/core/Selection.js.html",
+    "src/core/Selection.js",
+    "file"
+  ],
+  [
+    "src/core/selection.js~selection#add",
+    "class/src/core/Selection.js~Selection.html#instance-method-add",
+    "src/core/Selection.js~Selection#add",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#clear",
+    "class/src/core/Selection.js~Selection.html#instance-method-clear",
+    "src/core/Selection.js~Selection#clear",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#constructor",
+    "class/src/core/Selection.js~Selection.html#instance-constructor-constructor",
+    "src/core/Selection.js~Selection#constructor",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#delete",
+    "class/src/core/Selection.js~Selection.html#instance-method-delete",
+    "src/core/Selection.js~Selection#delete",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#indexof",
+    "class/src/core/Selection.js~Selection.html#instance-method-indexOf",
+    "src/core/Selection.js~Selection#indexOf",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#layer",
+    "class/src/core/Selection.js~Selection.html#instance-get-layer",
+    "src/core/Selection.js~Selection#layer",
+    "member"
+  ],
+  [
+    "src/core/selection.js~selection#layer",
+    "class/src/core/Selection.js~Selection.html#instance-set-layer",
+    "src/core/Selection.js~Selection#layer",
+    "member"
+  ],
+  [
+    "src/core/selection.js~selection#set",
+    "class/src/core/Selection.js~Selection.html#instance-method-set",
+    "src/core/Selection.js~Selection#set",
+    "method"
+  ],
+  [
+    "src/core/selection.js~selection#setvisible",
+    "class/src/core/Selection.js~Selection.html#instance-method-setVisible",
+    "src/core/Selection.js~Selection#setVisible",
+    "method"
+  ],
+  [
     "src/core/index.js",
     "file/src/core/index.js.html",
     "src/core/index.js",
@@ -849,6 +921,18 @@ window.esdocSearchIndex = [
     "src/effects/bloomeffect.js~bloomeffect#luminancematerial",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-luminanceMaterial",
     "src/effects/BloomEffect.js~BloomEffect#luminanceMaterial",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#luminancepass",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-luminancePass",
+    "src/effects/BloomEffect.js~BloomEffect#luminancePass",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#rendertarget",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-renderTarget",
+    "src/effects/BloomEffect.js~BloomEffect#renderTarget",
     "member"
   ],
   [
@@ -1524,8 +1608,20 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/outlineeffect.js~outlineeffect#selection",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-selection",
+    "src/effects/OutlineEffect.js~OutlineEffect#selection",
+    "member"
+  ],
+  [
     "src/effects/outlineeffect.js~outlineeffect#selectionlayer",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-selectionLayer",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-selectionLayer",
+    "src/effects/OutlineEffect.js~OutlineEffect#selectionLayer",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#selectionlayer",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-selectionLayer",
     "src/effects/OutlineEffect.js~OutlineEffect#selectionLayer",
     "member"
   ],
@@ -1851,6 +1947,60 @@ window.esdocSearchIndex = [
     "src/effects/scanlineeffect.js~scanlineeffect#setsize",
     "class/src/effects/ScanlineEffect.js~ScanlineEffect.html#instance-method-setSize",
     "src/effects/ScanlineEffect.js~ScanlineEffect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js",
+    "file/src/effects/SelectiveBloomEffect.js.html",
+    "src/effects/SelectiveBloomEffect.js",
+    "file"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#constructor",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-constructor-constructor",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#ignorebackground",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-ignoreBackground",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#ignoreBackground",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#ignorebackground",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-ignoreBackground",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#ignoreBackground",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#initialize",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-method-initialize",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#initialize",
+    "method"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#inverted",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-member-inverted",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#inverted",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#selection",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-member-selection",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#selection",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#setsize",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-method-setSize",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#update",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-method-update",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#update",
     "method"
   ],
   [

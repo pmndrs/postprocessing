@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
@@ -54,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
@@ -114,7 +116,7 @@
   
   
   <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span> &#x2192; BloomEffect</div></div>
-  
+  <div class="flat-list" data-ice="directSubclass"><h4>Direct Subclass:</h4><div><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></div></div>
   
   
   <div class="flat-list" data-ice="indirectImplements"><h4>Indirect Implements:</h4><ul><li><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></li>, <li><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></li>, <li><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></li></ul></div>
@@ -471,6 +473,35 @@ to blur bright highlights.</p>
     <td>
       <span class="access" data-ice="access">public</span>
       
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-luminancePass">luminancePass</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A luminance shader pass.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
@@ -546,6 +577,41 @@ to blur bright highlights.</p>
         
         
         <div data-ice="description"><p>Sets the render width.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+<table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Protected Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-renderTarget">renderTarget</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A render target.</p>
 </div>
       </div>
     </td>
@@ -1278,7 +1344,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber243">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber242">source</a></span></span>
     </span>
   </h3>
 
@@ -1321,7 +1387,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber256">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber255">source</a></span></span>
     </span>
   </h3>
 
@@ -1364,7 +1430,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber194">source</a></span></span>
     </span>
   </h3>
 
@@ -1408,7 +1474,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber208">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -1452,7 +1518,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber165">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber164">source</a></span></span>
     </span>
   </h3>
 
@@ -1496,7 +1562,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber180">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
@@ -1542,7 +1608,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber221">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber220">source</a></span></span>
     </span>
   </h3>
 
@@ -1586,7 +1652,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber232">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -1629,7 +1695,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber123">source</a></span></span>
     </span>
   </h3>
 
@@ -1637,6 +1703,51 @@ render width and aspect ratio.</p>
   
   
   <div data-ice="description"><p>The luminance material.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-luminancePass">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">luminancePass</span><span class="code" data-ice="signature">: <span><a href="class/src/passes/ShaderPass.js~ShaderPass.html">ShaderPass</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber95">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A luminance shader pass.</p>
+<p>You may disable this pass to deactivate luminance filtering.</p>
 </div>
 
   
@@ -1673,7 +1784,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber112">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -1719,7 +1830,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber136">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber135">source</a></span></span>
     </span>
   </h3>
 
@@ -1763,7 +1874,7 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber151">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber150">source</a></span></span>
     </span>
   </h3>
 
@@ -1773,6 +1884,52 @@ is set to <code>SKIP</code>.</p>
   <div data-ice="description"><p>Sets the render width.</p>
 <p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
 render height and aspect ratio.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<h2 data-ice="title">Protected Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-renderTarget">
+    <span class="access" data-ice="access">protected</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">renderTarget</span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber64">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A render target.</p>
 </div>
 
   
@@ -1812,7 +1969,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber269">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber268">source</a></span></span>
     </span>
   </h3>
 
@@ -1869,7 +2026,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber336">source</a></span></span>
     </span>
   </h3>
 
@@ -1937,7 +2094,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber282">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber281">source</a></span></span>
     </span>
   </h3>
 
@@ -1998,7 +2155,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber314">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber321">source</a></span></span>
     </span>
   </h3>
 
@@ -2066,7 +2223,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber298">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 

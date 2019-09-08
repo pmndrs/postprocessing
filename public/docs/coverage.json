@@ -1,7 +1,7 @@
 {
-  "coverage": "97.1%",
-  "expectCount": 552,
-  "actualCount": 536,
+  "coverage": "97.23%",
+  "expectCount": 578,
+  "actualCount": 562,
   "files": {
     "src/core/Disposable.js": {
       "expectCount": 2,
@@ -21,6 +21,11 @@
     "src/core/Resizable.js": {
       "expectCount": 2,
       "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/core/Selection.js": {
+      "expectCount": 11,
+      "actualCount": 11,
       "undocumentLines": []
     },
     "src/effects/blending/BlendFunction.js": {
@@ -109,11 +114,11 @@
       "undocumentLines": []
     },
     "src/effects/OutlineEffect.js": {
-      "expectCount": 42,
-      "actualCount": 40,
+      "expectCount": 41,
+      "actualCount": 39,
       "undocumentLines": [
-        75,
-        444
+        76,
+        446
       ]
     },
     "src/effects/PixelationEffect.js": {
@@ -129,6 +134,11 @@
     "src/effects/ScanlineEffect.js": {
       "expectCount": 7,
       "actualCount": 7,
+      "undocumentLines": []
+    },
+    "src/effects/SelectiveBloomEffect.js": {
+      "expectCount": 16,
+      "actualCount": 16,
       "undocumentLines": []
     },
     "src/effects/SepiaEffect.js": {

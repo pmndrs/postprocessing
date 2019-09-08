@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 4434,
+  "end": 4465,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 4434,
+    "end": 4465,
     "loc": {
       "start": {
         "line": 1,
@@ -6720,9 +6720,9 @@
           "trailingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+              "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
               "start": 3556,
-              "end": 4201,
+              "end": 4232,
               "loc": {
                 "start": {
                   "line": 166,
@@ -6757,9 +6757,9 @@
         "trailingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+            "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
             "start": 3556,
-            "end": 4201,
+            "end": 4232,
             "loc": {
               "start": {
                 "line": 166,
@@ -6775,8 +6775,8 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 4205,
-        "end": 4432,
+        "start": 4236,
+        "end": 4463,
         "loc": {
           "start": {
             "line": 177,
@@ -6791,8 +6791,8 @@
         "source": null,
         "declaration": {
           "type": "VariableDeclaration",
-          "start": 4212,
-          "end": 4432,
+          "start": 4243,
+          "end": 4463,
           "loc": {
             "start": {
               "line": 177,
@@ -6806,8 +6806,8 @@
           "declarations": [
             {
               "type": "VariableDeclarator",
-              "start": 4218,
-              "end": 4431,
+              "start": 4249,
+              "end": 4462,
               "loc": {
                 "start": {
                   "line": 177,
@@ -6820,8 +6820,8 @@
               },
               "id": {
                 "type": "Identifier",
-                "start": 4218,
-                "end": 4225,
+                "start": 4249,
+                "end": 4256,
                 "loc": {
                   "start": {
                     "line": 177,
@@ -6838,8 +6838,8 @@
               },
               "init": {
                 "type": "ObjectExpression",
-                "start": 4228,
-                "end": 4431,
+                "start": 4259,
+                "end": 4462,
                 "loc": {
                   "start": {
                     "line": 177,
@@ -6853,8 +6853,8 @@
                 "properties": [
                   {
                     "type": "ObjectProperty",
-                    "start": 4234,
-                    "end": 4264,
+                    "start": 4265,
+                    "end": 4295,
                     "loc": {
                       "start": {
                         "line": 179,
@@ -6870,8 +6870,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 4234,
-                      "end": 4247,
+                      "start": 4265,
+                      "end": 4278,
                       "loc": {
                         "start": {
                           "line": 179,
@@ -6887,8 +6887,8 @@
                     },
                     "value": {
                       "type": "StringLiteral",
-                      "start": 4249,
-                      "end": 4264,
+                      "start": 4280,
+                      "end": 4295,
                       "loc": {
                         "start": {
                           "line": 179,
@@ -6908,8 +6908,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 4268,
-                    "end": 4304,
+                    "start": 4299,
+                    "end": 4335,
                     "loc": {
                       "start": {
                         "line": 180,
@@ -6925,8 +6925,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 4268,
-                      "end": 4284,
+                      "start": 4299,
+                      "end": 4315,
                       "loc": {
                         "start": {
                           "line": 180,
@@ -6942,8 +6942,8 @@
                     },
                     "value": {
                       "type": "StringLiteral",
-                      "start": 4286,
-                      "end": 4304,
+                      "start": 4317,
+                      "end": 4335,
                       "loc": {
                         "start": {
                           "line": 180,
@@ -6963,8 +6963,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 4308,
-                    "end": 4350,
+                    "start": 4339,
+                    "end": 4381,
                     "loc": {
                       "start": {
                         "line": 181,
@@ -6980,8 +6980,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 4308,
-                      "end": 4327,
+                      "start": 4339,
+                      "end": 4358,
                       "loc": {
                         "start": {
                           "line": 181,
@@ -6997,8 +6997,8 @@
                     },
                     "value": {
                       "type": "StringLiteral",
-                      "start": 4329,
-                      "end": 4350,
+                      "start": 4360,
+                      "end": 4381,
                       "loc": {
                         "start": {
                           "line": 181,
@@ -7018,8 +7018,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 4354,
-                    "end": 4380,
+                    "start": 4385,
+                    "end": 4411,
                     "loc": {
                       "start": {
                         "line": 182,
@@ -7035,8 +7035,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 4354,
-                      "end": 4365,
+                      "start": 4385,
+                      "end": 4396,
                       "loc": {
                         "start": {
                           "line": 182,
@@ -7052,8 +7052,8 @@
                     },
                     "value": {
                       "type": "StringLiteral",
-                      "start": 4367,
-                      "end": 4380,
+                      "start": 4398,
+                      "end": 4411,
                       "loc": {
                         "start": {
                           "line": 182,
@@ -7073,8 +7073,8 @@
                   },
                   {
                     "type": "ObjectProperty",
-                    "start": 4384,
-                    "end": 4426,
+                    "start": 4415,
+                    "end": 4457,
                     "loc": {
                       "start": {
                         "line": 183,
@@ -7090,8 +7090,8 @@
                     "computed": false,
                     "key": {
                       "type": "Identifier",
-                      "start": 4384,
-                      "end": 4403,
+                      "start": 4415,
+                      "end": 4434,
                       "loc": {
                         "start": {
                           "line": 183,
@@ -7107,8 +7107,8 @@
                     },
                     "value": {
                       "type": "StringLiteral",
-                      "start": 4405,
-                      "end": 4426,
+                      "start": 4436,
+                      "end": 4457,
                       "loc": {
                         "start": {
                           "line": 183,
@@ -7135,9 +7135,9 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+              "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
               "start": 3556,
-              "end": 4201,
+              "end": 4232,
               "loc": {
                 "start": {
                   "line": 166,
@@ -7155,9 +7155,9 @@
         "leadingComments": [
           {
             "type": "CommentBlock",
-            "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+            "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
             "start": 3556,
-            "end": 4201,
+            "end": 4232,
             "loc": {
               "start": {
                 "line": 166,
@@ -7273,9 +7273,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+      "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
       "start": 3556,
-      "end": 4201,
+      "end": 4232,
       "loc": {
         "start": {
           "line": 166,
@@ -20358,9 +20358,9 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n * An enumeration of shader code placeholders.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
+      "value": "*\r\n * An enumeration of shader code placeholders used by the {@link EffectPass}.\r\n *\r\n * @type {Object}\r\n * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_UV - A placeholder for UV transformations inside the fragment shader.\r\n * @property {String} FRAGMENT_MAIN_IMAGE - A placeholder for color calculations inside the fragment shader.\r\n * @property {String} VERTEX_HEAD - A placeholder for function and variable declarations inside the vertex shader.\r\n * @property {String} VERTEX_MAIN_SUPPORT - A placeholder for supporting calculations inside the vertex shader.\r\n ",
       "start": 3556,
-      "end": 4201,
+      "end": 4232,
       "loc": {
         "start": {
           "line": 166,
@@ -20387,8 +20387,8 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 4205,
-      "end": 4211,
+      "start": 4236,
+      "end": 4242,
       "loc": {
         "start": {
           "line": 177,
@@ -20415,8 +20415,8 @@
         "updateContext": null
       },
       "value": "const",
-      "start": 4212,
-      "end": 4217,
+      "start": 4243,
+      "end": 4248,
       "loc": {
         "start": {
           "line": 177,
@@ -20441,8 +20441,8 @@
         "binop": null
       },
       "value": "Section",
-      "start": 4218,
-      "end": 4225,
+      "start": 4249,
+      "end": 4256,
       "loc": {
         "start": {
           "line": 177,
@@ -20468,8 +20468,8 @@
         "updateContext": null
       },
       "value": "=",
-      "start": 4226,
-      "end": 4227,
+      "start": 4257,
+      "end": 4258,
       "loc": {
         "start": {
           "line": 177,
@@ -20493,8 +20493,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4228,
-      "end": 4229,
+      "start": 4259,
+      "end": 4260,
       "loc": {
         "start": {
           "line": 177,
@@ -20519,8 +20519,8 @@
         "binop": null
       },
       "value": "FRAGMENT_HEAD",
-      "start": 4234,
-      "end": 4247,
+      "start": 4265,
+      "end": 4278,
       "loc": {
         "start": {
           "line": 179,
@@ -20545,8 +20545,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4247,
-      "end": 4248,
+      "start": 4278,
+      "end": 4279,
       "loc": {
         "start": {
           "line": 179,
@@ -20572,8 +20572,8 @@
         "updateContext": null
       },
       "value": "FRAGMENT_HEAD",
-      "start": 4249,
-      "end": 4264,
+      "start": 4280,
+      "end": 4295,
       "loc": {
         "start": {
           "line": 179,
@@ -20598,8 +20598,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4264,
-      "end": 4265,
+      "start": 4295,
+      "end": 4296,
       "loc": {
         "start": {
           "line": 179,
@@ -20624,8 +20624,8 @@
         "binop": null
       },
       "value": "FRAGMENT_MAIN_UV",
-      "start": 4268,
-      "end": 4284,
+      "start": 4299,
+      "end": 4315,
       "loc": {
         "start": {
           "line": 180,
@@ -20650,8 +20650,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4284,
-      "end": 4285,
+      "start": 4315,
+      "end": 4316,
       "loc": {
         "start": {
           "line": 180,
@@ -20677,8 +20677,8 @@
         "updateContext": null
       },
       "value": "FRAGMENT_MAIN_UV",
-      "start": 4286,
-      "end": 4304,
+      "start": 4317,
+      "end": 4335,
       "loc": {
         "start": {
           "line": 180,
@@ -20703,8 +20703,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4304,
-      "end": 4305,
+      "start": 4335,
+      "end": 4336,
       "loc": {
         "start": {
           "line": 180,
@@ -20729,8 +20729,8 @@
         "binop": null
       },
       "value": "FRAGMENT_MAIN_IMAGE",
-      "start": 4308,
-      "end": 4327,
+      "start": 4339,
+      "end": 4358,
       "loc": {
         "start": {
           "line": 181,
@@ -20755,8 +20755,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4327,
-      "end": 4328,
+      "start": 4358,
+      "end": 4359,
       "loc": {
         "start": {
           "line": 181,
@@ -20782,8 +20782,8 @@
         "updateContext": null
       },
       "value": "FRAGMENT_MAIN_IMAGE",
-      "start": 4329,
-      "end": 4350,
+      "start": 4360,
+      "end": 4381,
       "loc": {
         "start": {
           "line": 181,
@@ -20808,8 +20808,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4350,
-      "end": 4351,
+      "start": 4381,
+      "end": 4382,
       "loc": {
         "start": {
           "line": 181,
@@ -20834,8 +20834,8 @@
         "binop": null
       },
       "value": "VERTEX_HEAD",
-      "start": 4354,
-      "end": 4365,
+      "start": 4385,
+      "end": 4396,
       "loc": {
         "start": {
           "line": 182,
@@ -20860,8 +20860,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4365,
-      "end": 4366,
+      "start": 4396,
+      "end": 4397,
       "loc": {
         "start": {
           "line": 182,
@@ -20887,8 +20887,8 @@
         "updateContext": null
       },
       "value": "VERTEX_HEAD",
-      "start": 4367,
-      "end": 4380,
+      "start": 4398,
+      "end": 4411,
       "loc": {
         "start": {
           "line": 182,
@@ -20913,8 +20913,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4380,
-      "end": 4381,
+      "start": 4411,
+      "end": 4412,
       "loc": {
         "start": {
           "line": 182,
@@ -20939,8 +20939,8 @@
         "binop": null
       },
       "value": "VERTEX_MAIN_SUPPORT",
-      "start": 4384,
-      "end": 4403,
+      "start": 4415,
+      "end": 4434,
       "loc": {
         "start": {
           "line": 183,
@@ -20965,8 +20965,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4403,
-      "end": 4404,
+      "start": 4434,
+      "end": 4435,
       "loc": {
         "start": {
           "line": 183,
@@ -20992,8 +20992,8 @@
         "updateContext": null
       },
       "value": "VERTEX_MAIN_SUPPORT",
-      "start": 4405,
-      "end": 4426,
+      "start": 4436,
+      "end": 4457,
       "loc": {
         "start": {
           "line": 183,
@@ -21017,8 +21017,8 @@
         "postfix": false,
         "binop": null
       },
-      "start": 4430,
-      "end": 4431,
+      "start": 4461,
+      "end": 4462,
       "loc": {
         "start": {
           "line": 185,
@@ -21043,8 +21043,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4431,
-      "end": 4432,
+      "start": 4462,
+      "end": 4463,
       "loc": {
         "start": {
           "line": 185,
@@ -21069,8 +21069,8 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 4434,
-      "end": 4434,
+      "start": 4465,
+      "end": 4465,
       "loc": {
         "start": {
           "line": 186,

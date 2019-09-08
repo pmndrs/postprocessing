@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span></li>
@@ -54,6 +55,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SMAAEffect.js~SMAAEffect.html">SMAAEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html">SSAOEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ScanlineEffect.js~ScanlineEffect.html">ScanlineEffect</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html">SelectiveBloomEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/SepiaEffect.js~SepiaEffect.html">SepiaEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html">ShockWaveEffect</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html">TextureEffect</a></span></span></li>
@@ -97,13 +99,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {OutlineEffect} from &apos;<span><a href="file/src/effects/OutlineEffect.js.html#lineNumber22">postprocessing/src/effects/OutlineEffect.js</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {OutlineEffect} from &apos;<span><a href="file/src/effects/OutlineEffect.js.html#lineNumber23">postprocessing/src/effects/OutlineEffect.js</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/OutlineEffect.js.html#lineNumber22">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/OutlineEffect.js.html#lineNumber23">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -509,14 +511,70 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-selectionLayer">selectionLayer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-selection">selection</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>A dedicated render layer for selected objects.</p>
+        <div data-ice="description"><p>A selection of objects that will be outlined.</p>
 </div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-selectionLayer">selectionLayer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use selection.layer instead.</div>
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-set-selectionLayer">selectionLayer</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use selection.layer instead.</div>
+        
+        
       </div>
     </td>
     <td>
@@ -693,7 +751,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.clear instead.</div>
         
         <div data-ice="description"><p>Clears the list of selected objects.</p>
 </div>
@@ -722,7 +780,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.delete instead.</div>
         
         <div data-ice="description"><p>Deselects an object.</p>
 </div>
@@ -809,7 +867,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.add instead.</div>
         
         <div data-ice="description"><p>Selects an object.</p>
 </div>
@@ -896,7 +954,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.set instead.</div>
         
         <div data-ice="description"><p>Clears the current selection and selects a list of objects.</p>
 </div>
@@ -1371,7 +1429,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber46">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber47">source</a></span></span>
     </span>
   </h3>
 
@@ -1546,7 +1604,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber75">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber76">source</a></span></span>
     </span>
   </h3>
 
@@ -1595,7 +1653,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber380">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber382">source</a></span></span>
     </span>
   </h3>
 
@@ -1639,7 +1697,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber390">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber392">source</a></span></span>
     </span>
   </h3>
 
@@ -1682,7 +1740,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber197">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber198">source</a></span></span>
     </span>
   </h3>
 
@@ -1726,7 +1784,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber331">source</a></span></span>
     </span>
   </h3>
 
@@ -1770,7 +1828,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber342">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber344">source</a></span></span>
     </span>
   </h3>
 
@@ -1814,7 +1872,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber296">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
@@ -1858,7 +1916,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber311">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber291">source</a></span></span>
     </span>
   </h3>
 
@@ -1904,7 +1962,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber355">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber357">source</a></span></span>
     </span>
   </h3>
 
@@ -1948,7 +2006,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber368">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -2025,10 +2083,54 @@ render width and aspect ratio.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-selectionLayer">
+  <h3 data-ice="anchor" id="instance-member-selection">
     <span class="access" data-ice="access">public</span>
     
     
+    
+    
+    
+    <span class="code" data-ice="name">selection</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber226">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A selection of objects that will be outlined.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-selectionLayer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -2036,17 +2138,57 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber245">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber307">source</a></span></span>
     </span>
   </h3>
 
   
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use selection.layer instead.</div>
   
   
-  <div data-ice="description"><p>A dedicated render layer for selected objects.</p>
-<p>This layer is set to 10 by default. If this collides with your own custom
-layers, please change it to a free layer before rendering!</p>
+
+  
+
+  <div data-ice="properties">
 </div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-selectionLayer">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">selectionLayer</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber318">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use selection.layer instead.</div>
+  
+  
 
   
 
@@ -2082,7 +2224,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber444">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber446">source</a></span></span>
     </span>
   </h3>
 
@@ -2126,7 +2268,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber264">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber244">source</a></span></span>
     </span>
   </h3>
 
@@ -2170,7 +2312,7 @@ layers, please change it to a free layer before rendering!</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -2216,7 +2358,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber406">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber408">source</a></span></span>
     </span>
   </h3>
 
@@ -2260,7 +2402,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber420">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber422">source</a></span></span>
     </span>
   </h3>
 
@@ -2308,12 +2450,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber520">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber511">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.clear instead.</div>
   
   <div data-ice="description"><p>Clears the list of selected objects.</p>
 </div>
@@ -2365,12 +2507,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber564">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber543">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.delete instead.</div>
   
   <div data-ice="description"><p>Deselects an object.</p>
 </div>
@@ -2439,7 +2581,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber464">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber466">source</a></span></span>
     </span>
   </h3>
 
@@ -2496,7 +2638,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber705">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber642">source</a></span></span>
     </span>
   </h3>
 
@@ -2564,12 +2706,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber548">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber527">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.add instead.</div>
   
   <div data-ice="description"><p>Selects an object.</p>
 </div>
@@ -2638,7 +2780,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber435">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber437">source</a></span></span>
     </span>
   </h3>
 
@@ -2701,7 +2843,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber477">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber479">source</a></span></span>
     </span>
   </h3>
 
@@ -2762,12 +2904,12 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber493">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber496">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Use selection.set instead.</div>
   
   <div data-ice="description"><p>Clears the current selection and selects a list of objects.</p>
 </div>
@@ -2836,7 +2978,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber683">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber620">source</a></span></span>
     </span>
   </h3>
 
@@ -2904,7 +3046,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber624">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber559">source</a></span></span>
     </span>
   </h3>
 
