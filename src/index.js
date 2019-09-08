@@ -31,6 +31,7 @@ export {
 	RealisticBokehEffect,
 	ScanlineEffect,
 	ShockWaveEffect,
+	SelectiveBloomEffect,
 	SepiaEffect,
 	SMAAEffect,
 	SMAAPreset,
