@@ -14,7 +14,7 @@ export class RenderPass extends Pass {
 	 *
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
-	 * @param {Object} [overrideMaterial=null] - An override material for the scene.
+	 * @param {Material} [overrideMaterial=null] - An override material for the scene.
 	 */
 
 	constructor(scene, camera, overrideMaterial = null) {
