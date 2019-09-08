@@ -1,0 +1,13 @@
+{
+	"source": {
+		"include": ["src"]
+	}
+	"plugins": [
+		"plugins/markdown",
+		"plugins/summarize"
+	],
+	"opts": {
+		"desitnation": "public/docs",
+		"recurse": true
+	}
+}
