@@ -164,7 +164,7 @@ export class EffectMaterial extends ShaderMaterial {
 }
 
 /**
- * An enumeration of shader code placeholders.
+ * An enumeration of shader code placeholders used by the {@link EffectPass}.
  *
  * @type {Object}
  * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
