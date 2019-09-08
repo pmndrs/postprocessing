@@ -58,7 +58,7 @@ export class BloomEffect extends Effect {
 		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @private
+		 * @protected
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
@@ -90,7 +90,6 @@ export class BloomEffect extends Effect {
 		 * You may disable this pass to deactivate luminance filtering.
 		 *
 		 * @type {ShaderPass}
-		 * @private
 		 */
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
