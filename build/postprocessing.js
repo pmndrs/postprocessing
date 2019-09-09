@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.6.1 build Tue Sep 03 2019
+ * postprocessing v6.7.0 build Mon Sep 09 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -60,6 +60,74 @@
     };
 
     return _setPrototypeOf(o, p);
+  }
+
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+    if (Reflect.construct.sham) return false;
+    if (typeof Proxy === "function") return true;
+
+    try {
+      Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function _construct(Parent, args, Class) {
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
+        var a = [null];
+        a.push.apply(a, args);
+        var Constructor = Function.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) _setPrototypeOf(instance, Class.prototype);
+        return instance;
+      };
+    }
+
+    return _construct.apply(null, arguments);
+  }
+
+  function _isNativeFunction(fn) {
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+
+  function _wrapNativeSuper(Class) {
+    var _cache = typeof Map === "function" ? new Map() : undefined;
+
+    _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null || !_isNativeFunction(Class)) return Class;
+
+      if (typeof Class !== "function") {
+        throw new TypeError("Super expression must either be null or a function");
+      }
+
+      if (typeof _cache !== "undefined") {
+        if (_cache.has(Class)) return _cache.get(Class);
+
+        _cache.set(Class, Wrapper);
+      }
+
+      function Wrapper() {
+        return _construct(Class, arguments, _getPrototypeOf(this).constructor);
+      }
+
+      Wrapper.prototype = Object.create(Class.prototype, {
+        constructor: {
+          value: Wrapper,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      });
+      return _setPrototypeOf(Wrapper, Class);
+    };
+
+    return _wrapNativeSuper(Class);
   }
 
   function _assertThisInitialized(self) {
@@ -2537,13 +2605,164 @@
     return Resizable;
   }();
 
+  var Selection = function (_Set) {
+    _inherits(Selection, _Set);
+
+    function Selection(iterable) {
+      var _this16;
+
+      var layer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10;
+
+      _classCallCheck(this, Selection);
+
+      _this16 = _possibleConstructorReturn(this, _getPrototypeOf(Selection).call(this));
+      _this16.currentLayer = layer;
+
+      if (iterable !== undefined) {
+        _this16.set(iterable);
+      }
+
+      return _this16;
+    }
+
+    _createClass(Selection, [{
+      key: "clear",
+      value: function clear() {
+        var layer = this.layer;
+        var _iteratorNormalCompletion19 = true;
+        var _didIteratorError19 = false;
+        var _iteratorError19 = undefined;
+
+        try {
+          for (var _iterator19 = this[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+            var object = _step19.value;
+            object.layers.disable(layer);
+          }
+        } catch (err) {
+          _didIteratorError19 = true;
+          _iteratorError19 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion19 && _iterator19["return"] != null) {
+              _iterator19["return"]();
+            }
+          } finally {
+            if (_didIteratorError19) {
+              throw _iteratorError19;
+            }
+          }
+        }
+
+        return _get(_getPrototypeOf(Selection.prototype), "clear", this).call(this);
+      }
+    }, {
+      key: "set",
+      value: function set(objects) {
+        this.clear();
+        var _iteratorNormalCompletion20 = true;
+        var _didIteratorError20 = false;
+        var _iteratorError20 = undefined;
+
+        try {
+          for (var _iterator20 = objects[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
+            var object = _step20.value;
+            this.add(object);
+          }
+        } catch (err) {
+          _didIteratorError20 = true;
+          _iteratorError20 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion20 && _iterator20["return"] != null) {
+              _iterator20["return"]();
+            }
+          } finally {
+            if (_didIteratorError20) {
+              throw _iteratorError20;
+            }
+          }
+        }
+
+        return this;
+      }
+    }, {
+      key: "indexOf",
+      value: function indexOf(object) {
+        return this.has(object) ? 0 : -1;
+      }
+    }, {
+      key: "add",
+      value: function add(object) {
+        object.layers.enable(this.layer);
+
+        _get(_getPrototypeOf(Selection.prototype), "add", this).call(this, object);
+
+        return this;
+      }
+    }, {
+      key: "delete",
+      value: function _delete(object) {
+        if (this.has(object)) {
+          object.layers.disable(this.layer);
+        }
+
+        return _get(_getPrototypeOf(Selection.prototype), "delete", this).call(this, object);
+      }
+    }, {
+      key: "setVisible",
+      value: function setVisible(visible) {
+        var _iteratorNormalCompletion21 = true;
+        var _didIteratorError21 = false;
+        var _iteratorError21 = undefined;
+
+        try {
+          for (var _iterator21 = this[Symbol.iterator](), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
+            var object = _step21.value;
+
+            if (visible) {
+              object.layers.enable(0);
+            } else {
+              object.layers.disable(0);
+            }
+          }
+        } catch (err) {
+          _didIteratorError21 = true;
+          _iteratorError21 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion21 && _iterator21["return"] != null) {
+              _iterator21["return"]();
+            }
+          } finally {
+            if (_didIteratorError21) {
+              throw _iteratorError21;
+            }
+          }
+        }
+
+        return this;
+      }
+    }, {
+      key: "layer",
+      get: function get() {
+        return this.currentLayer;
+      },
+      set: function set(value) {
+        this.clear();
+        this.currentLayer = value;
+      }
+    }]);
+
+    return Selection;
+  }(_wrapNativeSuper(Set));
+
   var fragmentShader$a = "uniform sampler2D texture;\n#ifdef ASPECT_CORRECTION\nvarying vec2 vUv2;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){\n#ifdef ASPECT_CORRECTION\noutputColor=texture2D(texture,vUv2);\n#else\noutputColor=texture2D(texture,uv);\n#endif\n}";
 
   var BloomEffect = function (_Effect) {
     _inherits(BloomEffect, _Effect);
 
     function BloomEffect() {
-      var _this16;
+      var _this17;
 
       var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref6$blendFunction = _ref6.blendFunction,
@@ -2563,29 +2782,29 @@
 
       _classCallCheck(this, BloomEffect);
 
-      _this16 = _possibleConstructorReturn(this, _getPrototypeOf(BloomEffect).call(this, "BloomEffect", fragmentShader$a, {
+      _this17 = _possibleConstructorReturn(this, _getPrototypeOf(BloomEffect).call(this, "BloomEffect", fragmentShader$a, {
         blendFunction: blendFunction,
         uniforms: new Map([["texture", new three.Uniform(null)]])
       }));
-      _this16.renderTarget = new three.WebGLRenderTarget(1, 1, {
+      _this17.renderTarget = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this16.renderTarget.texture.name = "Bloom.Target";
-      _this16.renderTarget.texture.generateMipmaps = false;
-      _this16.uniforms.get("texture").value = _this16.renderTarget.texture;
-      _this16.blurPass = new BlurPass({
+      _this17.renderTarget.texture.name = "Bloom.Target";
+      _this17.renderTarget.texture.generateMipmaps = false;
+      _this17.uniforms.get("texture").value = _this17.renderTarget.texture;
+      _this17.blurPass = new BlurPass({
         resolutionScale: resolutionScale,
         width: width,
         height: height,
         kernelSize: kernelSize
       });
-      _this16.luminancePass = new ShaderPass(new LuminanceMaterial(true));
-      _this16.luminanceMaterial.threshold = luminanceThreshold;
-      _this16.luminanceMaterial.smoothing = luminanceSmoothing;
-      return _this16;
+      _this17.luminancePass = new ShaderPass(new LuminanceMaterial(true));
+      _this17.luminanceMaterial.threshold = luminanceThreshold;
+      _this17.luminanceMaterial.smoothing = luminanceSmoothing;
+      return _this17;
     }
 
     _createClass(BloomEffect, [{
@@ -2604,8 +2823,13 @@
       key: "update",
       value: function update(renderer, inputBuffer, deltaTime) {
         var renderTarget = this.renderTarget;
-        this.luminancePass.render(renderer, inputBuffer, renderTarget);
-        this.blurPass.render(renderer, renderTarget, renderTarget);
+
+        if (this.luminancePass.enabled) {
+          this.luminancePass.render(renderer, inputBuffer, renderTarget);
+          this.blurPass.render(renderer, renderTarget, renderTarget);
+        } else {
+          this.blurPass.render(renderer, inputBuffer, renderTarget);
+        }
       }
     }, {
       key: "setSize",
@@ -2762,7 +2986,7 @@
     _inherits(ColorDepthEffect, _Effect5);
 
     function ColorDepthEffect() {
-      var _this17;
+      var _this18;
 
       var _ref9 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref9$blendFunction = _ref9.blendFunction,
@@ -2772,15 +2996,15 @@
 
       _classCallCheck(this, ColorDepthEffect);
 
-      _this17 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthEffect).call(this, "ColorDepthEffect", fragmentShader$e, {
+      _this18 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthEffect).call(this, "ColorDepthEffect", fragmentShader$e, {
         blendFunction: blendFunction,
         uniforms: new Map([["factor", new three.Uniform(1.0)]])
       }));
-      _this17.bits = 0;
+      _this18.bits = 0;
 
-      _this17.setBitDepth(bits);
+      _this18.setBitDepth(bits);
 
-      return _this17;
+      return _this18;
     }
 
     _createClass(ColorDepthEffect, [{
@@ -2841,7 +3065,7 @@
     _inherits(DepthEffect, _Effect7);
 
     function DepthEffect() {
-      var _this18;
+      var _this19;
 
       var _ref11 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref11$blendFunction = _ref11.blendFunction,
@@ -2851,12 +3075,12 @@
 
       _classCallCheck(this, DepthEffect);
 
-      _this18 = _possibleConstructorReturn(this, _getPrototypeOf(DepthEffect).call(this, "DepthEffect", fragmentShader$g, {
+      _this19 = _possibleConstructorReturn(this, _getPrototypeOf(DepthEffect).call(this, "DepthEffect", fragmentShader$g, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH
       }));
-      _this18.inverted = inverted;
-      return _this18;
+      _this19.inverted = inverted;
+      return _this19;
     }
 
     _createClass(DepthEffect, [{
@@ -2878,7 +3102,7 @@
     _inherits(DotScreenEffect, _Effect8);
 
     function DotScreenEffect() {
-      var _this19;
+      var _this20;
 
       var _ref12 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref12$blendFunction = _ref12.blendFunction,
@@ -2890,14 +3114,14 @@
 
       _classCallCheck(this, DotScreenEffect);
 
-      _this19 = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenEffect).call(this, "DotScreenEffect", fragmentShader$h, {
+      _this20 = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenEffect).call(this, "DotScreenEffect", fragmentShader$h, {
         blendFunction: blendFunction,
         uniforms: new Map([["angle", new three.Uniform(new three.Vector2())], ["scale", new three.Uniform(scale)]])
       }));
 
-      _this19.setAngle(angle);
+      _this20.setAngle(angle);
 
-      return _this19;
+      return _this20;
     }
 
     _createClass(DotScreenEffect, [{
@@ -2944,7 +3168,7 @@
     _inherits(GlitchEffect, _Effect10);
 
     function GlitchEffect() {
-      var _this20;
+      var _this21;
 
       var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref14$blendFunction = _ref14.blendFunction,
@@ -2968,26 +3192,26 @@
 
       _classCallCheck(this, GlitchEffect);
 
-      _this20 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchEffect).call(this, "GlitchEffect", fragmentShader$j, {
+      _this21 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchEffect).call(this, "GlitchEffect", fragmentShader$j, {
         blendFunction: blendFunction,
         uniforms: new Map([["perturbationMap", new three.Uniform(null)], ["columns", new three.Uniform(columns)], ["active", new three.Uniform(false)], ["random", new three.Uniform(0.02)], ["seed", new three.Uniform(new three.Vector2())], ["distortion", new three.Uniform(new three.Vector2())]])
       }));
-      _this20.perturbationMap = null;
+      _this21.perturbationMap = null;
 
-      _this20.setPerturbationMap(perturbationMap === null ? _this20.generatePerturbationMap(dtSize) : perturbationMap);
+      _this21.setPerturbationMap(perturbationMap === null ? _this21.generatePerturbationMap(dtSize) : perturbationMap);
 
-      _this20.perturbationMap.generateMipmaps = false;
-      _this20.delay = delay;
-      _this20.duration = duration;
-      _this20.breakPoint = new three.Vector2(randomFloat(_this20.delay.x, _this20.delay.y), randomFloat(_this20.duration.x, _this20.duration.y));
-      _this20.time = 0;
-      _this20.seed = _this20.uniforms.get("seed").value;
-      _this20.distortion = _this20.uniforms.get("distortion").value;
-      _this20.mode = GlitchMode.SPORADIC;
-      _this20.strength = strength;
-      _this20.ratio = ratio;
-      _this20.chromaticAberrationOffset = chromaticAberrationOffset;
-      return _this20;
+      _this21.perturbationMap.generateMipmaps = false;
+      _this21.delay = delay;
+      _this21.duration = duration;
+      _this21.breakPoint = new three.Vector2(randomFloat(_this21.delay.x, _this21.delay.y), randomFloat(_this21.duration.x, _this21.duration.y));
+      _this21.time = 0;
+      _this21.seed = _this21.uniforms.get("seed").value;
+      _this21.distortion = _this21.uniforms.get("distortion").value;
+      _this21.mode = GlitchMode.SPORADIC;
+      _this21.strength = strength;
+      _this21.ratio = ratio;
+      _this21.chromaticAberrationOffset = chromaticAberrationOffset;
+      return _this21;
     }
 
     _createClass(GlitchEffect, [{
@@ -3104,7 +3328,7 @@
     _inherits(GodRaysEffect, _Effect11);
 
     function GodRaysEffect(camera, lightSource) {
-      var _this21;
+      var _this22;
 
       var _ref15 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref15$blendFunction = _ref15.blendFunction,
@@ -3134,43 +3358,43 @@
 
       _classCallCheck(this, GodRaysEffect);
 
-      _this21 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysEffect).call(this, "GodRaysEffect", fragmentShader$a, {
+      _this22 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysEffect).call(this, "GodRaysEffect", fragmentShader$a, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["texture", new three.Uniform(null)]])
       }));
-      _this21.camera = camera;
-      _this21.lightSource = lightSource;
-      _this21.lightSource.material.depthWrite = false;
-      _this21.lightSource.material.transparent = true;
-      _this21.lightScene = new three.Scene();
-      _this21.screenPosition = new three.Vector2();
-      _this21.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+      _this22.camera = camera;
+      _this22.lightSource = lightSource;
+      _this22.lightSource.material.depthWrite = false;
+      _this22.lightSource.material.transparent = true;
+      _this22.lightScene = new three.Scene();
+      _this22.screenPosition = new three.Vector2();
+      _this22.renderTargetX = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this21.renderTargetX.texture.name = "GodRays.TargetX";
-      _this21.renderTargetY = _this21.renderTargetX.clone();
-      _this21.renderTargetY.texture.name = "GodRays.TargetY";
-      _this21.uniforms.get("texture").value = _this21.renderTargetY.texture;
-      _this21.renderTargetLight = _this21.renderTargetX.clone();
-      _this21.renderTargetLight.texture.name = "GodRays.Light";
-      _this21.renderTargetLight.depthBuffer = true;
-      _this21.renderTargetLight.depthTexture = new three.DepthTexture();
-      _this21.renderPassLight = new RenderPass(_this21.lightScene, camera);
-      _this21.renderPassLight.getClearPass().overrideClearColor = new three.Color(0x000000);
-      _this21.clearPass = new ClearPass(true, false, false);
-      _this21.blurPass = new BlurPass({
+      _this22.renderTargetX.texture.name = "GodRays.TargetX";
+      _this22.renderTargetY = _this22.renderTargetX.clone();
+      _this22.renderTargetY.texture.name = "GodRays.TargetY";
+      _this22.uniforms.get("texture").value = _this22.renderTargetY.texture;
+      _this22.renderTargetLight = _this22.renderTargetX.clone();
+      _this22.renderTargetLight.texture.name = "GodRays.Light";
+      _this22.renderTargetLight.depthBuffer = true;
+      _this22.renderTargetLight.depthTexture = new three.DepthTexture();
+      _this22.renderPassLight = new RenderPass(_this22.lightScene, camera);
+      _this22.renderPassLight.getClearPass().overrideClearColor = new three.Color(0x000000);
+      _this22.clearPass = new ClearPass(true, false, false);
+      _this22.blurPass = new BlurPass({
         resolutionScale: resolutionScale,
         width: width,
         height: height,
         kernelSize: kernelSize
       });
-      _this21.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
-      _this21.godRaysPass = new ShaderPass(function () {
-        var material = new GodRaysMaterial(_this21.screenPosition);
+      _this22.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
+      _this22.godRaysPass = new ShaderPass(function () {
+        var material = new GodRaysMaterial(_this22.screenPosition);
         material.uniforms.density.value = density;
         material.uniforms.decay.value = decay;
         material.uniforms.weight.value = weight;
@@ -3178,9 +3402,9 @@
         material.uniforms.clampMax.value = clampMax;
         return material;
       }());
-      _this21.samples = samples;
-      _this21.blur = blur;
-      return _this21;
+      _this22.samples = samples;
+      _this22.blur = blur;
+      return _this22;
     }
 
     _createClass(GodRaysEffect, [{
@@ -3349,7 +3573,7 @@
     _inherits(GridEffect, _Effect12);
 
     function GridEffect() {
-      var _this22;
+      var _this23;
 
       var _ref16 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref16$blendFunction = _ref16.blendFunction,
@@ -3361,14 +3585,14 @@
 
       _classCallCheck(this, GridEffect);
 
-      _this22 = _possibleConstructorReturn(this, _getPrototypeOf(GridEffect).call(this, "GridEffect", fragmentShader$k, {
+      _this23 = _possibleConstructorReturn(this, _getPrototypeOf(GridEffect).call(this, "GridEffect", fragmentShader$k, {
         blendFunction: blendFunction,
         uniforms: new Map([["scale", new three.Uniform(new three.Vector2())], ["lineWidth", new three.Uniform(lineWidth)]])
       }));
-      _this22.resolution = new three.Vector2();
-      _this22.scale = Math.max(scale, 1e-6);
-      _this22.lineWidth = Math.max(lineWidth, 0.0);
-      return _this22;
+      _this23.resolution = new three.Vector2();
+      _this23.scale = Math.max(scale, 1e-6);
+      _this23.lineWidth = Math.max(lineWidth, 0.0);
+      return _this23;
     }
 
     _createClass(GridEffect, [{
@@ -3413,7 +3637,7 @@
     _inherits(HueSaturationEffect, _Effect13);
 
     function HueSaturationEffect() {
-      var _this23;
+      var _this24;
 
       var _ref17 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref17$blendFunction = _ref17.blendFunction,
@@ -3425,14 +3649,14 @@
 
       _classCallCheck(this, HueSaturationEffect);
 
-      _this23 = _possibleConstructorReturn(this, _getPrototypeOf(HueSaturationEffect).call(this, "HueSaturationEffect", fragmentShader$l, {
+      _this24 = _possibleConstructorReturn(this, _getPrototypeOf(HueSaturationEffect).call(this, "HueSaturationEffect", fragmentShader$l, {
         blendFunction: blendFunction,
         uniforms: new Map([["hue", new three.Uniform(new three.Vector3())], ["saturation", new three.Uniform(saturation)]])
       }));
 
-      _this23.setHue(hue);
+      _this24.setHue(hue);
 
-      return _this23;
+      return _this24;
     }
 
     _createClass(HueSaturationEffect, [{
@@ -3453,7 +3677,7 @@
     _inherits(NoiseEffect, _Effect14);
 
     function NoiseEffect() {
-      var _this24;
+      var _this25;
 
       var _ref18 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref18$blendFunction = _ref18.blendFunction,
@@ -3463,11 +3687,11 @@
 
       _classCallCheck(this, NoiseEffect);
 
-      _this24 = _possibleConstructorReturn(this, _getPrototypeOf(NoiseEffect).call(this, "NoiseEffect", fragmentShader$m, {
+      _this25 = _possibleConstructorReturn(this, _getPrototypeOf(NoiseEffect).call(this, "NoiseEffect", fragmentShader$m, {
         blendFunction: blendFunction
       }));
-      _this24.premultiply = premultiply;
-      return _this24;
+      _this25.premultiply = premultiply;
+      return _this25;
     }
 
     _createClass(NoiseEffect, [{
@@ -3490,7 +3714,7 @@
     _inherits(OutlineEffect, _Effect15);
 
     function OutlineEffect(scene, camera) {
-      var _this25;
+      var _this26;
 
       var _ref19 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref19$blendFunction = _ref19.blendFunction,
@@ -3520,12 +3744,12 @@
 
       _classCallCheck(this, OutlineEffect);
 
-      _this25 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineEffect).call(this, "OutlineEffect", fragmentShader$n, {
+      _this26 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineEffect).call(this, "OutlineEffect", fragmentShader$n, {
         uniforms: new Map([["maskTexture", new three.Uniform(null)], ["edgeTexture", new three.Uniform(null)], ["edgeStrength", new three.Uniform(edgeStrength)], ["visibleEdgeColor", new three.Uniform(new three.Color(visibleEdgeColor))], ["hiddenEdgeColor", new three.Uniform(new three.Color(hiddenEdgeColor))], ["pulse", new three.Uniform(1.0)]])
       }));
 
-      _this25.blendMode = function (defines) {
-        return new Proxy(_this25.blendMode, {
+      _this26.blendMode = function (defines) {
+        return new Proxy(_this26.blendMode, {
           set: function set(target, name, value) {
             if (value === BlendFunction.ALPHA) {
               defines.set("ALPHA", "1");
@@ -3537,53 +3761,51 @@
             return true;
           }
         });
-      }(_this25.defines);
+      }(_this26.defines);
 
-      _this25.blendMode.blendFunction = blendFunction;
+      _this26.blendMode.blendFunction = blendFunction;
 
-      _this25.setPatternTexture(patternTexture);
+      _this26.setPatternTexture(patternTexture);
 
-      _this25.xRay = xRay;
-      _this25.scene = scene;
-      _this25.camera = camera;
-      _this25.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
+      _this26.xRay = xRay;
+      _this26.scene = scene;
+      _this26.camera = camera;
+      _this26.renderTargetMask = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         format: three.RGBFormat
       });
-      _this25.renderTargetMask.texture.name = "Outline.Mask";
-      _this25.uniforms.get("maskTexture").value = _this25.renderTargetMask.texture;
-      _this25.renderTargetEdges = _this25.renderTargetMask.clone();
-      _this25.renderTargetEdges.texture.name = "Outline.Edges";
-      _this25.renderTargetEdges.depthBuffer = false;
-      _this25.renderTargetBlurredEdges = _this25.renderTargetEdges.clone();
-      _this25.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
-      _this25.clearPass = new ClearPass();
-      _this25.clearPass.overrideClearColor = new three.Color(0x000000);
-      _this25.clearPass.overrideClearAlpha = 1.0;
-      _this25.depthPass = new DepthPass(scene, camera);
-      _this25.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(_this25.depthPass.renderTarget.texture, camera));
+      _this26.renderTargetMask.texture.name = "Outline.Mask";
+      _this26.uniforms.get("maskTexture").value = _this26.renderTargetMask.texture;
+      _this26.renderTargetEdges = _this26.renderTargetMask.clone();
+      _this26.renderTargetEdges.texture.name = "Outline.Edges";
+      _this26.renderTargetEdges.depthBuffer = false;
+      _this26.renderTargetBlurredEdges = _this26.renderTargetEdges.clone();
+      _this26.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
+      _this26.clearPass = new ClearPass();
+      _this26.clearPass.overrideClearColor = new three.Color(0x000000);
+      _this26.clearPass.overrideClearAlpha = 1.0;
+      _this26.depthPass = new DepthPass(scene, camera);
+      _this26.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(_this26.depthPass.renderTarget.texture, camera));
 
-      var clearPass = _this25.maskPass.getClearPass();
+      var clearPass = _this26.maskPass.getClearPass();
 
       clearPass.overrideClearColor = new three.Color(0xffffff);
       clearPass.overrideClearAlpha = 1.0;
-      _this25.blurPass = new BlurPass({
+      _this26.blurPass = new BlurPass({
         resolutionScale: resolutionScale,
         width: width,
         height: height,
         kernelSize: kernelSize
       });
-      _this25.blur = blur;
-      _this25.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
-      _this25.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = _this25.renderTargetMask.texture;
-      _this25.selection = [];
-      _this25.time = 0.0;
-      _this25.pulseSpeed = pulseSpeed;
-      _this25.selectionLayer = 10;
-      _this25.clear = false;
-      return _this25;
+      _this26.blur = blur;
+      _this26.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
+      _this26.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = _this26.renderTargetMask.texture;
+      _this26.time = 0.0;
+      _this26.selection = new Selection();
+      _this26.pulseSpeed = pulseSpeed;
+      return _this26;
     }
 
     _createClass(OutlineEffect, [{
@@ -3618,95 +3840,50 @@
     }, {
       key: "setSelection",
       value: function setSelection(objects) {
-        var selection = objects.slice(0);
-        var selectionLayer = this.selectionLayer;
-        var i, l;
-        this.clearSelection();
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          selection[i].layers.enable(selectionLayer);
-        }
-
-        this.selection = selection;
+        this.selection.set(objects);
         return this;
       }
     }, {
       key: "clearSelection",
       value: function clearSelection() {
-        var selection = this.selection;
-        var selectionLayer = this.selectionLayer;
-        var i, l;
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          selection[i].layers.disable(selectionLayer);
-        }
-
-        this.selection = [];
-        this.time = 0.0;
-        this.clear = true;
+        this.selection.clear();
         return this;
       }
     }, {
       key: "selectObject",
       value: function selectObject(object) {
-        object.layers.enable(this.selectionLayer);
-        this.selection.push(object);
+        this.selection.add(object);
         return this;
       }
     }, {
       key: "deselectObject",
       value: function deselectObject(object) {
-        var selection = this.selection;
-        var index = selection.indexOf(object);
-
-        if (index >= 0) {
-          selection[index].layers.disable(this.selectionLayer);
-          selection.splice(index, 1);
-
-          if (selection.length === 0) {
-            this.time = 0.0;
-            this.clear = true;
-          }
-        }
-
+        this.selection["delete"](object);
         return this;
-      }
-    }, {
-      key: "setSelectionVisible",
-      value: function setSelectionVisible(visible) {
-        var selection = this.selection;
-        var i, l;
-
-        for (i = 0, l = selection.length; i < l; ++i) {
-          if (visible) {
-            selection[i].layers.enable(0);
-          } else {
-            selection[i].layers.disable(0);
-          }
-        }
       }
     }, {
       key: "update",
       value: function update(renderer, inputBuffer, deltaTime) {
         var scene = this.scene;
         var camera = this.camera;
+        var selection = this.selection;
         var pulse = this.uniforms.get("pulse");
         var background = scene.background;
         var mask = camera.layers.mask;
 
-        if (this.selection.length > 0) {
+        if (selection.size > 0) {
           scene.background = null;
           pulse.value = 1.0;
 
           if (this.pulseSpeed > 0.0) {
             pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-            this.time += deltaTime;
           }
 
-          this.setSelectionVisible(false);
+          this.time += deltaTime;
+          selection.setVisible(false);
           this.depthPass.render(renderer);
-          this.setSelectionVisible(true);
-          camera.layers.mask = 1 << this.selectionLayer;
+          selection.setVisible(true);
+          camera.layers.set(selection.layer);
           this.maskPass.render(renderer, this.renderTargetMask);
           camera.layers.mask = mask;
           scene.background = background;
@@ -3715,9 +3892,9 @@
           if (this.blur) {
             this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
           }
-        } else if (this.clear) {
+        } else if (this.time > 0.0) {
           this.clearPass.render(renderer, this.renderTargetMask);
-          this.clear = false;
+          this.time = 0.0;
         }
       }
     }, {
@@ -3764,6 +3941,14 @@
         this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
       }
     }, {
+      key: "selectionLayer",
+      get: function get() {
+        return this.selection.layer;
+      },
+      set: function set(value) {
+        this.selection.layer = value;
+      }
+    }, {
       key: "dithering",
       get: function get() {
         return this.blurPass.dithering;
@@ -3807,18 +3992,18 @@
     _inherits(PixelationEffect, _Effect16);
 
     function PixelationEffect() {
-      var _this26;
+      var _this27;
 
       var granularity = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 30.0;
 
       _classCallCheck(this, PixelationEffect);
 
-      _this26 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationEffect).call(this, "PixelationEffect", fragmentShader$o, {
+      _this27 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationEffect).call(this, "PixelationEffect", fragmentShader$o, {
         uniforms: new Map([["active", new three.Uniform(false)], ["d", new three.Uniform(new three.Vector2())]])
       }));
-      _this26.resolution = new three.Vector2();
-      _this26.granularity = granularity;
-      return _this26;
+      _this27.resolution = new three.Vector2();
+      _this27.granularity = granularity;
+      return _this27;
     }
 
     _createClass(PixelationEffect, [{
@@ -3857,7 +4042,7 @@
     _inherits(RealisticBokehEffect, _Effect17);
 
     function RealisticBokehEffect() {
-      var _this27;
+      var _this28;
 
       var _ref20 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref20$blendFunction = _ref20.blendFunction,
@@ -3889,17 +4074,17 @@
 
       _classCallCheck(this, RealisticBokehEffect);
 
-      _this27 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehEffect).call(this, "RealisticBokehEffect", fragmentShader$p, {
+      _this28 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehEffect).call(this, "RealisticBokehEffect", fragmentShader$p, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
         uniforms: new Map([["focus", new three.Uniform(focus)], ["focalLength", new three.Uniform(focalLength)], ["luminanceThreshold", new three.Uniform(luminanceThreshold)], ["luminanceGain", new three.Uniform(luminanceGain)], ["bias", new three.Uniform(bias)], ["fringe", new three.Uniform(fringe)], ["maxBlur", new three.Uniform(maxBlur)]])
       }));
-      _this27.rings = rings;
-      _this27.samples = samples;
-      _this27.showFocus = showFocus;
-      _this27.manualDoF = manualDoF;
-      _this27.pentagon = pentagon;
-      return _this27;
+      _this28.rings = rings;
+      _this28.samples = samples;
+      _this28.showFocus = showFocus;
+      _this28.manualDoF = manualDoF;
+      _this28.pentagon = pentagon;
+      return _this28;
     }
 
     _createClass(RealisticBokehEffect, [{
@@ -3963,7 +4148,7 @@
     _inherits(ScanlineEffect, _Effect18);
 
     function ScanlineEffect() {
-      var _this28;
+      var _this29;
 
       var _ref21 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref21$blendFunction = _ref21.blendFunction,
@@ -3973,13 +4158,13 @@
 
       _classCallCheck(this, ScanlineEffect);
 
-      _this28 = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineEffect).call(this, "ScanlineEffect", fragmentShader$q, {
+      _this29 = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineEffect).call(this, "ScanlineEffect", fragmentShader$q, {
         blendFunction: blendFunction,
         uniforms: new Map([["count", new three.Uniform(0.0)]])
       }));
-      _this28.resolution = new three.Vector2();
-      _this28.density = density;
-      return _this28;
+      _this29.resolution = new three.Vector2();
+      _this29.density = density;
+      return _this29;
     }
 
     _createClass(ScanlineEffect, [{
@@ -4014,7 +4199,7 @@
     _inherits(ShockWaveEffect, _Effect19);
 
     function ShockWaveEffect(camera) {
-      var _this29;
+      var _this30;
 
       var epicenter = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector3();
 
@@ -4030,17 +4215,17 @@
 
       _classCallCheck(this, ShockWaveEffect);
 
-      _this29 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveEffect).call(this, "ShockWaveEffect", fragmentShader$r, {
+      _this30 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveEffect).call(this, "ShockWaveEffect", fragmentShader$r, {
         vertexShader: vertexShader$8,
         uniforms: new Map([["active", new three.Uniform(false)], ["center", new three.Uniform(new three.Vector2(0.5, 0.5))], ["cameraDistance", new three.Uniform(1.0)], ["size", new three.Uniform(1.0)], ["radius", new three.Uniform(-waveSize)], ["maxRadius", new three.Uniform(maxRadius)], ["waveSize", new three.Uniform(waveSize)], ["amplitude", new three.Uniform(amplitude)]])
       }));
-      _this29.camera = camera;
-      _this29.epicenter = epicenter;
-      _this29.screenPosition = _this29.uniforms.get("center").value;
-      _this29.speed = speed;
-      _this29.time = 0.0;
-      _this29.active = false;
-      return _this29;
+      _this30.camera = camera;
+      _this30.epicenter = epicenter;
+      _this30.screenPosition = _this30.uniforms.get("center").value;
+      _this30.speed = speed;
+      _this30.time = 0.0;
+      _this30.active = false;
+      return _this30;
     }
 
     _createClass(ShockWaveEffect, [{
@@ -4084,6 +4269,122 @@
     return ShockWaveEffect;
   }(Effect);
 
+  var SelectiveBloomEffect = function (_BloomEffect) {
+    _inherits(SelectiveBloomEffect, _BloomEffect);
+
+    function SelectiveBloomEffect(scene, camera, options) {
+      var _this31;
+
+      _classCallCheck(this, SelectiveBloomEffect);
+
+      _this31 = _possibleConstructorReturn(this, _getPrototypeOf(SelectiveBloomEffect).call(this, options));
+      _this31.scene = scene;
+      _this31.camera = camera;
+      _this31.clearPass = new ClearPass(true, true, false);
+      _this31.clearPass.overrideClearColor = new three.Color(0x000000);
+      _this31.renderPass = new RenderPass(scene, camera);
+      _this31.renderPass.clear = false;
+      _this31.blackoutPass = new RenderPass(scene, camera, new three.MeshBasicMaterial({
+        color: 0x000000
+      }));
+      _this31.blackoutPass.clear = false;
+
+      _this31.backgroundPass = function () {
+        var backgroundScene = new three.Scene();
+        var pass = new RenderPass(backgroundScene, camera);
+        backgroundScene.background = scene.background;
+        pass.clear = false;
+        return pass;
+      }();
+
+      _this31.renderTargetSelection = new three.WebGLRenderTarget(1, 1, {
+        minFilter: three.LinearFilter,
+        magFilter: three.LinearFilter,
+        stencilBuffer: false,
+        depthBuffer: true
+      });
+      _this31.renderTargetSelection.texture.name = "Bloom.Selection";
+      _this31.renderTargetSelection.texture.generateMipmaps = false;
+      _this31.selection = new Selection();
+      _this31.inverted = false;
+      return _this31;
+    }
+
+    _createClass(SelectiveBloomEffect, [{
+      key: "update",
+      value: function update(renderer, inputBuffer, deltaTime) {
+        var scene = this.scene;
+        var camera = this.camera;
+        var selection = this.selection;
+        var renderTarget = this.renderTargetSelection;
+        var background = scene.background;
+        var mask = camera.layers.mask;
+        this.clearPass.render(renderer, renderTarget);
+
+        if (!this.ignoreBackground) {
+          this.backgroundPass.render(renderer, renderTarget);
+        }
+
+        scene.background = null;
+
+        if (this.inverted) {
+          camera.layers.set(selection.layer);
+          this.blackoutPass.render(renderer, renderTarget);
+          camera.layers.mask = mask;
+          selection.setVisible(false);
+          this.renderPass.render(renderer, renderTarget);
+          selection.setVisible(true);
+        } else {
+          selection.setVisible(false);
+          this.blackoutPass.render(renderer, renderTarget);
+          selection.setVisible(true);
+          camera.layers.set(selection.layer);
+          this.renderPass.render(renderer, renderTarget);
+          camera.layers.mask = mask;
+        }
+
+        scene.background = background;
+
+        _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "update", this).call(this, renderer, renderTarget, deltaTime);
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        var blurPass = this.blurPass;
+
+        _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "setSize", this).call(this, width, height);
+
+        this.backgroundPass.setSize(width, height);
+        this.blackoutPass.setSize(width, height);
+        this.renderPass.setSize(width, height);
+        this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+      }
+    }, {
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "initialize", this).call(this, renderer, alpha);
+
+        this.backgroundPass.initialize(renderer, alpha);
+        this.blackoutPass.initialize(renderer, alpha);
+        this.renderPass.initialize(renderer, alpha);
+
+        if (!alpha) {
+          this.renderTargetSelection.texture.format = three.RGBFormat;
+        }
+      }
+    }, {
+      key: "ignoreBackground",
+      get: function get() {
+        return !this.backgroundPass.enabled;
+      },
+      set: function set(value) {
+        this.backgroundPass.enabled = !value;
+      }
+    }]);
+
+    return SelectiveBloomEffect;
+  }(BloomEffect);
+
   var fragmentShader$s = "uniform float intensity;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 color=vec3(dot(inputColor.rgb,vec3(1.0-0.607*intensity,0.769*intensity,0.189*intensity)),dot(inputColor.rgb,vec3(0.349*intensity,1.0-0.314*intensity,0.168*intensity)),dot(inputColor.rgb,vec3(0.272*intensity,0.534*intensity,1.0-0.869*intensity)));outputColor=vec4(color,inputColor.a);}";
 
   var SepiaEffect = function (_Effect20) {
@@ -4116,36 +4417,36 @@
     _inherits(SMAAEffect, _Effect21);
 
     function SMAAEffect(searchImage, areaImage) {
-      var _this30;
+      var _this32;
 
       var preset = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : SMAAPreset.HIGH;
 
       _classCallCheck(this, SMAAEffect);
 
-      _this30 = _possibleConstructorReturn(this, _getPrototypeOf(SMAAEffect).call(this, "SMAAEffect", fragmentShader$t, {
+      _this32 = _possibleConstructorReturn(this, _getPrototypeOf(SMAAEffect).call(this, "SMAAEffect", fragmentShader$t, {
         vertexShader: vertexShader$9,
         blendFunction: BlendFunction.NORMAL,
         attributes: EffectAttribute.CONVOLUTION,
         uniforms: new Map([["weightMap", new three.Uniform(null)]])
       }));
-      _this30.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
+      _this32.renderTargetColorEdges = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false,
         format: three.RGBFormat
       });
-      _this30.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
-      _this30.renderTargetWeights = _this30.renderTargetColorEdges.clone();
-      _this30.renderTargetWeights.texture.name = "SMAA.Weights";
-      _this30.renderTargetWeights.texture.format = three.RGBAFormat;
-      _this30.uniforms.get("weightMap").value = _this30.renderTargetWeights.texture;
-      _this30.clearPass = new ClearPass(true, false, false);
-      _this30.clearPass.overrideClearColor = new three.Color(0x000000);
-      _this30.clearPass.overrideClearAlpha = 1.0;
-      _this30.colorEdgesPass = new ShaderPass(new ColorEdgesMaterial());
-      _this30.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
+      _this32.renderTargetColorEdges.texture.name = "SMAA.ColorEdges";
+      _this32.renderTargetWeights = _this32.renderTargetColorEdges.clone();
+      _this32.renderTargetWeights.texture.name = "SMAA.Weights";
+      _this32.renderTargetWeights.texture.format = three.RGBAFormat;
+      _this32.uniforms.get("weightMap").value = _this32.renderTargetWeights.texture;
+      _this32.clearPass = new ClearPass(true, false, false);
+      _this32.clearPass.overrideClearColor = new three.Color(0x000000);
+      _this32.clearPass.overrideClearAlpha = 1.0;
+      _this32.colorEdgesPass = new ShaderPass(new ColorEdgesMaterial());
+      _this32.weightsPass = new ShaderPass(new SMAAWeightsMaterial());
 
-      _this30.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = function () {
+      _this32.weightsPass.getFullscreenMaterial().uniforms.searchTexture.value = function () {
         var searchTexture = new three.Texture(searchImage);
         searchTexture.name = "SMAA.Search";
         searchTexture.magFilter = three.NearestFilter;
@@ -4157,7 +4458,7 @@
         return searchTexture;
       }();
 
-      _this30.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = function () {
+      _this32.weightsPass.getFullscreenMaterial().uniforms.areaTexture.value = function () {
         var areaTexture = new three.Texture(areaImage);
         areaTexture.name = "SMAA.Area";
         areaTexture.minFilter = three.LinearFilter;
@@ -4168,9 +4469,9 @@
         return areaTexture;
       }();
 
-      _this30.applyPreset(preset);
+      _this32.applyPreset(preset);
 
-      return _this30;
+      return _this32;
     }
 
     _createClass(SMAAEffect, [{
@@ -4278,7 +4579,7 @@
     _inherits(SSAOEffect, _Effect22);
 
     function SSAOEffect(camera, normalBuffer) {
-      var _this31;
+      var _this33;
 
       var _ref24 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref24$blendFunction = _ref24.blendFunction,
@@ -4306,24 +4607,24 @@
 
       _classCallCheck(this, SSAOEffect);
 
-      _this31 = _possibleConstructorReturn(this, _getPrototypeOf(SSAOEffect).call(this, "SSAOEffect", fragmentShader$u, {
+      _this33 = _possibleConstructorReturn(this, _getPrototypeOf(SSAOEffect).call(this, "SSAOEffect", fragmentShader$u, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         defines: new Map([["RINGS_INT", "0"], ["SAMPLES_INT", "0"], ["SAMPLES_FLOAT", "0.0"]]),
         uniforms: new Map([["normalBuffer", new three.Uniform(normalBuffer)], ["cameraInverseProjectionMatrix", new three.Uniform(new three.Matrix4())], ["cameraProjectionMatrix", new three.Uniform(new three.Matrix4())], ["radiusStep", new three.Uniform(new three.Vector2())], ["distanceCutoff", new three.Uniform(new three.Vector2())], ["proximityCutoff", new three.Uniform(new three.Vector2())], ["seed", new three.Uniform(Math.random())], ["luminanceInfluence", new three.Uniform(luminanceInfluence)], ["scale", new three.Uniform(scale)], ["bias", new three.Uniform(bias)]])
       }));
-      _this31.r = 0.0;
-      _this31.resolution = new three.Vector2(1, 1);
-      _this31.camera = camera;
-      _this31.samples = samples;
-      _this31.rings = rings;
-      _this31.radius = radius;
+      _this33.r = 0.0;
+      _this33.resolution = new three.Vector2(1, 1);
+      _this33.camera = camera;
+      _this33.samples = samples;
+      _this33.rings = rings;
+      _this33.radius = radius;
 
-      _this31.setDistanceCutoff(distanceThreshold, distanceFalloff);
+      _this33.setDistanceCutoff(distanceThreshold, distanceFalloff);
 
-      _this31.setProximityCutoff(rangeThreshold, rangeFalloff);
+      _this33.setProximityCutoff(rangeThreshold, rangeFalloff);
 
-      return _this31;
+      return _this33;
     }
 
     _createClass(SSAOEffect, [{
@@ -4397,7 +4698,7 @@
     _inherits(TextureEffect, _Effect23);
 
     function TextureEffect() {
-      var _this32;
+      var _this34;
 
       var _ref25 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref25$blendFunction = _ref25.blendFunction,
@@ -4409,12 +4710,12 @@
 
       _classCallCheck(this, TextureEffect);
 
-      _this32 = _possibleConstructorReturn(this, _getPrototypeOf(TextureEffect).call(this, "TextureEffect", fragmentShader$a, {
+      _this34 = _possibleConstructorReturn(this, _getPrototypeOf(TextureEffect).call(this, "TextureEffect", fragmentShader$a, {
         blendFunction: blendFunction,
         uniforms: new Map([["texture", new three.Uniform(texture)]])
       }));
-      _this32.aspectCorrection = aspectCorrection;
-      return _this32;
+      _this34.aspectCorrection = aspectCorrection;
+      return _this34;
     }
 
     _createClass(TextureEffect, [{
@@ -4444,7 +4745,7 @@
     _inherits(ToneMappingEffect, _Effect24);
 
     function ToneMappingEffect() {
-      var _this33;
+      var _this35;
 
       var _ref26 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref26$blendFunction = _ref26.blendFunction,
@@ -4464,36 +4765,36 @@
 
       _classCallCheck(this, ToneMappingEffect);
 
-      _this33 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragmentShader$v, {
+      _this35 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragmentShader$v, {
         blendFunction: blendFunction,
         uniforms: new Map([["luminanceMap", new three.Uniform(null)], ["middleGrey", new three.Uniform(middleGrey)], ["maxLuminance", new three.Uniform(maxLuminance)], ["averageLuminance", new three.Uniform(averageLuminance)]])
       }));
-      _this33.renderTargetLuminance = new three.WebGLRenderTarget(1, 1, {
+      _this35.renderTargetLuminance = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearMipmapLinearFilter !== undefined ? three.LinearMipmapLinearFilter : three.LinearMipMapLinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false,
         format: three.RGBFormat
       });
-      _this33.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
-      _this33.renderTargetLuminance.texture.generateMipmaps = true;
-      _this33.renderTargetAdapted = _this33.renderTargetLuminance.clone();
-      _this33.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminance";
-      _this33.renderTargetAdapted.texture.generateMipmaps = false;
-      _this33.renderTargetAdapted.texture.minFilter = three.LinearFilter;
-      _this33.renderTargetPrevious = _this33.renderTargetAdapted.clone();
-      _this33.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminance";
-      _this33.savePass = new SavePass(_this33.renderTargetPrevious, false);
-      _this33.luminancePass = new ShaderPass(new LuminanceMaterial());
+      _this35.renderTargetLuminance.texture.name = "ToneMapping.Luminance";
+      _this35.renderTargetLuminance.texture.generateMipmaps = true;
+      _this35.renderTargetAdapted = _this35.renderTargetLuminance.clone();
+      _this35.renderTargetAdapted.texture.name = "ToneMapping.AdaptedLuminance";
+      _this35.renderTargetAdapted.texture.generateMipmaps = false;
+      _this35.renderTargetAdapted.texture.minFilter = three.LinearFilter;
+      _this35.renderTargetPrevious = _this35.renderTargetAdapted.clone();
+      _this35.renderTargetPrevious.texture.name = "ToneMapping.PreviousLuminance";
+      _this35.savePass = new SavePass(_this35.renderTargetPrevious, false);
+      _this35.luminancePass = new ShaderPass(new LuminanceMaterial());
 
-      var luminanceMaterial = _this33.luminancePass.getFullscreenMaterial();
+      var luminanceMaterial = _this35.luminancePass.getFullscreenMaterial();
 
       luminanceMaterial.useThreshold = false;
-      _this33.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
-      _this33.adaptationRate = adaptationRate;
-      _this33.resolution = resolution;
-      _this33.adaptive = adaptive;
-      return _this33;
+      _this35.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
+      _this35.adaptationRate = adaptationRate;
+      _this35.resolution = resolution;
+      _this35.adaptive = adaptive;
+      return _this35;
     }
 
     _createClass(ToneMappingEffect, [{
@@ -4577,7 +4878,7 @@
     _inherits(VignetteEffect, _Effect25);
 
     function VignetteEffect() {
-      var _this34;
+      var _this36;
 
       var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -4589,12 +4890,12 @@
         offset: 0.5,
         darkness: 0.5
       }, options);
-      _this34 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragmentShader$w, {
+      _this36 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragmentShader$w, {
         blendFunction: settings.blendFunction,
         uniforms: new Map([["offset", new three.Uniform(settings.offset)], ["darkness", new three.Uniform(settings.darkness)]])
       }));
-      _this34.eskil = settings.eskil;
-      return _this34;
+      _this36.eskil = settings.eskil;
+      return _this36;
     }
 
     _createClass(VignetteEffect, [{
@@ -5312,6 +5613,8 @@
   exports.SSAOEffect = SSAOEffect;
   exports.SavePass = SavePass;
   exports.ScanlineEffect = ScanlineEffect;
+  exports.Selection = Selection;
+  exports.SelectiveBloomEffect = SelectiveBloomEffect;
   exports.SepiaEffect = SepiaEffect;
   exports.ShaderPass = ShaderPass;
   exports.ShockWaveEffect = ShockWaveEffect;

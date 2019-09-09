@@ -1,9 +1,9 @@
 /**
- * postprocessing v6.6.1 build Tue Sep 03 2019
+ * postprocessing v6.7.0 build Mon Sep 09 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
-import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, Texture, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Box2 } from 'three';
+import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Box2 } from 'three';
 
 /**
  * The Disposable contract.
@@ -632,7 +632,7 @@ class EffectMaterial extends ShaderMaterial {
 }
 
 /**
- * An enumeration of shader code placeholders.
+ * An enumeration of shader code placeholders used by the {@link EffectPass}.
  *
  * @type {Object}
  * @property {String} FRAGMENT_HEAD - A placeholder for function and variable declarations inside the fragment shader.
@@ -2126,7 +2126,7 @@ class RenderPass extends Pass {
 	 *
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
-	 * @param {Object} [overrideMaterial=null] - An override material for the scene.
+	 * @param {Material} [overrideMaterial=null] - An override material for the scene.
 	 */
 
 	constructor(scene, camera, overrideMaterial = null) {
@@ -4418,6 +4418,191 @@ class Resizable {
 
 }
 
+/**
+ * An object selection.
+ */
+
+class Selection extends Set {
+
+	/**
+	 * Constructs a new selection.
+	 *
+	 * @param {Iterable<Object3D>} [iterable] - A collection of objects that should be added to this selection.
+	 * @param {Number} [layer=10] - A dedicated render layer for selected objects.
+	 */
+
+	constructor(iterable, layer = 10) {
+
+		super();
+
+		/**
+		 * The current render layer for selected objects.
+		 *
+		 * @type {Number}
+		 * @private
+		 */
+
+		this.currentLayer = layer;
+
+		if(iterable !== undefined) {
+
+			this.set(iterable);
+
+		}
+
+	}
+
+	/**
+	 * A dedicated render layer for selected objects.
+	 *
+	 * This layer is set to 10 by default. If this collides with your own custom
+	 * layers, please change it to a free layer before rendering!
+	 *
+	 * @type {Number}
+	 */
+
+	get layer() {
+
+		return this.currentLayer;
+
+	}
+
+	/**
+	 * Sets the render layer of selected objects.
+	 *
+	 * The current selection will be cleared beforehand.
+	 *
+	 * @type {Number}
+	 */
+
+	set layer(value) {
+
+		this.clear();
+		this.currentLayer = value;
+
+	}
+
+	/**
+	 * Clears this selection.
+	 *
+	 * @return {Selection} This selection.
+	 */
+
+	clear() {
+
+		const layer = this.layer;
+
+		for(const object of this) {
+
+			object.layers.disable(layer);
+
+		}
+
+		return super.clear();
+
+	}
+
+	/**
+	 * Clears this selection and adds the given objects.
+	 *
+	 * @param {Iterable<Object3D>} objects - The objects that should be selected. This array will be copied.
+	 * @return {Selection} This selection.
+	 */
+
+	set(objects) {
+
+		this.clear();
+
+		for(const object of objects) {
+
+			this.add(object);
+
+		}
+
+		return this;
+
+	}
+
+	/**
+	 * An alias for {@link has}.
+	 *
+	 * @param {Object3D} object - An object.
+	 * @return {Number} Returns 0 if the given object is currently selected, or -1 otherwise.
+	 * @deprecated Added for backward compatibility. Use has instead.
+	 */
+
+	indexOf(object) {
+
+		return this.has(object) ? 0 : -1;
+
+	}
+
+	/**
+	 * Adds an object to this selection.
+	 *
+	 * @param {Object3D} object - The object that should be selected.
+	 * @return {Selection} This selection.
+	 */
+
+	add(object) {
+
+		object.layers.enable(this.layer);
+		super.add(object);
+
+		return this;
+
+	}
+
+	/**
+	 * Removes an object from this selection.
+	 *
+	 * @param {Object3D} object - The object that should be deselected.
+	 * @return {Boolean} Returns true if an object has successfully been removed from this selection; otherwise false.
+	 */
+
+	delete(object) {
+
+		if(this.has(object)) {
+
+			object.layers.disable(this.layer);
+
+		}
+
+		return super.delete(object);
+
+	}
+
+	/**
+	 * Sets the visibility of all selected objects.
+	 *
+	 * This method enables or disables render layer 0 of all selected objects.
+	 *
+	 * @param {Boolean} visible - Whether the selected objects should be visible.
+	 * @return {Selection} This selection.
+	 */
+
+	setVisible(visible) {
+
+		for(const object of this) {
+
+			if(visible) {
+
+				object.layers.enable(0);
+
+			} else {
+
+				object.layers.disable(0);
+
+			}
+
+		}
+
+		return this;
+
+	}
+
+}
+
 var fragmentShader$a = "uniform sampler2D texture;\n#ifdef ASPECT_CORRECTION\nvarying vec2 vUv2;\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){\n#ifdef ASPECT_CORRECTION\noutputColor=texture2D(texture,vUv2);\n#else\noutputColor=texture2D(texture,uv);\n#endif\n}";
 
 /**
@@ -4498,7 +4683,6 @@ class BloomEffect extends Effect {
 		 * You may disable this pass to deactivate luminance filtering.
 		 *
 		 * @type {ShaderPass}
-		 * @private
 		 */
 
 		this.luminancePass = new ShaderPass(new LuminanceMaterial(true));
@@ -4707,8 +4891,16 @@ class BloomEffect extends Effect {
 
 		const renderTarget = this.renderTarget;
 
-		this.luminancePass.render(renderer, inputBuffer, renderTarget);
-		this.blurPass.render(renderer, renderTarget, renderTarget);
+		if(this.luminancePass.enabled) {
+
+			this.luminancePass.render(renderer, inputBuffer, renderTarget);
+			this.blurPass.render(renderer, renderTarget, renderTarget);
+
+		} else {
+
+			this.blurPass.render(renderer, inputBuffer, renderTarget);
+
+		}
 
 	}
 
@@ -6494,15 +6686,6 @@ class OutlineEffect extends Effect {
 		this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
 
 		/**
-		 * A list of objects to outline.
-		 *
-		 * @type {Object3D[]}
-		 * @private
-		 */
-
-		this.selection = [];
-
-		/**
 		 * The current animation time.
 		 *
 		 * @type {Number}
@@ -6512,32 +6695,20 @@ class OutlineEffect extends Effect {
 		this.time = 0.0;
 
 		/**
+		 * A selection of objects that will be outlined.
+		 *
+		 * @type {Selection}
+		 */
+
+		this.selection = new Selection();
+
+		/**
 		 * The pulse speed. A value of zero disables the pulse effect.
 		 *
 		 * @type {Number}
 		 */
 
 		this.pulseSpeed = pulseSpeed;
-
-		/**
-		 * A dedicated render layer for selected objects.
-		 *
-		 * This layer is set to 10 by default. If this collides with your own custom
-		 * layers, please change it to a free layer before rendering!
-		 *
-		 * @type {Number}
-		 */
-
-		this.selectionLayer = 10;
-
-		/**
-		 * A clear flag.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.clear = false;
 
 	}
 
@@ -6602,6 +6773,28 @@ class OutlineEffect extends Effect {
 		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
 		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
 		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use selection.layer instead.
+	 */
+
+	get selectionLayer() {
+
+		return this.selection.layer;
+
+	}
+
+	/**
+	 * @type {Number}
+	 * @deprecated Use selection.layer instead.
+	 */
+
+	set selectionLayer(value) {
+
+		this.selection.layer = value;
 
 	}
 
@@ -6774,24 +6967,12 @@ class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D[]} objects - The objects that should be outlined. This array will be copied.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.set instead.
 	 */
 
 	setSelection(objects) {
 
-		const selection = objects.slice(0);
-		const selectionLayer = this.selectionLayer;
-
-		let i, l;
-
-		this.clearSelection();
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			selection[i].layers.enable(selectionLayer);
-
-		}
-
-		this.selection = selection;
+		this.selection.set(objects);
 
 		return this;
 
@@ -6801,24 +6982,12 @@ class OutlineEffect extends Effect {
 	 * Clears the list of selected objects.
 	 *
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.clear instead.
 	 */
 
 	clearSelection() {
 
-		const selection = this.selection;
-		const selectionLayer = this.selectionLayer;
-
-		let i, l;
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			selection[i].layers.disable(selectionLayer);
-
-		}
-
-		this.selection = [];
-		this.time = 0.0;
-		this.clear = true;
+		this.selection.clear();
 
 		return this;
 
@@ -6829,12 +6998,12 @@ class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should be outlined.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.add instead.
 	 */
 
 	selectObject(object) {
 
-		object.layers.enable(this.selectionLayer);
-		this.selection.push(object);
+		this.selection.add(object);
 
 		return this;
 
@@ -6845,57 +7014,14 @@ class OutlineEffect extends Effect {
 	 *
 	 * @param {Object3D} object - The object that should no longer be outlined.
 	 * @return {OutlinePass} This pass.
+	 * @deprecated Use selection.delete instead.
 	 */
 
 	deselectObject(object) {
 
-		const selection = this.selection;
-		const index = selection.indexOf(object);
-
-		if(index >= 0) {
-
-			selection[index].layers.disable(this.selectionLayer);
-			selection.splice(index, 1);
-
-			if(selection.length === 0) {
-
-				this.time = 0.0;
-				this.clear = true;
-
-			}
-
-		}
+		this.selection.delete(object);
 
 		return this;
-
-	}
-
-	/**
-	 * Sets the visibility of all selected objects.
-	 *
-	 * @private
-	 * @param {Boolean} visible - Whether the selected objects should be visible.
-	 */
-
-	setSelectionVisible(visible) {
-
-		const selection = this.selection;
-
-		let i, l;
-
-		for(i = 0, l = selection.length; i < l; ++i) {
-
-			if(visible) {
-
-				selection[i].layers.enable(0);
-
-			} else {
-
-				selection[i].layers.disable(0);
-
-			}
-
-		}
 
 	}
 
@@ -6911,12 +7037,13 @@ class OutlineEffect extends Effect {
 
 		const scene = this.scene;
 		const camera = this.camera;
+		const selection = this.selection;
 		const pulse = this.uniforms.get("pulse");
 
 		const background = scene.background;
 		const mask = camera.layers.mask;
 
-		if(this.selection.length > 0) {
+		if(selection.size > 0) {
 
 			scene.background = null;
 			pulse.value = 1.0;
@@ -6924,17 +7051,18 @@ class OutlineEffect extends Effect {
 			if(this.pulseSpeed > 0.0) {
 
 				pulse.value = 0.625 + Math.cos(this.time * this.pulseSpeed * 10.0) * 0.375;
-				this.time += deltaTime;
 
 			}
 
+			this.time += deltaTime;
+
 			// Render a custom depth texture and ignore selected objects.
-			this.setSelectionVisible(false);
+			selection.setVisible(false);
 			this.depthPass.render(renderer);
-			this.setSelectionVisible(true);
+			selection.setVisible(true);
 
 			// Compare the depth of the selected objects with the depth texture.
-			camera.layers.mask = 1 << this.selectionLayer;
+			camera.layers.set(selection.layer);
 			this.maskPass.render(renderer, this.renderTargetMask);
 
 			// Restore the camera layer mask and the scene background.
@@ -6950,10 +7078,10 @@ class OutlineEffect extends Effect {
 
 			}
 
-		} else if(this.clear) {
+		} else if(this.time > 0.0) {
 
 			this.clearPass.render(renderer, this.renderTargetMask);
-			this.clear = false;
+			this.time = 0.0;
 
 		}
 
@@ -7604,6 +7732,258 @@ class ShockWaveEffect extends Effect {
 
 			}
 
+
+		}
+
+	}
+
+}
+
+/**
+ * A selective bloom effect.
+ *
+ * This effect applies bloom only to selected objects. For this, all objects in
+ * the scene need to be rendered again: non-selected objects are rendered solid
+ * black to properly occlude selected objects and the scene background.
+ *
+ * Attention: If you don't need to limit bloom to a subset of objects, consider
+ * using the {@link BloomEffect} instead for better performance.
+ */
+
+class SelectiveBloomEffect extends BloomEffect {
+
+	/**
+	 * Constructs a new selective bloom effect.
+	 *
+	 * @param {Scene} scene - The main scene.
+	 * @param {Camera} camera - The main camera.
+	 * @param {Object} [options] - The options. See {@link BloomEffect} for details.
+	 */
+
+	constructor(scene, camera, options) {
+
+		super(options);
+
+		/**
+		 * The main scene.
+		 *
+		 * @type {Scene}
+		 * @private
+		 */
+
+		this.scene = scene;
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.camera = camera;
+
+		/**
+		 * A clear pass.
+		 *
+		 * @type {ClearPass}
+		 * @private
+		 */
+
+		this.clearPass = new ClearPass(true, true, false);
+		this.clearPass.overrideClearColor = new Color(0x000000);
+
+		/**
+		 * A render pass.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.renderPass = new RenderPass(scene, camera);
+		this.renderPass.clear = false;
+
+		/**
+		 * A render pass that renders all objects solid black.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.blackoutPass = new RenderPass(scene, camera, new MeshBasicMaterial({ color: 0x000000 }));
+		this.blackoutPass.clear = false;
+
+		/**
+		 * A render pass that only renders the background of the main scene.
+		 *
+		 * @type {RenderPass}
+		 * @private
+		 */
+
+		this.backgroundPass = (() => {
+
+			const backgroundScene = new Scene();
+			const pass = new RenderPass(backgroundScene, camera);
+
+			backgroundScene.background = scene.background;
+			pass.clear = false;
+
+			return pass;
+
+		})();
+
+		/**
+		 * A render target.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetSelection = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			stencilBuffer: false,
+			depthBuffer: true
+		});
+
+		this.renderTargetSelection.texture.name = "Bloom.Selection";
+		this.renderTargetSelection.texture.generateMipmaps = false;
+
+		/**
+		 * A selection of objects.
+		 *
+		 * @type {Selection}
+		 */
+
+		this.selection = new Selection();
+
+		/**
+		 * Indicates whether the selection should be considered inverted.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.inverted = false;
+
+	}
+
+	/**
+	 * Indicates whether the scene background should be ignored.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get ignoreBackground() {
+
+		return !this.backgroundPass.enabled;
+
+	}
+
+	/**
+	 * Enables or disables background rendering.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set ignoreBackground(value) {
+
+		this.backgroundPass.enabled = !value;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, deltaTime) {
+
+		const scene = this.scene;
+		const camera = this.camera;
+		const selection = this.selection;
+		const renderTarget = this.renderTargetSelection;
+
+		const background = scene.background;
+		const mask = camera.layers.mask;
+
+		this.clearPass.render(renderer, renderTarget);
+
+		if(!this.ignoreBackground) {
+
+			this.backgroundPass.render(renderer, renderTarget);
+
+		}
+
+		scene.background = null;
+
+		if(this.inverted) {
+
+			camera.layers.set(selection.layer);
+			this.blackoutPass.render(renderer, renderTarget);
+			camera.layers.mask = mask;
+
+			selection.setVisible(false);
+			this.renderPass.render(renderer, renderTarget);
+			selection.setVisible(true);
+
+		} else {
+
+			selection.setVisible(false);
+			this.blackoutPass.render(renderer, renderTarget);
+			selection.setVisible(true);
+
+			camera.layers.set(selection.layer);
+			this.renderPass.render(renderer, renderTarget);
+			camera.layers.mask = mask;
+
+		}
+
+		scene.background = background;
+		super.update(renderer, renderTarget, deltaTime);
+
+	}
+
+	/**
+	 * Updates the size of internal render targets.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		const blurPass = this.blurPass;
+
+		super.setSize(width, height);
+
+		this.backgroundPass.setSize(width, height);
+		this.blackoutPass.setSize(width, height);
+		this.renderPass.setSize(width, height);
+
+		this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		super.initialize(renderer, alpha);
+
+		this.backgroundPass.initialize(renderer, alpha);
+		this.blackoutPass.initialize(renderer, alpha);
+		this.renderPass.initialize(renderer, alpha);
+
+		if(!alpha) {
+
+			this.renderTargetSelection.texture.format = RGBFormat;
 
 		}
 
@@ -9859,6 +10239,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 /**
  * Calculates orthogonal or diagonal patterns for a given offset.
  *
+ * @private
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Number|Float32Array} offset - A pattern offset. Diagonal offsets are pairs.
  * @param {Boolean} orthogonal - Whether the patterns are orthogonal or diagonal.
@@ -9912,6 +10293,7 @@ function generatePatterns(patterns, offset, orthogonal) {
 /**
  * Assembles orthogonal or diagonal patterns into the final area image.
  *
+ * @private
  * @param {Vector2} base - A base position.
  * @param {RawImageData[]} patterns - The patterns to assemble.
  * @param {Uint8Array[]} edges - Edge coordinate pairs, used for positioning.
@@ -10252,4 +10634,4 @@ class SMAASearchImageData {
 
 }
 
-export { AdaptiveLuminanceMaterial, BlendFunction, BlendMode, BloomEffect, BlurPass, BokehEffect, BrightnessContrastEffect, ChromaticAberrationEffect, ClearMaskPass, ClearPass, ColorAverageEffect, ColorDepthEffect, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthEffect, DepthMaskMaterial, DepthPass, Disposable, DotScreenEffect, Effect, EffectAttribute, EffectComposer, EffectMaterial, EffectPass, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GodRaysMaterial, GridEffect, HueSaturationEffect, Initializable, KernelSize, LuminanceMaterial, MaskPass, NoiseEffect, NormalPass, OutlineEdgesMaterial, OutlineEffect, Pass, PixelationEffect, RawImageData, RealisticBokehEffect, RenderPass, Resizable, SMAAAreaImageData, SMAAEffect, SMAAPreset, SMAASearchImageData, SMAAWeightsMaterial, SSAOEffect, SavePass, ScanlineEffect, SepiaEffect, ShaderPass, ShockWaveEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension };
+export { AdaptiveLuminanceMaterial, BlendFunction, BlendMode, BloomEffect, BlurPass, BokehEffect, BrightnessContrastEffect, ChromaticAberrationEffect, ClearMaskPass, ClearPass, ColorAverageEffect, ColorDepthEffect, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthEffect, DepthMaskMaterial, DepthPass, Disposable, DotScreenEffect, Effect, EffectAttribute, EffectComposer, EffectMaterial, EffectPass, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GodRaysMaterial, GridEffect, HueSaturationEffect, Initializable, KernelSize, LuminanceMaterial, MaskPass, NoiseEffect, NormalPass, OutlineEdgesMaterial, OutlineEffect, Pass, PixelationEffect, RawImageData, RealisticBokehEffect, RenderPass, Resizable, SMAAAreaImageData, SMAAEffect, SMAAPreset, SMAASearchImageData, SMAAWeightsMaterial, SSAOEffect, SavePass, ScanlineEffect, Selection, SelectiveBloomEffect, SepiaEffect, ShaderPass, ShockWaveEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension };

@@ -126,11 +126,11 @@
   
   
   <div class="description" data-ice="description"><p>A selective bloom effect.</p>
-<p>If you don&apos;t need to limit bloom to a subset of objects, consider using the
-<span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span> instead.</p>
-<p>This effect renders selected objects to an additional render target, occludes
-them by rendering the depth of non-selected objects and uses the result to
-generate the bloom overlay.</p>
+<p>This effect applies bloom only to selected objects. For this, all objects in
+the scene need to be rendered again: non-selected objects are rendered solid
+black to properly occlude selected objects and the scene background.</p>
+<p>Attention: If you don&apos;t need to limit bloom to a subset of objects, consider
+using the <span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">BloomEffect</a></span> instead for better performance.</p>
 </div>
   
 
@@ -1183,35 +1183,6 @@ deletes them.</p>
         
         
         <div data-ice="description"><p>A luminance shader pass.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">protected</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-renderTarget">renderTarget</a></span></span><span class="code" data-ice="signature">: <span>WebGLRenderTarget</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>A render target.</p>
 </div>
       </div>
     </td>

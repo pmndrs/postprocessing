@@ -930,12 +930,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/bloomeffect.js~bloomeffect#rendertarget",
-    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-renderTarget",
-    "src/effects/BloomEffect.js~BloomEffect#renderTarget",
-    "member"
-  ],
-  [
     "src/effects/bloomeffect.js~bloomeffect#setresolutionscale",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-method-setResolutionScale",
     "src/effects/BloomEffect.js~BloomEffect#setResolutionScale",
