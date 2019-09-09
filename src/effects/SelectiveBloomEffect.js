@@ -14,12 +14,12 @@ import { BloomEffect } from "./BloomEffect.js";
 /**
  * A selective bloom effect.
  *
- * If you don't need to limit bloom to a subset of objects, consider using the
- * {@link BloomEffect} instead.
+ * This effect applies bloom only to selected objects. For this, all objects in
+ * the scene need to be rendered again: non-selected objects are rendered solid
+ * black to properly occlude selected objects and the scene background.
  *
- * This effect renders selected objects to an additional render target, occludes
- * them by rendering the depth of non-selected objects and uses the result to
- * generate the bloom overlay.
+ * Attention: If you don't need to limit bloom to a subset of objects, consider
+ * using the {@link BloomEffect} instead for better performance.
  */
 
 export class SelectiveBloomEffect extends BloomEffect {
