@@ -58,7 +58,7 @@ export class BloomEffect extends Effect {
 		 * A render target.
 		 *
 		 * @type {WebGLRenderTarget}
-		 * @protected
+		 * @private
 		 */
 
 		this.renderTarget = new WebGLRenderTarget(1, 1, {
