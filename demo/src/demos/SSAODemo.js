@@ -10,6 +10,7 @@ import {
 	PerspectiveCamera,
 	PlaneBufferGeometry,
 	PointLight,
+	SphereBufferGeometry,
 	Vector2,
 	WebGLRenderer
 } from "three";
@@ -19,6 +20,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	DepthEffect,
 	EffectPass,
 	NormalPass,
 	SSAOEffect,
@@ -51,13 +53,22 @@ export class SSAODemo extends PostProcessingDemo {
 		this.renderer = null;
 
 		/**
-		 * An effect.
+		 * An SSAO effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.effect = null;
+		this.ssaoEffect = null;
+
+		/**
+		 * A depth effect.
+		 *
+		 * @type {Effect}
+		 * @private
+		 */
+
+		this.depthEffect = null;
 
 		/**
 		 * An effect pass.
@@ -287,6 +298,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const box01 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
 		const box02 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
+		const sphere01 = new Mesh(new SphereBufferGeometry(1, 32, 32), actorMaterial);
 
 		box01.position.set(-3.5, -4, -3);
 		box01.rotation.y = Math.PI * 0.1;
@@ -298,15 +310,21 @@ export class SSAODemo extends PostProcessingDemo {
 		box02.scale.set(6, 6, 6);
 		box02.castShadow = true;
 
+		sphere01.position.set(-5, -7, 6);
+		sphere01.scale.set(3, 3, 3);
+		sphere01.castShadow = true;
+
 		environment.add(plane00, plane01, plane02, plane03, plane04, plane05, plane06, plane07);
-		actors.add(box01, box02);
+		actors.add(box01, box02, sphere01);
 
 		scene.add(environment, actors);
 
 		// Passes.
 
-		const normalPass = new NormalPass(scene, camera, {
-			resolutionScale: 1.0
+		const normalPass = new NormalPass(scene, camera);
+
+		const depthEffect = new DepthEffect({
+			blendFunction: BlendFunction.SKIP
 		});
 
 		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
@@ -324,13 +342,12 @@ export class SSAODemo extends PostProcessingDemo {
 			bias: 0.5
 		});
 
-		ssaoEffect.blendMode.opacity.value = 1.5;
-
-		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect);
+		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);
 		this.renderPass.renderToScreen = false;
 		effectPass.renderToScreen = true;
 
-		this.effect = ssaoEffect;
+		this.ssaoEffect = ssaoEffect;
+		this.depthEffect = depthEffect;
 		this.effectPass = effectPass;
 		this.normalPass = normalPass;
 
@@ -348,9 +365,17 @@ export class SSAODemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const effectPass = this.effectPass;
-		const effect = this.effect;
-		const blendMode = effect.blendMode;
-		const uniforms = effect.uniforms;
+		const normalPass = this.normalPass;
+		const ssaoEffect = this.ssaoEffect;
+		const depthEffect = this.depthEffect;
+		const blendMode = ssaoEffect.blendMode;
+		const uniforms = ssaoEffect.uniforms;
+
+		const RenderMode = {
+			DEFAULT: 0,
+			NORMALS: 1,
+			DEPTH: 2
+		};
 
 		const params = {
 			"distance": {
@@ -364,13 +389,28 @@ export class SSAODemo extends PostProcessingDemo {
 			"lum influence": uniforms.get("luminanceInfluence").value,
 			"scale": uniforms.get("scale").value,
 			"bias": uniforms.get("bias").value,
+			"render mode": RenderMode.DEFAULT,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(effect, "samples").min(1).max(32).step(1).onChange(() => effectPass.recompile());
-		menu.add(effect, "rings").min(1).max(16).step(1).onChange(() => effectPass.recompile());
-		menu.add(effect, "radius").min(0.01).max(50.0).step(0.01);
+		function toggleRenderMode() {
+
+			const mode = Number.parseInt(params["render mode"]);
+
+			effectPass.enabled = (mode === RenderMode.DEFAULT || mode === RenderMode.DEPTH);
+			normalPass.renderToScreen = (mode === RenderMode.NORMALS);
+			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+
+			effectPass.recompile();
+
+		}
+
+		menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
+
+		menu.add(ssaoEffect, "samples").min(1).max(32).step(1).onChange(() => effectPass.recompile());
+		menu.add(ssaoEffect, "rings").min(1).max(16).step(1).onChange(() => effectPass.recompile());
+		menu.add(ssaoEffect, "radius").min(0.01).max(50.0).step(0.01);
 
 		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -382,13 +422,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			effect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
 
 		});
 
 		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			effect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
+			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
 
 		});
 
@@ -396,13 +436,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f.add(params.proximity, "threshold").min(0.0).max(0.05).step(0.0001).onChange(() => {
 
-			effect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
 		f.add(params.proximity, "falloff").min(0.0).max(0.1).step(0.0001).onChange(() => {
 
-			effect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
+			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
