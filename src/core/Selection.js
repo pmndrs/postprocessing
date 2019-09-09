@@ -7,7 +7,7 @@ export class Selection extends Set {
 	/**
 	 * Constructs a new selection.
 	 *
-	 * @param {Iterable<Object3D>} iterable - A collection of objects that should be added to this selection.
+	 * @param {Iterable<Object3D>} [iterable] - A collection of objects that should be added to this selection.
 	 * @param {Number} [layer=10] - A dedicated render layer for selected objects.
 	 */
 
