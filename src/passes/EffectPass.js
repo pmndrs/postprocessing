@@ -1,3 +1,4 @@
+import { Vector2 } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect.js";
 import { EffectMaterial, Section } from "../materials";
@@ -240,6 +241,15 @@ export class EffectPass extends Pass {
 		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
 
 		/**
+		 * The current render size.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.size = new Vector2();
+
+		/**
 		 * Indicates whether this pass should skip rendering.
 		 *
 		 * Effects will still be updated, even if this flag is true.
@@ -296,8 +306,6 @@ export class EffectPass extends Pass {
 		 */
 
 		this.maxTime = 1e3;
-
-		this.setFullscreenMaterial(this.createMaterial());
 
 	}
 
@@ -478,14 +486,12 @@ export class EffectPass extends Pass {
 	recompile() {
 
 		let material = this.getFullscreenMaterial();
-		let width = 0, height = 0;
+		let width = this.size.x, height = this.size.y;
 		let depthTexture = null;
 		let depthPacking = 0;
 
 		if(material !== null) {
 
-			const resolution = material.uniforms.resolution.value;
-			width = resolution.x; height = resolution.y;
 			depthTexture = material.uniforms.depthBuffer.value;
 			depthPacking = material.depthPacking;
 			material.dispose();
@@ -580,7 +586,15 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setSize(width, height);
+		const material = this.getFullscreenMaterial();
+
+		if(material !== null) {
+
+			material.setSize(width, height);
+
+		}
+
+		this.size.set(width, height);
 
 		for(const effect of this.effects) {
 
@@ -599,8 +613,19 @@ export class EffectPass extends Pass {
 
 	initialize(renderer, alpha) {
 
-		const capabilities = renderer.capabilities;
+		// Initialize effects before building the final shader.
+		for(const effect of this.effects) {
 
+			effect.initialize(renderer, alpha);
+
+		}
+
+		// Generate the fullscreen material.
+		this.setFullscreenMaterial(this.createMaterial());
+		this.getFullscreenMaterial().setSize(this.size.width, this.size.height);
+
+		// Compare required resources with capabilities.
+		const capabilities = renderer.capabilities;
 		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
 		if(this.uniforms > max) {
@@ -614,12 +639,6 @@ export class EffectPass extends Pass {
 		if(this.varyings > max) {
 
 			console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-
-		}
-
-		for(const effect of this.effects) {
-
-			effect.initialize(renderer, alpha);
 
 		}
 
