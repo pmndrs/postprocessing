@@ -334,7 +334,7 @@ export class SSAODemo extends PostProcessingDemo {
 			rings: 4,
 			distanceThreshold: 0.6,
 			distanceFalloff: 0.1,
-			rangeThreshold: 0.0015,
+			rangeThreshold: 0.005,
 			rangeFalloff: 0.01,
 			luminanceInfluence: 0.7,
 			radius: 18.25,
