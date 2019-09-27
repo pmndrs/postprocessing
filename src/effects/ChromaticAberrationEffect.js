@@ -57,4 +57,25 @@ export class ChromaticAberrationEffect extends Effect {
 
 	}
 
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		if(alpha) {
+
+			this.defines.set("ALPHA", "1");
+
+		} else {
+
+			this.defines.delete("ALPHA");
+
+		}
+
+	}
+
 }
