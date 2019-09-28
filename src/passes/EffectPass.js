@@ -621,7 +621,7 @@ export class EffectPass extends Pass {
 
 		// Generate the fullscreen material.
 		this.setFullscreenMaterial(this.createMaterial());
-		this.getFullscreenMaterial().setSize(this.size.width, this.size.height);
+		this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
 
 		// Compare required resources with capabilities.
 		const capabilities = renderer.capabilities;
