@@ -486,7 +486,6 @@ export class EffectPass extends Pass {
 	recompile() {
 
 		let material = this.getFullscreenMaterial();
-		let width = this.size.x, height = this.size.y;
 		let depthTexture = null;
 		let depthPacking = 0;
 
@@ -502,7 +501,7 @@ export class EffectPass extends Pass {
 		}
 
 		material = this.createMaterial();
-		material.setSize(width, height);
+		material.setSize(this.size.x, this.size.y);
 		this.setFullscreenMaterial(material);
 		this.setDepthTexture(depthTexture, depthPacking);
 
