@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.7.0 build Mon Sep 09 2019
+ * postprocessing v6.8.0 build Tue Oct 01 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1634,15 +1634,13 @@
       _this11.effects = effects.sort(function (a, b) {
         return b.attributes - a.attributes;
       });
+      _this11.size = new three.Vector2();
       _this11.skipRendering = false;
       _this11.quantize = false;
       _this11.uniforms = 0;
       _this11.varyings = 0;
       _this11.minTime = 1.0;
       _this11.maxTime = 1e3;
-
-      _this11.setFullscreenMaterial(_this11.createMaterial());
-
       return _this11;
     }
 
@@ -1802,15 +1800,10 @@
       key: "recompile",
       value: function recompile() {
         var material = this.getFullscreenMaterial();
-        var width = 0,
-            height = 0;
         var depthTexture = null;
         var depthPacking = 0;
 
         if (material !== null) {
-          var resolution = material.uniforms.resolution.value;
-          width = resolution.x;
-          height = resolution.y;
           depthTexture = material.uniforms.depthBuffer.value;
           depthPacking = material.depthPacking;
           material.dispose();
@@ -1819,7 +1812,7 @@
         }
 
         material = this.createMaterial();
-        material.setSize(width, height);
+        material.setSize(this.size.x, this.size.y);
         this.setFullscreenMaterial(material);
         this.setDepthTexture(depthTexture, depthPacking);
       }
@@ -1900,7 +1893,13 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.getFullscreenMaterial().setSize(width, height);
+        var material = this.getFullscreenMaterial();
+
+        if (material !== null) {
+          material.setSize(width, height);
+        }
+
+        this.size.set(width, height);
         var _iteratorNormalCompletion11 = true;
         var _didIteratorError11 = false;
         var _iteratorError11 = undefined;
@@ -1928,19 +1927,6 @@
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha) {
-        var capabilities = renderer.capabilities;
-        var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
-
-        if (this.uniforms > max) {
-          console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
-        }
-
-        max = capabilities.maxVaryings;
-
-        if (this.varyings > max) {
-          console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-        }
-
         var _iteratorNormalCompletion12 = true;
         var _didIteratorError12 = false;
         var _iteratorError12 = undefined;
@@ -1963,6 +1949,21 @@
               throw _iteratorError12;
             }
           }
+        }
+
+        this.setFullscreenMaterial(this.createMaterial());
+        this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+        var capabilities = renderer.capabilities;
+        var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+
+        if (this.uniforms > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
+        }
+
+        max = capabilities.maxVaryings;
+
+        if (this.varyings > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
         }
       }
     }, {
@@ -2748,7 +2749,32 @@
         return this.currentLayer;
       },
       set: function set(value) {
-        this.clear();
+        var currentLayer = this.currentLayer;
+        var _iteratorNormalCompletion22 = true;
+        var _didIteratorError22 = false;
+        var _iteratorError22 = undefined;
+
+        try {
+          for (var _iterator22 = this[Symbol.iterator](), _step22; !(_iteratorNormalCompletion22 = (_step22 = _iterator22.next()).done); _iteratorNormalCompletion22 = true) {
+            var object = _step22.value;
+            object.layers.disable(currentLayer);
+            object.layers.enable(value);
+          }
+        } catch (err) {
+          _didIteratorError22 = true;
+          _iteratorError22 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion22 && _iterator22["return"] != null) {
+              _iterator22["return"]();
+            }
+          } finally {
+            if (_didIteratorError22) {
+              throw _iteratorError22;
+            }
+          }
+        }
+
         this.currentLayer = value;
       }
     }]);
@@ -3023,7 +3049,7 @@
     return ColorDepthEffect;
   }(Effect);
 
-  var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;color.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;outputColor=color;}";
+  var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;\n#ifdef ALPHA\nvec2 ra=texture2D(inputBuffer,vUvR).ra;vec2 ba=texture2D(inputBuffer,vUvB).ba;color.r=ra.x;color.b=ba.x;color.a=max(max(ra.y,ba.y),inputColor.a);\n#else\ncolor.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;\n#endif\noutputColor=color;}";
   var vertexShader$6 = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(const in vec2 uv){vUvR=uv+offset;vUvB=uv-offset;}";
 
   var ChromaticAberrationEffect = function (_Effect6) {
@@ -3047,6 +3073,15 @@
     }
 
     _createClass(ChromaticAberrationEffect, [{
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        if (alpha) {
+          this.defines.set("ALPHA", "1");
+        } else {
+          this.defines["delete"]("ALPHA");
+        }
+      }
+    }, {
       key: "offset",
       get: function get() {
         return this.uniforms.get("offset").value;

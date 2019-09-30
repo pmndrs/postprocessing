@@ -4838,15 +4838,13 @@
       _this17.effects = effects.sort(function (a, b) {
         return b.attributes - a.attributes;
       });
+      _this17.size = new three.Vector2();
       _this17.skipRendering = false;
       _this17.quantize = false;
       _this17.uniforms = 0;
       _this17.varyings = 0;
       _this17.minTime = 1.0;
       _this17.maxTime = 1e3;
-
-      _this17.setFullscreenMaterial(_this17.createMaterial());
-
       return _this17;
     }
 
@@ -5006,15 +5004,10 @@
       key: "recompile",
       value: function recompile() {
         var material = this.getFullscreenMaterial();
-        var width = 0,
-            height = 0;
         var depthTexture = null;
         var depthPacking = 0;
 
         if (material !== null) {
-          var resolution = material.uniforms.resolution.value;
-          width = resolution.x;
-          height = resolution.y;
           depthTexture = material.uniforms.depthBuffer.value;
           depthPacking = material.depthPacking;
           material.dispose();
@@ -5023,7 +5016,7 @@
         }
 
         material = this.createMaterial();
-        material.setSize(width, height);
+        material.setSize(this.size.x, this.size.y);
         this.setFullscreenMaterial(material);
         this.setDepthTexture(depthTexture, depthPacking);
       }
@@ -5104,7 +5097,13 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.getFullscreenMaterial().setSize(width, height);
+        var material = this.getFullscreenMaterial();
+
+        if (material !== null) {
+          material.setSize(width, height);
+        }
+
+        this.size.set(width, height);
         var _iteratorNormalCompletion13 = true;
         var _didIteratorError13 = false;
         var _iteratorError13 = undefined;
@@ -5132,19 +5131,6 @@
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha) {
-        var capabilities = renderer.capabilities;
-        var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
-
-        if (this.uniforms > max) {
-          console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
-        }
-
-        max = capabilities.maxVaryings;
-
-        if (this.varyings > max) {
-          console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-        }
-
         var _iteratorNormalCompletion14 = true;
         var _didIteratorError14 = false;
         var _iteratorError14 = undefined;
@@ -5167,6 +5153,21 @@
               throw _iteratorError14;
             }
           }
+        }
+
+        this.setFullscreenMaterial(this.createMaterial());
+        this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+        var capabilities = renderer.capabilities;
+        var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
+
+        if (this.uniforms > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " uniforms, but " + this.uniforms + " were defined");
+        }
+
+        max = capabilities.maxVaryings;
+
+        if (this.varyings > max) {
+          console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
         }
       }
     }, {
@@ -5939,7 +5940,32 @@
         return this.currentLayer;
       },
       set: function set(value) {
-        this.clear();
+        var currentLayer = this.currentLayer;
+        var _iteratorNormalCompletion24 = true;
+        var _didIteratorError24 = false;
+        var _iteratorError24 = undefined;
+
+        try {
+          for (var _iterator24 = this[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
+            var object = _step24.value;
+            object.layers.disable(currentLayer);
+            object.layers.enable(value);
+          }
+        } catch (err) {
+          _didIteratorError24 = true;
+          _iteratorError24 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion24 && _iterator24["return"] != null) {
+              _iterator24["return"]();
+            }
+          } finally {
+            if (_didIteratorError24) {
+              throw _iteratorError24;
+            }
+          }
+        }
+
         this.currentLayer = value;
       }
     }]);
@@ -6214,7 +6240,7 @@
     return ColorDepthEffect;
   }(Effect);
 
-  var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;color.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;outputColor=color;}";
+  var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;\n#ifdef ALPHA\nvec2 ra=texture2D(inputBuffer,vUvR).ra;vec2 ba=texture2D(inputBuffer,vUvB).ba;color.r=ra.x;color.b=ba.x;color.a=max(max(ra.y,ba.y),inputColor.a);\n#else\ncolor.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;\n#endif\noutputColor=color;}";
   var vertexShader$6 = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(const in vec2 uv){vUvR=uv+offset;vUvB=uv-offset;}";
 
   var ChromaticAberrationEffect = function (_Effect6) {
@@ -6238,6 +6264,15 @@
     }
 
     _createClass(ChromaticAberrationEffect, [{
+      key: "initialize",
+      value: function initialize(renderer, alpha) {
+        if (alpha) {
+          this.defines.set("ALPHA", "1");
+        } else {
+          this.defines["delete"]("ALPHA");
+        }
+      }
+    }, {
       key: "offset",
       get: function get() {
         return this.uniforms.get("offset").value;
@@ -15424,7 +15459,7 @@
           rings: 4,
           distanceThreshold: 0.6,
           distanceFalloff: 0.1,
-          rangeThreshold: 0.0015,
+          rangeThreshold: 0.005,
           rangeFalloff: 0.01,
           luminanceInfluence: 0.7,
           radius: 18.25,
@@ -16150,27 +16185,27 @@
           return new EffectPass(camera, effect);
         });
         passes[passes.length - 1].renderToScreen = true;
-        var _iteratorNormalCompletion24 = true;
-        var _didIteratorError24 = false;
-        var _iteratorError24 = undefined;
+        var _iteratorNormalCompletion25 = true;
+        var _didIteratorError25 = false;
+        var _iteratorError25 = undefined;
 
         try {
-          for (var _iterator24 = passes[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
-            var pass = _step24.value;
+          for (var _iterator25 = passes[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
+            var pass = _step25.value;
             pass.enabled = false;
             composer.addPass(pass);
           }
         } catch (err) {
-          _didIteratorError24 = true;
-          _iteratorError24 = err;
+          _didIteratorError25 = true;
+          _iteratorError25 = err;
         } finally {
           try {
-            if (!_iteratorNormalCompletion24 && _iterator24["return"] != null) {
-              _iterator24["return"]();
+            if (!_iteratorNormalCompletion25 && _iterator25["return"] != null) {
+              _iterator25["return"]();
             }
           } finally {
-            if (_didIteratorError24) {
-              throw _iteratorError24;
+            if (_didIteratorError25) {
+              throw _iteratorError25;
             }
           }
         }
