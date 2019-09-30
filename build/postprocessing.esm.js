@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.7.0 build Mon Sep 09 2019
+ * postprocessing v6.8.0 build Tue Oct 01 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -3058,6 +3058,15 @@ class EffectPass extends Pass {
 		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
 
 		/**
+		 * The current render size.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.size = new Vector2();
+
+		/**
 		 * Indicates whether this pass should skip rendering.
 		 *
 		 * Effects will still be updated, even if this flag is true.
@@ -3114,8 +3123,6 @@ class EffectPass extends Pass {
 		 */
 
 		this.maxTime = 1e3;
-
-		this.setFullscreenMaterial(this.createMaterial());
 
 	}
 
@@ -3296,14 +3303,11 @@ class EffectPass extends Pass {
 	recompile() {
 
 		let material = this.getFullscreenMaterial();
-		let width = 0, height = 0;
 		let depthTexture = null;
 		let depthPacking = 0;
 
 		if(material !== null) {
 
-			const resolution = material.uniforms.resolution.value;
-			width = resolution.x; height = resolution.y;
 			depthTexture = material.uniforms.depthBuffer.value;
 			depthPacking = material.depthPacking;
 			material.dispose();
@@ -3314,7 +3318,7 @@ class EffectPass extends Pass {
 		}
 
 		material = this.createMaterial();
-		material.setSize(width, height);
+		material.setSize(this.size.x, this.size.y);
 		this.setFullscreenMaterial(material);
 		this.setDepthTexture(depthTexture, depthPacking);
 
@@ -3398,7 +3402,15 @@ class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		this.getFullscreenMaterial().setSize(width, height);
+		const material = this.getFullscreenMaterial();
+
+		if(material !== null) {
+
+			material.setSize(width, height);
+
+		}
+
+		this.size.set(width, height);
 
 		for(const effect of this.effects) {
 
@@ -3417,8 +3429,19 @@ class EffectPass extends Pass {
 
 	initialize(renderer, alpha) {
 
-		const capabilities = renderer.capabilities;
+		// Initialize effects before building the final shader.
+		for(const effect of this.effects) {
 
+			effect.initialize(renderer, alpha);
+
+		}
+
+		// Generate the fullscreen material.
+		this.setFullscreenMaterial(this.createMaterial());
+		this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+
+		// Compare required resources with capabilities.
+		const capabilities = renderer.capabilities;
 		let max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
 		if(this.uniforms > max) {
@@ -3432,12 +3455,6 @@ class EffectPass extends Pass {
 		if(this.varyings > max) {
 
 			console.warn("The current rendering context doesn't support more than " + max + " varyings, but " + this.varyings + " were defined");
-
-		}
-
-		for(const effect of this.effects) {
-
-			effect.initialize(renderer, alpha);
 
 		}
 
@@ -4470,14 +4487,22 @@ class Selection extends Set {
 	/**
 	 * Sets the render layer of selected objects.
 	 *
-	 * The current selection will be cleared beforehand.
+	 * The current selection will be updated accordingly.
 	 *
 	 * @type {Number}
 	 */
 
 	set layer(value) {
 
-		this.clear();
+		const currentLayer = this.currentLayer;
+
+		for(const object of this) {
+
+			object.layers.disable(currentLayer);
+			object.layers.enable(value);
+
+		}
+
 		this.currentLayer = value;
 
 	}
@@ -5115,7 +5140,7 @@ class ColorDepthEffect extends Effect {
 
 }
 
-var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;color.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;outputColor=color;}";
+var fragmentShader$f = "varying vec2 vUvR;varying vec2 vUvB;void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec4 color=inputColor;\n#ifdef ALPHA\nvec2 ra=texture2D(inputBuffer,vUvR).ra;vec2 ba=texture2D(inputBuffer,vUvB).ba;color.r=ra.x;color.b=ba.x;color.a=max(max(ra.y,ba.y),inputColor.a);\n#else\ncolor.r=texture2D(inputBuffer,vUvR).r;color.b=texture2D(inputBuffer,vUvB).b;\n#endif\noutputColor=color;}";
 
 var vertexShader$6 = "uniform vec2 offset;varying vec2 vUvR;varying vec2 vUvB;void mainSupport(const in vec2 uv){vUvR=uv+offset;vUvB=uv-offset;}";
 
@@ -5168,6 +5193,27 @@ class ChromaticAberrationEffect extends Effect {
 	set offset(value) {
 
 		this.uniforms.get("offset").value = value;
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 */
+
+	initialize(renderer, alpha) {
+
+		if(alpha) {
+
+			this.defines.set("ALPHA", "1");
+
+		} else {
+
+			this.defines.delete("ALPHA");
+
+		}
 
 	}
 

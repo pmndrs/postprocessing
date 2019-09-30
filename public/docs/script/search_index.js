@@ -1002,6 +1002,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/chromaticaberrationeffect.js~chromaticaberrationeffect#initialize",
+    "class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html#instance-method-initialize",
+    "src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect#initialize",
+    "method"
+  ],
+  [
     "src/effects/chromaticaberrationeffect.js~chromaticaberrationeffect#offset",
     "class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html#instance-get-offset",
     "src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect#offset",
