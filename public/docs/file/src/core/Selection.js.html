@@ -151,14 +151,22 @@ export class Selection extends Set {
 	/**
 	 * Sets the render layer of selected objects.
 	 *
-	 * The current selection will be cleared beforehand.
+	 * The current selection will be updated accordingly.
 	 *
 	 * @type {Number}
 	 */
 
 	set layer(value) {
 
-		this.clear();
+		const currentLayer = this.currentLayer;
+
+		for(const object of this) {
+
+			object.layers.disable(currentLayer);
+			object.layers.enable(value);
+
+		}
+
 		this.currentLayer = value;
 
 	}
