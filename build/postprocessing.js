@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.0 build Tue Oct 01 2019
+ * postprocessing v6.8.1 build Wed Oct 02 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -2496,7 +2496,7 @@
       }
     }, {
       key: "setSize",
-      value: function setSize(width, height) {
+      value: function setSize(width, height, updateStyle) {
         var renderer = this.renderer;
 
         if (width === undefined || height === undefined) {
@@ -2505,7 +2505,7 @@
           height = size.height;
         }
 
-        renderer.setSize(width, height);
+        renderer.setSize(width, height, updateStyle);
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
         this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
         this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);

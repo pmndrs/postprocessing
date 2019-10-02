@@ -380,9 +380,10 @@ export class EffectComposer {
 	 *
 	 * @param {Number} [width] - The width.
 	 * @param {Number} [height] - The height.
+	 * @param {Boolean} [updateStyle] - Determines whether the style of the canvas should be updated.
 	 */
 
-	setSize(width, height) {
+	setSize(width, height, updateStyle) {
 
 		const renderer = this.renderer;
 
@@ -394,7 +395,7 @@ export class EffectComposer {
 		}
 
 		// Update the logical render size.
-		renderer.setSize(width, height);
+		renderer.setSize(width, height, updateStyle);
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());

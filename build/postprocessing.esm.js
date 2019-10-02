@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.0 build Tue Oct 01 2019
+ * postprocessing v6.8.1 build Wed Oct 02 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -4320,9 +4320,10 @@ class EffectComposer {
 	 *
 	 * @param {Number} [width] - The width.
 	 * @param {Number} [height] - The height.
+	 * @param {Boolean} [updateStyle] - Determines whether the style of the canvas should be updated.
 	 */
 
-	setSize(width, height) {
+	setSize(width, height, updateStyle) {
 
 		const renderer = this.renderer;
 
@@ -4334,7 +4335,7 @@ class EffectComposer {
 		}
 
 		// Update the logical render size.
-		renderer.setSize(width, height);
+		renderer.setSize(width, height, updateStyle);
 
 		// The drawing buffer size takes the device pixel ratio into account.
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
