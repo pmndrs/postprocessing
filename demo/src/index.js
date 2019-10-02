@@ -109,9 +109,6 @@ function onLoad(event) {
 
 window.addEventListener("load", function main(event) {
 
-	// Clean up.
-	this.removeEventListener("load", main);
-
 	const viewport = document.getElementById("viewport");
 
 	// Create a custom renderer.
