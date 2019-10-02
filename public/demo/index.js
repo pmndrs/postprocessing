@@ -3378,9 +3378,9 @@
       }
     }, {
       key: "setSize",
-      value: function setSize(width, height) {
+      value: function setSize(width, height, updateStyle) {
         var demo = this.currentDemo;
-        this.renderer.setSize(width, height);
+        this.renderer.setSize(width, height, updateStyle);
 
         if (demo !== null && demo.camera !== null) {
           var camera = demo.camera;
@@ -5700,7 +5700,7 @@
       }
     }, {
       key: "setSize",
-      value: function setSize(width, height) {
+      value: function setSize(width, height, updateStyle) {
         var renderer = this.renderer;
 
         if (width === undefined || height === undefined) {
@@ -5709,7 +5709,7 @@
           height = size.height;
         }
 
-        renderer.setSize(width, height);
+        renderer.setSize(width, height, updateStyle);
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
         this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
         this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
@@ -16300,7 +16300,6 @@
   }
 
   window.addEventListener("load", function main(event) {
-    this.removeEventListener("load", main);
     var viewport = document.getElementById("viewport");
     renderer = new three.WebGLRenderer({
       logarithmicDepthBuffer: true,
