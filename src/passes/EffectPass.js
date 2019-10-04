@@ -1,4 +1,3 @@
-import { Vector2 } from "three";
 import { BlendFunction } from "../effects/blending";
 import { EffectAttribute } from "../effects/Effect.js";
 import { EffectMaterial, Section } from "../materials";
@@ -222,14 +221,7 @@ export class EffectPass extends Pass {
 
 		super("EffectPass");
 
-		/**
-		 * The main camera.
-		 *
-		 * @type {Camera}
-		 * @private
-		 */
-
-		this.mainCamera = camera;
+		this.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
 
 		/**
 		 * The effects, sorted by attribute priority, DESC.
@@ -241,15 +233,6 @@ export class EffectPass extends Pass {
 		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
 
 		/**
-		 * The current render size.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.size = new Vector2();
-
-		/**
 		 * Indicates whether this pass should skip rendering.
 		 *
 		 * Effects will still be updated, even if this flag is true.
@@ -259,15 +242,6 @@ export class EffectPass extends Pass {
 		 */
 
 		this.skipRendering = false;
-
-		/**
-		 * Indicates whether dithering is enabled.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.quantize = false;
 
 		/**
 		 * The amount of shader uniforms that this pass uses.
@@ -310,6 +284,19 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * The current render size.
+	 *
+	 * @type {Vector2}
+	 * @private
+	 */
+
+	get size() {
+
+		return this.getFullscreenMaterial().uniforms.resolution.value;
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * Color quantization reduces banding artifacts but degrades performance.
@@ -319,7 +306,7 @@ export class EffectPass extends Pass {
 
 	get dithering() {
 
-		return this.quantize;
+		return this.getFullscreenMaterial().dithering;
 
 	}
 
@@ -333,31 +320,24 @@ export class EffectPass extends Pass {
 
 	set dithering(value) {
 
-		if(this.quantize !== value) {
+		const material = this.getFullscreenMaterial();
 
-			const material = this.getFullscreenMaterial();
+		if(material.dithering !== value) {
 
-			if(material !== null) {
-
-				material.dithering = value;
-				material.needsUpdate = true;
-
-			}
-
-			this.quantize = value;
+			material.dithering = value;
+			material.needsUpdate = true;
 
 		}
 
 	}
 
 	/**
-	 * Creates a compound shader material.
+	 * Updates the compound shader material.
 	 *
 	 * @private
-	 * @return {Material} The new material.
 	 */
 
-	createMaterial() {
+	updateMaterial() {
 
 		const blendRegExp = /\bblend\b/g;
 
@@ -460,7 +440,9 @@ export class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		const material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+		const material = this.getFullscreenMaterial();
+		material.setShaderParts(shaderParts).setDefines(defines).setUniforms(uniforms);
+		material.extensions = {};
 
 		if(extensions.size > 0) {
 
@@ -473,37 +455,17 @@ export class EffectPass extends Pass {
 
 		}
 
-		return material;
-
 	}
 
 	/**
-	 * Destroys the current fullscreen shader material and builds a new one.
+	 * Updates the shader material.
 	 *
-	 * Warning: This method performs a relatively expensive shader recompilation.
+	 * Warning: This method triggers a relatively expensive shader recompilation.
 	 */
 
 	recompile() {
 
-		let material = this.getFullscreenMaterial();
-		let depthTexture = null;
-		let depthPacking = 0;
-
-		if(material !== null) {
-
-			depthTexture = material.uniforms.depthBuffer.value;
-			depthPacking = material.depthPacking;
-			material.dispose();
-
-			this.uniforms = 0;
-			this.varyings = 0;
-
-		}
-
-		material = this.createMaterial();
-		material.setSize(this.size.x, this.size.y);
-		this.setFullscreenMaterial(material);
-		this.setDepthTexture(depthTexture, depthPacking);
+		this.updateMaterial();
 
 	}
 
@@ -515,9 +477,7 @@ export class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		const material = this.getFullscreenMaterial();
-
-		return (material !== null) ? material.uniforms.depthBuffer.value : null;
+		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
 
 	}
 
@@ -531,7 +491,6 @@ export class EffectPass extends Pass {
 	setDepthTexture(depthTexture, depthPacking = 0) {
 
 		const material = this.getFullscreenMaterial();
-
 		material.uniforms.depthBuffer.value = depthTexture;
 		material.depthPacking = depthPacking;
 		material.needsUpdate = true;
@@ -585,15 +544,7 @@ export class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		const material = this.getFullscreenMaterial();
-
-		if(material !== null) {
-
-			material.setSize(width, height);
-
-		}
-
-		this.size.set(width, height);
+		this.getFullscreenMaterial().setSize(width, height);
 
 		for(const effect of this.effects) {
 
@@ -619,9 +570,8 @@ export class EffectPass extends Pass {
 
 		}
 
-		// Generate the fullscreen material.
-		this.setFullscreenMaterial(this.createMaterial());
-		this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+		// Initialize the fullscreen material.
+		this.updateMaterial();
 
 		// Compare required resources with capabilities.
 		const capabilities = renderer.capabilities;
