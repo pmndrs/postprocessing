@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.1 build Wed Oct 02 2019
+ * postprocessing v6.8.2 build Fri Oct 04 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -448,9 +448,12 @@
   var EffectMaterial = function (_ShaderMaterial7) {
     _inherits(EffectMaterial, _ShaderMaterial7);
 
-    function EffectMaterial(shaderParts, defines, uniforms) {
+    function EffectMaterial() {
       var _this3;
 
+      var shaderParts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var defines = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var uniforms = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
       var camera = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
       var dithering = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
 
@@ -471,14 +474,39 @@
           aspect: new three.Uniform(1.0),
           time: new three.Uniform(0.0)
         },
-        fragmentShader: fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD)).replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV)).replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)),
-        vertexShader: vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD)).replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)),
-        dithering: dithering,
         depthWrite: false,
-        depthTest: false
+        depthTest: false,
+        dithering: dithering
       }));
 
+      if (shaderParts !== null) {
+        _this3.setShaderParts(shaderParts);
+      }
+
       if (defines !== null) {
+        _this3.setDefines(defines);
+      }
+
+      if (uniforms !== null) {
+        _this3.setUniforms(uniforms);
+      }
+
+      _this3.adoptCameraSettings(camera);
+
+      return _this3;
+    }
+
+    _createClass(EffectMaterial, [{
+      key: "setShaderParts",
+      value: function setShaderParts(shaderParts) {
+        this.fragmentShader = fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD)).replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV)).replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
+        this.vertexShader = vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD)).replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT));
+        this.needsUpdate = true;
+        return this;
+      }
+    }, {
+      key: "setDefines",
+      value: function setDefines(defines) {
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -486,7 +514,7 @@
         try {
           for (var _iterator = defines.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var entry = _step.value;
-            _this3.defines[entry[0]] = entry[1];
+            this.defines[entry[0]] = entry[1];
           }
         } catch (err) {
           _didIteratorError = true;
@@ -502,17 +530,21 @@
             }
           }
         }
-      }
 
-      if (uniforms !== null) {
+        this.needsUpdate = true;
+        return this;
+      }
+    }, {
+      key: "setUniforms",
+      value: function setUniforms(uniforms) {
         var _iteratorNormalCompletion2 = true;
         var _didIteratorError2 = false;
         var _iteratorError2 = undefined;
 
         try {
           for (var _iterator2 = uniforms.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var _entry = _step2.value;
-            _this3.uniforms[_entry[0]] = _entry[1];
+            var entry = _step2.value;
+            this.uniforms[entry[0]] = entry[1];
           }
         } catch (err) {
           _didIteratorError2 = true;
@@ -528,21 +560,9 @@
             }
           }
         }
-      }
 
-      _this3.adoptCameraSettings(camera);
-
-      return _this3;
-    }
-
-    _createClass(EffectMaterial, [{
-      key: "setSize",
-      value: function setSize(width, height) {
-        width = Math.max(width, 1.0);
-        height = Math.max(height, 1.0);
-        this.uniforms.resolution.value.set(width, height);
-        this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-        this.uniforms.aspect.value = width / height;
+        this.needsUpdate = true;
+        return this;
       }
     }, {
       key: "adoptCameraSettings",
@@ -558,7 +578,18 @@
           } else {
             delete this.defines.PERSPECTIVE_CAMERA;
           }
+
+          this.needsUpdate = true;
         }
+      }
+    }, {
+      key: "setSize",
+      value: function setSize(width, height) {
+        width = Math.max(width, 1.0);
+        height = Math.max(height, 1.0);
+        this.uniforms.resolution.value.set(width, height);
+        this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+        this.uniforms.aspect.value = width / height;
       }
     }, {
       key: "depthPacking",
@@ -1625,7 +1656,8 @@
       _classCallCheck(this, EffectPass);
 
       _this11 = _possibleConstructorReturn(this, _getPrototypeOf(EffectPass).call(this, "EffectPass"));
-      _this11.mainCamera = camera;
+
+      _this11.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
 
       for (var _len = arguments.length, effects = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
         effects[_key - 1] = arguments[_key];
@@ -1634,9 +1666,7 @@
       _this11.effects = effects.sort(function (a, b) {
         return b.attributes - a.attributes;
       });
-      _this11.size = new three.Vector2();
       _this11.skipRendering = false;
-      _this11.quantize = false;
       _this11.uniforms = 0;
       _this11.varyings = 0;
       _this11.minTime = 1.0;
@@ -1645,8 +1675,8 @@
     }
 
     _createClass(EffectPass, [{
-      key: "createMaterial",
-      value: function createMaterial() {
+      key: "updateMaterial",
+      value: function updateMaterial() {
         var blendRegExp = /\bblend\b/g;
         var shaderParts = new Map([[Section.FRAGMENT_HEAD, ""], [Section.FRAGMENT_MAIN_UV, ""], [Section.FRAGMENT_MAIN_IMAGE, ""], [Section.VERTEX_HEAD, ""], [Section.VERTEX_MAIN_SUPPORT, ""]]);
         var blendModes = new Map();
@@ -1766,7 +1796,9 @@
         this.varyings = varyings;
         this.skipRendering = id === 0;
         this.needsSwap = !this.skipRendering;
-        var material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+        var material = this.getFullscreenMaterial();
+        material.setShaderParts(shaderParts).setDefines(defines).setUniforms(uniforms);
+        material.extensions = {};
 
         if (extensions.size > 0) {
           var _iteratorNormalCompletion7 = true;
@@ -1793,34 +1825,16 @@
             }
           }
         }
-
-        return material;
       }
     }, {
       key: "recompile",
       value: function recompile() {
-        var material = this.getFullscreenMaterial();
-        var depthTexture = null;
-        var depthPacking = 0;
-
-        if (material !== null) {
-          depthTexture = material.uniforms.depthBuffer.value;
-          depthPacking = material.depthPacking;
-          material.dispose();
-          this.uniforms = 0;
-          this.varyings = 0;
-        }
-
-        material = this.createMaterial();
-        material.setSize(this.size.x, this.size.y);
-        this.setFullscreenMaterial(material);
-        this.setDepthTexture(depthTexture, depthPacking);
+        this.updateMaterial();
       }
     }, {
       key: "getDepthTexture",
       value: function getDepthTexture() {
-        var material = this.getFullscreenMaterial();
-        return material !== null ? material.uniforms.depthBuffer.value : null;
+        return this.getFullscreenMaterial().uniforms.depthBuffer.value;
       }
     }, {
       key: "setDepthTexture",
@@ -1893,13 +1907,7 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        var material = this.getFullscreenMaterial();
-
-        if (material !== null) {
-          material.setSize(width, height);
-        }
-
-        this.size.set(width, height);
+        this.getFullscreenMaterial().setSize(width, height);
         var _iteratorNormalCompletion11 = true;
         var _didIteratorError11 = false;
         var _iteratorError11 = undefined;
@@ -1951,8 +1959,7 @@
           }
         }
 
-        this.setFullscreenMaterial(this.createMaterial());
-        this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+        this.updateMaterial();
         var capabilities = renderer.capabilities;
         var max = Math.min(capabilities.maxFragmentUniforms, capabilities.maxVertexUniforms);
 
@@ -1996,20 +2003,21 @@
         }
       }
     }, {
+      key: "size",
+      get: function get() {
+        return this.getFullscreenMaterial().uniforms.resolution.value;
+      }
+    }, {
       key: "dithering",
       get: function get() {
-        return this.quantize;
+        return this.getFullscreenMaterial().dithering;
       },
       set: function set(value) {
-        if (this.quantize !== value) {
-          var material = this.getFullscreenMaterial();
+        var material = this.getFullscreenMaterial();
 
-          if (material !== null) {
-            material.dithering = value;
-            material.needsUpdate = true;
-          }
-
-          this.quantize = value;
+        if (material.dithering !== value) {
+          material.dithering = value;
+          material.needsUpdate = true;
         }
       }
     }]);

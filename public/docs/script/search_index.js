@@ -2472,10 +2472,46 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/materials/effectmaterial.js~effectmaterial#fragmentshader",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-member-fragmentShader",
+    "src/materials/EffectMaterial.js~EffectMaterial#fragmentShader",
+    "member"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#needsupdate",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-member-needsUpdate",
+    "src/materials/EffectMaterial.js~EffectMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#setdefines",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setDefines",
+    "src/materials/EffectMaterial.js~EffectMaterial#setDefines",
+    "method"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#setshaderparts",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setShaderParts",
+    "src/materials/EffectMaterial.js~EffectMaterial#setShaderParts",
+    "method"
+  ],
+  [
     "src/materials/effectmaterial.js~effectmaterial#setsize",
     "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setSize",
     "src/materials/EffectMaterial.js~EffectMaterial#setSize",
     "method"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#setuniforms",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-method-setUniforms",
+    "src/materials/EffectMaterial.js~EffectMaterial#setUniforms",
+    "method"
+  ],
+  [
+    "src/materials/effectmaterial.js~effectmaterial#vertexshader",
+    "class/src/materials/EffectMaterial.js~EffectMaterial.html#instance-member-vertexShader",
+    "src/materials/EffectMaterial.js~EffectMaterial#vertexShader",
+    "member"
   ],
   [
     "src/materials/godraysmaterial.js",

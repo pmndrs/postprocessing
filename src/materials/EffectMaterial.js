@@ -16,14 +16,14 @@ export class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new effect material.
 	 *
-	 * @param {Map<String, String>} shaderParts - A collection of shader snippets.
-	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
-	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @param {Map<String, String>} [shaderParts=null] - A collection of shader snippets. See {@link Section}.
+	 * @param {Map<String, String>} [defines=null] - A collection of preprocessor macro definitions.
+	 * @param {Map<String, Uniform>} [uniforms=null] - A collection of uniforms.
 	 * @param {Camera} [camera=null] - A camera.
 	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(shaderParts, defines, uniforms, camera = null, dithering = false) {
+	constructor(shaderParts = null, defines = null, uniforms = null, camera = null, dithering = false) {
 
 		super({
 
@@ -50,36 +50,27 @@ export class EffectMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
-				.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
-				.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)),
-
-			vertexShader: vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
-				.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)),
-
-			dithering: dithering,
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+			dithering
 
 		});
 
+		if(shaderParts !== null) {
+
+			this.setShaderParts(shaderParts);
+
+		}
+
 		if(defines !== null) {
 
-			for(const entry of defines.entries()) {
-
-				this.defines[entry[0]] = entry[1];
-
-			}
+			this.setDefines(defines);
 
 		}
 
 		if(uniforms !== null) {
 
-			for(const entry of uniforms.entries()) {
-
-				this.uniforms[entry[0]] = entry[1];
-
-			}
+			this.setUniforms(uniforms);
 
 		}
 
@@ -117,20 +108,66 @@ export class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the resolution.
+	 * Sets the shader parts.
 	 *
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
+	 * @param {Map<String, String>} shaderParts - A collection of shader snippets. See {@link Section}.
+	 * @return {EffectMaterial} This material.
 	 */
 
-	setSize(width, height) {
+	setShaderParts(shaderParts) {
 
-		width = Math.max(width, 1.0);
-		height = Math.max(height, 1.0);
+		this.fragmentShader = fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
+			.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
+			.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
 
-		this.uniforms.resolution.value.set(width, height);
-		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-		this.uniforms.aspect.value = width / height;
+		this.vertexShader = vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
+			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT));
+
+		this.needsUpdate = true;
+
+		return this;
+
+	}
+
+	/**
+	 * Sets the shader macros.
+	 *
+	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setDefines(defines) {
+
+		for(const entry of defines.entries()) {
+
+			this.defines[entry[0]] = entry[1];
+
+		}
+
+		this.needsUpdate = true;
+
+		return this;
+
+	}
+
+	/**
+	 * Sets the shader uniforms.
+	 *
+	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setUniforms(uniforms) {
+
+		for(const entry of uniforms.entries()) {
+
+			this.uniforms[entry[0]] = entry[1];
+
+		}
+
+		this.needsUpdate = true;
+
+		return this;
 
 	}
 
@@ -157,7 +194,27 @@ export class EffectMaterial extends ShaderMaterial {
 
 			}
 
+			this.needsUpdate = true;
+
 		}
+
+	}
+
+	/**
+	 * Sets the resolution.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		width = Math.max(width, 1.0);
+		height = Math.max(height, 1.0);
+
+		this.uniforms.resolution.value.set(width, height);
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		this.uniforms.aspect.value = width / height;
 
 	}
 
