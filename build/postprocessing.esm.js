@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.1 build Wed Oct 02 2019
+ * postprocessing v6.8.2 build Fri Oct 04 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -484,14 +484,14 @@ class EffectMaterial extends ShaderMaterial {
 	/**
 	 * Constructs a new effect material.
 	 *
-	 * @param {Map<String, String>} shaderParts - A collection of shader snippets.
-	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
-	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @param {Map<String, String>} [shaderParts=null] - A collection of shader snippets. See {@link Section}.
+	 * @param {Map<String, String>} [defines=null] - A collection of preprocessor macro definitions.
+	 * @param {Map<String, Uniform>} [uniforms=null] - A collection of uniforms.
 	 * @param {Camera} [camera=null] - A camera.
 	 * @param {Boolean} [dithering=false] - Whether dithering should be enabled.
 	 */
 
-	constructor(shaderParts, defines, uniforms, camera = null, dithering = false) {
+	constructor(shaderParts = null, defines = null, uniforms = null, camera = null, dithering = false) {
 
 		super({
 
@@ -518,36 +518,27 @@ class EffectMaterial extends ShaderMaterial {
 
 			},
 
-			fragmentShader: fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
-				.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
-				.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE)),
-
-			vertexShader: vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
-				.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT)),
-
-			dithering: dithering,
 			depthWrite: false,
-			depthTest: false
+			depthTest: false,
+			dithering
 
 		});
 
+		if(shaderParts !== null) {
+
+			this.setShaderParts(shaderParts);
+
+		}
+
 		if(defines !== null) {
 
-			for(const entry of defines.entries()) {
-
-				this.defines[entry[0]] = entry[1];
-
-			}
+			this.setDefines(defines);
 
 		}
 
 		if(uniforms !== null) {
 
-			for(const entry of uniforms.entries()) {
-
-				this.uniforms[entry[0]] = entry[1];
-
-			}
+			this.setUniforms(uniforms);
 
 		}
 
@@ -585,20 +576,66 @@ class EffectMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Sets the resolution.
+	 * Sets the shader parts.
 	 *
-	 * @param {Number} width - The width.
-	 * @param {Number} height - The height.
+	 * @param {Map<String, String>} shaderParts - A collection of shader snippets. See {@link Section}.
+	 * @return {EffectMaterial} This material.
 	 */
 
-	setSize(width, height) {
+	setShaderParts(shaderParts) {
 
-		width = Math.max(width, 1.0);
-		height = Math.max(height, 1.0);
+		this.fragmentShader = fragmentTemplate.replace(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD))
+			.replace(Section.FRAGMENT_MAIN_UV, shaderParts.get(Section.FRAGMENT_MAIN_UV))
+			.replace(Section.FRAGMENT_MAIN_IMAGE, shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
 
-		this.uniforms.resolution.value.set(width, height);
-		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
-		this.uniforms.aspect.value = width / height;
+		this.vertexShader = vertexTemplate.replace(Section.VERTEX_HEAD, shaderParts.get(Section.VERTEX_HEAD))
+			.replace(Section.VERTEX_MAIN_SUPPORT, shaderParts.get(Section.VERTEX_MAIN_SUPPORT));
+
+		this.needsUpdate = true;
+
+		return this;
+
+	}
+
+	/**
+	 * Sets the shader macros.
+	 *
+	 * @param {Map<String, String>} defines - A collection of preprocessor macro definitions.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setDefines(defines) {
+
+		for(const entry of defines.entries()) {
+
+			this.defines[entry[0]] = entry[1];
+
+		}
+
+		this.needsUpdate = true;
+
+		return this;
+
+	}
+
+	/**
+	 * Sets the shader uniforms.
+	 *
+	 * @param {Map<String, Uniform>} uniforms - A collection of uniforms.
+	 * @return {EffectMaterial} This material.
+	 */
+
+	setUniforms(uniforms) {
+
+		for(const entry of uniforms.entries()) {
+
+			this.uniforms[entry[0]] = entry[1];
+
+		}
+
+		this.needsUpdate = true;
+
+		return this;
 
 	}
 
@@ -625,7 +662,27 @@ class EffectMaterial extends ShaderMaterial {
 
 			}
 
+			this.needsUpdate = true;
+
 		}
+
+	}
+
+	/**
+	 * Sets the resolution.
+	 *
+	 * @param {Number} width - The width.
+	 * @param {Number} height - The height.
+	 */
+
+	setSize(width, height) {
+
+		width = Math.max(width, 1.0);
+		height = Math.max(height, 1.0);
+
+		this.uniforms.resolution.value.set(width, height);
+		this.uniforms.texelSize.value.set(1.0 / width, 1.0 / height);
+		this.uniforms.aspect.value = width / height;
 
 	}
 
@@ -3039,14 +3096,7 @@ class EffectPass extends Pass {
 
 		super("EffectPass");
 
-		/**
-		 * The main camera.
-		 *
-		 * @type {Camera}
-		 * @private
-		 */
-
-		this.mainCamera = camera;
+		this.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
 
 		/**
 		 * The effects, sorted by attribute priority, DESC.
@@ -3058,15 +3108,6 @@ class EffectPass extends Pass {
 		this.effects = effects.sort((a, b) => (b.attributes - a.attributes));
 
 		/**
-		 * The current render size.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.size = new Vector2();
-
-		/**
 		 * Indicates whether this pass should skip rendering.
 		 *
 		 * Effects will still be updated, even if this flag is true.
@@ -3076,15 +3117,6 @@ class EffectPass extends Pass {
 		 */
 
 		this.skipRendering = false;
-
-		/**
-		 * Indicates whether dithering is enabled.
-		 *
-		 * @type {Boolean}
-		 * @private
-		 */
-
-		this.quantize = false;
 
 		/**
 		 * The amount of shader uniforms that this pass uses.
@@ -3127,6 +3159,19 @@ class EffectPass extends Pass {
 	}
 
 	/**
+	 * The current render size.
+	 *
+	 * @type {Vector2}
+	 * @private
+	 */
+
+	get size() {
+
+		return this.getFullscreenMaterial().uniforms.resolution.value;
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * Color quantization reduces banding artifacts but degrades performance.
@@ -3136,7 +3181,7 @@ class EffectPass extends Pass {
 
 	get dithering() {
 
-		return this.quantize;
+		return this.getFullscreenMaterial().dithering;
 
 	}
 
@@ -3150,31 +3195,24 @@ class EffectPass extends Pass {
 
 	set dithering(value) {
 
-		if(this.quantize !== value) {
+		const material = this.getFullscreenMaterial();
 
-			const material = this.getFullscreenMaterial();
+		if(material.dithering !== value) {
 
-			if(material !== null) {
-
-				material.dithering = value;
-				material.needsUpdate = true;
-
-			}
-
-			this.quantize = value;
+			material.dithering = value;
+			material.needsUpdate = true;
 
 		}
 
 	}
 
 	/**
-	 * Creates a compound shader material.
+	 * Updates the compound shader material.
 	 *
 	 * @private
-	 * @return {Material} The new material.
 	 */
 
-	createMaterial() {
+	updateMaterial() {
 
 		const blendRegExp = /\bblend\b/g;
 
@@ -3277,7 +3315,9 @@ class EffectPass extends Pass {
 		this.skipRendering = (id === 0);
 		this.needsSwap = !this.skipRendering;
 
-		const material = new EffectMaterial(shaderParts, defines, uniforms, this.mainCamera, this.dithering);
+		const material = this.getFullscreenMaterial();
+		material.setShaderParts(shaderParts).setDefines(defines).setUniforms(uniforms);
+		material.extensions = {};
 
 		if(extensions.size > 0) {
 
@@ -3290,37 +3330,17 @@ class EffectPass extends Pass {
 
 		}
 
-		return material;
-
 	}
 
 	/**
-	 * Destroys the current fullscreen shader material and builds a new one.
+	 * Updates the shader material.
 	 *
-	 * Warning: This method performs a relatively expensive shader recompilation.
+	 * Warning: This method triggers a relatively expensive shader recompilation.
 	 */
 
 	recompile() {
 
-		let material = this.getFullscreenMaterial();
-		let depthTexture = null;
-		let depthPacking = 0;
-
-		if(material !== null) {
-
-			depthTexture = material.uniforms.depthBuffer.value;
-			depthPacking = material.depthPacking;
-			material.dispose();
-
-			this.uniforms = 0;
-			this.varyings = 0;
-
-		}
-
-		material = this.createMaterial();
-		material.setSize(this.size.x, this.size.y);
-		this.setFullscreenMaterial(material);
-		this.setDepthTexture(depthTexture, depthPacking);
+		this.updateMaterial();
 
 	}
 
@@ -3332,9 +3352,7 @@ class EffectPass extends Pass {
 
 	getDepthTexture() {
 
-		const material = this.getFullscreenMaterial();
-
-		return (material !== null) ? material.uniforms.depthBuffer.value : null;
+		return this.getFullscreenMaterial().uniforms.depthBuffer.value;
 
 	}
 
@@ -3348,7 +3366,6 @@ class EffectPass extends Pass {
 	setDepthTexture(depthTexture, depthPacking = 0) {
 
 		const material = this.getFullscreenMaterial();
-
 		material.uniforms.depthBuffer.value = depthTexture;
 		material.depthPacking = depthPacking;
 		material.needsUpdate = true;
@@ -3402,15 +3419,7 @@ class EffectPass extends Pass {
 
 	setSize(width, height) {
 
-		const material = this.getFullscreenMaterial();
-
-		if(material !== null) {
-
-			material.setSize(width, height);
-
-		}
-
-		this.size.set(width, height);
+		this.getFullscreenMaterial().setSize(width, height);
 
 		for(const effect of this.effects) {
 
@@ -3436,9 +3445,8 @@ class EffectPass extends Pass {
 
 		}
 
-		// Generate the fullscreen material.
-		this.setFullscreenMaterial(this.createMaterial());
-		this.getFullscreenMaterial().setSize(this.size.x, this.size.y);
+		// Initialize the fullscreen material.
+		this.updateMaterial();
 
 		// Compare required resources with capabilities.
 		const capabilities = renderer.capabilities;

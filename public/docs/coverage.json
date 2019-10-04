@@ -1,7 +1,7 @@
 {
-  "coverage": "97.24%",
-  "expectCount": 580,
-  "actualCount": 564,
+  "coverage": "96.74%",
+  "expectCount": 584,
+  "actualCount": 565,
   "files": {
     "src/core/Disposable.js": {
       "expectCount": 2,
@@ -226,9 +226,13 @@
       "undocumentLines": []
     },
     "src/materials/EffectMaterial.js": {
-      "expectCount": 7,
-      "actualCount": 7,
-      "undocumentLines": []
+      "expectCount": 13,
+      "actualCount": 10,
+      "undocumentLines": [
+        119,
+        123,
+        126
+      ]
     },
     "src/materials/GodRaysMaterial.js": {
       "expectCount": 5,
@@ -283,11 +287,11 @@
       ]
     },
     "src/passes/EffectPass.js": {
-      "expectCount": 26,
-      "actualCount": 24,
+      "expectCount": 24,
+      "actualCount": 22,
       "undocumentLines": [
-        437,
-        461
+        417,
+        441
       ]
     },
     "src/passes/MaskPass.js": {
