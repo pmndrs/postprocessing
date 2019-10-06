@@ -414,7 +414,8 @@ export class EffectPass extends Pass {
 
 			}
 
-			this.needsDepthTexture = true;
+			// Only request a depth texture if none has been provided yet.
+			this.needsDepthTexture = (this.getDepthTexture() === null);
 
 		}
 
