@@ -12150,21 +12150,20 @@
 
   var _GLTFLoader = function () {
     function GLTFLoader(manager) {
-      this.manager = manager !== undefined ? manager : three__default.DefaultLoadingManager;
+      three__default.Loader.call(this, manager);
       this.dracoLoader = null;
       this.ddsLoader = null;
     }
 
-    GLTFLoader.prototype = {
+    GLTFLoader.prototype = Object.assign(Object.create(three__default.Loader.prototype), {
       constructor: GLTFLoader,
-      crossOrigin: 'anonymous',
       load: function load(url, onLoad, onProgress, onError) {
         var scope = this;
         var resourcePath;
 
-        if (this.resourcePath !== undefined) {
+        if (this.resourcePath !== '') {
           resourcePath = this.resourcePath;
-        } else if (this.path !== undefined) {
+        } else if (this.path !== '') {
           resourcePath = this.path;
         } else {
           resourcePath = three__default.LoaderUtils.extractUrlBase(url);
@@ -12201,18 +12200,6 @@
             _onError(e);
           }
         }, onProgress, _onError);
-      },
-      setCrossOrigin: function setCrossOrigin(value) {
-        this.crossOrigin = value;
-        return this;
-      },
-      setPath: function setPath(value) {
-        this.path = value;
-        return this;
-      },
-      setResourcePath: function setResourcePath(value) {
-        this.resourcePath = value;
-        return this;
       },
       setDRACOLoader: function setDRACOLoader(dracoLoader) {
         this.dracoLoader = dracoLoader;
@@ -12298,7 +12285,7 @@
         });
         parser.parse(onLoad, onError);
       }
-    };
+    });
 
     function GLTFRegistry() {
       var objects = {};
@@ -13310,7 +13297,7 @@
           var sparseValues = new TypedArray(bufferViews[2], byteOffsetValues, accessorDef.sparse.count * itemSize);
 
           if (bufferView !== null) {
-            bufferAttribute.setArray(bufferAttribute.array.slice());
+            bufferAttribute = new three__default.BufferAttribute(bufferAttribute.array.slice(), bufferAttribute.itemSize, bufferAttribute.normalized);
           }
 
           for (var i = 0, il = sparseIndices.length; i < il; i++) {
@@ -13358,7 +13345,7 @@
       }
 
       return Promise.resolve(sourceURI).then(function (sourceURI) {
-        var loader = three__default.Loader.Handlers.get(sourceURI);
+        var loader = options.manager.getHandler(sourceURI);
 
         if (!loader) {
           loader = textureExtensions[EXTENSIONS.MSFT_TEXTURE_DDS] ? parser.extensions[EXTENSIONS.MSFT_TEXTURE_DDS].ddsLoader : textureLoader;
@@ -13436,7 +13423,6 @@
           three__default.Material.prototype.copy.call(pointsMaterial, material);
           pointsMaterial.color.copy(material.color);
           pointsMaterial.map = material.map;
-          pointsMaterial.lights = false;
           pointsMaterial.sizeAttenuation = false;
           this.cache.add(cacheKey, pointsMaterial);
         }
@@ -13450,7 +13436,6 @@
           lineMaterial = new three__default.LineBasicMaterial();
           three__default.Material.prototype.copy.call(lineMaterial, material);
           lineMaterial.color.copy(material.color);
-          lineMaterial.lights = false;
           this.cache.add(cacheKey, lineMaterial);
         }
 
