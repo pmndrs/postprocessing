@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.2 build Fri Oct 04 2019
+ * postprocessing v6.8.3 build Sun Oct 06 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1779,7 +1779,7 @@
             shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
           }
 
-          this.needsDepthTexture = true;
+          this.needsDepthTexture = this.getDepthTexture() === null;
         }
 
         if (transformedUv) {

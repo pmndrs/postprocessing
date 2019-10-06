@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.2 build Fri Oct 04 2019
+ * postprocessing v6.8.3 build Sun Oct 06 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1396,8 +1396,6 @@ class Pass {
 		this.needsSwap = true;
 
 		/**
-		 * Only relevant for subclassing.
-		 *
 		 * Indicates whether the {@link EffectComposer} should prepare a depth
 		 * texture for this pass.
 		 *
@@ -3289,7 +3287,8 @@ class EffectPass extends Pass {
 
 			}
 
-			this.needsDepthTexture = true;
+			// Only request a depth texture if none has been provided yet.
+			this.needsDepthTexture = (this.getDepthTexture() === null);
 
 		}
 

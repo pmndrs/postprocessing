@@ -4983,7 +4983,7 @@
             shaderParts.set(Section.FRAGMENT_MAIN_IMAGE, "float depth = readDepth(UV);\n\n\t" + shaderParts.get(Section.FRAGMENT_MAIN_IMAGE));
           }
 
-          this.needsDepthTexture = true;
+          this.needsDepthTexture = this.getDepthTexture() === null;
         }
 
         if (transformedUv) {
