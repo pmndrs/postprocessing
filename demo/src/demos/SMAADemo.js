@@ -142,7 +142,7 @@ export class SMAADemo extends PostProcessingDemo {
 
 	load() {
 
-		const maxAnisotropy = this.composer.renderer.capabilities.getMaxAnisotropy();
+		const maxAnisotropy = this.composer.getRenderer().capabilities.getMaxAnisotropy();
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
@@ -207,7 +207,7 @@ export class SMAADemo extends PostProcessingDemo {
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
-		const renderer = composer.renderer;
+		const renderer = composer.getRenderer();
 
 		// Camera.
 
@@ -242,7 +242,7 @@ export class SMAADemo extends PostProcessingDemo {
 			renderer.getPixelRatio()
 		);
 
-		this.originalRenderer = composer.renderer;
+		this.originalRenderer = composer.getRenderer();
 		this.rendererAA = rendererAA;
 
 		// Controls.
@@ -444,9 +444,9 @@ export class SMAADemo extends PostProcessingDemo {
 
 		function swapRenderers(browser) {
 
-			const size = composer.renderer.getSize(new Vector2());
+			const size = composer.getRenderer().getSize(new Vector2());
 
-			if(browser && composer.renderer !== renderer2) {
+			if(browser && composer.getRenderer() !== renderer2) {
 
 				renderer2.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer2);

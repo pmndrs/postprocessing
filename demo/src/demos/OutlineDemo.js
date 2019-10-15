@@ -245,7 +245,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
-		const renderer = composer.renderer;
+		const renderer = composer.getRenderer();
 
 		// Camera.
 
@@ -490,7 +490,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		super.reset();
 
-		const dom = this.composer.renderer.domElement;
+		const dom = this.composer.getRenderer().domElement;
 		dom.removeEventListener("mousemove", this);
 		dom.removeEventListener("mousedown", this);
 
