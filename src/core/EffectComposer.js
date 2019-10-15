@@ -41,9 +41,6 @@ export class EffectComposer {
 		/**
 		 * The renderer.
 		 *
-		 * You may replace the renderer at any time by using
-		 * {@link EffectComposer#replaceRenderer}.
-		 *
 		 * @type {WebGLRenderer}
 		 * @private
 		 */
@@ -110,6 +107,9 @@ export class EffectComposer {
 
 	/**
 	 * Returns the WebGL renderer.
+	 *
+	 * You may replace the renderer at any time by using
+	 * {@link EffectComposer#replaceRenderer}.
 	 *
 	 * @return {WebGLRenderer} The renderer.
 	 */
