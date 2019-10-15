@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.3 build Sun Oct 06 2019
+ * postprocessing v6.8.4 build Tue Oct 15 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -3988,9 +3988,6 @@ class EffectComposer {
 		/**
 		 * The renderer.
 		 *
-		 * You may replace the renderer at any time by using
-		 * {@link EffectComposer#replaceRenderer}.
-		 *
 		 * @type {WebGLRenderer}
 		 * @private
 		 */
@@ -4057,6 +4054,9 @@ class EffectComposer {
 
 	/**
 	 * Returns the WebGL renderer.
+	 *
+	 * You may replace the renderer at any time by using
+	 * {@link EffectComposer#replaceRenderer}.
 	 *
 	 * @return {WebGLRenderer} The renderer.
 	 */
@@ -4775,9 +4775,8 @@ class BloomEffect extends Effect {
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.blurPass.width = value;
+		this.renderTarget.setSize(this.width, this.height);
 
 	}
 
@@ -4804,9 +4803,8 @@ class BloomEffect extends Effect {
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.blurPass.height = value;
+		this.renderTarget.setSize(this.width, this.height);
 
 	}
 
@@ -7917,6 +7915,64 @@ class SelectiveBloomEffect extends BloomEffect {
 		 */
 
 		this.inverted = false;
+
+	}
+
+	/**
+	 * The current width of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get width() {
+
+		return super.width;
+
+	}
+
+	/**
+	 * Sets the render width.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render height and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set width(value) {
+
+		super.width = value;
+
+		this.renderTargetSelection.setSize(this.width, this.height);
+
+	}
+
+	/**
+	 * The current height of the internal render targets.
+	 *
+	 * @type {Number}
+	 */
+
+	get height() {
+
+		return super.height;
+
+	}
+
+	/**
+	 * Sets the render height.
+	 *
+	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
+	 * render width and aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set height(value) {
+
+		super.height = value;
+
+		this.renderTargetSelection.setSize(this.width, this.height);
 
 	}
 

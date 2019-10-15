@@ -1962,6 +1962,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#height",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-height",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#height",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#height",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-height",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#height",
+    "member"
+  ],
+  [
     "src/effects/selectivebloomeffect.js~selectivebloomeffect#ignorebackground",
     "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-ignoreBackground",
     "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#ignoreBackground",
@@ -2002,6 +2014,18 @@ window.esdocSearchIndex = [
     "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-method-update",
     "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#update",
     "method"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#width",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-width",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#width",
+    "member"
+  ],
+  [
+    "src/effects/selectivebloomeffect.js~selectivebloomeffect#width",
+    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-width",
+    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#width",
+    "member"
   ],
   [
     "src/effects/sepiaeffect.js",

@@ -39,6 +39,21 @@
     return Constructor;
   }
 
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
   function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
@@ -182,6 +197,56 @@
     }
 
     return _get(target, property, receiver || target);
+  }
+
+  function set(target, property, value, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.set) {
+      set = Reflect.set;
+    } else {
+      set = function set(target, property, value, receiver) {
+        var base = _superPropBase(target, property);
+
+        var desc;
+
+        if (base) {
+          desc = Object.getOwnPropertyDescriptor(base, property);
+
+          if (desc.set) {
+            desc.set.call(receiver, value);
+            return true;
+          } else if (!desc.writable) {
+            return false;
+          }
+        }
+
+        desc = Object.getOwnPropertyDescriptor(receiver, property);
+
+        if (desc) {
+          if (!desc.writable) {
+            return false;
+          }
+
+          desc.value = value;
+          Object.defineProperty(receiver, property, desc);
+        } else {
+          _defineProperty(receiver, property, value);
+        }
+
+        return true;
+      };
+    }
+
+    return set(target, property, value, receiver);
+  }
+
+  function _set(target, property, value, receiver, isStrict) {
+    var s = set(target, property, value, receiver || target);
+
+    if (!s && isStrict) {
+      throw new Error('failed to set property');
+    }
+
+    return value;
   }
 
   function _toConsumableArray(arr) {
@@ -6088,9 +6153,8 @@
         return this.blurPass.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.width = value;
+        this.renderTarget.setSize(this.width, this.height);
       }
     }, {
       key: "height",
@@ -6098,9 +6162,8 @@
         return this.blurPass.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.height = value;
+        this.renderTarget.setSize(this.width, this.height);
       }
     }, {
       key: "dithering",
@@ -7605,6 +7668,26 @@
         if (!alpha) {
           this.renderTargetSelection.texture.format = three.RGBFormat;
         }
+      }
+    }, {
+      key: "width",
+      get: function get() {
+        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", this);
+      },
+      set: function set(value) {
+        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", value, this, true);
+
+        this.renderTargetSelection.setSize(this.width, this.height);
+      }
+    }, {
+      key: "height",
+      get: function get() {
+        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", this);
+      },
+      set: function set(value) {
+        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", value, this, true);
+
+        this.renderTargetSelection.setSize(this.width, this.height);
       }
     }, {
       key: "ignoreBackground",
@@ -10857,8 +10940,10 @@
       _this46 = _possibleConstructorReturn(this, _getPrototypeOf(BloomDemo).call(this, "bloom", composer));
       _this46.raycaster = null;
       _this46.selectedObject = null;
-      _this46.effect = null;
-      _this46.pass = null;
+      _this46.effectA = null;
+      _this46.effectB = null;
+      _this46.passA = null;
+      _this46.passB = null;
       _this46.object = null;
       return _this46;
     }
@@ -10886,7 +10971,7 @@
     }, {
       key: "handleSelection",
       value: function handleSelection() {
-        var selection = this.effect.selection;
+        var selection = this.effectB.selection;
         var selectedObject = this.selectedObject;
 
         if (selectedObject !== null) {
@@ -10947,8 +11032,8 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 2000);
+        var renderer = composer.getRenderer();
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 1000);
         camera.position.set(-10, 6, 15);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -11014,27 +11099,34 @@
         object.add(o2);
         scene.add(object);
         this.raycaster = new three.Raycaster();
-        renderer.domElement.addEventListener("mousemove", this);
-        renderer.domElement.addEventListener("mousedown", this);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
         smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
-        var bloomEffect = new SelectiveBloomEffect(scene, camera, {
+        var bloomOptions = {
           blendFunction: BlendFunction.SCREEN,
           kernelSize: KernelSize.MEDIUM,
           luminanceThreshold: 0.825,
           luminanceSmoothing: 0.075,
           height: 480
-        });
-        bloomEffect.inverted = true;
+        };
+        var bloomEffect = new BloomEffect(bloomOptions);
+        var selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
         bloomEffect.blendMode.opacity.value = 2.3;
-        this.effect = bloomEffect;
-        var pass = new EffectPass(camera, smaaEffect, bloomEffect);
-        this.pass = pass;
+        selectiveBloomEffect.blendMode.opacity.value = 2.3;
+        selectiveBloomEffect.inverted = true;
+        this.effectA = bloomEffect;
+        this.effectB = selectiveBloomEffect;
+        var effectPassA = new EffectPass(camera, smaaEffect, bloomEffect);
+        var effectPassB = new EffectPass(camera, smaaEffect, selectiveBloomEffect);
+        this.passA = effectPassA;
+        this.passB = effectPassB;
         this.renderPass.renderToScreen = false;
-        pass.renderToScreen = true;
-        composer.addPass(pass);
-        ambientLight.layers.enable(bloomEffect.selection.layer);
-        directionalLight.layers.enable(bloomEffect.selection.layer);
+        effectPassA.renderToScreen = true;
+        effectPassB.renderToScreen = true;
+        effectPassB.enabled = false;
+        composer.addPass(effectPassA);
+        composer.addPass(effectPassB);
+        ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
+        directionalLight.layers.enable(selectiveBloomEffect.selection.layer);
       }
     }, {
       key: "render",
@@ -11057,68 +11149,89 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var pass = this.pass;
-        var effect = this.effect;
-        var blendMode = effect.blendMode;
+        var _this48 = this;
+
+        var renderer = this.composer.getRenderer();
+        var passA = this.passA;
+        var passB = this.passB;
+        var effectA = this.effectA;
+        var effectB = this.effectB;
+        var blendModeA = effectA.blendMode;
+        var blendModeB = effectB.blendMode;
         var params = {
-          "resolution": effect.height,
-          "kernel size": effect.blurPass.kernelSize,
-          "scale": effect.blurPass.scale,
+          "resolution": effectA.height,
+          "kernel size": effectA.blurPass.kernelSize,
+          "scale": effectA.blurPass.scale,
           "luminance": {
-            "filter": effect.luminancePass.enabled,
-            "threshold": effect.luminanceMaterial.threshold,
-            "smoothing": effect.luminanceMaterial.smoothing
+            "filter": effectA.luminancePass.enabled,
+            "threshold": effectA.luminanceMaterial.threshold,
+            "smoothing": effectA.luminanceMaterial.smoothing
           },
           "selection": {
-            "inverted": effect.inverted,
-            "ignore bg": effect.ignoreBackground
+            "enabled": false,
+            "inverted": effectB.inverted,
+            "ignore bg": effectB.ignoreBackground
           },
-          "opacity": blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
+          "opacity": blendModeA.opacity.value,
+          "blend mode": blendModeA.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effect.height = Number.parseInt(params.resolution);
+          effectA.height = effectB.height = Number.parseInt(params.resolution);
         });
         menu.add(params, "kernel size", KernelSize).onChange(function () {
-          effect.blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+          effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number.parseInt(params["kernel size"]);
         });
         menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
-          effect.blurPass.scale = Number.parseFloat(params.scale);
+          effectA.blurPass.scale = effectB.blurPass.scale = Number.parseFloat(params.scale);
         });
         var folder = menu.addFolder("Luminance");
         folder.add(params.luminance, "filter").onChange(function () {
-          effect.luminancePass.enabled = params.luminance.filter;
+          effectA.luminancePass.enabled = effectB.luminancePass.enabled = params.luminance.filter;
         });
         folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(function () {
-          effect.luminanceMaterial.threshold = Number.parseFloat(params.luminance.threshold);
+          effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number.parseFloat(params.luminance.threshold);
         });
         folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(function () {
-          effect.luminanceMaterial.smoothing = Number.parseFloat(params.luminance.smoothing);
+          effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number.parseFloat(params.luminance.smoothing);
         });
         folder.open();
         folder = menu.addFolder("Selection");
+        folder.add(params.selection, "enabled").onChange(function () {
+          passB.enabled = params.selection.enabled;
+          passA.enabled = !passB.enabled;
+
+          if (passB.enabled) {
+            renderer.domElement.addEventListener("mousemove", _this48);
+            renderer.domElement.addEventListener("mousedown", _this48);
+          } else {
+            renderer.domElement.removeEventListener("mousemove", _this48);
+            renderer.domElement.removeEventListener("mousedown", _this48);
+          }
+        });
         folder.add(params.selection, "inverted").onChange(function () {
-          effect.inverted = params.selection.inverted;
+          effectB.inverted = params.selection.inverted;
         });
         folder.add(params.selection, "ignore bg").onChange(function () {
-          effect.ignoreBackground = params.selection["ignore bg"];
+          effectB.ignoreBackground = params.selection["ignore bg"];
         });
-        folder.open();
         menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
+          blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-          pass.recompile();
+          blendModeA.blendFunction = blendModeB.blendFunction = Number.parseInt(params["blend mode"]);
+          passA.recompile();
+          passB.recompile();
         });
-        menu.add(effect, "dithering");
+        menu.add(effectA, "dithering").onChange(function () {
+          effectB.dithering = effectA.dithering;
+        });
       }
     }, {
       key: "reset",
       value: function reset() {
         _get(_getPrototypeOf(BloomDemo.prototype), "reset", this).call(this);
 
-        var dom = this.composer.renderer.domElement;
+        var dom = this.composer.getRenderer().domElement;
         dom.removeEventListener("mousemove", this);
         dom.removeEventListener("mousedown", this);
         return this;
@@ -11132,22 +11245,22 @@
     _inherits(BlurDemo, _PostProcessingDemo2);
 
     function BlurDemo(composer) {
-      var _this48;
+      var _this49;
 
       _classCallCheck(this, BlurDemo);
 
-      _this48 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
-      _this48.blurPass = null;
-      _this48.texturePass = null;
-      _this48.effect = null;
-      _this48.object = null;
-      return _this48;
+      _this49 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
+      _this49.blurPass = null;
+      _this49.texturePass = null;
+      _this49.effect = null;
+      _this49.object = null;
+      return _this49;
     }
 
     _createClass(BlurDemo, [{
       key: "load",
       value: function load() {
-        var _this49 = this;
+        var _this50 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11169,7 +11282,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this49.loadSMAAImages();
+            _this50.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11181,7 +11294,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-15, 0, -15);
         camera.lookAt(scene.position);
@@ -11303,21 +11416,21 @@
     _inherits(BokehDemo, _PostProcessingDemo3);
 
     function BokehDemo(composer) {
-      var _this50;
+      var _this51;
 
       _classCallCheck(this, BokehDemo);
 
-      _this50 = _possibleConstructorReturn(this, _getPrototypeOf(BokehDemo).call(this, "bokeh", composer));
-      _this50.effect = null;
-      _this50.bokehPass = null;
-      _this50.depthPass = null;
-      return _this50;
+      _this51 = _possibleConstructorReturn(this, _getPrototypeOf(BokehDemo).call(this, "bokeh", composer));
+      _this51.effect = null;
+      _this51.bokehPass = null;
+      _this51.depthPass = null;
+      return _this51;
     }
 
     _createClass(BokehDemo, [{
       key: "load",
       value: function load() {
-        var _this51 = this;
+        var _this52 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11339,7 +11452,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this51.loadSMAAImages();
+            _this52.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11351,7 +11464,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
         camera.position.set(12.5, -0.3, 1.7);
         this.camera = camera;
@@ -11453,20 +11566,20 @@
     _inherits(RealisticBokehDemo, _PostProcessingDemo4);
 
     function RealisticBokehDemo(composer) {
-      var _this52;
+      var _this53;
 
       _classCallCheck(this, RealisticBokehDemo);
 
-      _this52 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehDemo).call(this, "realistic-bokeh", composer));
-      _this52.effect = null;
-      _this52.pass = null;
-      return _this52;
+      _this53 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehDemo).call(this, "realistic-bokeh", composer));
+      _this53.effect = null;
+      _this53.pass = null;
+      return _this53;
     }
 
     _createClass(RealisticBokehDemo, [{
       key: "load",
       value: function load() {
-        var _this53 = this;
+        var _this54 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11488,7 +11601,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this53.loadSMAAImages();
+            _this54.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11500,7 +11613,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
         camera.position.set(12.5, -0.3, 1.7);
         this.camera = camera;
@@ -11655,20 +11768,20 @@
     _inherits(ColorDepthDemo, _PostProcessingDemo5);
 
     function ColorDepthDemo(composer) {
-      var _this54;
+      var _this55;
 
       _classCallCheck(this, ColorDepthDemo);
 
-      _this54 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
-      _this54.effect = null;
-      _this54.pass = null;
-      return _this54;
+      _this55 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
+      _this55.effect = null;
+      _this55.pass = null;
+      return _this55;
     }
 
     _createClass(ColorDepthDemo, [{
       key: "load",
       value: function load() {
-        var _this55 = this;
+        var _this56 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11690,7 +11803,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this55.loadSMAAImages();
+            _this56.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11702,7 +11815,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
@@ -11758,24 +11871,24 @@
     _inherits(ColorGradingDemo, _PostProcessingDemo6);
 
     function ColorGradingDemo(composer) {
-      var _this56;
+      var _this57;
 
       _classCallCheck(this, ColorGradingDemo);
 
-      _this56 = _possibleConstructorReturn(this, _getPrototypeOf(ColorGradingDemo).call(this, "color-grading", composer));
-      _this56.brightnessContrastEffect = null;
-      _this56.colorAverageEffect = null;
-      _this56.gammaCorrectionEffect = null;
-      _this56.hueSaturationEffect = null;
-      _this56.sepiaEffect = null;
-      _this56.pass = null;
-      return _this56;
+      _this57 = _possibleConstructorReturn(this, _getPrototypeOf(ColorGradingDemo).call(this, "color-grading", composer));
+      _this57.brightnessContrastEffect = null;
+      _this57.colorAverageEffect = null;
+      _this57.gammaCorrectionEffect = null;
+      _this57.hueSaturationEffect = null;
+      _this57.sepiaEffect = null;
+      _this57.pass = null;
+      return _this57;
     }
 
     _createClass(ColorGradingDemo, [{
       key: "load",
       value: function load() {
-        var _this57 = this;
+        var _this58 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11797,7 +11910,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this57.loadSMAAImages();
+            _this58.loadSMAAImages();
           } else {
             resolve();
           }
@@ -11809,7 +11922,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-0.75, -0.1, -1);
         camera.lookAt(scene.position);
@@ -11956,21 +12069,21 @@
     _inherits(GlitchDemo, _PostProcessingDemo7);
 
     function GlitchDemo(composer) {
-      var _this58;
+      var _this59;
 
       _classCallCheck(this, GlitchDemo);
 
-      _this58 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
-      _this58.effect = null;
-      _this58.pass = null;
-      _this58.object = null;
-      return _this58;
+      _this59 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
+      _this59.effect = null;
+      _this59.pass = null;
+      _this59.object = null;
+      return _this59;
     }
 
     _createClass(GlitchDemo, [{
       key: "load",
       value: function load() {
-        var _this59 = this;
+        var _this60 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -11996,7 +12109,7 @@
               assets.set("perturbation-map", texture);
             });
 
-            _this59.loadSMAAImages();
+            _this60.loadSMAAImages();
           } else {
             resolve();
           }
@@ -12008,7 +12121,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(6, 1, 6);
         camera.lookAt(scene.position);
@@ -14068,22 +14181,22 @@
     _inherits(GodRaysDemo, _PostProcessingDemo8);
 
     function GodRaysDemo(composer) {
-      var _this60;
+      var _this61;
 
       _classCallCheck(this, GodRaysDemo);
 
-      _this60 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
-      _this60.pass = null;
-      _this60.effect = null;
-      _this60.sun = null;
-      _this60.light = null;
-      return _this60;
+      _this61 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
+      _this61.pass = null;
+      _this61.effect = null;
+      _this61.sun = null;
+      _this61.light = null;
+      return _this61;
     }
 
     _createClass(GodRaysDemo, [{
       key: "load",
       value: function load() {
-        var _this61 = this;
+        var _this62 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14116,7 +14229,7 @@
               assets.set("sun-diffuse", texture);
             });
 
-            _this61.loadSMAAImages();
+            _this62.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14128,7 +14241,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-6, -1, -6);
         this.camera = camera;
@@ -14251,16 +14364,16 @@
     _inherits(OutlineDemo, _PostProcessingDemo9);
 
     function OutlineDemo(composer) {
-      var _this62;
+      var _this63;
 
       _classCallCheck(this, OutlineDemo);
 
-      _this62 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
-      _this62.raycaster = null;
-      _this62.selectedObject = null;
-      _this62.effect = null;
-      _this62.pass = null;
-      return _this62;
+      _this63 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
+      _this63.raycaster = null;
+      _this63.selectedObject = null;
+      _this63.effect = null;
+      _this63.pass = null;
+      return _this63;
     }
 
     _createClass(OutlineDemo, [{
@@ -14313,7 +14426,7 @@
     }, {
       key: "load",
       value: function load() {
-        var _this63 = this;
+        var _this64 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14339,7 +14452,7 @@
               assets.set("pattern-color", texture);
             });
 
-            _this63.loadSMAAImages();
+            _this64.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14351,7 +14464,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-4, 1.25, -5);
         camera.lookAt(scene.position);
@@ -14493,7 +14606,7 @@
       value: function reset() {
         _get(_getPrototypeOf(OutlineDemo.prototype), "reset", this).call(this);
 
-        var dom = this.composer.renderer.domElement;
+        var dom = this.composer.getRenderer().domElement;
         dom.removeEventListener("mousemove", this);
         dom.removeEventListener("mousedown", this);
         return this;
@@ -14507,17 +14620,17 @@
     _inherits(PatternDemo, _PostProcessingDemo10);
 
     function PatternDemo(composer) {
-      var _this64;
+      var _this65;
 
       _classCallCheck(this, PatternDemo);
 
-      _this64 = _possibleConstructorReturn(this, _getPrototypeOf(PatternDemo).call(this, "pattern", composer));
-      _this64.dotScreenEffect = null;
-      _this64.gridEffect = null;
-      _this64.scanlineEffect = null;
-      _this64.pass = null;
-      _this64.object = null;
-      return _this64;
+      _this65 = _possibleConstructorReturn(this, _getPrototypeOf(PatternDemo).call(this, "pattern", composer));
+      _this65.dotScreenEffect = null;
+      _this65.gridEffect = null;
+      _this65.scanlineEffect = null;
+      _this65.pass = null;
+      _this65.object = null;
+      return _this65;
     }
 
     _createClass(PatternDemo, [{
@@ -14553,7 +14666,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
@@ -14712,22 +14825,22 @@
     _inherits(PixelationDemo, _PostProcessingDemo11);
 
     function PixelationDemo(composer) {
-      var _this65;
+      var _this66;
 
       _classCallCheck(this, PixelationDemo);
 
-      _this65 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
-      _this65.effect = null;
-      _this65.object = null;
-      _this65.maskPass = null;
-      _this65.maskObject = null;
-      return _this65;
+      _this66 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
+      _this66.effect = null;
+      _this66.object = null;
+      _this66.maskPass = null;
+      _this66.maskObject = null;
+      return _this66;
     }
 
     _createClass(PixelationDemo, [{
       key: "load",
       value: function load() {
-        var _this66 = this;
+        var _this67 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14749,7 +14862,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this66.loadSMAAImages();
+            _this67.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14761,7 +14874,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
@@ -14869,19 +14982,19 @@
     _inherits(ShockWaveDemo, _PostProcessingDemo12);
 
     function ShockWaveDemo(composer) {
-      var _this67;
+      var _this68;
 
       _classCallCheck(this, ShockWaveDemo);
 
-      _this67 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
-      _this67.effect = null;
-      return _this67;
+      _this68 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
+      _this68.effect = null;
+      return _this68;
     }
 
     _createClass(ShockWaveDemo, [{
       key: "load",
       value: function load() {
-        var _this68 = this;
+        var _this69 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -14903,7 +15016,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this68.loadSMAAImages();
+            _this69.loadSMAAImages();
           } else {
             resolve();
           }
@@ -14915,7 +15028,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(5, 1, 5);
         camera.lookAt(scene.position);
@@ -14992,30 +15105,30 @@
     _inherits(SMAADemo, _PostProcessingDemo13);
 
     function SMAADemo(composer) {
-      var _this69;
+      var _this70;
 
       _classCallCheck(this, SMAADemo);
 
-      _this69 = _possibleConstructorReturn(this, _getPrototypeOf(SMAADemo).call(this, "smaa", composer));
-      _this69.originalRenderer = null;
-      _this69.rendererAA = null;
-      _this69.controls2 = null;
-      _this69.smaaEffect = null;
-      _this69.pass = null;
-      _this69.edgesTextureEffect = null;
-      _this69.weightsTextureEffect = null;
-      _this69.objectA = null;
-      _this69.objectB = null;
-      _this69.objectC = null;
-      return _this69;
+      _this70 = _possibleConstructorReturn(this, _getPrototypeOf(SMAADemo).call(this, "smaa", composer));
+      _this70.originalRenderer = null;
+      _this70.rendererAA = null;
+      _this70.controls2 = null;
+      _this70.smaaEffect = null;
+      _this70.pass = null;
+      _this70.edgesTextureEffect = null;
+      _this70.weightsTextureEffect = null;
+      _this70.objectA = null;
+      _this70.objectB = null;
+      _this70.objectC = null;
+      return _this70;
     }
 
     _createClass(SMAADemo, [{
       key: "load",
       value: function load() {
-        var _this70 = this;
+        var _this71 = this;
 
-        var maxAnisotropy = this.composer.renderer.capabilities.getMaxAnisotropy();
+        var maxAnisotropy = this.composer.getRenderer().capabilities.getMaxAnisotropy();
         var assets = this.assets;
         var loadingManager = this.loadingManager;
         var textureLoader = new three.TextureLoader(loadingManager);
@@ -15042,7 +15155,7 @@
               assets.set("crate-color", texture);
             });
 
-            _this70.loadSMAAImages();
+            _this71.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15054,7 +15167,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-3, 0, -3);
         camera.lookAt(scene.position);
@@ -15073,7 +15186,7 @@
           return renderer;
         }(renderer.getSize(new three.Vector2()), renderer.getClearColor(), renderer.getPixelRatio());
 
-        this.originalRenderer = composer.renderer;
+        this.originalRenderer = composer.getRenderer();
         this.rendererAA = rendererAA;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
         controls.settings.pointer.lock = false;
@@ -15204,9 +15317,9 @@
         };
 
         function swapRenderers(browser) {
-          var size = composer.renderer.getSize(new three.Vector2());
+          var size = composer.getRenderer().getSize(new three.Vector2());
 
-          if (browser && composer.renderer !== renderer2) {
+          if (browser && composer.getRenderer() !== renderer2) {
             renderer2.setSize(size.width, size.height);
             composer.replaceRenderer(renderer2);
             controls1.setEnabled(false);
@@ -15268,23 +15381,23 @@
     _inherits(SSAODemo, _PostProcessingDemo14);
 
     function SSAODemo(composer) {
-      var _this71;
+      var _this72;
 
       _classCallCheck(this, SSAODemo);
 
-      _this71 = _possibleConstructorReturn(this, _getPrototypeOf(SSAODemo).call(this, "ssao", composer));
-      _this71.renderer = null;
-      _this71.ssaoEffect = null;
-      _this71.depthEffect = null;
-      _this71.effectPass = null;
-      _this71.normalPass = null;
-      return _this71;
+      _this72 = _possibleConstructorReturn(this, _getPrototypeOf(SSAODemo).call(this, "ssao", composer));
+      _this72.renderer = null;
+      _this72.ssaoEffect = null;
+      _this72.depthEffect = null;
+      _this72.effectPass = null;
+      _this72.normalPass = null;
+      return _this72;
     }
 
     _createClass(SSAODemo, [{
       key: "load",
       value: function load() {
-        var _this72 = this;
+        var _this73 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15306,7 +15419,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this72.loadSMAAImages();
+            _this73.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15330,7 +15443,7 @@
           renderer.setPixelRatio(pixelRatio);
           renderer.shadowMap.enabled = true;
           return renderer;
-        }(composer.renderer);
+        }(composer.getRenderer());
 
         composer.replaceRenderer(renderer);
         this.renderer = renderer;
@@ -15563,20 +15676,20 @@
     _inherits(TextureDemo, _PostProcessingDemo15);
 
     function TextureDemo(composer) {
-      var _this73;
+      var _this74;
 
       _classCallCheck(this, TextureDemo);
 
-      _this73 = _possibleConstructorReturn(this, _getPrototypeOf(TextureDemo).call(this, "texture", composer));
-      _this73.effect = null;
-      _this73.pass = null;
-      return _this73;
+      _this74 = _possibleConstructorReturn(this, _getPrototypeOf(TextureDemo).call(this, "texture", composer));
+      _this74.effect = null;
+      _this74.pass = null;
+      return _this74;
     }
 
     _createClass(TextureDemo, [{
       key: "load",
       value: function load() {
-        var _this74 = this;
+        var _this75 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15603,7 +15716,7 @@
               assets.set("scratches-color", texture);
             });
 
-            _this74.loadSMAAImages();
+            _this75.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15615,7 +15728,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-0.75, -0.1, -1);
         camera.lookAt(scene.position);
@@ -15668,21 +15781,21 @@
     _inherits(ToneMappingDemo, _PostProcessingDemo16);
 
     function ToneMappingDemo(composer) {
-      var _this75;
+      var _this76;
 
       _classCallCheck(this, ToneMappingDemo);
 
-      _this75 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingDemo).call(this, "tone-mapping", composer));
-      _this75.effect = null;
-      _this75.pass = null;
-      _this75.object = null;
-      return _this75;
+      _this76 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingDemo).call(this, "tone-mapping", composer));
+      _this76.effect = null;
+      _this76.pass = null;
+      _this76.object = null;
+      return _this76;
     }
 
     _createClass(ToneMappingDemo, [{
       key: "load",
       value: function load() {
-        var _this76 = this;
+        var _this77 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15709,7 +15822,7 @@
               assets.set("crate-color", texture);
             });
 
-            _this76.loadSMAAImages();
+            _this77.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15721,7 +15834,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(-3, 0, -3);
         camera.lookAt(scene.position);
@@ -15838,21 +15951,21 @@
     _inherits(VignetteDemo, _PostProcessingDemo17);
 
     function VignetteDemo(composer) {
-      var _this77;
+      var _this78;
 
       _classCallCheck(this, VignetteDemo);
 
-      _this77 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteDemo).call(this, "vignette", composer));
-      _this77.effect = null;
-      _this77.pass = null;
-      _this77.object = null;
-      return _this77;
+      _this78 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteDemo).call(this, "vignette", composer));
+      _this78.effect = null;
+      _this78.pass = null;
+      _this78.object = null;
+      return _this78;
     }
 
     _createClass(VignetteDemo, [{
       key: "load",
       value: function load() {
-        var _this78 = this;
+        var _this79 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -15874,7 +15987,7 @@
               assets.set("sky", textureCube);
             });
 
-            _this78.loadSMAAImages();
+            _this79.loadSMAAImages();
           } else {
             resolve();
           }
@@ -15886,7 +15999,7 @@
         var scene = this.scene;
         var assets = this.assets;
         var composer = this.composer;
-        var renderer = composer.renderer;
+        var renderer = composer.getRenderer();
         var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
@@ -15996,28 +16109,28 @@
     _inherits(PerformanceDemo, _PostProcessingDemo18);
 
     function PerformanceDemo(composer) {
-      var _this79;
+      var _this80;
 
       _classCallCheck(this, PerformanceDemo);
 
-      _this79 = _possibleConstructorReturn(this, _getPrototypeOf(PerformanceDemo).call(this, "performance", composer));
-      _this79.renderer = null;
-      _this79.effects = null;
-      _this79.effectPass = null;
-      _this79.passes = null;
-      _this79.sun = null;
-      _this79.light = null;
-      _this79.fps = "0";
-      _this79.acc0 = 0;
-      _this79.acc1 = 0;
-      _this79.frames = 0;
-      return _this79;
+      _this80 = _possibleConstructorReturn(this, _getPrototypeOf(PerformanceDemo).call(this, "performance", composer));
+      _this80.renderer = null;
+      _this80.effects = null;
+      _this80.effectPass = null;
+      _this80.passes = null;
+      _this80.sun = null;
+      _this80.light = null;
+      _this80.fps = "0";
+      _this80.acc0 = 0;
+      _this80.acc1 = 0;
+      _this80.frames = 0;
+      return _this80;
     }
 
     _createClass(PerformanceDemo, [{
       key: "load",
       value: function load() {
-        var _this80 = this;
+        var _this81 = this;
 
         var assets = this.assets;
         var loadingManager = this.loadingManager;
@@ -16043,7 +16156,7 @@
               assets.set("sun-diffuse", texture);
             });
 
-            _this80.loadSMAAImages();
+            _this81.loadSMAAImages();
           } else {
             resolve();
           }
@@ -16067,7 +16180,7 @@
           renderer.setSize(size.width, size.height);
           renderer.setPixelRatio(pixelRatio);
           return renderer;
-        }(composer.renderer);
+        }(composer.getRenderer());
 
         composer.replaceRenderer(renderer);
         this.renderer = renderer;
@@ -16231,7 +16344,7 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var _this81 = this;
+        var _this82 = this;
 
         var params = {
           "merge effects": true,
@@ -16243,9 +16356,9 @@
           }
         };
         menu.add(params, "merge effects").onChange(function () {
-          _this81.effectPass.enabled = params["merge effects"];
+          _this82.effectPass.enabled = params["merge effects"];
 
-          _this81.passes.forEach(function (pass) {
+          _this82.passes.forEach(function (pass) {
             pass.enabled = !params["merge effects"];
           });
         });
