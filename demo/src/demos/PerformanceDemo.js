@@ -232,7 +232,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 			return renderer;
 
-		})(composer.renderer);
+		})(composer.getRenderer());
 
 		composer.replaceRenderer(renderer);
 		this.renderer = renderer;

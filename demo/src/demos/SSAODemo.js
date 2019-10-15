@@ -171,7 +171,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 			return renderer;
 
-		})(composer.renderer);
+		})(composer.getRenderer());
 
 		composer.replaceRenderer(renderer);
 		this.renderer = renderer;

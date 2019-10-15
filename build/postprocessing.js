@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.3 build Sun Oct 06 2019
+ * postprocessing v6.8.4 build Tue Oct 15 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -29,6 +29,21 @@
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
+  }
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
   }
 
   function _inherits(subClass, superClass) {
@@ -174,6 +189,56 @@
     }
 
     return _get(target, property, receiver || target);
+  }
+
+  function set(target, property, value, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.set) {
+      set = Reflect.set;
+    } else {
+      set = function set(target, property, value, receiver) {
+        var base = _superPropBase(target, property);
+
+        var desc;
+
+        if (base) {
+          desc = Object.getOwnPropertyDescriptor(base, property);
+
+          if (desc.set) {
+            desc.set.call(receiver, value);
+            return true;
+          } else if (!desc.writable) {
+            return false;
+          }
+        }
+
+        desc = Object.getOwnPropertyDescriptor(receiver, property);
+
+        if (desc) {
+          if (!desc.writable) {
+            return false;
+          }
+
+          desc.value = value;
+          Object.defineProperty(receiver, property, desc);
+        } else {
+          _defineProperty(receiver, property, value);
+        }
+
+        return true;
+      };
+    }
+
+    return set(target, property, value, receiver);
+  }
+
+  function _set(target, property, value, receiver, isStrict) {
+    var s = set(target, property, value, receiver || target);
+
+    if (!s && isStrict) {
+      throw new Error('failed to set property');
+    }
+
+    return value;
   }
 
   var Disposable = function () {
@@ -2897,9 +2962,8 @@
         return this.blurPass.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.width = value;
+        this.renderTarget.setSize(this.width, this.height);
       }
     }, {
       key: "height",
@@ -2907,9 +2971,8 @@
         return this.blurPass.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.height = value;
+        this.renderTarget.setSize(this.width, this.height);
       }
     }, {
       key: "dithering",
@@ -4414,6 +4477,26 @@
         if (!alpha) {
           this.renderTargetSelection.texture.format = three.RGBFormat;
         }
+      }
+    }, {
+      key: "width",
+      get: function get() {
+        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", this);
+      },
+      set: function set(value) {
+        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", value, this, true);
+
+        this.renderTargetSelection.setSize(this.width, this.height);
+      }
+    }, {
+      key: "height",
+      get: function get() {
+        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", this);
+      },
+      set: function set(value) {
+        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", value, this, true);
+
+        this.renderTargetSelection.setSize(this.width, this.height);
       }
     }, {
       key: "ignoreBackground",
