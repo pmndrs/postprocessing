@@ -149,9 +149,8 @@ export class BloomEffect extends Effect {
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.blurPass.width = value;
+		this.renderTarget.setSize(this.width, this.height);
 
 	}
 
@@ -178,9 +177,8 @@ export class BloomEffect extends Effect {
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.blurPass.height = value;
+		this.renderTarget.setSize(this.width, this.height);
 
 	}
 
