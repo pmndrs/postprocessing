@@ -3692,7 +3692,7 @@
     return DepthComparisonMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentShader$5 = "uniform sampler2D depthBuffer0;uniform sampler2D depthBuffer1;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){float d0=texture2D(depthBuffer0,vUv).r;float d1=texture2D(depthBuffer1,vUv).r;if(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
+  var fragmentShader$5 = "#include <common>\n#include <packing>\nuniform sampler2D depthBuffer0;uniform sampler2D depthBuffer1;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if DEPTH_PACKING_0 == 3201\nfloat d0=unpackRGBAToDepth(texture2D(depthBuffer0,vUv));\n#else\nfloat d0=texture2D(depthBuffer0,vUv).r;\n#endif\n#if DEPTH_PACKING_1 == 3201\nfloat d1=unpackRGBAToDepth(texture2D(depthBuffer1,vUv));\n#else\nfloat d1=texture2D(depthBuffer1,vUv).r;\n#endif\nif(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
 
   var DepthMaskMaterial = function (_ShaderMaterial6) {
     _inherits(DepthMaskMaterial, _ShaderMaterial6);
@@ -3702,6 +3702,10 @@
 
       return _possibleConstructorReturn(this, _getPrototypeOf(DepthMaskMaterial).call(this, {
         type: "DepthMaskMaterial",
+        defines: {
+          DEPTH_PACKING_0: "0",
+          DEPTH_PACKING_1: "0"
+        },
         uniforms: {
           depthBuffer0: new three.Uniform(null),
           depthBuffer1: new three.Uniform(null),
@@ -6689,7 +6693,11 @@
         height: height,
         kernelSize: kernelSize
       });
-      _this28.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
+      _this28.depthMaskPass = new ShaderPass(function (depthTexture) {
+        var material = new DepthMaskMaterial();
+        material.uniforms.depthBuffer1.value = depthTexture;
+        return material;
+      }(_this28.renderTargetLight.depthTexture));
       _this28.godRaysPass = new ShaderPass(function () {
         var material = new GodRaysMaterial(_this28.screenPosition);
         material.uniforms.density.value = density;
@@ -6719,9 +6727,10 @@
     }, {
       key: "setDepthTexture",
       value: function setDepthTexture(depthTexture) {
+        var depthPacking = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
         var material = this.depthMaskPass.getFullscreenMaterial();
         material.uniforms.depthBuffer0.value = depthTexture;
-        material.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
+        material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
       }
     }, {
       key: "update",
