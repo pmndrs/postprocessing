@@ -122,6 +122,13 @@ export class DepthMaskMaterial extends ShaderMaterial {
 
 			type: &quot;DepthMaskMaterial&quot;,
 
+			defines: {
+
+				DEPTH_PACKING_0: &quot;0&quot;,
+				DEPTH_PACKING_1: &quot;0&quot;
+
+			},
+
 			uniforms: {
 
 				depthBuffer0: new Uniform(null),

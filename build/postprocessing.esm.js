@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.4 build Tue Oct 15 2019
+ * postprocessing v6.8.5 build Thu Oct 17 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -427,7 +427,7 @@ class DepthComparisonMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$5 = "uniform sampler2D depthBuffer0;uniform sampler2D depthBuffer1;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){float d0=texture2D(depthBuffer0,vUv).r;float d1=texture2D(depthBuffer1,vUv).r;if(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
+var fragmentShader$5 = "#include <common>\n#include <packing>\nuniform sampler2D depthBuffer0;uniform sampler2D depthBuffer1;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if DEPTH_PACKING_0 == 3201\nfloat d0=unpackRGBAToDepth(texture2D(depthBuffer0,vUv));\n#else\nfloat d0=texture2D(depthBuffer0,vUv).r;\n#endif\n#if DEPTH_PACKING_1 == 3201\nfloat d1=unpackRGBAToDepth(texture2D(depthBuffer1,vUv));\n#else\nfloat d1=texture2D(depthBuffer1,vUv).r;\n#endif\nif(d0<d1){discard;}gl_FragColor=texture2D(inputBuffer,vUv);}";
 
 /**
  * A depth mask shader material.
@@ -446,6 +446,13 @@ class DepthMaskMaterial extends ShaderMaterial {
 		super({
 
 			type: "DepthMaskMaterial",
+
+			defines: {
+
+				DEPTH_PACKING_0: "0",
+				DEPTH_PACKING_1: "0"
+
+			},
 
 			uniforms: {
 
@@ -5921,7 +5928,14 @@ class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.depthMaskPass = new ShaderPass(new DepthMaskMaterial());
+		this.depthMaskPass = new ShaderPass(((depthTexture) => {
+
+			const material = new DepthMaskMaterial();
+			material.uniforms.depthBuffer1.value = depthTexture;
+
+			return material;
+
+		})(this.renderTargetLight.depthTexture));
 
 		/**
 		 * A god rays blur pass.
@@ -6178,7 +6192,7 @@ class GodRaysEffect extends Effect {
 		const material = this.depthMaskPass.getFullscreenMaterial();
 
 		material.uniforms.depthBuffer0.value = depthTexture;
-		material.uniforms.depthBuffer1.value = this.renderTargetLight.depthTexture;
+		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
 
 	}
 
