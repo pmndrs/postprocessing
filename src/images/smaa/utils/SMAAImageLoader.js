@@ -16,28 +16,11 @@ function generate() {
 
 	return new Promise((resolve, reject) => {
 
-		//const loadingManager = new LoadingManager();
-		//loadingManager.onLoad = () => resolve(urls);
-
 		worker.addEventListener("error", (event) => reject(event.error));
 		worker.addEventListener("message", (event) => {
 
 			const searchImageData = RawImageData.from(event.data.searchImageData);
 			const areaImageData = RawImageData.from(event.data.areaImageData);
-
-			/*searchImageData.toCanvas().toBlob((blob) => {
-
-				urls[0] = URL.createObjectURL(blob);
-				loadingManager.itemEnd("smaa-search");
-
-			});
-
-			areaImageData.toCanvas().toBlob((blob) => {
-
-				urls[1] = URL.createObjectURL(blob);
-				loadingManager.itemEnd("smaa-area");
-
-			});*/
 
 			const urls = [
 				searchImageData.toCanvas().toDataURL(),
@@ -55,9 +38,6 @@ function generate() {
 			resolve(urls);
 
 		});
-
-		//loadingManager.itemStart("smaa-search");
-		//loadingManager.itemStart("smaa-area");
 
 		worker.postMessage(null);
 
@@ -135,7 +115,6 @@ export class SMAAImageLoader {
 
 				result.search.addEventListener("load", () => {
 
-					//URL.revokeObjectURL(urls[0]);
 					primaryManager.itemEnd("smaa-search");
 					secondaryManager.itemEnd("smaa-search");
 
@@ -143,7 +122,6 @@ export class SMAAImageLoader {
 
 				result.area.addEventListener("load", () => {
 
-					//URL.revokeObjectURL(urls[1]);
 					primaryManager.itemEnd("smaa-area");
 					secondaryManager.itemEnd("smaa-area");
 
