@@ -48,7 +48,8 @@ function generate() {
 /**
  * An SMAA image loader.
  *
- * This loader uses a worker thread to generate the search and area images.
+ * This loader uses a worker thread to generate the search and area images. The
+ * Generated data URLs will be cached using localStorage, if available.
  */
 
 export class SMAAImageLoader {
