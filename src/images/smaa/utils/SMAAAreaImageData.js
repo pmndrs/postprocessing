@@ -1215,7 +1215,7 @@ function assemble(base, patterns, edges, size, orthogonal, target) {
 					edge[1] * size + base.y + y
 				);
 
-				c = (p.y * dstWidth + p.x) * 2;
+				c = (p.y * dstWidth + p.x) * 4;
 
 				/* The texture coordinates of orthogonal patterns are compressed
 				quadratically to reach longer distances for a given texture size. */
@@ -1224,6 +1224,8 @@ function assemble(base, patterns, edges, size, orthogonal, target) {
 
 				dstData[c] = srcData[d];
 				dstData[c + 1] = srcData[d + 1];
+				dstData[c + 2] = 0;
+				dstData[c + 3] = 255;
 
 			}
 
@@ -1256,8 +1258,8 @@ export class SMAAAreaImageData {
 		const width = 2 * 5 * ORTHOGONAL_SIZE;
 		const height = orthogonalSubsamplingOffsets.length * 5 * ORTHOGONAL_SIZE;
 
-		const data = new Uint8ClampedArray(width * height * 2);
-		const result = new RawImageData(width, height, data, 2);
+		const data = new Uint8ClampedArray(width * height * 4);
+		const result = new RawImageData(width, height, data);
 
 		const orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
 		const diagonalPatternSize = DIAGONAL_SIZE;

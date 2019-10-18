@@ -156,12 +156,13 @@ export class SMAASearchImageData {
 
 		const width = 66;
 		const height = 33;
+		const halfWidth = width / 2;
 
 		const croppedWidth = 64;
 		const croppedHeight = 16;
 
 		const data = new Uint8ClampedArray(width * height);
-		const croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight);
+		const croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight * 4);
 
 		let x, y;
 		let s, t, i;
@@ -180,9 +181,11 @@ export class SMAASearchImageData {
 					e1 = edges.get(s);
 					e2 = edges.get(t);
 
+					i = y * width + x;
+
 					// Maximize the dynamic range to help the compression.
-					data[y * width + x] = (127 * deltaLeft(e1, e2));
-					data[y * width + x + (width / 2)] = (127 * deltaRight(e1, e2));
+					data[i] = (127 * deltaLeft(e1, e2));
+					data[i + halfWidth] = (127 * deltaRight(e1, e2));
 
 				}
 
@@ -193,15 +196,16 @@ export class SMAASearchImageData {
 		// Crop the result to powers-of-two to make it BC4-friendly.
 		for(i = 0, y = height - croppedHeight; y < height; ++y) {
 
-			for(x = 0; x < croppedWidth; ++x, ++i) {
+			for(x = 0; x < croppedWidth; ++x, i += 4) {
 
 				croppedData[i] = data[y * width + x];
+				croppedData[i + 3] = 255;
 
 			}
 
 		}
 
-		return new RawImageData(croppedWidth, croppedHeight, croppedData, 1);
+		return new RawImageData(croppedWidth, croppedHeight, croppedData);
 
 	}
 
