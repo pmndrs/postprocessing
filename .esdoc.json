@@ -11,6 +11,15 @@
 				"autoPrivate": true
 			}
 		}
+	}, {
+		"name": "esdoc-importpath-plugin",
+		"option": {
+			"stripPackageName": false,
+			"replaces": [{
+				"from": "^src/.*",
+				"to": ""
+			}]
+		}
 	}]
 
 }
