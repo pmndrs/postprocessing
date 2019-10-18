@@ -110,15 +110,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			if(assets.size === 0) {
 
 				loadingManager.onError = reject;
-				loadingManager.onProgress = (item, loaded, total) => {
-
-					if(loaded === total) {
-
-						resolve();
-
-					}
-
-				};
+				loadingManager.onLoad = resolve;
 
 				cubeTextureLoader.load(urls, function(textureCube) {
 
