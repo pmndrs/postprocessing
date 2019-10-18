@@ -20,6 +20,7 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import {
 	BlendFunction,
 	EffectPass,
+	SMAAImageLoader,
 	SMAAEffect,
 	SMAAPreset,
 	TextureEffect
@@ -147,6 +148,7 @@ export class SMAADemo extends PostProcessingDemo {
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/sunset/";
 		const format = ".png";
@@ -177,7 +179,12 @@ export class SMAADemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load((smaa) => {
+
+					assets.set("smaa-search", smaa.search);
+					assets.set("smaa-area", smaa.area);
+
+				});
 
 			} else {
 
