@@ -1,392 +1,392 @@
 window.esdocSearchIndex = [
   [
-    "postprocessing/src/materials/adaptiveluminancematerial.js~adaptiveluminancematerial",
+    "postprocessing~adaptiveluminancematerial",
     "class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html",
-    "<span>AdaptiveLuminanceMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/AdaptiveLuminanceMaterial.js</span>",
+    "<span>AdaptiveLuminanceMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/blending/blendfunction.js~blendfunction",
+    "postprocessing~blendfunction",
     "variable/index.html#static-variable-BlendFunction",
-    "<span>BlendFunction</span> <span class=\"search-result-import-path\">postprocessing/src/effects/blending/BlendFunction.js</span>",
+    "<span>BlendFunction</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/effects/blending/blendmode.js~blendmode",
+    "postprocessing~blendmode",
     "class/src/effects/blending/BlendMode.js~BlendMode.html",
-    "<span>BlendMode</span> <span class=\"search-result-import-path\">postprocessing/src/effects/blending/BlendMode.js</span>",
+    "<span>BlendMode</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/bloomeffect.js~bloomeffect",
+    "postprocessing~bloomeffect",
     "class/src/effects/BloomEffect.js~BloomEffect.html",
-    "<span>BloomEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/BloomEffect.js</span>",
+    "<span>BloomEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/blurpass.js~blurpass",
+    "postprocessing~blurpass",
     "class/src/passes/BlurPass.js~BlurPass.html",
-    "<span>BlurPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/BlurPass.js</span>",
+    "<span>BlurPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/bokeheffect.js~bokeheffect",
+    "postprocessing~bokeheffect",
     "class/src/effects/BokehEffect.js~BokehEffect.html",
-    "<span>BokehEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/BokehEffect.js</span>",
+    "<span>BokehEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/brightnesscontrasteffect.js~brightnesscontrasteffect",
+    "postprocessing~brightnesscontrasteffect",
     "class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html",
-    "<span>BrightnessContrastEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/BrightnessContrastEffect.js</span>",
+    "<span>BrightnessContrastEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/chromaticaberrationeffect.js~chromaticaberrationeffect",
+    "postprocessing~chromaticaberrationeffect",
     "class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html",
-    "<span>ChromaticAberrationEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ChromaticAberrationEffect.js</span>",
+    "<span>ChromaticAberrationEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/clearmaskpass.js~clearmaskpass",
+    "postprocessing~clearmaskpass",
     "class/src/passes/ClearMaskPass.js~ClearMaskPass.html",
-    "<span>ClearMaskPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/ClearMaskPass.js</span>",
+    "<span>ClearMaskPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/clearpass.js~clearpass",
+    "postprocessing~clearpass",
     "class/src/passes/ClearPass.js~ClearPass.html",
-    "<span>ClearPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/ClearPass.js</span>",
+    "<span>ClearPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/coloraverageeffect.js~coloraverageeffect",
+    "postprocessing~coloraverageeffect",
     "class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html",
-    "<span>ColorAverageEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ColorAverageEffect.js</span>",
+    "<span>ColorAverageEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/colordeptheffect.js~colordeptheffect",
+    "postprocessing~colordeptheffect",
     "class/src/effects/ColorDepthEffect.js~ColorDepthEffect.html",
-    "<span>ColorDepthEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ColorDepthEffect.js</span>",
+    "<span>ColorDepthEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/coloredgesmaterial.js~coloredgesmaterial",
+    "postprocessing~coloredgesmaterial",
     "class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html",
-    "<span>ColorEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ColorEdgesMaterial.js</span>",
+    "<span>ColorEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/convolutionmaterial.js~convolutionmaterial",
+    "postprocessing~convolutionmaterial",
     "class/src/materials/ConvolutionMaterial.js~ConvolutionMaterial.html",
-    "<span>ConvolutionMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ConvolutionMaterial.js</span>",
+    "<span>ConvolutionMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/copymaterial.js~copymaterial",
+    "postprocessing~copymaterial",
     "class/src/materials/CopyMaterial.js~CopyMaterial.html",
-    "<span>CopyMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/CopyMaterial.js</span>",
+    "<span>CopyMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/depthcomparisonmaterial.js~depthcomparisonmaterial",
+    "postprocessing~depthcomparisonmaterial",
     "class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html",
-    "<span>DepthComparisonMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DepthComparisonMaterial.js</span>",
+    "<span>DepthComparisonMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/deptheffect.js~deptheffect",
+    "postprocessing~deptheffect",
     "class/src/effects/DepthEffect.js~DepthEffect.html",
-    "<span>DepthEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/DepthEffect.js</span>",
+    "<span>DepthEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/depthmaskmaterial.js~depthmaskmaterial",
+    "postprocessing~depthmaskmaterial",
     "class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html",
-    "<span>DepthMaskMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/DepthMaskMaterial.js</span>",
+    "<span>DepthMaskMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/depthpass.js~depthpass",
+    "postprocessing~depthpass",
     "class/src/passes/DepthPass.js~DepthPass.html",
-    "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/DepthPass.js</span>",
+    "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/core/disposable.js~disposable",
+    "postprocessing~disposable",
     "class/src/core/Disposable.js~Disposable.html",
-    "<span>Disposable</span> <span class=\"search-result-import-path\">postprocessing/src/core/Disposable.js</span>",
+    "<span>Disposable</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/dotscreeneffect.js~dotscreeneffect",
+    "postprocessing~dotscreeneffect",
     "class/src/effects/DotScreenEffect.js~DotScreenEffect.html",
-    "<span>DotScreenEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/DotScreenEffect.js</span>",
+    "<span>DotScreenEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/effect.js~effect",
+    "postprocessing~effect",
     "class/src/effects/Effect.js~Effect.html",
-    "<span>Effect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/Effect.js</span>",
+    "<span>Effect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/effect.js~effectattribute",
+    "postprocessing~effectattribute",
     "variable/index.html#static-variable-EffectAttribute",
-    "<span>EffectAttribute</span> <span class=\"search-result-import-path\">postprocessing/src/effects/Effect.js</span>",
+    "<span>EffectAttribute</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/core/effectcomposer.js~effectcomposer",
+    "postprocessing~effectcomposer",
     "class/src/core/EffectComposer.js~EffectComposer.html",
-    "<span>EffectComposer</span> <span class=\"search-result-import-path\">postprocessing/src/core/EffectComposer.js</span>",
+    "<span>EffectComposer</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/effectmaterial.js~effectmaterial",
+    "postprocessing~effectmaterial",
     "class/src/materials/EffectMaterial.js~EffectMaterial.html",
-    "<span>EffectMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/EffectMaterial.js</span>",
+    "<span>EffectMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/effectpass.js~effectpass",
+    "postprocessing~effectpass",
     "class/src/passes/EffectPass.js~EffectPass.html",
-    "<span>EffectPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/EffectPass.js</span>",
+    "<span>EffectPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/gammacorrectioneffect.js~gammacorrectioneffect",
+    "postprocessing~gammacorrectioneffect",
     "class/src/effects/GammaCorrectionEffect.js~GammaCorrectionEffect.html",
-    "<span>GammaCorrectionEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/GammaCorrectionEffect.js</span>",
+    "<span>GammaCorrectionEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/glitcheffect.js~glitcheffect",
+    "postprocessing~glitcheffect",
     "class/src/effects/GlitchEffect.js~GlitchEffect.html",
-    "<span>GlitchEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/GlitchEffect.js</span>",
+    "<span>GlitchEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/glitcheffect.js~glitchmode",
+    "postprocessing~glitchmode",
     "variable/index.html#static-variable-GlitchMode",
-    "<span>GlitchMode</span> <span class=\"search-result-import-path\">postprocessing/src/effects/GlitchEffect.js</span>",
+    "<span>GlitchMode</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/effects/godrayseffect.js~godrayseffect",
+    "postprocessing~godrayseffect",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html",
-    "<span>GodRaysEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/GodRaysEffect.js</span>",
+    "<span>GodRaysEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/godraysmaterial.js~godraysmaterial",
+    "postprocessing~godraysmaterial",
     "class/src/materials/GodRaysMaterial.js~GodRaysMaterial.html",
-    "<span>GodRaysMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/GodRaysMaterial.js</span>",
+    "<span>GodRaysMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/grideffect.js~grideffect",
+    "postprocessing~grideffect",
     "class/src/effects/GridEffect.js~GridEffect.html",
-    "<span>GridEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/GridEffect.js</span>",
+    "<span>GridEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/huesaturationeffect.js~huesaturationeffect",
+    "postprocessing~huesaturationeffect",
     "class/src/effects/HueSaturationEffect.js~HueSaturationEffect.html",
-    "<span>HueSaturationEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/HueSaturationEffect.js</span>",
+    "<span>HueSaturationEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/core/initializable.js~initializable",
+    "postprocessing~initializable",
     "class/src/core/Initializable.js~Initializable.html",
-    "<span>Initializable</span> <span class=\"search-result-import-path\">postprocessing/src/core/Initializable.js</span>",
+    "<span>Initializable</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/convolutionmaterial.js~kernelsize",
+    "postprocessing~kernelsize",
     "variable/index.html#static-variable-KernelSize",
-    "<span>KernelSize</span> <span class=\"search-result-import-path\">postprocessing/src/materials/ConvolutionMaterial.js</span>",
+    "<span>KernelSize</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/materials/luminancematerial.js~luminancematerial",
+    "postprocessing~luminancematerial",
     "class/src/materials/LuminanceMaterial.js~LuminanceMaterial.html",
-    "<span>LuminanceMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/LuminanceMaterial.js</span>",
+    "<span>LuminanceMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/maskpass.js~maskpass",
+    "postprocessing~maskpass",
     "class/src/passes/MaskPass.js~MaskPass.html",
-    "<span>MaskPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/MaskPass.js</span>",
+    "<span>MaskPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/noiseeffect.js~noiseeffect",
+    "postprocessing~noiseeffect",
     "class/src/effects/NoiseEffect.js~NoiseEffect.html",
-    "<span>NoiseEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/NoiseEffect.js</span>",
+    "<span>NoiseEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/normalpass.js~normalpass",
+    "postprocessing~normalpass",
     "class/src/passes/NormalPass.js~NormalPass.html",
-    "<span>NormalPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/NormalPass.js</span>",
+    "<span>NormalPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/outlineedgesmaterial.js~outlineedgesmaterial",
+    "postprocessing~outlineedgesmaterial",
     "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html",
-    "<span>OutlineEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/OutlineEdgesMaterial.js</span>",
+    "<span>OutlineEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/outlineeffect.js~outlineeffect",
+    "postprocessing~outlineeffect",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html",
-    "<span>OutlineEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/OutlineEffect.js</span>",
+    "<span>OutlineEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/pass.js~pass",
+    "postprocessing~pass",
     "class/src/passes/Pass.js~Pass.html",
-    "<span>Pass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/Pass.js</span>",
+    "<span>Pass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/pixelationeffect.js~pixelationeffect",
+    "postprocessing~pixelationeffect",
     "class/src/effects/PixelationEffect.js~PixelationEffect.html",
-    "<span>PixelationEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/PixelationEffect.js</span>",
+    "<span>PixelationEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/images/rawimagedata.js~rawimagedata",
+    "postprocessing~rawimagedata",
     "class/src/images/RawImageData.js~RawImageData.html",
-    "<span>RawImageData</span> <span class=\"search-result-import-path\">postprocessing/src/images/RawImageData.js</span>",
+    "<span>RawImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/realisticbokeheffect.js~realisticbokeheffect",
+    "postprocessing~realisticbokeheffect",
     "class/src/effects/RealisticBokehEffect.js~RealisticBokehEffect.html",
-    "<span>RealisticBokehEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/RealisticBokehEffect.js</span>",
+    "<span>RealisticBokehEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/renderpass.js~renderpass",
+    "postprocessing~renderpass",
     "class/src/passes/RenderPass.js~RenderPass.html",
-    "<span>RenderPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/RenderPass.js</span>",
+    "<span>RenderPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/core/resizable.js~resizable",
+    "postprocessing~resizable",
     "class/src/core/Resizable.js~Resizable.html",
-    "<span>Resizable</span> <span class=\"search-result-import-path\">postprocessing/src/core/Resizable.js</span>",
+    "<span>Resizable</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/images/smaa/utils/smaaareaimagedata.js~smaaareaimagedata",
+    "postprocessing~smaaareaimagedata",
     "class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html",
-    "<span>SMAAAreaImageData</span> <span class=\"search-result-import-path\">postprocessing/src/images/smaa/utils/SMAAAreaImageData.js</span>",
+    "<span>SMAAAreaImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/smaaeffect.js~smaaeffect",
+    "postprocessing~smaaeffect",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html",
-    "<span>SMAAEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SMAAEffect.js</span>",
+    "<span>SMAAEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/smaaeffect.js~smaapreset",
+    "postprocessing~smaapreset",
     "variable/index.html#static-variable-SMAAPreset",
-    "<span>SMAAPreset</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SMAAEffect.js</span>",
+    "<span>SMAAPreset</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/images/smaa/utils/smaasearchimagedata.js~smaasearchimagedata",
+    "postprocessing~smaasearchimagedata",
     "class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html",
-    "<span>SMAASearchImageData</span> <span class=\"search-result-import-path\">postprocessing/src/images/smaa/utils/SMAASearchImageData.js</span>",
+    "<span>SMAASearchImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/smaaweightsmaterial.js~smaaweightsmaterial",
+    "postprocessing~smaaweightsmaterial",
     "class/src/materials/SMAAWeightsMaterial.js~SMAAWeightsMaterial.html",
-    "<span>SMAAWeightsMaterial</span> <span class=\"search-result-import-path\">postprocessing/src/materials/SMAAWeightsMaterial.js</span>",
+    "<span>SMAAWeightsMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/ssaoeffect.js~ssaoeffect",
+    "postprocessing~ssaoeffect",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html",
-    "<span>SSAOEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SSAOEffect.js</span>",
+    "<span>SSAOEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/savepass.js~savepass",
+    "postprocessing~savepass",
     "class/src/passes/SavePass.js~SavePass.html",
-    "<span>SavePass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/SavePass.js</span>",
+    "<span>SavePass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/scanlineeffect.js~scanlineeffect",
+    "postprocessing~scanlineeffect",
     "class/src/effects/ScanlineEffect.js~ScanlineEffect.html",
-    "<span>ScanlineEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ScanlineEffect.js</span>",
+    "<span>ScanlineEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/materials/effectmaterial.js~section",
+    "postprocessing~section",
     "variable/index.html#static-variable-Section",
-    "<span>Section</span> <span class=\"search-result-import-path\">postprocessing/src/materials/EffectMaterial.js</span>",
+    "<span>Section</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
-    "postprocessing/src/core/selection.js~selection",
+    "postprocessing~selection",
     "class/src/core/Selection.js~Selection.html",
-    "<span>Selection</span> <span class=\"search-result-import-path\">postprocessing/src/core/Selection.js</span>",
+    "<span>Selection</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/selectivebloomeffect.js~selectivebloomeffect",
+    "postprocessing~selectivebloomeffect",
     "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html",
-    "<span>SelectiveBloomEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SelectiveBloomEffect.js</span>",
+    "<span>SelectiveBloomEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/sepiaeffect.js~sepiaeffect",
+    "postprocessing~sepiaeffect",
     "class/src/effects/SepiaEffect.js~SepiaEffect.html",
-    "<span>SepiaEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/SepiaEffect.js</span>",
+    "<span>SepiaEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/passes/shaderpass.js~shaderpass",
+    "postprocessing~shaderpass",
     "class/src/passes/ShaderPass.js~ShaderPass.html",
-    "<span>ShaderPass</span> <span class=\"search-result-import-path\">postprocessing/src/passes/ShaderPass.js</span>",
+    "<span>ShaderPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/shockwaveeffect.js~shockwaveeffect",
+    "postprocessing~shockwaveeffect",
     "class/src/effects/ShockWaveEffect.js~ShockWaveEffect.html",
-    "<span>ShockWaveEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ShockWaveEffect.js</span>",
+    "<span>ShockWaveEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/textureeffect.js~textureeffect",
+    "postprocessing~textureeffect",
     "class/src/effects/TextureEffect.js~TextureEffect.html",
-    "<span>TextureEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/TextureEffect.js</span>",
+    "<span>TextureEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/tonemappingeffect.js~tonemappingeffect",
+    "postprocessing~tonemappingeffect",
     "class/src/effects/ToneMappingEffect.js~ToneMappingEffect.html",
-    "<span>ToneMappingEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/ToneMappingEffect.js</span>",
+    "<span>ToneMappingEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/vignetteeffect.js~vignetteeffect",
+    "postprocessing~vignetteeffect",
     "class/src/effects/VignetteEffect.js~VignetteEffect.html",
-    "<span>VignetteEffect</span> <span class=\"search-result-import-path\">postprocessing/src/effects/VignetteEffect.js</span>",
+    "<span>VignetteEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
-    "postprocessing/src/effects/effect.js~webglextension",
+    "postprocessing~webglextension",
     "variable/index.html#static-variable-WebGLExtension",
-    "<span>WebGLExtension</span> <span class=\"search-result-import-path\">postprocessing/src/effects/Effect.js</span>",
+    "<span>WebGLExtension</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "variable"
   ],
   [
