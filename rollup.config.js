@@ -2,6 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import babel from "rollup-plugin-babel";
 import glsl from "rollup-plugin-glsl";
+import { string } from "rollup-plugin-string";
 import { terser } from "rollup-plugin-terser";
 
 const pkg = require("./package.json");
@@ -20,6 +21,19 @@ const globals = Object.assign({}, ...external.map((value) => ({
 	[value]: value.replace(/-/g, "").toUpperCase()
 })));
 
+const worker = {
+
+	input: "src/images/smaa/utils/worker.js",
+	plugins: [resolve()].concat(production ? [minify({
+		comments: false
+	}), babel()] : []),
+	output: {
+		file: "src/images/smaa/utils/worker.tmp",
+		format: "iife"
+	}
+
+}
+
 const lib = {
 
 	module: {
@@ -29,6 +43,8 @@ const lib = {
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: pkg.module,
@@ -83,6 +99,8 @@ const demo = {
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: "public/demo/index.js",
@@ -102,6 +120,8 @@ const demo = {
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: "public/demo/index.js",
@@ -123,7 +143,7 @@ const demo = {
 
 };
 
-export default (production ? [
+export default [worker].concat(production ? [
 	lib.module, lib.main, lib.min,
 	demo.module, demo.main, demo.min
 ] : [demo.main]);
