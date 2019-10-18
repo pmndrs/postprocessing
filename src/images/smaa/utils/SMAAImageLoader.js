@@ -6,10 +6,11 @@ import workerProgram from "./worker.tmp";
  * Generates the SMAA data images.
  *
  * @private
+ * @param {Boolean} [useCache=true] - Determines whether the generated image data should be cached.
  * @return {Promise} A promise that returns the search image and area image blobs.
  */
 
-function generate() {
+function generate(useCache = true) {
 
 	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 	const worker = new Worker(workerURL);
@@ -27,7 +28,7 @@ function generate() {
 				areaImageData.toCanvas().toDataURL()
 			];
 
-			if(window.localStorage !== undefined) {
+			if(useCache && window.localStorage !== undefined) {
 
 				localStorage.setItem("smaa-search", urls[0]);
 				localStorage.setItem("smaa-area", urls[1]);
@@ -49,7 +50,8 @@ function generate() {
  * An SMAA image loader.
  *
  * This loader uses a worker thread to generate the search and area images. The
- * Generated data URLs will be cached using localStorage, if available.
+ * Generated data URLs will be cached using localStorage, if available. To
+ * disable caching, use {@link SMAAImageLoader.useCache}.
  */
 
 export class SMAAImageLoader {
@@ -69,6 +71,14 @@ export class SMAAImageLoader {
 		 */
 
 		this.loadingManager = loadingManager;
+
+		/**
+		 * Indicates whether the generated image data should be cached.
+		 *
+		 * @type {Boolean}
+		 */
+
+		this.useCache = true;
 
 	}
 
@@ -104,13 +114,13 @@ export class SMAAImageLoader {
 
 			};
 
-			const cachedURLs = (window.localStorage !== undefined) ? [
+			const cachedURLs = (this.useCache && window.localStorage !== undefined) ? [
 				localStorage.getItem("smaa-search"),
 				localStorage.getItem("smaa-area")
 			] : [null, null];
 
 			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
-				Promise.resolve(cachedURLs) : generate();
+				Promise.resolve(cachedURLs) : generate(this.useCache);
 
 			promise.then((urls) => {
 
