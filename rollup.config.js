@@ -29,16 +29,16 @@ const lib = {
 		output: [{
 			file: pkg.module,
 			format: "esm",
-			banner: banner,
-			globals: globals
+			globals,
+			banner
 		}, {
 			file: pkg.main,
 			format: "esm",
-			globals: globals
+			globals
 		}, {
 			file: pkg.main.replace(".js", ".min.js"),
 			format: "esm",
-			globals: globals
+			globals
 		}]
 	},
 
@@ -50,8 +50,8 @@ const lib = {
 			file: pkg.main,
 			format: "umd",
 			name: pkg.name.replace(/-/g, "").toUpperCase(),
-			banner: banner,
-			globals: globals
+			globals,
+			banner
 		}
 	},
 
@@ -66,8 +66,8 @@ const lib = {
 			file: pkg.main.replace(".js", ".min.js"),
 			format: "umd",
 			name: pkg.name.replace(/-/g, "").toUpperCase(),
-			banner: banner,
-			globals: globals
+			globals,
+			banner
 		}
 	}
 
@@ -86,11 +86,11 @@ const demo = {
 		output: [{
 			file: "public/demo/index.js",
 			format: "esm",
-			globals: globals
+			globals
 		}].concat(production ? [{
 			file: "public/demo/index.min.js",
 			format: "esm",
-			globals: globals
+			globals
 		}] : [])
 	},
 
@@ -105,7 +105,7 @@ const demo = {
 		output: [{
 			file: "public/demo/index.js",
 			format: "iife",
-			globals: globals
+			globals
 		}]
 	},
 
@@ -118,7 +118,7 @@ const demo = {
 		output: {
 			file: "public/demo/index.min.js",
 			format: "iife",
-			globals: globals
+			globals
 		}
 	}
 
