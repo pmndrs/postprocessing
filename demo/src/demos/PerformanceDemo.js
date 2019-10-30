@@ -8,8 +8,9 @@ import {
 	MeshPhongMaterial,
 	PerspectiveCamera,
 	PointLight,
-	TextureLoader,
+	RepeatWrapping,
 	SphereBufferGeometry,
+	TextureLoader,
 	TorusBufferGeometry,
 	Vector2,
 	WebGLRenderer
@@ -34,6 +35,7 @@ import {
 	SepiaEffect,
 	ScanlineEffect,
 	SMAAEffect,
+	TextureEffect,
 	VignetteEffect
 } from "../../../src";
 
@@ -178,9 +180,10 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 				});
 
-				textureLoader.load("textures/sun.png", function(texture) {
+				textureLoader.load("textures/scratches.jpg", function(texture) {
 
-					assets.set("sun-diffuse", texture);
+					texture.wrapS = texture.wrapT = RepeatWrapping;
+					assets.set("scratches-color", texture);
 
 				});
 
@@ -337,6 +340,11 @@ export class PerformanceDemo extends PostProcessingDemo {
 			density: 1.04
 		});
 
+		const textureEffect = new TextureEffect({
+			blendFunction: BlendFunction.REFLECT,
+			texture: assets.get("scratches-color")
+		});
+
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.COLOR_DODGE);
 		const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.NORMAL });
@@ -356,6 +364,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 		dotScreenEffect.blendMode.opacity.value = 0.01;
 		gridEffect.blendMode.opacity.value = 0.01;
 		scanlineEffect.blendMode.opacity.value = 0.01;
+		textureEffect.blendMode.opacity.value = 0.8;
 		noiseEffect.blendMode.opacity.value = 0.25;
 
 		const effects = [
@@ -371,6 +380,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 			gammaCorrectionEffect,
 			hueSaturationEffect,
 			sepiaEffect,
+			textureEffect,
 			noiseEffect,
 			vignetteEffect
 		];
@@ -440,29 +450,9 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const params = {
 			"merge effects": true,
-			"firefox": function() {
-
-				window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank");
-
-			},
-			"chrome": function() {
-
-				window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank");
-
-			}
+			"firefox": () => window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank"),
+			"chrome": () => window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank")
 		};
-
-		menu.add(params, "merge effects").onChange(() => {
-
-			this.effectPass.enabled = params["merge effects"];
-
-			this.passes.forEach((pass) => {
-
-				pass.enabled = !params["merge effects"];
-
-			});
-
-		});
 
 		menu.add(this, "fps").listen();
 
