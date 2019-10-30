@@ -32,8 +32,19 @@ function getFullscreenTriangle() {
 		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
 		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
 		geometry = new BufferGeometry();
-		geometry.setAttribute("position", new BufferAttribute(vertices, 3));
-		geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
+
+		// Added for backward compatibility (setAttribute was added in three r110).
+		if(geometry.setAttribute !== undefined) {
+
+			geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+			geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
+
+		} else {
+
+			geometry.addAttribute("position", new BufferAttribute(vertices, 3));
+			geometry.addAttribute("uv", new BufferAttribute(uvs, 2));
+
+		}
 
 	}
 
