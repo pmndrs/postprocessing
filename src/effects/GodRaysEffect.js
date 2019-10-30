@@ -527,7 +527,7 @@ export class GodRaysEffect extends Effect {
 		v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
 		this.screenPosition.set(
 			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
-			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),
+			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5))
 		);
 
 		if(this.blur) {

@@ -7,7 +7,6 @@ import {
 	MeshBasicMaterial,
 	PerspectiveCamera,
 	SphereBufferGeometry,
-	TextureLoader,
 	Vector3
 } from "three";
 
@@ -88,7 +87,6 @@ export class GodRaysDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
-		const textureLoader = new TextureLoader(loadingManager);
 		const modelLoader = new GLTFLoader(loadingManager);
 
 		const path = "textures/skies/starry/";
@@ -106,25 +104,19 @@ export class GodRaysDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (textureCube) => {
 
 					assets.set("sky", textureCube);
 
 				});
 
-				modelLoader.load("models/tree/scene.gltf", function(gltf) {
+				modelLoader.load("models/tree/scene.gltf", (gltf) => {
 
 					gltf.scene.scale.multiplyScalar(2.5);
 					gltf.scene.position.set(0, -2.3, 0);
 					gltf.scene.rotation.set(0, 3, 0);
 
 					assets.set("model", gltf.scene);
-
-				});
-
-				textureLoader.load("textures/sun.png", function(texture) {
-
-					assets.set("sun-diffuse", texture);
 
 				});
 
