@@ -17136,7 +17136,7 @@
     "__docId__": 728,
     "kind": "file",
     "name": "src/passes/Pass.js",
-    "content": "import {\r\n\tBufferAttribute,\r\n\tBufferGeometry,\r\n\tScene,\r\n\tMesh,\r\n\tOrthographicCamera\r\n} from \"three\";\r\n\r\n/**\r\n * Shared fullscreen geometry.\r\n *\r\n * @type {BufferGeometry}\r\n * @private\r\n */\r\n\r\nlet geometry = null;\r\n\r\n/**\r\n * Returns a shared fullscreen triangle.\r\n *\r\n * The size of the screen is 2x2 units (NDC). A triangle that fills the screen\r\n * needs to be 4 units wide and 4 units tall.\r\n *\r\n * @private\r\n * @return {BufferGeometry} The fullscreen geometry.\r\n */\r\n\r\nfunction getFullscreenTriangle() {\r\n\r\n\tif(geometry === null) {\r\n\r\n\t\tconst vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);\r\n\t\tconst uvs = new Float32Array([0, 0, 2, 0, 0, 2]);\r\n\t\tgeometry = new BufferGeometry();\r\n\t\tgeometry.setAttribute(\"position\", new BufferAttribute(vertices, 3));\r\n\t\tgeometry.setAttribute(\"uv\", new BufferAttribute(uvs, 2));\r\n\r\n\t}\r\n\r\n\treturn geometry;\r\n\r\n}\r\n\r\n/**\r\n * An abstract pass.\r\n *\r\n * Passes that do not rely on the depth buffer should explicitly disable the\r\n * depth test and depth write flags of their fullscreen shader material.\r\n *\r\n * Fullscreen passes use a shared fullscreen triangle:\r\n * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/\r\n *\r\n * @implements {Initializable}\r\n * @implements {Resizable}\r\n * @implements {Disposable}\r\n */\r\n\r\nexport class Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pass.\r\n\t *\r\n\t * @param {String} [name] - The name of this pass. Does not have to be unique.\r\n\t * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.\r\n\t * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.\r\n\t */\r\n\r\n\tconstructor(name = \"Pass\", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t */\r\n\r\n\t\tthis.name = name;\r\n\r\n\t\t/**\r\n\t\t * The scene to render.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * A mesh that fills the screen.\r\n\t\t *\r\n\t\t * @type {Mesh}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screen = null;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should swap the frame\r\n\t\t * buffers after this pass has finished rendering.\r\n\t\t *\r\n\t\t * Set this to `false` if this pass doesn't render to the output buffer or\r\n\t\t * the screen. Otherwise, the contents of the input buffer will be lost.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the {@link EffectComposer} should prepare a depth\r\n\t\t * texture for this pass.\r\n\t\t *\r\n\t\t * Set this to `true` if this pass relies on depth information from a\r\n\t\t * preceding {@link RenderPass}.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsDepthTexture = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should render to screen.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.renderToScreen = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should be executed.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current fullscreen material.\r\n\t *\r\n\t * @return {Material} The current fullscreen material, or null if there is none.\r\n\t */\r\n\r\n\tgetFullscreenMaterial() {\r\n\r\n\t\treturn (this.screen !== null) ? this.screen.material : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the fullscreen material.\r\n\t *\r\n\t * The material will be assigned to a mesh that fills the screen. The mesh\r\n\t * will be created once a material is assigned via this method.\r\n\t *\r\n\t * @protected\r\n\t * @param {Material} material - A fullscreen material.\r\n\t */\r\n\r\n\tsetFullscreenMaterial(material) {\r\n\r\n\t\tlet screen = this.screen;\r\n\r\n\t\tif(screen !== null) {\r\n\r\n\t\t\tscreen.material = material;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tscreen = new Mesh(getFullscreenTriangle(), material);\r\n\t\t\tscreen.frustumCulled = false;\r\n\r\n\t\t\tif(this.scene === null) {\r\n\r\n\t\t\t\tthis.scene = new Scene();\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.scene.add(screen);\r\n\t\t\tthis.screen = screen;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\treturn null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * You may override this method if your pass relies on the depth information\r\n\t * of a preceding {@link RenderPass}.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * This is an abstract method that must be overridden.\r\n\t *\r\n\t * @abstract\r\n\t * @throws {Error} An error is thrown if the method is not overridden.\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tthrow new Error(\"Render method not implemented!\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * You may override this method in case you want to be informed about the size\r\n\t * of the main frame buffer.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method before this pass is\r\n\t * initialized and every time its own size is updated.\r\n\t *\r\n\t * @param {Number} width - The renderer's width.\r\n\t * @param {Number} height - The renderer's height.\r\n\t * @example this.myRenderTarget.setSize(width, height);\r\n\t */\r\n\r\n\tsetSize(width, height) {}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * By overriding this method you gain access to the renderer. You'll also be\r\n\t * able to configure your custom render targets to use the appropriate format\r\n\t * (RGB or RGBA).\r\n\t *\r\n\t * The provided renderer can be used to warm up special off-screen render\r\n\t * targets by performing a preliminary render operation.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when this pass is added to its\r\n\t * queue, but not before its size has been set.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {}\r\n\r\n\t/**\r\n\t * Performs a shallow search for disposable properties and deletes them. The\r\n\t * pass will be inoperative after this method was called!\r\n\t *\r\n\t * Disposable objects:\r\n\t *  - WebGLRenderTarget\r\n\t *  - Material\r\n\t *  - Texture\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when it is being destroyed.\r\n\t * You may, however, use it independently to free memory when you are certain\r\n\t * that you don't need this pass anymore.\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tfor(const key of Object.keys(this)) {\r\n\r\n\t\t\tif(this[key] !== null && typeof this[key].dispose === \"function\") {\r\n\r\n\t\t\t\t/** @ignore */\r\n\t\t\t\tthis[key].dispose();\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tBufferAttribute,\r\n\tBufferGeometry,\r\n\tScene,\r\n\tMesh,\r\n\tOrthographicCamera\r\n} from \"three\";\r\n\r\n/**\r\n * Shared fullscreen geometry.\r\n *\r\n * @type {BufferGeometry}\r\n * @private\r\n */\r\n\r\nlet geometry = null;\r\n\r\n/**\r\n * Returns a shared fullscreen triangle.\r\n *\r\n * The size of the screen is 2x2 units (NDC). A triangle that fills the screen\r\n * needs to be 4 units wide and 4 units tall.\r\n *\r\n * @private\r\n * @return {BufferGeometry} The fullscreen geometry.\r\n */\r\n\r\nfunction getFullscreenTriangle() {\r\n\r\n\tif(geometry === null) {\r\n\r\n\t\tconst vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);\r\n\t\tconst uvs = new Float32Array([0, 0, 2, 0, 0, 2]);\r\n\t\tgeometry = new BufferGeometry();\r\n\r\n\t\t// Added for backward compatibility (setAttribute was added in three r110).\r\n\t\tif(geometry.setAttribute !== undefined) {\r\n\r\n\t\t\tgeometry.setAttribute(\"position\", new BufferAttribute(vertices, 3));\r\n\t\t\tgeometry.setAttribute(\"uv\", new BufferAttribute(uvs, 2));\r\n\r\n\t\t} else {\r\n\r\n\t\t\tgeometry.addAttribute(\"position\", new BufferAttribute(vertices, 3));\r\n\t\t\tgeometry.addAttribute(\"uv\", new BufferAttribute(uvs, 2));\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\treturn geometry;\r\n\r\n}\r\n\r\n/**\r\n * An abstract pass.\r\n *\r\n * Passes that do not rely on the depth buffer should explicitly disable the\r\n * depth test and depth write flags of their fullscreen shader material.\r\n *\r\n * Fullscreen passes use a shared fullscreen triangle:\r\n * https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/\r\n *\r\n * @implements {Initializable}\r\n * @implements {Resizable}\r\n * @implements {Disposable}\r\n */\r\n\r\nexport class Pass {\r\n\r\n\t/**\r\n\t * Constructs a new pass.\r\n\t *\r\n\t * @param {String} [name] - The name of this pass. Does not have to be unique.\r\n\t * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.\r\n\t * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.\r\n\t */\r\n\r\n\tconstructor(name = \"Pass\", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {\r\n\r\n\t\t/**\r\n\t\t * The name of this pass.\r\n\t\t *\r\n\t\t * @type {String}\r\n\t\t */\r\n\r\n\t\tthis.name = name;\r\n\r\n\t\t/**\r\n\t\t * The scene to render.\r\n\t\t *\r\n\t\t * @type {Scene}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.scene = scene;\r\n\r\n\t\t/**\r\n\t\t * The camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @protected\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * A mesh that fills the screen.\r\n\t\t *\r\n\t\t * @type {Mesh}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.screen = null;\r\n\r\n\t\t/**\r\n\t\t * Only relevant for subclassing.\r\n\t\t *\r\n\t\t * Indicates whether the {@link EffectComposer} should swap the frame\r\n\t\t * buffers after this pass has finished rendering.\r\n\t\t *\r\n\t\t * Set this to `false` if this pass doesn't render to the output buffer or\r\n\t\t * the screen. Otherwise, the contents of the input buffer will be lost.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsSwap = true;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether the {@link EffectComposer} should prepare a depth\r\n\t\t * texture for this pass.\r\n\t\t *\r\n\t\t * Set this to `true` if this pass relies on depth information from a\r\n\t\t * preceding {@link RenderPass}.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.needsDepthTexture = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should render to screen.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.renderToScreen = false;\r\n\r\n\t\t/**\r\n\t\t * Indicates whether this pass should be executed.\r\n\t\t *\r\n\t\t * @type {Boolean}\r\n\t\t */\r\n\r\n\t\tthis.enabled = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current fullscreen material.\r\n\t *\r\n\t * @return {Material} The current fullscreen material, or null if there is none.\r\n\t */\r\n\r\n\tgetFullscreenMaterial() {\r\n\r\n\t\treturn (this.screen !== null) ? this.screen.material : null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the fullscreen material.\r\n\t *\r\n\t * The material will be assigned to a mesh that fills the screen. The mesh\r\n\t * will be created once a material is assigned via this method.\r\n\t *\r\n\t * @protected\r\n\t * @param {Material} material - A fullscreen material.\r\n\t */\r\n\r\n\tsetFullscreenMaterial(material) {\r\n\r\n\t\tlet screen = this.screen;\r\n\r\n\t\tif(screen !== null) {\r\n\r\n\t\t\tscreen.material = material;\r\n\r\n\t\t} else {\r\n\r\n\t\t\tscreen = new Mesh(getFullscreenTriangle(), material);\r\n\t\t\tscreen.frustumCulled = false;\r\n\r\n\t\t\tif(this.scene === null) {\r\n\r\n\t\t\t\tthis.scene = new Scene();\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.scene.add(screen);\r\n\t\t\tthis.screen = screen;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current depth texture.\r\n\t *\r\n\t * @return {Texture} The current depth texture, or null if there is none.\r\n\t */\r\n\r\n\tgetDepthTexture() {\r\n\r\n\t\treturn null;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * You may override this method if your pass relies on the depth information\r\n\t * of a preceding {@link RenderPass}.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {}\r\n\r\n\t/**\r\n\t * Renders the effect.\r\n\t *\r\n\t * This is an abstract method that must be overridden.\r\n\t *\r\n\t * @abstract\r\n\t * @throws {Error} An error is thrown if the method is not overridden.\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {WebGLRenderTarget} outputBuffer - A frame buffer that serves as the output render target unless this pass renders to screen.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t * @param {Boolean} [stencilTest] - Indicates whether a stencil mask is active.\r\n\t */\r\n\r\n\trender(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {\r\n\r\n\t\tthrow new Error(\"Render method not implemented!\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this pass with the renderer's size.\r\n\t *\r\n\t * You may override this method in case you want to be informed about the size\r\n\t * of the main frame buffer.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method before this pass is\r\n\t * initialized and every time its own size is updated.\r\n\t *\r\n\t * @param {Number} width - The renderer's width.\r\n\t * @param {Number} height - The renderer's height.\r\n\t * @example this.myRenderTarget.setSize(width, height);\r\n\t */\r\n\r\n\tsetSize(width, height) {}\r\n\r\n\t/**\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * By overriding this method you gain access to the renderer. You'll also be\r\n\t * able to configure your custom render targets to use the appropriate format\r\n\t * (RGB or RGBA).\r\n\t *\r\n\t * The provided renderer can be used to warm up special off-screen render\r\n\t * targets by performing a preliminary render operation.\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when this pass is added to its\r\n\t * queue, but not before its size has been set.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.\r\n\t * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }\r\n\t */\r\n\r\n\tinitialize(renderer, alpha) {}\r\n\r\n\t/**\r\n\t * Performs a shallow search for disposable properties and deletes them. The\r\n\t * pass will be inoperative after this method was called!\r\n\t *\r\n\t * Disposable objects:\r\n\t *  - WebGLRenderTarget\r\n\t *  - Material\r\n\t *  - Texture\r\n\t *\r\n\t * The {@link EffectComposer} calls this method when it is being destroyed.\r\n\t * You may, however, use it independently to free memory when you are certain\r\n\t * that you don't need this pass anymore.\r\n\t */\r\n\r\n\tdispose() {\r\n\r\n\t\tconst material = this.getFullscreenMaterial();\r\n\r\n\t\tif(material !== null) {\r\n\r\n\t\t\tmaterial.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tfor(const key of Object.keys(this)) {\r\n\r\n\t\t\tif(this[key] !== null && typeof this[key].dispose === \"function\") {\r\n\r\n\t\t\t\t/** @ignore */\r\n\t\t\t\tthis[key].dispose();\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/passes/Pass.js",
     "access": "public",
@@ -17204,7 +17204,7 @@
     "importPath": "postprocessing",
     "importStyle": "{Pass}",
     "description": "An abstract pass.\n\nPasses that do not rely on the depth buffer should explicitly disable the\ndepth test and depth write flags of their fullscreen shader material.\n\nFullscreen passes use a shared fullscreen triangle:\nhttps://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/",
-    "lineNumber": 58,
+    "lineNumber": 69,
     "interface": false,
     "implements": [
       "Initializable",
@@ -17223,7 +17223,7 @@
     "longname": "src/passes/Pass.js~Pass#constructor",
     "access": "public",
     "description": "Constructs a new pass.",
-    "lineNumber": 68,
+    "lineNumber": 79,
     "params": [
       {
         "nullable": null,
@@ -17266,7 +17266,7 @@
     "longname": "src/passes/Pass.js~Pass#name",
     "access": "public",
     "description": "The name of this pass.",
-    "lineNumber": 76,
+    "lineNumber": 87,
     "type": {
       "nullable": null,
       "types": [
@@ -17285,7 +17285,7 @@
     "longname": "src/passes/Pass.js~Pass#scene",
     "access": "protected",
     "description": "The scene to render.",
-    "lineNumber": 85,
+    "lineNumber": 96,
     "type": {
       "nullable": null,
       "types": [
@@ -17304,7 +17304,7 @@
     "longname": "src/passes/Pass.js~Pass#camera",
     "access": "protected",
     "description": "The camera.",
-    "lineNumber": 94,
+    "lineNumber": 105,
     "type": {
       "nullable": null,
       "types": [
@@ -17323,7 +17323,7 @@
     "longname": "src/passes/Pass.js~Pass#screen",
     "access": "private",
     "description": "A mesh that fills the screen.",
-    "lineNumber": 103,
+    "lineNumber": 114,
     "type": {
       "nullable": null,
       "types": [
@@ -17343,7 +17343,7 @@
     "longname": "src/passes/Pass.js~Pass#needsSwap",
     "access": "public",
     "description": "Only relevant for subclassing.\n\nIndicates whether the {@link EffectComposer} should swap the frame\nbuffers after this pass has finished rendering.\n\nSet this to `false` if this pass doesn't render to the output buffer or\nthe screen. Otherwise, the contents of the input buffer will be lost.",
-    "lineNumber": 117,
+    "lineNumber": 128,
     "type": {
       "nullable": null,
       "types": [
@@ -17362,7 +17362,7 @@
     "longname": "src/passes/Pass.js~Pass#needsDepthTexture",
     "access": "public",
     "description": "Indicates whether the {@link EffectComposer} should prepare a depth\ntexture for this pass.\n\nSet this to `true` if this pass relies on depth information from a\npreceding {@link RenderPass}.",
-    "lineNumber": 129,
+    "lineNumber": 140,
     "type": {
       "nullable": null,
       "types": [
@@ -17381,7 +17381,7 @@
     "longname": "src/passes/Pass.js~Pass#renderToScreen",
     "access": "public",
     "description": "Indicates whether this pass should render to screen.",
-    "lineNumber": 137,
+    "lineNumber": 148,
     "type": {
       "nullable": null,
       "types": [
@@ -17400,7 +17400,7 @@
     "longname": "src/passes/Pass.js~Pass#enabled",
     "access": "public",
     "description": "Indicates whether this pass should be executed.",
-    "lineNumber": 145,
+    "lineNumber": 156,
     "type": {
       "nullable": null,
       "types": [
@@ -17421,7 +17421,7 @@
     "longname": "src/passes/Pass.js~Pass#getFullscreenMaterial",
     "access": "public",
     "description": "Returns the current fullscreen material.",
-    "lineNumber": 155,
+    "lineNumber": 166,
     "return": {
       "nullable": null,
       "types": [
@@ -17443,7 +17443,7 @@
     "longname": "src/passes/Pass.js~Pass#setFullscreenMaterial",
     "access": "protected",
     "description": "Sets the fullscreen material.\n\nThe material will be assigned to a mesh that fills the screen. The mesh\nwill be created once a material is assigned via this method.",
-    "lineNumber": 171,
+    "lineNumber": 182,
     "params": [
       {
         "nullable": null,
@@ -17469,7 +17469,7 @@
     "longname": "src/passes/Pass.js~Pass#getDepthTexture",
     "access": "public",
     "description": "Returns the current depth texture.",
-    "lineNumber": 203,
+    "lineNumber": 214,
     "return": {
       "nullable": null,
       "types": [
@@ -17491,7 +17491,7 @@
     "longname": "src/passes/Pass.js~Pass#setDepthTexture",
     "access": "public",
     "description": "Sets the depth texture.\n\nYou may override this method if your pass relies on the depth information\nof a preceding {@link RenderPass}.",
-    "lineNumber": 219,
+    "lineNumber": 230,
     "params": [
       {
         "nullable": null,
@@ -17529,7 +17529,7 @@
     "longname": "src/passes/Pass.js~Pass#render",
     "access": "public",
     "description": "Renders the effect.\n\nThis is an abstract method that must be overridden.",
-    "lineNumber": 235,
+    "lineNumber": 246,
     "params": [
       {
         "nullable": null,
@@ -17607,7 +17607,7 @@
     "examples": [
       "this.myRenderTarget.setSize(width, height);"
     ],
-    "lineNumber": 255,
+    "lineNumber": 266,
     "params": [
       {
         "nullable": null,
@@ -17646,7 +17646,7 @@
     "examples": [
       "if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }"
     ],
-    "lineNumber": 275,
+    "lineNumber": 286,
     "params": [
       {
         "nullable": null,
@@ -17682,7 +17682,7 @@
     "longname": "src/passes/Pass.js~Pass#dispose",
     "access": "public",
     "description": "Performs a shallow search for disposable properties and deletes them. The\npass will be inoperative after this method was called!\n\nDisposable objects:\n - WebGLRenderTarget\n - Material\n - Texture\n\nThe {@link EffectComposer} calls this method when it is being destroyed.\nYou may, however, use it independently to free memory when you are certain\nthat you don't need this pass anymore.",
-    "lineNumber": 291,
+    "lineNumber": 302,
     "params": [],
     "return": null
   },
@@ -18439,7 +18439,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.6\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.109.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.7\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.109.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,

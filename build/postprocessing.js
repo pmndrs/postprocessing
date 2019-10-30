@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.6 build Wed Oct 30 2019
+ * postprocessing v6.8.7 build Wed Oct 30 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -964,8 +964,14 @@
       var vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
       var uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
       geometry = new three.BufferGeometry();
-      geometry.setAttribute("position", new three.BufferAttribute(vertices, 3));
-      geometry.setAttribute("uv", new three.BufferAttribute(uvs, 2));
+
+      if (geometry.setAttribute !== undefined) {
+        geometry.setAttribute("position", new three.BufferAttribute(vertices, 3));
+        geometry.setAttribute("uv", new three.BufferAttribute(uvs, 2));
+      } else {
+        geometry.addAttribute("position", new three.BufferAttribute(vertices, 3));
+        geometry.addAttribute("uv", new three.BufferAttribute(uvs, 2));
+      }
     }
 
     return geometry;
