@@ -127,10 +127,10 @@ window.addEventListener("load", function main(event) {
 		stencilBuffer: true
 	});
 
-	// Initialise the demo manager.
+	// Initialize the demo manager.
 	manager = new DemoManager(viewport, {
 		aside: document.getElementById("aside"),
-		renderer: renderer
+		renderer
 	});
 
 	// Setup demo switch and load event handlers.

@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.5 build Thu Oct 17 2019
+ * postprocessing v6.8.6 build Wed Oct 30 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -1318,8 +1318,8 @@ function getFullscreenTriangle() {
 		const vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
 		const uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
 		geometry = new BufferGeometry();
-		geometry.addAttribute("position", new BufferAttribute(vertices, 3));
-		geometry.addAttribute("uv", new BufferAttribute(uvs, 2));
+		geometry.setAttribute("position", new BufferAttribute(vertices, 3));
+		geometry.setAttribute("uv", new BufferAttribute(uvs, 2));
 
 	}
 
@@ -6254,7 +6254,7 @@ class GodRaysEffect extends Effect {
 		v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
 		this.screenPosition.set(
 			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
-			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)),
+			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5))
 		);
 
 		if(this.blur) {

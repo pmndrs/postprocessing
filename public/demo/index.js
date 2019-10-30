@@ -269,65 +269,6 @@
     throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 
-  var Demo = function () {
-    function Demo() {
-      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "demo";
-
-      _classCallCheck(this, Demo);
-
-      this.id = id;
-      this.renderer = null;
-      this.loadingManager = new three.LoadingManager();
-      this.assets = new Map();
-      this.scene = new three.Scene();
-      this.camera = null;
-      this.controls = null;
-      this.ready = false;
-    }
-
-    _createClass(Demo, [{
-      key: "setRenderer",
-      value: function setRenderer(renderer) {
-        this.renderer = renderer;
-        return this;
-      }
-    }, {
-      key: "load",
-      value: function load() {
-        return Promise.resolve();
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {}
-    }, {
-      key: "render",
-      value: function render(delta) {
-        this.renderer.render(this.scene, this.camera);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {}
-    }, {
-      key: "reset",
-      value: function reset() {
-        var fog = this.scene.fog;
-        this.scene = new three.Scene();
-        this.scene.fog = fog;
-        this.camera = null;
-
-        if (this.controls !== null) {
-          this.controls.dispose();
-          this.controls = null;
-        }
-
-        this.ready = false;
-        return this;
-      }
-    }]);
-
-    return Demo;
-  }();
-
   var Event = function Event(type) {
     _classCallCheck(this, Event);
 
@@ -3288,6 +3229,65 @@
 
   var GUI$1 = GUI;
 
+  var Demo = function () {
+    function Demo() {
+      var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "demo";
+
+      _classCallCheck(this, Demo);
+
+      this.id = id;
+      this.renderer = null;
+      this.loadingManager = new three.LoadingManager();
+      this.assets = new Map();
+      this.scene = new three.Scene();
+      this.camera = null;
+      this.controls = null;
+      this.ready = false;
+    }
+
+    _createClass(Demo, [{
+      key: "setRenderer",
+      value: function setRenderer(renderer) {
+        this.renderer = renderer;
+        return this;
+      }
+    }, {
+      key: "load",
+      value: function load() {
+        return Promise.resolve();
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {}
+    }, {
+      key: "render",
+      value: function render(delta) {
+        this.renderer.render(this.scene, this.camera);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {}
+    }, {
+      key: "reset",
+      value: function reset() {
+        var fog = this.scene.fog;
+        this.scene = new three.Scene();
+        this.scene.fog = fog;
+        this.camera = null;
+
+        if (this.controls !== null) {
+          this.controls.dispose();
+          this.controls = null;
+        }
+
+        this.ready = false;
+        return this;
+      }
+    }]);
+
+    return Demo;
+  }();
+
   var DemoManagerEvent = function (_Event) {
     _inherits(DemoManagerEvent, _Event);
 
@@ -4174,8 +4174,8 @@
       var vertices = new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]);
       var uvs = new Float32Array([0, 0, 2, 0, 0, 2]);
       geometry = new three.BufferGeometry();
-      geometry.addAttribute("position", new three.BufferAttribute(vertices, 3));
-      geometry.addAttribute("uv", new three.BufferAttribute(uvs, 2));
+      geometry.setAttribute("position", new three.BufferAttribute(vertices, 3));
+      geometry.setAttribute("uv", new three.BufferAttribute(uvs, 2));
     }
 
     return geometry;
@@ -11018,13 +11018,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -11280,13 +11274,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -11450,13 +11438,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -11599,13 +11581,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -11801,13 +11777,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -11908,13 +11878,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -12104,13 +12068,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -14210,7 +14168,6 @@
         var assets = this.assets;
         var loadingManager = this.loadingManager;
         var cubeTextureLoader = new three.CubeTextureLoader(loadingManager);
-        var textureLoader = new three.TextureLoader(loadingManager);
         var modelLoader = new threeGltfLoader(loadingManager);
         var path = "textures/skies/starry/";
         var format = ".png";
@@ -14218,13 +14175,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -14233,9 +14184,6 @@
               gltf.scene.position.set(0, -2.3, 0);
               gltf.scene.rotation.set(0, 3, 0);
               assets.set("model", gltf.scene);
-            });
-            textureLoader.load("textures/sun.png", function (texture) {
-              assets.set("sun-diffuse", texture);
             });
 
             _this62.loadSMAAImages();
@@ -14447,13 +14395,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -14654,13 +14596,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -14860,13 +14796,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15014,13 +14944,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15148,13 +15072,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15417,13 +15335,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15710,13 +15622,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15816,13 +15722,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -15985,13 +15885,7 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
@@ -16151,18 +16045,13 @@
         return new Promise(function (resolve, reject) {
           if (assets.size === 0) {
             loadingManager.onError = reject;
-
-            loadingManager.onProgress = function (item, loaded, total) {
-              if (loaded === total) {
-                resolve();
-              }
-            };
-
+            loadingManager.onLoad = resolve;
             cubeTextureLoader.load(urls, function (textureCube) {
               assets.set("sky", textureCube);
             });
-            textureLoader.load("textures/sun.png", function (texture) {
-              assets.set("sun-diffuse", texture);
+            textureLoader.load("textures/scratches.jpg", function (texture) {
+              texture.wrapS = texture.wrapT = three.RepeatWrapping;
+              assets.set("scratches-color", texture);
             });
 
             _this81.loadSMAAImages();
@@ -16263,6 +16152,10 @@
           blendFunction: BlendFunction.OVERLAY,
           density: 1.04
         });
+        var textureEffect = new TextureEffect({
+          blendFunction: BlendFunction.REFLECT,
+          texture: assets.get("scratches-color")
+        });
         var colorAverageEffect = new ColorAverageEffect(BlendFunction.COLOR_DODGE);
         var colorDepthEffect = new ColorDepthEffect({
           bits: 16
@@ -16290,8 +16183,9 @@
         dotScreenEffect.blendMode.opacity.value = 0.01;
         gridEffect.blendMode.opacity.value = 0.01;
         scanlineEffect.blendMode.opacity.value = 0.01;
+        textureEffect.blendMode.opacity.value = 0.8;
         noiseEffect.blendMode.opacity.value = 0.25;
-        var effects = [smaaEffect, bloomEffect, godRaysEffect, colorAverageEffect, colorDepthEffect, dotScreenEffect, gridEffect, scanlineEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect, sepiaEffect, noiseEffect, vignetteEffect];
+        var effects = [smaaEffect, bloomEffect, godRaysEffect, colorAverageEffect, colorDepthEffect, dotScreenEffect, gridEffect, scanlineEffect, brightnessContrastEffect, gammaCorrectionEffect, hueSaturationEffect, sepiaEffect, textureEffect, noiseEffect, vignetteEffect];
 
         var effectPass = _construct(EffectPass, [camera].concat(effects));
 
@@ -16353,24 +16247,15 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
-        var _this82 = this;
-
         var params = {
           "merge effects": true,
           "firefox": function firefox() {
-            window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank");
+            return window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank");
           },
           "chrome": function chrome() {
-            window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank");
+            return window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank");
           }
         };
-        menu.add(params, "merge effects").onChange(function () {
-          _this82.effectPass.enabled = params["merge effects"];
-
-          _this82.passes.forEach(function (pass) {
-            pass.enabled = !params["merge effects"];
-          });
-        });
         menu.add(this, "fps").listen();
         var folder = menu.addFolder("Disable VSync");
         folder.add(params, "firefox");
