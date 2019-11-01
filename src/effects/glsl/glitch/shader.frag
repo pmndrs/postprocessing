@@ -10,8 +10,6 @@ void mainUv(inout vec2 uv) {
 
 	if(active) {
 
-		vec4 normal = texture2D(perturbationMap, uv * random * random);
-
 		if(uv.y < distortion.x + columns && uv.y > distortion.x - columns * random) {
 
 			float sx = clamp(ceil(seed.x), 0.0, 1.0);
@@ -26,8 +24,8 @@ void mainUv(inout vec2 uv) {
 
 		}
 
-		uv.x += normal.x * seed.x * (random * 0.2);
-		uv.y += normal.y * seed.y * (random * 0.2);
+		vec2 normal = texture2D(perturbationMap, uv * random * random).rg;
+		uv += normal * seed * (random * 0.2);
 
 	}
 
