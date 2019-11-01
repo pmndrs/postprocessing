@@ -1,6 +1,5 @@
 import {
 	DataTexture,
-	FloatType,
 	NearestFilter,
 	RepeatWrapping,
 	RGBFormat,
@@ -20,7 +19,7 @@ import fragmentShader from "./glsl/glitch/shader.frag";
  * @private
  */
 
-const generatedTexture = "Glitch.Generated";
+const tag = "Glitch.Generated";
 
 /**
  * Returns a random float in the specified range.
@@ -231,7 +230,7 @@ export class GlitchEffect extends Effect {
 
 	setPerturbationMap(perturbationMap) {
 
-		if(this.perturbationMap !== null && this.perturbationMap.name === generatedTexture) {
+		if(this.perturbationMap !== null && this.perturbationMap.name === tag) {
 
 			this.perturbationMap.dispose();
 
@@ -255,22 +254,22 @@ export class GlitchEffect extends Effect {
 	generatePerturbationMap(size = 64) {
 
 		const pixels = size * size;
-		const data = new Float32Array(pixels * 3);
+		const data = new Uint8Array(pixels * 3);
 
-		let i, x;
+		let i, l, x;
 
-		for(i = 0; i < pixels; ++i) {
+		for(i = 0, l = data.length; i < l; i += 3) {
 
-			x = Math.random();
+			x = Math.random() * 255;
 
-			data[i * 3] = x;
-			data[i * 3 + 1] = x;
-			data[i * 3 + 2] = x;
+			data[i] = x;
+			data[i + 1] = x;
+			data[i + 2] = x;
 
 		}
 
-		const map = new DataTexture(data, size, size, RGBFormat, FloatType);
-		map.name = generatedTexture;
+		const map = new DataTexture(data, size, size, RGBFormat);
+		map.name = tag;
 		map.needsUpdate = true;
 
 		return map;
