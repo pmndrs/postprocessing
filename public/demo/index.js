@@ -16253,6 +16253,8 @@
     }, {
       key: "registerOptions",
       value: function registerOptions(menu) {
+        var _this82 = this;
+
         var params = {
           "merge effects": true,
           "firefox": function firefox() {
@@ -16262,6 +16264,32 @@
             return window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank");
           }
         };
+        menu.add(params, "merge effects").onChange(function () {
+          _this82.effectPass.enabled = params["merge effects"];
+          var _iteratorNormalCompletion26 = true;
+          var _didIteratorError26 = false;
+          var _iteratorError26 = undefined;
+
+          try {
+            for (var _iterator26 = _this82.passes[Symbol.iterator](), _step26; !(_iteratorNormalCompletion26 = (_step26 = _iterator26.next()).done); _iteratorNormalCompletion26 = true) {
+              var pass = _step26.value;
+              pass.enabled = !params["merge effects"];
+            }
+          } catch (err) {
+            _didIteratorError26 = true;
+            _iteratorError26 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion26 && _iterator26["return"] != null) {
+                _iterator26["return"]();
+              }
+            } finally {
+              if (_didIteratorError26) {
+                throw _iteratorError26;
+              }
+            }
+          }
+        });
         menu.add(this, "fps").listen();
         var folder = menu.addFolder("Disable VSync");
         folder.add(params, "firefox");
