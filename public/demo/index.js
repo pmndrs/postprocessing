@@ -6464,8 +6464,8 @@
     return GammaCorrectionEffect;
   }(Effect);
 
-  var fragmentShader$j = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){vec4 normal=texture2D(perturbationMap,uv*random*random);if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}uv.x+=normal.x*seed.x*(random*0.2);uv.y+=normal.y*seed.y*(random*0.2);}}";
-  var generatedTexture = "Glitch.Generated";
+  var fragmentShader$j = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}vec2 normal=texture2D(perturbationMap,uv*random*random).rg;uv+=normal*seed*(random*0.2);}}";
+  var tag = "Glitch.Generated";
 
   function randomFloat(low, high) {
     return low + Math.random() * (high - low);
@@ -6529,7 +6529,7 @@
     }, {
       key: "setPerturbationMap",
       value: function setPerturbationMap(perturbationMap) {
-        if (this.perturbationMap !== null && this.perturbationMap.name === generatedTexture) {
+        if (this.perturbationMap !== null && this.perturbationMap.name === tag) {
           this.perturbationMap.dispose();
         }
 
@@ -6543,18 +6543,18 @@
       value: function generatePerturbationMap() {
         var size = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 64;
         var pixels = size * size;
-        var data = new Float32Array(pixels * 3);
-        var i, x;
+        var data = new Uint8Array(pixels * 3);
+        var i, l, x;
 
-        for (i = 0; i < pixels; ++i) {
-          x = Math.random();
-          data[i * 3] = x;
-          data[i * 3 + 1] = x;
-          data[i * 3 + 2] = x;
+        for (i = 0, l = data.length; i < l; i += 3) {
+          x = Math.random() * 255;
+          data[i] = x;
+          data[i + 1] = x;
+          data[i + 2] = x;
         }
 
-        var map = new three.DataTexture(data, size, size, three.RGBFormat, three.FloatType);
-        map.name = generatedTexture;
+        var map = new three.DataTexture(data, size, size, three.RGBFormat);
+        map.name = tag;
         map.needsUpdate = true;
         return map;
       }

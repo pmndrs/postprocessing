@@ -4031,7 +4031,7 @@
     "__docId__": 187,
     "kind": "file",
     "name": "src/effects/GlitchEffect.js",
-    "content": "import {\r\n\tDataTexture,\r\n\tFloatType,\r\n\tNearestFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tVector2\r\n} from \"three\";\r\n\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/glitch/shader.frag\";\r\n\r\n/**\r\n * A label for generated data textures.\r\n *\r\n * @type {String}\r\n * @private\r\n */\r\n\r\nconst generatedTexture = \"Glitch.Generated\";\r\n\r\n/**\r\n * Returns a random float in the specified range.\r\n *\r\n * @private\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomFloat(low, high) {\r\n\r\n\treturn low + Math.random() * (high - low);\r\n\r\n}\r\n\r\n/**\r\n * A glitch effect.\r\n *\r\n * This effect can influence the {@link ChromaticAberrationEffect}.\r\n *\r\n * Reference: https://github.com/staffantan/unityglitch\r\n *\r\n * Warning: This effect cannot be merged with convolution effects.\r\n */\r\n\r\nexport class GlitchEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new glitch effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.\r\n\t * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.\r\n\t * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.\r\n\t * @param {Vector2} [options.strength] - The strength of weak and strong glitches.\r\n\t * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.\r\n\t * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.\r\n\t * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.\r\n\t * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.\r\n\t */\r\n\r\n\tconstructor({\r\n\t\tblendFunction = BlendFunction.NORMAL,\r\n\t\tchromaticAberrationOffset = null,\r\n\t\tdelay = new Vector2(1.5, 3.5),\r\n\t\tduration = new Vector2(0.6, 1.0),\r\n\t\tstrength = new Vector2(0.3, 1.0),\r\n\t\tcolumns = 0.05,\r\n\t\tratio = 0.85,\r\n\t\tperturbationMap = null,\r\n\t\tdtSize = 64\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"GlitchEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"perturbationMap\", new Uniform(null)],\r\n\t\t\t\t[\"columns\", new Uniform(columns)],\r\n\t\t\t\t[\"active\", new Uniform(false)],\r\n\t\t\t\t[\"random\", new Uniform(0.02)],\r\n\t\t\t\t[\"seed\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"distortion\", new Uniform(new Vector2())]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The current perturbation map.\r\n\t\t *\r\n\t\t * @type {Texture}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.perturbationMap = null;\r\n\r\n\t\tthis.setPerturbationMap((perturbationMap === null) ?\r\n\t\t\tthis.generatePerturbationMap(dtSize) :\r\n\t\t\tperturbationMap);\r\n\r\n\t\tthis.perturbationMap.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The minimum and maximum delay between glitch activations in seconds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.delay = delay;\r\n\r\n\t\t/**\r\n\t\t * The minimum and maximum duration of a glitch in seconds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.duration = duration;\r\n\r\n\t\t/**\r\n\t\t * A random glitch break point.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.breakPoint = new Vector2(\r\n\t\t\trandomFloat(this.delay.x, this.delay.y),\r\n\t\t\trandomFloat(this.duration.x, this.duration.y)\r\n\t\t);\r\n\r\n\t\t/**\r\n\t\t * A time accumulator.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.time = 0;\r\n\r\n\t\t/**\r\n\t\t * Random seeds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.seed = this.uniforms.get(\"seed\").value;\r\n\r\n\t\t/**\r\n\t\t * A distortion vector.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.distortion = this.uniforms.get(\"distortion\").value;\r\n\r\n\t\t/**\r\n\t\t * The effect mode.\r\n\t\t *\r\n\t\t * @type {GlitchMode}\r\n\t\t */\r\n\r\n\t\tthis.mode = GlitchMode.SPORADIC;\r\n\r\n\t\t/**\r\n\t\t * The strength of weak and strong glitches.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.strength = strength;\r\n\r\n\t\t/**\r\n\t\t * The threshold for strong glitches, ranging from 0 to 1 where 0 means no\r\n\t\t * weak glitches and 1 means no strong ones. The default ratio of 0.85\r\n\t\t * offers a decent balance.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.ratio = ratio;\r\n\r\n\t\t/**\r\n\t\t * The chromatic aberration offset.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.chromaticAberrationOffset = chromaticAberrationOffset;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the glitch effect is currently active.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget active() {\r\n\r\n\t\treturn this.uniforms.get(\"active\").value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current perturbation map.\r\n\t *\r\n\t * @return {Texture} The current perturbation map.\r\n\t */\r\n\r\n\tgetPerturbationMap() {\r\n\r\n\t\treturn this.perturbationMap;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Replaces the current perturbation map with the given one.\r\n\t *\r\n\t * The current map will be disposed if it was generated by this effect.\r\n\t *\r\n\t * @param {Texture} perturbationMap - The new perturbation map.\r\n\t */\r\n\r\n\tsetPerturbationMap(perturbationMap) {\r\n\r\n\t\tif(this.perturbationMap !== null && this.perturbationMap.name === generatedTexture) {\r\n\r\n\t\t\tthis.perturbationMap.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tperturbationMap.wrapS = perturbationMap.wrapT = RepeatWrapping;\r\n\t\tperturbationMap.magFilter = perturbationMap.minFilter = NearestFilter;\r\n\r\n\t\tthis.perturbationMap = perturbationMap;\r\n\t\tthis.uniforms.get(\"perturbationMap\").value = perturbationMap;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Generates a perturbation map.\r\n\t *\r\n\t * @param {Number} [size=64] - The texture size.\r\n\t * @return {DataTexture} The perturbation map.\r\n\t */\r\n\r\n\tgeneratePerturbationMap(size = 64) {\r\n\r\n\t\tconst pixels = size * size;\r\n\t\tconst data = new Float32Array(pixels * 3);\r\n\r\n\t\tlet i, x;\r\n\r\n\t\tfor(i = 0; i < pixels; ++i) {\r\n\r\n\t\t\tx = Math.random();\r\n\r\n\t\t\tdata[i * 3] = x;\r\n\t\t\tdata[i * 3 + 1] = x;\r\n\t\t\tdata[i * 3 + 2] = x;\r\n\r\n\t\t}\r\n\r\n\t\tconst map = new DataTexture(data, size, size, RGBFormat, FloatType);\r\n\t\tmap.name = generatedTexture;\r\n\t\tmap.needsUpdate = true;\r\n\r\n\t\treturn map;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, deltaTime) {\r\n\r\n\t\tconst mode = this.mode;\r\n\t\tconst breakPoint = this.breakPoint;\r\n\t\tconst offset = this.chromaticAberrationOffset;\r\n\t\tconst s = this.strength;\r\n\r\n\t\tlet time = this.time;\r\n\t\tlet active = false;\r\n\t\tlet r = 0.0, a = 0.0;\r\n\t\tlet trigger;\r\n\r\n\t\tif(mode !== GlitchMode.DISABLED) {\r\n\r\n\t\t\tif(mode === GlitchMode.SPORADIC) {\r\n\r\n\t\t\t\ttime += deltaTime;\r\n\t\t\t\ttrigger = (time > breakPoint.x);\r\n\r\n\t\t\t\tif(time >= (breakPoint.x + breakPoint.y)) {\r\n\r\n\t\t\t\t\tbreakPoint.set(\r\n\t\t\t\t\t\trandomFloat(this.delay.x, this.delay.y),\r\n\t\t\t\t\t\trandomFloat(this.duration.x, this.duration.y)\r\n\t\t\t\t\t);\r\n\r\n\t\t\t\t\ttime = 0;\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t\tr = Math.random();\r\n\t\t\tthis.uniforms.get(\"random\").value = r;\r\n\r\n\t\t\tif((trigger && r > this.ratio) || mode === GlitchMode.CONSTANT_WILD) {\r\n\r\n\t\t\t\tactive = true;\r\n\r\n\t\t\t\tr *= s.y * 0.03;\r\n\t\t\t\ta = randomFloat(-Math.PI, Math.PI);\r\n\r\n\t\t\t\tthis.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));\r\n\t\t\t\tthis.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));\r\n\r\n\t\t\t} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {\r\n\r\n\t\t\t\tactive = true;\r\n\r\n\t\t\t\tr *= s.x * 0.03;\r\n\t\t\t\ta = randomFloat(-Math.PI, Math.PI);\r\n\r\n\t\t\t\tthis.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));\r\n\t\t\t\tthis.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.time = time;\r\n\r\n\t\t}\r\n\r\n\t\tif(offset !== null) {\r\n\r\n\t\t\tif(active) {\r\n\r\n\t\t\t\toffset.set(Math.cos(a), Math.sin(a)).multiplyScalar(r);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\toffset.set(0.0, 0.0);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tthis.uniforms.get(\"active\").value = active;\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * A glitch mode enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} DISABLED - No glitches.\r\n * @property {Number} SPORADIC - Sporadic glitches.\r\n * @property {Number} CONSTANT_MILD - Constant mild glitches.\r\n * @property {Number} CONSTANT_WILD - Constant wild glitches.\r\n */\r\n\r\nexport const GlitchMode = {\r\n\r\n\tDISABLED: 0,\r\n\tSPORADIC: 1,\r\n\tCONSTANT_MILD: 2,\r\n\tCONSTANT_WILD: 3\r\n\r\n};\r\n",
+    "content": "import {\r\n\tDataTexture,\r\n\tNearestFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tVector2\r\n} from \"three\";\r\n\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/glitch/shader.frag\";\r\n\r\n/**\r\n * A label for generated data textures.\r\n *\r\n * @type {String}\r\n * @private\r\n */\r\n\r\nconst tag = \"Glitch.Generated\";\r\n\r\n/**\r\n * Returns a random float in the specified range.\r\n *\r\n * @private\r\n * @param {Number} low - The lowest possible value.\r\n * @param {Number} high - The highest possible value.\r\n * @return {Number} The random value.\r\n */\r\n\r\nfunction randomFloat(low, high) {\r\n\r\n\treturn low + Math.random() * (high - low);\r\n\r\n}\r\n\r\n/**\r\n * A glitch effect.\r\n *\r\n * This effect can influence the {@link ChromaticAberrationEffect}.\r\n *\r\n * Reference: https://github.com/staffantan/unityglitch\r\n *\r\n * Warning: This effect cannot be merged with convolution effects.\r\n */\r\n\r\nexport class GlitchEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new glitch effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Vector2} [options.chromaticAberrationOffset] - A chromatic aberration offset. If provided, the glitch effect will influence this offset.\r\n\t * @param {Vector2} [options.delay] - The minimum and maximum delay between glitch activations in seconds.\r\n\t * @param {Vector2} [options.duration] - The minimum and maximum duration of a glitch in seconds.\r\n\t * @param {Vector2} [options.strength] - The strength of weak and strong glitches.\r\n\t * @param {Texture} [options.perturbationMap] - A perturbation map. If none is provided, a noise texture will be created.\r\n\t * @param {Number} [options.dtSize=64] - The size of the generated noise map. Will be ignored if a perturbation map is provided.\r\n\t * @param {Number} [options.columns=0.05] - The scale of the blocky glitch columns.\r\n\t * @param {Number} [options.ratio=0.85] - The threshold for strong glitches.\r\n\t */\r\n\r\n\tconstructor({\r\n\t\tblendFunction = BlendFunction.NORMAL,\r\n\t\tchromaticAberrationOffset = null,\r\n\t\tdelay = new Vector2(1.5, 3.5),\r\n\t\tduration = new Vector2(0.6, 1.0),\r\n\t\tstrength = new Vector2(0.3, 1.0),\r\n\t\tcolumns = 0.05,\r\n\t\tratio = 0.85,\r\n\t\tperturbationMap = null,\r\n\t\tdtSize = 64\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"GlitchEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"perturbationMap\", new Uniform(null)],\r\n\t\t\t\t[\"columns\", new Uniform(columns)],\r\n\t\t\t\t[\"active\", new Uniform(false)],\r\n\t\t\t\t[\"random\", new Uniform(0.02)],\r\n\t\t\t\t[\"seed\", new Uniform(new Vector2())],\r\n\t\t\t\t[\"distortion\", new Uniform(new Vector2())]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * The current perturbation map.\r\n\t\t *\r\n\t\t * @type {Texture}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.perturbationMap = null;\r\n\r\n\t\tthis.setPerturbationMap((perturbationMap === null) ?\r\n\t\t\tthis.generatePerturbationMap(dtSize) :\r\n\t\t\tperturbationMap);\r\n\r\n\t\tthis.perturbationMap.generateMipmaps = false;\r\n\r\n\t\t/**\r\n\t\t * The minimum and maximum delay between glitch activations in seconds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.delay = delay;\r\n\r\n\t\t/**\r\n\t\t * The minimum and maximum duration of a glitch in seconds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.duration = duration;\r\n\r\n\t\t/**\r\n\t\t * A random glitch break point.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.breakPoint = new Vector2(\r\n\t\t\trandomFloat(this.delay.x, this.delay.y),\r\n\t\t\trandomFloat(this.duration.x, this.duration.y)\r\n\t\t);\r\n\r\n\t\t/**\r\n\t\t * A time accumulator.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.time = 0;\r\n\r\n\t\t/**\r\n\t\t * Random seeds.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.seed = this.uniforms.get(\"seed\").value;\r\n\r\n\t\t/**\r\n\t\t * A distortion vector.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.distortion = this.uniforms.get(\"distortion\").value;\r\n\r\n\t\t/**\r\n\t\t * The effect mode.\r\n\t\t *\r\n\t\t * @type {GlitchMode}\r\n\t\t */\r\n\r\n\t\tthis.mode = GlitchMode.SPORADIC;\r\n\r\n\t\t/**\r\n\t\t * The strength of weak and strong glitches.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.strength = strength;\r\n\r\n\t\t/**\r\n\t\t * The threshold for strong glitches, ranging from 0 to 1 where 0 means no\r\n\t\t * weak glitches and 1 means no strong ones. The default ratio of 0.85\r\n\t\t * offers a decent balance.\r\n\t\t *\r\n\t\t * @type {Number}\r\n\t\t */\r\n\r\n\t\tthis.ratio = ratio;\r\n\r\n\t\t/**\r\n\t\t * The chromatic aberration offset.\r\n\t\t *\r\n\t\t * @type {Vector2}\r\n\t\t */\r\n\r\n\t\tthis.chromaticAberrationOffset = chromaticAberrationOffset;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the glitch effect is currently active.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget active() {\r\n\r\n\t\treturn this.uniforms.get(\"active\").value;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Returns the current perturbation map.\r\n\t *\r\n\t * @return {Texture} The current perturbation map.\r\n\t */\r\n\r\n\tgetPerturbationMap() {\r\n\r\n\t\treturn this.perturbationMap;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Replaces the current perturbation map with the given one.\r\n\t *\r\n\t * The current map will be disposed if it was generated by this effect.\r\n\t *\r\n\t * @param {Texture} perturbationMap - The new perturbation map.\r\n\t */\r\n\r\n\tsetPerturbationMap(perturbationMap) {\r\n\r\n\t\tif(this.perturbationMap !== null && this.perturbationMap.name === tag) {\r\n\r\n\t\t\tthis.perturbationMap.dispose();\r\n\r\n\t\t}\r\n\r\n\t\tperturbationMap.wrapS = perturbationMap.wrapT = RepeatWrapping;\r\n\t\tperturbationMap.magFilter = perturbationMap.minFilter = NearestFilter;\r\n\r\n\t\tthis.perturbationMap = perturbationMap;\r\n\t\tthis.uniforms.get(\"perturbationMap\").value = perturbationMap;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Generates a perturbation map.\r\n\t *\r\n\t * @param {Number} [size=64] - The texture size.\r\n\t * @return {DataTexture} The perturbation map.\r\n\t */\r\n\r\n\tgeneratePerturbationMap(size = 64) {\r\n\r\n\t\tconst pixels = size * size;\r\n\t\tconst data = new Uint8Array(pixels * 3);\r\n\r\n\t\tlet i, l, x;\r\n\r\n\t\tfor(i = 0, l = data.length; i < l; i += 3) {\r\n\r\n\t\t\tx = Math.random() * 255;\r\n\r\n\t\t\tdata[i] = x;\r\n\t\t\tdata[i + 1] = x;\r\n\t\t\tdata[i + 2] = x;\r\n\r\n\t\t}\r\n\r\n\t\tconst map = new DataTexture(data, size, size, RGBFormat);\r\n\t\tmap.name = tag;\r\n\t\tmap.needsUpdate = true;\r\n\r\n\t\treturn map;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, deltaTime) {\r\n\r\n\t\tconst mode = this.mode;\r\n\t\tconst breakPoint = this.breakPoint;\r\n\t\tconst offset = this.chromaticAberrationOffset;\r\n\t\tconst s = this.strength;\r\n\r\n\t\tlet time = this.time;\r\n\t\tlet active = false;\r\n\t\tlet r = 0.0, a = 0.0;\r\n\t\tlet trigger;\r\n\r\n\t\tif(mode !== GlitchMode.DISABLED) {\r\n\r\n\t\t\tif(mode === GlitchMode.SPORADIC) {\r\n\r\n\t\t\t\ttime += deltaTime;\r\n\t\t\t\ttrigger = (time > breakPoint.x);\r\n\r\n\t\t\t\tif(time >= (breakPoint.x + breakPoint.y)) {\r\n\r\n\t\t\t\t\tbreakPoint.set(\r\n\t\t\t\t\t\trandomFloat(this.delay.x, this.delay.y),\r\n\t\t\t\t\t\trandomFloat(this.duration.x, this.duration.y)\r\n\t\t\t\t\t);\r\n\r\n\t\t\t\t\ttime = 0;\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t}\r\n\r\n\t\t\tr = Math.random();\r\n\t\t\tthis.uniforms.get(\"random\").value = r;\r\n\r\n\t\t\tif((trigger && r > this.ratio) || mode === GlitchMode.CONSTANT_WILD) {\r\n\r\n\t\t\t\tactive = true;\r\n\r\n\t\t\t\tr *= s.y * 0.03;\r\n\t\t\t\ta = randomFloat(-Math.PI, Math.PI);\r\n\r\n\t\t\t\tthis.seed.set(randomFloat(-s.y, s.y), randomFloat(-s.y, s.y));\r\n\t\t\t\tthis.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));\r\n\r\n\t\t\t} else if(trigger || mode === GlitchMode.CONSTANT_MILD) {\r\n\r\n\t\t\t\tactive = true;\r\n\r\n\t\t\t\tr *= s.x * 0.03;\r\n\t\t\t\ta = randomFloat(-Math.PI, Math.PI);\r\n\r\n\t\t\t\tthis.seed.set(randomFloat(-s.x, s.x), randomFloat(-s.x, s.x));\r\n\t\t\t\tthis.distortion.set(randomFloat(0.0, 1.0), randomFloat(0.0, 1.0));\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.time = time;\r\n\r\n\t\t}\r\n\r\n\t\tif(offset !== null) {\r\n\r\n\t\t\tif(active) {\r\n\r\n\t\t\t\toffset.set(Math.cos(a), Math.sin(a)).multiplyScalar(r);\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\toffset.set(0.0, 0.0);\r\n\r\n\t\t\t}\r\n\r\n\t\t}\r\n\r\n\t\tthis.uniforms.get(\"active\").value = active;\r\n\r\n\t}\r\n\r\n}\r\n\r\n/**\r\n * A glitch mode enumeration.\r\n *\r\n * @type {Object}\r\n * @property {Number} DISABLED - No glitches.\r\n * @property {Number} SPORADIC - Sporadic glitches.\r\n * @property {Number} CONSTANT_MILD - Constant mild glitches.\r\n * @property {Number} CONSTANT_WILD - Constant wild glitches.\r\n */\r\n\r\nexport const GlitchMode = {\r\n\r\n\tDISABLED: 0,\r\n\tSPORADIC: 1,\r\n\tCONSTANT_MILD: 2,\r\n\tCONSTANT_WILD: 3\r\n\r\n};\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/GlitchEffect.js",
     "access": "public",
@@ -4041,16 +4041,16 @@
   {
     "__docId__": 188,
     "kind": "variable",
-    "name": "generatedTexture",
+    "name": "tag",
     "memberof": "src/effects/GlitchEffect.js",
     "static": true,
-    "longname": "src/effects/GlitchEffect.js~generatedTexture",
+    "longname": "src/effects/GlitchEffect.js~tag",
     "access": "private",
     "export": false,
     "importPath": "postprocessing",
     "importStyle": null,
     "description": "A label for generated data textures.",
-    "lineNumber": 23,
+    "lineNumber": 22,
     "type": {
       "nullable": null,
       "types": [
@@ -4075,7 +4075,7 @@
     "importPath": "postprocessing",
     "importStyle": null,
     "description": "Returns a random float in the specified range.",
-    "lineNumber": 34,
+    "lineNumber": 33,
     "params": [
       {
         "nullable": null,
@@ -4120,7 +4120,7 @@
     "importPath": "postprocessing",
     "importStyle": "{GlitchEffect}",
     "description": "A glitch effect.\n\nThis effect can influence the {@link ChromaticAberrationEffect}.\n\nReference: https://github.com/staffantan/unityglitch\n\nWarning: This effect cannot be merged with convolution effects.",
-    "lineNumber": 50,
+    "lineNumber": 49,
     "interface": false,
     "extends": [
       "src/effects/Effect.js~Effect"
@@ -4137,7 +4137,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#constructor",
     "access": "public",
     "description": "Constructs a new glitch effect.",
-    "lineNumber": 67,
+    "lineNumber": 66,
     "params": [
       {
         "nullable": null,
@@ -4258,7 +4258,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#perturbationMap",
     "access": "private",
     "description": "The current perturbation map.",
-    "lineNumber": 101,
+    "lineNumber": 100,
     "type": {
       "nullable": null,
       "types": [
@@ -4278,7 +4278,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#delay",
     "access": "public",
     "description": "The minimum and maximum delay between glitch activations in seconds.",
-    "lineNumber": 115,
+    "lineNumber": 114,
     "type": {
       "nullable": null,
       "types": [
@@ -4297,7 +4297,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#duration",
     "access": "public",
     "description": "The minimum and maximum duration of a glitch in seconds.",
-    "lineNumber": 123,
+    "lineNumber": 122,
     "type": {
       "nullable": null,
       "types": [
@@ -4316,7 +4316,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#breakPoint",
     "access": "private",
     "description": "A random glitch break point.",
-    "lineNumber": 132,
+    "lineNumber": 131,
     "type": {
       "nullable": null,
       "types": [
@@ -4336,7 +4336,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#time",
     "access": "private",
     "description": "A time accumulator.",
-    "lineNumber": 144,
+    "lineNumber": 143,
     "type": {
       "nullable": null,
       "types": [
@@ -4356,7 +4356,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#seed",
     "access": "private",
     "description": "Random seeds.",
-    "lineNumber": 153,
+    "lineNumber": 152,
     "type": {
       "nullable": null,
       "types": [
@@ -4376,7 +4376,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#distortion",
     "access": "private",
     "description": "A distortion vector.",
-    "lineNumber": 162,
+    "lineNumber": 161,
     "type": {
       "nullable": null,
       "types": [
@@ -4396,7 +4396,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#mode",
     "access": "public",
     "description": "The effect mode.",
-    "lineNumber": 170,
+    "lineNumber": 169,
     "type": {
       "nullable": null,
       "types": [
@@ -4415,7 +4415,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#strength",
     "access": "public",
     "description": "The strength of weak and strong glitches.",
-    "lineNumber": 178,
+    "lineNumber": 177,
     "type": {
       "nullable": null,
       "types": [
@@ -4434,7 +4434,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#ratio",
     "access": "public",
     "description": "The threshold for strong glitches, ranging from 0 to 1 where 0 means no\nweak glitches and 1 means no strong ones. The default ratio of 0.85\noffers a decent balance.",
-    "lineNumber": 188,
+    "lineNumber": 187,
     "type": {
       "nullable": null,
       "types": [
@@ -4453,7 +4453,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#chromaticAberrationOffset",
     "access": "public",
     "description": "The chromatic aberration offset.",
-    "lineNumber": 196,
+    "lineNumber": 195,
     "type": {
       "nullable": null,
       "types": [
@@ -4474,7 +4474,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#active",
     "access": "public",
     "description": "Indicates whether the glitch effect is currently active.",
-    "lineNumber": 206,
+    "lineNumber": 205,
     "type": {
       "nullable": null,
       "types": [
@@ -4495,7 +4495,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#getPerturbationMap",
     "access": "public",
     "description": "Returns the current perturbation map.",
-    "lineNumber": 218,
+    "lineNumber": 217,
     "return": {
       "nullable": null,
       "types": [
@@ -4517,7 +4517,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#setPerturbationMap",
     "access": "public",
     "description": "Replaces the current perturbation map with the given one.\n\nThe current map will be disposed if it was generated by this effect.",
-    "lineNumber": 232,
+    "lineNumber": 231,
     "params": [
       {
         "nullable": null,
@@ -4543,7 +4543,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#generatePerturbationMap",
     "access": "public",
     "description": "Generates a perturbation map.",
-    "lineNumber": 255,
+    "lineNumber": 254,
     "params": [
       {
         "nullable": null,
@@ -4578,7 +4578,7 @@
     "longname": "src/effects/GlitchEffect.js~GlitchEffect#update",
     "access": "public",
     "description": "Updates this effect.",
-    "lineNumber": 288,
+    "lineNumber": 287,
     "params": [
       {
         "nullable": null,
@@ -4625,7 +4625,7 @@
     "importPath": "postprocessing",
     "importStyle": "{GlitchMode}",
     "description": "A glitch mode enumeration.",
-    "lineNumber": 379,
+    "lineNumber": 378,
     "properties": [
       {
         "nullable": null,
@@ -18439,7 +18439,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.7\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.109.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.8\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.109.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,

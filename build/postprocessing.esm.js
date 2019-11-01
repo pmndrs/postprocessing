@@ -1,9 +1,9 @@
 /**
- * postprocessing v6.8.7 build Wed Oct 30 2019
+ * postprocessing v6.8.8 build Fri Nov 01 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
-import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, FloatType, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Box2 } from 'three';
+import { ShaderMaterial, Uniform, Vector2, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, RGBAFormat, RepeatWrapping, NearestFilter, DataTexture, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Box2 } from 'three';
 
 /**
  * The Disposable contract.
@@ -5382,7 +5382,7 @@ class GammaCorrectionEffect extends Effect {
 
 }
 
-var fragmentShader$j = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){vec4 normal=texture2D(perturbationMap,uv*random*random);if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}uv.x+=normal.x*seed.x*(random*0.2);uv.y+=normal.y*seed.y*(random*0.2);}}";
+var fragmentShader$j = "uniform sampler2D perturbationMap;uniform bool active;uniform float columns;uniform float random;uniform vec2 seed;uniform vec2 distortion;void mainUv(inout vec2 uv){if(active){if(uv.y<distortion.x+columns&&uv.y>distortion.x-columns*random){float sx=clamp(ceil(seed.x),0.0,1.0);uv.y=sx*(1.0-(uv.y+distortion.y))+(1.0-sx)*distortion.y;}if(uv.x<distortion.y+columns&&uv.x>distortion.y-columns*random){float sy=clamp(ceil(seed.y),0.0,1.0);uv.x=sy*distortion.x+(1.0-sy)*(1.0-(uv.x+distortion.x));}vec2 normal=texture2D(perturbationMap,uv*random*random).rg;uv+=normal*seed*(random*0.2);}}";
 
 /**
  * A label for generated data textures.
@@ -5391,7 +5391,7 @@ var fragmentShader$j = "uniform sampler2D perturbationMap;uniform bool active;un
  * @private
  */
 
-const generatedTexture = "Glitch.Generated";
+const tag = "Glitch.Generated";
 
 /**
  * Returns a random float in the specified range.
@@ -5602,7 +5602,7 @@ class GlitchEffect extends Effect {
 
 	setPerturbationMap(perturbationMap) {
 
-		if(this.perturbationMap !== null && this.perturbationMap.name === generatedTexture) {
+		if(this.perturbationMap !== null && this.perturbationMap.name === tag) {
 
 			this.perturbationMap.dispose();
 
@@ -5626,22 +5626,22 @@ class GlitchEffect extends Effect {
 	generatePerturbationMap(size = 64) {
 
 		const pixels = size * size;
-		const data = new Float32Array(pixels * 3);
+		const data = new Uint8Array(pixels * 3);
 
-		let i, x;
+		let i, l, x;
 
-		for(i = 0; i < pixels; ++i) {
+		for(i = 0, l = data.length; i < l; i += 3) {
 
-			x = Math.random();
+			x = Math.random() * 255;
 
-			data[i * 3] = x;
-			data[i * 3 + 1] = x;
-			data[i * 3 + 2] = x;
+			data[i] = x;
+			data[i + 1] = x;
+			data[i + 2] = x;
 
 		}
 
-		const map = new DataTexture(data, size, size, RGBFormat, FloatType);
-		map.name = generatedTexture;
+		const map = new DataTexture(data, size, size, RGBFormat);
+		map.name = tag;
 		map.needsUpdate = true;
 
 		return map;
