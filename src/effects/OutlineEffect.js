@@ -37,8 +37,8 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width. Has no effect if blurring is disabled.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height. Has no effect if blurring is disabled.
+	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
