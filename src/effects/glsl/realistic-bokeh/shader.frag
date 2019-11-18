@@ -1,5 +1,6 @@
 uniform float focus;
 uniform float focalLength;
+uniform float fStop;
 uniform float maxBlur;
 uniform float luminanceThreshold;
 uniform float luminanceGain;
@@ -117,7 +118,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 		float focalPlane = (depthMM * focalLength) / (depthMM - focalLength);
 		float farDoF = (focalPlaneMM * focalLength) / (focalPlaneMM - focalLength);
-		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * focus * CIRCLE_OF_CONFUSION);
+		float nearDoF = (focalPlaneMM - focalLength) / (focalPlaneMM * fStop * CIRCLE_OF_CONFUSION);
 
 		float blur = abs(focalPlane - farDoF) * nearDoF;
 

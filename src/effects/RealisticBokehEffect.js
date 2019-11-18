@@ -22,6 +22,7 @@ export class RealisticBokehEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.focus=1.0] - The focus distance in world units.
 	 * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.
+	 * @param {Number} [options.fStop=0.9] - The ratio of the lens focal length to the diameter of the entrance pupil (aperture).
 	 * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.
 	 * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.
 	 * @param {Number} [options.bias=0.5] - A blur bias.
@@ -38,6 +39,7 @@ export class RealisticBokehEffect extends Effect {
 		blendFunction = BlendFunction.NORMAL,
 		focus = 1.0,
 		focalLength = 24.0,
+		fStop = 0.9,
 		luminanceThreshold = 0.5,
 		luminanceGain = 2.0,
 		bias = 0.5,
@@ -58,6 +60,7 @@ export class RealisticBokehEffect extends Effect {
 			uniforms: new Map([
 				["focus", new Uniform(focus)],
 				["focalLength", new Uniform(focalLength)],
+				["fStop", new Uniform(fStop)],
 				["luminanceThreshold", new Uniform(luminanceThreshold)],
 				["luminanceGain", new Uniform(luminanceGain)],
 				["bias", new Uniform(bias)],
