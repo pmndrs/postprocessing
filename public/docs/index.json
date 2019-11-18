@@ -7525,7 +7525,7 @@
     "__docId__": 330,
     "kind": "file",
     "name": "src/effects/RealisticBokehEffect.js",
-    "content": "import { Uniform, Vector4 } from \"three\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/realistic-bokeh/shader.frag\";\r\n\r\n/**\r\n * Depth of Field shader v2.4.\r\n *\r\n * Yields more realistic results but is also more demanding.\r\n *\r\n * Original shader code by Martins Upitis:\r\n *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)\r\n */\r\n\r\nexport class RealisticBokehEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new bokeh effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Number} [options.focus=1.0] - The focus distance in world units.\r\n\t * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.\r\n\t * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.\r\n\t * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.\r\n\t * @param {Number} [options.bias=0.5] - A blur bias.\r\n\t * @param {Number} [options.fringe=0.7] - A blur offset.\r\n\t * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.\r\n\t * @param {Boolean} [options.rings=3] - The number of blur iterations.\r\n\t * @param {Boolean} [options.samples=2] - The amount of samples taken per ring.\r\n\t * @param {Boolean} [options.showFocus=false] - Whether the focal point should be highlighted. Useful for debugging.\r\n\t * @param {Boolean} [options.manualDoF=false] - Enables manual control over the depth of field.\r\n\t * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.\r\n\t */\r\n\r\n\tconstructor({\r\n\t\tblendFunction = BlendFunction.NORMAL,\r\n\t\tfocus = 1.0,\r\n\t\tfocalLength = 24.0,\r\n\t\tluminanceThreshold = 0.5,\r\n\t\tluminanceGain = 2.0,\r\n\t\tbias = 0.5,\r\n\t\tfringe = 0.7,\r\n\t\tmaxBlur = 1.0,\r\n\t\trings = 3,\r\n\t\tsamples = 2,\r\n\t\tshowFocus = false,\r\n\t\tmanualDoF = false,\r\n\t\tpentagon = false\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"RealisticBokehEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\t\t\tattributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"focus\", new Uniform(focus)],\r\n\t\t\t\t[\"focalLength\", new Uniform(focalLength)],\r\n\t\t\t\t[\"luminanceThreshold\", new Uniform(luminanceThreshold)],\r\n\t\t\t\t[\"luminanceGain\", new Uniform(luminanceGain)],\r\n\t\t\t\t[\"bias\", new Uniform(bias)],\r\n\t\t\t\t[\"fringe\", new Uniform(fringe)],\r\n\t\t\t\t[\"maxBlur\", new Uniform(maxBlur)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\tthis.rings = rings;\r\n\t\tthis.samples = samples;\r\n\t\tthis.showFocus = showFocus;\r\n\t\tthis.manualDoF = manualDoF;\r\n\t\tthis.pentagon = pentagon;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of blur iterations.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"RINGS_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of blur iterations.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"RINGS_INT\", value.toFixed(0));\r\n\t\tthis.defines.set(\"RINGS_FLOAT\", value.toFixed(1));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of blur samples per ring.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"SAMPLES_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of blur samples per ring.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"SAMPLES_INT\", value.toFixed(0));\r\n\t\tthis.defines.set(\"SAMPLES_FLOAT\", value.toFixed(1));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the focal point will be highlighted.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget showFocus() {\r\n\r\n\t\treturn this.defines.has(\"SHOW_FOCUS\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables focal point highlighting.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset showFocus(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"SHOW_FOCUS\", \"1\") : this.defines.delete(\"SHOW_FOCUS\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the Depth of Field should be calculated manually.\r\n\t *\r\n\t * If enabled, the Depth of Field can be adjusted via the `dof` uniform.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget manualDoF() {\r\n\r\n\t\treturn this.defines.has(\"MANUAL_DOF\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables manual Depth of Field.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset manualDoF(value) {\r\n\r\n\t\tif(value) {\r\n\r\n\t\t\tthis.defines.set(\"MANUAL_DOF\", \"1\");\r\n\t\t\tthis.uniforms.set(\"dof\", new Uniform(new Vector4(0.2, 1.0, 0.2, 2.0)));\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"MANUAL_DOF\");\r\n\t\t\tthis.uniforms.delete(\"dof\");\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the blur shape should be pentagonal.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget pentagon() {\r\n\r\n\t\treturn this.defines.has(\"PENTAGON\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables pentagonal blur.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset pentagon(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"PENTAGON\", \"1\") : this.defines.delete(\"PENTAGON\");\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import { Uniform, Vector4 } from \"three\";\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/realistic-bokeh/shader.frag\";\r\n\r\n/**\r\n * Depth of Field shader v2.4.\r\n *\r\n * Yields more realistic results but is also more demanding.\r\n *\r\n * Original shader code by Martins Upitis:\r\n *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)\r\n */\r\n\r\nexport class RealisticBokehEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new bokeh effect.\r\n\t *\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.\r\n\t * @param {Number} [options.focus=1.0] - The focus distance in world units.\r\n\t * @param {Number} [options.focalLength=24.0] - The focal length of the main camera.\r\n\t * @param {Number} [options.fStop=0.9] - The ratio of the lens focal length to the diameter of the entrance pupil (aperture).\r\n\t * @param {Number} [options.luminanceThreshold=0.5] - A luminance threshold.\r\n\t * @param {Number} [options.luminanceGain=2.0] - A luminance gain factor.\r\n\t * @param {Number} [options.bias=0.5] - A blur bias.\r\n\t * @param {Number} [options.fringe=0.7] - A blur offset.\r\n\t * @param {Number} [options.maxBlur=1.0] - The maximum blur strength.\r\n\t * @param {Boolean} [options.rings=3] - The number of blur iterations.\r\n\t * @param {Boolean} [options.samples=2] - The amount of samples taken per ring.\r\n\t * @param {Boolean} [options.showFocus=false] - Whether the focal point should be highlighted. Useful for debugging.\r\n\t * @param {Boolean} [options.manualDoF=false] - Enables manual control over the depth of field.\r\n\t * @param {Boolean} [options.pentagon=false] - Enables pentagonal blur shapes. Requires a high number of rings and samples.\r\n\t */\r\n\r\n\tconstructor({\r\n\t\tblendFunction = BlendFunction.NORMAL,\r\n\t\tfocus = 1.0,\r\n\t\tfocalLength = 24.0,\r\n\t\tfStop = 0.9,\r\n\t\tluminanceThreshold = 0.5,\r\n\t\tluminanceGain = 2.0,\r\n\t\tbias = 0.5,\r\n\t\tfringe = 0.7,\r\n\t\tmaxBlur = 1.0,\r\n\t\trings = 3,\r\n\t\tsamples = 2,\r\n\t\tshowFocus = false,\r\n\t\tmanualDoF = false,\r\n\t\tpentagon = false\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"RealisticBokehEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\t\t\tattributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"focus\", new Uniform(focus)],\r\n\t\t\t\t[\"focalLength\", new Uniform(focalLength)],\r\n\t\t\t\t[\"fStop\", new Uniform(fStop)],\r\n\t\t\t\t[\"luminanceThreshold\", new Uniform(luminanceThreshold)],\r\n\t\t\t\t[\"luminanceGain\", new Uniform(luminanceGain)],\r\n\t\t\t\t[\"bias\", new Uniform(bias)],\r\n\t\t\t\t[\"fringe\", new Uniform(fringe)],\r\n\t\t\t\t[\"maxBlur\", new Uniform(maxBlur)]\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\tthis.rings = rings;\r\n\t\tthis.samples = samples;\r\n\t\tthis.showFocus = showFocus;\r\n\t\tthis.manualDoF = manualDoF;\r\n\t\tthis.pentagon = pentagon;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of blur iterations.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"RINGS_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of blur iterations.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"RINGS_INT\", value.toFixed(0));\r\n\t\tthis.defines.set(\"RINGS_FLOAT\", value.toFixed(1));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of blur samples per ring.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number.parseInt(this.defines.get(\"SAMPLES_INT\"));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of blur samples per ring.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tvalue = Math.floor(value);\r\n\r\n\t\tthis.defines.set(\"SAMPLES_INT\", value.toFixed(0));\r\n\t\tthis.defines.set(\"SAMPLES_FLOAT\", value.toFixed(1));\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the focal point will be highlighted.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget showFocus() {\r\n\r\n\t\treturn this.defines.has(\"SHOW_FOCUS\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables focal point highlighting.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset showFocus(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"SHOW_FOCUS\", \"1\") : this.defines.delete(\"SHOW_FOCUS\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the Depth of Field should be calculated manually.\r\n\t *\r\n\t * If enabled, the Depth of Field can be adjusted via the `dof` uniform.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget manualDoF() {\r\n\r\n\t\treturn this.defines.has(\"MANUAL_DOF\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables manual Depth of Field.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset manualDoF(value) {\r\n\r\n\t\tif(value) {\r\n\r\n\t\t\tthis.defines.set(\"MANUAL_DOF\", \"1\");\r\n\t\t\tthis.uniforms.set(\"dof\", new Uniform(new Vector4(0.2, 1.0, 0.2, 2.0)));\r\n\r\n\t\t} else {\r\n\r\n\t\t\tthis.defines.delete(\"MANUAL_DOF\");\r\n\t\t\tthis.uniforms.delete(\"dof\");\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether the blur shape should be pentagonal.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget pentagon() {\r\n\r\n\t\treturn this.defines.has(\"PENTAGON\");\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables pentagonal blur.\r\n\t *\r\n\t * You'll need to call {@link EffectPass#recompile} after changing this value.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset pentagon(value) {\r\n\r\n\t\tvalue ? this.defines.set(\"PENTAGON\", \"1\") : this.defines.delete(\"PENTAGON\");\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/RealisticBokehEffect.js",
     "access": "public",
@@ -7561,7 +7561,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#constructor",
     "access": "public",
     "description": "Constructs a new bokeh effect.",
-    "lineNumber": 37,
+    "lineNumber": 38,
     "params": [
       {
         "nullable": null,
@@ -7608,6 +7608,18 @@
         "defaultRaw": 24,
         "name": "options.focalLength",
         "description": "The focal length of the main camera."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "0.9",
+        "defaultRaw": 0.9,
+        "name": "options.fStop",
+        "description": "The ratio of the lens focal length to the diameter of the entrance pupil (aperture)."
       },
       {
         "nullable": null,
@@ -7742,7 +7754,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#rings",
     "access": "public",
     "description": "The amount of blur iterations.",
-    "lineNumber": 84,
+    "lineNumber": 87,
     "type": {
       "nullable": null,
       "types": [
@@ -7763,7 +7775,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#rings",
     "access": "public",
     "description": "Sets the amount of blur iterations.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 98,
+    "lineNumber": 101,
     "type": {
       "nullable": null,
       "types": [
@@ -7784,7 +7796,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#samples",
     "access": "public",
     "description": "The amount of blur samples per ring.",
-    "lineNumber": 113,
+    "lineNumber": 116,
     "type": {
       "nullable": null,
       "types": [
@@ -7805,7 +7817,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#samples",
     "access": "public",
     "description": "Sets the amount of blur samples per ring.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 127,
+    "lineNumber": 130,
     "type": {
       "nullable": null,
       "types": [
@@ -7826,7 +7838,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "access": "public",
     "description": "Indicates whether the focal point will be highlighted.",
-    "lineNumber": 142,
+    "lineNumber": 145,
     "type": {
       "nullable": null,
       "types": [
@@ -7847,7 +7859,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#showFocus",
     "access": "public",
     "description": "Enables or disables focal point highlighting.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 156,
+    "lineNumber": 159,
     "type": {
       "nullable": null,
       "types": [
@@ -7868,7 +7880,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#manualDoF",
     "access": "public",
     "description": "Indicates whether the Depth of Field should be calculated manually.\n\nIf enabled, the Depth of Field can be adjusted via the `dof` uniform.",
-    "lineNumber": 170,
+    "lineNumber": 173,
     "type": {
       "nullable": null,
       "types": [
@@ -7889,7 +7901,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#manualDoF",
     "access": "public",
     "description": "Enables or disables manual Depth of Field.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 184,
+    "lineNumber": 187,
     "type": {
       "nullable": null,
       "types": [
@@ -7910,7 +7922,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
     "access": "public",
     "description": "Indicates whether the blur shape should be pentagonal.",
-    "lineNumber": 206,
+    "lineNumber": 209,
     "type": {
       "nullable": null,
       "types": [
@@ -7931,7 +7943,7 @@
     "longname": "src/effects/RealisticBokehEffect.js~RealisticBokehEffect#pentagon",
     "access": "public",
     "description": "Enables or disables pentagonal blur.\n\nYou'll need to call {@link EffectPass#recompile} after changing this value.",
-    "lineNumber": 220,
+    "lineNumber": 223,
     "type": {
       "nullable": null,
       "types": [
@@ -18439,7 +18451,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.8\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.109.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.8.9\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"lint\": \"npm run lint:lib && npm run lint:demo && npm run lint:test\",\r\n\t\t\"lint:config\": \"eslint *.js\",\r\n\t\t\"lint:lib\": \"eslint src\",\r\n\t\t\"lint:demo\": \"eslint demo/src\",\r\n\t\t\"lint:test\": \"eslint test\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c --watch\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run lint && npm run build:production\",\r\n\t\t\"test\": \"npm run ava\",\r\n\t\t\"prepack\": \"npm test\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.111.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"ava\": \"2.x.x\",\r\n\t\t\"cross-env\": \"6.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint\": \"6.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"1.x.x\",\r\n\t\t\"rollup-plugin-babel\": \"4.x.x\",\r\n\t\t\"rollup-plugin-babel-minify\": \"9.x.x\",\r\n\t\t\"rollup-plugin-commonjs\": \"10.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-node-resolve\": \"5.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.110.x\",\r\n\t\t\"three-demo\": \"3.x.x\",\r\n\t\t\"three-gltf-loader\": \"1.110.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,

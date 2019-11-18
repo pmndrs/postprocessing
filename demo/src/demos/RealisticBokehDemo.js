@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	PerspectiveCamera,
@@ -130,11 +129,6 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		controls.lookAt(scene.position);
 		this.controls = controls;
 
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
-
 		// Sky.
 
 		scene.background = assets.get("sky");
@@ -171,6 +165,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		const bokehEffect = new RealisticBokehEffect({
 			focus: 1.55,
 			focalLength: camera.getFocalLength(),
+			fStop: 1.6,
 			luminanceThreshold: 0.325,
 			luminanceGain: 2.0,
 			bias: -0.35,
@@ -213,6 +208,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		const params = {
 			"focus": uniforms.get("focus").value,
 			"focal length": uniforms.get("focalLength").value,
+			"f-stop": uniforms.get("fStop").value,
 			"threshold": uniforms.get("luminanceThreshold").value,
 			"gain": uniforms.get("luminanceGain").value,
 			"bias": uniforms.get("bias").value,
@@ -236,6 +232,12 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		menu.add(params, "focal length").min(0.1).max(35.0).step(0.01).onChange(() => {
 
 			uniforms.get("focalLength").value = params["focal length"];
+
+		});
+
+		menu.add(params, "f-stop").min(0.01).max(4.0).step(0.01).onChange(() => {
+
+			uniforms.get("fStop").value = params["f-stop"];
 
 		});
 
