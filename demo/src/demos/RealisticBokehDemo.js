@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	PerspectiveCamera,
@@ -166,6 +165,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		const bokehEffect = new RealisticBokehEffect({
 			focus: 1.55,
 			focalLength: camera.getFocalLength(),
+			fStop: 1.6,
 			luminanceThreshold: 0.325,
 			luminanceGain: 2.0,
 			bias: -0.35,
