@@ -454,15 +454,15 @@ export class PerformanceDemo extends PostProcessingDemo {
 			"chrome": () => window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank")
 		};
 
-		menu.add(params, "merge effects").onChange(() => {	
+		menu.add(params, "merge effects").onChange(() => {
 
-			this.effectPass.enabled = params["merge effects"];	
+			this.effectPass.enabled = params["merge effects"];
 
-			for(const pass of this.passes) {	
+			for(const pass of this.passes) {
 
-				pass.enabled = !params["merge effects"];	
+				pass.enabled = !params["merge effects"];
 
-			}	
+			}
 
 		});
 
