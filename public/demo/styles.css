@@ -41,24 +41,46 @@ div[role="complementary"] {
 	top: 0;
 }
 
+img {
+	cursor: pointer;
+	display: block;
+	opacity: 0.075;
+	transition: opacity 0.2s;
+}
+
+img:hover {
+	opacity: 0.25;
+}
+
 .info {
-	color: rgb(90, 95, 90);
-	font-size: 75%;
-	left: 5px;
+	bottom: 12px;
+	left: 8px;
 	position: fixed;
-	top: 5px;
+}
+
+.info div {
+	bottom: 100%;
+	color: rgb(90, 95, 90);
+	display: none;
+	font-size: 75%;
+	position: absolute;
+	width: max-content;
+}
+
+.code {
+	bottom: 15px;
+	left: 50px;
+	position: fixed;
 }
 
 .github {
 	bottom: 15px;
-	left: 15px;
-	opacity: 0.075;
+	left: 90px;
 	position: fixed;
-	transition: opacity 0.2s;
 }
 
-.github:active, .github:hover {
-	opacity: 0.25;
+.dg {
+	user-select: none;
 }
 
 #viewport p {
