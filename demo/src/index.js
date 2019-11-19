@@ -101,13 +101,13 @@ function onLoad(event) {
 }
 
 /**
- * Starts the program.
+ * Performs initialization tasks when the page has been fully loaded.
  *
  * @private
  * @param {Event} event - An event.
  */
 
-window.addEventListener("load", function main(event) {
+window.addEventListener("load", (event) => {
 
 	const viewport = document.getElementById("viewport");
 
@@ -213,15 +213,39 @@ window.addEventListener("resize", (function() {
 }()));
 
 /**
+ * Performs initialization tasks when the document is ready.
+ *
+ * @private
+ * @param {Event} event - An event.
+ */
+
+document.addEventListener("DOMContentLoaded", (event) => {
+
+	const infoImg = document.querySelector(".info img");
+	const infoDiv = document.querySelector(".info div");
+
+	if(infoImg !== null && infoDiv !== null) {
+
+		infoImg.addEventListener("click", (event) => {
+
+			infoDiv.style.display = (infoDiv.style.display === "block") ? "none" : "block";
+
+		});
+
+	}
+
+});
+
+/**
  * Toggles the visibility of the interface on Alt key press.
  *
  * @private
  * @param {Event} event - An event.
  */
 
-document.addEventListener("keydown", function onKeyDown(event) {
+document.addEventListener("keydown", (event) => {
 
-	const aside = this.getElementById("aside");
+	const aside = document.getElementById("aside");
 
 	if(event.altKey && aside !== null) {
 
