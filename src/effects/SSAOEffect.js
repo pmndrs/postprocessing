@@ -232,7 +232,10 @@ export class SSAOEffect extends Effect {
 
 	setDistanceCutoff(threshold, falloff) {
 
-		this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("distanceCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
@@ -245,7 +248,10 @@ export class SSAOEffect extends Effect {
 
 	setProximityCutoff(threshold, falloff) {
 
-		this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("proximityCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
