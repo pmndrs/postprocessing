@@ -29,6 +29,20 @@ float readDepth(const in vec2 uv) {
 
 }
 
+float getViewZ(const in float depth) {
+
+	#ifdef PERSPECTIVE_CAMERA
+
+		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
+
+	#else
+
+		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
+
+	#endif
+
+}
+
 FRAGMENT_HEAD
 
 void main() {

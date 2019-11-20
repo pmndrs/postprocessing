@@ -11,20 +11,6 @@ uniform float luminanceInfluence;
 uniform float scale;
 uniform float bias;
 
-float getViewZ(const in float depth) {
-
-	#ifdef PERSPECTIVE_CAMERA
-
-		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
-
-	#else
-
-		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
-
-	#endif
-
-}
-
 vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const in float viewZ) {
 
 	float clipW = cameraProjectionMatrix[2][3] * viewZ + cameraProjectionMatrix[3][3];
