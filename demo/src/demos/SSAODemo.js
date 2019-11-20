@@ -17,6 +17,7 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
+import { CornellBox } from "./objects/CornellBox.js";
 
 import {
 	BlendFunction,
@@ -153,7 +154,6 @@ export class SSAODemo extends PostProcessingDemo {
 			const pixelRatio = renderer.getPixelRatio();
 
 			renderer = new WebGLRenderer({
-				logarithmicDepthBuffer: true,
 				antialias: false
 			});
 
@@ -170,8 +170,8 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.3, 1000);
-		camera.position.set(0, 0, 30);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+		camera.position.set(0, 0, 35);
 		camera.lookAt(scene.position);
 		this.camera = camera;
 
@@ -195,121 +195,12 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x544121);
+		scene.add(...CornellBox.createLights());
 
-		const lightCeiling = new PointLight(0xffe3b1, 1.0, 25);
-		lightCeiling.position.set(0, 9.3, 0);
-		lightCeiling.castShadow = true;
-		lightCeiling.shadow.mapSize.width = 1024;
-		lightCeiling.shadow.mapSize.height = 1024;
-		lightCeiling.shadow.bias = 1e-4;
-		lightCeiling.shadow.radius = 4;
+		// Objects.
 
-		const lightRed = new DirectionalLight(0xff0000, 0.1);
-		lightRed.position.set(-10, 0, 0);
-		lightRed.target.position.copy(scene.position);
-
-		const lightGreen = new DirectionalLight(0x00ff00, 0.1);
-		lightGreen.position.set(10, 0, 0);
-		lightGreen.target.position.copy(scene.position);
-
-		scene.add(lightCeiling);
-		scene.add(lightRed);
-		scene.add(lightGreen);
-		scene.add(ambientLight);
-
-		// Cornell box.
-
-		const environment = new Group();
-		const actors = new Group();
-		const shininess = 5;
-
-		const planeGeometry = new PlaneBufferGeometry();
-		const planeMaterial = new MeshPhongMaterial({
-			color: 0xffffff, shininess: shininess
-		});
-
-		const plane00 = new Mesh(planeGeometry, planeMaterial);
-		const plane01 = new Mesh(planeGeometry, planeMaterial);
-		const plane02 = new Mesh(planeGeometry, planeMaterial);
-		const plane03 = new Mesh(planeGeometry, planeMaterial);
-		const plane04 = new Mesh(planeGeometry, planeMaterial);
-
-		plane00.position.y = -10;
-		plane00.rotation.x = Math.PI * 0.5;
-		plane00.scale.set(20, 20, 1);
-
-		plane01.position.y = -10;
-		plane01.rotation.x = Math.PI * -0.5;
-		plane01.scale.set(20, 20, 1);
-		plane01.receiveShadow = true;
-
-		plane02.position.y = 10;
-		plane02.rotation.x = Math.PI * 0.5;
-		plane02.scale.set(20, 20, 1);
-		plane02.receiveShadow = true;
-
-		plane03.position.z = -10;
-		plane03.scale.set(20, 20, 1);
-		plane03.receiveShadow = true;
-
-		plane04.position.z = 10;
-		plane04.rotation.y = Math.PI;
-		plane04.scale.set(20, 20, 1);
-		plane04.receiveShadow = true;
-
-		const plane05 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0xff0000, shininess: shininess
-		}));
-
-		const plane06 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0x00ff00, shininess: shininess
-		}));
-
-		const plane07 = new Mesh(planeGeometry, new MeshPhongMaterial({
-			color: 0xffffff, emissive: 0xffffff, shininess: shininess
-		}));
-
-		plane05.position.x = -10;
-		plane05.rotation.y = Math.PI * 0.5;
-		plane05.scale.set(20, 20, 1);
-		plane05.receiveShadow = true;
-
-		plane06.position.x = 10;
-		plane06.rotation.y = Math.PI * -0.5;
-		plane06.scale.set(20, 20, 1);
-		plane06.receiveShadow = true;
-
-		plane07.position.y = 10 - 1e-2;
-		plane07.rotation.x = Math.PI * 0.5;
-		plane07.scale.set(4, 4, 1);
-
-		const actorMaterial = new MeshPhongMaterial({
-			color: 0xffffff, shininess: shininess
-		});
-
-		const box01 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
-		const box02 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
-		const sphere01 = new Mesh(new SphereBufferGeometry(1, 32, 32), actorMaterial);
-
-		box01.position.set(-3.5, -4, -3);
-		box01.rotation.y = Math.PI * 0.1;
-		box01.scale.set(6, 12, 6);
-		box01.castShadow = true;
-
-		box02.position.set(3.5, -7, 3);
-		box02.rotation.y = Math.PI * -0.1;
-		box02.scale.set(6, 6, 6);
-		box02.castShadow = true;
-
-		sphere01.position.set(-5, -7, 6);
-		sphere01.scale.set(3, 3, 3);
-		sphere01.castShadow = true;
-
-		environment.add(plane00, plane01, plane02, plane03, plane04, plane05, plane06, plane07);
-		actors.add(box01, box02, sphere01);
-
-		scene.add(environment, actors);
+		scene.add(CornellBox.createEnvironment());
+		scene.add(CornellBox.createActors());
 
 		// Passes.
 
@@ -324,14 +215,14 @@ export class SSAODemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
 			rings: 4,
-			distanceThreshold: 0.6,
-			distanceFalloff: 0.1,
-			rangeThreshold: 0.005,
-			rangeFalloff: 0.01,
+			distanceThreshold: 0.97,
+			distanceFalloff: 0.03,
+			rangeThreshold: 0.0005,
+			rangeFalloff: 0.001,
 			luminanceInfluence: 0.7,
 			radius: 18.25,
 			scale: 1.0,
-			bias: 0.5
+			bias: 0.0
 		});
 
 		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);
@@ -412,13 +303,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Distance Cutoff");
 
-		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange(() => {
 
 			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
 
 		});
 
-		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.001).onChange(() => {
+		f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.0001).onChange(() => {
 
 			ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
 
@@ -432,7 +323,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		f.add(params.proximity, "falloff").min(0.0).max(0.1).step(0.0001).onChange(() => {
+		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange(() => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
