@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	PerspectiveCamera,
@@ -67,9 +66,9 @@ export class ShockWaveDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -98,7 +97,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(5, 1, 5);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -111,11 +110,6 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 

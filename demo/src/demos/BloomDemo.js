@@ -3,7 +3,6 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	MeshLambertMaterial,
@@ -230,9 +229,9 @@ export class BloomDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -261,7 +260,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 1000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-10, 6, 15);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -274,11 +273,6 @@ export class BloomDemo extends PostProcessingDemo {
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -328,7 +322,7 @@ export class BloomDemo extends PostProcessingDemo {
 		mesh = new Mesh(
 			new BoxBufferGeometry(0.25, 8.25, 0.25),
 			new MeshLambertMaterial({
-				color: 0x0b0b0b
+				color: 0x000000
 			})
 		);
 
@@ -477,7 +471,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effectA.height = effectB.height = Number.parseInt(params.resolution);
+			effectA.resolution.height = effectB.resolution.height = Number.parseInt(params.resolution);
 
 		});
 

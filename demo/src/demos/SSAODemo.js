@@ -1,16 +1,6 @@
 import {
-	AmbientLight,
-	BoxBufferGeometry,
 	CubeTextureLoader,
-	DirectionalLight,
-	FogExp2,
-	Group,
-	Mesh,
-	MeshPhongMaterial,
 	PerspectiveCamera,
-	PlaneBufferGeometry,
-	PointLight,
-	SphereBufferGeometry,
 	Vector2,
 	WebGLRenderer
 } from "three";
@@ -118,9 +108,9 @@ export class SSAODemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -170,7 +160,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
 		camera.position.set(0, 0, 35);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -183,11 +173,6 @@ export class SSAODemo extends PostProcessingDemo {
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -215,14 +200,14 @@ export class SSAODemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
 			rings: 4,
-			distanceThreshold: 0.97,
-			distanceFalloff: 0.03,
-			rangeThreshold: 0.0005,
+			distanceThreshold: 0.3,	// Render up to a distance of ~300 world units
+			distanceFalloff: 0.02,	// with an additional 20 units of falloff.
+			rangeThreshold: 0.001,
 			rangeFalloff: 0.001,
 			luminanceInfluence: 0.7,
 			radius: 18.25,
 			scale: 1.0,
-			bias: 0.0
+			bias: 0.05
 		});
 
 		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);

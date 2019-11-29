@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	CylinderBufferGeometry,
-	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
@@ -174,16 +173,16 @@ export class PerformanceDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
-				textureLoader.load("textures/scratches.jpg", function(texture) {
+				textureLoader.load("textures/scratches.jpg", (t) => {
 
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					assets.set("scratches-color", texture);
+					t.wrapS = t.wrapT = RepeatWrapping;
+					assets.set("scratches-color", t);
 
 				});
 
@@ -218,7 +217,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 			renderer = new WebGLRenderer({
 				powerPreference: "high-performance",
-				logarithmicDepthBuffer: true,
 				antialias: false
 			});
 
@@ -238,11 +236,6 @@ export class PerformanceDemo extends PostProcessingDemo {
 		camera.position.set(-10, 1.125, 0);
 		camera.lookAt(scene.position);
 		this.camera = camera;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 

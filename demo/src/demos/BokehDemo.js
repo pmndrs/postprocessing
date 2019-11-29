@@ -2,7 +2,6 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	PerspectiveCamera,
@@ -93,9 +92,9 @@ export class BokehDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -124,7 +123,7 @@ export class BokehDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(12.5, -0.3, 1.7);
 		this.camera = camera;
 
@@ -139,11 +138,6 @@ export class BokehDemo extends PostProcessingDemo {
 		controls.settings.zoom.maxDistance = 40.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 
@@ -175,8 +169,10 @@ export class BokehDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area")
+		);
 
 		const bokehEffect = new BokehEffect({
 			focus: 0.32,

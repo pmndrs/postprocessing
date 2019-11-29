@@ -1,13 +1,13 @@
 import {
-  AmbientLight,
-  BoxBufferGeometry,
-  DirectionalLight,
-  Group,
-  Mesh,
-  MeshPhongMaterial,
-  PlaneBufferGeometry,
-  PointLight,
-  SphereBufferGeometry
+	AmbientLight,
+	BoxBufferGeometry,
+	DirectionalLight,
+	Group,
+	Mesh,
+	MeshPhongMaterial,
+	PlaneBufferGeometry,
+	PointLight,
+	SphereBufferGeometry
 } from "three";
 
 /**
@@ -19,23 +19,23 @@ import {
 
 function createLights() {
 
-  const ambientLight = new AmbientLight(0x544121);
+	const ambientLight = new AmbientLight(0x544121);
 
-  const lightCeiling = new PointLight(0xffe3b1, 1.0, 25);
-  lightCeiling.position.set(0, 9.3, 0);
-  lightCeiling.castShadow = true;
-  lightCeiling.shadow.mapSize.width = 1024;
-  lightCeiling.shadow.mapSize.height = 1024;
-  lightCeiling.shadow.bias = 1e-4;
-  lightCeiling.shadow.radius = 4;
+	const lightCeiling = new PointLight(0xffe3b1, 1.0, 25);
+	lightCeiling.position.set(0, 9.3, 0);
+	lightCeiling.castShadow = true;
+	lightCeiling.shadow.mapSize.width = 1024;
+	lightCeiling.shadow.mapSize.height = 1024;
+	lightCeiling.shadow.bias = 1e-4;
+	lightCeiling.shadow.radius = 4;
 
-  const lightRed = new DirectionalLight(0xff0000, 0.1);
-  lightRed.position.set(-10, 0, 0);
-  lightRed.target.position.set(0, 0, 0);
+	const lightRed = new DirectionalLight(0xff0000, 0.1);
+	lightRed.position.set(-10, 0, 0);
+	lightRed.target.position.set(0, 0, 0);
 
-  const lightGreen = new DirectionalLight(0x00ff00, 0.1);
-  lightGreen.position.set(10, 0, 0);
-  lightGreen.target.position.set(0, 0, 0);
+	const lightGreen = new DirectionalLight(0x00ff00, 0.1);
+	lightGreen.position.set(10, 0, 0);
+	lightGreen.target.position.set(0, 0, 0);
 
 	return [lightCeiling, lightRed, lightGreen, ambientLight];
 
@@ -50,89 +50,89 @@ function createLights() {
 
 function createEnvironment() {
 
-  const environment = new Group();
-  const shininess = 5;
+	const environment = new Group();
+	const shininess = 5;
 
-  const planeGeometry = new PlaneBufferGeometry();
-  const planeMaterial = new MeshPhongMaterial({
-    color: 0xffffff,
-    shininess
-  });
+	const planeGeometry = new PlaneBufferGeometry();
+	const planeMaterial = new MeshPhongMaterial({
+		color: 0xffffff,
+		shininess
+	});
 
-  const plane00 = new Mesh(planeGeometry, planeMaterial);
-  const plane01 = new Mesh(planeGeometry, planeMaterial);
-  const plane02 = new Mesh(planeGeometry, planeMaterial);
-  const plane03 = new Mesh(planeGeometry, planeMaterial);
-  const plane04 = new Mesh(planeGeometry, planeMaterial);
+	const plane00 = new Mesh(planeGeometry, planeMaterial);
+	const plane01 = new Mesh(planeGeometry, planeMaterial);
+	const plane02 = new Mesh(planeGeometry, planeMaterial);
+	const plane03 = new Mesh(planeGeometry, planeMaterial);
+	const plane04 = new Mesh(planeGeometry, planeMaterial);
 
-  plane00.position.y = -10;
-  plane00.rotation.x = Math.PI * 0.5;
-  plane00.scale.set(20, 20, 1);
+	plane00.position.y = -10;
+	plane00.rotation.x = Math.PI * 0.5;
+	plane00.scale.set(20, 20, 1);
 
-  plane01.position.y = -10;
-  plane01.rotation.x = Math.PI * -0.5;
-  plane01.scale.set(20, 20, 1);
-  plane01.receiveShadow = true;
+	plane01.position.y = -10;
+	plane01.rotation.x = Math.PI * -0.5;
+	plane01.scale.set(20, 20, 1);
+	plane01.receiveShadow = true;
 
-  plane02.position.y = 10;
-  plane02.rotation.x = Math.PI * 0.5;
-  plane02.scale.set(20, 20, 1);
-  plane02.receiveShadow = true;
+	plane02.position.y = 10;
+	plane02.rotation.x = Math.PI * 0.5;
+	plane02.scale.set(20, 20, 1);
+	plane02.receiveShadow = true;
 
-  plane03.position.z = -10;
-  plane03.scale.set(20, 20, 1);
-  plane03.receiveShadow = true;
+	plane03.position.z = -10;
+	plane03.scale.set(20, 20, 1);
+	plane03.receiveShadow = true;
 
-  plane04.position.z = 10;
-  plane04.rotation.y = Math.PI;
-  plane04.scale.set(20, 20, 1);
-  plane04.receiveShadow = true;
+	plane04.position.z = 10;
+	plane04.rotation.y = Math.PI;
+	plane04.scale.set(20, 20, 1);
+	plane04.receiveShadow = true;
 
-  const plane05 = new Mesh(
-    planeGeometry,
-    new MeshPhongMaterial({
-      color: 0xff0000,
-      shininess
-    })
-  );
+	const plane05 = new Mesh(
+		planeGeometry,
+		new MeshPhongMaterial({
+			color: 0xff0000,
+			shininess
+		})
+	);
 
-  const plane06 = new Mesh(
-    planeGeometry,
-    new MeshPhongMaterial({
-      color: 0x00ff00,
-      shininess
-    })
-  );
+	const plane06 = new Mesh(
+		planeGeometry,
+		new MeshPhongMaterial({
+			color: 0x00ff00,
+			shininess
+		})
+	);
 
-  const plane07 = new Mesh(
-    planeGeometry,
-    new MeshPhongMaterial({
-      color: 0xffffff,
-      emissive: 0xffffff,
-      shininess
-    })
-  );
+	const plane07 = new Mesh(
+		planeGeometry,
+		new MeshPhongMaterial({
+			color: 0xffffff,
+			emissive: 0xffffff,
+			shininess
+		})
+	);
 
-  plane05.position.x = -10;
-  plane05.rotation.y = Math.PI * 0.5;
-  plane05.scale.set(20, 20, 1);
-  plane05.receiveShadow = true;
+	plane05.position.x = -10;
+	plane05.rotation.y = Math.PI * 0.5;
+	plane05.scale.set(20, 20, 1);
+	plane05.receiveShadow = true;
 
-  plane06.position.x = 10;
-  plane06.rotation.y = Math.PI * -0.5;
-  plane06.scale.set(20, 20, 1);
-  plane06.receiveShadow = true;
+	plane06.position.x = 10;
+	plane06.rotation.y = Math.PI * -0.5;
+	plane06.scale.set(20, 20, 1);
+	plane06.receiveShadow = true;
 
-  plane07.position.y = 10 - 1e-2;
-  plane07.rotation.x = Math.PI * 0.5;
-  plane07.scale.set(4, 4, 1);
+	plane07.position.y = 10 - 1e-2;
+	plane07.rotation.x = Math.PI * 0.5;
+	plane07.scale.set(4, 4, 1);
 
-  environment.add(
-    plane00, plane01, plane02, plane03,
-    plane04, plane05, plane06, plane07
-  );
+	environment.add(
+		plane00, plane01, plane02, plane03,
+		plane04, plane05, plane06, plane07
+	);
 
-  return environment;
+	return environment;
 
 }
 
@@ -145,13 +145,13 @@ function createEnvironment() {
 
 function createActors() {
 
-  const actors = new Group();
-  const shininess = 5;
+	const actors = new Group();
+	const shininess = 5;
 
-  const actorMaterial = new MeshPhongMaterial({
-    color: 0xffffff,
-    shininess
-  });
+	const actorMaterial = new MeshPhongMaterial({
+		color: 0xffffff,
+		shininess
+	});
 
 	const box01 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
 	const box02 = new Mesh(new BoxBufferGeometry(1, 1, 1), actorMaterial);
@@ -173,7 +173,7 @@ function createActors() {
 
 	actors.add(box01, box02, sphere01);
 
-  return actors;
+	return actors;
 
 }
 

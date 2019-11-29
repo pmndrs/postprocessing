@@ -113,7 +113,6 @@ window.addEventListener("load", (event) => {
 
 	// Create a custom renderer.
 	renderer = new WebGLRenderer({
-		logarithmicDepthBuffer: true,
 		antialias: false
 	});
 
@@ -247,7 +246,7 @@ document.addEventListener("keydown", (event) => {
 
 	const aside = document.getElementById("aside");
 
-	if(event.altKey && aside !== null) {
+	if(aside !== null && event.key === "h") {
 
 		event.preventDefault();
 		aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";

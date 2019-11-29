@@ -82,9 +82,9 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -113,7 +113,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(12.5, -0.3, 1.7);
 		this.camera = camera;
 
