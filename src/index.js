@@ -3,6 +3,7 @@ export {
 	Initializable,
 	EffectComposer,
 	Resizable,
+	Resizer,
 	Selection
 } from "./core";
 
