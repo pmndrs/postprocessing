@@ -1,15 +1,7 @@
-import { LinearFilter, RGBFormat, Vector2, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, KernelSize } from "../materials";
+import { Resizer } from "../core/Resizer.js";
 import { Pass } from "./Pass.js";
-
-/**
- * An auto sizing constant.
- *
- * @type {Number}
- * @private
- */
-
-const AUTO_SIZE = -1;
 
 /**
  * An efficient, incremental blur pass.
@@ -22,15 +14,15 @@ export class BlurPass extends Pass {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The blur render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The blur render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The blur render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The blur render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor({
 		resolutionScale = 0.5,
-		width = AUTO_SIZE,
-		height = AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -43,14 +35,14 @@ export class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+		this.renderTargetA = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
 
-		this.renderTargetX.texture.name = "Blur.TargetX";
+		this.renderTargetA.texture.name = "Blur.TargetA";
 
 		/**
 		 * A second render target.
@@ -59,36 +51,23 @@ export class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargetY.texture.name = "Blur.TargetY";
+		this.renderTargetB = this.renderTargetA.clone();
+		this.renderTargetB.texture.name = "Blur.TargetB";
 
 		/**
-		 * The current main render size.
+		 * The desired render resolution.
 		 *
-		 * @type {Vector2}
-		 * @private
+		 * It's recommended to set the height or the width to an absolute value for
+		 * consistent results across different devices and resolutions.
+		 *
+		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
+		 * calculate it based on its counterpart and the original aspect ratio.
+		 *
+		 * @type {Resizer}
 		 */
 
-		this.originalSize = new Vector2();
-
-		/**
-		 * The absolute render resolution.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.resolution = new Vector2(width, height);
-
-		/**
-		 * The current resolution scale.
-		 *
-		 * @type {Number}
-		 * @private
-		 * @deprecated
-		 */
-
-		this.resolutionScale = resolutionScale;
+		this.resolution = new Resizer(this, width, height);
+		this.resolution.scale = resolutionScale;
 
 		/**
 		 * A convolution shader material.
@@ -125,27 +104,25 @@ export class BlurPass extends Pass {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.renderTargetX.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		this.resolution.x = value;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.width = value;
 
 	}
 
@@ -153,27 +130,25 @@ export class BlurPass extends Pass {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.renderTargetX.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		this.resolution.y = value;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.height = value;
 
 	}
 
@@ -238,28 +213,15 @@ export class BlurPass extends Pass {
 	}
 
 	/**
-	 * Returns the original resolution.
-	 *
-	 * @return {Vector2} The original resolution received via {@link setSize}.
-	 * @deprecated Added for internal use only.
-	 */
-
-	getOriginalSize() {
-
-		return this.originalSize;
-
-	}
-
-	/**
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.resolutionScale;
+		return this.resolution.scale;
 
 	}
 
@@ -267,13 +229,13 @@ export class BlurPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.resolutionScale = scale;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -293,8 +255,8 @@ export class BlurPass extends Pass {
 		const scene = this.scene;
 		const camera = this.camera;
 
-		const renderTargetX = this.renderTargetX;
-		const renderTargetY = this.renderTargetY;
+		const renderTargetA = this.renderTargetA;
+		const renderTargetB = this.renderTargetB;
 
 		let material = this.convolutionMaterial;
 		let uniforms = material.uniforms;
@@ -310,7 +272,7 @@ export class BlurPass extends Pass {
 		for(i = 0, l = kernel.length - 1; i < l; ++i) {
 
 			// Alternate between targets.
-			destRT = ((i % 2) === 0) ? renderTargetX : renderTargetY;
+			destRT = ((i & 1) === 0) ? renderTargetA : renderTargetB;
 
 			uniforms.kernel.value = kernel[i];
 			uniforms.inputBuffer.value = lastRT.texture;
@@ -346,34 +308,13 @@ export class BlurPass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		const aspect = width / height;
+		resolution.base.set(width, height);
 
-		this.originalSize.set(width, height);
+		width = resolution.width;
+		height = resolution.height;
 
-		if(resolution.x !== AUTO_SIZE && resolution.y !== AUTO_SIZE) {
-
-			width = Math.max(1, resolution.x);
-			height = Math.max(1, resolution.y);
-
-		} else if(resolution.x !== AUTO_SIZE) {
-
-			width = Math.max(1, resolution.x);
-			height = Math.round(Math.max(1, resolution.y) / aspect);
-
-		} else if(resolution.y !== AUTO_SIZE) {
-
-			width = Math.round(Math.max(1, resolution.y) * aspect);
-			height = Math.max(1, resolution.y);
-
-		} else {
-
-			width = Math.max(1, Math.round(width * this.resolutionScale));
-			height = Math.max(1, Math.round(height * this.resolutionScale));
-
-		}
-
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTargetA.setSize(width, height);
+		this.renderTargetB.setSize(width, height);
 
 		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 		this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
@@ -391,26 +332,23 @@ export class BlurPass extends Pass {
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
+			this.renderTargetA.texture.format = RGBFormat;
+			this.renderTargetB.texture.format = RGBFormat;
 
 		}
 
 	}
 
 	/**
-	 * An auto sizing flag that can be used for the render {@link BlurPass.width}
-	 * and {@link BlurPass.height}.
-	 *
-	 * It's recommended to set the height or the width to an absolute value for
-	 * consistent blur results across different devices and resolutions.
+	 * An auto sizing flag.
 	 *
 	 * @type {Number}
+	 * @deprecated Use {@link Resizer.AUTO_SIZE} instead.
 	 */
 
 	static get AUTO_SIZE() {
 
-		return AUTO_SIZE;
+		return Resizer.AUTO_SIZE;
 
 	}
 

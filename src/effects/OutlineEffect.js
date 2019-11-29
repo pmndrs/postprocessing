@@ -7,7 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
-import { Selection } from "../core";
+import { Resizer, Selection } from "../core";
 import { DepthComparisonMaterial, OutlineEdgesMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
@@ -37,8 +37,8 @@ export class OutlineEffect extends Effect {
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
@@ -52,8 +52,8 @@ export class OutlineEffect extends Effect {
 		visibleEdgeColor = 0xffffff,
 		hiddenEdgeColor = 0x22090a,
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true
@@ -196,6 +196,7 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass.resolution.resizable = this;
 		this.blur = blur;
 
 		/**
@@ -236,34 +237,40 @@ export class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resizer}
+	 */
+
+	get resolution() {
+
+		return this.blurPass.resolution;
+
+	}
+
+	/**
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.blurPass.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-
-		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+		this.resolution.width = value;
 
 	}
 
@@ -271,31 +278,25 @@ export class OutlineEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.blurPass.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-
-		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+		this.resolution.height = value;
 
 	}
 
@@ -460,12 +461,12 @@ export class OutlineEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.blurPass.getResolutionScale();
+		return this.resolution.scale;
 
 	}
 
@@ -473,15 +474,13 @@ export class OutlineEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		const originalSize = this.blurPass.getOriginalSize();
-		this.blurPass.setResolutionScale(scale);
-		this.depthPass.setResolutionScale(scale);
-		this.setSize(originalSize.x, originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -619,12 +618,12 @@ export class OutlineEffect extends Effect {
 
 	setSize(width, height) {
 
-		this.renderTargetMask.setSize(width, height);
-		this.depthPass.setSize(width, height);
 		this.blurPass.setSize(width, height);
+		this.depthPass.setSize(width, height);
+		this.renderTargetMask.setSize(width, height);
 
-		width = this.blurPass.width;
-		height = this.blurPass.height;
+		width = this.resolution.width;
+		height = this.resolution.height;
 
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetBlurredEdges.setSize(width, height);

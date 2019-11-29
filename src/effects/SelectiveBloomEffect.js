@@ -139,64 +139,6 @@ export class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * The current width of the internal render targets.
-	 *
-	 * @type {Number}
-	 */
-
-	get width() {
-
-		return super.width;
-
-	}
-
-	/**
-	 * Sets the render width.
-	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
-	 * @type {Number}
-	 */
-
-	set width(value) {
-
-		super.width = value;
-
-		this.renderTargetSelection.setSize(this.width, this.height);
-
-	}
-
-	/**
-	 * The current height of the internal render targets.
-	 *
-	 * @type {Number}
-	 */
-
-	get height() {
-
-		return super.height;
-
-	}
-
-	/**
-	 * Sets the render height.
-	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
-	 * @type {Number}
-	 */
-
-	set height(value) {
-
-		super.height = value;
-
-		this.renderTargetSelection.setSize(this.width, this.height);
-
-	}
-
-	/**
 	 * Indicates whether the scene background should be ignored.
 	 *
 	 * @type {Boolean}
@@ -284,15 +226,16 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 	setSize(width, height) {
 
-		const blurPass = this.blurPass;
-
 		super.setSize(width, height);
 
 		this.backgroundPass.setSize(width, height);
 		this.blackoutPass.setSize(width, height);
 		this.renderPass.setSize(width, height);
 
-		this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+		this.renderTargetSelection.setSize(
+			this.resolution.width,
+			this.resolution.height
+		);
 
 	}
 
