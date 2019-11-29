@@ -43,12 +43,24 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 		angle += ANGLE_STEP;
 
 		float sampleDepth = readDepth(coord);
-		float proximity = abs(depth - sampleDepth);
+		float viewZ = getViewZ(sampleDepth);
 
-		if(sampleDepth < distanceCutoff.y && proximity < proximityCutoff.y) {
+		#ifdef PERSPECTIVE_CAMERA
+
+			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+		#else
+
+			float linearSampleDepth = sampleDepth;
+
+		#endif
+
+		float proximity = abs(depth - linearSampleDepth);
+
+		if(linearSampleDepth < distanceCutoff.y && proximity < proximityCutoff.y) {
 
 			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, proximity);
-			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, getViewZ(sampleDepth));
+			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, viewZ);
 			occlusionSum += getOcclusion(p, n, sampleViewPosition) * falloff;
 
 		}
@@ -62,17 +74,30 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
 	float ao = 1.0;
+	float viewZ = getViewZ(depth);
+
+	#ifdef PERSPECTIVE_CAMERA
+
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+	#else
+
+		float linearDepth = depth;
+
+	#endif
 
 	// Skip fragments of objects that are too far away.
-	if(depth < distanceCutoff.y) {
+	if(linearDepth < distanceCutoff.y) {
 
-		vec3 viewPosition = getViewPosition(uv, depth, getViewZ(depth));
+		vec3 viewPosition = getViewPosition(uv, depth, viewZ);
 		vec3 viewNormal = unpackRGBToNormal(texture2D(normalBuffer, uv).xyz);
-		ao -= getAmbientOcclusion(viewPosition, viewNormal, depth, uv);
+		ao -= getAmbientOcclusion(viewPosition, viewNormal, linearDepth, uv);
 
 		// Fade AO based on luminance and depth.
 		float l = linearToRelativeLuminance(inputColor.rgb);
-		ao = mix(ao, 1.0, max(l * luminanceInfluence, smoothstep(distanceCutoff.x, distanceCutoff.y, depth)));
+		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
+		float f = max(l * luminanceInfluence, d);
+		ao = mix(ao, 1.0, f);
 
 	}
 
