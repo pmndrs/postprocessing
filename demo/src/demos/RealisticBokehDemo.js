@@ -163,7 +163,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bokehEffect = new RealisticBokehEffect({
-			focus: 1.55,
+			focus: 2.65,
 			focalLength: camera.getFocalLength(),
 			fStop: 1.6,
 			luminanceThreshold: 0.325,
