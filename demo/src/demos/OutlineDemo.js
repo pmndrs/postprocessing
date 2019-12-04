@@ -333,7 +333,6 @@ export class OutlineDemo extends PostProcessingDemo {
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
 			hiddenEdgeColor: 0x22090a,
-			resolutionScale: 1.0,
 			height: 480,
 			blur: false,
 			xRay: true
