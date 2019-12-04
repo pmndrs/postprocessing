@@ -175,9 +175,9 @@ export class BokehDemo extends PostProcessingDemo {
 		);
 
 		const bokehEffect = new BokehEffect({
-			focus: 0.32,
+			focus: 0.61,
 			dof: 0.02,
-			aperture: 0.015,
+			aperture: 0.0265,
 			maxBlur: 0.0125
 		});
 
