@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -370,7 +371,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -399,7 +400,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>Sets the render height.</p>
 </div>
@@ -489,6 +490,35 @@
         
         
         <div data-ice="description"><p>The pulse speed.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The resolution of this effect.</p>
 </div>
       </div>
     </td>
@@ -628,7 +658,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -657,7 +687,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>Sets the render width.</p>
 </div>
@@ -809,7 +839,7 @@
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -925,7 +955,7 @@
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -1531,7 +1561,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.width</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render width.</p>
 </td>
     </tr>
@@ -1539,7 +1569,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.height</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render height.</p>
 </td>
     </tr>
@@ -1653,7 +1683,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber382">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber383">source</a></span></span>
     </span>
   </h3>
 
@@ -1697,7 +1727,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber392">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber393">source</a></span></span>
     </span>
   </h3>
 
@@ -1784,7 +1814,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber331">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber332">source</a></span></span>
     </span>
   </h3>
 
@@ -1828,7 +1858,7 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber344">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber345">source</a></span></span>
     </span>
   </h3>
 
@@ -1872,12 +1902,12 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber276">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -1916,16 +1946,14 @@ function.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber291">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber297">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>Sets the render height.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render width and aspect ratio.</p>
 </div>
 
   
@@ -1962,7 +1990,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber357">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
@@ -2006,7 +2034,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber370">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber371">source</a></span></span>
     </span>
   </h3>
 
@@ -2050,7 +2078,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber235">source</a></span></span>
     </span>
   </h3>
 
@@ -2058,6 +2086,50 @@ render width and aspect ratio.</p>
   
   
   <div data-ice="description"><p>The pulse speed. A value of zero disables the pulse effect.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-resolution">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber245">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The resolution of this effect.</p>
 </div>
 
   
@@ -2094,7 +2166,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber226">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber227">source</a></span></span>
     </span>
   </h3>
 
@@ -2138,7 +2210,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber307">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber308">source</a></span></span>
     </span>
   </h3>
 
@@ -2181,7 +2253,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber318">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber319">source</a></span></span>
     </span>
   </h3>
 
@@ -2224,7 +2296,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber446">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber447">source</a></span></span>
     </span>
   </h3>
 
@@ -2268,12 +2340,12 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber244">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -2312,16 +2384,14 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber259">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber271">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>Sets the render width.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render height and aspect ratio.</p>
 </div>
 
   
@@ -2358,7 +2428,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber408">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber409">source</a></span></span>
     </span>
   </h3>
 
@@ -2402,7 +2472,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber422">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber423">source</a></span></span>
     </span>
   </h3>
 
@@ -2450,7 +2520,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber511">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber510">source</a></span></span>
     </span>
   </h3>
 
@@ -2507,7 +2577,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber543">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber542">source</a></span></span>
     </span>
   </h3>
 
@@ -2581,12 +2651,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber466">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber467">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -2638,7 +2708,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber642">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber641">source</a></span></span>
     </span>
   </h3>
 
@@ -2706,7 +2776,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber527">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber526">source</a></span></span>
     </span>
   </h3>
 
@@ -2780,7 +2850,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber437">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber438">source</a></span></span>
     </span>
   </h3>
 
@@ -2843,12 +2913,12 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber479">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber480">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -2904,7 +2974,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber496">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber495">source</a></span></span>
     </span>
   </h3>
 
@@ -2978,7 +3048,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber620">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber619">source</a></span></span>
     </span>
   </h3>
 
@@ -3046,7 +3116,7 @@ texture.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber559">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/OutlineEffect.js.html#lineNumber558">source</a></span></span>
     </span>
   </h3>
 

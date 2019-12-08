@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -99,13 +100,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GodRaysEffect} from &apos;<span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber43">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {GodRaysEffect} from &apos;<span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber44">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber43">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber44">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -371,7 +372,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -400,7 +401,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>Sets the render height.</p>
 </div>
@@ -461,6 +462,35 @@
         <div class="deprecated" data-ice="deprecated">this set was deprecated. Use blurPass.kernelSize instead.</div>
         
         <div data-ice="description"><p>Sets the blur kernel size.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The resolution of this effect.</p>
 </div>
       </div>
     </td>
@@ -574,7 +604,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -603,7 +633,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>Sets the render width.</p>
 </div>
@@ -639,7 +669,7 @@
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -726,7 +756,7 @@
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -1201,7 +1231,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber65">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber66">source</a></span></span>
     </span>
   </h3>
 
@@ -1310,7 +1340,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.width</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render width.</p>
 </td>
     </tr>
@@ -1318,7 +1348,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.height</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render height.</p>
 </td>
     </tr>
@@ -1375,7 +1405,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber364">source</a></span></span>
     </span>
   </h3>
 
@@ -1419,7 +1449,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber372">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber374">source</a></span></span>
     </span>
   </h3>
 
@@ -1462,7 +1492,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber195">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber196">source</a></span></span>
     </span>
   </h3>
 
@@ -1507,7 +1537,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber335">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber337">source</a></span></span>
     </span>
   </h3>
 
@@ -1551,7 +1581,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber347">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber349">source</a></span></span>
     </span>
   </h3>
 
@@ -1595,7 +1625,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber259">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber261">source</a></span></span>
     </span>
   </h3>
 
@@ -1639,12 +1669,12 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber303">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber312">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -1683,16 +1713,14 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber318">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber325">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>Sets the render height.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render width and aspect ratio.</p>
 </div>
 
   
@@ -1729,7 +1757,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber385">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber387">source</a></span></span>
     </span>
   </h3>
 
@@ -1773,7 +1801,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber398">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber400">source</a></span></span>
     </span>
   </h3>
 
@@ -1781,6 +1809,50 @@ render width and aspect ratio.</p>
   <div class="deprecated" data-ice="deprecated">this set was deprecated. Use blurPass.kernelSize instead.</div>
   
   <div data-ice="description"><p>Sets the blur kernel size.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-resolution">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber273">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The resolution of this effect.</p>
 </div>
 
   
@@ -1817,7 +1889,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber438">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber439">source</a></span></span>
     </span>
   </h3>
 
@@ -1861,7 +1933,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber450">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber451">source</a></span></span>
     </span>
   </h3>
 
@@ -1905,7 +1977,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1951,12 +2023,12 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber271">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber286">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -1995,16 +2067,14 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber286">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber299">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>Sets the render width.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render height and aspect ratio.</p>
 </div>
 
   
@@ -2044,12 +2114,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber411">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber413">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -2169,7 +2239,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber463">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber464">source</a></span></span>
     </span>
   </h3>
 
@@ -2238,12 +2308,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber424">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -2299,7 +2369,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber552">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber553">source</a></span></span>
     </span>
   </h3>
 
@@ -2367,7 +2437,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber480">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/GodRaysEffect.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 

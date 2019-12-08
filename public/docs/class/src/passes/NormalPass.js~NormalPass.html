@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -237,6 +238,63 @@
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The desired render resolution.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolutionScale">resolutionScale</a></span></span><span class="code" data-ice="signature">: <span>*</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -262,7 +320,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -320,7 +378,7 @@
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -828,7 +886,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber29">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -874,7 +932,23 @@ initialized and every time its own size is updated.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: 1.0</li></ul></td>
-      <td data-ice="description"><p>The render texture resolution scale, relative to the main frame buffer size.</p>
+      <td data-ice="description"><p>Deprecated. Adjust the height or width instead for consistent results.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.width</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
+      <td data-ice="description"><p>The render width.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
+      <td data-ice="description"><p>The render height.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -921,7 +995,7 @@ initialized and every time its own size is updated.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber33">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber40">source</a></span></span>
     </span>
   </h3>
 
@@ -969,7 +1043,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber65">source</a></span></span>
     </span>
   </h3>
 
@@ -978,6 +1052,95 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
   
   <div data-ice="description"><p>A render target that contains the scene normals.</p>
 </div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-resolution">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber89">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The desired render resolution.</p>
+<p>Use <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span> for the width or height to automatically
+calculate it based on its counterpart and the original aspect ratio.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-resolutionScale">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">resolutionScale</span><span class="code" data-ice="signature">: <span>*</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber116">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  
 
   
 
@@ -1016,12 +1179,12 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber98">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber101">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -1073,7 +1236,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber131">source</a></span></span>
     </span>
   </h3>
 
@@ -1162,12 +1325,12 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber110">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber114">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -1223,7 +1386,7 @@ the screen. Otherwise, the contents of the input buffer will be lost.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber141">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/passes/NormalPass.js.html#lineNumber145">source</a></span></span>
     </span>
   </h3>
 

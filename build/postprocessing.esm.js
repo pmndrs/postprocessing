@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.9 build Mon Nov 18 2019
+ * postprocessing v6.9.0 build Sun Dec 08 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -474,7 +474,7 @@ class DepthMaskMaterial extends ShaderMaterial {
 
 }
 
-var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
+var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
 
 var vertexTemplate = "uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;VERTEX_HEADvoid main(){vUv=position.xy*0.5+0.5;VERTEX_MAIN_SUPPORTgl_Position=vec4(position.xy,1.0,1.0);}";
 
@@ -1293,6 +1293,190 @@ class SMAAWeightsMaterial extends ShaderMaterial {
 }
 
 /**
+ * An auto sizing constant.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const AUTO_SIZE = -1;
+
+/**
+ * A resizer.
+ */
+
+class Resizer {
+
+	/**
+	 * Constructs a new resizer.
+	 *
+	 * @param {Resizable} resizeable - A resizable object.
+	 * @param {Number} [width=Resizer.AUTO_SIZE] - The width.
+	 * @param {Number} [height=Resizer.AUTO_SIZE] - The height.
+	 */
+
+	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE) {
+
+		/**
+		 * A resizable object.
+		 *
+		 * @type {Resizable}
+		 */
+
+		this.resizable = resizable;
+
+		/**
+		 * The base size.
+		 *
+		 * This size will be passed to the resizable object every time the width or
+		 * height is changed.
+		 *
+		 * @type {Vector2}
+		 */
+
+		this.base = new Vector2(1, 1);
+
+		/**
+		 * The target size.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.target = new Vector2(width, height);
+
+		/**
+		 * A scale.
+		 *
+		 * If both the width and the height are set to {@link Resizer.AUTO_SIZE},
+		 * they will be scaled uniformly using this scalar.
+		 *
+		 * @type {Number}
+		 * @deprecated Added for internal use only.
+		 */
+
+		this.scale = 1.0;
+
+	}
+
+	/**
+	 * The calculated width.
+	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base width will be returned.
+	 *
+	 * @type {Number}
+	 */
+
+	get width() {
+
+		const base = this.base;
+		const target = this.target;
+
+		let result;
+
+		if(target.x !== AUTO_SIZE) {
+
+			result = target.x;
+
+		} else if(target.y !== AUTO_SIZE) {
+
+			result = Math.round(target.y * (base.x / base.y));
+
+		} else {
+
+			result = Math.round(base.x * this.scale);
+
+		}
+
+		return result;
+
+	}
+
+	/**
+	 * Sets the target width.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based
+	 * on the height and the original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set width(value) {
+
+		this.target.x = value;
+		this.resizable.setSize(this.base.x, this.base.y);
+
+	}
+
+	/**
+	 * The calculated height.
+	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base height will be returned.
+	 *
+	 * @type {Number}
+	 */
+
+	get height() {
+
+		const base = this.base;
+		const target = this.target;
+
+		let result;
+
+		if(target.y !== AUTO_SIZE) {
+
+			result = target.y;
+
+		} else if(target.x !== AUTO_SIZE) {
+
+			result = Math.round(target.x / (base.x / base.y));
+
+		} else {
+
+			result = Math.round(base.y * this.scale);
+
+		}
+
+		return result;
+
+	}
+
+	/**
+	 * Sets the target height.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based
+	 * on the width and the original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set height(value) {
+
+		this.target.y = value;
+		this.resizable.setSize(this.base.x, this.base.y);
+
+	}
+
+	/**
+	 * An auto sizing constant.
+	 *
+	 * Can be used to automatically calculate the width or height based on the
+	 * original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	static get AUTO_SIZE() {
+
+		return AUTO_SIZE;
+
+	}
+
+}
+
+/**
  * Shared fullscreen geometry.
  *
  * @type {BufferGeometry}
@@ -1611,15 +1795,6 @@ class Pass {
 }
 
 /**
- * An auto sizing constant.
- *
- * @type {Number}
- * @private
- */
-
-const AUTO_SIZE = -1;
-
-/**
  * An efficient, incremental blur pass.
  */
 
@@ -1630,15 +1805,15 @@ class BlurPass extends Pass {
 	 *
 	 * @param {Object} [options] - The options.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Adjust the height or width instead for consistent results.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The blur render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The blur render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The blur render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The blur render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
 	constructor({
 		resolutionScale = 0.5,
-		width = AUTO_SIZE,
-		height = AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -1651,14 +1826,14 @@ class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+		this.renderTargetA = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
 
-		this.renderTargetX.texture.name = "Blur.TargetX";
+		this.renderTargetA.texture.name = "Blur.TargetA";
 
 		/**
 		 * A second render target.
@@ -1667,36 +1842,23 @@ class BlurPass extends Pass {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargetY.texture.name = "Blur.TargetY";
+		this.renderTargetB = this.renderTargetA.clone();
+		this.renderTargetB.texture.name = "Blur.TargetB";
 
 		/**
-		 * The current main render size.
+		 * The desired render resolution.
 		 *
-		 * @type {Vector2}
-		 * @private
+		 * It's recommended to set the height or the width to an absolute value for
+		 * consistent results across different devices and resolutions.
+		 *
+		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
+		 * calculate it based on its counterpart and the original aspect ratio.
+		 *
+		 * @type {Resizer}
 		 */
 
-		this.originalSize = new Vector2();
-
-		/**
-		 * The absolute render resolution.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.resolution = new Vector2(width, height);
-
-		/**
-		 * The current resolution scale.
-		 *
-		 * @type {Number}
-		 * @private
-		 * @deprecated
-		 */
-
-		this.resolutionScale = resolutionScale;
+		this.resolution = new Resizer(this, width, height);
+		this.resolution.scale = resolutionScale;
 
 		/**
 		 * A convolution shader material.
@@ -1733,27 +1895,25 @@ class BlurPass extends Pass {
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.renderTargetX.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		this.resolution.x = value;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.width = value;
 
 	}
 
@@ -1761,27 +1921,25 @@ class BlurPass extends Pass {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.renderTargetX.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		this.resolution.y = value;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.height = value;
 
 	}
 
@@ -1846,28 +2004,15 @@ class BlurPass extends Pass {
 	}
 
 	/**
-	 * Returns the original resolution.
-	 *
-	 * @return {Vector2} The original resolution received via {@link setSize}.
-	 * @deprecated Added for internal use only.
-	 */
-
-	getOriginalSize() {
-
-		return this.originalSize;
-
-	}
-
-	/**
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.resolutionScale;
+		return this.resolution.scale;
 
 	}
 
@@ -1875,13 +2020,13 @@ class BlurPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		this.resolutionScale = scale;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -1901,8 +2046,8 @@ class BlurPass extends Pass {
 		const scene = this.scene;
 		const camera = this.camera;
 
-		const renderTargetX = this.renderTargetX;
-		const renderTargetY = this.renderTargetY;
+		const renderTargetA = this.renderTargetA;
+		const renderTargetB = this.renderTargetB;
 
 		let material = this.convolutionMaterial;
 		let uniforms = material.uniforms;
@@ -1918,7 +2063,7 @@ class BlurPass extends Pass {
 		for(i = 0, l = kernel.length - 1; i < l; ++i) {
 
 			// Alternate between targets.
-			destRT = ((i % 2) === 0) ? renderTargetX : renderTargetY;
+			destRT = ((i & 1) === 0) ? renderTargetA : renderTargetB;
 
 			uniforms.kernel.value = kernel[i];
 			uniforms.inputBuffer.value = lastRT.texture;
@@ -1954,34 +2099,13 @@ class BlurPass extends Pass {
 	setSize(width, height) {
 
 		const resolution = this.resolution;
-		const aspect = width / height;
+		resolution.base.set(width, height);
 
-		this.originalSize.set(width, height);
+		width = resolution.width;
+		height = resolution.height;
 
-		if(resolution.x !== AUTO_SIZE && resolution.y !== AUTO_SIZE) {
-
-			width = Math.max(1, resolution.x);
-			height = Math.max(1, resolution.y);
-
-		} else if(resolution.x !== AUTO_SIZE) {
-
-			width = Math.max(1, resolution.x);
-			height = Math.round(Math.max(1, resolution.y) / aspect);
-
-		} else if(resolution.y !== AUTO_SIZE) {
-
-			width = Math.round(Math.max(1, resolution.y) * aspect);
-			height = Math.max(1, resolution.y);
-
-		} else {
-
-			width = Math.max(1, Math.round(width * this.resolutionScale));
-			height = Math.max(1, Math.round(height * this.resolutionScale));
-
-		}
-
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTargetA.setSize(width, height);
+		this.renderTargetB.setSize(width, height);
 
 		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
 		this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
@@ -1999,26 +2123,23 @@ class BlurPass extends Pass {
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
+			this.renderTargetA.texture.format = RGBFormat;
+			this.renderTargetB.texture.format = RGBFormat;
 
 		}
 
 	}
 
 	/**
-	 * An auto sizing flag that can be used for the render {@link BlurPass.width}
-	 * and {@link BlurPass.height}.
-	 *
-	 * It's recommended to set the height or the width to an absolute value for
-	 * consistent blur results across different devices and resolutions.
+	 * An auto sizing flag.
 	 *
 	 * @type {Number}
+	 * @deprecated Use {@link Resizer.AUTO_SIZE} instead.
 	 */
 
 	static get AUTO_SIZE() {
 
-		return AUTO_SIZE;
+		return Resizer.AUTO_SIZE;
 
 	}
 
@@ -2351,11 +2472,18 @@ class DepthPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=1.0] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
-	constructor(scene, camera, { resolutionScale = 1.0, renderTarget } = {}) {
+	constructor(scene, camera, {
+		resolutionScale = 1.0,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
+		renderTarget
+	} = {}) {
 
 		super("DepthPass");
 
@@ -2399,22 +2527,16 @@ class DepthPass extends Pass {
 		}
 
 		/**
-		 * The current resolution scale.
+		 * The desired render resolution.
 		 *
-		 * @type {Number}
-		 * @private
+		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
+		 * calculate it based on its counterpart and the original aspect ratio.
+		 *
+		 * @type {Resizer}
 		 */
 
-		this.resolutionScale = resolutionScale;
-
-		/**
-		 * The original size.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.originalSize = new Vector2();
+		this.resolution = new Resizer(this, width, height);
+		this.resolution.scale = resolutionScale;
 
 	}
 
@@ -2422,6 +2544,7 @@ class DepthPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
@@ -2434,6 +2557,7 @@ class DepthPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
@@ -2469,12 +2593,13 @@ class DepthPass extends Pass {
 
 	setSize(width, height) {
 
-		this.originalSize.set(width, height);
+		const resolution = this.resolution;
+		resolution.base.set(width, height);
 
-		this.renderTarget.setSize(
-			Math.max(1, Math.round(width * this.resolutionScale)),
-			Math.max(1, Math.round(height * this.resolutionScale))
-		);
+		width = resolution.width;
+		height = resolution.height;
+
+		this.renderTarget.setSize(width, height);
 
 	}
 
@@ -3664,11 +3789,18 @@ class NormalPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=1.0] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
-	constructor(scene, camera, { resolutionScale = 1.0, renderTarget } = {}) {
+	constructor(scene, camera, {
+		resolutionScale = 1.0,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
+		renderTarget
+	} = {}) {
 
 		super("NormalPass");
 
@@ -3683,6 +3815,7 @@ class NormalPass extends Pass {
 
 		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial({
 			morphTargets: true,
+			morphNormals: true,
 			skinning: true
 		}));
 
@@ -3712,22 +3845,16 @@ class NormalPass extends Pass {
 		}
 
 		/**
-		 * The current resolution scale.
+		 * The desired render resolution.
 		 *
-		 * @type {Number}
-		 * @private
+		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
+		 * calculate it based on its counterpart and the original aspect ratio.
+		 *
+		 * @type {Resizer}
 		 */
 
-		this.resolutionScale = resolutionScale;
-
-		/**
-		 * The original resolution.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.originalSize = new Vector2();
+		this.resolution = new Resizer(this, width, height);
+		this.resolution.scale = resolutionScale;
 
 	}
 
@@ -3735,6 +3862,7 @@ class NormalPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
@@ -3747,6 +3875,7 @@ class NormalPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
@@ -3782,12 +3911,13 @@ class NormalPass extends Pass {
 
 	setSize(width, height) {
 
-		this.originalSize.set(width, height);
+		const resolution = this.resolution;
+		resolution.base.set(width, height);
 
-		this.renderTarget.setSize(
-			Math.max(1, Math.round(width * this.resolutionScale)),
-			Math.max(1, Math.round(height * this.resolutionScale))
-		);
+		width = resolution.width;
+		height = resolution.height;
+
+		this.renderTarget.setSize(width, height);
 
 	}
 
@@ -4673,8 +4803,8 @@ class BloomEffect extends Effect {
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
 	 */
 
@@ -4683,8 +4813,8 @@ class BloomEffect extends Effect {
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
 	} = {}) {
 
@@ -4720,13 +4850,11 @@ class BloomEffect extends Effect {
 		/**
 		 * A blur pass.
 		 *
-		 * Do not adjust the width or height of this pass directly. Use
-		 * {@link width} or {@link height} instead.
-		 *
 		 * @type {BlurPass}
 		 */
 
 		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass.resolution.resizable = this;
 
 		/**
 		 * A luminance shader pass.
@@ -4771,30 +4899,40 @@ class BloomEffect extends Effect {
 	}
 
 	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resizer}
+	 */
+
+	get resolution() {
+
+		return this.blurPass.resolution;
+
+	}
+
+	/**
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.blurPass.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		this.blurPass.width = value;
-		this.renderTarget.setSize(this.width, this.height);
+		this.resolution.width = value;
 
 	}
 
@@ -4802,27 +4940,25 @@ class BloomEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.blurPass.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		this.blurPass.height = value;
-		this.renderTarget.setSize(this.width, this.height);
+		this.resolution.height = value;
 
 	}
 
@@ -4904,12 +5040,12 @@ class BloomEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.blurPass.getResolutionScale();
+		return this.resolution.scale;
 
 	}
 
@@ -4917,14 +5053,13 @@ class BloomEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		const blurPass = this.blurPass;
-		blurPass.setResolutionScale(scale);
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -4962,9 +5097,8 @@ class BloomEffect extends Effect {
 
 	setSize(width, height) {
 
-		const blurPass = this.blurPass;
-		blurPass.setSize(width, height);
-		this.renderTarget.setSize(blurPass.width, blurPass.height);
+		this.blurPass.setSize(width, height);
+		this.renderTarget.setSize(this.resolution.width, this.resolution.height);
 
 	}
 
@@ -5794,8 +5928,8 @@ class GodRaysEffect extends Effect {
 	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
 	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
@@ -5809,8 +5943,8 @@ class GodRaysEffect extends Effect {
 		exposure = 0.6,
 		clampMax = 1.0,
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.SMALL,
 		blur = true
 	} = {}) {
@@ -5871,14 +6005,14 @@ class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+		this.renderTargetA = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
 
-		this.renderTargetX.texture.name = "GodRays.TargetX";
+		this.renderTargetA.texture.name = "GodRays.TargetX";
 
 		/**
 		 * A render target.
@@ -5887,9 +6021,9 @@ class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargetY.texture.name = "GodRays.TargetY";
-		this.uniforms.get("texture").value = this.renderTargetY.texture;
+		this.renderTargetB = this.renderTargetA.clone();
+		this.renderTargetB.texture.name = "GodRays.TargetY";
+		this.uniforms.get("texture").value = this.renderTargetB.texture;
 
 		/**
 		 * A render target for the light scene.
@@ -5898,7 +6032,7 @@ class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetLight = this.renderTargetX.clone();
+		this.renderTargetLight = this.renderTargetA.clone();
 		this.renderTargetLight.texture.name = "GodRays.Light";
 		this.renderTargetLight.depthBuffer = true;
 		this.renderTargetLight.depthTexture = new DepthTexture();
@@ -5931,6 +6065,7 @@ class GodRaysEffect extends Effect {
 		 */
 
 		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass.resolution.resizable = this;
 
 		/**
 		 * A depth mask pass.
@@ -5984,7 +6119,7 @@ class GodRaysEffect extends Effect {
 
 	get texture() {
 
-		return this.renderTargetY.texture;
+		return this.renderTargetB.texture;
 
 	}
 
@@ -6001,34 +6136,40 @@ class GodRaysEffect extends Effect {
 	}
 
 	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resizer}
+	 */
+
+	get resolution() {
+
+		return this.blurPass.resolution;
+
+	}
+
+	/**
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.blurPass.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-
-		this.renderTargetX.setSize(blurPass.width, blurPass.height);
-		this.renderTargetY.setSize(blurPass.width, blurPass.height);
-		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+		this.resolution.width = value;
 
 	}
 
@@ -6036,31 +6177,25 @@ class GodRaysEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.blurPass.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-
-		this.renderTargetX.setSize(blurPass.width, blurPass.height);
-		this.renderTargetY.setSize(blurPass.width, blurPass.height);
-		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+		this.resolution.height = value;
 
 	}
 
@@ -6143,12 +6278,12 @@ class GodRaysEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.blurPass.getResolutionScale();
+		return this.resolution.scale;
 
 	}
 
@@ -6156,14 +6291,13 @@ class GodRaysEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		const originalSize = this.blurPass.getOriginalSize();
-		this.blurPass.setResolutionScale(scale);
-		this.setSize(originalSize.x, originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -6221,7 +6355,7 @@ class GodRaysEffect extends Effect {
 		const parent = lightSource.parent;
 		const matrixAutoUpdate = lightSource.matrixAutoUpdate;
 
-		const renderTargetX = this.renderTargetX;
+		const renderTargetA = this.renderTargetA;
 		const renderTargetLight = this.renderTargetLight;
 
 		if(!matrixAutoUpdate) {
@@ -6242,8 +6376,8 @@ class GodRaysEffect extends Effect {
 		// Render the light source and mask it based on depth.
 		this.lightScene.add(lightSource);
 		this.renderPassLight.render(renderer, renderTargetLight);
-		this.clearPass.render(renderer, renderTargetX);
-		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
+		this.clearPass.render(renderer, renderTargetA);
+		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetA);
 
 		// Restore the original values.
 		lightSource.material.depthWrite = false;
@@ -6271,12 +6405,12 @@ class GodRaysEffect extends Effect {
 		if(this.blur) {
 
 			// Blur the masked scene to reduce artifacts.
-			this.blurPass.render(renderer, renderTargetX, renderTargetX);
+			this.blurPass.render(renderer, renderTargetA, renderTargetA);
 
 		}
 
 		// Blur the masked scene along radial lines towards the light source.
-		this.godRaysPass.render(renderer, renderTargetX, this.renderTargetY);
+		this.godRaysPass.render(renderer, renderTargetA, this.renderTargetB);
 
 	}
 
@@ -6290,16 +6424,15 @@ class GodRaysEffect extends Effect {
 	setSize(width, height) {
 
 		this.blurPass.setSize(width, height);
-
 		this.renderPassLight.setSize(width, height);
 		this.depthMaskPass.setSize(width, height);
 		this.godRaysPass.setSize(width, height);
 
-		width = this.blurPass.width;
-		height = this.blurPass.height;
+		width = this.resolution.width;
+		height = this.resolution.height;
 
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTargetA.setSize(width, height);
+		this.renderTargetB.setSize(width, height);
 		this.renderTargetLight.setSize(width, height);
 
 	}
@@ -6320,8 +6453,8 @@ class GodRaysEffect extends Effect {
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
+			this.renderTargetA.texture.format = RGBFormat;
+			this.renderTargetB.texture.format = RGBFormat;
 			this.renderTargetLight.texture.format = RGBFormat;
 
 		}
@@ -6591,8 +6724,8 @@ class OutlineEffect extends Effect {
 	 * @param {Number} [options.visibleEdgeColor=0xffffff] - The color of visible edges.
 	 * @param {Number} [options.hiddenEdgeColor=0x22090a] - The color of hidden edges.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.VERY_SMALL] - The blur kernel size.
 	 * @param {Boolean} [options.blur=false] - Whether the outline should be blurred.
 	 * @param {Boolean} [options.xRay=true] - Whether occluded parts of selected objects should be visible.
@@ -6606,8 +6739,8 @@ class OutlineEffect extends Effect {
 		visibleEdgeColor = 0xffffff,
 		hiddenEdgeColor = 0x22090a,
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.VERY_SMALL,
 		blur = false,
 		xRay = true
@@ -6750,6 +6883,7 @@ class OutlineEffect extends Effect {
 		 */
 
 		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass.resolution.resizable = this;
 		this.blur = blur;
 
 		/**
@@ -6790,34 +6924,40 @@ class OutlineEffect extends Effect {
 	}
 
 	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resizer}
+	 */
+
+	get resolution() {
+
+		return this.blurPass.resolution;
+
+	}
+
+	/**
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.blurPass.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-
-		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+		this.resolution.width = value;
 
 	}
 
@@ -6825,31 +6965,25 @@ class OutlineEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.blurPass.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-
-		this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-		this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+		this.resolution.height = value;
 
 	}
 
@@ -7014,12 +7148,12 @@ class OutlineEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.blurPass.getResolutionScale();
+		return this.resolution.scale;
 
 	}
 
@@ -7027,15 +7161,13 @@ class OutlineEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		const originalSize = this.blurPass.getOriginalSize();
-		this.blurPass.setResolutionScale(scale);
-		this.depthPass.setResolutionScale(scale);
-		this.setSize(originalSize.x, originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -7173,13 +7305,13 @@ class OutlineEffect extends Effect {
 
 	setSize(width, height) {
 
-		this.renderTargetMask.setSize(width, height);
-		this.depthPass.setSize(width, height);
 		this.blurPass.setSize(width, height);
+		this.renderTargetMask.setSize(width, height);
 
-		width = this.blurPass.width;
-		height = this.blurPass.height;
+		width = this.resolution.width;
+		height = this.resolution.height;
 
+		this.depthPass.setSize(width, height);
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetBlurredEdges.setSize(width, height);
 		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
@@ -7947,64 +8079,6 @@ class SelectiveBloomEffect extends BloomEffect {
 	}
 
 	/**
-	 * The current width of the internal render targets.
-	 *
-	 * @type {Number}
-	 */
-
-	get width() {
-
-		return super.width;
-
-	}
-
-	/**
-	 * Sets the render width.
-	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
-	 * @type {Number}
-	 */
-
-	set width(value) {
-
-		super.width = value;
-
-		this.renderTargetSelection.setSize(this.width, this.height);
-
-	}
-
-	/**
-	 * The current height of the internal render targets.
-	 *
-	 * @type {Number}
-	 */
-
-	get height() {
-
-		return super.height;
-
-	}
-
-	/**
-	 * Sets the render height.
-	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
-	 * @type {Number}
-	 */
-
-	set height(value) {
-
-		super.height = value;
-
-		this.renderTargetSelection.setSize(this.width, this.height);
-
-	}
-
-	/**
 	 * Indicates whether the scene background should be ignored.
 	 *
 	 * @type {Boolean}
@@ -8092,15 +8166,16 @@ class SelectiveBloomEffect extends BloomEffect {
 
 	setSize(width, height) {
 
-		const blurPass = this.blurPass;
-
 		super.setSize(width, height);
 
 		this.backgroundPass.setSize(width, height);
 		this.blackoutPass.setSize(width, height);
 		this.renderPass.setSize(width, height);
 
-		this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+		this.renderTargetSelection.setSize(
+			this.resolution.width,
+			this.resolution.height
+		);
 
 	}
 
@@ -8492,7 +8567,7 @@ const SMAAPreset = {
 
 };
 
-var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float proximity=abs(depth-sampleDepth);if(sampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,getViewZ(sampleDepth));occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;if(depth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,getViewZ(depth));vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,depth,uv);float l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,max(l*luminanceInfluence,smoothstep(distanceCutoff.x,distanceCutoff.y,depth)));}outputColor=vec4(vec3(ao),inputColor.a);}";
+var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(linearSampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,viewZ);occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,uv);float l=linearToRelativeLuminance(inputColor.rgb);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);float f=max(l*luminanceInfluence,d);ao=mix(ao,1.0,f);}outputColor=vec4(vec3(ao),inputColor.a);}";
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
@@ -8515,28 +8590,28 @@ class SSAOEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
-	 * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
 	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
-	 * @param {Number} [options.bias=0.5] - An occlusion bias.
+	 * @param {Number} [options.bias=0.0] - An occlusion bias.
 	 */
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
 		samples = 11,
 		rings = 4,
-		distanceThreshold = 0.65,
-		distanceFalloff = 0.1,
-		rangeThreshold = 0.0015,
-		rangeFalloff = 0.01,
+		distanceThreshold = 0.97,
+		distanceFalloff = 0.03,
+		rangeThreshold = 0.0005,
+		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
 		radius = 18.25,
 		scale = 1.0,
-		bias = 0.5
+		bias = 0.0
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader$u, {
@@ -8722,7 +8797,10 @@ class SSAOEffect extends Effect {
 
 	setDistanceCutoff(threshold, falloff) {
 
-		this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("distanceCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
@@ -8735,7 +8813,10 @@ class SSAOEffect extends Effect {
 
 	setProximityCutoff(threshold, falloff) {
 
-		this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("proximityCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
@@ -10772,4 +10853,4 @@ class SMAASearchImageData {
 
 }
 
-export { AdaptiveLuminanceMaterial, BlendFunction, BlendMode, BloomEffect, BlurPass, BokehEffect, BrightnessContrastEffect, ChromaticAberrationEffect, ClearMaskPass, ClearPass, ColorAverageEffect, ColorDepthEffect, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthEffect, DepthMaskMaterial, DepthPass, Disposable, DotScreenEffect, Effect, EffectAttribute, EffectComposer, EffectMaterial, EffectPass, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GodRaysMaterial, GridEffect, HueSaturationEffect, Initializable, KernelSize, LuminanceMaterial, MaskPass, NoiseEffect, NormalPass, OutlineEdgesMaterial, OutlineEffect, Pass, PixelationEffect, RawImageData, RealisticBokehEffect, RenderPass, Resizable, SMAAAreaImageData, SMAAEffect, SMAAPreset, SMAASearchImageData, SMAAWeightsMaterial, SSAOEffect, SavePass, ScanlineEffect, Selection, SelectiveBloomEffect, SepiaEffect, ShaderPass, ShockWaveEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension };
+export { AdaptiveLuminanceMaterial, BlendFunction, BlendMode, BloomEffect, BlurPass, BokehEffect, BrightnessContrastEffect, ChromaticAberrationEffect, ClearMaskPass, ClearPass, ColorAverageEffect, ColorDepthEffect, ColorEdgesMaterial, ConvolutionMaterial, CopyMaterial, DepthComparisonMaterial, DepthEffect, DepthMaskMaterial, DepthPass, Disposable, DotScreenEffect, Effect, EffectAttribute, EffectComposer, EffectMaterial, EffectPass, GammaCorrectionEffect, GlitchEffect, GlitchMode, GodRaysEffect, GodRaysMaterial, GridEffect, HueSaturationEffect, Initializable, KernelSize, LuminanceMaterial, MaskPass, NoiseEffect, NormalPass, OutlineEdgesMaterial, OutlineEffect, Pass, PixelationEffect, RawImageData, RealisticBokehEffect, RenderPass, Resizable, Resizer, SMAAAreaImageData, SMAAEffect, SMAAPreset, SMAASearchImageData, SMAAWeightsMaterial, SSAOEffect, SavePass, ScanlineEffect, Selection, SelectiveBloomEffect, SepiaEffect, ShaderPass, ShockWaveEffect, TextureEffect, ToneMappingEffect, VignetteEffect, WebGLExtension };

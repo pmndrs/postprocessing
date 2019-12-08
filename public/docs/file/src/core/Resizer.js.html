@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">DepthComparisonMaterial | postprocessing</title>
+  <title data-ice="title">src/core/Resizer.js | postprocessing</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -99,264 +99,194 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {DepthComparisonMaterial} from &apos;<span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber10">postprocessing</a></span>&apos;</code></pre></div>
-  <span data-ice="access">public</span>
-  <span data-ice="kind">class</span>
-  
-  
-  
-  <span data-ice="source">| <span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber10">source</a></span></span>
-</div>
+<div class="content" data-ice="content"><h1 data-ice="title">src/core/Resizer.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { Vector2 } from &quot;three&quot;;
 
-<div class="self-detail detail">
-  <h1 data-ice="name">DepthComparisonMaterial</h1>
+/**
+ * An auto sizing constant.
+ *
+ * @type {Number}
+ * @private
+ */
 
-  
+const AUTO_SIZE = -1;
 
-  
-  
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>three~ShaderMaterial</span> &#x2192; DepthComparisonMaterial</div></div>
-  
-  
-  
-  
-  
-  
+/**
+ * A resizer.
+ */
 
-  
-  
-  <div class="description" data-ice="description"><p>A depth comparison shader material.</p>
-</div>
-  
+export class Resizer {
 
-  
+	/**
+	 * Constructs a new resizer.
+	 *
+	 * @param {Resizable} resizeable - A resizable object.
+	 * @param {Number} [width=Resizer.AUTO_SIZE] - The width.
+	 * @param {Number} [height=Resizer.AUTO_SIZE] - The height.
+	 */
 
-  
+	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE) {
 
-  
+		/**
+		 * A resizable object.
+		 *
+		 * @type {Resizable}
+		 */
 
-  
-</div>
+		this.resizable = resizable;
 
+		/**
+		 * The base size.
+		 *
+		 * This size will be passed to the resizable object every time the width or
+		 * height is changed.
+		 *
+		 * @type {Vector2}
+		 */
 
+		this.base = new Vector2(1, 1);
 
-<div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, camera: <span>PerspectiveCamera</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Constructs a new depth comparison material.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+		/**
+		 * The target size.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
 
-<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
-  <tbody>
-  
-  <tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-method-adoptCameraSettings">adoptCameraSettings</a></span></span><span class="code" data-ice="signature">(camera: <span>Camera</span>)</span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Adopts the settings of the given camera.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-</tbody>
-</table>
-</div>
+		this.target = new Vector2(width, height);
 
+		/**
+		 * A scale.
+		 *
+		 * If both the width and the height are set to {@link Resizer.AUTO_SIZE},
+		 * they will be scaled uniformly using this scalar.
+		 *
+		 * @type {Number}
+		 * @deprecated Added for internal use only.
+		 */
 
+		this.scale = 1.0;
 
+	}
 
+	/**
+	 * The calculated width.
+	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base width will be returned.
+	 *
+	 * @type {Number}
+	 */
 
-<div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
+	get width() {
 
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-constructor-constructor">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, camera: <span>PerspectiveCamera</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber19">source</a></span></span>
-    </span>
-  </h3>
+		const base = this.base;
+		const target = this.target;
 
-  
-  
-  
-  <div data-ice="description"><p>Constructs a new depth comparison material.</p>
-</div>
+		let result;
 
-  
+		if(target.x !== AUTO_SIZE) {
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">depthTexture</td>
-      <td data-ice="type" class="code"><span>Texture</span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>A depth texture.</p>
-</td>
-    </tr>
-<tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">camera</td>
-      <td data-ice="type" class="code"><span>PerspectiveCamera</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>A camera.</p>
-</td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
+			result = target.x;
 
-  
+		} else if(target.y !== AUTO_SIZE) {
 
-  
+			result = Math.round(target.y * (base.x / base.y));
 
-  
+		} else {
 
-  
+			result = Math.round(base.x * this.scale);
 
-  
+		}
 
-  
+		return result;
 
-  
+	}
 
-  
-  
-</div>
-</div>
+	/**
+	 * Sets the target width.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the width based
+	 * on the height and the original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
 
-<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+	set width(value) {
 
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-adoptCameraSettings">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    
-    <span class="code" data-ice="name">adoptCameraSettings</span><span class="code" data-ice="signature">(camera: <span>Camera</span>)</span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber54">source</a></span></span>
-    </span>
-  </h3>
+		this.target.x = value;
+		this.resizable.setSize(this.base.x, this.base.y);
 
-  
-  
-  
-  <div data-ice="description"><p>Adopts the settings of the given camera.</p>
-</div>
+	}
 
-  
+	/**
+	 * The calculated height.
+	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base height will be returned.
+	 *
+	 * @type {Number}
+	 */
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
-    
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">camera</td>
-      <td data-ice="type" class="code"><span>Camera</span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>A camera.</p>
-</td>
-    </tr>
-</tbody>
-  </table>
-</div>
-</div>
+	get height() {
 
-  
+		const base = this.base;
+		const target = this.target;
 
-  
+		let result;
 
-  
+		if(target.y !== AUTO_SIZE) {
 
-  
+			result = target.y;
 
-  
+		} else if(target.x !== AUTO_SIZE) {
 
-  
+			result = Math.round(target.x / (base.x / base.y));
 
-  
+		} else {
 
-  
-  
-</div>
-</div>
+			result = Math.round(base.y * this.scale);
+
+		}
+
+		return result;
+
+	}
+
+	/**
+	 * Sets the target height.
+	 *
+	 * Use {@link Resizer.AUTO_SIZE} to automatically calculate the height based
+	 * on the width and the original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	set height(value) {
+
+		this.target.y = value;
+		this.resizable.setSize(this.base.x, this.base.y);
+
+	}
+
+	/**
+	 * An auto sizing constant.
+	 *
+	 * Can be used to automatically calculate the width or height based on the
+	 * original aspect ratio.
+	 *
+	 * @type {Number}
+	 */
+
+	static get AUTO_SIZE() {
+
+		return AUTO_SIZE;
+
+	}
+
+}
+</code></pre>
+
 </div>
 
 <footer class="footer">

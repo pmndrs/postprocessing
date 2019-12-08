@@ -282,6 +282,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~resizer",
+    "class/src/core/Resizer.js~Resizer.html",
+    "<span>Resizer</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~smaaareaimagedata",
     "class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html",
     "<span>SMAAAreaImageData</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -774,6 +780,66 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/resizer.js",
+    "file/src/core/Resizer.js.html",
+    "src/core/Resizer.js",
+    "file"
+  ],
+  [
+    "src/core/resizer.js~resizer#base",
+    "class/src/core/Resizer.js~Resizer.html#instance-member-base",
+    "src/core/Resizer.js~Resizer#base",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#constructor",
+    "class/src/core/Resizer.js~Resizer.html#instance-constructor-constructor",
+    "src/core/Resizer.js~Resizer#constructor",
+    "method"
+  ],
+  [
+    "src/core/resizer.js~resizer#height",
+    "class/src/core/Resizer.js~Resizer.html#instance-get-height",
+    "src/core/Resizer.js~Resizer#height",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#height",
+    "class/src/core/Resizer.js~Resizer.html#instance-set-height",
+    "src/core/Resizer.js~Resizer#height",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#resizable",
+    "class/src/core/Resizer.js~Resizer.html#instance-member-resizable",
+    "src/core/Resizer.js~Resizer#resizable",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#scale",
+    "class/src/core/Resizer.js~Resizer.html#instance-member-scale",
+    "src/core/Resizer.js~Resizer#scale",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#width",
+    "class/src/core/Resizer.js~Resizer.html#instance-get-width",
+    "src/core/Resizer.js~Resizer#width",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#width",
+    "class/src/core/Resizer.js~Resizer.html#instance-set-width",
+    "src/core/Resizer.js~Resizer#width",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer.auto_size",
+    "class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE",
+    "src/core/Resizer.js~Resizer.AUTO_SIZE",
+    "member"
+  ],
+  [
     "src/core/selection.js",
     "file/src/core/Selection.js.html",
     "src/core/Selection.js",
@@ -927,6 +993,12 @@ window.esdocSearchIndex = [
     "src/effects/bloomeffect.js~bloomeffect#luminancepass",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-member-luminancePass",
     "src/effects/BloomEffect.js~BloomEffect#luminancePass",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#resolution",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-resolution",
+    "src/effects/BloomEffect.js~BloomEffect#resolution",
     "member"
   ],
   [
@@ -1362,6 +1434,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/godrayseffect.js~godrayseffect#resolution",
+    "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-resolution",
+    "src/effects/GodRaysEffect.js~GodRaysEffect#resolution",
+    "member"
+  ],
+  [
     "src/effects/godrayseffect.js~godrayseffect#samples",
     "class/src/effects/GodRaysEffect.js~GodRaysEffect.html#instance-get-samples",
     "src/effects/GodRaysEffect.js~GodRaysEffect#samples",
@@ -1599,6 +1677,12 @@ window.esdocSearchIndex = [
     "src/effects/outlineeffect.js~outlineeffect#pulsespeed",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-pulseSpeed",
     "src/effects/OutlineEffect.js~OutlineEffect#pulseSpeed",
+    "member"
+  ],
+  [
+    "src/effects/outlineeffect.js~outlineeffect#resolution",
+    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-resolution",
+    "src/effects/OutlineEffect.js~OutlineEffect#resolution",
     "member"
   ],
   [
@@ -1962,18 +2046,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/selectivebloomeffect.js~selectivebloomeffect#height",
-    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-height",
-    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#height",
-    "member"
-  ],
-  [
-    "src/effects/selectivebloomeffect.js~selectivebloomeffect#height",
-    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-height",
-    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#height",
-    "member"
-  ],
-  [
     "src/effects/selectivebloomeffect.js~selectivebloomeffect#ignorebackground",
     "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-ignoreBackground",
     "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#ignoreBackground",
@@ -2014,18 +2086,6 @@ window.esdocSearchIndex = [
     "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-method-update",
     "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#update",
     "method"
-  ],
-  [
-    "src/effects/selectivebloomeffect.js~selectivebloomeffect#width",
-    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-width",
-    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#width",
-    "member"
-  ],
-  [
-    "src/effects/selectivebloomeffect.js~selectivebloomeffect#width",
-    "class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-width",
-    "src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect#width",
-    "member"
   ],
   [
     "src/effects/sepiaeffect.js",
@@ -2772,12 +2832,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/passes/blurpass.js~blurpass#getoriginalsize",
-    "class/src/passes/BlurPass.js~BlurPass.html#instance-method-getOriginalSize",
-    "src/passes/BlurPass.js~BlurPass#getOriginalSize",
-    "method"
-  ],
-  [
     "src/passes/blurpass.js~blurpass#getresolutionscale",
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-getResolutionScale",
     "src/passes/BlurPass.js~BlurPass#getResolutionScale",
@@ -2818,6 +2872,12 @@ window.esdocSearchIndex = [
     "class/src/passes/BlurPass.js~BlurPass.html#instance-method-render",
     "src/passes/BlurPass.js~BlurPass#render",
     "method"
+  ],
+  [
+    "src/passes/blurpass.js~blurpass#resolution",
+    "class/src/passes/BlurPass.js~BlurPass.html#instance-member-resolution",
+    "src/passes/BlurPass.js~BlurPass#resolution",
+    "member"
   ],
   [
     "src/passes/blurpass.js~blurpass#scale",
@@ -2973,6 +3033,18 @@ window.esdocSearchIndex = [
     "src/passes/depthpass.js~depthpass#rendertarget",
     "class/src/passes/DepthPass.js~DepthPass.html#instance-member-renderTarget",
     "src/passes/DepthPass.js~DepthPass#renderTarget",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#resolution",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolution",
+    "src/passes/DepthPass.js~DepthPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#resolutionscale",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-member-resolutionScale",
+    "src/passes/DepthPass.js~DepthPass#resolutionScale",
     "member"
   ],
   [
@@ -3153,6 +3225,18 @@ window.esdocSearchIndex = [
     "src/passes/normalpass.js~normalpass#rendertarget",
     "class/src/passes/NormalPass.js~NormalPass.html#instance-member-renderTarget",
     "src/passes/NormalPass.js~NormalPass#renderTarget",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#resolution",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolution",
+    "src/passes/NormalPass.js~NormalPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/normalpass.js~normalpass#resolutionscale",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-member-resolutionScale",
+    "src/passes/NormalPass.js~NormalPass#resolutionScale",
     "member"
   ],
   [

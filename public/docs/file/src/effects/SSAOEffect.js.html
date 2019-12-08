@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -126,28 +127,28 @@ export class SSAOEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
-	 * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
 	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
-	 * @param {Number} [options.bias=0.5] - An occlusion bias.
+	 * @param {Number} [options.bias=0.0] - An occlusion bias.
 	 */
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
 		samples = 11,
 		rings = 4,
-		distanceThreshold = 0.65,
-		distanceFalloff = 0.1,
-		rangeThreshold = 0.0015,
-		rangeFalloff = 0.01,
+		distanceThreshold = 0.97,
+		distanceFalloff = 0.03,
+		rangeThreshold = 0.0005,
+		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
 		radius = 18.25,
 		scale = 1.0,
-		bias = 0.5
+		bias = 0.0
 	} = {}) {
 
 		super(&quot;SSAOEffect&quot;, fragmentShader, {
@@ -333,7 +334,10 @@ export class SSAOEffect extends Effect {
 
 	setDistanceCutoff(threshold, falloff) {
 
-		this.uniforms.get(&quot;distanceCutoff&quot;).value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get(&quot;distanceCutoff&quot;).value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
@@ -346,7 +350,10 @@ export class SSAOEffect extends Effect {
 
 	setProximityCutoff(threshold, falloff) {
 
-		this.uniforms.get(&quot;proximityCutoff&quot;).value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get(&quot;proximityCutoff&quot;).value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 

@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.8.9 build Mon Nov 18 2019
+ * postprocessing v6.9.0 build Sun Dec 08 2019
  * https://github.com/vanruesc/postprocessing
  * Copyright 2019 Raoul van Rüschen, Zlib
  */
@@ -29,21 +29,6 @@
     if (protoProps) _defineProperties(Constructor.prototype, protoProps);
     if (staticProps) _defineProperties(Constructor, staticProps);
     return Constructor;
-  }
-
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
   }
 
   function _inherits(subClass, superClass) {
@@ -189,56 +174,6 @@
     }
 
     return _get(target, property, receiver || target);
-  }
-
-  function set(target, property, value, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.set) {
-      set = Reflect.set;
-    } else {
-      set = function set(target, property, value, receiver) {
-        var base = _superPropBase(target, property);
-
-        var desc;
-
-        if (base) {
-          desc = Object.getOwnPropertyDescriptor(base, property);
-
-          if (desc.set) {
-            desc.set.call(receiver, value);
-            return true;
-          } else if (!desc.writable) {
-            return false;
-          }
-        }
-
-        desc = Object.getOwnPropertyDescriptor(receiver, property);
-
-        if (desc) {
-          if (!desc.writable) {
-            return false;
-          }
-
-          desc.value = value;
-          Object.defineProperty(receiver, property, desc);
-        } else {
-          _defineProperty(receiver, property, value);
-        }
-
-        return true;
-      };
-    }
-
-    return set(target, property, value, receiver);
-  }
-
-  function _set(target, property, value, receiver, isStrict) {
-    var s = set(target, property, value, receiver || target);
-
-    if (!s && isStrict) {
-      throw new Error('failed to set property');
-    }
-
-    return value;
   }
 
   var Disposable = function () {
@@ -511,7 +446,7 @@
     return DepthMaskMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
+  var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
   var vertexTemplate = "uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;VERTEX_HEADvoid main(){vUv=position.xy*0.5+0.5;VERTEX_MAIN_SUPPORTgl_Position=vec4(position.xy,1.0,1.0);}";
 
   var EffectMaterial = function (_ShaderMaterial7) {
@@ -957,6 +892,73 @@
     return SMAAWeightsMaterial;
   }(three.ShaderMaterial);
 
+  var AUTO_SIZE = -1;
+
+  var Resizer = function () {
+    function Resizer(resizable) {
+      var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : AUTO_SIZE;
+      var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : AUTO_SIZE;
+
+      _classCallCheck(this, Resizer);
+
+      this.resizable = resizable;
+      this.base = new three.Vector2(1, 1);
+      this.target = new three.Vector2(width, height);
+      this.scale = 1.0;
+    }
+
+    _createClass(Resizer, [{
+      key: "width",
+      get: function get() {
+        var base = this.base;
+        var target = this.target;
+        var result;
+
+        if (target.x !== AUTO_SIZE) {
+          result = target.x;
+        } else if (target.y !== AUTO_SIZE) {
+          result = Math.round(target.y * (base.x / base.y));
+        } else {
+          result = Math.round(base.x * this.scale);
+        }
+
+        return result;
+      },
+      set: function set(value) {
+        this.target.x = value;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }, {
+      key: "height",
+      get: function get() {
+        var base = this.base;
+        var target = this.target;
+        var result;
+
+        if (target.y !== AUTO_SIZE) {
+          result = target.y;
+        } else if (target.x !== AUTO_SIZE) {
+          result = Math.round(target.x / (base.x / base.y));
+        } else {
+          result = Math.round(base.y * this.scale);
+        }
+
+        return result;
+      },
+      set: function set(value) {
+        this.target.y = value;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }], [{
+      key: "AUTO_SIZE",
+      get: function get() {
+        return AUTO_SIZE;
+      }
+    }]);
+
+    return Resizer;
+  }();
+
   var geometry = null;
 
   function getFullscreenTriangle() {
@@ -1061,8 +1063,6 @@
     return Pass;
   }();
 
-  var AUTO_SIZE = -1;
-
   var BlurPass = function (_Pass) {
     _inherits(BlurPass, _Pass);
 
@@ -1073,27 +1073,26 @@
           _ref$resolutionScale = _ref.resolutionScale,
           resolutionScale = _ref$resolutionScale === void 0 ? 0.5 : _ref$resolutionScale,
           _ref$width = _ref.width,
-          width = _ref$width === void 0 ? AUTO_SIZE : _ref$width,
+          width = _ref$width === void 0 ? Resizer.AUTO_SIZE : _ref$width,
           _ref$height = _ref.height,
-          height = _ref$height === void 0 ? AUTO_SIZE : _ref$height,
+          height = _ref$height === void 0 ? Resizer.AUTO_SIZE : _ref$height,
           _ref$kernelSize = _ref.kernelSize,
           kernelSize = _ref$kernelSize === void 0 ? KernelSize.LARGE : _ref$kernelSize;
 
       _classCallCheck(this, BlurPass);
 
       _this6 = _possibleConstructorReturn(this, _getPrototypeOf(BlurPass).call(this, "BlurPass"));
-      _this6.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+      _this6.renderTargetA = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this6.renderTargetX.texture.name = "Blur.TargetX";
-      _this6.renderTargetY = _this6.renderTargetX.clone();
-      _this6.renderTargetY.texture.name = "Blur.TargetY";
-      _this6.originalSize = new three.Vector2();
-      _this6.resolution = new three.Vector2(width, height);
-      _this6.resolutionScale = resolutionScale;
+      _this6.renderTargetA.texture.name = "Blur.TargetA";
+      _this6.renderTargetB = _this6.renderTargetA.clone();
+      _this6.renderTargetB.texture.name = "Blur.TargetB";
+      _this6.resolution = new Resizer(_assertThisInitialized(_this6), width, height);
+      _this6.resolution.scale = resolutionScale;
       _this6.convolutionMaterial = new ConvolutionMaterial();
       _this6.ditheredConvolutionMaterial = new ConvolutionMaterial();
       _this6.ditheredConvolutionMaterial.dithering = true;
@@ -1103,28 +1102,23 @@
     }
 
     _createClass(BlurPass, [{
-      key: "getOriginalSize",
-      value: function getOriginalSize() {
-        return this.originalSize;
-      }
-    }, {
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.resolutionScale;
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        this.resolutionScale = scale;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
         var scene = this.scene;
         var camera = this.camera;
-        var renderTargetX = this.renderTargetX;
-        var renderTargetY = this.renderTargetY;
+        var renderTargetA = this.renderTargetA;
+        var renderTargetB = this.renderTargetB;
         var material = this.convolutionMaterial;
         var uniforms = material.uniforms;
         var kernel = material.getKernel();
@@ -1134,7 +1128,7 @@
         this.setFullscreenMaterial(material);
 
         for (i = 0, l = kernel.length - 1; i < l; ++i) {
-          destRT = i % 2 === 0 ? renderTargetX : renderTargetY;
+          destRT = (i & 1) === 0 ? renderTargetA : renderTargetB;
           uniforms.kernel.value = kernel[i];
           uniforms.inputBuffer.value = lastRT.texture;
           renderer.setRenderTarget(destRT);
@@ -1157,25 +1151,11 @@
       key: "setSize",
       value: function setSize(width, height) {
         var resolution = this.resolution;
-        var aspect = width / height;
-        this.originalSize.set(width, height);
-
-        if (resolution.x !== AUTO_SIZE && resolution.y !== AUTO_SIZE) {
-          width = Math.max(1, resolution.x);
-          height = Math.max(1, resolution.y);
-        } else if (resolution.x !== AUTO_SIZE) {
-          width = Math.max(1, resolution.x);
-          height = Math.round(Math.max(1, resolution.y) / aspect);
-        } else if (resolution.y !== AUTO_SIZE) {
-          width = Math.round(Math.max(1, resolution.y) * aspect);
-          height = Math.max(1, resolution.y);
-        } else {
-          width = Math.max(1, Math.round(width * this.resolutionScale));
-          height = Math.max(1, Math.round(height * this.resolutionScale));
-        }
-
-        this.renderTargetX.setSize(width, height);
-        this.renderTargetY.setSize(width, height);
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTargetA.setSize(width, height);
+        this.renderTargetB.setSize(width, height);
         this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
         this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
       }
@@ -1183,27 +1163,25 @@
       key: "initialize",
       value: function initialize(renderer, alpha) {
         if (!alpha) {
-          this.renderTargetX.texture.format = three.RGBFormat;
-          this.renderTargetY.texture.format = three.RGBFormat;
+          this.renderTargetA.texture.format = three.RGBFormat;
+          this.renderTargetB.texture.format = three.RGBFormat;
         }
       }
     }, {
       key: "width",
       get: function get() {
-        return this.renderTargetX.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        this.resolution.x = value;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.renderTargetX.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        this.resolution.y = value;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.height = value;
       }
     }, {
       key: "scale",
@@ -1226,7 +1204,7 @@
     }], [{
       key: "AUTO_SIZE",
       get: function get() {
-        return AUTO_SIZE;
+        return Resizer.AUTO_SIZE;
       }
     }]);
 
@@ -1389,6 +1367,10 @@
       var _ref2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref2$resolutionScale = _ref2.resolutionScale,
           resolutionScale = _ref2$resolutionScale === void 0 ? 1.0 : _ref2$resolutionScale,
+          _ref2$width = _ref2.width,
+          width = _ref2$width === void 0 ? Resizer.AUTO_SIZE : _ref2$width,
+          _ref2$height = _ref2.height,
+          height = _ref2$height === void 0 ? Resizer.AUTO_SIZE : _ref2$height,
           renderTarget = _ref2.renderTarget;
 
       _classCallCheck(this, DepthPass);
@@ -1416,8 +1398,8 @@
         _this10.renderTarget.texture.name = "DepthPass.Target";
       }
 
-      _this10.resolutionScale = resolutionScale;
-      _this10.originalSize = new three.Vector2();
+      _this10.resolution = new Resizer(_assertThisInitialized(_this10), width, height);
+      _this10.resolution.scale = resolutionScale;
       return _this10;
     }
 
@@ -1441,8 +1423,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.originalSize.set(width, height);
-        this.renderTarget.setSize(Math.max(1, Math.round(width * this.resolutionScale)), Math.max(1, Math.round(height * this.resolutionScale)));
+        var resolution = this.resolution;
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTarget.setSize(width, height);
       }
     }]);
 
@@ -2183,6 +2168,10 @@
       var _ref4 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref4$resolutionScale = _ref4.resolutionScale,
           resolutionScale = _ref4$resolutionScale === void 0 ? 1.0 : _ref4$resolutionScale,
+          _ref4$width = _ref4.width,
+          width = _ref4$width === void 0 ? Resizer.AUTO_SIZE : _ref4$width,
+          _ref4$height = _ref4.height,
+          height = _ref4$height === void 0 ? Resizer.AUTO_SIZE : _ref4$height,
           renderTarget = _ref4.renderTarget;
 
       _classCallCheck(this, NormalPass);
@@ -2191,6 +2180,7 @@
       _this13.needsSwap = false;
       _this13.renderPass = new RenderPass(scene, camera, new three.MeshNormalMaterial({
         morphTargets: true,
+        morphNormals: true,
         skinning: true
       }));
 
@@ -2210,8 +2200,8 @@
         _this13.renderTarget.texture.name = "NormalPass.Target";
       }
 
-      _this13.resolutionScale = resolutionScale;
-      _this13.originalSize = new three.Vector2();
+      _this13.resolution = new Resizer(_assertThisInitialized(_this13), width, height);
+      _this13.resolution.scale = resolutionScale;
       return _this13;
     }
 
@@ -2235,8 +2225,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.originalSize.set(width, height);
-        this.renderTarget.setSize(Math.max(1, Math.round(width * this.resolutionScale)), Math.max(1, Math.round(height * this.resolutionScale)));
+        var resolution = this.resolution;
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTarget.setSize(width, height);
       }
     }]);
 
@@ -2883,9 +2876,9 @@
           _ref6$resolutionScale = _ref6.resolutionScale,
           resolutionScale = _ref6$resolutionScale === void 0 ? 0.5 : _ref6$resolutionScale,
           _ref6$width = _ref6.width,
-          width = _ref6$width === void 0 ? BlurPass.AUTO_SIZE : _ref6$width,
+          width = _ref6$width === void 0 ? Resizer.AUTO_SIZE : _ref6$width,
           _ref6$height = _ref6.height,
-          height = _ref6$height === void 0 ? BlurPass.AUTO_SIZE : _ref6$height,
+          height = _ref6$height === void 0 ? Resizer.AUTO_SIZE : _ref6$height,
           _ref6$kernelSize = _ref6.kernelSize,
           kernelSize = _ref6$kernelSize === void 0 ? KernelSize.LARGE : _ref6$kernelSize;
 
@@ -2910,6 +2903,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this17.blurPass.resolution.resizable = _assertThisInitialized(_this17);
       _this17.luminancePass = new ShaderPass(new LuminanceMaterial(true));
       _this17.luminanceMaterial.threshold = luminanceThreshold;
       _this17.luminanceMaterial.smoothing = luminanceSmoothing;
@@ -2919,14 +2913,13 @@
     _createClass(BloomEffect, [{
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var blurPass = this.blurPass;
-        blurPass.setResolutionScale(scale);
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "update",
@@ -2943,9 +2936,8 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        var blurPass = this.blurPass;
-        blurPass.setSize(width, height);
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.setSize(width, height);
+        this.renderTarget.setSize(this.resolution.width, this.resolution.height);
       }
     }, {
       key: "initialize",
@@ -2967,22 +2959,25 @@
         return this.luminancePass.getFullscreenMaterial();
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        this.blurPass.width = value;
-        this.renderTarget.setSize(this.width, this.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        this.blurPass.height = value;
-        this.renderTarget.setSize(this.width, this.height);
+        this.resolution.height = value;
       }
     }, {
       key: "dithering",
@@ -3464,9 +3459,9 @@
           _ref15$resolutionScal = _ref15.resolutionScale,
           resolutionScale = _ref15$resolutionScal === void 0 ? 0.5 : _ref15$resolutionScal,
           _ref15$width = _ref15.width,
-          width = _ref15$width === void 0 ? BlurPass.AUTO_SIZE : _ref15$width,
+          width = _ref15$width === void 0 ? Resizer.AUTO_SIZE : _ref15$width,
           _ref15$height = _ref15.height,
-          height = _ref15$height === void 0 ? BlurPass.AUTO_SIZE : _ref15$height,
+          height = _ref15$height === void 0 ? Resizer.AUTO_SIZE : _ref15$height,
           _ref15$kernelSize = _ref15.kernelSize,
           kernelSize = _ref15$kernelSize === void 0 ? KernelSize.SMALL : _ref15$kernelSize,
           _ref15$blur = _ref15.blur,
@@ -3485,17 +3480,17 @@
       _this22.lightSource.material.transparent = true;
       _this22.lightScene = new three.Scene();
       _this22.screenPosition = new three.Vector2();
-      _this22.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+      _this22.renderTargetA = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this22.renderTargetX.texture.name = "GodRays.TargetX";
-      _this22.renderTargetY = _this22.renderTargetX.clone();
-      _this22.renderTargetY.texture.name = "GodRays.TargetY";
-      _this22.uniforms.get("texture").value = _this22.renderTargetY.texture;
-      _this22.renderTargetLight = _this22.renderTargetX.clone();
+      _this22.renderTargetA.texture.name = "GodRays.TargetX";
+      _this22.renderTargetB = _this22.renderTargetA.clone();
+      _this22.renderTargetB.texture.name = "GodRays.TargetY";
+      _this22.uniforms.get("texture").value = _this22.renderTargetB.texture;
+      _this22.renderTargetLight = _this22.renderTargetA.clone();
       _this22.renderTargetLight.texture.name = "GodRays.Light";
       _this22.renderTargetLight.depthBuffer = true;
       _this22.renderTargetLight.depthTexture = new three.DepthTexture();
@@ -3508,6 +3503,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this22.blurPass.resolution.resizable = _assertThisInitialized(_this22);
       _this22.depthMaskPass = new ShaderPass(function (depthTexture) {
         var material = new DepthMaskMaterial();
         material.uniforms.depthBuffer1.value = depthTexture;
@@ -3530,14 +3526,13 @@
     _createClass(GodRaysEffect, [{
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var originalSize = this.blurPass.getOriginalSize();
-        this.blurPass.setResolutionScale(scale);
-        this.setSize(originalSize.x, originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setDepthTexture",
@@ -3553,7 +3548,7 @@
         var lightSource = this.lightSource;
         var parent = lightSource.parent;
         var matrixAutoUpdate = lightSource.matrixAutoUpdate;
-        var renderTargetX = this.renderTargetX;
+        var renderTargetA = this.renderTargetA;
         var renderTargetLight = this.renderTargetLight;
 
         if (!matrixAutoUpdate) {
@@ -3566,8 +3561,8 @@
         lightSource.matrix.copy(lightSource.matrixWorld);
         this.lightScene.add(lightSource);
         this.renderPassLight.render(renderer, renderTargetLight);
-        this.clearPass.render(renderer, renderTargetX);
-        this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
+        this.clearPass.render(renderer, renderTargetA);
+        this.depthMaskPass.render(renderer, renderTargetLight, renderTargetA);
         lightSource.material.depthWrite = false;
         lightSource.matrixAutoUpdate = matrixAutoUpdate;
 
@@ -3583,10 +3578,10 @@
         this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
 
         if (this.blur) {
-          this.blurPass.render(renderer, renderTargetX, renderTargetX);
+          this.blurPass.render(renderer, renderTargetA, renderTargetA);
         }
 
-        this.godRaysPass.render(renderer, renderTargetX, this.renderTargetY);
+        this.godRaysPass.render(renderer, renderTargetA, this.renderTargetB);
       }
     }, {
       key: "setSize",
@@ -3595,10 +3590,10 @@
         this.renderPassLight.setSize(width, height);
         this.depthMaskPass.setSize(width, height);
         this.godRaysPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
-        this.renderTargetX.setSize(width, height);
-        this.renderTargetY.setSize(width, height);
+        width = this.resolution.width;
+        height = this.resolution.height;
+        this.renderTargetA.setSize(width, height);
+        this.renderTargetB.setSize(width, height);
         this.renderTargetLight.setSize(width, height);
       }
     }, {
@@ -3610,15 +3605,15 @@
         this.godRaysPass.initialize(renderer, alpha);
 
         if (!alpha) {
-          this.renderTargetX.texture.format = three.RGBFormat;
-          this.renderTargetY.texture.format = three.RGBFormat;
+          this.renderTargetA.texture.format = three.RGBFormat;
+          this.renderTargetB.texture.format = three.RGBFormat;
           this.renderTargetLight.texture.format = three.RGBFormat;
         }
       }
     }, {
       key: "texture",
       get: function get() {
-        return this.renderTargetY.texture;
+        return this.renderTargetB.texture;
       }
     }, {
       key: "godRaysMaterial",
@@ -3626,28 +3621,25 @@
         return this.godRaysPass.getFullscreenMaterial();
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTargetX.setSize(blurPass.width, blurPass.height);
-        this.renderTargetY.setSize(blurPass.width, blurPass.height);
-        this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTargetX.setSize(blurPass.width, blurPass.height);
-        this.renderTargetY.setSize(blurPass.width, blurPass.height);
-        this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+        this.resolution.height = value;
       }
     }, {
       key: "dithering",
@@ -3853,9 +3845,9 @@
           _ref19$resolutionScal = _ref19.resolutionScale,
           resolutionScale = _ref19$resolutionScal === void 0 ? 0.5 : _ref19$resolutionScal,
           _ref19$width = _ref19.width,
-          width = _ref19$width === void 0 ? BlurPass.AUTO_SIZE : _ref19$width,
+          width = _ref19$width === void 0 ? Resizer.AUTO_SIZE : _ref19$width,
           _ref19$height = _ref19.height,
-          height = _ref19$height === void 0 ? BlurPass.AUTO_SIZE : _ref19$height,
+          height = _ref19$height === void 0 ? Resizer.AUTO_SIZE : _ref19$height,
           _ref19$kernelSize = _ref19.kernelSize,
           kernelSize = _ref19$kernelSize === void 0 ? KernelSize.VERY_SMALL : _ref19$kernelSize,
           _ref19$blur = _ref19.blur,
@@ -3920,6 +3912,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this26.blurPass.resolution.resizable = _assertThisInitialized(_this26);
       _this26.blur = blur;
       _this26.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
       _this26.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = _this26.renderTargetMask.texture;
@@ -3948,15 +3941,13 @@
     }, {
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var originalSize = this.blurPass.getOriginalSize();
-        this.blurPass.setResolutionScale(scale);
-        this.depthPass.setResolutionScale(scale);
-        this.setSize(originalSize.x, originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setSelection",
@@ -4021,11 +4012,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.renderTargetMask.setSize(width, height);
-        this.depthPass.setSize(width, height);
         this.blurPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
+        this.renderTargetMask.setSize(width, height);
+        width = this.resolution.width;
+        height = this.resolution.height;
+        this.depthPass.setSize(width, height);
         this.renderTargetEdges.setSize(width, height);
         this.renderTargetBlurredEdges.setSize(width, height);
         this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
@@ -4038,28 +4029,25 @@
         this.maskPass.initialize(renderer, alpha);
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-        this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-        this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-        this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-        this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+        this.resolution.height = value;
       }
     }, {
       key: "selectionLayer",
@@ -4473,14 +4461,12 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        var blurPass = this.blurPass;
-
         _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "setSize", this).call(this, width, height);
 
         this.backgroundPass.setSize(width, height);
         this.blackoutPass.setSize(width, height);
         this.renderPass.setSize(width, height);
-        this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+        this.renderTargetSelection.setSize(this.resolution.width, this.resolution.height);
       }
     }, {
       key: "initialize",
@@ -4494,26 +4480,6 @@
         if (!alpha) {
           this.renderTargetSelection.texture.format = three.RGBFormat;
         }
-      }
-    }, {
-      key: "width",
-      get: function get() {
-        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", this);
-      },
-      set: function set(value) {
-        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", value, this, true);
-
-        this.renderTargetSelection.setSize(this.width, this.height);
-      }
-    }, {
-      key: "height",
-      get: function get() {
-        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", this);
-      },
-      set: function set(value) {
-        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", value, this, true);
-
-        this.renderTargetSelection.setSize(this.width, this.height);
       }
     }, {
       key: "ignoreBackground",
@@ -4716,7 +4682,7 @@
     HIGH: 2,
     ULTRA: 3
   };
-  var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float proximity=abs(depth-sampleDepth);if(sampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,getViewZ(sampleDepth));occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;if(depth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,getViewZ(depth));vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,depth,uv);float l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,max(l*luminanceInfluence,smoothstep(distanceCutoff.x,distanceCutoff.y,depth)));}outputColor=vec4(vec3(ao),inputColor.a);}";
+  var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(linearSampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,viewZ);occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,uv);float l=linearToRelativeLuminance(inputColor.rgb);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);float f=max(l*luminanceInfluence,d);ao=mix(ao,1.0,f);}outputColor=vec4(vec3(ao),inputColor.a);}";
 
   var SSAOEffect = function (_Effect22) {
     _inherits(SSAOEffect, _Effect22);
@@ -4732,13 +4698,13 @@
           _ref24$rings = _ref24.rings,
           rings = _ref24$rings === void 0 ? 4 : _ref24$rings,
           _ref24$distanceThresh = _ref24.distanceThreshold,
-          distanceThreshold = _ref24$distanceThresh === void 0 ? 0.65 : _ref24$distanceThresh,
+          distanceThreshold = _ref24$distanceThresh === void 0 ? 0.97 : _ref24$distanceThresh,
           _ref24$distanceFallof = _ref24.distanceFalloff,
-          distanceFalloff = _ref24$distanceFallof === void 0 ? 0.1 : _ref24$distanceFallof,
+          distanceFalloff = _ref24$distanceFallof === void 0 ? 0.03 : _ref24$distanceFallof,
           _ref24$rangeThreshold = _ref24.rangeThreshold,
-          rangeThreshold = _ref24$rangeThreshold === void 0 ? 0.0015 : _ref24$rangeThreshold,
+          rangeThreshold = _ref24$rangeThreshold === void 0 ? 0.0005 : _ref24$rangeThreshold,
           _ref24$rangeFalloff = _ref24.rangeFalloff,
-          rangeFalloff = _ref24$rangeFalloff === void 0 ? 0.01 : _ref24$rangeFalloff,
+          rangeFalloff = _ref24$rangeFalloff === void 0 ? 0.001 : _ref24$rangeFalloff,
           _ref24$luminanceInflu = _ref24.luminanceInfluence,
           luminanceInfluence = _ref24$luminanceInflu === void 0 ? 0.7 : _ref24$luminanceInflu,
           _ref24$radius = _ref24.radius,
@@ -4746,7 +4712,7 @@
           _ref24$scale = _ref24.scale,
           scale = _ref24$scale === void 0 ? 1.0 : _ref24$scale,
           _ref24$bias = _ref24.bias,
-          bias = _ref24$bias === void 0 ? 0.5 : _ref24$bias;
+          bias = _ref24$bias === void 0 ? 0.0 : _ref24$bias;
 
       _classCallCheck(this, SSAOEffect);
 
@@ -4784,12 +4750,12 @@
     }, {
       key: "setDistanceCutoff",
       value: function setDistanceCutoff(threshold, falloff) {
-        this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+        this.uniforms.get("distanceCutoff").value.set(Math.min(Math.max(threshold, 0.0), 1.0), Math.min(Math.max(threshold + falloff, 0.0), 1.0));
       }
     }, {
       key: "setProximityCutoff",
       value: function setProximityCutoff(threshold, falloff) {
-        this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+        this.uniforms.get("proximityCutoff").value.set(Math.min(Math.max(threshold, 0.0), 1.0), Math.min(Math.max(threshold + falloff, 0.0), 1.0));
       }
     }, {
       key: "setSize",
@@ -5748,6 +5714,7 @@
   exports.RealisticBokehEffect = RealisticBokehEffect;
   exports.RenderPass = RenderPass;
   exports.Resizable = Resizable;
+  exports.Resizer = Resizer;
   exports.SMAAAreaImageData = SMAAAreaImageData;
   exports.SMAAEffect = SMAAEffect;
   exports.SMAAPreset = SMAAPreset;

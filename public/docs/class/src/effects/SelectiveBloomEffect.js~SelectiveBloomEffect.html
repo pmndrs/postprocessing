@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -199,64 +200,6 @@ using the <span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">Bloo
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-height">height</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The current height of the internal render targets.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-height">height</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the render height.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-ignoreBackground">ignoreBackground</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
@@ -351,64 +294,6 @@ using the <span><a href="class/src/effects/BloomEffect.js~BloomEffect.html">Bloo
         
         
         <div data-ice="description"><p>A selection of objects.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">get</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-get-width">width</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The current width of the internal render targets.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      <span class="kind" data-ice="kind">set</span>
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
-          <span class="code" data-ice="name"><span><a href="class/src/effects/SelectiveBloomEffect.js~SelectiveBloomEffect.html#instance-set-width">width</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>Sets the render width.</p>
 </div>
       </div>
     </td>
@@ -1036,7 +921,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -1065,7 +950,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>Sets the render height.</p>
 </div>
@@ -1176,6 +1061,35 @@ deletes them.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The resolution of this effect.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-texture">texture</a></span></span><span class="code" data-ice="signature">: <span>Texture</span></span>
         </p>
       </div>
@@ -1209,7 +1123,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -1238,7 +1152,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>Sets the render width.</p>
 </div>
@@ -1325,7 +1239,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -1383,7 +1297,7 @@ deletes them.</p>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -1539,96 +1453,6 @@ deletes them.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-height">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">height</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber176">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The current height of the internal render targets.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-height">BloomEffect#height</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-height">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">height</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber191">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the render height.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render width and aspect ratio.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-height">BloomEffect#height</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-ignoreBackground">
     <span class="access" data-ice="access">public</span>
     
@@ -1640,7 +1464,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
@@ -1684,7 +1508,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber217">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber159">source</a></span></span>
     </span>
   </h3>
 
@@ -1804,96 +1628,6 @@ render width and aspect ratio.</p>
   
   
 </div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-width">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">get</span>
-    
-    
-    
-    <span class="code" data-ice="name">width</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber147">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>The current width of the internal render targets.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-width">BloomEffect#width</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-width">
-    <span class="access" data-ice="access">public</span>
-    
-    <span class="kind" data-ice="kind">set</span>
-    
-    
-    
-    <span class="code" data-ice="name">width</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber162">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  <div data-ice="description"><p>Sets the render width.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render height and aspect ratio.</p>
-</div>
-
-  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-width">BloomEffect#width</a></span></div>
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
 </div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
@@ -1909,7 +1643,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber306">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1977,7 +1711,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber285">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber227">source</a></span></span>
     </span>
   </h3>
 
@@ -2045,7 +1779,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber231">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SelectiveBloomEffect.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 

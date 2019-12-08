@@ -30,6 +30,7 @@
   <ul>
     
   <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#core">core</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/Selection.js~Selection.html">Selection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Disposable.js~Disposable.html">Disposable</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-interface">I</span><span data-ice="name"><span><a href="class/src/core/Initializable.js~Initializable.html">Initializable</a></span></span></li>
@@ -99,13 +100,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BloomEffect} from &apos;<span><a href="file/src/effects/BloomEffect.js.html#lineNumber22">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BloomEffect} from &apos;<span><a href="file/src/effects/BloomEffect.js.html#lineNumber23">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/BloomEffect.js.html#lineNumber22">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/BloomEffect.js.html#lineNumber23">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -343,7 +344,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -372,7 +373,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
         
         <div data-ice="description"><p>Sets the render height.</p>
 </div>
@@ -512,6 +513,35 @@ to blur bright highlights.</p>
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-resolution">resolution</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The resolution of this effect.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-texture">texture</a></span></span><span class="code" data-ice="signature">: <span>Texture</span></span>
         </p>
       </div>
@@ -545,7 +575,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -574,7 +604,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
         
         <div data-ice="description"><p>Sets the render width.</p>
 </div>
@@ -610,7 +640,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -668,7 +698,7 @@ to blur bright highlights.</p>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+        <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
         
         <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -1143,7 +1173,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber37">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber38">source</a></span></span>
     </span>
   </h3>
 
@@ -1206,7 +1236,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.width</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render width.</p>
 </td>
     </tr>
@@ -1214,7 +1244,7 @@ deletes them.</p>
       <td data-ice="name" class="code" data-depth="1">options.height</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
-<li>default: BlurPass.AUTO_SIZE</li></ul></td>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
       <td data-ice="description"><p>The render height.</p>
 </td>
     </tr>
@@ -1263,7 +1293,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber83">source</a></span></span>
     </span>
   </h3>
 
@@ -1271,8 +1301,6 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>A blur pass.</p>
-<p>Do not adjust the width or height of this pass directly. Use
-<span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-width">width</a></span> or <span><a href="class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-height">height</a></span> instead.</p>
 </div>
 
   
@@ -1309,7 +1337,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber247">source</a></span></span>
     </span>
   </h3>
 
@@ -1352,7 +1380,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber253">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber260">source</a></span></span>
     </span>
   </h3>
 
@@ -1395,7 +1423,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber192">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber199">source</a></span></span>
     </span>
   </h3>
 
@@ -1439,7 +1467,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber205">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber212">source</a></span></span>
     </span>
   </h3>
 
@@ -1483,12 +1511,12 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber163">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber173">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>The current height of the internal render targets.</p>
 </div>
@@ -1527,16 +1555,14 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber178">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber186">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.height instead.</div>
   
   <div data-ice="description"><p>Sets the render height.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render width and aspect ratio.</p>
 </div>
 
   
@@ -1573,7 +1599,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber218">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -1617,7 +1643,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber229">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -1660,7 +1686,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber123">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber122">source</a></span></span>
     </span>
   </h3>
 
@@ -1704,7 +1730,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber95">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber94">source</a></span></span>
     </span>
   </h3>
 
@@ -1713,6 +1739,50 @@ render width and aspect ratio.</p>
   
   <div data-ice="description"><p>A luminance shader pass.</p>
 <p>You may disable this pass to deactivate luminance filtering.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-resolution">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">resolution</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizer.js~Resizer.html">Resizer</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber134">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The resolution of this effect.</p>
 </div>
 
   
@@ -1749,7 +1819,7 @@ render width and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber111">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber110">source</a></span></span>
     </span>
   </h3>
 
@@ -1795,12 +1865,12 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber135">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber147">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>The current width of the internal render targets.</p>
 </div>
@@ -1839,16 +1909,14 @@ is set to <code>SKIP</code>.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber150">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber160">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use resolution.width instead.</div>
   
   <div data-ice="description"><p>Sets the render width.</p>
-<p>Use <span><a href="class/src/passes/BlurPass.js~BlurPass.html#static-get-AUTO_SIZE">BlurPass.AUTO_SIZE</a></span> to activate automatic sizing based on the
-render height and aspect ratio.</p>
 </div>
 
   
@@ -1888,12 +1956,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber273">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Returns the current resolution scale.</p>
 </div>
@@ -1945,7 +2013,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber334">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber339">source</a></span></span>
     </span>
   </h3>
 
@@ -2013,12 +2081,12 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber279">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber286">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the width or height instead.</div>
+  <div class="deprecated" data-ice="deprecated">this method was deprecated. Adjust the fixed resolution width or height instead.</div>
   
   <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
@@ -2074,7 +2142,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber319">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber325">source</a></span></span>
     </span>
   </h3>
 
@@ -2142,7 +2210,7 @@ render height and aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber295">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/BloomEffect.js.html#lineNumber301">source</a></span></span>
     </span>
   </h3>
 

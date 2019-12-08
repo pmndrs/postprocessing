@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <base data-ice="baseUrl" href="../../../">
-  <title data-ice="title">DepthComparisonMaterial | postprocessing</title>
+  <title data-ice="title">Resizer | postprocessing</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -100,23 +100,23 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {DepthComparisonMaterial} from &apos;<span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber10">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {Resizer} from &apos;<span><a href="file/src/core/Resizer.js.html#lineNumber16">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber10">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/core/Resizer.js.html#lineNumber16">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
-  <h1 data-ice="name">DepthComparisonMaterial</h1>
+  <h1 data-ice="name">Resizer</h1>
 
   
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>three~ShaderMaterial</span> &#x2192; DepthComparisonMaterial</div></div>
+  
   
   
   
@@ -126,7 +126,7 @@
 
   
   
-  <div class="description" data-ice="description"><p>A depth comparison shader material.</p>
+  <div class="description" data-ice="description"><p>A resizer.</p>
 </div>
   
 
@@ -139,7 +139,42 @@
   
 </div>
 
-
+<div data-ice="staticMemberSummary"><h2>Static Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Static Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      <span data-ice="static">static</span>
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">AUTO_SIZE</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>An auto sizing constant.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 
 <div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
@@ -159,13 +194,13 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, camera: <span>PerspectiveCamera</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Constructs a new depth comparison material.</p>
+        <div data-ice="description"><p>Constructs a new resizer.</p>
 </div>
       </div>
     </td>
@@ -177,9 +212,8 @@
 </tbody>
 </table>
 </div>
-
-<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
-  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
   <tbody>
   
   <tr data-ice="target">
@@ -196,13 +230,187 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-method-adoptCameraSettings">adoptCameraSettings</a></span></span><span class="code" data-ice="signature">(camera: <span>Camera</span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-member-base">base</a></span></span><span class="code" data-ice="signature">: <span>Vector2</span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Adopts the settings of the given camera.</p>
+        <div data-ice="description"><p>The base size.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-get-height">height</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The calculated height.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-set-height">height</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the target height.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-member-resizable">resizable</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>A resizable object.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-member-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        <div class="deprecated" data-ice="deprecated">this member was deprecated. Added for internal use only.</div>
+        
+        <div data-ice="description"><p>A scale.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-get-width">width</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The calculated width.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-set-width">width</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the target width.</p>
 </div>
       </div>
     </td>
@@ -218,6 +426,55 @@
 
 
 
+<div data-ice="staticMemberDetails"><h2 data-ice="title">Static Public Members</h2>
+
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-get-AUTO_SIZE">
+    <span class="access" data-ice="access">public</span>
+    <span data-ice="static">static</span>
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">AUTO_SIZE</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber179">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>An auto sizing constant.</p>
+<p>Can be used to automatically calculate the width or height based on the
+original aspect ratio.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 
 <div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
 
@@ -229,18 +486,18 @@
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(depthTexture: <span>Texture</span>, camera: <span>PerspectiveCamera</span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber19">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber26">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Constructs a new depth comparison material.</p>
+  <div data-ice="description"><p>Constructs a new resizer.</p>
 </div>
 
   
@@ -254,18 +511,26 @@
     <tbody>
     
     <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">depthTexture</td>
-      <td data-ice="type" class="code"><span>Texture</span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>A depth texture.</p>
+      <td data-ice="name" class="code" data-depth="0">resizeable</td>
+      <td data-ice="type" class="code"><span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A resizable object.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">camera</td>
-      <td data-ice="type" class="code"><span>PerspectiveCamera</span></td>
-      <td data-ice="appendix"><ul><li>optional</li></ul></td>
-      <td data-ice="description"><p>A camera.</p>
+      <td data-ice="name" class="code" data-depth="0">width</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
+      <td data-ice="description"><p>The width.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">height</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: Resizer.AUTO_SIZE</li></ul></td>
+      <td data-ice="description"><p>The height.</p>
 </td>
     </tr>
 </tbody>
@@ -291,72 +556,330 @@
   
 </div>
 </div>
-
-<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-method-adoptCameraSettings">
+  <h3 data-ice="anchor" id="instance-member-base">
     <span class="access" data-ice="access">public</span>
     
     
     
     
     
-    <span class="code" data-ice="name">adoptCameraSettings</span><span class="code" data-ice="signature">(camera: <span>Camera</span>)</span>
+    <span class="code" data-ice="name">base</span><span class="code" data-ice="signature">: <span>Vector2</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/DepthComparisonMaterial.js.html#lineNumber54">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber45">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Adopts the settings of the given camera.</p>
+  <div data-ice="description"><p>The base size.</p>
+<p>This size will be passed to the resizable object every time the width or
+height is changed.</p>
 </div>
 
   
 
-  <div data-ice="properties"><div data-ice="properties">
-  <h4 data-ice="title">Params:</h4>
-  <table class="params">
-    <thead>
-    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
-    </thead>
-    <tbody>
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-height">
+    <span class="access" data-ice="access">public</span>
     
-    <tr data-ice="property" data-depth="0">
-      <td data-ice="name" class="code" data-depth="0">camera</td>
-      <td data-ice="type" class="code"><span>Camera</span></td>
-      <td data-ice="appendix"><ul><li>optional</li>
-<li>default: null</li></ul></td>
-      <td data-ice="description"><p>A camera.</p>
-</td>
-    </tr>
-</tbody>
-  </table>
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">height</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber129">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The calculated height.</p>
+<p>If both the width and the height are set to <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span>, the
+base height will be returned.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-height">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">height</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber163">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the target height.</p>
+<p>Use <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span> to automatically calculate the height based
+on the width and the original aspect ratio.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-resizable">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">resizable</span><span class="code" data-ice="signature">: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber34">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>A resizable object.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-member-scale">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber66">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  <div class="deprecated" data-ice="deprecated">this member was deprecated. Added for internal use only.</div>
+  
+  <div data-ice="description"><p>A scale.</p>
+<p>If both the width and the height are set to <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span>,
+they will be scaled uniformly using this scalar.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-width">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">width</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber79">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The calculated width.</p>
+<p>If both the width and the height are set to <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span>, the
+base width will be returned.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-width">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">width</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber113">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the target width.</p>
+<p>Use <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span> to automatically calculate the width based
+on the height and the original aspect ratio.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
 </div>
 </div>
 
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-</div>
 </div>
 
 <footer class="footer">

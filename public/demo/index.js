@@ -39,21 +39,6 @@
     return Constructor;
   }
 
-  function _defineProperty(obj, key, value) {
-    if (key in obj) {
-      Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-      });
-    } else {
-      obj[key] = value;
-    }
-
-    return obj;
-  }
-
   function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
@@ -197,56 +182,6 @@
     }
 
     return _get(target, property, receiver || target);
-  }
-
-  function set(target, property, value, receiver) {
-    if (typeof Reflect !== "undefined" && Reflect.set) {
-      set = Reflect.set;
-    } else {
-      set = function set(target, property, value, receiver) {
-        var base = _superPropBase(target, property);
-
-        var desc;
-
-        if (base) {
-          desc = Object.getOwnPropertyDescriptor(base, property);
-
-          if (desc.set) {
-            desc.set.call(receiver, value);
-            return true;
-          } else if (!desc.writable) {
-            return false;
-          }
-        }
-
-        desc = Object.getOwnPropertyDescriptor(receiver, property);
-
-        if (desc) {
-          if (!desc.writable) {
-            return false;
-          }
-
-          desc.value = value;
-          Object.defineProperty(receiver, property, desc);
-        } else {
-          _defineProperty(receiver, property, value);
-        }
-
-        return true;
-      };
-    }
-
-    return set(target, property, value, receiver);
-  }
-
-  function _set(target, property, value, receiver, isStrict) {
-    var s = set(target, property, value, receiver || target);
-
-    if (!s && isStrict) {
-      throw new Error('failed to set property');
-    }
-
-    return value;
   }
 
   function _toConsumableArray(arr) {
@@ -3721,7 +3656,7 @@
     return DepthMaskMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
+  var fragmentTemplate = "#include <common>\n#include <packing>\n#include <dithering_pars_fragment>\nuniform sampler2D inputBuffer;uniform sampler2D depthBuffer;uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}FRAGMENT_HEADvoid main(){FRAGMENT_MAIN_UVvec4 color0=texture2D(inputBuffer,UV);vec4 color1=vec4(0.0);FRAGMENT_MAIN_IMAGEgl_FragColor=color0;\n#include <dithering_fragment>\n}";
   var vertexTemplate = "uniform vec2 resolution;uniform vec2 texelSize;uniform float cameraNear;uniform float cameraFar;uniform float aspect;uniform float time;varying vec2 vUv;VERTEX_HEADvoid main(){vUv=position.xy*0.5+0.5;VERTEX_MAIN_SUPPORTgl_Position=vec4(position.xy,1.0,1.0);}";
 
   var EffectMaterial = function (_ShaderMaterial7) {
@@ -4167,6 +4102,73 @@
     return SMAAWeightsMaterial;
   }(three.ShaderMaterial);
 
+  var AUTO_SIZE = -1;
+
+  var Resizer = function () {
+    function Resizer(resizable) {
+      var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : AUTO_SIZE;
+      var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : AUTO_SIZE;
+
+      _classCallCheck(this, Resizer);
+
+      this.resizable = resizable;
+      this.base = new three.Vector2(1, 1);
+      this.target = new three.Vector2(width, height);
+      this.scale = 1.0;
+    }
+
+    _createClass(Resizer, [{
+      key: "width",
+      get: function get() {
+        var base = this.base;
+        var target = this.target;
+        var result;
+
+        if (target.x !== AUTO_SIZE) {
+          result = target.x;
+        } else if (target.y !== AUTO_SIZE) {
+          result = Math.round(target.y * (base.x / base.y));
+        } else {
+          result = Math.round(base.x * this.scale);
+        }
+
+        return result;
+      },
+      set: function set(value) {
+        this.target.x = value;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }, {
+      key: "height",
+      get: function get() {
+        var base = this.base;
+        var target = this.target;
+        var result;
+
+        if (target.y !== AUTO_SIZE) {
+          result = target.y;
+        } else if (target.x !== AUTO_SIZE) {
+          result = Math.round(target.x / (base.x / base.y));
+        } else {
+          result = Math.round(base.y * this.scale);
+        }
+
+        return result;
+      },
+      set: function set(value) {
+        this.target.y = value;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }], [{
+      key: "AUTO_SIZE",
+      get: function get() {
+        return AUTO_SIZE;
+      }
+    }]);
+
+    return Resizer;
+  }();
+
   var geometry = null;
 
   function getFullscreenTriangle() {
@@ -4271,8 +4273,6 @@
     return Pass;
   }();
 
-  var AUTO_SIZE = -1;
-
   var BlurPass = function (_Pass) {
     _inherits(BlurPass, _Pass);
 
@@ -4283,27 +4283,26 @@
           _ref4$resolutionScale = _ref4.resolutionScale,
           resolutionScale = _ref4$resolutionScale === void 0 ? 0.5 : _ref4$resolutionScale,
           _ref4$width = _ref4.width,
-          width = _ref4$width === void 0 ? AUTO_SIZE : _ref4$width,
+          width = _ref4$width === void 0 ? Resizer.AUTO_SIZE : _ref4$width,
           _ref4$height = _ref4.height,
-          height = _ref4$height === void 0 ? AUTO_SIZE : _ref4$height,
+          height = _ref4$height === void 0 ? Resizer.AUTO_SIZE : _ref4$height,
           _ref4$kernelSize = _ref4.kernelSize,
           kernelSize = _ref4$kernelSize === void 0 ? KernelSize.LARGE : _ref4$kernelSize;
 
       _classCallCheck(this, BlurPass);
 
       _this12 = _possibleConstructorReturn(this, _getPrototypeOf(BlurPass).call(this, "BlurPass"));
-      _this12.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+      _this12.renderTargetA = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this12.renderTargetX.texture.name = "Blur.TargetX";
-      _this12.renderTargetY = _this12.renderTargetX.clone();
-      _this12.renderTargetY.texture.name = "Blur.TargetY";
-      _this12.originalSize = new three.Vector2();
-      _this12.resolution = new three.Vector2(width, height);
-      _this12.resolutionScale = resolutionScale;
+      _this12.renderTargetA.texture.name = "Blur.TargetA";
+      _this12.renderTargetB = _this12.renderTargetA.clone();
+      _this12.renderTargetB.texture.name = "Blur.TargetB";
+      _this12.resolution = new Resizer(_assertThisInitialized(_this12), width, height);
+      _this12.resolution.scale = resolutionScale;
       _this12.convolutionMaterial = new ConvolutionMaterial();
       _this12.ditheredConvolutionMaterial = new ConvolutionMaterial();
       _this12.ditheredConvolutionMaterial.dithering = true;
@@ -4313,28 +4312,23 @@
     }
 
     _createClass(BlurPass, [{
-      key: "getOriginalSize",
-      value: function getOriginalSize() {
-        return this.originalSize;
-      }
-    }, {
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.resolutionScale;
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        this.resolutionScale = scale;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "render",
       value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
         var scene = this.scene;
         var camera = this.camera;
-        var renderTargetX = this.renderTargetX;
-        var renderTargetY = this.renderTargetY;
+        var renderTargetA = this.renderTargetA;
+        var renderTargetB = this.renderTargetB;
         var material = this.convolutionMaterial;
         var uniforms = material.uniforms;
         var kernel = material.getKernel();
@@ -4344,7 +4338,7 @@
         this.setFullscreenMaterial(material);
 
         for (i = 0, l = kernel.length - 1; i < l; ++i) {
-          destRT = i % 2 === 0 ? renderTargetX : renderTargetY;
+          destRT = (i & 1) === 0 ? renderTargetA : renderTargetB;
           uniforms.kernel.value = kernel[i];
           uniforms.inputBuffer.value = lastRT.texture;
           renderer.setRenderTarget(destRT);
@@ -4367,25 +4361,11 @@
       key: "setSize",
       value: function setSize(width, height) {
         var resolution = this.resolution;
-        var aspect = width / height;
-        this.originalSize.set(width, height);
-
-        if (resolution.x !== AUTO_SIZE && resolution.y !== AUTO_SIZE) {
-          width = Math.max(1, resolution.x);
-          height = Math.max(1, resolution.y);
-        } else if (resolution.x !== AUTO_SIZE) {
-          width = Math.max(1, resolution.x);
-          height = Math.round(Math.max(1, resolution.y) / aspect);
-        } else if (resolution.y !== AUTO_SIZE) {
-          width = Math.round(Math.max(1, resolution.y) * aspect);
-          height = Math.max(1, resolution.y);
-        } else {
-          width = Math.max(1, Math.round(width * this.resolutionScale));
-          height = Math.max(1, Math.round(height * this.resolutionScale));
-        }
-
-        this.renderTargetX.setSize(width, height);
-        this.renderTargetY.setSize(width, height);
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTargetA.setSize(width, height);
+        this.renderTargetB.setSize(width, height);
         this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
         this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
       }
@@ -4393,27 +4373,25 @@
       key: "initialize",
       value: function initialize(renderer, alpha) {
         if (!alpha) {
-          this.renderTargetX.texture.format = three.RGBFormat;
-          this.renderTargetY.texture.format = three.RGBFormat;
+          this.renderTargetA.texture.format = three.RGBFormat;
+          this.renderTargetB.texture.format = three.RGBFormat;
         }
       }
     }, {
       key: "width",
       get: function get() {
-        return this.renderTargetX.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        this.resolution.x = value;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.renderTargetX.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        this.resolution.y = value;
-        this.setSize(this.originalSize.x, this.originalSize.y);
+        this.resolution.height = value;
       }
     }, {
       key: "scale",
@@ -4436,7 +4414,7 @@
     }], [{
       key: "AUTO_SIZE",
       get: function get() {
-        return AUTO_SIZE;
+        return Resizer.AUTO_SIZE;
       }
     }]);
 
@@ -4599,6 +4577,10 @@
       var _ref5 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref5$resolutionScale = _ref5.resolutionScale,
           resolutionScale = _ref5$resolutionScale === void 0 ? 1.0 : _ref5$resolutionScale,
+          _ref5$width = _ref5.width,
+          width = _ref5$width === void 0 ? Resizer.AUTO_SIZE : _ref5$width,
+          _ref5$height = _ref5.height,
+          height = _ref5$height === void 0 ? Resizer.AUTO_SIZE : _ref5$height,
           renderTarget = _ref5.renderTarget;
 
       _classCallCheck(this, DepthPass);
@@ -4626,8 +4608,8 @@
         _this16.renderTarget.texture.name = "DepthPass.Target";
       }
 
-      _this16.resolutionScale = resolutionScale;
-      _this16.originalSize = new three.Vector2();
+      _this16.resolution = new Resizer(_assertThisInitialized(_this16), width, height);
+      _this16.resolution.scale = resolutionScale;
       return _this16;
     }
 
@@ -4651,8 +4633,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.originalSize.set(width, height);
-        this.renderTarget.setSize(Math.max(1, Math.round(width * this.resolutionScale)), Math.max(1, Math.round(height * this.resolutionScale)));
+        var resolution = this.resolution;
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTarget.setSize(width, height);
       }
     }]);
 
@@ -5387,6 +5372,10 @@
       var _ref7 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref7$resolutionScale = _ref7.resolutionScale,
           resolutionScale = _ref7$resolutionScale === void 0 ? 1.0 : _ref7$resolutionScale,
+          _ref7$width = _ref7.width,
+          width = _ref7$width === void 0 ? Resizer.AUTO_SIZE : _ref7$width,
+          _ref7$height = _ref7.height,
+          height = _ref7$height === void 0 ? Resizer.AUTO_SIZE : _ref7$height,
           renderTarget = _ref7.renderTarget;
 
       _classCallCheck(this, NormalPass);
@@ -5395,6 +5384,7 @@
       _this19.needsSwap = false;
       _this19.renderPass = new RenderPass(scene, camera, new three.MeshNormalMaterial({
         morphTargets: true,
+        morphNormals: true,
         skinning: true
       }));
 
@@ -5414,8 +5404,8 @@
         _this19.renderTarget.texture.name = "NormalPass.Target";
       }
 
-      _this19.resolutionScale = resolutionScale;
-      _this19.originalSize = new three.Vector2();
+      _this19.resolution = new Resizer(_assertThisInitialized(_this19), width, height);
+      _this19.resolution.scale = resolutionScale;
       return _this19;
     }
 
@@ -5439,8 +5429,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.originalSize.set(width, height);
-        this.renderTarget.setSize(Math.max(1, Math.round(width * this.resolutionScale)), Math.max(1, Math.round(height * this.resolutionScale)));
+        var resolution = this.resolution;
+        resolution.base.set(width, height);
+        width = resolution.width;
+        height = resolution.height;
+        this.renderTarget.setSize(width, height);
       }
     }]);
 
@@ -6074,9 +6067,9 @@
           _ref9$resolutionScale = _ref9.resolutionScale,
           resolutionScale = _ref9$resolutionScale === void 0 ? 0.5 : _ref9$resolutionScale,
           _ref9$width = _ref9.width,
-          width = _ref9$width === void 0 ? BlurPass.AUTO_SIZE : _ref9$width,
+          width = _ref9$width === void 0 ? Resizer.AUTO_SIZE : _ref9$width,
           _ref9$height = _ref9.height,
-          height = _ref9$height === void 0 ? BlurPass.AUTO_SIZE : _ref9$height,
+          height = _ref9$height === void 0 ? Resizer.AUTO_SIZE : _ref9$height,
           _ref9$kernelSize = _ref9.kernelSize,
           kernelSize = _ref9$kernelSize === void 0 ? KernelSize.LARGE : _ref9$kernelSize;
 
@@ -6101,6 +6094,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this23.blurPass.resolution.resizable = _assertThisInitialized(_this23);
       _this23.luminancePass = new ShaderPass(new LuminanceMaterial(true));
       _this23.luminanceMaterial.threshold = luminanceThreshold;
       _this23.luminanceMaterial.smoothing = luminanceSmoothing;
@@ -6110,14 +6104,13 @@
     _createClass(BloomEffect, [{
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var blurPass = this.blurPass;
-        blurPass.setResolutionScale(scale);
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "update",
@@ -6134,9 +6127,8 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        var blurPass = this.blurPass;
-        blurPass.setSize(width, height);
-        this.renderTarget.setSize(blurPass.width, blurPass.height);
+        this.blurPass.setSize(width, height);
+        this.renderTarget.setSize(this.resolution.width, this.resolution.height);
       }
     }, {
       key: "initialize",
@@ -6158,22 +6150,25 @@
         return this.luminancePass.getFullscreenMaterial();
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        this.blurPass.width = value;
-        this.renderTarget.setSize(this.width, this.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        this.blurPass.height = value;
-        this.renderTarget.setSize(this.width, this.height);
+        this.resolution.height = value;
       }
     }, {
       key: "dithering",
@@ -6655,9 +6650,9 @@
           _ref18$resolutionScal = _ref18.resolutionScale,
           resolutionScale = _ref18$resolutionScal === void 0 ? 0.5 : _ref18$resolutionScal,
           _ref18$width = _ref18.width,
-          width = _ref18$width === void 0 ? BlurPass.AUTO_SIZE : _ref18$width,
+          width = _ref18$width === void 0 ? Resizer.AUTO_SIZE : _ref18$width,
           _ref18$height = _ref18.height,
-          height = _ref18$height === void 0 ? BlurPass.AUTO_SIZE : _ref18$height,
+          height = _ref18$height === void 0 ? Resizer.AUTO_SIZE : _ref18$height,
           _ref18$kernelSize = _ref18.kernelSize,
           kernelSize = _ref18$kernelSize === void 0 ? KernelSize.SMALL : _ref18$kernelSize,
           _ref18$blur = _ref18.blur,
@@ -6676,17 +6671,17 @@
       _this28.lightSource.material.transparent = true;
       _this28.lightScene = new three.Scene();
       _this28.screenPosition = new three.Vector2();
-      _this28.renderTargetX = new three.WebGLRenderTarget(1, 1, {
+      _this28.renderTargetA = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
         stencilBuffer: false,
         depthBuffer: false
       });
-      _this28.renderTargetX.texture.name = "GodRays.TargetX";
-      _this28.renderTargetY = _this28.renderTargetX.clone();
-      _this28.renderTargetY.texture.name = "GodRays.TargetY";
-      _this28.uniforms.get("texture").value = _this28.renderTargetY.texture;
-      _this28.renderTargetLight = _this28.renderTargetX.clone();
+      _this28.renderTargetA.texture.name = "GodRays.TargetX";
+      _this28.renderTargetB = _this28.renderTargetA.clone();
+      _this28.renderTargetB.texture.name = "GodRays.TargetY";
+      _this28.uniforms.get("texture").value = _this28.renderTargetB.texture;
+      _this28.renderTargetLight = _this28.renderTargetA.clone();
       _this28.renderTargetLight.texture.name = "GodRays.Light";
       _this28.renderTargetLight.depthBuffer = true;
       _this28.renderTargetLight.depthTexture = new three.DepthTexture();
@@ -6699,6 +6694,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this28.blurPass.resolution.resizable = _assertThisInitialized(_this28);
       _this28.depthMaskPass = new ShaderPass(function (depthTexture) {
         var material = new DepthMaskMaterial();
         material.uniforms.depthBuffer1.value = depthTexture;
@@ -6721,14 +6717,13 @@
     _createClass(GodRaysEffect, [{
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var originalSize = this.blurPass.getOriginalSize();
-        this.blurPass.setResolutionScale(scale);
-        this.setSize(originalSize.x, originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setDepthTexture",
@@ -6744,7 +6739,7 @@
         var lightSource = this.lightSource;
         var parent = lightSource.parent;
         var matrixAutoUpdate = lightSource.matrixAutoUpdate;
-        var renderTargetX = this.renderTargetX;
+        var renderTargetA = this.renderTargetA;
         var renderTargetLight = this.renderTargetLight;
 
         if (!matrixAutoUpdate) {
@@ -6757,8 +6752,8 @@
         lightSource.matrix.copy(lightSource.matrixWorld);
         this.lightScene.add(lightSource);
         this.renderPassLight.render(renderer, renderTargetLight);
-        this.clearPass.render(renderer, renderTargetX);
-        this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
+        this.clearPass.render(renderer, renderTargetA);
+        this.depthMaskPass.render(renderer, renderTargetLight, renderTargetA);
         lightSource.material.depthWrite = false;
         lightSource.matrixAutoUpdate = matrixAutoUpdate;
 
@@ -6774,10 +6769,10 @@
         this.screenPosition.set(Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)), Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5)));
 
         if (this.blur) {
-          this.blurPass.render(renderer, renderTargetX, renderTargetX);
+          this.blurPass.render(renderer, renderTargetA, renderTargetA);
         }
 
-        this.godRaysPass.render(renderer, renderTargetX, this.renderTargetY);
+        this.godRaysPass.render(renderer, renderTargetA, this.renderTargetB);
       }
     }, {
       key: "setSize",
@@ -6786,10 +6781,10 @@
         this.renderPassLight.setSize(width, height);
         this.depthMaskPass.setSize(width, height);
         this.godRaysPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
-        this.renderTargetX.setSize(width, height);
-        this.renderTargetY.setSize(width, height);
+        width = this.resolution.width;
+        height = this.resolution.height;
+        this.renderTargetA.setSize(width, height);
+        this.renderTargetB.setSize(width, height);
         this.renderTargetLight.setSize(width, height);
       }
     }, {
@@ -6801,15 +6796,15 @@
         this.godRaysPass.initialize(renderer, alpha);
 
         if (!alpha) {
-          this.renderTargetX.texture.format = three.RGBFormat;
-          this.renderTargetY.texture.format = three.RGBFormat;
+          this.renderTargetA.texture.format = three.RGBFormat;
+          this.renderTargetB.texture.format = three.RGBFormat;
           this.renderTargetLight.texture.format = three.RGBFormat;
         }
       }
     }, {
       key: "texture",
       get: function get() {
-        return this.renderTargetY.texture;
+        return this.renderTargetB.texture;
       }
     }, {
       key: "godRaysMaterial",
@@ -6817,28 +6812,25 @@
         return this.godRaysPass.getFullscreenMaterial();
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTargetX.setSize(blurPass.width, blurPass.height);
-        this.renderTargetY.setSize(blurPass.width, blurPass.height);
-        this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTargetX.setSize(blurPass.width, blurPass.height);
-        this.renderTargetY.setSize(blurPass.width, blurPass.height);
-        this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+        this.resolution.height = value;
       }
     }, {
       key: "dithering",
@@ -7044,9 +7036,9 @@
           _ref22$resolutionScal = _ref22.resolutionScale,
           resolutionScale = _ref22$resolutionScal === void 0 ? 0.5 : _ref22$resolutionScal,
           _ref22$width = _ref22.width,
-          width = _ref22$width === void 0 ? BlurPass.AUTO_SIZE : _ref22$width,
+          width = _ref22$width === void 0 ? Resizer.AUTO_SIZE : _ref22$width,
           _ref22$height = _ref22.height,
-          height = _ref22$height === void 0 ? BlurPass.AUTO_SIZE : _ref22$height,
+          height = _ref22$height === void 0 ? Resizer.AUTO_SIZE : _ref22$height,
           _ref22$kernelSize = _ref22.kernelSize,
           kernelSize = _ref22$kernelSize === void 0 ? KernelSize.VERY_SMALL : _ref22$kernelSize,
           _ref22$blur = _ref22.blur,
@@ -7111,6 +7103,7 @@
         height: height,
         kernelSize: kernelSize
       });
+      _this32.blurPass.resolution.resizable = _assertThisInitialized(_this32);
       _this32.blur = blur;
       _this32.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
       _this32.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = _this32.renderTargetMask.texture;
@@ -7139,15 +7132,13 @@
     }, {
       key: "getResolutionScale",
       value: function getResolutionScale() {
-        return this.blurPass.getResolutionScale();
+        return this.resolution.scale;
       }
     }, {
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
-        var originalSize = this.blurPass.getOriginalSize();
-        this.blurPass.setResolutionScale(scale);
-        this.depthPass.setResolutionScale(scale);
-        this.setSize(originalSize.x, originalSize.y);
+        this.resolution.scale = scale;
+        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setSelection",
@@ -7212,11 +7203,11 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        this.renderTargetMask.setSize(width, height);
-        this.depthPass.setSize(width, height);
         this.blurPass.setSize(width, height);
-        width = this.blurPass.width;
-        height = this.blurPass.height;
+        this.renderTargetMask.setSize(width, height);
+        width = this.resolution.width;
+        height = this.resolution.height;
+        this.depthPass.setSize(width, height);
         this.renderTargetEdges.setSize(width, height);
         this.renderTargetBlurredEdges.setSize(width, height);
         this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
@@ -7229,28 +7220,25 @@
         this.maskPass.initialize(renderer, alpha);
       }
     }, {
+      key: "resolution",
+      get: function get() {
+        return this.blurPass.resolution;
+      }
+    }, {
       key: "width",
       get: function get() {
-        return this.blurPass.width;
+        return this.resolution.width;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.width = value;
-        this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-        this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-        this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+        this.resolution.width = value;
       }
     }, {
       key: "height",
       get: function get() {
-        return this.blurPass.height;
+        return this.resolution.height;
       },
       set: function set(value) {
-        var blurPass = this.blurPass;
-        blurPass.height = value;
-        this.renderTargetEdges.setSize(blurPass.width, blurPass.height);
-        this.renderTargetBlurredEdges.setSize(blurPass.width, blurPass.height);
-        this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / blurPass.width, 1.0 / blurPass.height);
+        this.resolution.height = value;
       }
     }, {
       key: "selectionLayer",
@@ -7664,14 +7652,12 @@
     }, {
       key: "setSize",
       value: function setSize(width, height) {
-        var blurPass = this.blurPass;
-
         _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "setSize", this).call(this, width, height);
 
         this.backgroundPass.setSize(width, height);
         this.blackoutPass.setSize(width, height);
         this.renderPass.setSize(width, height);
-        this.renderTargetSelection.setSize(blurPass.width, blurPass.height);
+        this.renderTargetSelection.setSize(this.resolution.width, this.resolution.height);
       }
     }, {
       key: "initialize",
@@ -7685,26 +7671,6 @@
         if (!alpha) {
           this.renderTargetSelection.texture.format = three.RGBFormat;
         }
-      }
-    }, {
-      key: "width",
-      get: function get() {
-        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", this);
-      },
-      set: function set(value) {
-        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "width", value, this, true);
-
-        this.renderTargetSelection.setSize(this.width, this.height);
-      }
-    }, {
-      key: "height",
-      get: function get() {
-        return _get(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", this);
-      },
-      set: function set(value) {
-        _set(_getPrototypeOf(SelectiveBloomEffect.prototype), "height", value, this, true);
-
-        this.renderTargetSelection.setSize(this.width, this.height);
       }
     }, {
       key: "ignoreBackground",
@@ -7907,7 +7873,7 @@
     HIGH: 2,
     ULTRA: 3
   };
-  var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float proximity=abs(depth-sampleDepth);if(sampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,getViewZ(sampleDepth));occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;if(depth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,getViewZ(depth));vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,depth,uv);float l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,max(l*luminanceInfluence,smoothstep(distanceCutoff.x,distanceCutoff.y,depth)));}outputColor=vec4(vec3(ao),inputColor.a);}";
+  var fragmentShader$u = "uniform sampler2D normalBuffer;uniform mat4 cameraProjectionMatrix;uniform mat4 cameraInverseProjectionMatrix;uniform vec2 radiusStep;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;uniform float seed;uniform float luminanceInfluence;uniform float scale;uniform float bias;vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=cameraProjectionMatrix[2][3]*viewZ+cameraProjectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(cameraInverseProjectionMatrix*clipPosition).xyz;}float getOcclusion(const in vec3 p,const in vec3 n,const in vec3 sampleViewPosition){vec3 viewDelta=sampleViewPosition-p;float d=length(viewDelta)*scale;return max(0.0,dot(n,viewDelta)/d-bias)/(1.0+pow2(d));}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){vec2 radius=radiusStep;float angle=rand(uv+seed)*PI2;float occlusionSum=0.0;for(int i=0;i<SAMPLES_INT;++i){vec2 coord=uv+vec2(cos(angle),sin(angle))*radius;radius+=radiusStep;angle+=ANGLE_STEP;float sampleDepth=readDepth(coord);float viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(linearSampleDepth<distanceCutoff.y&&proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 sampleViewPosition=getViewPosition(coord,sampleDepth,viewZ);occlusionSum+=getOcclusion(p,n,sampleViewPosition)*falloff;}}return occlusionSum/SAMPLES_FLOAT;}void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float ao=1.0;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(uv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(texture2D(normalBuffer,uv).xyz);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,uv);float l=linearToRelativeLuminance(inputColor.rgb);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);float f=max(l*luminanceInfluence,d);ao=mix(ao,1.0,f);}outputColor=vec4(vec3(ao),inputColor.a);}";
 
   var SSAOEffect = function (_Effect22) {
     _inherits(SSAOEffect, _Effect22);
@@ -7923,13 +7889,13 @@
           _ref27$rings = _ref27.rings,
           rings = _ref27$rings === void 0 ? 4 : _ref27$rings,
           _ref27$distanceThresh = _ref27.distanceThreshold,
-          distanceThreshold = _ref27$distanceThresh === void 0 ? 0.65 : _ref27$distanceThresh,
+          distanceThreshold = _ref27$distanceThresh === void 0 ? 0.97 : _ref27$distanceThresh,
           _ref27$distanceFallof = _ref27.distanceFalloff,
-          distanceFalloff = _ref27$distanceFallof === void 0 ? 0.1 : _ref27$distanceFallof,
+          distanceFalloff = _ref27$distanceFallof === void 0 ? 0.03 : _ref27$distanceFallof,
           _ref27$rangeThreshold = _ref27.rangeThreshold,
-          rangeThreshold = _ref27$rangeThreshold === void 0 ? 0.0015 : _ref27$rangeThreshold,
+          rangeThreshold = _ref27$rangeThreshold === void 0 ? 0.0005 : _ref27$rangeThreshold,
           _ref27$rangeFalloff = _ref27.rangeFalloff,
-          rangeFalloff = _ref27$rangeFalloff === void 0 ? 0.01 : _ref27$rangeFalloff,
+          rangeFalloff = _ref27$rangeFalloff === void 0 ? 0.001 : _ref27$rangeFalloff,
           _ref27$luminanceInflu = _ref27.luminanceInfluence,
           luminanceInfluence = _ref27$luminanceInflu === void 0 ? 0.7 : _ref27$luminanceInflu,
           _ref27$radius = _ref27.radius,
@@ -7937,7 +7903,7 @@
           _ref27$scale = _ref27.scale,
           scale = _ref27$scale === void 0 ? 1.0 : _ref27$scale,
           _ref27$bias = _ref27.bias,
-          bias = _ref27$bias === void 0 ? 0.5 : _ref27$bias;
+          bias = _ref27$bias === void 0 ? 0.0 : _ref27$bias;
 
       _classCallCheck(this, SSAOEffect);
 
@@ -7975,12 +7941,12 @@
     }, {
       key: "setDistanceCutoff",
       value: function setDistanceCutoff(threshold, falloff) {
-        this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+        this.uniforms.get("distanceCutoff").value.set(Math.min(Math.max(threshold, 0.0), 1.0), Math.min(Math.max(threshold + falloff, 0.0), 1.0));
       }
     }, {
       key: "setProximityCutoff",
       value: function setProximityCutoff(threshold, falloff) {
-        this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+        this.uniforms.get("proximityCutoff").value.set(Math.min(Math.max(threshold, 0.0), 1.0), Math.min(Math.max(threshold + falloff, 0.0), 1.0));
       }
     }, {
       key: "setSize",
@@ -11027,8 +10993,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this47.loadSMAAImages();
@@ -11044,7 +11010,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.3, 1000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-10, 6, 15);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -11054,8 +11020,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -11084,7 +11048,7 @@
         this.object = object;
         scene.add(object);
         mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshLambertMaterial({
-          color: 0x0b0b0b
+          color: 0x000000
         }));
         object = new three.Object3D();
         var o0, o1, o2;
@@ -11187,7 +11151,7 @@
           "blend mode": blendModeA.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effectA.height = effectB.height = Number.parseInt(params.resolution);
+          effectA.resolution.height = effectB.resolution.height = Number.parseInt(params.resolution);
         });
         menu.add(params, "kernel size", KernelSize).onChange(function () {
           effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number.parseInt(params["kernel size"]);
@@ -11283,8 +11247,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this50.loadSMAAImages();
@@ -11300,7 +11264,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-15, 0, -15);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -11310,8 +11274,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -11394,7 +11356,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          blurPass.height = Number.parseInt(params.resolution);
+          blurPass.resolution.height = Number.parseInt(params.resolution);
         });
         menu.add(params, "kernel size", KernelSize).onChange(function () {
           blurPass.kernelSize = Number.parseInt(params["kernel size"]);
@@ -11447,8 +11409,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this52.loadSMAAImages();
@@ -11464,7 +11426,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(12.5, -0.3, 1.7);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -11476,8 +11438,6 @@
         controls.settings.zoom.maxDistance = 40.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x404040);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -11495,11 +11455,10 @@
         mesh.rotation.set(0, 0, Math.PI / 2);
         scene.add(mesh);
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-        smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var bokehEffect = new BokehEffect({
-          focus: 0.32,
+          focus: 0.61,
           dof: 0.02,
-          aperture: 0.015,
+          aperture: 0.0265,
           maxBlur: 0.0125
         });
         var smaaPass = new EffectPass(camera, smaaEffect);
@@ -11590,8 +11549,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this54.loadSMAAImages();
@@ -11607,7 +11566,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 50);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(12.5, -0.3, 1.7);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -11638,7 +11597,7 @@
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
         smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
         var bokehEffect = new RealisticBokehEffect({
-          focus: 1.55,
+          focus: 2.65,
           focalLength: camera.getFocalLength(),
           fStop: 1.6,
           luminanceThreshold: 0.325,
@@ -11789,8 +11748,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this56.loadSMAAImages();
@@ -11806,7 +11765,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -11816,8 +11775,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
         var colorDepthEffect = new ColorDepthEffect({
@@ -11890,8 +11847,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this58.loadSMAAImages();
@@ -11907,7 +11864,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-0.75, -0.1, -1);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -12080,11 +12037,11 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/perturb.jpg", function (texture) {
-              assets.set("perturbation-map", texture);
+            textureLoader.load("textures/perturb.jpg", function (t) {
+              assets.set("perturbation-map", t);
             });
 
             _this60.loadSMAAImages();
@@ -12100,7 +12057,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(6, 1, 6);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -12110,8 +12067,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -14187,8 +14142,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
             modelLoader.load("models/tree/scene.gltf", function (gltf) {
               gltf.scene.scale.multiplyScalar(2.5);
@@ -14210,7 +14165,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-6, -1, -6);
         this.camera = camera;
         var target = new three.Vector3(0, 0.5, 0);
@@ -14286,7 +14241,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effect.height = Number.parseInt(params.resolution);
+          effect.resolution.height = Number.parseInt(params.resolution);
         });
         menu.add(effect, "dithering");
         menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
@@ -14407,11 +14362,11 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/pattern.png", function (texture) {
-              assets.set("pattern-color", texture);
+            textureLoader.load("textures/pattern.png", function (t) {
+              assets.set("pattern-color", t);
             });
 
             _this64.loadSMAAImages();
@@ -14427,7 +14382,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-4, 1.25, -5);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -14437,8 +14392,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color, 0.0);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x404040);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -14481,7 +14434,6 @@
           pulseSpeed: 0.0,
           visibleEdgeColor: 0xffffff,
           hiddenEdgeColor: 0x22090a,
-          resolutionScale: 1.0,
           height: 480,
           blur: false,
           xRay: true
@@ -14518,7 +14470,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effect.height = Number.parseInt(params.resolution);
+          effect.resolution.height = Number.parseInt(params.resolution);
         });
         menu.add(effect, "dithering");
         menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
@@ -14608,8 +14560,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
           } else {
             resolve();
@@ -14623,7 +14575,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -14633,8 +14585,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -14808,8 +14758,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this67.loadSMAAImages();
@@ -14825,7 +14775,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -14835,8 +14785,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -14956,8 +14904,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this69.loadSMAAImages();
@@ -14973,7 +14921,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(5, 1, 5);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -14983,8 +14931,6 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -15084,13 +15030,13 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/crate.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              texture.anisotropy = Math.min(4, maxAnisotropy);
-              assets.set("crate-color", texture);
+            textureLoader.load("textures/crate.jpg", function (t) {
+              t.wrapS = t.wrapT = three.RepeatWrapping;
+              t.anisotropy = Math.min(4, maxAnisotropy);
+              assets.set("crate-color", t);
             });
 
             _this71.loadSMAAImages();
@@ -15106,16 +15052,13 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-3, 0, -3);
         camera.lookAt(scene.position);
         this.camera = camera;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
 
         var rendererAA = function (size, clearColor, pixelRatio) {
           var renderer = new three.WebGLRenderer({
-            logarithmicDepthBuffer: true,
             antialias: true
           });
           renderer.setSize(size.width, size.height);
@@ -15138,7 +15081,7 @@
         this.controls2 = controls2;
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
-        var directionalLight = new three.DirectionalLight(0xffbbaa);
+        var directionalLight = new three.DirectionalLight(0xff8866, 1);
         directionalLight.position.set(1440, 200, 2000);
         directionalLight.target.position.copy(scene.position);
         scene.add(directionalLight);
@@ -15157,7 +15100,7 @@
         this.objectB = mesh;
         scene.add(mesh);
         mesh = new three.Mesh(new three.BoxBufferGeometry(0.25, 8.25, 0.25), new three.MeshPhongMaterial({
-          color: 0x0d0d0d
+          color: 0x000000
         }));
         var object = new three.Object3D();
         var o0, o1, o2;
@@ -15315,6 +15258,133 @@
     return SMAADemo;
   }(PostProcessingDemo);
 
+  function _createLights() {
+    var ambientLight = new three.AmbientLight(0x544121);
+    var lightCeiling = new three.PointLight(0xffe3b1, 1.0, 25);
+    lightCeiling.position.set(0, 9.3, 0);
+    lightCeiling.castShadow = true;
+    lightCeiling.shadow.mapSize.width = 1024;
+    lightCeiling.shadow.mapSize.height = 1024;
+    lightCeiling.shadow.bias = 1e-4;
+    lightCeiling.shadow.radius = 4;
+    var lightRed = new three.DirectionalLight(0xff0000, 0.1);
+    lightRed.position.set(-10, 0, 0);
+    lightRed.target.position.set(0, 0, 0);
+    var lightGreen = new three.DirectionalLight(0x00ff00, 0.1);
+    lightGreen.position.set(10, 0, 0);
+    lightGreen.target.position.set(0, 0, 0);
+    return [lightCeiling, lightRed, lightGreen, ambientLight];
+  }
+
+  function _createEnvironment() {
+    var environment = new three.Group();
+    var shininess = 5;
+    var planeGeometry = new three.PlaneBufferGeometry();
+    var planeMaterial = new three.MeshPhongMaterial({
+      color: 0xffffff,
+      shininess: shininess
+    });
+    var plane00 = new three.Mesh(planeGeometry, planeMaterial);
+    var plane01 = new three.Mesh(planeGeometry, planeMaterial);
+    var plane02 = new three.Mesh(planeGeometry, planeMaterial);
+    var plane03 = new three.Mesh(planeGeometry, planeMaterial);
+    var plane04 = new three.Mesh(planeGeometry, planeMaterial);
+    plane00.position.y = -10;
+    plane00.rotation.x = Math.PI * 0.5;
+    plane00.scale.set(20, 20, 1);
+    plane01.position.y = -10;
+    plane01.rotation.x = Math.PI * -0.5;
+    plane01.scale.set(20, 20, 1);
+    plane01.receiveShadow = true;
+    plane02.position.y = 10;
+    plane02.rotation.x = Math.PI * 0.5;
+    plane02.scale.set(20, 20, 1);
+    plane02.receiveShadow = true;
+    plane03.position.z = -10;
+    plane03.scale.set(20, 20, 1);
+    plane03.receiveShadow = true;
+    plane04.position.z = 10;
+    plane04.rotation.y = Math.PI;
+    plane04.scale.set(20, 20, 1);
+    plane04.receiveShadow = true;
+    var plane05 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
+      color: 0xff0000,
+      shininess: shininess
+    }));
+    var plane06 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
+      color: 0x00ff00,
+      shininess: shininess
+    }));
+    var plane07 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
+      color: 0xffffff,
+      emissive: 0xffffff,
+      shininess: shininess
+    }));
+    plane05.position.x = -10;
+    plane05.rotation.y = Math.PI * 0.5;
+    plane05.scale.set(20, 20, 1);
+    plane05.receiveShadow = true;
+    plane06.position.x = 10;
+    plane06.rotation.y = Math.PI * -0.5;
+    plane06.scale.set(20, 20, 1);
+    plane06.receiveShadow = true;
+    plane07.position.y = 10 - 1e-2;
+    plane07.rotation.x = Math.PI * 0.5;
+    plane07.scale.set(4, 4, 1);
+    environment.add(plane00, plane01, plane02, plane03, plane04, plane05, plane06, plane07);
+    return environment;
+  }
+
+  function _createActors() {
+    var actors = new three.Group();
+    var shininess = 5;
+    var actorMaterial = new three.MeshPhongMaterial({
+      color: 0xffffff,
+      shininess: shininess
+    });
+    var box01 = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), actorMaterial);
+    var box02 = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), actorMaterial);
+    var sphere01 = new three.Mesh(new three.SphereBufferGeometry(1, 32, 32), actorMaterial);
+    box01.position.set(-3.5, -4, -3);
+    box01.rotation.y = Math.PI * 0.1;
+    box01.scale.set(6, 12, 6);
+    box01.castShadow = true;
+    box02.position.set(3.5, -7, 3);
+    box02.rotation.y = Math.PI * -0.1;
+    box02.scale.set(6, 6, 6);
+    box02.castShadow = true;
+    sphere01.position.set(-5, -7, 6);
+    sphere01.scale.set(3, 3, 3);
+    sphere01.castShadow = true;
+    actors.add(box01, box02, sphere01);
+    return actors;
+  }
+
+  var CornellBox = function () {
+    function CornellBox() {
+      _classCallCheck(this, CornellBox);
+    }
+
+    _createClass(CornellBox, null, [{
+      key: "createLights",
+      value: function createLights() {
+        return _createLights();
+      }
+    }, {
+      key: "createEnvironment",
+      value: function createEnvironment() {
+        return _createEnvironment();
+      }
+    }, {
+      key: "createActors",
+      value: function createActors() {
+        return _createActors();
+      }
+    }]);
+
+    return CornellBox;
+  }();
+
   var SSAODemo = function (_PostProcessingDemo14) {
     _inherits(SSAODemo, _PostProcessingDemo14);
 
@@ -15347,8 +15417,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this73.loadSMAAImages();
@@ -15368,7 +15438,6 @@
           var size = renderer.getSize(new three.Vector2());
           var pixelRatio = renderer.getPixelRatio();
           renderer = new three.WebGLRenderer({
-            logarithmicDepthBuffer: true,
             antialias: false
           });
           renderer.setSize(size.width, size.height);
@@ -15379,8 +15448,8 @@
 
         composer.replaceRenderer(renderer);
         this.renderer = renderer;
-        var camera = new three.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.3, 1000);
-        camera.position.set(0, 0, 30);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+        camera.position.set(0, 0, 35);
         camera.lookAt(scene.position);
         this.camera = camera;
         var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
@@ -15389,103 +15458,10 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x544121);
-        var lightCeiling = new three.PointLight(0xffe3b1, 1.0, 25);
-        lightCeiling.position.set(0, 9.3, 0);
-        lightCeiling.castShadow = true;
-        lightCeiling.shadow.mapSize.width = 1024;
-        lightCeiling.shadow.mapSize.height = 1024;
-        lightCeiling.shadow.bias = 1e-4;
-        lightCeiling.shadow.radius = 4;
-        var lightRed = new three.DirectionalLight(0xff0000, 0.1);
-        lightRed.position.set(-10, 0, 0);
-        lightRed.target.position.copy(scene.position);
-        var lightGreen = new three.DirectionalLight(0x00ff00, 0.1);
-        lightGreen.position.set(10, 0, 0);
-        lightGreen.target.position.copy(scene.position);
-        scene.add(lightCeiling);
-        scene.add(lightRed);
-        scene.add(lightGreen);
-        scene.add(ambientLight);
-        var environment = new three.Group();
-        var actors = new three.Group();
-        var shininess = 5;
-        var planeGeometry = new three.PlaneBufferGeometry();
-        var planeMaterial = new three.MeshPhongMaterial({
-          color: 0xffffff,
-          shininess: shininess
-        });
-        var plane00 = new three.Mesh(planeGeometry, planeMaterial);
-        var plane01 = new three.Mesh(planeGeometry, planeMaterial);
-        var plane02 = new three.Mesh(planeGeometry, planeMaterial);
-        var plane03 = new three.Mesh(planeGeometry, planeMaterial);
-        var plane04 = new three.Mesh(planeGeometry, planeMaterial);
-        plane00.position.y = -10;
-        plane00.rotation.x = Math.PI * 0.5;
-        plane00.scale.set(20, 20, 1);
-        plane01.position.y = -10;
-        plane01.rotation.x = Math.PI * -0.5;
-        plane01.scale.set(20, 20, 1);
-        plane01.receiveShadow = true;
-        plane02.position.y = 10;
-        plane02.rotation.x = Math.PI * 0.5;
-        plane02.scale.set(20, 20, 1);
-        plane02.receiveShadow = true;
-        plane03.position.z = -10;
-        plane03.scale.set(20, 20, 1);
-        plane03.receiveShadow = true;
-        plane04.position.z = 10;
-        plane04.rotation.y = Math.PI;
-        plane04.scale.set(20, 20, 1);
-        plane04.receiveShadow = true;
-        var plane05 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
-          color: 0xff0000,
-          shininess: shininess
-        }));
-        var plane06 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
-          color: 0x00ff00,
-          shininess: shininess
-        }));
-        var plane07 = new three.Mesh(planeGeometry, new three.MeshPhongMaterial({
-          color: 0xffffff,
-          emissive: 0xffffff,
-          shininess: shininess
-        }));
-        plane05.position.x = -10;
-        plane05.rotation.y = Math.PI * 0.5;
-        plane05.scale.set(20, 20, 1);
-        plane05.receiveShadow = true;
-        plane06.position.x = 10;
-        plane06.rotation.y = Math.PI * -0.5;
-        plane06.scale.set(20, 20, 1);
-        plane06.receiveShadow = true;
-        plane07.position.y = 10 - 1e-2;
-        plane07.rotation.x = Math.PI * 0.5;
-        plane07.scale.set(4, 4, 1);
-        var actorMaterial = new three.MeshPhongMaterial({
-          color: 0xffffff,
-          shininess: shininess
-        });
-        var box01 = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), actorMaterial);
-        var box02 = new three.Mesh(new three.BoxBufferGeometry(1, 1, 1), actorMaterial);
-        var sphere01 = new three.Mesh(new three.SphereBufferGeometry(1, 32, 32), actorMaterial);
-        box01.position.set(-3.5, -4, -3);
-        box01.rotation.y = Math.PI * 0.1;
-        box01.scale.set(6, 12, 6);
-        box01.castShadow = true;
-        box02.position.set(3.5, -7, 3);
-        box02.rotation.y = Math.PI * -0.1;
-        box02.scale.set(6, 6, 6);
-        box02.castShadow = true;
-        sphere01.position.set(-5, -7, 6);
-        sphere01.scale.set(3, 3, 3);
-        sphere01.castShadow = true;
-        environment.add(plane00, plane01, plane02, plane03, plane04, plane05, plane06, plane07);
-        actors.add(box01, box02, sphere01);
-        scene.add(environment, actors);
+        scene.add.apply(scene, _toConsumableArray(CornellBox.createLights()));
+        scene.add(CornellBox.createEnvironment());
+        scene.add(CornellBox.createActors());
         var normalPass = new NormalPass(scene, camera);
         var depthEffect = new DepthEffect({
           blendFunction: BlendFunction.SKIP
@@ -15495,14 +15471,14 @@
           blendFunction: BlendFunction.MULTIPLY,
           samples: 11,
           rings: 4,
-          distanceThreshold: 0.6,
-          distanceFalloff: 0.1,
-          rangeThreshold: 0.005,
-          rangeFalloff: 0.01,
+          distanceThreshold: 0.3,
+          distanceFalloff: 0.02,
+          rangeThreshold: 0.001,
+          rangeFalloff: 0.001,
           luminanceInfluence: 0.7,
           radius: 18.25,
           scale: 1.0,
-          bias: 0.5
+          bias: 0.05
         });
         var effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);
         this.renderPass.renderToScreen = false;
@@ -15565,17 +15541,17 @@
           uniforms.get("luminanceInfluence").value = params["lum influence"];
         });
         var f = menu.addFolder("Distance Cutoff");
-        f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.001).onChange(function () {
+        f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange(function () {
           ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
         });
-        f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.001).onChange(function () {
+        f.add(params.distance, "falloff").min(0.0).max(1.0).step(0.0001).onChange(function () {
           ssaoEffect.setDistanceCutoff(params.distance.threshold, params.distance.falloff);
         });
         f = menu.addFolder("Proximity Cutoff");
         f.add(params.proximity, "threshold").min(0.0).max(0.05).step(0.0001).onChange(function () {
           ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
         });
-        f.add(params.proximity, "falloff").min(0.0).max(0.1).step(0.0001).onChange(function () {
+        f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange(function () {
           ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
         });
         menu.add(params, "bias").min(-1.0).max(1.0).step(0.001).onChange(function () {
@@ -15634,12 +15610,12 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/scratches.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              assets.set("scratches-color", texture);
+            textureLoader.load("textures/scratches.jpg", function (t) {
+              t.wrapS = t.wrapT = three.RepeatWrapping;
+              assets.set("scratches-color", t);
             });
 
             _this75.loadSMAAImages();
@@ -15734,12 +15710,12 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/crate.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              assets.set("crate-color", texture);
+            textureLoader.load("textures/crate.jpg", function (t) {
+              t.wrapS = t.wrapT = three.RepeatWrapping;
+              assets.set("crate-color", t);
             });
 
             _this77.loadSMAAImages();
@@ -15755,7 +15731,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(-3, 0, -3);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -15767,8 +15743,6 @@
         controls.settings.zoom.maxDistance = 40.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
@@ -15897,8 +15871,8 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
 
             _this79.loadSMAAImages();
@@ -15914,7 +15888,7 @@
         var assets = this.assets;
         var composer = this.composer;
         var renderer = composer.getRenderer();
-        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        var camera = new three.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
         camera.position.set(10, 1, 10);
         camera.lookAt(scene.position);
         this.camera = camera;
@@ -15924,10 +15898,8 @@
         controls.settings.sensitivity.zoom = 1.0;
         controls.lookAt(scene.position);
         this.controls = controls;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
-        var ambientLight = new three.AmbientLight(0x666666);
+        var ambientLight = new three.AmbientLight(0x222222);
         var directionalLight = new three.DirectionalLight(0xffbbaa);
         directionalLight.position.set(-1, 1, 1);
         directionalLight.target.position.copy(scene.position);
@@ -16057,12 +16029,12 @@
           if (assets.size === 0) {
             loadingManager.onError = reject;
             loadingManager.onLoad = resolve;
-            cubeTextureLoader.load(urls, function (textureCube) {
-              assets.set("sky", textureCube);
+            cubeTextureLoader.load(urls, function (t) {
+              assets.set("sky", t);
             });
-            textureLoader.load("textures/scratches.jpg", function (texture) {
-              texture.wrapS = texture.wrapT = three.RepeatWrapping;
-              assets.set("scratches-color", texture);
+            textureLoader.load("textures/scratches.jpg", function (t) {
+              t.wrapS = t.wrapT = three.RepeatWrapping;
+              assets.set("scratches-color", t);
             });
 
             _this81.loadSMAAImages();
@@ -16083,7 +16055,6 @@
           var pixelRatio = renderer.getPixelRatio();
           renderer = new three.WebGLRenderer({
             powerPreference: "high-performance",
-            logarithmicDepthBuffer: true,
             antialias: false
           });
           renderer.setSize(size.width, size.height);
@@ -16097,8 +16068,6 @@
         camera.position.set(-10, 1.125, 0);
         camera.lookAt(scene.position);
         this.camera = camera;
-        scene.fog = new three.FogExp2(0x000000, 0.0025);
-        renderer.setClearColor(scene.fog.color);
         scene.background = assets.get("sky");
         var ambientLight = new three.AmbientLight(0x666666);
         var pointLight = new three.PointLight(0xffbbaa, 5.5, 12);
@@ -16338,10 +16307,9 @@
     document.getElementById("viewport").children[0].style.display = "none";
   }
 
-  window.addEventListener("load", function main(event) {
+  window.addEventListener("load", function (event) {
     var viewport = document.getElementById("viewport");
     renderer = new three.WebGLRenderer({
-      logarithmicDepthBuffer: true,
       antialias: false
     });
     renderer.debug.checkShaderErrors = true;
@@ -16389,10 +16357,20 @@
       }
     };
   }());
-  document.addEventListener("keydown", function onKeyDown(event) {
-    var aside = this.getElementById("aside");
+  document.addEventListener("DOMContentLoaded", function (event) {
+    var infoImg = document.querySelector(".info img");
+    var infoDiv = document.querySelector(".info div");
 
-    if (event.altKey && aside !== null) {
+    if (infoImg !== null && infoDiv !== null) {
+      infoImg.addEventListener("click", function (event) {
+        infoDiv.style.display = infoDiv.style.display === "block" ? "none" : "block";
+      });
+    }
+  });
+  document.addEventListener("keydown", function (event) {
+    var aside = document.getElementById("aside");
+
+    if (aside !== null && event.key === "h") {
       event.preventDefault();
       aside.style.visibility = aside.style.visibility === "hidden" ? "visible" : "hidden";
     }
