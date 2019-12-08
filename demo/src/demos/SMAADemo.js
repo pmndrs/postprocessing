@@ -3,7 +3,6 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshBasicMaterial,
 	MeshPhongMaterial,
@@ -164,17 +163,17 @@ export class SMAADemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
-				textureLoader.load("textures/crate.jpg", function(texture) {
+				textureLoader.load("textures/crate.jpg", (t) => {
 
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					texture.anisotropy = Math.min(4, maxAnisotropy);
-					assets.set("crate-color", texture);
+					t.wrapS = t.wrapT = RepeatWrapping;
+					t.anisotropy = Math.min(4, maxAnisotropy);
+					assets.set("crate-color", t);
 
 				});
 
@@ -203,22 +202,16 @@ export class SMAADemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-3, 0, -3);
 		camera.lookAt(scene.position);
 		this.camera = camera;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Create a second renderer with AA.
 
 		const rendererAA = ((size, clearColor, pixelRatio) => {
 
 			const renderer = new WebGLRenderer({
-				logarithmicDepthBuffer: true,
 				antialias: true
 			});
 
@@ -258,7 +251,7 @@ export class SMAADemo extends PostProcessingDemo {
 		// Lights.
 
 		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		const directionalLight = new DirectionalLight(0xff8866, 1);
 
 		directionalLight.position.set(1440, 200, 2000);
 		directionalLight.target.position.copy(scene.position);
@@ -296,7 +289,7 @@ export class SMAADemo extends PostProcessingDemo {
 		mesh = new Mesh(
 			new BoxBufferGeometry(0.25, 8.25, 0.25),
 			new MeshPhongMaterial({
-				color: 0x0d0d0d
+				color: 0x000000
 			})
 		);
 

@@ -112,9 +112,9 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -143,7 +143,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-0.75, -0.1, -1);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -163,7 +163,10 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area")
+		);
 
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.SKIP });

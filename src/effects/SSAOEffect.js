@@ -25,28 +25,28 @@ export class SSAOEffect extends Effect {
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
-	 * @param {Number} [options.distanceThreshold=0.65] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.distanceFalloff=0.1] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeThreshold=0.0015] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
-	 * @param {Number} [options.rangeFalloff=0.01] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
+	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
 	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
-	 * @param {Number} [options.bias=0.5] - An occlusion bias.
+	 * @param {Number} [options.bias=0.0] - An occlusion bias. Should be set to 0.5 when logarithmic depth is used.
 	 */
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
 		samples = 11,
 		rings = 4,
-		distanceThreshold = 0.65,
-		distanceFalloff = 0.1,
-		rangeThreshold = 0.0015,
-		rangeFalloff = 0.01,
+		distanceThreshold = 0.97,
+		distanceFalloff = 0.03,
+		rangeThreshold = 0.0005,
+		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
 		radius = 18.25,
 		scale = 1.0,
-		bias = 0.5
+		bias = 0.0
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader, {
@@ -232,7 +232,10 @@ export class SSAOEffect extends Effect {
 
 	setDistanceCutoff(threshold, falloff) {
 
-		this.uniforms.get("distanceCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("distanceCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 
@@ -245,7 +248,10 @@ export class SSAOEffect extends Effect {
 
 	setProximityCutoff(threshold, falloff) {
 
-		this.uniforms.get("proximityCutoff").value.set(threshold, Math.min(threshold + falloff, 1.0 - 1e-6));
+		this.uniforms.get("proximityCutoff").value.set(
+			Math.min(Math.max(threshold, 0.0), 1.0),
+			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
+		);
 
 	}
 

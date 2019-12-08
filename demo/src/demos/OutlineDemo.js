@@ -4,7 +4,6 @@ import {
 	CubeTextureLoader,
 	ConeBufferGeometry,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	OctahedronBufferGeometry,
@@ -204,15 +203,15 @@ export class OutlineDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
-				textureLoader.load("textures/pattern.png", function(texture) {
+				textureLoader.load("textures/pattern.png", (t) => {
 
-					assets.set("pattern-color", texture);
+					assets.set("pattern-color", t);
 
 				});
 
@@ -241,7 +240,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-4, 1.25, -5);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -254,11 +253,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		controls.settings.sensitivity.zoom = 1.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color, 0.0);
 
 		// Sky.
 
@@ -339,7 +333,6 @@ export class OutlineDemo extends PostProcessingDemo {
 			pulseSpeed: 0.0,
 			visibleEdgeColor: 0xffffff,
 			hiddenEdgeColor: 0x22090a,
-			resolutionScale: 1.0,
 			height: 480,
 			blur: false,
 			xRay: true
@@ -391,7 +384,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effect.height = Number.parseInt(params.resolution);
+			effect.resolution.height = Number.parseInt(params.resolution);
 
 		});
 

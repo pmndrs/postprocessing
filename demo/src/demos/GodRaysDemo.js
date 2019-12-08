@@ -104,9 +104,9 @@ export class GodRaysDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (textureCube) => {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
@@ -145,7 +145,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-6, -1, -6);
 		this.camera = camera;
 
@@ -262,7 +262,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effect.height = Number.parseInt(params.resolution);
+			effect.resolution.height = Number.parseInt(params.resolution);
 
 		});
 

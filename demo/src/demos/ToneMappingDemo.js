@@ -3,7 +3,6 @@ import {
 	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	FogExp2,
 	Mesh,
 	MeshPhongMaterial,
 	PerspectiveCamera,
@@ -94,16 +93,16 @@ export class ToneMappingDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
-				textureLoader.load("textures/crate.jpg", function(texture) {
+				textureLoader.load("textures/crate.jpg", (t) => {
 
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					assets.set("crate-color", texture);
+					t.wrapS = t.wrapT = RepeatWrapping;
+					assets.set("crate-color", t);
 
 				});
 
@@ -132,7 +131,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
 		camera.position.set(-3, 0, -3);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -147,11 +146,6 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		controls.settings.zoom.maxDistance = 40.0;
 		controls.lookAt(scene.position);
 		this.controls = controls;
-
-		// Fog.
-
-		scene.fog = new FogExp2(0x000000, 0.0025);
-		renderer.setClearColor(scene.fog.color);
 
 		// Sky.
 

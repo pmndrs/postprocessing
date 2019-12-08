@@ -79,16 +79,16 @@ export class TextureDemo extends PostProcessingDemo {
 				loadingManager.onError = reject;
 				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, function(textureCube) {
+				cubeTextureLoader.load(urls, (t) => {
 
-					assets.set("sky", textureCube);
+					assets.set("sky", t);
 
 				});
 
-				textureLoader.load("textures/scratches.jpg", function(texture) {
+				textureLoader.load("textures/scratches.jpg", (t) => {
 
-					texture.wrapS = texture.wrapT = RepeatWrapping;
-					assets.set("scratches-color", texture);
+					t.wrapS = t.wrapT = RepeatWrapping;
+					assets.set("scratches-color", t);
 
 				});
 

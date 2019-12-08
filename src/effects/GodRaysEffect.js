@@ -11,6 +11,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { Resizer } from "../core";
 import { DepthMaskMaterial, KernelSize, GodRaysMaterial } from "../materials";
 import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
@@ -56,8 +57,8 @@ export class GodRaysEffect extends Effect {
 	 * @param {Number} [options.exposure=0.6] - A constant attenuation coefficient.
 	 * @param {Number} [options.clampMax=1.0] - An upper bound for the saturation of the overall effect.
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
-	 * @param {Number} [options.width=BlurPass.AUTO_SIZE] - The render width.
-	 * @param {Number} [options.height=BlurPass.AUTO_SIZE] - The render height.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.SMALL] - The blur kernel size. Has no effect if blur is disabled.
 	 * @param {Number} [options.blur=true] - Whether the god rays should be blurred to reduce artifacts.
 	 */
@@ -71,8 +72,8 @@ export class GodRaysEffect extends Effect {
 		exposure = 0.6,
 		clampMax = 1.0,
 		resolutionScale = 0.5,
-		width = BlurPass.AUTO_SIZE,
-		height = BlurPass.AUTO_SIZE,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.SMALL,
 		blur = true
 	} = {}) {
@@ -133,14 +134,14 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetX = new WebGLRenderTarget(1, 1, {
+		this.renderTargetA = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer: false,
 			depthBuffer: false
 		});
 
-		this.renderTargetX.texture.name = "GodRays.TargetX";
+		this.renderTargetA.texture.name = "GodRays.TargetX";
 
 		/**
 		 * A render target.
@@ -149,9 +150,9 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetY = this.renderTargetX.clone();
-		this.renderTargetY.texture.name = "GodRays.TargetY";
-		this.uniforms.get("texture").value = this.renderTargetY.texture;
+		this.renderTargetB = this.renderTargetA.clone();
+		this.renderTargetB.texture.name = "GodRays.TargetY";
+		this.uniforms.get("texture").value = this.renderTargetB.texture;
 
 		/**
 		 * A render target for the light scene.
@@ -160,7 +161,7 @@ export class GodRaysEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetLight = this.renderTargetX.clone();
+		this.renderTargetLight = this.renderTargetA.clone();
 		this.renderTargetLight.texture.name = "GodRays.Light";
 		this.renderTargetLight.depthBuffer = true;
 		this.renderTargetLight.depthTexture = new DepthTexture();
@@ -193,6 +194,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.blurPass = new BlurPass({ resolutionScale, width, height, kernelSize });
+		this.blurPass.resolution.resizable = this;
 
 		/**
 		 * A depth mask pass.
@@ -246,7 +248,7 @@ export class GodRaysEffect extends Effect {
 
 	get texture() {
 
-		return this.renderTargetY.texture;
+		return this.renderTargetB.texture;
 
 	}
 
@@ -263,34 +265,40 @@ export class GodRaysEffect extends Effect {
 	}
 
 	/**
+	 * The resolution of this effect.
+	 *
+	 * @type {Resizer}
+	 */
+
+	get resolution() {
+
+		return this.blurPass.resolution;
+
+	}
+
+	/**
 	 * The current width of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	get width() {
 
-		return this.blurPass.width;
+		return this.resolution.width;
 
 	}
 
 	/**
 	 * Sets the render width.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render height and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.width instead.
 	 */
 
 	set width(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.width = value;
-
-		this.renderTargetX.setSize(blurPass.width, blurPass.height);
-		this.renderTargetY.setSize(blurPass.width, blurPass.height);
-		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+		this.resolution.width = value;
 
 	}
 
@@ -298,31 +306,25 @@ export class GodRaysEffect extends Effect {
 	 * The current height of the internal render targets.
 	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	get height() {
 
-		return this.blurPass.height;
+		return this.resolution.height;
 
 	}
 
 	/**
 	 * Sets the render height.
 	 *
-	 * Use {@link BlurPass.AUTO_SIZE} to activate automatic sizing based on the
-	 * render width and aspect ratio.
-	 *
 	 * @type {Number}
+	 * @deprecated Use resolution.height instead.
 	 */
 
 	set height(value) {
 
-		const blurPass = this.blurPass;
-		blurPass.height = value;
-
-		this.renderTargetX.setSize(blurPass.width, blurPass.height);
-		this.renderTargetY.setSize(blurPass.width, blurPass.height);
-		this.renderTargetLight.setSize(blurPass.width, blurPass.height);
+		this.resolution.height = value;
 
 	}
 
@@ -405,12 +407,12 @@ export class GodRaysEffect extends Effect {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
 
-		return this.blurPass.getResolutionScale();
+		return this.resolution.scale;
 
 	}
 
@@ -418,14 +420,13 @@ export class GodRaysEffect extends Effect {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
-	 * @deprecated Adjust the width or height instead.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
 
-		const originalSize = this.blurPass.getOriginalSize();
-		this.blurPass.setResolutionScale(scale);
-		this.setSize(originalSize.x, originalSize.y);
+		this.resolution.scale = scale;
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -483,7 +484,7 @@ export class GodRaysEffect extends Effect {
 		const parent = lightSource.parent;
 		const matrixAutoUpdate = lightSource.matrixAutoUpdate;
 
-		const renderTargetX = this.renderTargetX;
+		const renderTargetA = this.renderTargetA;
 		const renderTargetLight = this.renderTargetLight;
 
 		if(!matrixAutoUpdate) {
@@ -504,8 +505,8 @@ export class GodRaysEffect extends Effect {
 		// Render the light source and mask it based on depth.
 		this.lightScene.add(lightSource);
 		this.renderPassLight.render(renderer, renderTargetLight);
-		this.clearPass.render(renderer, renderTargetX);
-		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetX);
+		this.clearPass.render(renderer, renderTargetA);
+		this.depthMaskPass.render(renderer, renderTargetLight, renderTargetA);
 
 		// Restore the original values.
 		lightSource.material.depthWrite = false;
@@ -533,12 +534,12 @@ export class GodRaysEffect extends Effect {
 		if(this.blur) {
 
 			// Blur the masked scene to reduce artifacts.
-			this.blurPass.render(renderer, renderTargetX, renderTargetX);
+			this.blurPass.render(renderer, renderTargetA, renderTargetA);
 
 		}
 
 		// Blur the masked scene along radial lines towards the light source.
-		this.godRaysPass.render(renderer, renderTargetX, this.renderTargetY);
+		this.godRaysPass.render(renderer, renderTargetA, this.renderTargetB);
 
 	}
 
@@ -552,16 +553,15 @@ export class GodRaysEffect extends Effect {
 	setSize(width, height) {
 
 		this.blurPass.setSize(width, height);
-
 		this.renderPassLight.setSize(width, height);
 		this.depthMaskPass.setSize(width, height);
 		this.godRaysPass.setSize(width, height);
 
-		width = this.blurPass.width;
-		height = this.blurPass.height;
+		width = this.resolution.width;
+		height = this.resolution.height;
 
-		this.renderTargetX.setSize(width, height);
-		this.renderTargetY.setSize(width, height);
+		this.renderTargetA.setSize(width, height);
+		this.renderTargetB.setSize(width, height);
 		this.renderTargetLight.setSize(width, height);
 
 	}
@@ -582,8 +582,8 @@ export class GodRaysEffect extends Effect {
 
 		if(!alpha) {
 
-			this.renderTargetX.texture.format = RGBFormat;
-			this.renderTargetY.texture.format = RGBFormat;
+			this.renderTargetA.texture.format = RGBFormat;
+			this.renderTargetB.texture.format = RGBFormat;
 			this.renderTargetLight.texture.format = RGBFormat;
 
 		}
