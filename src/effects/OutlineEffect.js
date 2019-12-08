@@ -619,12 +619,12 @@ export class OutlineEffect extends Effect {
 	setSize(width, height) {
 
 		this.blurPass.setSize(width, height);
-		this.depthPass.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
 		width = this.resolution.width;
 		height = this.resolution.height;
 
+		this.depthPass.setSize(width, height);
 		this.renderTargetEdges.setSize(width, height);
 		this.renderTargetBlurredEdges.setSize(width, height);
 		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
