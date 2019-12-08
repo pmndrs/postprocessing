@@ -70,6 +70,9 @@ export class Resizer {
 	/**
 	 * The calculated width.
 	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base width will be returned.
+	 *
 	 * @type {Number}
 	 */
 
@@ -116,6 +119,9 @@ export class Resizer {
 
 	/**
 	 * The calculated height.
+	 *
+	 * If both the width and the height are set to {@link Resizer.AUTO_SIZE}, the
+	 * base height will be returned.
 	 *
 	 * @type {Number}
 	 */
