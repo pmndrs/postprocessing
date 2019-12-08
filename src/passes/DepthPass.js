@@ -7,6 +7,7 @@ import {
 	WebGLRenderTarget
 } from "three";
 
+import { Resizer } from "../core/Resizer.js";
 import { Pass } from "./Pass.js";
 import { RenderPass } from "./RenderPass.js";
 
@@ -22,11 +23,18 @@ export class DepthPass extends Pass {
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.resolutionScale=1.0] - The render texture resolution scale, relative to the main frame buffer size.
+	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
-	constructor(scene, camera, { resolutionScale = 1.0, renderTarget } = {}) {
+	constructor(scene, camera, {
+		resolutionScale = 1.0,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE,
+		renderTarget
+	} = {}) {
 
 		super("DepthPass");
 
@@ -70,22 +78,16 @@ export class DepthPass extends Pass {
 		}
 
 		/**
-		 * The current resolution scale.
+		 * The desired render resolution.
 		 *
-		 * @type {Number}
-		 * @private
+		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
+		 * calculate it based on its counterpart and the original aspect ratio.
+		 *
+		 * @type {Resizer}
 		 */
 
-		this.resolutionScale = resolutionScale;
-
-		/**
-		 * The original size.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.originalSize = new Vector2();
+		this.resolution = new Resizer(this, width, height);
+		this.resolution.scale = resolutionScale;
 
 	}
 
@@ -93,6 +95,7 @@ export class DepthPass extends Pass {
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	getResolutionScale() {
@@ -105,6 +108,7 @@ export class DepthPass extends Pass {
 	 * Sets the resolution scale.
 	 *
 	 * @param {Number} scale - The new resolution scale.
+	 * @deprecated Adjust the fixed resolution width or height instead.
 	 */
 
 	setResolutionScale(scale) {
@@ -140,12 +144,13 @@ export class DepthPass extends Pass {
 
 	setSize(width, height) {
 
-		this.originalSize.set(width, height);
+		const resolution = this.resolution;
+		resolution.base.set(width, height);
 
-		this.renderTarget.setSize(
-			Math.max(1, Math.round(width * this.resolutionScale)),
-			Math.max(1, Math.round(height * this.resolutionScale))
-		);
+		width = resolution.width;
+		height = resolution.height;
+
+		this.renderTarget.setSize(width, height);
 
 	}
 
