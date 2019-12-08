@@ -32,7 +32,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
 	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
 	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
-	 * @param {Number} [options.bias=0.0] - An occlusion bias. Should be set to 0.5 when logarithmic depth is used.
+	 * @param {Number} [options.bias=0.0] - An occlusion bias.
 	 */
 
 	constructor(camera, normalBuffer, {
