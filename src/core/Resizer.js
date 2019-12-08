@@ -34,15 +34,6 @@ export class Resizer {
 		this.resizable = resizable;
 
 		/**
-		 * The target size.
-		 *
-		 * @type {Vector2}
-		 * @private
-		 */
-
-		this.target = new Vector2(width, height);
-
-		/**
 		 * The base size.
 		 *
 		 * This size will be passed to the resizable object every time the width or
@@ -52,6 +43,15 @@ export class Resizer {
 		 */
 
 		this.base = new Vector2(1, 1);
+
+		/**
+		 * The target size.
+		 *
+		 * @type {Vector2}
+		 * @private
+		 */
+
+		this.target = new Vector2(width, height);
 
 		/**
 		 * A scale.
