@@ -3,7 +3,6 @@ import {
 	MeshNormalMaterial,
 	LinearFilter,
 	RGBFormat,
-	Vector2,
 	WebGLRenderTarget
 } from "three";
 

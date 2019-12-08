@@ -3,7 +3,6 @@ import {
 	MeshDepthMaterial,
 	LinearFilter,
 	RGBADepthPacking,
-	Vector2,
 	WebGLRenderTarget
 } from "three";
 
