@@ -45,11 +45,11 @@
 		"lint:test": "eslint test",
 		"build": "rollup -c",
 		"build:production": "cross-env NODE_ENV=production npm run build",
-		"watch": "rollup -c --watch",
+		"watch": "concurrently --kill-others \"esw src -w\" \"rollup -c -w\"",
 		"doc": "rimraf public/docs && esdoc",
 		"pretest": "npm run lint && npm run build:production",
 		"test": "npm run ava",
-		"prepack": "npm test"
+		"prepack": "npm test && npm run doc"
 	},
 	"ava": {
 		"failFast": true,
@@ -69,6 +69,7 @@
 		"@rollup/plugin-commonjs": "11.x.x",
 		"@rollup/plugin-node-resolve": "6.x.x",
 		"ava": "2.x.x",
+		"concurrently": "5.x.x",
 		"cross-env": "6.x.x",
 		"dat.gui": "0.x.x",
 		"delta-controls": "2.x.x",
@@ -77,6 +78,7 @@
 		"esdoc-standard-plugin": "1.x.x",
 		"eslint": "6.x.x",
 		"eslint-config-aether": "1.x.x",
+		"eslint-watch": "6.x.x",
 		"math-ds": "1.x.x",
 		"rimraf": "3.x.x",
 		"rollup": "1.x.x",
