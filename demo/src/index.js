@@ -236,7 +236,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 });
 
 /**
- * Toggles the visibility of the interface on Alt key press.
+ * Toggles the visibility of the interface on H key press.
  *
  * @private
  * @param {Event} event - An event.
