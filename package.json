@@ -58,14 +58,16 @@
 		]
 	},
 	"eslintConfig": {
-		"extends": "delta"
+		"extends": "aether"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.112.0"
+		"three": ">= 0.102.0 < 0.113.0"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
+		"@rollup/plugin-commonjs": "11.x.x",
+		"@rollup/plugin-node-resolve": "6.x.x",
 		"ava": "2.x.x",
 		"cross-env": "6.x.x",
 		"dat.gui": "0.x.x",
@@ -74,18 +76,16 @@
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
 		"eslint": "6.x.x",
-		"eslint-config-delta": "1.x.x",
+		"eslint-config-aether": "1.x.x",
 		"math-ds": "1.x.x",
 		"rimraf": "3.x.x",
 		"rollup": "1.x.x",
 		"rollup-plugin-babel": "4.x.x",
 		"rollup-plugin-babel-minify": "9.x.x",
-		"rollup-plugin-commonjs": "10.x.x",
 		"rollup-plugin-glsl": "1.x.x",
-		"rollup-plugin-node-resolve": "5.x.x",
 		"synthetic-event": "1.x.x",
-		"three": "0.111.x",
+		"three": "0.112.x",
 		"three-demo": "3.x.x",
-		"three-gltf-loader": "1.110.x"
+		"three-gltf-loader": "1.x.x"
 	}
 }
