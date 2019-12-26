@@ -1,8 +1,8 @@
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
-import glsl from "rollup-plugin-glsl";
 import minify from "rollup-plugin-babel-minify";
-import resolve from "rollup-plugin-node-resolve";
+import glsl from "rollup-plugin-glsl";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
@@ -14,7 +14,10 @@ const banner = `/**
  */`;
 
 const production = (process.env.NODE_ENV === "production");
-const globals = { three: "THREE" };
+const external = Object.keys(pkg.peerDependencies);
+const globals = Object.assign({}, ...external.map((value) => ({
+	[value]: value.replace(/-/g, "").toUpperCase()
+})));
 
 const lib = {
 
