@@ -23,7 +23,7 @@ const lib = {
 
 	module: {
 		input: "src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: [resolve(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
@@ -47,7 +47,7 @@ const lib = {
 
 	main: {
 		input: pkg.main,
-		external: Object.keys(globals),
+		external,
 		plugins: [babel()],
 		output: {
 			file: pkg.main,
@@ -60,7 +60,7 @@ const lib = {
 
 	min: {
 		input: pkg.main.replace(".js", ".min.js"),
-		external: Object.keys(globals),
+		external,
 		plugins: [minify({
 			bannerNewLine: true,
 			comments: false
@@ -80,7 +80,7 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
@@ -99,7 +99,7 @@ const demo = {
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: production ? [babel()] : [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
@@ -114,7 +114,7 @@ const demo = {
 
 	min: {
 		input: "public/demo/index.min.js",
-		external: Object.keys(globals),
+		external,
 		plugins: [minify({
 			comments: false
 		}), babel()],
