@@ -48,7 +48,7 @@
 		"watch": "concurrently --kill-others \"esw src -w\" \"rollup -c -w\"",
 		"doc": "rimraf public/docs && esdoc",
 		"pretest": "npm run lint && npm run build:production",
-		"test": "npm run ava",
+		"test": "ava",
 		"prepack": "npm test && npm run doc"
 	},
 	"ava": {
