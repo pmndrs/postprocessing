@@ -21,9 +21,9 @@ devDependencies:
   rollup-plugin-babel-minify: 9.1.1_rollup@1.27.14
   rollup-plugin-glsl: 1.3.0
   synthetic-event: 1.0.0
-  three: 0.112.0
-  three-demo: 3.15.0_79c96d2dc50ce3148a24beaa2b5e4159
-  three-gltf-loader: 1.111.0_three@0.112.0
+  three: 0.112.1
+  three-demo: 3.15.0_6274b0b1a501bff7e0ffa21e46b83b56
+  three-gltf-loader: 1.111.0_three@0.112.1
 lockfileVersion: 5.1
 packages:
   /@ava/babel-plugin-throws-helper/4.0.0:
@@ -1520,7 +1520,7 @@ packages:
       integrity: sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==
   /browserslist/4.8.2:
     dependencies:
-      caniuse-lite: 1.0.30001016
+      caniuse-lite: 1.0.30001017
       electron-to-chromium: 1.3.322
       node-releases: 1.1.44
     dev: true
@@ -1594,10 +1594,10 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
-  /caniuse-lite/1.0.30001016:
+  /caniuse-lite/1.0.30001017:
     dev: true
     resolution:
-      integrity: sha512-yYQ2QfotceRiH4U+h1Us86WJXtVHDmy3nEKIdYPsZCYnOV5/tMgGbmoIlrMzmh2VXlproqYtVaKeGDBkMZifFA==
+      integrity: sha512-EDnZyOJ6eYh6lHmCvCdHAFbfV4KJ9lSdfv4h/ppEhrU/Yudkl7jujwMZ1we6RX7DXqBfT04pVMQ4J+1wcTlsKA==
   /caseless/0.12.0:
     dev: true
     optional: true
@@ -1859,7 +1859,7 @@ packages:
       date-fns: 2.8.1
       lodash: 4.17.15
       read-pkg: 4.0.1
-      rxjs: 6.5.3
+      rxjs: 6.5.4
       spawn-command: 0.0.2-1
       supports-color: 6.1.0
       tree-kill: 1.2.2
@@ -3196,7 +3196,7 @@ packages:
       lodash: 4.17.15
       mute-stream: 0.0.8
       run-async: 2.3.0
-      rxjs: 6.5.3
+      rxjs: 6.5.4
       string-width: 4.2.0
       strip-ansi: 5.2.0
       through: 2.3.8
@@ -4844,14 +4844,14 @@ packages:
     dev: true
     resolution:
       integrity: sha512-DEqnSRTDw/Tc3FXf49zedI638Z9onwUotBMiUFKmrO2sdFKIbXamXGQ3Axd4qgphxKB4kw/qP1w5kTxnfU1B9Q==
-  /rxjs/6.5.3:
+  /rxjs/6.5.4:
     dependencies:
       tslib: 1.10.0
     dev: true
     engines:
       npm: '>=2.0.0'
     resolution:
-      integrity: sha512-wuYsAYYFdWTAnAaPoKGNhfpWwKZbJW+HgAJ+mImp+Epl7BG8oNWBCTyRM8gba9k4lk8BgWdoYm21Mo/RYhhbgA==
+      integrity: sha512-naMQXcgEo3csAEGvw/NydRA0fuS2nDZJiw1YUWFKU7aPPAPGZEsD4Iimit96qwCieH6y614MCLYwdkrWx7z/7Q==
   /safe-buffer/5.1.2:
     dev: true
     resolution:
@@ -5258,11 +5258,11 @@ packages:
     dev: true
     resolution:
       integrity: sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
-  /three-demo/3.15.0_79c96d2dc50ce3148a24beaa2b5e4159:
+  /three-demo/3.15.0_6274b0b1a501bff7e0ffa21e46b83b56:
     dependencies:
       dat.gui: 0.7.6
       synthetic-event: 1.0.0
-      three: 0.112.0
+      three: 0.112.1
     dev: true
     peerDependencies:
       dat.gui: '>= 0.0.0 < 1.0.0'
@@ -5270,18 +5270,18 @@ packages:
       three: '>= 0.89.0 < 0.113.0'
     resolution:
       integrity: sha512-fmZ10CPCDVrDqf8gUzDpUn6Byxc+CcLIl6nsFLvKXPiGInD1g1zzE45vAzdNBhcHQaLdcFOmsCbmd4eyBcolXQ==
-  /three-gltf-loader/1.111.0_three@0.112.0:
+  /three-gltf-loader/1.111.0_three@0.112.1:
     dependencies:
-      three: 0.112.0
+      three: 0.112.1
     dev: true
     peerDependencies:
       three: '>=0.111.0'
     resolution:
       integrity: sha512-f2d6J5sMEC+dvRcpRjE8g9vqtvpNfnR7bgd+R7Y0dj2mmHwKN5luKe/WYA0Z9+j7mhjla/AC5DGxdXsu8wFhug==
-  /three/0.112.0:
+  /three/0.112.1:
     dev: true
     resolution:
-      integrity: sha512-dX2fm4kmpaEq3A8sMGOBZzI5X132Lzoh+Aw/uFF3iGXnjM0jzxo5vugDbydTQbWU2I31XC1Nn7kIPdyhxx1uqg==
+      integrity: sha512-8I0O74hiYtKl3LgDNcPJbBGOlpekbcJ6fJnImmW3mFdeUFJ2H9Y3/UuUSW2sBdjrIlCM0gvOkaTEFlofO900TQ==
   /through/2.3.8:
     dev: true
     resolution:
@@ -5713,6 +5713,6 @@ specifiers:
   rollup-plugin-babel-minify: 9.1.1
   rollup-plugin-glsl: 1.3.0
   synthetic-event: 1.0.0
-  three: 0.112.0
+  three: 0.112.1
   three-demo: 3.15.0
   three-gltf-loader: 1.111.0
