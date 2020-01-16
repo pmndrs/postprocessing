@@ -1,8 +1,8 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import babel from "rollup-plugin-babel";
-import minify from "rollup-plugin-babel-minify";
 import glsl from "rollup-plugin-glsl";
+import { terser } from "rollup-plugin-terser";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
@@ -10,7 +10,8 @@ const date = (new Date()).toDateString();
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
- * Copyright ${date.slice(-4)} ${pkg.author.name}, ${pkg.license}
+ * Copyright ${date.slice(-4)} ${pkg.author.name}
+ * @license ${pkg.license}
  */`;
 
 const production = (process.env.NODE_ENV === "production");
@@ -61,10 +62,7 @@ const lib = {
 	min: {
 		input: pkg.main.replace(".js", ".min.js"),
 		external,
-		plugins: [minify({
-			bannerNewLine: true,
-			comments: false
-		}), babel()],
+		plugins: [terser(), babel()],
 		output: {
 			file: pkg.main.replace(".js", ".min.js"),
 			format: "umd",
@@ -115,9 +113,7 @@ const demo = {
 	min: {
 		input: "public/demo/index.min.js",
 		external,
-		plugins: [minify({
-			comments: false
-		}), babel()],
+		plugins: [terser(), babel()],
 		output: {
 			file: "public/demo/index.min.js",
 			format: "iife",
