@@ -10,8 +10,8 @@ import {
 	Vector3
 } from "three";
 
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DeltaControls } from "delta-controls";
-import GLTFLoader from "three-gltf-loader";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
