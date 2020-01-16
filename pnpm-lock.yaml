@@ -19,6 +19,7 @@ devDependencies:
   rollup: 1.29.0
   rollup-plugin-babel: 4.3.3_@babel+core@7.8.3+rollup@1.29.0
   rollup-plugin-glsl: 1.3.0
+  rollup-plugin-string: 3.0.0
   rollup-plugin-terser: 5.2.0_rollup@1.29.0
   synthetic-event: 1.0.0
   three: 0.112.1
@@ -3722,7 +3723,7 @@ packages:
       integrity: sha1-h+IBAJ6/3m9G3FdXMFpwr3HjFiQ=
   /magic-string/0.25.6:
     dependencies:
-      sourcemap-codec: 1.4.7
+      sourcemap-codec: 1.4.8
     dev: true
     resolution:
       integrity: sha512-3a5LOMSGoCTH5rbqobC2HuDNRtE2glHZ8J7pK+QZYppyWA36yuNpsX994rIY2nCuyP7CZYy7lQq/X2jygiZ89g==
@@ -4716,6 +4717,12 @@ packages:
     dev: true
     resolution:
       integrity: sha512-iddxdkQmuo6Hfk5JuT2ntVe8D5hvZ+r3uyPotjIkF2JYNOEdamEWCnieoLGCcxU16pWFoV/tmu74qkeR5Q/ChQ==
+  /rollup-plugin-string/3.0.0:
+    dependencies:
+      rollup-pluginutils: 2.8.2
+    dev: true
+    resolution:
+      integrity: sha512-vqyzgn9QefAgeKi+Y4A7jETeIAU1zQmS6VotH6bzm/zmUQEnYkpIGRaOBPY41oiWYV4JyBoGAaBjYMYuv+6wVw==
   /rollup-plugin-terser/5.2.0_rollup@1.29.0:
     dependencies:
       '@babel/code-frame': 7.8.3
@@ -4895,10 +4902,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==
-  /sourcemap-codec/1.4.7:
+  /sourcemap-codec/1.4.8:
     dev: true
     resolution:
-      integrity: sha512-RuN23NzhAOuUtaivhcrjXx1OPXsFeH9m5sI373/U7+tGLKihjUyboZAzOadytMjnqHp1f45RGk1IzDKCpDpSYA==
+      integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==
   /spawn-command/0.0.2-1:
     dev: true
     resolution:
@@ -5630,6 +5637,7 @@ specifiers:
   rollup: 1.29.0
   rollup-plugin-babel: 4.3.3
   rollup-plugin-glsl: 1.3.0
+  rollup-plugin-string: 3.0.0
   rollup-plugin-terser: 5.2.0
   synthetic-event: 1.0.0
   three: 0.112.1
