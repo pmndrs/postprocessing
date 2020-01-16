@@ -17,7 +17,8 @@ import {
 	BlendFunction,
 	ToneMappingEffect,
 	EffectPass,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -77,6 +78,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/sunset/";
 		const format = ".png";
@@ -106,7 +108,12 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

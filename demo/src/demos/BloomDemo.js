@@ -22,7 +22,8 @@ import {
 	EffectPass,
 	KernelSize,
 	SelectiveBloomEffect,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -213,6 +214,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space2/";
 		const format = ".jpg";
@@ -235,7 +237,12 @@ export class BloomDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

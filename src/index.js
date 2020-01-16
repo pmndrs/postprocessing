@@ -46,6 +46,7 @@ export {
 export {
 	RawImageData,
 	SMAAAreaImageData,
+	SMAAImageLoader,
 	SMAASearchImageData
 } from "./images";
 

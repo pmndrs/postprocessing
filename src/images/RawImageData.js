@@ -5,36 +5,16 @@
  * @param {Number} width - The image width.
  * @param {Number} height - The image height.
  * @param {Uint8ClampedArray} data - The image data.
- * @param {Number} channels - The color channels used for a single pixel.
  * @return {Canvas} The canvas.
  */
 
-function createCanvas(width, height, data, channels) {
+function createCanvas(width, height, data) {
 
 	const canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
 	const context = canvas.getContext("2d");
 
 	const imageData = context.createImageData(width, height);
-	const target = imageData.data;
-
-	let x, y;
-	let i, j;
-
-	for(y = 0; y < height; ++y) {
-
-		for(x = 0; x < width; ++x) {
-
-			i = (y * width + x) * 4;
-			j = (y * width + x) * channels;
-
-			target[i] = (channels > 0) ? data[j] : 0;
-			target[i + 1] = (channels > 1) ? data[j + 1] : 0;
-			target[i + 2] = (channels > 2) ? data[j + 2] : 0;
-			target[i + 3] = (channels > 3) ? data[j + 3] : 255;
-
-		}
-
-	}
+	imageData.data.set(data);
 
 	canvas.width = width;
 	canvas.height = height;
@@ -57,10 +37,9 @@ export class RawImageData {
 	 * @param {Number} [width=0] - The width of the image.
 	 * @param {Number} [height=0] - The height of the image.
 	 * @param {Uint8ClampedArray} [data=null] - The image data.
-	 * @param {Number} [channels=4] - The amount of color channels used per pixel. Range [1, 4].
 	 */
 
-	constructor(width = 0, height = 0, data = null, channels = 4) {
+	constructor(width = 0, height = 0, data = null) {
 
 		/**
 		 * The width of the image.
@@ -86,14 +65,6 @@ export class RawImageData {
 
 		this.data = data;
 
-		/**
-		 * The amount of color channels used per pixel. Range [1, 4].
-		 *
-		 * @type {Number}
-		 */
-
-		this.channels = channels;
-
 	}
 
 	/**
@@ -107,9 +78,21 @@ export class RawImageData {
 		return (typeof document === "undefined") ? null : createCanvas(
 			this.width,
 			this.height,
-			this.data,
-			this.channels
+			this.data
 		);
+
+	}
+
+	/**
+	 * Creates a new image data container.
+	 *
+	 * @param {Object} data - Raw image data.
+	 * @return {RawImageData} The image data.
+	 */
+
+	static from(data) {
+
+		return new RawImageData(data.width, data.height, data.data);
 
 	}
 

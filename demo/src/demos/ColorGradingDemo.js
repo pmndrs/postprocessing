@@ -10,7 +10,8 @@ import {
 	GammaCorrectionEffect,
 	HueSaturationEffect,
 	SepiaEffect,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -96,6 +97,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/sunset/";
 		const format = ".png";
@@ -118,7 +120,12 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

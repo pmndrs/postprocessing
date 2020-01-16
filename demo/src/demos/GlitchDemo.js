@@ -20,7 +20,8 @@ import {
 	GlitchMode,
 	GlitchEffect,
 	NoiseEffect,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -80,6 +81,7 @@ export class GlitchDemo extends PostProcessingDemo {
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space4/";
 		const format = ".jpg";
@@ -108,7 +110,12 @@ export class GlitchDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

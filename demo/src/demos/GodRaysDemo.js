@@ -19,7 +19,8 @@ import {
 	EffectPass,
 	GodRaysEffect,
 	KernelSize,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -86,8 +87,9 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const modelLoader = new GLTFLoader(loadingManager);
+		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/starry/";
 		const format = ".png";
@@ -120,7 +122,12 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

@@ -31,8 +31,8 @@ export class SMAAEffect extends Effect {
 	/**
 	 * Constructs a new SMAA effect.
 	 *
-	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
-	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
+	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link SMAAImageLoader}.
+	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link SMAAImageLoader}.
 	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
 	 */
 
@@ -289,6 +289,7 @@ export class SMAAEffect extends Effect {
 	 * the area image to create an {@link SMAAEffect}.
 	 *
 	 * @type {String}
+	 * @deprecated Use SMAAImageLoader instead.
 	 * @example
 	 * const searchImage = new Image();
 	 * searchImage.addEventListener("load", progress);
@@ -308,6 +309,7 @@ export class SMAAEffect extends Effect {
 	 * the search image to create an {@link SMAAEffect}.
 	 *
 	 * @type {String}
+	 * @deprecated Use SMAAImageLoader instead.
 	 * @example
 	 * const areaImage = new Image();
 	 * areaImage.addEventListener("load", progress);
