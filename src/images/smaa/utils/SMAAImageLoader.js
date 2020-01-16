@@ -89,7 +89,7 @@ export class SMAAImageLoader {
 	 *
 	 * @param {Function} [onLoad] - A function to call when the loading process is done.
 	 * @param {Function} [onError] - A function to call when an error occurs.
-	 * @return {Promise} A promise that returns the search image and area image.
+	 * @return {Promise} A promise that returns the search image and area image as a tupel.
 	 */
 
 	load(onLoad = () => {}, onError = () => {}) {
@@ -104,18 +104,6 @@ export class SMAAImageLoader {
 
 		return new Promise((resolve, reject) => {
 
-			const result = {
-				search: new Image(),
-				area: new Image()
-			};
-
-			internalManager.onLoad = () => {
-
-				onLoad(result);
-				resolve(result);
-
-			};
-
 			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
 				localStorage.getItem("smaa-search"),
 				localStorage.getItem("smaa-area")
@@ -126,22 +114,31 @@ export class SMAAImageLoader {
 
 			promise.then((urls) => {
 
-				result.search.addEventListener("load", () => {
+				const result = [new Image(), new Image()];
+
+				internalManager.onLoad = () => {
+
+					onLoad(result);
+					resolve(result);
+
+				};
+
+				result[0].addEventListener("load", () => {
 
 					externalManager.itemEnd("smaa-search");
 					internalManager.itemEnd("smaa-search");
 
 				});
 
-				result.area.addEventListener("load", () => {
+				result[1].addEventListener("load", () => {
 
 					externalManager.itemEnd("smaa-area");
 					internalManager.itemEnd("smaa-area");
 
 				});
 
-				result.search.src = urls[0];
-				result.area.src = urls[1];
+				result[0].src = urls[0];
+				result[1].src = urls[1];
 
 			}).catch((error) => {
 
