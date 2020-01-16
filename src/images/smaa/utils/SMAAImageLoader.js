@@ -6,11 +6,11 @@ import workerProgram from "./worker.tmp";
  * Generates the SMAA data images.
  *
  * @private
- * @param {Boolean} [useCache=true] - Determines whether the generated image data should be cached.
+ * @param {Boolean} [disableCache=false] - Determines whether the generated image data should be cached.
  * @return {Promise} A promise that returns the search image and area image blobs.
  */
 
-function generate(useCache = true) {
+function generate(disableCache = false) {
 
 	const workerURL = URL.createObjectURL(new Blob([workerProgram], { type: "text/javascript" }));
 	const worker = new Worker(workerURL);
@@ -28,7 +28,7 @@ function generate(useCache = true) {
 				areaImageData.toCanvas().toDataURL()
 			];
 
-			if(useCache && window.localStorage !== undefined) {
+			if(!disableCache && window.localStorage !== undefined) {
 
 				localStorage.setItem("smaa-search", urls[0]);
 				localStorage.setItem("smaa-area", urls[1]);
@@ -51,7 +51,9 @@ function generate(useCache = true) {
  *
  * This loader uses a worker thread to generate the search and area images. The
  * Generated data URLs will be cached using localStorage, if available. To
- * disable caching, use {@link SMAAImageLoader.useCache}.
+ * disable caching, please refer to {@link SMAAImageLoader.disableCache}.
+ *
+ * @experimental Added for testing, API might change in patch or minor releases.
  */
 
 export class SMAAImageLoader {
@@ -73,12 +75,12 @@ export class SMAAImageLoader {
 		this.loadingManager = loadingManager;
 
 		/**
-		 * Indicates whether the generated image data should be cached.
+		 * Indicates whether data image caching is disabled.
 		 *
 		 * @type {Boolean}
 		 */
 
-		this.useCache = true;
+		this.disableCache = false;
 
 	}
 
@@ -87,18 +89,18 @@ export class SMAAImageLoader {
 	 *
 	 * @param {Function} [onLoad] - A function to call when the loading process is done.
 	 * @param {Function} [onError] - A function to call when an error occurs.
-	 * @return {Promise} A promise that returns the search image and area image as a tupel.
+	 * @return {Promise} A promise that returns the search image and area image.
 	 */
 
 	load(onLoad = () => {}, onError = () => {}) {
 
-		const primaryManager = this.loadingManager;
-		const secondaryManager = new LoadingManager();
+		const externalManager = this.loadingManager;
+		const internalManager = new LoadingManager();
 
-		primaryManager.itemStart("smaa-search");
-		primaryManager.itemStart("smaa-area");
-		secondaryManager.itemStart("smaa-search");
-		secondaryManager.itemStart("smaa-area");
+		externalManager.itemStart("smaa-search");
+		externalManager.itemStart("smaa-area");
+		internalManager.itemStart("smaa-search");
+		internalManager.itemStart("smaa-area");
 
 		return new Promise((resolve, reject) => {
 
@@ -107,34 +109,34 @@ export class SMAAImageLoader {
 				area: new Image()
 			};
 
-			secondaryManager.onLoad = () => {
+			internalManager.onLoad = () => {
 
 				onLoad(result);
 				resolve(result);
 
 			};
 
-			const cachedURLs = (this.useCache && window.localStorage !== undefined) ? [
+			const cachedURLs = (!this.disableCache && window.localStorage !== undefined) ? [
 				localStorage.getItem("smaa-search"),
 				localStorage.getItem("smaa-area")
 			] : [null, null];
 
 			const promise = (cachedURLs[0] !== null && cachedURLs[1] !== null) ?
-				Promise.resolve(cachedURLs) : generate(this.useCache);
+				Promise.resolve(cachedURLs) : generate(this.disableCache);
 
 			promise.then((urls) => {
 
 				result.search.addEventListener("load", () => {
 
-					primaryManager.itemEnd("smaa-search");
-					secondaryManager.itemEnd("smaa-search");
+					externalManager.itemEnd("smaa-search");
+					internalManager.itemEnd("smaa-search");
 
 				});
 
 				result.area.addEventListener("load", () => {
 
-					primaryManager.itemEnd("smaa-area");
-					secondaryManager.itemEnd("smaa-area");
+					externalManager.itemEnd("smaa-area");
+					internalManager.itemEnd("smaa-area");
 
 				});
 
@@ -143,8 +145,8 @@ export class SMAAImageLoader {
 
 			}).catch((error) => {
 
-				primaryManager.itemError("smaa-search");
-				primaryManager.itemError("smaa-area");
+				externalManager.itemError("smaa-search");
+				externalManager.itemError("smaa-area");
 
 				onError(error);
 				reject(error);
