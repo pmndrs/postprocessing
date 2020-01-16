@@ -24,9 +24,7 @@ const globals = Object.assign({}, ...external.map((value) => ({
 const worker = {
 
 	input: "src/images/smaa/utils/worker.js",
-	plugins: [resolve()].concat(production ? [minify({
-		comments: false
-	}), babel()] : []),
+	plugins: [resolve()].concat(production ? [terser(), babel()] : []),
 	output: {
 		file: "src/images/smaa/utils/worker.tmp",
 		format: "iife"
