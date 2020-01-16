@@ -20,8 +20,8 @@ import { PostProcessingDemo } from "./PostProcessingDemo.js";
 import {
 	BlendFunction,
 	EffectPass,
-	SMAAImageLoader,
 	SMAAEffect,
+	SMAAImageLoader,
 	SMAAPreset,
 	TextureEffect
 } from "../../../src";
@@ -179,10 +179,10 @@ export class SMAADemo extends PostProcessingDemo {
 
 				});
 
-				smaaImageLoader.load((smaa) => {
+				smaaImageLoader.load(([search, area]) => {
 
-					assets.set("smaa-search", smaa.search);
-					assets.set("smaa-area", smaa.area);
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
 
 				});
 

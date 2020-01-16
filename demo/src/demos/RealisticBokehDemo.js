@@ -16,6 +16,7 @@ import {
 	RealisticBokehEffect,
 	EffectPass,
 	SMAAEffect,
+	SMAAImageLoader,
 	VignetteEffect
 } from "../../../src";
 
@@ -66,6 +67,7 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space3/";
 		const format = ".jpg";
@@ -88,7 +90,12 @@ export class RealisticBokehDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

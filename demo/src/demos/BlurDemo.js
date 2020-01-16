@@ -19,6 +19,7 @@ import {
 	KernelSize,
 	SavePass,
 	SMAAEffect,
+	SMAAImageLoader,
 	TextureEffect
 } from "../../../src";
 
@@ -87,6 +88,7 @@ export class BlurDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/sunset/";
 		const format = ".png";
@@ -109,7 +111,12 @@ export class BlurDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

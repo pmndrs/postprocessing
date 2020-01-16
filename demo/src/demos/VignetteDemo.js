@@ -16,6 +16,7 @@ import {
 	BlendFunction,
 	EffectPass,
 	SMAAEffect,
+	SMAAImageLoader,
 	VignetteEffect
 } from "../../../src";
 
@@ -75,6 +76,7 @@ export class VignetteDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space/";
 		const format = ".jpg";
@@ -97,7 +99,12 @@ export class VignetteDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

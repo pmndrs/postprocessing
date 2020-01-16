@@ -19,7 +19,8 @@ import {
 	EffectPass,
 	MaskPass,
 	PixelationEffect,
-	SMAAEffect
+	SMAAEffect,
+	SMAAImageLoader
 } from "../../../src";
 
 /**
@@ -87,6 +88,7 @@ export class PixelationDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space/";
 		const format = ".jpg";
@@ -109,7 +111,12 @@ export class PixelationDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 
