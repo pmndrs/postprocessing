@@ -300,6 +300,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~smaaimageloader",
+    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html",
+    "<span>SMAAImageLoader</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~smaapreset",
     "variable/index.html#static-variable-SMAAPreset",
     "<span>SMAAPreset</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -2328,12 +2334,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/images/rawimagedata.js~rawimagedata#channels",
-    "class/src/images/RawImageData.js~RawImageData.html#instance-member-channels",
-    "src/images/RawImageData.js~RawImageData#channels",
-    "member"
-  ],
-  [
     "src/images/rawimagedata.js~rawimagedata#constructor",
     "class/src/images/RawImageData.js~RawImageData.html#instance-constructor-constructor",
     "src/images/RawImageData.js~RawImageData#constructor",
@@ -2362,6 +2362,12 @@ window.esdocSearchIndex = [
     "class/src/images/RawImageData.js~RawImageData.html#instance-member-width",
     "src/images/RawImageData.js~RawImageData#width",
     "member"
+  ],
+  [
+    "src/images/rawimagedata.js~rawimagedata.from",
+    "class/src/images/RawImageData.js~RawImageData.html#static-method-from",
+    "src/images/RawImageData.js~RawImageData.from",
+    "method"
   ],
   [
     "src/images/index.js",
@@ -2394,6 +2400,36 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/images/smaa/utils/smaaimageloader.js",
+    "file/src/images/smaa/utils/SMAAImageLoader.js.html",
+    "src/images/smaa/utils/SMAAImageLoader.js",
+    "file"
+  ],
+  [
+    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#constructor",
+    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-constructor-constructor",
+    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#constructor",
+    "method"
+  ],
+  [
+    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#disablecache",
+    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-member-disableCache",
+    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#disableCache",
+    "member"
+  ],
+  [
+    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#load",
+    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-method-load",
+    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#load",
+    "method"
+  ],
+  [
+    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#loadingmanager",
+    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-member-loadingManager",
+    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#loadingManager",
+    "member"
+  ],
+  [
     "src/images/smaa/utils/smaasearchimagedata.js",
     "file/src/images/smaa/utils/SMAASearchImageData.js.html",
     "src/images/smaa/utils/SMAASearchImageData.js",
@@ -2404,6 +2440,12 @@ window.esdocSearchIndex = [
     "class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html#static-method-generate",
     "src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.generate",
     "method"
+  ],
+  [
+    "src/images/smaa/utils/worker.js",
+    "file/src/images/smaa/utils/worker.js.html",
+    "src/images/smaa/utils/worker.js",
+    "file"
   ],
   [
     "src/index.js",

@@ -1,7 +1,8 @@
 /**
- * postprocessing v6.9.0 build Sun Dec 08 2019
+ * postprocessing v6.10.0 build Fri Jan 17 2020
  * https://github.com/vanruesc/postprocessing
- * Copyright 2019 Raoul van Rüschen, Zlib
+ * Copyright 2020 Raoul van Rüschen
+ * @license Zlib
  */
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
@@ -5020,25 +5021,11 @@
     return VignetteEffect;
   }(Effect);
 
-  function createCanvas(width, height, data, channels) {
+  function createCanvas(width, height, data) {
     var canvas = document.createElementNS("http://www.w3.org/1999/xhtml", "canvas");
     var context = canvas.getContext("2d");
     var imageData = context.createImageData(width, height);
-    var target = imageData.data;
-    var x, y;
-    var i, j;
-
-    for (y = 0; y < height; ++y) {
-      for (x = 0; x < width; ++x) {
-        i = (y * width + x) * 4;
-        j = (y * width + x) * channels;
-        target[i] = channels > 0 ? data[j] : 0;
-        target[i + 1] = channels > 1 ? data[j + 1] : 0;
-        target[i + 2] = channels > 2 ? data[j + 2] : 0;
-        target[i + 3] = channels > 3 ? data[j + 3] : 255;
-      }
-    }
-
+    imageData.data.set(data);
     canvas.width = width;
     canvas.height = height;
     context.putImageData(imageData, 0, 0);
@@ -5050,28 +5037,152 @@
       var width = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
       var height = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      var channels = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 4;
 
       _classCallCheck(this, RawImageData);
 
       this.width = width;
       this.height = height;
       this.data = data;
-      this.channels = channels;
     }
 
     _createClass(RawImageData, [{
       key: "toCanvas",
       value: function toCanvas() {
-        return typeof document === "undefined" ? null : createCanvas(this.width, this.height, this.data, this.channels);
+        return typeof document === "undefined" ? null : createCanvas(this.width, this.height, this.data);
+      }
+    }], [{
+      key: "from",
+      value: function from(data) {
+        return new RawImageData(data.width, data.height, data.data);
       }
     }]);
 
     return RawImageData;
   }();
 
-  var b0 = new three.Box2();
-  var b1 = new three.Box2();
+  var workerProgram = "!function(){\"use strict\";function e(e,t){if(!(e instanceof t))throw new TypeError(\"Cannot call a class as a function\")}function t(e,t){for(var a=0;a<t.length;a++){var n=t[a];n.enumerable=n.enumerable||!1,n.configurable=!0,\"value\"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}function a(e,a,n){return a&&t(e.prototype,a),n&&t(e,n),e}var n=function(){function t(){var a=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0,s=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;e(this,t),this.width=a,this.height=n,this.data=s}return a(t,[{key:\"toCanvas\",value:function(){return\"undefined\"==typeof document?null:(e=this.width,t=this.height,a=this.data,n=document.createElementNS(\"http://www.w3.org/1999/xhtml\",\"canvas\"),s=n.getContext(\"2d\"),(r=s.createImageData(e,t)).data.set(a),n.width=e,n.height=t,s.putImageData(r,0,0),n);var e,t,a,n,s,r}}],[{key:\"from\",value:function(e){return new t(e.width,e.height,e.data)}}]),t}(),s=function(){function t(){var a=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0,n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:0;e(this,t),this.x=a,this.y=n}return a(t,[{key:\"set\",value:function(e,t){return this.x=e,this.y=t,this}},{key:\"equals\",value:function(e){return this===e||this.x===e.x&&this.y===e.y}}]),t}(),r=function t(){e(this,t),this.min=new s,this.max=new s},i=new r,y=new r,c=new Float32Array([0,-.25,.25,-.125,.125,-.375,.375]),u=[new Float32Array([0,0]),new Float32Array([.25,-.25]),new Float32Array([-.25,.25]),new Float32Array([.125,-.125]),new Float32Array([-.125,.125])],h=[new Uint8Array([0,0]),new Uint8Array([3,0]),new Uint8Array([0,3]),new Uint8Array([3,3]),new Uint8Array([1,0]),new Uint8Array([4,0]),new Uint8Array([1,3]),new Uint8Array([4,3]),new Uint8Array([0,1]),new Uint8Array([3,1]),new Uint8Array([0,4]),new Uint8Array([3,4]),new Uint8Array([1,1]),new Uint8Array([4,1]),new Uint8Array([1,4]),new Uint8Array([4,4])],o=[new Uint8Array([0,0]),new Uint8Array([1,0]),new Uint8Array([0,2]),new Uint8Array([1,2]),new Uint8Array([2,0]),new Uint8Array([3,0]),new Uint8Array([2,2]),new Uint8Array([3,2]),new Uint8Array([0,1]),new Uint8Array([1,1]),new Uint8Array([0,3]),new Uint8Array([1,3]),new Uint8Array([2,1]),new Uint8Array([3,1]),new Uint8Array([2,3]),new Uint8Array([3,3])];function w(e,t,a){return e+(t-e)*a}function x(e,t){var a,n=t.min,s=t.max,r=.5*Math.sqrt(2*n.x),i=.5*Math.sqrt(2*n.y),y=.5*Math.sqrt(2*s.x),c=.5*Math.sqrt(2*s.y),u=(a=e/32,Math.min(Math.max(a,0),1));return n.set(w(r,n.x,u),w(i,n.y,u)),s.set(w(y,s.x,u),w(c,s.y,u)),t}function f(e,t,a,n){var s,r,i,y,c=t.x-e.x,u=t.y-e.y,h=a,o=a+1,w=e.y+u*(h-e.x)/c,x=e.y+u*(o-e.x)/c;return h>=e.x&&h<t.x||o>e.x&&o<=t.x?Math.sign(w)===Math.sign(x)||Math.abs(w)<1e-4||Math.abs(x)<1e-4?(s=(w+x)/2)<0?n.set(Math.abs(s),0):n.set(0,Math.abs(s)):(r=(y=-e.y*c/u+e.x)>e.x?w*(y-Math.trunc(y))/2:0,i=y<t.x?x*(1-(y-Math.trunc(y)))/2:0,(s=Math.abs(r)>Math.abs(i)?r:-i)<0?n.set(Math.abs(r),Math.abs(i)):n.set(Math.abs(i),Math.abs(r))):n.set(0,0),n}function l(e,t,a,n,s){var r=i.min,c=i.max,u=y.min,h=y.max,o=y,w=.5+n,l=.5+n-1,b=t+a+1;switch(e){case 0:s.set(0,0);break;case 1:t<=a?f(r.set(0,l),c.set(b/2,0),t,s):s.set(0,0);break;case 2:t>=a?f(r.set(b/2,0),c.set(b,l),t,s):s.set(0,0);break;case 3:f(r.set(0,l),c.set(b/2,0),t,u),f(r.set(b/2,0),c.set(b,l),t,h),x(b,o),s.set(u.x+h.x,u.y+h.y);break;case 4:t<=a?f(r.set(0,w),c.set(b/2,0),t,s):s.set(0,0);break;case 5:s.set(0,0);break;case 6:Math.abs(n)>0?(f(r.set(0,w),c.set(b,l),t,u),f(r.set(0,w),c.set(b/2,0),t,h),f(r.set(b/2,0),c.set(b,l),t,s),h.set(h.x+s.x,h.y+s.y),s.set((u.x+h.x)/2,(u.y+h.y)/2)):f(r.set(0,w),c.set(b,l),t,s);break;case 7:f(r.set(0,w),c.set(b,l),t,s);break;case 8:t>=a?f(r.set(b/2,0),c.set(b,w),t,s):s.set(0,0);break;case 9:Math.abs(n)>0?(f(r.set(0,l),c.set(b,w),t,u),f(r.set(0,l),c.set(b/2,0),t,h),f(r.set(b/2,0),c.set(b,w),t,s),h.set(h.x+s.x,h.y+s.y),s.set((u.x+h.x)/2,(u.y+h.y)/2)):f(r.set(0,l),c.set(b,w),t,s);break;case 10:s.set(0,0);break;case 11:f(r.set(0,l),c.set(b,w),t,s);break;case 12:f(r.set(0,w),c.set(b/2,0),t,u),f(r.set(b/2,0),c.set(b,w),t,h),x(b,o),s.set(u.x+h.x,u.y+h.y);break;case 13:f(r.set(0,l),c.set(b,w),t,s);break;case 14:f(r.set(0,w),c.set(b,l),t,s);break;case 15:s.set(0,0)}return s}function b(e,t,a,n){var s=e.equals(t);if(!s){var r=(e.x+t.x)/2,i=(e.y+t.y)/2;s=(t.y-e.y)*(a-r)+(e.x-t.x)*(n-i)>0}return s}function A(e,t,a,n){var s,r,i;for(s=0,i=0;i<30;++i)for(r=0;r<30;++r)b(e,t,a+r/29,n+i/29)&&++s;return s/900}function v(e,t,a,n,s,r){var i=o[e],y=i[0],c=i[1];return y>0&&(t.x+=s[0],t.y+=s[1]),c>0&&(a.x+=s[0],a.y+=s[1]),r.set(1-A(t,a,1+n,0+n),A(t,a,1+n,1+n))}function k(e,t,a,n,s){var r=i.min,c=i.max,u=y.min,h=y.max,o=t+a+1;switch(e){case 0:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 1:v(e,r.set(1,0),c.set(0+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 2:v(e,r.set(0,0),c.set(1+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 3:v(e,r.set(1,0),c.set(1+o,0+o),t,n,s);break;case 4:v(e,r.set(1,1),c.set(0+o,0+o),t,n,u),v(e,r.set(1,1),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 5:v(e,r.set(1,1),c.set(0+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 6:v(e,r.set(1,1),c.set(1+o,0+o),t,n,s);break;case 7:v(e,r.set(1,1),c.set(1+o,0+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 8:v(e,r.set(0,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,1+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 9:v(e,r.set(1,0),c.set(1+o,1+o),t,n,s);break;case 10:v(e,r.set(0,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 11:v(e,r.set(1,0),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 12:v(e,r.set(1,1),c.set(1+o,1+o),t,n,s);break;case 13:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,1+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 14:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,1),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2);break;case 15:v(e,r.set(1,1),c.set(1+o,1+o),t,n,u),v(e,r.set(1,0),c.set(1+o,0+o),t,n,h),s.set((u.x+h.x)/2,(u.y+h.y)/2)}return s}function U(e,t,a){var n,r,i,y,c,u,h,o,w=new s;for(n=0,r=e.length;n<r;++n)for(h=(u=e[n]).data,o=u.width,y=0;y<o;++y)for(i=0;i<o;++i)a?l(n,i,y,t,w):k(n,i,y,t,w),h[c=2*(y*o+i)]=255*w.x,h[c+1]=255*w.y}function d(e,t,a,n,r,i){var y,c,u,h,o,w,x,f,l,b,A=new s,v=i.data,k=i.width;for(y=0,c=t.length;y<c;++y)for(x=a[y],l=(f=t[y]).data,b=f.width,h=0;h<n;++h)for(u=0;u<n;++u)A.set(x[0]*n+e.x+u,x[1]*n+e.y+h),w=r?2*(h*h*b+u*u):2*(h*b+u),v[o=4*(A.y*k+A.x)]=l[w],v[o+1]=l[w+1],v[o+2]=0,v[o+3]=255}var g=function(){function t(){e(this,t)}return a(t,null,[{key:\"generate\",value:function(){var e,t,a=5*c.length*16,r=new Uint8ClampedArray(160*a*4),i=new n(160,a,r),y=Math.pow(15,2)+1,w=[],x=[],f=new s;for(e=0;e<16;++e)w.push(new n(y,y,new Uint8ClampedArray(y*y*2),2)),x.push(new n(20,20,new Uint8ClampedArray(800),2));for(e=0,t=c.length;e<t;++e)U(w,c[e],!0),f.set(0,80*e),d(f,w,h,16,!0,i);for(e=0,t=u.length;e<t;++e)U(x,u[e],!1),f.set(80,80*e),d(f,x,o,20,!1,i);return i}}]),t}(),m=new Map([[p([0,0,0,0]),[0,0,0,0]],[p([0,0,0,1]),[0,0,0,1]],[p([0,0,1,0]),[0,0,1,0]],[p([0,0,1,1]),[0,0,1,1]],[p([0,1,0,0]),[0,1,0,0]],[p([0,1,0,1]),[0,1,0,1]],[p([0,1,1,0]),[0,1,1,0]],[p([0,1,1,1]),[0,1,1,1]],[p([1,0,0,0]),[1,0,0,0]],[p([1,0,0,1]),[1,0,0,1]],[p([1,0,1,0]),[1,0,1,0]],[p([1,0,1,1]),[1,0,1,1]],[p([1,1,0,0]),[1,1,0,0]],[p([1,1,0,1]),[1,1,0,1]],[p([1,1,1,0]),[1,1,1,0]],[p([1,1,1,1]),[1,1,1,1]]]);function M(e,t,a){return e+(t-e)*a}function p(e){var t=M(e[0],e[1],.75),a=M(e[2],e[3],.75);return M(t,a,.875)}function C(e,t){var a=0;return 1===t[3]&&1!==e[1]&&1!==e[3]&&(a+=1),1===a&&1===t[2]&&1!==e[0]&&1!==e[2]&&(a+=1),a}var q=function(){function t(){e(this,t)}return a(t,null,[{key:\"generate\",value:function(){var e,t,a,s,r,i,y,c,u,h,o=new Uint8ClampedArray(2178),w=new Uint8ClampedArray(4096);for(t=0;t<33;++t)for(e=0;e<66;++e)a=.03125*e,s=.03125*t,m.has(a)&&m.has(s)&&(i=m.get(a),y=m.get(s),o[r=66*t+e]=127*(c=i,h=void 0,h=0,1===(u=y)[3]&&(h+=1),1===h&&1===u[2]&&1!==c[1]&&1!==c[3]&&(h+=1),h),o[r+33]=127*C(i,y));for(r=0,t=17;t<33;++t)for(e=0;e<64;++e,r+=4)w[r]=o[66*t+e],w[r+3]=255;return new n(64,16,w)}}]),t}();self.addEventListener(\"message\",(function(e){var t=g.generate(),a=q.generate();postMessage({areaImageData:t,searchImageData:a},[t.data.buffer,a.data.buffer]),close()}))}();\n";
+
+  function generate() {
+    var disableCache = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+    var workerURL = URL.createObjectURL(new Blob([workerProgram], {
+      type: "text/javascript"
+    }));
+    var worker = new Worker(workerURL);
+    return new Promise(function (resolve, reject) {
+      worker.addEventListener("error", function (event) {
+        return reject(event.error);
+      });
+      worker.addEventListener("message", function (event) {
+        var searchImageData = RawImageData.from(event.data.searchImageData);
+        var areaImageData = RawImageData.from(event.data.areaImageData);
+        var urls = [searchImageData.toCanvas().toDataURL(), areaImageData.toCanvas().toDataURL()];
+
+        if (!disableCache && window.localStorage !== undefined) {
+          localStorage.setItem("smaa-search", urls[0]);
+          localStorage.setItem("smaa-area", urls[1]);
+        }
+
+        URL.revokeObjectURL(workerURL);
+        resolve(urls);
+      });
+      worker.postMessage(null);
+    });
+  }
+
+  var SMAAImageLoader = function () {
+    function SMAAImageLoader() {
+      var loadingManager = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.LoadingManager();
+
+      _classCallCheck(this, SMAAImageLoader);
+
+      this.loadingManager = loadingManager;
+      this.disableCache = false;
+    }
+
+    _createClass(SMAAImageLoader, [{
+      key: "load",
+      value: function load() {
+        var _this37 = this;
+
+        var onLoad = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+        var onError = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {};
+        var externalManager = this.loadingManager;
+        var internalManager = new three.LoadingManager();
+        externalManager.itemStart("smaa-search");
+        externalManager.itemStart("smaa-area");
+        internalManager.itemStart("smaa-search");
+        internalManager.itemStart("smaa-area");
+        return new Promise(function (resolve, reject) {
+          var cachedURLs = !_this37.disableCache && window.localStorage !== undefined ? [localStorage.getItem("smaa-search"), localStorage.getItem("smaa-area")] : [null, null];
+          var promise = cachedURLs[0] !== null && cachedURLs[1] !== null ? Promise.resolve(cachedURLs) : generate(_this37.disableCache);
+          promise.then(function (urls) {
+            var result = [new Image(), new Image()];
+
+            internalManager.onLoad = function () {
+              onLoad(result);
+              resolve(result);
+            };
+
+            result[0].addEventListener("load", function () {
+              externalManager.itemEnd("smaa-search");
+              internalManager.itemEnd("smaa-search");
+            });
+            result[1].addEventListener("load", function () {
+              externalManager.itemEnd("smaa-area");
+              internalManager.itemEnd("smaa-area");
+            });
+            result[0].src = urls[0];
+            result[1].src = urls[1];
+          })["catch"](function (error) {
+            externalManager.itemError("smaa-search");
+            externalManager.itemError("smaa-area");
+            onError(error);
+            reject(error);
+          });
+        });
+      }
+    }]);
+
+    return SMAAImageLoader;
+  }();
+
+  var Vector2 = function () {
+    function Vector2() {
+      var x = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      var y = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+      _classCallCheck(this, Vector2);
+
+      this.x = x;
+      this.y = y;
+    }
+
+    _createClass(Vector2, [{
+      key: "set",
+      value: function set(x, y) {
+        this.x = x;
+        this.y = y;
+        return this;
+      }
+    }, {
+      key: "equals",
+      value: function equals(v) {
+        return this === v || this.x === v.x && this.y === v.y;
+      }
+    }]);
+
+    return Vector2;
+  }();
+
+  var Box2 = function Box2() {
+    _classCallCheck(this, Box2);
+
+    this.min = new Vector2();
+    this.max = new Vector2();
+  };
+
+  var b0 = new Box2();
+  var b1 = new Box2();
   var ORTHOGONAL_SIZE = 16;
   var DIAGONAL_SIZE = 20;
   var DIAGONAL_SAMPLES = 30;
@@ -5183,7 +5294,7 @@
           calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a1);
           calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, a2);
           smoothArea(d, a);
-          result.addVectors(a1, a2);
+          result.set(a1.x + a2.x, a1.y + a2.y);
           break;
         }
 
@@ -5209,8 +5320,9 @@
           if (Math.abs(offset) > 0.0) {
             calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, a1);
             calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a2);
-            a2.add(calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result));
-            result.addVectors(a1, a2).divideScalar(2.0);
+            calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
+            a2.set(a2.x + result.x, a2.y + result.y);
+            result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           } else {
             calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, result);
           }
@@ -5240,8 +5352,9 @@
           if (Math.abs(offset) > 0.0) {
             calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, a1);
             calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a2);
-            a2.add(calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result));
-            result.addVectors(a1, a2).divideScalar(2.0);
+            calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
+            a2.set(a2.x + result.x, a2.y + result.y);
+            result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           } else {
             calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, result);
           }
@@ -5266,7 +5379,7 @@
           calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a1);
           calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, a2);
           smoothArea(d, a);
-          result.addVectors(a1, a2);
+          result.set(a1.x + a2.x, a1.y + a2.y);
           break;
         }
 
@@ -5294,15 +5407,13 @@
 
   function isInsideArea(p1, p2, x, y) {
     var result = p1.equals(p2);
-    var xm, ym;
-    var a, b, c;
 
     if (!result) {
-      xm = (p1.x + p2.x) / 2.0;
-      ym = (p1.y + p2.y) / 2.0;
-      a = p2.y - p1.y;
-      b = p1.x - p2.x;
-      c = a * (x - xm) + b * (y - ym);
+      var xm = (p1.x + p2.x) / 2.0;
+      var ym = (p1.y + p2.y) / 2.0;
+      var a = p2.y - p1.y;
+      var b = p1.x - p2.x;
+      var c = a * (x - xm) + b * (y - ym);
       result = c > 0.0;
     }
 
@@ -5358,7 +5469,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5366,7 +5477,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5374,7 +5485,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5388,7 +5499,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5396,7 +5507,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5410,7 +5521,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5418,7 +5529,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5432,7 +5543,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5440,7 +5551,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5454,7 +5565,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5462,7 +5573,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
 
@@ -5470,7 +5581,7 @@
         {
           calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
           calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
-          result.addVectors(a1, a2).divideScalar(2.0);
+          result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
           break;
         }
     }
@@ -5479,7 +5590,7 @@
   }
 
   function generatePatterns(patterns, offset, orthogonal) {
-    var result = new three.Vector2();
+    var result = new Vector2();
     var i, l;
     var x, y;
     var c;
@@ -5508,7 +5619,7 @@
   }
 
   function assemble(base, patterns, edges, size, orthogonal, target) {
-    var p = new three.Vector2();
+    var p = new Vector2();
     var dstData = target.data;
     var dstWidth = target.width;
     var i, l;
@@ -5526,14 +5637,13 @@
 
       for (y = 0; y < size; ++y) {
         for (x = 0; x < size; ++x) {
-          p.fromArray(edge).multiplyScalar(size);
-          p.add(base);
-          p.x += x;
-          p.y += y;
-          c = (p.y * dstWidth + p.x) * 2;
+          p.set(edge[0] * size + base.x + x, edge[1] * size + base.y + y);
+          c = (p.y * dstWidth + p.x) * 4;
           d = orthogonal ? (y * y * srcWidth + x * x) * 2 : (y * srcWidth + x) * 2;
           dstData[c] = srcData[d];
           dstData[c + 1] = srcData[d + 1];
+          dstData[c + 2] = 0;
+          dstData[c + 3] = 255;
         }
       }
     }
@@ -5549,13 +5659,13 @@
       value: function generate() {
         var width = 2 * 5 * ORTHOGONAL_SIZE;
         var height = orthogonalSubsamplingOffsets.length * 5 * ORTHOGONAL_SIZE;
-        var data = new Uint8ClampedArray(width * height * 2);
-        var result = new RawImageData(width, height, data, 2);
+        var data = new Uint8ClampedArray(width * height * 4);
+        var result = new RawImageData(width, height, data);
         var orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
         var diagonalPatternSize = DIAGONAL_SIZE;
         var orthogonalPatterns = [];
         var diagonalPatterns = [];
-        var base = new three.Vector2();
+        var base = new Vector2();
         var i, l;
 
         for (i = 0; i < 16; ++i) {
@@ -5632,10 +5742,11 @@
       value: function generate() {
         var width = 66;
         var height = 33;
+        var halfWidth = width / 2;
         var croppedWidth = 64;
         var croppedHeight = 16;
         var data = new Uint8ClampedArray(width * height);
-        var croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight);
+        var croppedData = new Uint8ClampedArray(croppedWidth * croppedHeight * 4);
         var x, y;
         var s, t, i;
         var e1, e2;
@@ -5648,19 +5759,21 @@
             if (edges.has(s) && edges.has(t)) {
               e1 = edges.get(s);
               e2 = edges.get(t);
-              data[y * width + x] = 127 * deltaLeft(e1, e2);
-              data[y * width + x + width / 2] = 127 * deltaRight(e1, e2);
+              i = y * width + x;
+              data[i] = 127 * deltaLeft(e1, e2);
+              data[i + halfWidth] = 127 * deltaRight(e1, e2);
             }
           }
         }
 
         for (i = 0, y = height - croppedHeight; y < height; ++y) {
-          for (x = 0; x < croppedWidth; ++x, ++i) {
+          for (x = 0; x < croppedWidth; ++x, i += 4) {
             croppedData[i] = data[y * width + x];
+            croppedData[i + 3] = 255;
           }
         }
 
-        return new RawImageData(croppedWidth, croppedHeight, croppedData, 1);
+        return new RawImageData(croppedWidth, croppedHeight, croppedData);
       }
     }]);
 
@@ -5717,6 +5830,7 @@
   exports.Resizer = Resizer;
   exports.SMAAAreaImageData = SMAAAreaImageData;
   exports.SMAAEffect = SMAAEffect;
+  exports.SMAAImageLoader = SMAAImageLoader;
   exports.SMAAPreset = SMAAPreset;
   exports.SMAASearchImageData = SMAASearchImageData;
   exports.SMAAWeightsMaterial = SMAAWeightsMaterial;

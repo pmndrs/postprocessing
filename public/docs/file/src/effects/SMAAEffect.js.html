@@ -70,6 +70,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
@@ -133,8 +134,8 @@ export class SMAAEffect extends Effect {
 	/**
 	 * Constructs a new SMAA effect.
 	 *
-	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link searchImageDataURL}.
-	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link areaImageDataURL}.
+	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link SMAAImageLoader}.
+	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link SMAAImageLoader}.
 	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
 	 */
 
@@ -391,6 +392,7 @@ export class SMAAEffect extends Effect {
 	 * the area image to create an {@link SMAAEffect}.
 	 *
 	 * @type {String}
+	 * @deprecated Use SMAAImageLoader instead.
 	 * @example
 	 * const searchImage = new Image();
 	 * searchImage.addEventListener(&quot;load&quot;, progress);
@@ -410,6 +412,7 @@ export class SMAAEffect extends Effect {
 	 * the search image to create an {@link SMAAEffect}.
 	 *
 	 * @type {String}
+	 * @deprecated Use SMAAImageLoader instead.
 	 * @example
 	 * const areaImage = new Image();
 	 * areaImage.addEventListener(&quot;load&quot;, progress);
