@@ -7,7 +7,7 @@ import workerProgram from "./worker.tmp";
  *
  * @private
  * @param {Boolean} [disableCache=false] - Determines whether the generated image data should be cached.
- * @return {Promise} A promise that returns the search image and area image blobs.
+ * @return {Promise} A promise that returns the search image and area image as a data URL pair.
  */
 
 function generate(disableCache = false) {
@@ -89,7 +89,7 @@ export class SMAAImageLoader {
 	 *
 	 * @param {Function} [onLoad] - A function to call when the loading process is done.
 	 * @param {Function} [onError] - A function to call when an error occurs.
-	 * @return {Promise} A promise that returns the search image and area image as a tupel.
+	 * @return {Promise} A promise that returns the search image and area image as a pair.
 	 */
 
 	load(onLoad = () => {}, onError = () => {}) {
