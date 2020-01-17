@@ -1,8 +1,9 @@
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import babel from "rollup-plugin-babel";
-import commonjs from "rollup-plugin-commonjs";
 import glsl from "rollup-plugin-glsl";
-import minify from "rollup-plugin-babel-minify";
-import resolve from "rollup-plugin-node-resolve";
+import { string } from "rollup-plugin-string";
+import { terser } from "rollup-plugin-terser";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
@@ -10,21 +11,38 @@ const date = (new Date()).toDateString();
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
  * ${pkg.homepage}
- * Copyright ${date.slice(-4)} ${pkg.author.name}, ${pkg.license}
+ * Copyright ${date.slice(-4)} ${pkg.author.name}
+ * @license ${pkg.license}
  */`;
 
 const production = (process.env.NODE_ENV === "production");
-const globals = { three: "THREE" };
+const external = Object.keys(pkg.peerDependencies);
+const globals = Object.assign({}, ...external.map((value) => ({
+	[value]: value.replace(/-/g, "").toUpperCase()
+})));
+
+const worker = {
+
+	input: "src/images/smaa/utils/worker.js",
+	plugins: [resolve()].concat(production ? [terser(), babel()] : []),
+	output: {
+		file: "src/images/smaa/utils/worker.tmp",
+		format: "iife"
+	}
+
+}
 
 const lib = {
 
 	module: {
 		input: "src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: [resolve(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: pkg.module,
@@ -44,7 +62,7 @@ const lib = {
 
 	main: {
 		input: pkg.main,
-		external: Object.keys(globals),
+		external,
 		plugins: [babel()],
 		output: {
 			file: pkg.main,
@@ -57,11 +75,8 @@ const lib = {
 
 	min: {
 		input: pkg.main.replace(".js", ".min.js"),
-		external: Object.keys(globals),
-		plugins: [minify({
-			bannerNewLine: true,
-			comments: false
-		}), babel()],
+		external,
+		plugins: [terser(), babel()],
 		output: {
 			file: pkg.main.replace(".js", ".min.js"),
 			format: "umd",
@@ -77,11 +92,13 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: "public/demo/index.js",
@@ -96,11 +113,13 @@ const demo = {
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		external: Object.keys(globals),
+		external,
 		plugins: production ? [babel()] : [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
 			sourceMap: false
+		}), string({
+			include: ["**/*.tmp"]
 		})],
 		output: [{
 			file: "public/demo/index.js",
@@ -111,10 +130,8 @@ const demo = {
 
 	min: {
 		input: "public/demo/index.min.js",
-		external: Object.keys(globals),
-		plugins: [minify({
-			comments: false
-		}), babel()],
+		external,
+		plugins: [terser(), babel()],
 		output: {
 			file: "public/demo/index.min.js",
 			format: "iife",
@@ -124,7 +141,7 @@ const demo = {
 
 };
 
-export default (production ? [
+export default [worker].concat(production ? [
 	lib.module, lib.main, lib.min,
 	demo.module, demo.main, demo.min
 ] : [demo.main]);

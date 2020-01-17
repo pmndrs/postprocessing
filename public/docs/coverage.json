@@ -1,7 +1,7 @@
 {
-  "coverage": "96.47%",
-  "expectCount": 595,
-  "actualCount": 574,
+  "coverage": "95.9%",
+  "expectCount": 611,
+  "actualCount": 586,
   "files": {
     "src/core/Disposable.js": {
       "expectCount": 2,
@@ -189,8 +189,18 @@
       "undocumentLines": []
     },
     "src/images/smaa/utils/SMAAAreaImageData.js": {
-      "expectCount": 23,
-      "actualCount": 23,
+      "expectCount": 33,
+      "actualCount": 29,
+      "undocumentLines": [
+        20,
+        21,
+        71,
+        72
+      ]
+    },
+    "src/images/smaa/utils/SMAAImageLoader.js": {
+      "expectCount": 6,
+      "actualCount": 6,
       "undocumentLines": []
     },
     "src/images/smaa/utils/SMAASearchImageData.js": {

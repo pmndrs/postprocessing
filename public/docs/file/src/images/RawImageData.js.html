@@ -70,6 +70,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-BlendFunction">BlendFunction</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images">images</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/RawImageData.js~RawImageData.html">RawImageData</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#images-smaa-utils">images/smaa/utils</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAAreaImageData.js~SMAAAreaImageData.html">SMAAAreaImageData</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html">SMAAImageLoader</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/images/smaa/utils/SMAASearchImageData.js~SMAASearchImageData.html">SMAASearchImageData</a></span></span></li>
 <li data-ice="doc"><a data-ice="dirPath" class="nav-dir-path" href="identifiers.html#materials">materials</a><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html">AdaptiveLuminanceMaterial</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/materials/ColorEdgesMaterial.js~ColorEdgesMaterial.html">ColorEdgesMaterial</a></span></span></li>
@@ -107,36 +108,16 @@
  * @param {Number} width - The image width.
  * @param {Number} height - The image height.
  * @param {Uint8ClampedArray} data - The image data.
- * @param {Number} channels - The color channels used for a single pixel.
  * @return {Canvas} The canvas.
  */
 
-function createCanvas(width, height, data, channels) {
+function createCanvas(width, height, data) {
 
 	const canvas = document.createElementNS(&quot;http://www.w3.org/1999/xhtml&quot;, &quot;canvas&quot;);
 	const context = canvas.getContext(&quot;2d&quot;);
 
 	const imageData = context.createImageData(width, height);
-	const target = imageData.data;
-
-	let x, y;
-	let i, j;
-
-	for(y = 0; y &lt; height; ++y) {
-
-		for(x = 0; x &lt; width; ++x) {
-
-			i = (y * width + x) * 4;
-			j = (y * width + x) * channels;
-
-			target[i] = (channels &gt; 0) ? data[j] : 0;
-			target[i + 1] = (channels &gt; 1) ? data[j + 1] : 0;
-			target[i + 2] = (channels &gt; 2) ? data[j + 2] : 0;
-			target[i + 3] = (channels &gt; 3) ? data[j + 3] : 255;
-
-		}
-
-	}
+	imageData.data.set(data);
 
 	canvas.width = width;
 	canvas.height = height;
@@ -159,10 +140,9 @@ export class RawImageData {
 	 * @param {Number} [width=0] - The width of the image.
 	 * @param {Number} [height=0] - The height of the image.
 	 * @param {Uint8ClampedArray} [data=null] - The image data.
-	 * @param {Number} [channels=4] - The amount of color channels used per pixel. Range [1, 4].
 	 */
 
-	constructor(width = 0, height = 0, data = null, channels = 4) {
+	constructor(width = 0, height = 0, data = null) {
 
 		/**
 		 * The width of the image.
@@ -188,14 +168,6 @@ export class RawImageData {
 
 		this.data = data;
 
-		/**
-		 * The amount of color channels used per pixel. Range [1, 4].
-		 *
-		 * @type {Number}
-		 */
-
-		this.channels = channels;
-
 	}
 
 	/**
@@ -209,9 +181,21 @@ export class RawImageData {
 		return (typeof document === &quot;undefined&quot;) ? null : createCanvas(
 			this.width,
 			this.height,
-			this.data,
-			this.channels
+			this.data
 		);
+
+	}
+
+	/**
+	 * Creates a new image data container.
+	 *
+	 * @param {Object} data - Raw image data.
+	 * @return {RawImageData} The image data.
+	 */
+
+	static from(data) {
+
+		return new RawImageData(data.width, data.height, data.data);
 
 	}
 

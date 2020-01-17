@@ -1,5 +1,79 @@
-import { Box2, Vector2 } from "three";
 import { RawImageData } from "../../RawImageData.js";
+
+/**
+ * A 2D vector.
+ *
+ * @private
+ */
+
+class Vector2 {
+
+	/**
+	 * Constructs a new vector.
+	 *
+	 * @param {Number} [x=0] - The initial x value.
+	 * @param {Number} [y=0] - The initial y value.
+	 */
+
+	constructor(x = 0, y = 0) {
+
+		this.x = x;
+		this.y = y;
+
+	}
+
+	/**
+	 * Sets the components of this vector.
+	 *
+	 * @param {Number} x - The new x value.
+	 * @param {Number} y - The new y value.
+	 * @return {Vector2} This vector.
+	 */
+
+	set(x, y) {
+
+		this.x = x;
+		this.y = y;
+
+		return this;
+
+	}
+
+	/**
+	 * Checks if the given vector equals this vector.
+	 *
+	 * @param {Vector2} v - A vector.
+	 * @return {Boolean} Whether this vector equals the given one.
+	 */
+
+	equals(v) {
+
+		return (this === v || (this.x === v.x && this.y === v.y));
+
+	}
+
+}
+
+/**
+ * A 2D box.
+ *
+ * @private
+ */
+
+class Box2 {
+
+	/**
+	 * Constructs a new box.
+	 */
+
+	constructor() {
+
+		this.min = new Vector2();
+		this.max = new Vector2();
+
+	}
+
+}
 
 /**
  * A box.
@@ -64,13 +138,7 @@ const SMOOTH_MAX_DISTANCE = 32;
  */
 
 const orthogonalSubsamplingOffsets = new Float32Array([
-	0.0,
-	-0.25,
-	0.25,
-	-0.125,
-	0.125,
-	-0.375,
-	0.375
+	0.0, -0.25, 0.25, -0.125, 0.125, -0.375, 0.375
 ]);
 
 /**
@@ -387,7 +455,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			smoothArea(d, a);
 
-			result.addVectors(a1, a2);
+			result.set(a1.x + a2.x, a1.y + a2.y);
 
 			break;
 
@@ -443,9 +511,10 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d, o2), left, a1);
 				calculateOrthogonalArea(p1.set(0.0, o1), p2.set(d / 2.0, 0.0), left, a2);
-				a2.add(calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result));
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o2), left, result);
+				a2.set(a2.x + result.x, a2.y + result.y);
 
-				result.addVectors(a1, a2).divideScalar(2.0);
+				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			} else {
 
@@ -501,9 +570,10 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d, o1), left, a1);
 				calculateOrthogonalArea(p1.set(0.0, o2), p2.set(d / 2.0, 0.0), left, a2);
-				a2.add(calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result));
+				calculateOrthogonalArea(p1.set(d / 2.0, 0.0), p2.set(d, o1), left, result);
+				a2.set(a2.x + result.x, a2.y + result.y);
 
-				result.addVectors(a1, a2).divideScalar(2.0);
+				result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			} else {
 
@@ -552,7 +622,7 @@ function calculateOrthogonalAreaForPattern(pattern, left, right, offset, result)
 
 			smoothArea(d, a);
 
-			result.addVectors(a1, a2);
+			result.set(a1.x + a2.x, a1.y + a2.y);
 
 			break;
 
@@ -618,18 +688,15 @@ function isInsideArea(p1, p2, x, y) {
 
 	let result = p1.equals(p2);
 
-	let xm, ym;
-	let a, b, c;
-
 	if(!result) {
 
-		xm = (p1.x + p2.x) / 2.0;
-		ym = (p1.y + p2.y) / 2.0;
+		let xm = (p1.x + p2.x) / 2.0;
+		let ym = (p1.y + p2.y) / 2.0;
 
-		a = p2.y - p1.y;
-		b = p1.x - p2.x;
+		let a = p2.y - p1.y;
+		let b = p1.x - p2.x;
 
-		c = a * (x - xm) + b * (y - ym);
+		let c = a * (x - xm) + b * (y - ym);
 
 		result = (c > 0.0);
 
@@ -746,7 +813,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 	 * Unlike orthogonal patterns, the "null" pattern (one without crossing edges)
 	 * must be filtered, and the ends of both the "null" and L patterns are not
 	 * known: L and U patterns have different endings, and the adjacent pattern is
-	 * unknown. Therefore, a blend of both possibilites is computed.
+	 * unknown. Therefore, a blend of both possibilities is computed.
 	 */
 
 	switch(pattern) {
@@ -767,7 +834,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
 			// Blend both possibilities together.
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -786,7 +853,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -804,7 +871,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -838,7 +905,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -857,7 +924,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(0.0 + d, 0.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -890,7 +957,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -909,7 +976,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -945,7 +1012,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(0.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -965,7 +1032,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -1000,7 +1067,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 1.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -1018,7 +1085,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -1038,7 +1105,7 @@ function calculateDiagonalAreaForPattern(pattern, left, right, offset, result) {
 			calculateDiagonalArea(pattern, p1.set(1.0, 1.0), p2.set(1.0 + d, 1.0 + d), left, offset, a1);
 			calculateDiagonalArea(pattern, p1.set(1.0, 0.0), p2.set(1.0 + d, 0.0 + d), left, offset, a2);
 
-			result.addVectors(a1, a2).divideScalar(2.0);
+			result.set((a1.x + a2.x) / 2.0, (a1.y + a2.y) / 2.0);
 
 			break;
 
@@ -1143,12 +1210,12 @@ function assemble(base, patterns, edges, size, orthogonal, target) {
 
 			for(x = 0; x < size; ++x) {
 
-				p.fromArray(edge).multiplyScalar(size);
-				p.add(base);
-				p.x += x;
-				p.y += y;
+				p.set(
+					edge[0] * size + base.x + x,
+					edge[1] * size + base.y + y
+				);
 
-				c = (p.y * dstWidth + p.x) * 2;
+				c = (p.y * dstWidth + p.x) * 4;
 
 				/* The texture coordinates of orthogonal patterns are compressed
 				quadratically to reach longer distances for a given texture size. */
@@ -1157,6 +1224,8 @@ function assemble(base, patterns, edges, size, orthogonal, target) {
 
 				dstData[c] = srcData[d];
 				dstData[c + 1] = srcData[d + 1];
+				dstData[c + 2] = 0;
+				dstData[c + 3] = 255;
 
 			}
 
@@ -1189,8 +1258,8 @@ export class SMAAAreaImageData {
 		const width = 2 * 5 * ORTHOGONAL_SIZE;
 		const height = orthogonalSubsamplingOffsets.length * 5 * ORTHOGONAL_SIZE;
 
-		const data = new Uint8ClampedArray(width * height * 2);
-		const result = new RawImageData(width, height, data, 2);
+		const data = new Uint8ClampedArray(width * height * 4);
+		const result = new RawImageData(width, height, data);
 
 		const orthogonalPatternSize = Math.pow(ORTHOGONAL_SIZE - 1, 2) + 1;
 		const diagonalPatternSize = DIAGONAL_SIZE;

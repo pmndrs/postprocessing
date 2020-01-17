@@ -34,6 +34,7 @@ import {
 	SepiaEffect,
 	ScanlineEffect,
 	SMAAEffect,
+	SMAAImageLoader,
 	TextureEffect,
 	VignetteEffect
 } from "../../../src";
@@ -155,8 +156,9 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const textureLoader = new TextureLoader(loadingManager);
+		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space5/";
 		const format = ".jpg";
@@ -186,7 +188,12 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 

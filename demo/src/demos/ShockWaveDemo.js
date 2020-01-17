@@ -10,7 +10,13 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { EffectPass, ShockWaveEffect, SMAAEffect } from "../../../src";
+
+import {
+	EffectPass,
+	ShockWaveEffect,
+	SMAAEffect,
+	SMAAImageLoader
+} from "../../../src";
 
 /**
  * A shock wave demo setup.
@@ -50,6 +56,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
 		const path = "textures/skies/space3/";
 		const format = ".jpg";
@@ -72,7 +79,12 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 				});
 
-				this.loadSMAAImages();
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
+
+				});
 
 			} else {
 
