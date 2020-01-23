@@ -55,6 +55,9 @@
 		"failFast": true,
 		"files": [
 			"test/**/*.js"
+		],
+		"require": [
+			"esm"
 		]
 	},
 	"eslintConfig": {
@@ -68,7 +71,7 @@
 		"@babel/preset-env": "7.x.x",
 		"@rollup/plugin-commonjs": "11.x.x",
 		"@rollup/plugin-node-resolve": "7.x.x",
-		"ava": "2.x.x",
+		"ava": "3.x.x",
 		"concurrently": "5.x.x",
 		"cross-env": "6.x.x",
 		"dat.gui": "0.x.x",
@@ -79,6 +82,7 @@
 		"eslint": "6.x.x",
 		"eslint-config-aether": "1.x.x",
 		"eslint-watch": "6.x.x",
+		"esm": "3.x.x",
 		"math-ds": "1.x.x",
 		"rimraf": "3.x.x",
 		"rollup": "1.x.x",
