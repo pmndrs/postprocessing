@@ -1,4 +1,4 @@
-import { LoadingManager } from "three";
+import { Loader, LoadingManager } from "three";
 import { RawImageData } from "../../RawImageData.js";
 import workerProgram from "./worker.tmp";
 
@@ -56,23 +56,17 @@ function generate(disableCache = false) {
  * @experimental Added for testing, API might change in patch or minor releases.
  */
 
-export class SMAAImageLoader {
+export class SMAAImageLoader extends Loader {
 
 	/**
 	 * Constructs a new SMAA image loader.
 	 *
-	 * @param {LoadingManager} [loadingManager] - A loading manager.
+	 * @param {LoadingManager} [manager] - A loading manager.
 	 */
 
-	constructor(loadingManager = new LoadingManager()) {
+	constructor(manager) {
 
-		/**
-		 * A loading manager.
-		 *
-		 * @type {LoadingManager}
-		 */
-
-		this.loadingManager = loadingManager;
+		super(manager);
 
 		/**
 		 * Indicates whether data image caching is disabled.
@@ -94,7 +88,20 @@ export class SMAAImageLoader {
 
 	load(onLoad = () => {}, onError = () => {}) {
 
-		const externalManager = this.loadingManager;
+		// Conform to the signature (url, onLoad, onProgress, onError).
+		if(arguments.length === 4) {
+
+			onLoad = arguments[1];
+			onError = arguments[3];
+
+		} else if(arguments.length === 3 || typeof arguments[0] !== "function") {
+
+			onLoad = arguments[1];
+			onError = () => {};
+
+		}
+
+		const externalManager = this.manager;
 		const internalManager = new LoadingManager();
 
 		externalManager.itemStart("smaa-search");
