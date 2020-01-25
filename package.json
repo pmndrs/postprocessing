@@ -45,7 +45,7 @@
 		"lint:test": "eslint test",
 		"build": "rollup -c",
 		"build:production": "cross-env NODE_ENV=production npm run build",
-		"watch": "concurrently --kill-others \"esw src -w\" \"rollup -c -w\"",
+		"watch": "concurrently --kill-others \"esw src demo/src -w\" \"rollup -c -w\"",
 		"doc": "rimraf public/docs && esdoc",
 		"pretest": "npm run lint && npm run build:production",
 		"test": "ava",
