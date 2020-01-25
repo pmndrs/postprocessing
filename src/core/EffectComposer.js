@@ -104,6 +104,15 @@ export class EffectComposer {
 
 		this.passes = [];
 
+		/**
+		 * Determines whether the last pass automatically renders to screen.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.autoRenderToScreen = true;
+
 	}
 
 	/**
@@ -240,6 +249,26 @@ export class EffectComposer {
 		const renderer = this.renderer;
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
+		if(this.autoRenderToScreen) {
+
+			if(passes.length > 0) {
+
+				passes[passes.length - 1].renderToScreen = false;
+
+			}
+
+			if(pass.renderToScreen) {
+
+				this.autoRenderToScreen = false;
+
+			} else {
+
+				pass.renderToScreen = true;
+
+			}
+
+		}
+
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
 		pass.initialize(renderer, renderer.getContext().getContextAttributes().alpha);
 
@@ -284,24 +313,41 @@ export class EffectComposer {
 	removePass(pass) {
 
 		const passes = this.passes;
-		const removed = (passes.splice(passes.indexOf(pass), 1).length > 0);
+		const index = passes.indexOf(pass);
+		const removed = (passes.splice(index, 1).length > 0);
 
-		if(removed && this.depthTexture !== null) {
+		if(removed) {
 
-			const reducer = (a, b) => a || b.needsDepthTexture;
-			const depthTextureRequired = passes.reduce(reducer, false);
+			if(this.depthTexture !== null) {
 
-			if(!depthTextureRequired) {
+				// Check if the depth texture is still required.
+				const reducer = (a, b) => a || b.needsDepthTexture;
+				const depthTextureRequired = passes.reduce(reducer, false);
 
-				this.depthTexture.dispose();
-				this.depthTexture = null;
+				if(!depthTextureRequired) {
 
-				this.inputBuffer.depthTexture = null;
-				this.outputBuffer.depthTexture = null;
+					this.depthTexture.dispose();
+					this.depthTexture = null;
 
-				for(pass of passes) {
+					this.inputBuffer.depthTexture = null;
+					this.outputBuffer.depthTexture = null;
 
-					pass.setDepthTexture(null);
+					for(pass of passes) {
+
+						pass.setDepthTexture(null);
+
+					}
+
+				}
+
+			}
+
+			if(this.autoRenderToScreen && passes.length > 0) {
+
+				// Check if the removed pass was the last one in the chain.
+				if(index === passes.length) {
+
+					passes[passes.length - 1].renderToScreen = true;
 
 				}
 
@@ -428,6 +474,7 @@ export class EffectComposer {
 		this.outputBuffer = renderTarget.clone();
 		this.depthTexture = null;
 		this.copyPass = new ShaderPass(new CopyMaterial());
+		this.autoRenderToScreen = true;
 
 	}
 
