@@ -38,6 +38,9 @@ export class OutlineMaterial extends ShaderMaterial {
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 
+		// @todo Added for backward compatibility.
+		this.uniforms.maskTexture = this.uniforms.inputBuffer;
+
 	}
 
 	/**
