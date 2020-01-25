@@ -284,19 +284,6 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * The current render size.
-	 *
-	 * @type {Vector2}
-	 * @private
-	 */
-
-	get size() {
-
-		return this.getFullscreenMaterial().uniforms.resolution.value;
-
-	}
-
-	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * Color quantization reduces banding artifacts but degrades performance.
