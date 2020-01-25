@@ -207,7 +207,7 @@ export class OutlineEffect extends Effect {
 		 */
 
 		this.outlinePass = new ShaderPass(new OutlineMaterial());
-		this.outlinePass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
+		this.outlinePass.getFullscreenMaterial().uniforms.inputBuffer.value = this.renderTargetMask.texture;
 
 		/**
 		 * The current animation time.
