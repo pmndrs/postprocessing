@@ -61,6 +61,7 @@ export {
 	GodRaysMaterial,
 	KernelSize,
 	LuminanceMaterial,
+	OutlineMaterial,
 	OutlineEdgesMaterial,
 	SMAAWeightsMaterial
 } from "./materials";

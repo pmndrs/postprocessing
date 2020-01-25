@@ -1,4 +1,4 @@
-uniform sampler2D maskTexture;
+uniform sampler2D inputBuffer;
 
 varying vec2 vUv0;
 varying vec2 vUv1;
@@ -7,10 +7,10 @@ varying vec2 vUv3;
 
 void main() {
 
-	vec2 c0 = texture2D(maskTexture, vUv0).rg;
-	vec2 c1 = texture2D(maskTexture, vUv1).rg;
-	vec2 c2 = texture2D(maskTexture, vUv2).rg;
-	vec2 c3 = texture2D(maskTexture, vUv3).rg;
+	vec2 c0 = texture2D(inputBuffer, vUv0).rg;
+	vec2 c1 = texture2D(inputBuffer, vUv1).rg;
+	vec2 c2 = texture2D(inputBuffer, vUv2).rg;
+	vec2 c3 = texture2D(inputBuffer, vUv3).rg;
 
 	float d0 = (c0.x - c1.x) * 0.5;
 	float d1 = (c2.x - c3.x) * 0.5;

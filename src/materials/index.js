@@ -7,5 +7,5 @@ export { DepthMaskMaterial } from "./DepthMaskMaterial.js";
 export { EffectMaterial, Section } from "./EffectMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminanceMaterial } from "./LuminanceMaterial.js";
-export { OutlineEdgesMaterial } from "./OutlineEdgesMaterial.js";
+export { OutlineMaterial, OutlineEdgesMaterial } from "./OutlineMaterial.js";
 export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial.js";

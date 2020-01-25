@@ -1,29 +1,29 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/outline-edges/shader.frag";
-import vertexShader from "./glsl/outline-edges/shader.vert";
+import fragmentShader from "./glsl/outline/shader.frag";
+import vertexShader from "./glsl/outline/shader.vert";
 
 /**
- * An outline edge detection shader material.
+ * An outline shader material.
  */
 
-export class OutlineEdgesMaterial extends ShaderMaterial {
+export class OutlineMaterial extends ShaderMaterial {
 
 	/**
-	 * Constructs a new outline edge detection material.
+	 * Constructs a new outline material.
 	 *
-	 * @param {Vector2} [texelSize] - The absolute screen texel size.
+	 * @param {Vector2} [texelSize] - The screen texel size.
 	 */
 
 	constructor(texelSize = new Vector2()) {
 
 		super({
 
-			type: "OutlineEdgesMaterial",
+			type: "OutlineMaterial",
 
 			uniforms: {
 
-				maskTexture: new Uniform(null),
+				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2())
 
 			},
@@ -54,3 +54,11 @@ export class OutlineEdgesMaterial extends ShaderMaterial {
 	}
 
 }
+
+/**
+ * An outline shader material.
+ *
+ * @deprecated Use OutlineMaterial instead.
+ */
+
+export const OutlineEdgesMaterial = OutlineMaterial;
