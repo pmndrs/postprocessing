@@ -35,9 +35,10 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Boolean} [options.frameBufferType=UnsignedByteType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
-	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false } = {}) {
+	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, frameBufferType } = {}) {
 
 		/**
 		 * The renderer.
@@ -72,7 +73,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
 			this.outputBuffer = this.inputBuffer.clone();
 
 		}
@@ -208,24 +209,26 @@ export class EffectComposer {
 	 *
 	 * The created render target uses a linear filter for texel minification and
 	 * magnification. Its render texture format depends on whether the renderer
-	 * uses the alpha channel. Mipmaps are disabled.
+	 * uses the alpha channel. Mipmaps are disabled. The encoding is linear.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
+	 * @param {Number} type - The frame buffer type.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer) {
+	createBuffer(depthBuffer, stencilBuffer, type) {
 
 		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
+			format: alpha ? RGBAFormat : RGBFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			format: alpha ? RGBAFormat : RGBFormat,
-			depthBuffer: depthBuffer,
-			stencilBuffer: stencilBuffer
+			stencilBuffer,
+			depthBuffer,
+			type
 		});
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
