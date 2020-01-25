@@ -1,12 +1,12 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/color-edges/shader.frag";
-import vertexShader from "./glsl/color-edges/shader.vert";
+import fragmentShader from "./glsl/edge-detection/color.frag";
+import vertexShader from "./glsl/edge-detection/shader.vert";
 
 /**
  * A material that detects edges in a color texture.
  *
- * Mainly used for Subpixel Morphological Antialiasing.
+ * @deprecated Use EdgeDetectionMaterial instead.
  */
 
 export class ColorEdgesMaterial extends ShaderMaterial {

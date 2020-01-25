@@ -1,5 +1,6 @@
 export { AdaptiveLuminanceMaterial } from "./AdaptiveLuminanceMaterial.js";
 export { ColorEdgesMaterial } from "./ColorEdgesMaterial.js";
+export { EdgeDetectionMaterial, EdgeDetectionMode } from "./EdgeDetectionMaterial.js";
 export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
 export { CopyMaterial } from "./CopyMaterial.js";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial.js";

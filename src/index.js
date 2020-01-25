@@ -57,6 +57,8 @@ export {
 	CopyMaterial,
 	DepthComparisonMaterial,
 	DepthMaskMaterial,
+	EdgeDetectionMaterial,
+	EdgeDetectionMode,
 	EffectMaterial,
 	GodRaysMaterial,
 	KernelSize,

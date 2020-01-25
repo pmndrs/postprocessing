@@ -45,7 +45,7 @@ void main() {
 	delta.w = max(max(t.r, t.g), t.b);
 
 	// Calculate the maximum delta in the direct neighborhood.
-	float maxDelta = max(max(max(delta.x, delta.y), delta.z), delta.w);
+	vec2 maxDelta = max(delta.xy, delta.zw);
 
 	// Calculate left-left and top-top deltas.
 	vec3 cLeftLeft = texture2D(inputBuffer, vUv4).rgb;
@@ -57,10 +57,11 @@ void main() {
 	delta.w = max(max(t.r, t.g), t.b);
 
 	// Calculate the final maximum delta.
-	maxDelta = max(max(maxDelta, delta.z), delta.w);
+	maxDelta = max(maxDelta.xy, delta.zw);
+	float finalDelta = max(maxDelta.x, maxDelta.y);
 
 	// Local contrast adaptation.
-	edges *= step(maxDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
+	edges *= step(finalDelta, LOCAL_CONTRAST_ADAPTATION_FACTOR * delta.xy);
 
 	gl_FragColor = vec4(edges, 0.0, 1.0);
 
