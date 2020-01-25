@@ -16,6 +16,7 @@ export class GammaCorrectionEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Number} [options.gamma=2.0] - The gamma factor.
+	 * @deprecated Set WebGLRenderer.outputEncoding to sRGBEncoding or GammaEncoding instead.
 	 */
 
 	constructor({ blendFunction = BlendFunction.NORMAL, gamma = 2.0 } = {}) {
