@@ -92,7 +92,6 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		external,
 		plugins: [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
@@ -102,18 +101,15 @@ const demo = {
 		})],
 		output: [{
 			file: "public/demo/index.js",
-			format: "esm",
-			globals
+			format: "esm"
 		}].concat(production ? [{
 			file: "public/demo/index.min.js",
-			format: "esm",
-			globals
+			format: "esm"
 		}] : [])
 	},
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		external,
 		plugins: production ? [babel()] : [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
@@ -123,19 +119,16 @@ const demo = {
 		})],
 		output: [{
 			file: "public/demo/index.js",
-			format: "iife",
-			globals
+			format: "iife"
 		}]
 	},
 
 	min: {
 		input: "public/demo/index.min.js",
-		external,
 		plugins: [terser(), babel()],
 		output: {
 			file: "public/demo/index.min.js",
-			format: "iife",
-			globals
+			format: "iife"
 		}
 	}
 
