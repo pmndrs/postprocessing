@@ -56,6 +56,7 @@ void main() {
 
 	gl_FragColor = color0;
 
+	#include <encodings_fragment>
 	#include <dithering_fragment>
 
 }

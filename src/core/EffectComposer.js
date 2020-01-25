@@ -1,6 +1,7 @@
 import {
 	DepthStencilFormat,
 	DepthTexture,
+	LinearEncoding,
 	LinearFilter,
 	RGBAFormat,
 	RGBFormat,
@@ -220,6 +221,7 @@ export class EffectComposer {
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
+		renderTarget.texture.encoding = LinearEncoding;
 
 		return renderTarget;
 
@@ -417,10 +419,7 @@ export class EffectComposer {
 
 	reset() {
 
-		const renderTarget = this.createBuffer(
-			this.inputBuffer.depthBuffer,
-			this.inputBuffer.stencilBuffer
-		);
+		const renderTarget = this.inputBuffer.clone();
 
 		this.dispose();
 
