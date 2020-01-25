@@ -50,6 +50,7 @@ export class EffectMaterial extends ShaderMaterial {
 
 			},
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			dithering
@@ -86,7 +87,7 @@ export class EffectMaterial extends ShaderMaterial {
 
 	get depthPacking() {
 
-		return Number.parseInt(this.defines.DEPTH_PACKING);
+		return Number(this.defines.DEPTH_PACKING);
 
 	}
 
@@ -164,8 +165,6 @@ export class EffectMaterial extends ShaderMaterial {
 			this.uniforms[entry[0]] = entry[1];
 
 		}
-
-		this.needsUpdate = true;
 
 		return this;
 
