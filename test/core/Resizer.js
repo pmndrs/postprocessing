@@ -3,9 +3,7 @@ import { Resizer } from "../../build/postprocessing.js";
 
 test("can be instantiated", t => {
 
-	const object = new Resizer(null);
-
-	t.truthy(object);
+	t.truthy(new Resizer(null));
 
 });
 
