@@ -34,20 +34,25 @@ export class PostProcessingDemo extends Demo {
 		 */
 
 		this.renderPass = new RenderPass(this.scene, null);
-		this.renderPass.renderToScreen = true;
 
 	}
 
 	/**
 	 * Renders this demo.
 	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
+	 * @param {Number} deltaTime - The time since the last frame in seconds.
 	 */
 
-	render(delta) {
+	render(deltaTime) {
+
+		if(this.controls !== null) {
+
+			this.controls.update(deltaTime);
+
+		}
 
 		// Let the effect composer take care of rendering.
-		this.composer.render(delta);
+		this.composer.render(deltaTime);
 
 	}
 
@@ -63,7 +68,6 @@ export class PostProcessingDemo extends Demo {
 
 		const renderPass = new RenderPass(this.scene, null);
 		renderPass.enabled = this.renderPass.enabled;
-		renderPass.renderToScreen = true;
 		this.renderPass = renderPass;
 
 		return this;
