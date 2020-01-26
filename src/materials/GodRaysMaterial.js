@@ -17,6 +17,8 @@ import vertexShader from "./glsl/common/shader.vert";
  * Nvidia, GPU Gems 3, 2008:
  *  [Chapter 13. Volumetric Light Scattering as a Post-Process](
  *  https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch13.html)
+ *
+ * @todo Remove dithering code from fragment shader.
  */
 
 export class GodRaysMaterial extends ShaderMaterial {

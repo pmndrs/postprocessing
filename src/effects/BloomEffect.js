@@ -193,7 +193,7 @@ export class BloomEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	get dithering() {
@@ -206,7 +206,7 @@ export class BloomEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	set dithering(value) {

@@ -92,6 +92,7 @@ export class BlurPass extends Pass {
 		 * Whether the blurred result should also be dithered using noise.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 		 */
 
 		this.dithering = false;

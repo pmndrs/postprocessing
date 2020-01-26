@@ -15,6 +15,8 @@ import vertexShader from "./glsl/convolution/shader.vert";
  *
  * Further modified according to Apple's
  * [Best Practices for Shaders](https://goo.gl/lmRoM5).
+ *
+ * @todo Remove dithering code from fragment shader.
  */
 
 export class ConvolutionMaterial extends ShaderMaterial {

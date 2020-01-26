@@ -332,6 +332,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	get dithering() {
@@ -344,6 +345,7 @@ export class GodRaysEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	set dithering(value) {
