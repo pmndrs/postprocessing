@@ -250,6 +250,8 @@ export class EffectComposer {
 
 		const passes = this.passes;
 		const renderer = this.renderer;
+		const alpha = renderer.getContext().getContextAttributes().alpha;
+		const frameBufferType = this.inputBuffer.texture.type;
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
 		if(this.autoRenderToScreen) {
@@ -273,7 +275,7 @@ export class EffectComposer {
 		}
 
 		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		pass.initialize(renderer, renderer.getContext().getContextAttributes().alpha);
+		pass.initialize(renderer, alpha, frameBufferType);
 
 		if(index !== undefined) {
 

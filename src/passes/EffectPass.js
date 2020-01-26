@@ -547,14 +547,15 @@ export class EffectPass extends Pass {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
 		// Initialize effects before building the final shader.
 		for(const effect of this.effects) {
 
-			effect.initialize(renderer, alpha);
+			effect.initialize(renderer, alpha, frameBufferType);
 
 		}
 
