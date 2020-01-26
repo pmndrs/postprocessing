@@ -1,7 +1,6 @@
 import {
 	DepthStencilFormat,
 	DepthTexture,
-	LinearEncoding,
 	LinearFilter,
 	RGBAFormat,
 	RGBFormat,
@@ -35,7 +34,7 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
-	 * @param {Boolean} [options.frameBufferType=UnsignedByteType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
+	 * @param {Boolean} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
 	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, frameBufferType } = {}) {
@@ -209,7 +208,7 @@ export class EffectComposer {
 	 *
 	 * The created render target uses a linear filter for texel minification and
 	 * magnification. Its render texture format depends on whether the renderer
-	 * uses the alpha channel. Mipmaps are disabled. The encoding is linear.
+	 * uses the alpha channel. Mipmaps are disabled.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
@@ -233,7 +232,6 @@ export class EffectComposer {
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
-		renderTarget.texture.encoding = LinearEncoding;
 
 		return renderTarget;
 
