@@ -281,8 +281,12 @@ export class SMAAEffect extends Effect {
 
 		const material = this.edgeDetectionMaterial;
 
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+		if(material.defines.EDGE_DETECTION_DEPTH !== undefined) {
+
+			material.uniforms.depthBuffer.value = depthTexture;
+			material.defines.DEPTH_PACKING = depthPacking.toFixed(0);
+
+		}
 
 	}
 
