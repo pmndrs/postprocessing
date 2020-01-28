@@ -61,13 +61,13 @@ export class Cage {
 	/**
 	 * Creates a cubic cage.
 	 *
-	 * @param {Number} color - The color.
+	 * @param {Number} [color=0x000000] - The color.
 	 * @param {Number} [size=8.0] - The side length.
 	 * @param {Number} [thickness=0.25] - The line thickness.
 	 * @return {Group} The cage.
 	 */
 
-	static create(color, size = 8.0, thickness = 0.25) {
+	static create(color = 0x000000, size = 8.0, thickness = 0.25) {
 
 		return create(color, size, thickness);
 
