@@ -1,13 +1,4 @@
 /**
- * A progress text element.
- *
- * @type {HTMLElement}
- * @private
- */
-
-let progressText = null;
-
-/**
  * A progress bar.
  *
  * @type {HTMLElement}
@@ -28,7 +19,6 @@ export class ProgressManager {
 
 	static initialize() {
 
-		progressText = document.querySelector(".progress-text");
 		progressBar = document.querySelector(".progress-bar > div");
 
 	}
@@ -44,7 +34,6 @@ export class ProgressManager {
 	static updateProgress(url, loaded, total) {
 
 		const progress = (loaded / total * 100.0);
-		progressText.innerText = loaded + " / " + total;
 		progressBar.style.width = progress.toFixed(0) + "%";
 
 	}
@@ -55,7 +44,6 @@ export class ProgressManager {
 
 	static reset() {
 
-		progressText.innerHTML = "";
 		progressBar.removeAttribute("style");
 
 	}
