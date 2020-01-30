@@ -535,9 +535,11 @@ export class GodRaysEffect extends Effect {
 
 		// Calculate the screen light position.
 		v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
+
+		// Translate to [0.0, 1.0] and clamp to screen with a bias of 1.0.
 		this.screenPosition.set(
-			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
-			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5))
+			Math.min(Math.max((v.x + 1.0) * 0.5, -1.0), 2.0),
+			Math.min(Math.max((v.y + 1.0) * 0.5, -1.0), 2.0)
 		);
 
 		if(this.blur) {
