@@ -37,12 +37,11 @@ function createLights(shadowCameraHelper) {
  * @private
  * @param {Map} assets - A collection of assets. The model will be stored as "sponza".
  * @param {LoadingManager} manager - A loading manager.
- * @param {WebGLRenderer} renderer - A renderer. Will be used to initialize textures ahead of time.
+ * @param {Number} anisotropy - The texture anisotropy.
  */
 
-function load(assets, manager, renderer) {
+function load(assets, manager, anisotropy) {
 
-	const anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
 	const gltfLoader = new GLTFLoader(manager);
 
 	const sponzaURL = (window.location.hostname !== "localhost") ?
@@ -55,22 +54,21 @@ function load(assets, manager, renderer) {
 
 			if(object.isMesh) {
 
-				object.castShadow = true;
-				object.receiveShadow = true;
+				const { map = null, normalMap = null } = object.material;
 
-				if(object.material.map !== null) {
+				if(map !== null) {
 
 					object.material.map.anisotropy = anisotropy;
-					renderer.initTexture(object.material.map);
 
 				}
 
-				if(object.material.normalMap !== null) {
+				if(normalMap !== null) {
 
 					object.material.normalMap.anisotropy = anisotropy;
-					renderer.initTexture(object.material.normalMap);
 
 				}
+
+				object.castShadow = object.receiveShadow = true;
 
 			}
 
@@ -106,12 +104,12 @@ export class Sponza {
 	 *
 	 * @param {Map} assets - A collection of assets. The model will be stored as "sponza".
 	 * @param {LoadingManager} manager - A loading manager.
-	 * @param {WebGLRenderer} renderer - A renderer. Will be used to initialize textures ahead of time.
+	 * @param {Number} anisotropy - The texture anisotropy.
 	 */
 
-	static load(assets, manager, renderer) {
+	static load(assets, manager, anisotropy) {
 
-		load(assets, manager, renderer);
+		load(assets, manager, anisotropy);
 
 	}
 

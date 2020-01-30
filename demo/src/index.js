@@ -99,14 +99,37 @@ function onLoad(event) {
 
 	const demo = event.demo;
 
-	// Hide the progress bar.
-	document.querySelector(".loading").classList.add("hidden");
-
-	// Prevent stuttering when new objects enter the view frustum.
+	// Prevent stuttering when new objects come into view.
 	renderer.compile(demo.scene, demo.camera);
+
+	// Initialize textures ahead of time.
+	demo.scene.traverse((object) => {
+
+		if(object.isMesh) {
+
+			const { map = null, normalMap = null } = object.material;
+
+			if(map !== null) {
+
+				renderer.initTexture(object.material.map);
+
+			}
+
+			if(normalMap !== null) {
+
+				renderer.initTexture(object.material.normalMap);
+
+			}
+
+		}
+
+	});
 
 	// Let the main render pass use the camera of the current demo.
 	demo.renderPass.camera = demo.camera;
+
+	// Hide the progress bar.
+	document.querySelector(".loading").classList.add("hidden");
 
 }
 
