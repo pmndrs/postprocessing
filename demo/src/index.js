@@ -116,6 +116,7 @@ window.addEventListener("load", (event) => {
 
 	// Create and configure the renderer. Don't enable antialias!
 	renderer = new WebGLRenderer();
+	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = true;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
@@ -127,6 +128,7 @@ window.addEventListener("load", (event) => {
 
 	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
+		frameBufferType: HalfFloatType,
 		stencilBuffer: true
 	});
 
