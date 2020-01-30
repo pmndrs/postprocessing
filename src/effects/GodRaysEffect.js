@@ -575,12 +575,12 @@ export class GodRaysEffect extends Effect {
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		this.blurPass.initialize(renderer, alpha);
-		this.renderPassLight.initialize(renderer, alpha);
-		this.depthMaskPass.initialize(renderer, alpha);
-		this.godRaysPass.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha, frameBufferType);
+		this.renderPassLight.initialize(renderer, alpha, frameBufferType);
+		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
+		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha) {
 
@@ -589,6 +589,10 @@ export class GodRaysEffect extends Effect {
 			this.renderTargetLight.texture.format = RGBFormat;
 
 		}
+
+		this.renderTargetA.texture.type = frameBufferType;
+		this.renderTargetB.texture.type = frameBufferType;
+		this.renderTargetLight.texture.type = frameBufferType;
 
 	}
 

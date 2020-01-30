@@ -334,17 +334,20 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		this.blurPass.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha) {
 
 			this.renderTarget.texture.format = RGBFormat;
 
 		}
+
+		this.renderTarget.texture.type = frameBufferType;
 
 	}
 
