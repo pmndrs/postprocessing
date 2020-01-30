@@ -5,7 +5,6 @@ import { EffectComposer } from "../../src";
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { BokehDemo } from "./demos/BokehDemo.js";
-import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
@@ -140,7 +139,6 @@ window.addEventListener("load", (event) => {
 		new BloomDemo(composer),
 		new BlurDemo(composer),
 		new BokehDemo(composer),
-		new RealisticBokehDemo(composer),
 		new ColorDepthDemo(composer),
 		new ColorGradingDemo(composer),
 		new GlitchDemo(composer),
