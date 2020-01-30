@@ -52,6 +52,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 

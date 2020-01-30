@@ -422,7 +422,7 @@ void detectHorizontalCornerPattern(inout vec2 weights, const in vec4 texCoord, c
 		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(0, -2)).r;
 		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(1, -2)).r;
 
-		weights *= saturate(factor);
+		weights *= clamp(factor, 0.0, 1.0);
 
 	#endif
 
@@ -443,7 +443,7 @@ void detectVerticalCornerPattern(inout vec2 weights, const in vec4 texCoord, con
 		factor.y -= rounding.x * sampleLevelZeroOffset(inputBuffer, texCoord.xy, vec2(-2, 0)).g;
 		factor.y -= rounding.y * sampleLevelZeroOffset(inputBuffer, texCoord.zw, vec2(-2, 1)).g;
 
-		weights *= saturate(factor);
+		weights *= clamp(factor, 0.0, 1.0);
 
 	#endif
 

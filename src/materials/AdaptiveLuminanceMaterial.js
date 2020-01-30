@@ -38,6 +38,7 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 

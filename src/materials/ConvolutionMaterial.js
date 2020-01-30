@@ -46,6 +46,7 @@ export class ConvolutionMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
