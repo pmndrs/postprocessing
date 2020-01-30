@@ -82,6 +82,7 @@ function onChange(event) {
 	composer.reset();
 	composer.addPass(demo.renderPass);
 
+	// Reset the progress bar and show it.
 	ProgressManager.reset();
 	document.querySelector(".loading").classList.remove("hidden");
 
@@ -96,10 +97,16 @@ function onChange(event) {
 
 function onLoad(event) {
 
+	const demo = event.demo;
+
+	// Hide the progress bar.
 	document.querySelector(".loading").classList.add("hidden");
 
+	// Prevent stuttering when new objects enter the view frustum.
+	renderer.compile(demo.scene, demo.camera);
+
 	// Let the main render pass use the camera of the current demo.
-	event.demo.renderPass.camera = event.demo.camera;
+	demo.renderPass.camera = demo.camera;
 
 }
 
