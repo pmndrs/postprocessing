@@ -17,7 +17,6 @@ import { SMAADemo } from "./demos/SMAADemo.js";
 import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
-import { VignetteDemo } from "./demos/VignetteDemo.js";
 import { PerformanceDemo } from "./demos/PerformanceDemo.js";
 
 /**
@@ -151,7 +150,6 @@ window.addEventListener("load", (event) => {
 		new SSAODemo(composer),
 		new TextureDemo(composer),
 		new ToneMappingDemo(composer),
-		new VignetteDemo(composer),
 		new PerformanceDemo(composer)
 	];
 
