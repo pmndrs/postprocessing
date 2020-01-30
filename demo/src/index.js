@@ -1,5 +1,6 @@
+import { HalfFloatType, PCFSoftShadowMap, sRGBEncoding, Vector2, WebGLRenderer } from "three";
 import { DemoManager } from "three-demo";
-import { Vector2, WebGLRenderer } from "three";
+
 import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
@@ -18,6 +19,8 @@ import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
 import { PerformanceDemo } from "./demos/PerformanceDemo.js";
+
+import { ProgressManager } from "./utils/ProgressManager.js";
 
 /**
  * A renderer.
@@ -78,7 +81,8 @@ function onChange(event) {
 	composer.reset();
 	composer.addPass(demo.renderPass);
 
-	document.getElementById("viewport").children[0].style.display = "initial";
+	ProgressManager.reset();
+	document.querySelector(".loading").classList.remove("hidden");
 
 }
 
@@ -91,10 +95,10 @@ function onChange(event) {
 
 function onLoad(event) {
 
-	// Prepare the render pass.
-	event.demo.renderPass.camera = event.demo.camera;
+	document.querySelector(".loading").classList.add("hidden");
 
-	document.getElementById("viewport").children[0].style.display = "none";
+	// Let the main render pass use the camera of the current demo.
+	event.demo.renderPass.camera = event.demo.camera;
 
 }
 
@@ -109,22 +113,19 @@ window.addEventListener("load", (event) => {
 
 	const viewport = document.getElementById("viewport");
 
-	// Create a custom renderer.
-	renderer = new WebGLRenderer({
-		antialias: false
-	});
-
+	// Create and configure the renderer. Don't enable antialias!
+	renderer = new WebGLRenderer();
 	renderer.debug.checkShaderErrors = true;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
 
-	// Create an effect composer.
+	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
 		stencilBuffer: true
 	});
 
-	// Initialize the demo manager.
+	// Create the demo manager.
 	manager = new DemoManager(viewport, {
 		aside: document.getElementById("aside"),
 		renderer
@@ -153,21 +154,21 @@ window.addEventListener("load", (event) => {
 		new PerformanceDemo(composer)
 	];
 
-	if(demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1)) === -1) {
+	const id = demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1));
+
+	if(id === -1) {
 
 		// Invalid URL hash: demo doesn't exist.
 		window.location.hash = "";
 
 	}
 
-	// Register demos.
 	for(const demo of demos) {
 
 		manager.addDemo(demo);
 
 	}
 
-	// Start rendering.
 	render();
 
 });
@@ -216,18 +217,20 @@ window.addEventListener("resize", (function() {
 
 document.addEventListener("DOMContentLoaded", (event) => {
 
-	const infoImg = document.querySelector(".info img");
-	const infoDiv = document.querySelector(".info div");
+	const img = document.querySelector(".info img");
+	const div = document.querySelector(".info div");
 
-	if(infoImg !== null && infoDiv !== null) {
+	if(img !== null && div !== null) {
 
-		infoImg.addEventListener("click", (event) => {
+		img.addEventListener("click", (event) => {
 
-			infoDiv.style.display = (infoDiv.style.display === "block") ? "none" : "block";
+			div.classList.toggle("hidden");
 
 		});
 
 	}
+
+	ProgressManager.initialize();
 
 });
 
@@ -245,7 +248,7 @@ document.addEventListener("keydown", (event) => {
 	if(aside !== null && event.key === "h") {
 
 		event.preventDefault();
-		aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+		aside.classList.toggle("hidden");
 
 	}
 
