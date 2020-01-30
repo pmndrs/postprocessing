@@ -70,7 +70,7 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Use RED format in WebGL 2.0 and remove LinearMipMapLinearFilter in next major release.
+		 * @todo Remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
