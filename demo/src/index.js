@@ -77,6 +77,7 @@ function onChange(event) {
 	// Make sure that the main renderer is being used and update it just in case.
 	const size = composer.getRenderer().getSize(new Vector2());
 	renderer.setSize(size.width, size.height);
+	renderer.shadowMap.needsUpdate = true;
 	composer.replaceRenderer(renderer);
 	composer.reset();
 	composer.addPass(demo.renderPass);
@@ -119,6 +120,10 @@ window.addEventListener("load", (event) => {
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
+	renderer.shadowMap.type = PCFSoftShadowMap;
+	renderer.shadowMap.autoUpdate = false;
+	renderer.shadowMap.needsUpdate = true;
+	renderer.shadowMap.enabled = true;
 
 	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
