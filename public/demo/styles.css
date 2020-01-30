@@ -68,14 +68,13 @@ img:hover {
 
 .loading > div,
 .loading > div > div {
-	border-radius: 6px;
 	box-sizing: border-box;
 	display: inline-block;
+	height: 8px;
 }
 
 .loading > div {
-	border: 1px solid rgba(200, 200, 200, 0.5);
-	height: 8px;
+	background: rgba(255, 255, 255, 0.1);
 	margin-top: 10px;
 	text-align: left;
 	width: 220px;
@@ -85,7 +84,6 @@ img:hover {
 	background: rgba(6, 237, 164, 0.65);
 	transition: width 150ms;
 	vertical-align: top;
-	height: 6px;
 	width: 0;
 }
 
