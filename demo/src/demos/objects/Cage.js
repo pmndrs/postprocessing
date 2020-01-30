@@ -1,4 +1,4 @@
-import { BoxBufferGeometry, Group, Mesh, MeshLambertMaterial } from "three";
+import { BoxBufferGeometry, Group, Mesh, MeshBasicMaterial } from "three";
 
 /**
  * Creates a cubic cage.
@@ -17,7 +17,7 @@ function create(color, size, thickness) {
 
 	const mesh = new Mesh(
 		new BoxBufferGeometry(thickness, size + thickness, thickness),
-		new MeshLambertMaterial({ color })
+		new MeshBasicMaterial({ color })
 	);
 
 	const clone0 = group.clone();
