@@ -78,7 +78,7 @@ export class ShaderPass extends Pass {
 
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
-		if(this.uniform !== null) {
+		if(this.uniform !== null && inputBuffer !== null) {
 
 			this.uniform.value = inputBuffer.texture;
 
