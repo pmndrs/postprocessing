@@ -5,7 +5,7 @@ varying vec2 vUv;
 varying vec2 vUv0;
 varying vec2 vUv1;
 
-#ifndef EDGE_DETECTION_DEPTH
+#if EDGE_DETECTION_MODE != 0
 
 	varying vec2 vUv2;
 	varying vec2 vUv3;
@@ -22,7 +22,7 @@ void main() {
 	vUv0 = vUv + texelSize * vec2(-1.0, 0.0);
 	vUv1 = vUv + texelSize * vec2(0.0, -1.0);
 
-	#ifndef EDGE_DETECTION_DEPTH
+	#if EDGE_DETECTION_MODE != 0
 
 		// Right and bottom texel coordinates.
 		vUv2 = vUv + texelSize * vec2(1.0, 0.0);

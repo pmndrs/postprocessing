@@ -57,25 +57,24 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 	setEdgeDetectionMode(mode) {
 
+		this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
+
 		switch(mode) {
 
 			case EdgeDetectionMode.DEPTH:
 				this.fragmentShader = fragmentShaderDepth;
 				this.uniforms.depthBuffer = new Uniform(null);
-				this.defines.EDGE_DETECTION_DEPTH = "1";
 				break;
 
 			case EdgeDetectionMode.LUMA:
 				this.fragmentShader = fragmentShaderLuma;
 				this.uniforms.inputBuffer = new Uniform(null);
-				this.defines.EDGE_DETECTION_LUMA = "1";
 				break;
 
 			case EdgeDetectionMode.COLOR:
 			default:
 				this.fragmentShader = fragmentShaderColor;
 				this.uniforms.inputBuffer = new Uniform(null);
-				this.defines.EDGE_DETECTION_COLOR = "1";
 				break;
 
 		}
