@@ -159,8 +159,8 @@ window.addEventListener("load", (event) => {
 
 	const viewport = document.getElementById("viewport");
 
-	// Create and configure the renderer. Don't enable antialias!
-	renderer = new WebGLRenderer();
+	// Create and configure the renderer.
+	renderer = new WebGLRenderer({ powerPreference: "high-performance" });
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = true;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
