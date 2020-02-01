@@ -35,7 +35,7 @@ export class SMAAEffect extends Effect {
 	 * @param {Image} searchImage - The SMAA search image. Preload this image using the {@link SMAAImageLoader}.
 	 * @param {Image} areaImage - The SMAA area image. Preload this image using the {@link SMAAImageLoader}.
 	 * @param {SMAAPreset} [preset=SMAAPreset.HIGH] - An SMAA quality preset.
-	 * @param {EdgeDetectionMode} [preset=EdgeDetectionMode.COLOR] - The edge detection mode.
+	 * @param {EdgeDetectionMode} [edgeDetectionMode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 */
 
 	constructor(searchImage, areaImage, preset = SMAAPreset.HIGH, edgeDetectionMode = EdgeDetectionMode.COLOR) {
@@ -270,8 +270,6 @@ export class SMAAEffect extends Effect {
 
 	/**
 	 * Sets the depth texture.
-	 *
-	 * Will be called when the edge detection mode is set to DEPTH.
 	 *
 	 * @param {Texture} depthTexture - A depth texture.
 	 * @param {Number} [depthPacking=0] - The depth packing.
