@@ -17,11 +17,11 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 * Constructs a new edge detection material.
 	 *
 	 * @param {Vector2} [texelSize] - The screen texel size.
-	 * @param {EdgeDetectionMode} [edgeDetectionMode] - The edge detection mode.
+	 * @param {EdgeDetectionMode} [mode] - The edge detection mode.
 	 * @todo Remove texelSize parameter.
 	 */
 
-	constructor(texelSize = new Vector2(), edgeDetectionMode) {
+	constructor(texelSize = new Vector2(), mode) {
 
 		super({
 
@@ -30,10 +30,13 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 			defines: {
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1",
-				DEPTH_THRESHOLD: "0.01"
+				DEPTH_THRESHOLD: "0.01",
+				DEPTH_PACKING: "0"
 			},
 
 			uniforms: {
+				inputBuffer: new Uniform(null),
+				depthBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
 			},
 
@@ -44,40 +47,71 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 		});
 
-		this.setEdgeDetectionMode(edgeDetectionMode);
+		this.setEdgeDetectionMode(mode);
+
+	}
+
+	/**
+	 * The current depth packing.
+	 *
+	 * @type {Number}
+	 */
+
+	get depthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing.
+	 *
+	 * Use `BasicDepthPacking` or `RGBADepthPacking` if your depth texture
+	 * contains packed depth.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
 	/**
 	 * Sets the edge detection mode.
 	 *
-	 * @private
+	 * Warning: If you intend to change the edge detection mode at runtime, make
+	 * sure that {@link EffectPass.needsDepthTexture} is set to `true` _before_
+	 * the EffectPass is added to the composer.
+	 *
 	 * @param {EdgeDetectionMode} mode - The edge detection mode.
 	 */
 
 	setEdgeDetectionMode(mode) {
 
-		this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
-
 		switch(mode) {
 
 			case EdgeDetectionMode.DEPTH:
 				this.fragmentShader = fragmentShaderDepth;
-				this.uniforms.depthBuffer = new Uniform(null);
 				break;
 
 			case EdgeDetectionMode.LUMA:
 				this.fragmentShader = fragmentShaderLuma;
-				this.uniforms.inputBuffer = new Uniform(null);
 				break;
 
 			case EdgeDetectionMode.COLOR:
 			default:
 				this.fragmentShader = fragmentShaderColor;
-				this.uniforms.inputBuffer = new Uniform(null);
 				break;
 
 		}
+
+		this.defines.EDGE_DETECTION_MODE = mode.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 

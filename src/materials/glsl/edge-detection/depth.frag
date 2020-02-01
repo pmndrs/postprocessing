@@ -1,9 +1,24 @@
+#include <packing>
+
 uniform sampler2D depthBuffer;
 
 varying vec2 vUv;
-
 varying vec2 vUv0;
 varying vec2 vUv1;
+
+float readDepth(const in vec2 uv) {
+
+	#if DEPTH_PACKING == 3201
+
+		return unpackRGBAToDepth(texture2D(depthBuffer, uv));
+
+	#else
+
+		return texture2D(depthBuffer, uv).r;
+
+	#endif
+
+}
 
 /**
  * Gathers the current texel, and the top-left neighbors.
@@ -11,9 +26,9 @@ varying vec2 vUv1;
 
 vec3 gatherNeighbors() {
 
-	float p = texture2D(depthBuffer, vUv).r;
-	float pLeft = texture2D(depthBuffer, vUv0).r;
-	float pTop = texture2D(depthBuffer, vUv1).r;
+	float p = readDepth(vUv);
+	float pLeft = readDepth(vUv0);
+	float pTop = readDepth(vUv1);
 
 	return vec3(p, pLeft, pTop);
 
