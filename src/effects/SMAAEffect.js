@@ -321,6 +321,20 @@ export class SMAAEffect extends Effect {
 	}
 
 	/**
+	 * Deletes internal render targets and textures.
+	 */
+
+	dispose() {
+
+		const uniforms = this.weightsPass.getFullscreenMaterial().uniforms;
+		uniforms.searchTexture.value.dispose();
+		uniforms.areaTexture.value.dispose();
+
+		super.dispose();
+
+	}
+
+	/**
 	 * The SMAA search image, encoded as a base64 data URL.
 	 *
 	 * Use this image data to create an Image instance and use it together with
