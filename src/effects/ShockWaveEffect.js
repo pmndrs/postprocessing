@@ -157,8 +157,7 @@ export class ShockWaveEffect extends Effect {
 		const epicenter = this.epicenter;
 		const camera = this.camera;
 		const uniforms = this.uniforms;
-
-		let radius;
+		const uniformActive = uniforms.get("active");
 
 		if(this.active) {
 
@@ -169,7 +168,9 @@ export class ShockWaveEffect extends Effect {
 			ab.copy(camera.position).sub(epicenter);
 
 			// Don't render the effect if the object is behind the camera.
-			if(v.angleTo(ab) > HALF_PI) {
+			uniformActive.value = (v.angleTo(ab) > HALF_PI);
+
+			if(uniformActive.value) {
 
 				// Scale the effect based on distance to the object.
 				uniforms.get("cameraDistance").value = camera.position.distanceTo(epicenter);
@@ -182,16 +183,15 @@ export class ShockWaveEffect extends Effect {
 
 			// Update the shock wave radius based on time.
 			this.time += delta * this.speed;
-			radius = this.time - waveSize;
+			const radius = this.time - waveSize;
 			uniforms.get("radius").value = radius;
 
 			if(radius >= (uniforms.get("maxRadius").value + waveSize) * 2.0) {
 
 				this.active = false;
-				uniforms.get("active").value = false;
+				uniformActive.value = false;
 
 			}
-
 
 		}
 
