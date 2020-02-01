@@ -1,25 +1,23 @@
 import {
-	AmbientLight,
-	BoxBufferGeometry,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshBasicMaterial,
-	MeshPhongMaterial,
-	Object3D,
+	Color,
 	PerspectiveCamera,
-	RepeatWrapping,
-	TextureLoader,
 	Vector2,
+	Vector3,
 	WebGLRenderer
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Cage } from "./objects/Cage.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	CopyMaterial,
+	EdgeDetectionMode,
 	EffectPass,
+	ShaderPass,
 	SMAAEffect,
 	SMAAImageLoader,
 	SMAAPreset,
@@ -43,31 +41,13 @@ export class SMAADemo extends PostProcessingDemo {
 		super("smaa", composer);
 
 		/**
-		 * The main renderer.
-		 *
-		 * @type {WebGLRenderer}
-		 * @private
-		 */
-
-		this.originalRenderer = null;
-
-		/**
 		 * A secondary renderer.
 		 *
 		 * @type {WebGLRenderer}
 		 * @private
 		 */
 
-		this.rendererAA = null;
-
-		/**
-		 * Secondary camera controls.
-		 *
-		 * @type {Disposable}
-		 * @private
-		 */
-
-		this.controls2 = null;
+		this.secondaryRenderer = null;
 
 		/**
 		 * An SMAA effect.
@@ -79,13 +59,22 @@ export class SMAADemo extends PostProcessingDemo {
 		this.smaaEffect = null;
 
 		/**
-		 * A pass.
+		 * A copy pass.
 		 *
 		 * @type {Pass}
 		 * @private
 		 */
 
-		this.pass = null;
+		this.copyPass = null;
+
+		/**
+		 * An effect pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.effectPass = null;
 
 		/**
 		 * A texture effect (SMAA color edges).
@@ -112,25 +101,16 @@ export class SMAADemo extends PostProcessingDemo {
 		 * @private
 		 */
 
-		this.objectA = null;
+		this.object = null;
 
 		/**
-		 * An object.
+		 * Indicates whether the object should rotate.
 		 *
-		 * @type {Object3D}
+		 * @type {Boolean}
 		 * @private
 		 */
 
-		this.objectB = null;
-
-		/**
-		 * An object.
-		 *
-		 * @type {Object3D}
-		 * @private
-		 */
-
-		this.objectC = null;
+		this.rotate = true;
 
 	}
 
@@ -142,42 +122,21 @@ export class SMAADemo extends PostProcessingDemo {
 
 	load() {
 
-		const maxAnisotropy = this.composer.getRenderer().capabilities.getMaxAnisotropy();
-
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const textureLoader = new TextureLoader(loadingManager);
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/sunset/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
-
-				textureLoader.load("textures/crate.jpg", (t) => {
-
-					t.wrapS = t.wrapT = RepeatWrapping;
-					t.anisotropy = Math.min(4, maxAnisotropy);
-					assets.set("crate-color", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -207,139 +166,80 @@ export class SMAADemo extends PostProcessingDemo {
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
 
-		// Camera.
+		// Create a secondary renderer that uses MSAA.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(-3, 0, -3);
-		camera.lookAt(scene.position);
-		this.camera = camera;
-
-		// Create a second renderer with AA.
-
-		const rendererAA = ((size, clearColor, pixelRatio) => {
+		this.secondaryRenderer = ((primary) => {
 
 			const renderer = new WebGLRenderer({
+				powerPreference: "high-performance",
 				antialias: true
 			});
 
+			const size = primary.getSize(new Vector2());
 			renderer.setSize(size.width, size.height);
-			renderer.setClearColor(clearColor);
-			renderer.setPixelRatio(pixelRatio);
+			renderer.setClearColor(primary.getClearColor(), primary.getClearAlpha());
+			renderer.setPixelRatio(primary.getPixelRatio());
+			renderer.outputEncoding = primary.outputEncoding;
+			renderer.shadowMap.type = primary.shadowMap.type;
+			renderer.shadowMap.autoUpdate = false;
+			renderer.shadowMap.needsUpdate = true;
+			renderer.shadowMap.enabled = true;
 
 			return renderer;
 
-		})(
-			renderer.getSize(new Vector2()),
-			renderer.getClearColor(),
-			renderer.getPixelRatio()
-		);
+		})(renderer);
 
-		this.originalRenderer = composer.getRenderer();
-		this.rendererAA = rendererAA;
+		// Camera.
+
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(4, 8, 0.75);
+		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(-0.5, 6.5, -0.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
-
-		const controls2 = controls.clone();
-		controls2.setDom(rendererAA.domElement);
-		controls2.setEnabled(false);
-		this.controls2 = controls2;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xccccff);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xff8866, 1);
-
-		directionalLight.position.set(1440, 200, 2000);
-		directionalLight.target.position.copy(scene.position);
-
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(...Sponza.createLights());
 
 		// Objects.
 
-		let mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
-			new MeshBasicMaterial({
-				color: 0x000000,
-				wireframe: true
-			})
-		);
+		scene.add(assets.get("sponza"));
 
-		mesh.position.set(1.25, 0, -1.25);
+		const cage = Cage.create(0x000000, 1.25, 0.025);
+		cage.position.set(-0.5, 6.5, -0.25);
 
-		this.objectA = mesh;
-		scene.add(mesh);
+		cage.rotation.x += Math.PI * 0.1;
+		cage.rotation.y += Math.PI * 0.3;
 
-		mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
-			new MeshPhongMaterial({
-				map: assets.get("crate-color")
-			})
-		);
-
-		mesh.position.set(-1.25, 0, 1.25);
-
-		this.objectB = mesh;
-		scene.add(mesh);
-
-		mesh = new Mesh(
-			new BoxBufferGeometry(0.25, 8.25, 0.25),
-			new MeshPhongMaterial({
-				color: 0x000000
-			})
-		);
-
-		const object = new Object3D();
-
-		let o0, o1, o2;
-
-		o0 = object.clone();
-
-		let clone = mesh.clone();
-		clone.position.set(-4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(-4, 0, -4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, -4);
-		o0.add(clone);
-
-		o1 = o0.clone();
-		o1.rotation.set(Math.PI / 2, 0, 0);
-		o2 = o0.clone();
-		o2.rotation.set(0, 0, Math.PI / 2);
-
-		object.add(o0);
-		object.add(o1);
-		object.add(o2);
-
-		object.scale.set(0.1, 0.1, 0.1);
-
-		this.objectC = object;
-		scene.add(object);
+		this.object = cage;
+		scene.add(cage);
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
 
 		const edgesTextureEffect = new TextureEffect({
 			blendFunction: BlendFunction.SKIP,
-			texture: smaaEffect.renderTargetColorEdges.texture
+			texture: smaaEffect.renderTargetEdges.texture
 		});
 
 		const weightsTextureEffect = new TextureEffect({
@@ -347,16 +247,27 @@ export class SMAADemo extends PostProcessingDemo {
 			texture: smaaEffect.renderTargetWeights.texture
 		});
 
-		const pass = new EffectPass(camera, smaaEffect, edgesTextureEffect, weightsTextureEffect);
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
+		const copyPass = new ShaderPass(new CopyMaterial());
+
+		const effectPass = new EffectPass(
+			camera,
+			smaaEffect,
+			edgesTextureEffect,
+			weightsTextureEffect
+		);
 
 		this.smaaEffect = smaaEffect;
 		this.edgesTextureEffect = edgesTextureEffect;
 		this.weightsTextureEffect = weightsTextureEffect;
-		this.pass = pass;
+		this.copyPass = copyPass;
+		this.effectPass = effectPass;
 
-		composer.addPass(pass);
+		copyPass.enabled = false;
+		copyPass.renderToScreen = true;
+		effectPass.renderToScreen = true;
+
+		composer.addPass(copyPass);
+		composer.addPass(effectPass);
 
 	}
 
@@ -368,26 +279,25 @@ export class SMAADemo extends PostProcessingDemo {
 
 	render(delta) {
 
-		const objectA = this.objectA;
-		const objectB = this.objectB;
-		const objectC = this.objectC;
-		const twoPI = 2.0 * Math.PI;
+		if(this.rotate) {
 
-		objectA.rotation.x += 0.0005;
-		objectA.rotation.y += 0.001;
+			const object = this.object;
+			const PI2 = 2.0 * Math.PI;
 
-		objectB.rotation.copy(objectA.rotation);
-		objectC.rotation.copy(objectA.rotation);
+			object.rotation.x += 0.01 * delta;
+			object.rotation.y += 0.05 * delta;
 
-		if(objectA.rotation.x >= twoPI) {
+			if(object.rotation.x >= PI2) {
 
-			objectA.rotation.x -= twoPI;
+				object.rotation.x -= PI2;
 
-		}
+			}
 
-		if(objectA.rotation.y >= twoPI) {
+			if(object.rotation.y >= PI2) {
 
-			objectA.rotation.y -= twoPI;
+				object.rotation.y -= PI2;
+
+			}
 
 		}
 
@@ -403,20 +313,22 @@ export class SMAADemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
+		const scene = this.scene;
+		const controls = this.controls;
 		const composer = this.composer;
+		const renderer1 = composer.getRenderer();
+		const renderer2 = this.secondaryRenderer;
+
+		const copyPass = this.copyPass;
 		const renderPass = this.renderPass;
+		const effectPass = this.effectPass;
+
 		const smaaEffect = this.smaaEffect;
 		const edgesTextureEffect = this.edgesTextureEffect;
 		const weightsTextureEffect = this.weightsTextureEffect;
+
 		const blendMode = smaaEffect.blendMode;
-		const colorEdgesMaterial = smaaEffect.colorEdgesMaterial;
-
-		const renderer1 = this.originalRenderer;
-		const renderer2 = this.rendererAA;
-
-		const controls1 = this.controls;
-		const controls2 = this.controls2;
+		const edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
 
 		const AAMode = {
 			DISABLED: 0,
@@ -429,9 +341,10 @@ export class SMAADemo extends PostProcessingDemo {
 		const params = {
 			"AA mode": AAMode.SMAA,
 			"preset": SMAAPreset.HIGH,
-			"contrast factor": Number.parseFloat(colorEdgesMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
-			"opacity": blendMode.opacity.value,
-			"blend mode": blendMode.blendFunction
+			"edge detection": EdgeDetectionMode.DEPTH,
+			"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+			"opacity": this.smaaEffect.blendMode.opacity.value,
+			"blend mode": this.smaaEffect.blendMode.blendFunction
 		};
 
 		function swapRenderers(browser) {
@@ -440,17 +353,17 @@ export class SMAADemo extends PostProcessingDemo {
 
 			if(browser && composer.getRenderer() !== renderer2) {
 
+				scene.background.convertLinearToSRGB();
 				renderer2.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer2);
-				controls1.setEnabled(false);
-				controls2.setEnabled(true).lookAt(controls1.getTarget());
+				controls.setDom(renderer2.domElement);
 
 			} else {
 
+				scene.background.set(0x777777);
 				renderer1.setSize(size.width, size.height);
 				composer.replaceRenderer(renderer1);
-				controls1.setEnabled(true).lookAt(controls2.getTarget());
-				controls2.setEnabled(false);
+				controls.setDom(renderer1.domElement);
 
 			}
 
@@ -458,28 +371,39 @@ export class SMAADemo extends PostProcessingDemo {
 
 		function toggleAAMode() {
 
-			const mode = Number.parseInt(params["AA mode"]);
+			const mode = Number(params["AA mode"]);
 
-			pass.enabled = (mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES || mode === AAMode.SMAA_WEIGHTS);
-			renderPass.renderToScreen = (mode === AAMode.DISABLED || mode === AAMode.BROWSER);
+			renderPass.renderToScreen = (mode === AAMode.BROWSER);
+			effectPass.enabled = (mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES || mode === AAMode.SMAA_WEIGHTS);
+			copyPass.enabled = (mode === AAMode.DISABLED);
+
 			edgesTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			weightsTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+
 			swapRenderers(mode === AAMode.BROWSER);
-			pass.recompile();
+			effectPass.recompile();
 
 		}
+
+		menu.add(this, "rotate");
 
 		menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
 
 		menu.add(params, "preset", SMAAPreset).onChange(() => {
 
-			smaaEffect.applyPreset(Number.parseInt(params.preset));
+			smaaEffect.applyPreset(Number(params.preset));
+
+		});
+
+		menu.add(params, "edge detection", EdgeDetectionMode).onChange(() => {
+
+			edgeDetectionMaterial.setEdgeDetectionMode(Number(params["edge detection"]));
 
 		});
 
 		menu.add(params, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
 
-			colorEdgesMaterial.setLocalContrastAdaptationFactor(Number.parseFloat(params["contrast factor"]));
+			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params["contrast factor"]));
 
 		});
 
@@ -491,8 +415,8 @@ export class SMAADemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			pass.recompile();
+			blendMode.blendFunction = Number(params["blend mode"]);
+			effectPass.recompile();
 
 		});
 
@@ -508,17 +432,10 @@ export class SMAADemo extends PostProcessingDemo {
 
 		super.reset();
 
-		if(this.rendererAA !== null) {
+		if(this.secondaryRenderer !== null) {
 
-			this.rendererAA.dispose();
-			this.rendererAA = null;
-
-		}
-
-		if(this.controls2 !== null) {
-
-			this.controls2.dispose();
-			this.controls2 = null;
+			this.secondaryRenderer.dispose();
+			this.secondaryRenderer = null;
 
 		}
 

@@ -1,27 +1,20 @@
-import {
-	AmbientLight,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	Object3D,
-	PerspectiveCamera,
-	SphereBufferGeometry,
-	TextureLoader
-} from "three";
-
+import { Color, PerspectiveCamera, TextureLoader, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	ChromaticAberrationEffect,
+	EdgeDetectionMode,
 	EffectPass,
 	GlitchMode,
 	GlitchEffect,
 	NoiseEffect,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -58,21 +51,12 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		this.pass = null;
 
-		/**
-		 * An object.
-		 *
-		 * @type {Object3D}
-		 * @private
-		 */
-
-		this.object = null;
-
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
@@ -80,29 +64,19 @@ export class GlitchDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space4/";
-		const format = ".jpg";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				textureLoader.load("textures/perturb.jpg", (t) => {
 
@@ -140,66 +114,44 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(6, 1, 6);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 3, -3.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		scene.add(...Sponza.createLights());
 
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
+		// Objects.
 
-		scene.add(directionalLight);
-		scene.add(ambientLight);
-
-		// Random objects.
-
-		const object = new Object3D();
-		const geometry = new SphereBufferGeometry(1, 4, 4);
-
-		let material, mesh;
-		let i;
-
-		for(i = 0; i < 100; ++i) {
-
-			material = new MeshPhongMaterial({
-				color: 0xffffff * Math.random(),
-				flatShading: true
-			});
-
-			mesh = new Mesh(geometry, material);
-			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 10);
-			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random());
-			object.add(mesh);
-
-		}
-
-		this.object = object;
-		scene.add(object);
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.08);
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const chromaticAberrationEffect = new ChromaticAberrationEffect();
 
@@ -212,50 +164,17 @@ export class GlitchDemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.COLOR_DODGE
 		});
 
-		noiseEffect.blendMode.opacity.value = 0.15;
+		noiseEffect.blendMode.opacity.value = 0.1;
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const glitchPass = new EffectPass(camera, glitchEffect, noiseEffect);
 		const chromaticAberrationPass = new EffectPass(camera, chromaticAberrationEffect);
-
-		this.renderPass.renderToScreen = false;
-		chromaticAberrationPass.renderToScreen = true;
 
 		this.effect = glitchEffect;
 
 		composer.addPass(smaaPass);
 		composer.addPass(glitchPass);
 		composer.addPass(chromaticAberrationPass);
-
-	}
-
-	/**
-	 * Renders this demo.
-	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
-	 */
-
-	render(delta) {
-
-		const object = this.object;
-		const twoPI = 2.0 * Math.PI;
-
-		object.rotation.x += 0.001;
-		object.rotation.y += 0.005;
-
-		if(object.rotation.x >= twoPI) {
-
-			object.rotation.x -= twoPI;
-
-		}
-
-		if(object.rotation.y >= twoPI) {
-
-			object.rotation.y -= twoPI;
-
-		}
-
-		super.render(delta);
 
 	}
 
@@ -331,17 +250,21 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+		const folder = menu.addFolder("Strength");
+
+		folder.add(params, "weak glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			strength.x = params["weak glitches"];
 
 		});
 
-		menu.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
+		folder.add(params, "strong glitches").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			strength.y = params["strong glitches"];
 
 		});
+
+		folder.open();
 
 		menu.add(params, "glitch ratio").min(0.0).max(1.0).step(0.001).onChange(() => {
 

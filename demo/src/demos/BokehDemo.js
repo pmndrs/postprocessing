@@ -1,23 +1,18 @@
-import {
-	AmbientLight,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	PerspectiveCamera,
-	CylinderBufferGeometry
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	BokehEffect,
 	DepthEffect,
+	EdgeDetectionMode,
 	EffectPass,
 	SMAAEffect,
 	SMAAImageLoader,
+	SMAAPreset,
 	VignetteEffect
 } from "../../../src";
 
@@ -44,61 +39,60 @@ export class BokehDemo extends PostProcessingDemo {
 		 * @private
 		 */
 
-		this.effect = null;
+		this.depthEffect = null;
 
 		/**
-		 * A bokeh pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.bokehPass = null;
-
-		/**
-		 * A depth visualization pass.
+		 * An effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.depthPass = null;
+		this.bokehEffect = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.effectPass0 = null;
+
+		/**
+		 * A pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.effectPass1 = null;
 
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space3/";
-		const format = ".jpg";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -130,79 +124,67 @@ export class BokehDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(12.5, -0.3, 1.7);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(9.75, 5, 0.75);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 5, -1.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.rotation = 0.000425;
-		controls.settings.sensitivity.zoom = 0.15;
-		controls.settings.zoom.minDistance = 11.5;
-		controls.settings.zoom.maxDistance = 40.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x404040);
-		const directionalLight = new DirectionalLight(0xffbbaa);
-
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
-
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(...Sponza.createLights());
 
 		// Objects.
 
-		const geometry = new CylinderBufferGeometry(1, 1, 20, 6);
-		const material = new MeshPhongMaterial({
-			color: 0xffaaaa,
-			flatShading: true,
-			envMap: assets.get("sky")
-		});
-
-		const mesh = new Mesh(geometry, material);
-		mesh.rotation.set(0, 0, Math.PI / 2);
-		scene.add(mesh);
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
-			assets.get("smaa-area")
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
 		);
+
+		smaaEffect.setEdgeDetectionThreshold(0.05);
 
 		const bokehEffect = new BokehEffect({
 			focus: 0.61,
-			dof: 0.02,
+			dof: 0.17,
 			aperture: 0.0265,
-			maxBlur: 0.0125
+			maxBlur: 0.01
 		});
 
-		const smaaPass = new EffectPass(camera, smaaEffect);
-		const bokehPass = new EffectPass(camera, bokehEffect, new VignetteEffect());
-		const depthPass = new EffectPass(camera, new DepthEffect());
+		const depthEffect = new DepthEffect({
+			blendFunction: BlendFunction.SKIP
+		});
 
-		this.renderPass.renderToScreen = false;
-		smaaPass.renderToScreen = true;
-		depthPass.enabled = false;
+		const effectPass0 = new EffectPass(camera, depthEffect, smaaEffect);
+		const effectPass1 = new EffectPass(camera, bokehEffect, new VignetteEffect());
 
-		this.effect = bokehEffect;
-		this.bokehPass = bokehPass;
-		this.depthPass = depthPass;
+		this.depthEffect = depthEffect;
+		this.bokehEffect = bokehEffect;
 
-		composer.addPass(bokehPass);
-		composer.addPass(depthPass);
-		composer.addPass(smaaPass);
+		this.effectPass0 = effectPass0;
+		this.effectPass1 = effectPass1;
+
+		composer.addPass(effectPass0);
+		composer.addPass(effectPass1);
 
 	}
 
@@ -214,18 +196,19 @@ export class BokehDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const bokehPass = this.bokehPass;
-		const depthPass = this.depthPass;
-		const effect = this.effect;
-		const uniforms = effect.uniforms;
-		const blendMode = effect.blendMode;
+		const effectPass0 = this.effectPass0;
+		const effectPass1 = this.effectPass1;
+		const depthEffect = this.depthEffect;
+		const bokehEffect = this.bokehEffect;
+		const uniforms = bokehEffect.uniforms;
+		const blendMode = bokehEffect.blendMode;
 
 		const params = {
 			"focus": uniforms.get("focus").value,
 			"dof": uniforms.get("dof").value,
 			"aperture": uniforms.get("aperture").value,
 			"blur": uniforms.get("maxBlur").value,
-			"show depth": depthPass.enabled,
+			"show depth": false,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -263,14 +246,16 @@ export class BokehDemo extends PostProcessingDemo {
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
 			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			bokehPass.recompile();
+			effectPass1.recompile();
 
 		});
 
 		menu.add(params, "show depth").onChange(() => {
 
-			bokehPass.enabled = !params["show depth"];
-			depthPass.enabled = params["show depth"];
+			depthEffect.blendMode.blendFunction = params["show depth"] ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			effectPass1.enabled = !params["show depth"];
+			effectPass0.renderToScreen = params["show depth"];
+			effectPass0.recompile();
 
 		});
 

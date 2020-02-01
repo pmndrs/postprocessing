@@ -1,6 +1,7 @@
 import {
 	AmbientLight,
 	BoxBufferGeometry,
+	Color,
 	CubeTextureLoader,
 	ConeBufferGeometry,
 	DirectionalLight,
@@ -10,20 +11,24 @@ import {
 	PerspectiveCamera,
 	Raycaster,
 	SphereBufferGeometry,
+	sRGBEncoding,
 	TextureLoader,
 	Vector2
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	EdgeDetectionMode,
 	EffectPass,
 	OutlineEffect,
 	KernelSize,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -179,7 +184,7 @@ export class OutlineDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
@@ -202,11 +207,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
 				cubeTextureLoader.load(urls, (t) => {
 
+					t.encoding = sRGBEncoding;
 					assets.set("sky", t);
 
 				});
@@ -247,7 +254,8 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
 		camera.position.set(-4, 1.25, -5);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -267,14 +275,14 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x404040);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		const ambientLight = new AmbientLight(0x212121);
+		const mainLight = new DirectionalLight(0xff7e66, 1.0);
+		const backLight = new DirectionalLight(0xff7e66, 0.1);
 
-		directionalLight.position.set(1440, 200, 2000);
-		directionalLight.target.position.copy(scene.position);
+		mainLight.position.set(14.4, 2, 20);
+		backLight.position.copy(mainLight.position).negate();
 
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(ambientLight, mainLight, backLight);
 
 		// Objects.
 
@@ -331,7 +339,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.COLOR
+		);
+
 		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
@@ -349,8 +363,6 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		const smaaPass = new EffectPass(camera, smaaEffect);
 		const outlinePass = new EffectPass(camera, outlineEffect);
-		this.renderPass.renderToScreen = false;
-		smaaPass.renderToScreen = true;
 
 		this.effect = outlineEffect;
 		this.pass = outlinePass;
@@ -369,6 +381,8 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const color = new Color();
+
 		const assets = this.assets;
 		const pass = this.pass;
 		const effect = this.effect;
@@ -382,8 +396,8 @@ export class OutlineDemo extends PostProcessingDemo {
 			"pattern scale": 60.0,
 			"pulse speed": effect.pulseSpeed,
 			"edge strength": uniforms.get("edgeStrength").value,
-			"visible edge": uniforms.get("visibleEdgeColor").value.getHex(),
-			"hidden edge": uniforms.get("hiddenEdgeColor").value.getHex(),
+			"visible edge": color.copyLinearToSRGB(uniforms.get("visibleEdgeColor").value).getHex(),
+			"hidden edge": color.copyLinearToSRGB(uniforms.get("hiddenEdgeColor").value).getHex(),
 			"x-ray": true,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
@@ -395,7 +409,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(effect, "dithering");
+		menu.add(pass, "dithering");
 
 		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
 
@@ -445,13 +459,13 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.addColor(params, "visible edge").onChange(() => {
 
-			uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]);
+			uniforms.get("visibleEdgeColor").value.setHex(params["visible edge"]).convertSRGBToLinear();
 
 		});
 
 		menu.addColor(params, "hidden edge").onChange(() => {
 
-			uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]);
+			uniforms.get("hiddenEdgeColor").value.setHex(params["hidden edge"]).convertSRGBToLinear();
 
 		});
 
