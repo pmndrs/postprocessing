@@ -324,7 +324,7 @@ export class EffectComposer {
 			if(this.depthTexture !== null) {
 
 				// Check if the depth texture is still required.
-				const reducer = (a, b) => a || b.needsDepthTexture;
+				const reducer = (a, b) => (a || b.needsDepthTexture);
 				const depthTextureRequired = passes.reduce(reducer, false);
 
 				if(!depthTextureRequired) {
