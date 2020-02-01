@@ -402,6 +402,10 @@ export class EffectPass extends Pass {
 			// Only request a depth texture if none has been provided yet.
 			this.needsDepthTexture = (this.getDepthTexture() === null);
 
+		} else {
+
+			this.needsDepthTexture = false;
+
 		}
 
 		// Check if any effect transforms UVs in the fragment shader.
