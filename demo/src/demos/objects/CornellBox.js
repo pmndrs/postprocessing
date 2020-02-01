@@ -19,21 +19,19 @@ import {
 
 function createLights() {
 
-	const ambientLight = new AmbientLight(0x544121);
+	const ambientLight = new AmbientLight(0x160d03);
 
-	const lightCeiling = new PointLight(0xffe3b1, 1.0, 25);
+	const lightCeiling = new PointLight(0xffc370, 1.0, 25);
 	lightCeiling.position.set(0, 9.3, 0);
 	lightCeiling.castShadow = true;
 	lightCeiling.shadow.mapSize.width = 1024;
 	lightCeiling.shadow.mapSize.height = 1024;
-	lightCeiling.shadow.bias = 1e-4;
-	lightCeiling.shadow.radius = 4;
 
-	const lightRed = new DirectionalLight(0xff0000, 0.1);
+	const lightRed = new DirectionalLight(0xff0000, 0.05);
 	lightRed.position.set(-10, 0, 0);
 	lightRed.target.position.set(0, 0, 0);
 
-	const lightGreen = new DirectionalLight(0x00ff00, 0.1);
+	const lightGreen = new DirectionalLight(0x00ff00, 0.05);
 	lightGreen.position.set(10, 0, 0);
 	lightGreen.target.position.set(0, 0, 0);
 
