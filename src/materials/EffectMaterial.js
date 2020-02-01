@@ -105,6 +105,7 @@ export class EffectMaterial extends ShaderMaterial {
 	set depthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
