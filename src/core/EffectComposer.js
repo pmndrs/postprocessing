@@ -335,6 +335,8 @@ export class EffectComposer {
 					this.inputBuffer.depthTexture = null;
 					this.outputBuffer.depthTexture = null;
 
+					pass.setDepthTexture(null);
+
 					for(pass of passes) {
 
 						pass.setDepthTexture(null);
