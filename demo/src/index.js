@@ -23,6 +23,15 @@ import { PerformanceDemo } from "./demos/PerformanceDemo.js";
 import { ProgressManager } from "./utils/ProgressManager.js";
 
 /**
+ * A cache that keeps track of loaded demos.
+ *
+ * @type {WeakSet}
+ * @private
+ */
+
+const cache = new WeakSet();
+
+/**
  * A renderer.
  *
  * @type {WebGLRenderer}
@@ -99,31 +108,37 @@ function onLoad(event) {
 
 	const demo = event.demo;
 
-	// Prevent stuttering when new objects come into view.
-	renderer.compile(demo.scene, demo.camera);
+	if(!cache.has(demo)) {
 
-	// Initialize textures ahead of time.
-	demo.scene.traverse((object) => {
+		// Prevent stuttering when new objects come into view.
+		renderer.compile(demo.scene, demo.camera);
 
-		if(object.isMesh) {
+		// Initialize textures ahead of time.
+		demo.scene.traverse((object) => {
 
-			const { map = null, normalMap = null } = object.material;
+			if(object.isMesh) {
 
-			if(map !== null) {
+				const { map = null, normalMap = null } = object.material;
 
-				renderer.initTexture(object.material.map);
+				if(map !== null) {
+
+					renderer.initTexture(object.material.map);
+
+				}
+
+				if(normalMap !== null) {
+
+					renderer.initTexture(object.material.normalMap);
+
+				}
 
 			}
 
-			if(normalMap !== null) {
+		});
 
-				renderer.initTexture(object.material.normalMap);
+		cache.add(demo);
 
-			}
-
-		}
-
-	});
+	}
 
 	// Let the main render pass use the camera of the current demo.
 	demo.renderPass.camera = demo.camera;
