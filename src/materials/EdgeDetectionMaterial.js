@@ -17,11 +17,11 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 	 * Constructs a new edge detection material.
 	 *
 	 * @param {Vector2} [texelSize] - The screen texel size.
-	 * @param {EdgeDetectionMode} [mode] - The edge detection mode.
+	 * @param {EdgeDetectionMode} [mode=EdgeDetectionMode.COLOR] - The edge detection mode.
 	 * @todo Remove texelSize parameter.
 	 */
 
-	constructor(texelSize = new Vector2(), mode) {
+	constructor(texelSize = new Vector2(), mode = EdgeDetectionMode.COLOR) {
 
 		super({
 
