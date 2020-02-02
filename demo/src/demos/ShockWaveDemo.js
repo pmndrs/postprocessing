@@ -104,12 +104,12 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-		camera.position.set(-9, 0.5, -0.25);
+		camera.position.set(-8, 1, -0.25);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(-0.5, 2, -0.25);
+		const target = new Vector3(-0.5, 3, -0.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
