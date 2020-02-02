@@ -255,7 +255,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Sepia");
 
-		folder.add(params.sepia, "intensity").min(0.0).max(4.0).step(0.001).onChange(() => {
+		folder.add(params.sepia, "intensity").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			sepiaEffect.uniforms.get("intensity").value = params.sepia.intensity;
 
