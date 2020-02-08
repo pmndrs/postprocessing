@@ -1,10 +1,4 @@
-import {
-	LinearFilter,
-	RGBFormat,
-	Uniform,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from "three";
 import { Resizer } from "../core";
 import { KernelSize, LuminanceMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
@@ -347,7 +341,11 @@ export class BloomEffect extends Effect {
 
 		}
 
-		this.renderTarget.texture.type = frameBufferType;
+		if(frameBufferType !== undefined) {
+
+			this.renderTarget.texture.type = frameBufferType;
+
+		}
 
 	}
 

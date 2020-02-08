@@ -109,7 +109,11 @@ export class SavePass extends Pass {
 
 		}
 
-		this.renderTarget.texture.type = frameBufferType;
+		if(frameBufferType !== undefined) {
+
+			this.renderTarget.texture.type = frameBufferType;
+
+		}
 
 	}
 

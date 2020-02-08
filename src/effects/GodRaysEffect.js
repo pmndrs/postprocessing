@@ -600,9 +600,13 @@ export class GodRaysEffect extends Effect {
 
 		}
 
-		this.renderTargetA.texture.type = frameBufferType;
-		this.renderTargetB.texture.type = frameBufferType;
-		this.renderTargetLight.texture.type = frameBufferType;
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetA.texture.type = frameBufferType;
+			this.renderTargetB.texture.type = frameBufferType;
+			this.renderTargetLight.texture.type = frameBufferType;
+
+		}
 
 	}
 

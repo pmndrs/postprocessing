@@ -339,8 +339,12 @@ export class BlurPass extends Pass {
 
 		}
 
-		this.renderTargetA.texture.type = frameBufferType;
-		this.renderTargetB.texture.type = frameBufferType;
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetA.texture.type = frameBufferType;
+			this.renderTargetB.texture.type = frameBufferType;
+
+		}
 
 	}
 

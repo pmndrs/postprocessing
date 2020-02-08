@@ -261,7 +261,11 @@ export class SelectiveBloomEffect extends BloomEffect {
 
 		}
 
-		this.renderTargetSelection.texture.type = frameBufferType;
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetSelection.texture.type = frameBufferType;
+
+		}
 
 	}
 

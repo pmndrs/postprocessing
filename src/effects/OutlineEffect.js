@@ -645,10 +645,14 @@ export class OutlineEffect extends Effect {
 		// No need for high precision: the blur pass operates on a mask texture.
 		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
 
-		// These passes ignore the buffer type.
-		this.depthPass.initialize(renderer, alpha, frameBufferType);
-		this.maskPass.initialize(renderer, alpha, frameBufferType);
-		this.outlinePass.initialize(renderer, alpha, frameBufferType);
+		if(frameBufferType !== undefined) {
+
+			// These passes ignore the buffer type.
+			this.depthPass.initialize(renderer, alpha, frameBufferType);
+			this.maskPass.initialize(renderer, alpha, frameBufferType);
+			this.outlinePass.initialize(renderer, alpha, frameBufferType);
+
+		}
 
 	}
 
