@@ -428,11 +428,16 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const infoOptions = [];
+
 		const params = {
+			"effects": this.effectPass.effects.length,
 			"merge effects": true,
 			"firefox": () => window.open("https://www.google.com/search?q=firefox+layout.frame_rate", "_blank"),
-			"chrome": () => window.open("https://www.google.com/search?q=chrome+--disable-gpu-vsync", "_blank")
+			"chrome": () => window.open("https://www.google.com/search?q=chrome+--disable-frame-rate-limit --disable-gpu-vsync", "_blank")
 		};
+
+		infoOptions.push(menu.add(params, "effects"));
 
 		menu.add(params, "merge effects").onChange(() => {
 
@@ -446,11 +451,17 @@ export class PerformanceDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(this, "fps").listen();
+		infoOptions.push(menu.add(this, "fps").listen());
 
 		const folder = menu.addFolder("Disable VSync");
 		folder.add(params, "firefox");
 		folder.add(params, "chrome");
+
+		for(const option of infoOptions) {
+
+			option.domElement.style.pointerEvents = "none";
+
+		}
 
 	}
 
