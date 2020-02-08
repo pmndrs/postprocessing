@@ -7,7 +7,6 @@ import { terser } from "rollup-plugin-terser";
 
 const pkg = require("./package.json");
 const date = (new Date()).toDateString();
-const mainFields = ["module", "main"];
 
 const banner = `/**
  * ${pkg.name} v${pkg.version} build ${date}
@@ -25,7 +24,7 @@ const globals = Object.assign({}, ...external.map((value) => ({
 const worker = {
 
 	input: "src/images/smaa/utils/worker.js",
-	plugins: [resolve({ mainFields })].concat(production ? [terser(), babel()] : []),
+	plugins: [resolve()].concat(production ? [terser(), babel()] : []),
 	output: {
 		file: "src/images/smaa/utils/worker.tmp",
 		format: "iife"
@@ -38,7 +37,7 @@ const lib = {
 	module: {
 		input: "src/index.js",
 		external,
-		plugins: [resolve({ mainFields }), glsl({
+		plugins: [resolve(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -93,7 +92,7 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		plugins: [resolve({ mainFields }), commonjs(), glsl({
+		plugins: [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -111,7 +110,7 @@ const demo = {
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		plugins: production ? [babel()] : [resolve({ mainFields }), commonjs(), glsl({
+		plugins: production ? [babel()] : [resolve(), commonjs(), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
 			sourceMap: false
