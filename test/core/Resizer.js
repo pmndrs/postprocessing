@@ -1,5 +1,5 @@
 import test from "ava";
-import { Resizer } from "../../build/postprocessing.js";
+import { Resizer } from "../../build/postprocessing.esm.js";
 
 test("can be instantiated", t => {
 

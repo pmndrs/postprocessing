@@ -1,5 +1,5 @@
 import test from "ava";
-import { MaskPass } from "../../build/postprocessing.js";
+import { MaskPass } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 

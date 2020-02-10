@@ -1,5 +1,5 @@
 import test from "ava";
-import { SelectiveBloomEffect } from "../../build/postprocessing.js";
+import { SelectiveBloomEffect } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 

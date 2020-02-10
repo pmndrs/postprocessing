@@ -1,5 +1,5 @@
 import test from "ava";
-import { EffectMaterial } from "../../build/postprocessing.js";
+import { EffectMaterial } from "../../build/postprocessing.esm.js";
 
 test("can be created", t => {
 

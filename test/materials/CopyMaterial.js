@@ -1,5 +1,5 @@
 import test from "ava";
-import { CopyMaterial } from "../../build/postprocessing.js";
+import { CopyMaterial } from "../../build/postprocessing.esm.js";
 
 test("can be created", t => {
 

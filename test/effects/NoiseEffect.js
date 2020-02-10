@@ -1,5 +1,5 @@
 import test from "ava";
-import { NoiseEffect } from "../../build/postprocessing.js";
+import { NoiseEffect } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 

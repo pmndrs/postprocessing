@@ -1,5 +1,5 @@
 import test from "ava";
-import { ChromaticAberrationEffect } from "../../build/postprocessing.js";
+import { ChromaticAberrationEffect } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 
