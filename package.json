@@ -5,6 +5,9 @@
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
 	"module": "build/postprocessing.esm.js",
+	"exports": {
+		".": "./build/postprocessing.esm.js"
+	},
 	"sideEffects": false,
 	"license": "Zlib",
 	"keywords": [
