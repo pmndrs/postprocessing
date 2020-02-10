@@ -2,6 +2,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import babel from "rollup-plugin-babel";
 import glsl from "rollup-plugin-glsl";
+import { eslint } from "rollup-plugin-eslint";
 import { string } from "rollup-plugin-string";
 import { terser } from "rollup-plugin-terser";
 
@@ -37,7 +38,9 @@ const lib = {
 	module: {
 		input: "src/index.js",
 		external,
-		plugins: [resolve(), glsl({
+		plugins: [resolve(), eslint({
+			include: ["src/**/*.js", "demo/**/*.js"]
+		}), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -92,7 +95,9 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		plugins: [resolve(), commonjs(), glsl({
+		plugins: [resolve(), commonjs(), eslint({
+			include: ["src/**/*.js", "demo/**/*.js"]
+		}), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -110,7 +115,9 @@ const demo = {
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		plugins: production ? [babel()] : [resolve(), commonjs(), glsl({
+		plugins: production ? [babel()] : [resolve(), commonjs(), eslint({
+			include: ["src/**/*.js", "demo/**/*.js"]
+		}), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
 			sourceMap: false
