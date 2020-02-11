@@ -9,6 +9,8 @@ import fragmentShader from "./glsl/bokeh/shader.frag";
  *
  * Original shader code by Martins Upitis:
  *  http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
+ *
+ * @deprecated Use DepthOfFieldEffect instead.
  */
 
 export class BokehEffect extends Effect {
