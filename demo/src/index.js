@@ -13,6 +13,7 @@ import { BloomDemo } from "./demos/BloomDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
+import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
@@ -198,6 +199,7 @@ window.addEventListener("load", (event) => {
 		new BlurDemo(composer),
 		new ColorDepthDemo(composer),
 		new ColorGradingDemo(composer),
+		new DepthOfFieldDemo(composer),
 		new GlitchDemo(composer),
 		new GodRaysDemo(composer),
 		new OutlineDemo(composer),
