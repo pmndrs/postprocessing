@@ -52,6 +52,7 @@ export {
 
 export {
 	AdaptiveLuminanceMaterial,
+	CircleOfConfusionMaterial,
 	ColorEdgesMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,
