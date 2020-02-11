@@ -176,8 +176,8 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.SKIP });
 
-		const brightnessContrastEffect = new BrightnessContrastEffect({ brightness: 0.015, contrast: 0.05 });
-		const hueSaturationEffect = new HueSaturationEffect({ hue: 0.05, saturation: 0.4 });
+		const brightnessContrastEffect = new BrightnessContrastEffect({ blendFunction: BlendFunction.SKIP });
+		const hueSaturationEffect = new HueSaturationEffect({ hue: 0.0, saturation: 0.4 });
 
 		const pass = new EffectPass(camera,
 			smaaEffect,
@@ -231,7 +231,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				"blend mode": brightnessContrastEffect.blendMode.blendFunction
 			},
 			hueSaturation: {
-				"hue": 0.05,
+				"hue": 0.0,
 				"saturation": hueSaturationEffect.uniforms.get("saturation").value,
 				"opacity": hueSaturationEffect.blendMode.opacity.value,
 				"blend mode": hueSaturationEffect.blendMode.blendFunction
@@ -300,8 +300,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			pass.recompile();
 
 		});
-
-		folder.open();
 
 		folder = menu.addFolder("Hue & Saturation");
 
