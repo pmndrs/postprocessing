@@ -7,6 +7,7 @@ export { ColorAverageEffect } from "./ColorAverageEffect.js";
 export { ColorDepthEffect } from "./ColorDepthEffect.js";
 export { ChromaticAberrationEffect } from "./ChromaticAberrationEffect.js";
 export { DepthEffect } from "./DepthEffect.js";
+export { DepthOfFieldEffect } from "./DepthOfFieldEffect.js";
 export { DotScreenEffect } from "./DotScreenEffect.js";
 export { Effect, EffectAttribute, WebGLExtension } from "./Effect.js";
 export { GammaCorrectionEffect } from "./GammaCorrectionEffect.js";

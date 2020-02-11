@@ -17,6 +17,7 @@ export {
 	ColorDepthEffect,
 	ChromaticAberrationEffect,
 	DepthEffect,
+	DepthOfFieldEffect,
 	DotScreenEffect,
 	Effect,
 	EffectAttribute,
