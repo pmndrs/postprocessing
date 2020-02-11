@@ -52,6 +52,7 @@ export {
 
 export {
 	AdaptiveLuminanceMaterial,
+	BokehMaterial,
 	CircleOfConfusionMaterial,
 	ColorEdgesMaterial,
 	ConvolutionMaterial,

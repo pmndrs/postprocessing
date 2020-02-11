@@ -1,4 +1,5 @@
 export { AdaptiveLuminanceMaterial } from "./AdaptiveLuminanceMaterial.js";
+export { BokehMaterial } from "./BokehMaterial.js";
 export { CircleOfConfusionMaterial } from "./CircleOfConfusionMaterial.js";
 export { ColorEdgesMaterial } from "./ColorEdgesMaterial.js";
 export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
