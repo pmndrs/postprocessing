@@ -11,6 +11,8 @@ import fragmentShader from "./glsl/realistic-bokeh/shader.frag";
  *
  * Original shader code by Martins Upitis:
  *  http://blenderartists.org/forum/showthread.php?237488-GLSL-depth-of-field-with-bokeh-v2-4-(update)
+ *
+ * @deprecated Use DepthOfFieldEffect instead.
  */
 
 export class RealisticBokehEffect extends Effect {
