@@ -1,6 +1,12 @@
-import { HalfFloatType, PCFSoftShadowMap, sRGBEncoding, Vector2, WebGLRenderer } from "three";
-import { DemoManager } from "three-demo";
+import {
+	HalfFloatType,
+	PCFSoftShadowMap,
+	sRGBEncoding,
+	Vector2,
+	WebGLRenderer
+} from "three";
 
+import { DemoManager } from "three-demo";
 import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
@@ -156,12 +162,13 @@ function onLoad(event) {
 
 window.addEventListener("load", (event) => {
 
+	const debug = (window.location.href.indexOf("debug") !== -1);
 	const viewport = document.getElementById("viewport");
 
 	// Create and configure the renderer.
 	renderer = new WebGLRenderer({ powerPreference: "high-performance" });
 	renderer.outputEncoding = sRGBEncoding;
-	renderer.debug.checkShaderErrors = true;
+	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
