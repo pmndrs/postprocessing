@@ -241,7 +241,7 @@ export class SSAODemo extends PostProcessingDemo {
 			effectPass.enabled = (mode === RenderMode.DEFAULT || mode === RenderMode.DEPTH);
 			normalPass.renderToScreen = (mode === RenderMode.NORMALS);
 			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-
+			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
 			effectPass.recompile();
 
 		}

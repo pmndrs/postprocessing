@@ -284,6 +284,45 @@ export class EffectPass extends Pass {
 	}
 
 	/**
+	 * Indicates whether this pass encodes its output when rendering to screen.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get encodeOutput() {
+
+		return (this.getFullscreenMaterial().defines.ENCODE_OUTPUT !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set encodeOutput(value) {
+
+		if(this.encodeOutput !== value) {
+
+			const material = this.getFullscreenMaterial();
+			material.needsUpdate = true;
+
+			if(value) {
+
+				material.defines.ENCODE_OUTPUT = "1";
+
+			} else {
+
+				delete material.defines.ENCODE_OUTPUT;
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Indicates whether dithering is enabled.
 	 *
 	 * Color quantization reduces banding artifacts but degrades performance.

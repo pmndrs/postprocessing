@@ -379,9 +379,10 @@ export class SMAADemo extends PostProcessingDemo {
 
 			edgesTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			weightsTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			effectPass.encodeOutput = (mode !== AAMode.SMAA_EDGES && mode !== AAMode.SMAA_WEIGHTS);
+			effectPass.recompile();
 
 			swapRenderers(mode === AAMode.BROWSER);
-			effectPass.recompile();
 
 		}
 
