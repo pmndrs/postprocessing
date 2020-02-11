@@ -11,7 +11,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 function createLights(shadowCameraHelper) {
 
-	const ambientLight = new AmbientLight(0x212121);
+	const ambientLight = new AmbientLight(0x111111);
 	const directionalLight = new DirectionalLight(0xffffff, 1);
 
 	directionalLight.position.set(4, 18, 3);
