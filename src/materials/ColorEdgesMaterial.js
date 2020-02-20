@@ -24,17 +24,13 @@ export class ColorEdgesMaterial extends ShaderMaterial {
 			type: "ColorEdgesMaterial",
 
 			defines: {
-
 				LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
 				EDGE_THRESHOLD: "0.1"
-
 			},
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(texelSize)
-
 			},
 
 			fragmentShader,

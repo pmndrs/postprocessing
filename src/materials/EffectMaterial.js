@@ -30,25 +30,19 @@ export class EffectMaterial extends ShaderMaterial {
 			type: "EffectMaterial",
 
 			defines: {
-
 				DEPTH_PACKING: "0",
 				ENCODE_OUTPUT: "1"
-
 			},
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
-
 				resolution: new Uniform(new Vector2()),
 				texelSize: new Uniform(new Vector2()),
-
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000.0),
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
-
 			},
 
 			toneMapped: false,

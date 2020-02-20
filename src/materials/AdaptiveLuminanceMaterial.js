@@ -20,19 +20,15 @@ export class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			type: "AdaptiveLuminanceMaterial",
 
 			defines: {
-
 				MIP_LEVEL_1X1: "0.0"
-
 			},
 
 			uniforms: {
-
 				previousLuminanceBuffer: new Uniform(null),
 				currentLuminanceBuffer: new Uniform(null),
 				minLuminance: new Uniform(0.01),
 				deltaTime: new Uniform(0.0),
 				tau: new Uniform(1.0)
-
 			},
 
 			fragmentShader,

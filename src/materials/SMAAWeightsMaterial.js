@@ -45,13 +45,11 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 			},
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				areaTexture: new Uniform(null),
 				searchTexture: new Uniform(null),
 				texelSize: new Uniform(texelSize),
 				resolution: new Uniform(resolution)
-
 			},
 
 			fragmentShader,

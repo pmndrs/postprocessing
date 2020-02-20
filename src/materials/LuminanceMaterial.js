@@ -41,12 +41,10 @@ export class LuminanceMaterial extends ShaderMaterial {
 			type: "LuminanceMaterial",
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				threshold: new Uniform(0.0),
 				smoothing: new Uniform(1.0),
 				range: new Uniform(useRange ? luminanceRange : new Vector2())
-
 			},
 
 			fragmentShader,

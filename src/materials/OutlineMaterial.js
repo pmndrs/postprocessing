@@ -22,10 +22,8 @@ export class OutlineMaterial extends ShaderMaterial {
 			type: "OutlineMaterial",
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2())
-
 			},
 
 			fragmentShader,

@@ -36,23 +36,18 @@ export class GodRaysMaterial extends ShaderMaterial {
 			type: "GodRaysMaterial",
 
 			defines: {
-
 				SAMPLES_INT: "60",
 				SAMPLES_FLOAT: "60.0"
-
 			},
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				lightPosition: new Uniform(lightPosition),
-
 				density: new Uniform(1.0),
 				decay: new Uniform(1.0),
 				weight: new Uniform(1.0),
 				exposure: new Uniform(1.0),
 				clampMax: new Uniform(1.0)
-
 			},
 
 			fragmentShader,

@@ -34,13 +34,11 @@ export class ConvolutionMaterial extends ShaderMaterial {
 			type: "ConvolutionMaterial",
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				texelSize: new Uniform(new Vector2()),
 				halfTexelSize: new Uniform(new Vector2()),
 				kernel: new Uniform(0.0),
 				scale: new Uniform(1.0)
-
 			},
 
 			fragmentShader,

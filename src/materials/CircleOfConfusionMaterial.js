@@ -22,19 +22,15 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 			type: "CircleOfConfusionMaterial",
 
 			defines: {
-
 				DEPTH_PACKING: "0"
-
 			},
 
 			uniforms: {
-
 				depthBuffer: new Uniform(null),
 				focusDistance: new Uniform(0.0),
 				focalLength: new Uniform(0.0),
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000)
-
 			},
 
 			fragmentShader,
