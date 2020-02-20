@@ -143,7 +143,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
-		const colorDepthEffect = new ColorDepthEffect({ bits: 12 });
+		const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
 		const pass = new EffectPass(camera, smaaEffect, colorDepthEffect);
 		this.effect = colorDepthEffect;
 		this.pass = pass;
@@ -170,7 +170,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 			"blend mode": blendMode.blendFunction
 		};
 
-		menu.add(params, "bits").min(1).max(30).step(1).onChange(() => {
+		menu.add(params, "bits").min(1).max(32).step(1).onChange(() => {
 
 			effect.setBitDepth(params.bits);
 
