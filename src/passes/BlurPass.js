@@ -42,7 +42,7 @@ export class BlurPass extends Pass {
 			depthBuffer: false
 		});
 
-		this.renderTargetA.texture.name = "Blur.TargetA";
+		this.renderTargetA.texture.name = "Blur.Target.A";
 
 		/**
 		 * A second render target.
@@ -52,7 +52,7 @@ export class BlurPass extends Pass {
 		 */
 
 		this.renderTargetB = this.renderTargetA.clone();
-		this.renderTargetB.texture.name = "Blur.TargetB";
+		this.renderTargetB.texture.name = "Blur.Target.B";
 
 		/**
 		 * The desired render resolution.
