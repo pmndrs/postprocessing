@@ -410,7 +410,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const blendModeB = effectB.blendMode;
 
 		const params = {
-			"resolution": effectA.height,
+			"resolution": effectA.resolution.height,
 			"kernel size": effectA.blurPass.kernelSize,
 			"scale": effectA.blurPass.scale,
 			"luminance": {
