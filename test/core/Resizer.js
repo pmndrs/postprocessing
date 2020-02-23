@@ -1,11 +1,9 @@
 import test from "ava";
-import { Resizer } from "../../build/postprocessing.js";
+import { Resizer } from "../../build/postprocessing.esm.js";
 
 test("can be instantiated", t => {
 
-	const object = new Resizer(null);
-
-	t.truthy(object);
+	t.truthy(new Resizer(null));
 
 });
 

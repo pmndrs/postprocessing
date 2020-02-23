@@ -4,11 +4,12 @@ import {
 	RepeatWrapping,
 	RGBFormat,
 	Uniform,
+	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
 import { Resizer, Selection } from "../core";
-import { DepthComparisonMaterial, OutlineEdgesMaterial, KernelSize } from "../materials";
+import { DepthComparisonMaterial, OutlineMaterial, KernelSize } from "../materials";
 import { BlurPass, ClearPass, DepthPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
@@ -142,9 +143,9 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetEdges = this.renderTargetMask.clone();
-		this.renderTargetEdges.texture.name = "Outline.Edges";
-		this.renderTargetEdges.depthBuffer = false;
+		this.renderTargetOutline = this.renderTargetMask.clone();
+		this.renderTargetOutline.texture.name = "Outline.Edges";
+		this.renderTargetOutline.depthBuffer = false;
 
 		/**
 		 * A render target for the blurred outline overlay.
@@ -153,8 +154,8 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetBlurredEdges = this.renderTargetEdges.clone();
-		this.renderTargetBlurredEdges.texture.name = "Outline.BlurredEdges";
+		this.renderTargetBlurredOutline = this.renderTargetOutline.clone();
+		this.renderTargetBlurredOutline.texture.name = "Outline.BlurredEdges";
 
 		/**
 		 * A clear pass.
@@ -200,14 +201,14 @@ export class OutlineEffect extends Effect {
 		this.blur = blur;
 
 		/**
-		 * An outline edge detection pass.
+		 * An outline detection pass.
 		 *
 		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.outlineEdgesPass = new ShaderPass(new OutlineEdgesMaterial());
-		this.outlineEdgesPass.getFullscreenMaterial().uniforms.maskTexture.value = this.renderTargetMask.texture;
+		this.outlinePass = new ShaderPass(new OutlineMaterial());
+		this.outlinePass.getFullscreenMaterial().uniforms.inputBuffer.value = this.renderTargetMask.texture;
 
 		/**
 		 * The current animation time.
@@ -326,7 +327,7 @@ export class OutlineEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	get dithering() {
@@ -339,7 +340,7 @@ export class OutlineEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	set dithering(value) {
@@ -395,8 +396,8 @@ export class OutlineEffect extends Effect {
 		this.blurPass.enabled = value;
 
 		this.uniforms.get("edgeTexture").value = value ?
-			this.renderTargetBlurredEdges.texture :
-			this.renderTargetEdges.texture;
+			this.renderTargetBlurredOutline.texture :
+			this.renderTargetOutline.texture;
 
 	}
 
@@ -592,11 +593,11 @@ export class OutlineEffect extends Effect {
 			scene.background = background;
 
 			// Detect the outline.
-			this.outlineEdgesPass.render(renderer, null, this.renderTargetEdges);
+			this.outlinePass.render(renderer, null, this.renderTargetOutline);
 
 			if(this.blur) {
 
-				this.blurPass.render(renderer, this.renderTargetEdges, this.renderTargetBlurredEdges);
+				this.blurPass.render(renderer, this.renderTargetOutline, this.renderTargetBlurredOutline);
 
 			}
 
@@ -625,9 +626,9 @@ export class OutlineEffect extends Effect {
 		height = this.resolution.height;
 
 		this.depthPass.setSize(width, height);
-		this.renderTargetEdges.setSize(width, height);
-		this.renderTargetBlurredEdges.setSize(width, height);
-		this.outlineEdgesPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+		this.renderTargetOutline.setSize(width, height);
+		this.renderTargetBlurredOutline.setSize(width, height);
+		this.outlinePass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
 
 	}
 
@@ -636,13 +637,22 @@ export class OutlineEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		this.blurPass.initialize(renderer, alpha);
-		this.depthPass.initialize(renderer, alpha);
-		this.maskPass.initialize(renderer, alpha);
+		// No need for high precision: the blur pass operates on a mask texture.
+		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
+
+		if(frameBufferType !== undefined) {
+
+			// These passes ignore the buffer type.
+			this.depthPass.initialize(renderer, alpha, frameBufferType);
+			this.maskPass.initialize(renderer, alpha, frameBufferType);
+			this.outlinePass.initialize(renderer, alpha, frameBufferType);
+
+		}
 
 	}
 

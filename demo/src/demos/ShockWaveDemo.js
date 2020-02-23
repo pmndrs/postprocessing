@@ -1,21 +1,24 @@
 import {
-	AmbientLight,
-	CubeTextureLoader,
-	DirectionalLight,
+	Color,
 	Mesh,
 	MeshBasicMaterial,
 	PerspectiveCamera,
-	SphereBufferGeometry
+	SphereBufferGeometry,
+	Vector3
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
+	EdgeDetectionMode,
 	EffectPass,
 	ShockWaveEffect,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -55,29 +58,19 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space3/";
-		const format = ".jpg";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -109,49 +102,55 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(5, 1, 5);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-8, 1, -0.25);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(-0.5, 3, -0.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
-
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
-
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(...Sponza.createLights());
 
 		// Objects.
 
+		scene.add(assets.get("sponza"));
+
 		const geometry = new SphereBufferGeometry(1, 64, 64);
 		const material = new MeshBasicMaterial({
-			color: 0xffff00,
-			envMap: assets.get("sky")
+			color: 0x000000,
+			transparent: true,
+			opacity: 0.25
 		});
 
 		const mesh = new Mesh(geometry, material);
+		mesh.position.copy(target);
 		scene.add(mesh);
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const shockWaveEffect = new ShockWaveEffect(camera, mesh.position, {
 			speed: 1.25,
@@ -162,9 +161,6 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		const effectPass = new EffectPass(camera, shockWaveEffect);
 		const smaaPass = new EffectPass(camera, smaaEffect);
-
-		this.renderPass.renderToScreen = false;
-		smaaPass.renderToScreen = true;
 
 		this.effect = shockWaveEffect;
 

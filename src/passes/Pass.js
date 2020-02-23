@@ -114,6 +114,15 @@ export class Pass {
 		this.screen = null;
 
 		/**
+		 * Indicates whether this pass should render to texture.
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+
+		this.rtt = true;
+
+		/**
 		 * Only relevant for subclassing.
 		 *
 		 * Indicates whether the {@link EffectComposer} should swap the frame
@@ -140,20 +149,44 @@ export class Pass {
 		this.needsDepthTexture = false;
 
 		/**
-		 * Indicates whether this pass should render to screen.
-		 *
-		 * @type {Boolean}
-		 */
-
-		this.renderToScreen = false;
-
-		/**
 		 * Indicates whether this pass should be executed.
 		 *
 		 * @type {Boolean}
 		 */
 
 		this.enabled = true;
+
+	}
+
+	/**
+	 * Indicates whether this pass should render to screen.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get renderToScreen() {
+
+		return !this.rtt;
+
+	}
+
+	/**
+	 * Sets the render to screen flag and updates the fullscreen material.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set renderToScreen(value) {
+
+		const material = this.getFullscreenMaterial();
+
+		if(material !== null) {
+
+			material.needsUpdate = true;
+
+		}
+
+		this.rtt = !value;
 
 	}
 
@@ -280,10 +313,11 @@ export class Pass {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
-	initialize(renderer, alpha) {}
+	initialize(renderer, alpha, frameBufferType) {}
 
 	/**
 	 * Performs a shallow search for disposable properties and deletes them. The

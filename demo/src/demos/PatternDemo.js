@@ -1,23 +1,19 @@
-import {
-	AmbientLight,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	Object3D,
-	PerspectiveCamera,
-	SphereBufferGeometry
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	DotScreenEffect,
+	EdgeDetectionMode,
 	GridEffect,
 	EffectPass,
-	ScanlineEffect
+	ScanlineEffect,
+	SMAAEffect,
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -72,47 +68,36 @@ export class PatternDemo extends PostProcessingDemo {
 
 		this.pass = null;
 
-		/**
-		 * An object.
-		 *
-		 * @type {Object3D}
-		 * @private
-		 */
-
-		this.object = null;
-
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
+		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space/";
-		const format = ".jpg";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
+				Sponza.load(assets, loadingManager, anisotropy);
 
-					assets.set("sky", t);
+				smaaImageLoader.load(([search, area]) => {
+
+					assets.set("smaa-search", search);
+					assets.set("smaa-area", area);
 
 				});
 
@@ -139,67 +124,48 @@ export class PatternDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(10, 1, 10);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 3, -3.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		scene.add(...Sponza.createLights());
 
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
+		// Objects.
 
-		scene.add(directionalLight);
-		scene.add(ambientLight);
-
-		// Random objects.
-
-		const object = new Object3D();
-		const geometry = new SphereBufferGeometry(1, 4, 4);
-
-		let material, mesh;
-		let i;
-
-		for(i = 0; i < 100; ++i) {
-
-			material = new MeshPhongMaterial({
-				color: 0xffffff * Math.random(),
-				flatShading: true
-			});
-
-			mesh = new Mesh(geometry, material);
-			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 10);
-			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random());
-			object.add(mesh);
-
-		}
-
-		this.object = object;
-		scene.add(object);
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+
 		const dotScreenEffect = new DotScreenEffect({
-			blendFunction: BlendFunction.OVERLAY,
-			scale: 0.9,
+			blendFunction: BlendFunction.LIGHTEN,
+			scale: 0.24,
 			angle: Math.PI * 0.58
 		});
 
@@ -210,52 +176,26 @@ export class PatternDemo extends PostProcessingDemo {
 		});
 
 		const scanlineEffect = new ScanlineEffect({
-			blendFunction: BlendFunction.SKIP,
-			density: 1.5
+			blendFunction: BlendFunction.MULTIPLY,
+			density: 1.0
 		});
 
-		const pass = new EffectPass(camera, dotScreenEffect, gridEffect, scanlineEffect);
+		scanlineEffect.blendMode.opacity.value = 0.25;
+
+		const pass = new EffectPass(
+			camera,
+			smaaEffect,
+			dotScreenEffect,
+			gridEffect,
+			scanlineEffect
+		);
 
 		this.dotScreenEffect = dotScreenEffect;
 		this.gridEffect = gridEffect;
 		this.scanlineEffect = scanlineEffect;
-
 		this.pass = pass;
 
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-
 		composer.addPass(pass);
-
-	}
-
-	/**
-	 * Renders this demo.
-	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
-	 */
-
-	render(delta) {
-
-		const object = this.object;
-		const twoPI = 2.0 * Math.PI;
-
-		object.rotation.x += 0.0005;
-		object.rotation.y += 0.001;
-
-		if(object.rotation.x >= twoPI) {
-
-			object.rotation.x -= twoPI;
-
-		}
-
-		if(object.rotation.y >= twoPI) {
-
-			object.rotation.y -= twoPI;
-
-		}
-
-		super.render(delta);
 
 	}
 

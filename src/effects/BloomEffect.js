@@ -1,10 +1,4 @@
-import {
-	LinearFilter,
-	RGBFormat,
-	Uniform,
-	WebGLRenderTarget
-} from "three";
-
+import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from "three";
 import { Resizer } from "../core";
 import { KernelSize, LuminanceMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
@@ -193,7 +187,7 @@ export class BloomEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	get dithering() {
@@ -206,7 +200,7 @@ export class BloomEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
-	 * @deprecated Use blurPass.dithering instead.
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	set dithering(value) {
@@ -334,15 +328,22 @@ export class BloomEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		this.blurPass.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha) {
 
 			this.renderTarget.texture.format = RGBFormat;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTarget.texture.type = frameBufferType;
 
 		}
 

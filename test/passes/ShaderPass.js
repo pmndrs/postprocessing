@@ -1,5 +1,5 @@
 import test from "ava";
-import { ShaderPass } from "../../build/postprocessing.js";
+import { ShaderPass } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 

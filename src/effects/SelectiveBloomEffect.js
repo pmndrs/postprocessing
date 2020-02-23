@@ -243,20 +243,27 @@ export class SelectiveBloomEffect extends BloomEffect {
 	 * Performs initialization tasks.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		super.initialize(renderer, alpha);
+		super.initialize(renderer, alpha, frameBufferType);
 
-		this.backgroundPass.initialize(renderer, alpha);
-		this.blackoutPass.initialize(renderer, alpha);
-		this.renderPass.initialize(renderer, alpha);
+		this.backgroundPass.initialize(renderer, alpha, frameBufferType);
+		this.blackoutPass.initialize(renderer, alpha, frameBufferType);
+		this.renderPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha) {
 
 			this.renderTargetSelection.texture.format = RGBFormat;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetSelection.texture.type = frameBufferType;
 
 		}
 

@@ -105,7 +105,7 @@ export class RenderPass extends Pass {
 	 * The provided texture will be attached to the input buffer unless this pass
 	 * renders to screen.
 	 *
-	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {DepthTexture} depthTexture - A depth texture.
 	 * @param {Number} [depthPacking=0] - The depth packing.
 	 */
 

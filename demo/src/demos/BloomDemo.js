@@ -1,28 +1,28 @@
 import {
 	AmbientLight,
-	BoxBufferGeometry,
 	CubeTextureLoader,
 	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	MeshLambertMaterial,
-	Object3D,
 	PerspectiveCamera,
 	Raycaster,
-	SphereBufferGeometry,
+	sRGBEncoding,
 	Vector2
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Cage } from "./objects/Cage.js";
+import { SphereCloud } from "./objects/SphereCloud.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	BloomEffect,
+	EdgeDetectionMode,
 	EffectPass,
 	KernelSize,
 	SelectiveBloomEffect,
 	SMAAEffect,
+	SMAAPreset,
 	SMAAImageLoader
 } from "../../../src";
 
@@ -206,7 +206,7 @@ export class BloomDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
@@ -216,7 +216,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space2/";
+		const path = "textures/skies/space-green/";
 		const format = ".jpg";
 		const urls = [
 			path + "px" + format, path + "nx" + format,
@@ -228,11 +228,13 @@ export class BloomDemo extends PostProcessingDemo {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
 				cubeTextureLoader.load(urls, (t) => {
 
+					t.encoding = sRGBEncoding;
 					assets.set("sky", t);
 
 				});
@@ -267,7 +269,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
 		camera.position.set(-10, 6, 15);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -287,80 +290,25 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		const ambientLight = new AmbientLight(0x212121);
+		const mainLight = new DirectionalLight(0xffffff, 1.0);
+		const backLight = new DirectionalLight(0xff7e66, 0.1);
 
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
+		mainLight.position.set(-1, 1, 1);
+		backLight.position.copy(mainLight.position).negate();
 
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(ambientLight, mainLight, backLight);
 
 		// Random objects.
 
-		let object = new Object3D();
+		const cloud = SphereCloud.create();
+		cloud.scale.setScalar(0.4);
+		this.object = cloud;
+		scene.add(cloud);
 
-		let geometry = new SphereBufferGeometry(1, 4, 4);
-		let material;
-		let i, mesh;
+		// Cubic cage.
 
-		for(i = 0; i < 100; ++i) {
-
-			material = new MeshPhongMaterial({
-				color: 0xffffff * Math.random(),
-				flatShading: true
-			});
-
-			mesh = new Mesh(geometry, material);
-			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 4);
-			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random() * 0.5);
-			object.add(mesh);
-
-		}
-
-		this.object = object;
-
-		scene.add(object);
-
-		// Cage object.
-
-		mesh = new Mesh(
-			new BoxBufferGeometry(0.25, 8.25, 0.25),
-			new MeshLambertMaterial({
-				color: 0x000000
-			})
-		);
-
-		object = new Object3D();
-		let o0, o1, o2;
-
-		o0 = object.clone();
-
-		let clone = mesh.clone();
-		clone.position.set(-4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, 4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(-4, 0, -4);
-		o0.add(clone);
-		clone = mesh.clone();
-		clone.position.set(4, 0, -4);
-		o0.add(clone);
-
-		o1 = o0.clone();
-		o1.rotation.set(Math.PI / 2, 0, 0);
-		o2 = o0.clone();
-		o2.rotation.set(0, 0, Math.PI / 2);
-
-		object.add(o0);
-		object.add(o1);
-		object.add(o2);
-
-		scene.add(object);
+		scene.add(Cage.create());
 
 		// Raycaster.
 
@@ -368,24 +316,27 @@ export class BloomDemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
 		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bloomOptions = {
 			blendFunction: BlendFunction.SCREEN,
 			kernelSize: KernelSize.MEDIUM,
-			luminanceThreshold: 0.825,
+			luminanceThreshold: 0.8,
 			luminanceSmoothing: 0.075,
 			height: 480
 		};
 
 		/* If you don't need to limit bloom to a subset of objects, it's recommended
-		to use the BloomEffect for better performance. */
+		to use the normal BloomEffect for better performance. */
 		const bloomEffect = new BloomEffect(bloomOptions);
 		const selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
-
-		bloomEffect.blendMode.opacity.value = 2.3;
-		selectiveBloomEffect.blendMode.opacity.value = 2.3;
 		selectiveBloomEffect.inverted = true;
 
 		this.effectA = bloomEffect;
@@ -397,7 +348,6 @@ export class BloomDemo extends PostProcessingDemo {
 		this.passA = effectPassA;
 		this.passB = effectPassB;
 
-		this.renderPass.renderToScreen = false;
 		effectPassA.renderToScreen = true;
 		effectPassB.renderToScreen = true;
 		effectPassB.enabled = false;
@@ -405,9 +355,10 @@ export class BloomDemo extends PostProcessingDemo {
 		composer.addPass(effectPassA);
 		composer.addPass(effectPassB);
 
-		// Important: Make sure your lights are on!
+		// Important: Make sure your lights are on! (SelectiveBloom)
 		ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
-		directionalLight.layers.enable(selectiveBloomEffect.selection.layer);
+		mainLight.layers.enable(selectiveBloomEffect.selection.layer);
+		backLight.layers.enable(selectiveBloomEffect.selection.layer);
 
 	}
 
@@ -420,20 +371,20 @@ export class BloomDemo extends PostProcessingDemo {
 	render(delta) {
 
 		const object = this.object;
-		const twoPI = 2.0 * Math.PI;
+		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.001;
-		object.rotation.y += 0.005;
+		object.rotation.x += 0.05 * delta;
+		object.rotation.y += 0.25 * delta;
 
-		if(object.rotation.x >= twoPI) {
+		if(object.rotation.x >= PI2) {
 
-			object.rotation.x -= twoPI;
+			object.rotation.x -= PI2;
 
 		}
 
-		if(object.rotation.y >= twoPI) {
+		if(object.rotation.y >= PI2) {
 
-			object.rotation.y -= twoPI;
+			object.rotation.y -= PI2;
 
 		}
 
@@ -459,7 +410,7 @@ export class BloomDemo extends PostProcessingDemo {
 		const blendModeB = effectB.blendMode;
 
 		const params = {
-			"resolution": effectA.height,
+			"resolution": effectA.resolution.height,
 			"kernel size": effectA.blurPass.kernelSize,
 			"scale": effectA.blurPass.scale,
 			"luminance": {
@@ -478,19 +429,19 @@ export class BloomDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effectA.resolution.height = effectB.resolution.height = Number.parseInt(params.resolution);
+			effectA.resolution.height = effectB.resolution.height = Number(params.resolution);
 
 		});
 
 		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+			effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(params["kernel size"]);
 
 		});
 
 		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			effectA.blurPass.scale = effectB.blurPass.scale = Number.parseFloat(params.scale);
+			effectA.blurPass.scale = effectB.blurPass.scale = Number(params.scale);
 
 		});
 
@@ -504,13 +455,13 @@ export class BloomDemo extends PostProcessingDemo {
 
 		folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number.parseFloat(params.luminance.threshold);
+			effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(params.luminance.threshold);
 
 		});
 
 		folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number.parseFloat(params.luminance.smoothing);
+			effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(params.luminance.smoothing);
 
 		});
 
@@ -549,7 +500,7 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(4.0).step(0.01).onChange(() => {
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
 
@@ -557,16 +508,16 @@ export class BloomDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendModeA.blendFunction = blendModeB.blendFunction = Number.parseInt(params["blend mode"]);
+			blendModeA.blendFunction = blendModeB.blendFunction = Number(params["blend mode"]);
 
 			passA.recompile();
 			passB.recompile();
 
 		});
 
-		menu.add(effectA, "dithering").onChange(() => {
+		menu.add(passA, "dithering").onChange(() => {
 
-			effectB.dithering = effectA.dithering;
+			passB.dithering = passA.dithering;
 
 		});
 

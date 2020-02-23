@@ -42,7 +42,7 @@ export class BlurPass extends Pass {
 			depthBuffer: false
 		});
 
-		this.renderTargetA.texture.name = "Blur.TargetA";
+		this.renderTargetA.texture.name = "Blur.Target.A";
 
 		/**
 		 * A second render target.
@@ -52,7 +52,7 @@ export class BlurPass extends Pass {
 		 */
 
 		this.renderTargetB = this.renderTargetA.clone();
-		this.renderTargetB.texture.name = "Blur.TargetB";
+		this.renderTargetB.texture.name = "Blur.Target.B";
 
 		/**
 		 * The desired render resolution.
@@ -92,6 +92,7 @@ export class BlurPass extends Pass {
 		 * Whether the blurred result should also be dithered using noise.
 		 *
 		 * @type {Boolean}
+		 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 		 */
 
 		this.dithering = false;
@@ -326,14 +327,22 @@ export class BlurPass extends Pass {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
 		if(!alpha) {
 
 			this.renderTargetA.texture.format = RGBFormat;
 			this.renderTargetB.texture.format = RGBFormat;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetA.texture.type = frameBufferType;
+			this.renderTargetB.texture.type = frameBufferType;
 
 		}
 

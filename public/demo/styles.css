@@ -52,6 +52,42 @@ img:hover {
 	opacity: 0.25;
 }
 
+.hidden {
+	display: none;
+}
+
+.loading {
+	left: 0;
+	position: fixed;
+	right: 0;
+	text-align: center;
+	top: 50%;
+	transform: translateY(-50%);
+	user-select: none;
+}
+
+.loading > div,
+.loading > div > div {
+	border-radius: 6px;
+	box-sizing: border-box;
+	display: inline-block;
+	height: 4px;
+}
+
+.loading > div {
+	background: rgba(255, 255, 255, 0.1);
+	margin-top: 10px;
+	text-align: left;
+	width: 220px;
+}
+
+.loading > div > div {
+	background: rgba(255, 255, 255, 0.95);
+	transition: width 150ms;
+	vertical-align: top;
+	width: 0;
+}
+
 .info {
 	bottom: 12px;
 	left: 8px;
@@ -61,7 +97,6 @@ img:hover {
 .info div {
 	bottom: 100%;
 	color: rgb(90, 95, 90);
-	display: none;
 	font-size: 75%;
 	position: absolute;
 	width: max-content;
@@ -81,13 +116,4 @@ img:hover {
 
 .dg {
 	user-select: none;
-}
-
-#viewport p {
-	left: 0;
-	position: fixed;
-	right: 0;
-	text-align: center;
-	top: 50%;
-	transform: translateY(-50%);
 }

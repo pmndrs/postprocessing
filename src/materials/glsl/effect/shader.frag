@@ -56,6 +56,12 @@ void main() {
 
 	gl_FragColor = color0;
 
+	#ifdef ENCODE_OUTPUT
+
+		#include <encodings_fragment>
+
+	#endif
+
 	#include <dithering_fragment>
 
 }

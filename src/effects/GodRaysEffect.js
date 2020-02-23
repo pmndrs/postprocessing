@@ -184,6 +184,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.clearPass = new ClearPass(true, false, false);
+		this.clearPass.overrideClearColor = new Color(0x000000);
 
 		/**
 		 * A blur pass that reduces aliasing artifacts and makes the light softer.
@@ -332,6 +333,7 @@ export class GodRaysEffect extends Effect {
 	 * Indicates whether dithering is enabled.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	get dithering() {
@@ -344,6 +346,7 @@ export class GodRaysEffect extends Effect {
 	 * Enables or disables dithering.
 	 *
 	 * @type {Boolean}
+	 * @deprecated Set the frameBufferType of the EffectComposer to HalfFloatType instead.
 	 */
 
 	set dithering(value) {
@@ -487,20 +490,26 @@ export class GodRaysEffect extends Effect {
 		const renderTargetA = this.renderTargetA;
 		const renderTargetLight = this.renderTargetLight;
 
-		if(!matrixAutoUpdate) {
-
-			// Remember the local transformation to restore it later.
-			m.copy(lightSource.matrix);
-
-		}
-
 		// Enable depth write for the light scene render pass.
 		lightSource.material.depthWrite = true;
 
-		// The light source may be inside a group; apply all transformations.
+		// Update the world matrix.
 		lightSource.matrixAutoUpdate = false;
 		lightSource.updateWorldMatrix(true, false);
-		lightSource.matrix.copy(lightSource.matrixWorld);
+
+		if(parent !== null) {
+
+			if(!matrixAutoUpdate) {
+
+				// Remember the local transformation to restore it later.
+				m.copy(lightSource.matrix);
+
+			}
+
+			// Apply parent transformations.
+			lightSource.matrix.copy(lightSource.matrixWorld);
+
+		}
 
 		// Render the light source and mask it based on depth.
 		this.lightScene.add(lightSource);
@@ -512,23 +521,25 @@ export class GodRaysEffect extends Effect {
 		lightSource.material.depthWrite = false;
 		lightSource.matrixAutoUpdate = matrixAutoUpdate;
 
-		if(!matrixAutoUpdate) {
-
-			lightSource.matrix.copy(m);
-
-		}
-
 		if(parent !== null) {
+
+			if(!matrixAutoUpdate) {
+
+				lightSource.matrix.copy(m);
+
+			}
 
 			parent.add(lightSource);
 
 		}
 
-		// Calculate the screen light position and translate it to [0.0, 1.0].
+		// Calculate the screen light position.
 		v.setFromMatrixPosition(lightSource.matrixWorld).project(this.camera);
+
+		// Translate to [0.0, 1.0] and clamp to screen with a bias of 1.0.
 		this.screenPosition.set(
-			Math.max(0.0, Math.min(1.0, (v.x + 1.0) * 0.5)),
-			Math.max(0.0, Math.min(1.0, (v.y + 1.0) * 0.5))
+			Math.min(Math.max((v.x + 1.0) * 0.5, -1.0), 2.0),
+			Math.min(Math.max((v.y + 1.0) * 0.5, -1.0), 2.0)
 		);
 
 		if(this.blur) {
@@ -571,20 +582,29 @@ export class GodRaysEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
-		this.blurPass.initialize(renderer, alpha);
-		this.renderPassLight.initialize(renderer, alpha);
-		this.depthMaskPass.initialize(renderer, alpha);
-		this.godRaysPass.initialize(renderer, alpha);
+		this.blurPass.initialize(renderer, alpha, frameBufferType);
+		this.renderPassLight.initialize(renderer, alpha, frameBufferType);
+		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
+		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
 
 		if(!alpha) {
 
 			this.renderTargetA.texture.format = RGBFormat;
 			this.renderTargetB.texture.format = RGBFormat;
 			this.renderTargetLight.texture.format = RGBFormat;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTargetA.texture.type = frameBufferType;
+			this.renderTargetB.texture.type = frameBufferType;
+			this.renderTargetLight.texture.type = frameBufferType;
 
 		}
 

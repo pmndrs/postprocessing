@@ -1,7 +1,7 @@
 import {
 	Color,
 	MeshDepthMaterial,
-	LinearFilter,
+	NearestFilter,
 	RGBADepthPacking,
 	WebGLRenderTarget
 } from "three";
@@ -67,8 +67,8 @@ export class DepthPass extends Pass {
 		if(this.renderTarget === undefined) {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
-				minFilter: LinearFilter,
-				magFilter: LinearFilter,
+				minFilter: NearestFilter,
+				magFilter: NearestFilter,
 				stencilBuffer: false
 			});
 

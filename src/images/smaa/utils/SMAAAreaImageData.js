@@ -17,7 +17,20 @@ class Vector2 {
 
 	constructor(x = 0, y = 0) {
 
+		/**
+		 * The X component.
+		 *
+		 * @type {Number}
+		 */
+
 		this.x = x;
+
+		/**
+		 * The Y component.
+		 *
+		 * @type {Number}
+		 */
+
 		this.y = y;
 
 	}

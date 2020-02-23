@@ -1,13 +1,19 @@
+import {
+	HalfFloatType,
+	PCFSoftShadowMap,
+	sRGBEncoding,
+	Vector2,
+	WebGLRenderer
+} from "three";
+
 import { DemoManager } from "three-demo";
-import { Vector2, WebGLRenderer } from "three";
 import { EffectComposer } from "../../src";
 
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
-import { BokehDemo } from "./demos/BokehDemo.js";
-import { RealisticBokehDemo } from "./demos/RealisticBokehDemo.js";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
 import { ColorGradingDemo } from "./demos/ColorGradingDemo.js";
+import { DepthOfFieldDemo } from "./demos/DepthOfFieldDemo.js";
 import { GlitchDemo } from "./demos/GlitchDemo.js";
 import { GodRaysDemo } from "./demos/GodRaysDemo.js";
 import { OutlineDemo } from "./demos/OutlineDemo.js";
@@ -18,8 +24,18 @@ import { SMAADemo } from "./demos/SMAADemo.js";
 import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
-import { VignetteDemo } from "./demos/VignetteDemo.js";
 import { PerformanceDemo } from "./demos/PerformanceDemo.js";
+
+import { ProgressManager } from "./utils/ProgressManager.js";
+
+/**
+ * A cache that keeps track of loaded demos.
+ *
+ * @type {WeakSet}
+ * @private
+ */
+
+const cache = new WeakSet();
 
 /**
  * A renderer.
@@ -76,11 +92,14 @@ function onChange(event) {
 	// Make sure that the main renderer is being used and update it just in case.
 	const size = composer.getRenderer().getSize(new Vector2());
 	renderer.setSize(size.width, size.height);
+	renderer.shadowMap.needsUpdate = true;
 	composer.replaceRenderer(renderer);
 	composer.reset();
 	composer.addPass(demo.renderPass);
 
-	document.getElementById("viewport").children[0].style.display = "initial";
+	// Reset the progress bar and show it.
+	ProgressManager.reset();
+	document.querySelector(".loading").classList.remove("hidden");
 
 }
 
@@ -93,10 +112,45 @@ function onChange(event) {
 
 function onLoad(event) {
 
-	// Prepare the render pass.
-	event.demo.renderPass.camera = event.demo.camera;
+	const demo = event.demo;
 
-	document.getElementById("viewport").children[0].style.display = "none";
+	if(!cache.has(demo)) {
+
+		// Prevent stuttering when new objects come into view.
+		renderer.compile(demo.scene, demo.camera);
+
+		// Initialize textures ahead of time.
+		demo.scene.traverse((object) => {
+
+			if(object.isMesh) {
+
+				const { map = null, normalMap = null } = object.material;
+
+				if(map !== null) {
+
+					renderer.initTexture(object.material.map);
+
+				}
+
+				if(normalMap !== null) {
+
+					renderer.initTexture(object.material.normalMap);
+
+				}
+
+			}
+
+		});
+
+		cache.add(demo);
+
+	}
+
+	// Let the main render pass use the camera of the current demo.
+	demo.renderPass.camera = demo.camera;
+
+	// Hide the progress bar.
+	document.querySelector(".loading").classList.add("hidden");
 
 }
 
@@ -109,24 +163,28 @@ function onLoad(event) {
 
 window.addEventListener("load", (event) => {
 
+	const debug = (window.location.href.indexOf("debug") !== -1);
 	const viewport = document.getElementById("viewport");
 
-	// Create a custom renderer.
-	renderer = new WebGLRenderer({
-		antialias: false
-	});
-
-	renderer.debug.checkShaderErrors = true;
+	// Create and configure the renderer.
+	renderer = new WebGLRenderer({ powerPreference: "high-performance" });
+	renderer.outputEncoding = sRGBEncoding;
+	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
 	renderer.setPixelRatio(window.devicePixelRatio);
 	renderer.setClearColor(0x000000, 0.0);
+	renderer.shadowMap.type = PCFSoftShadowMap;
+	renderer.shadowMap.autoUpdate = false;
+	renderer.shadowMap.needsUpdate = true;
+	renderer.shadowMap.enabled = true;
 
-	// Create an effect composer.
+	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
+		frameBufferType: HalfFloatType,
 		stencilBuffer: true
 	});
 
-	// Initialize the demo manager.
+	// Create the demo manager.
 	manager = new DemoManager(viewport, {
 		aside: document.getElementById("aside"),
 		renderer
@@ -139,10 +197,9 @@ window.addEventListener("load", (event) => {
 	const demos = [
 		new BloomDemo(composer),
 		new BlurDemo(composer),
-		new BokehDemo(composer),
-		new RealisticBokehDemo(composer),
 		new ColorDepthDemo(composer),
 		new ColorGradingDemo(composer),
+		new DepthOfFieldDemo(composer),
 		new GlitchDemo(composer),
 		new GodRaysDemo(composer),
 		new OutlineDemo(composer),
@@ -153,25 +210,24 @@ window.addEventListener("load", (event) => {
 		new SSAODemo(composer),
 		new TextureDemo(composer),
 		new ToneMappingDemo(composer),
-		new VignetteDemo(composer),
 		new PerformanceDemo(composer)
 	];
 
-	if(demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1)) === -1) {
+	const id = demos.map((demo) => demo.id).indexOf(window.location.hash.slice(1));
+
+	if(id === -1) {
 
 		// Invalid URL hash: demo doesn't exist.
 		window.location.hash = "";
 
 	}
 
-	// Register demos.
 	for(const demo of demos) {
 
 		manager.addDemo(demo);
 
 	}
 
-	// Start rendering.
 	render();
 
 });
@@ -220,18 +276,20 @@ window.addEventListener("resize", (function() {
 
 document.addEventListener("DOMContentLoaded", (event) => {
 
-	const infoImg = document.querySelector(".info img");
-	const infoDiv = document.querySelector(".info div");
+	const img = document.querySelector(".info img");
+	const div = document.querySelector(".info div");
 
-	if(infoImg !== null && infoDiv !== null) {
+	if(img !== null && div !== null) {
 
-		infoImg.addEventListener("click", (event) => {
+		img.addEventListener("click", (event) => {
 
-			infoDiv.style.display = (infoDiv.style.display === "block") ? "none" : "block";
+			div.classList.toggle("hidden");
 
 		});
 
 	}
+
+	ProgressManager.initialize();
 
 });
 
@@ -249,7 +307,7 @@ document.addEventListener("keydown", (event) => {
 	if(aside !== null && event.key === "h") {
 
 		event.preventDefault();
-		aside.style.visibility = (aside.style.visibility === "hidden") ? "visible" : "hidden";
+		aside.classList.toggle("hidden");
 
 	}
 

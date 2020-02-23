@@ -30,26 +30,22 @@ export class EffectMaterial extends ShaderMaterial {
 			type: "EffectMaterial",
 
 			defines: {
-
-				DEPTH_PACKING: "0"
-
+				DEPTH_PACKING: "0",
+				ENCODE_OUTPUT: "1"
 			},
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				depthBuffer: new Uniform(null),
-
 				resolution: new Uniform(new Vector2()),
 				texelSize: new Uniform(new Vector2()),
-
 				cameraNear: new Uniform(0.3),
 				cameraFar: new Uniform(1000.0),
 				aspect: new Uniform(1.0),
 				time: new Uniform(0.0)
-
 			},
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			dithering
@@ -86,7 +82,7 @@ export class EffectMaterial extends ShaderMaterial {
 
 	get depthPacking() {
 
-		return Number.parseInt(this.defines.DEPTH_PACKING);
+		return Number(this.defines.DEPTH_PACKING);
 
 	}
 
@@ -104,6 +100,7 @@ export class EffectMaterial extends ShaderMaterial {
 	set depthPacking(value) {
 
 		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 
@@ -164,8 +161,6 @@ export class EffectMaterial extends ShaderMaterial {
 			this.uniforms[entry[0]] = entry[1];
 
 		}
-
-		this.needsUpdate = true;
 
 		return this;
 

@@ -2,23 +2,24 @@ import {
 	AmbientLight,
 	CubeTextureLoader,
 	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	Object3D,
 	PerspectiveCamera,
-	SphereBufferGeometry
+	sRGBEncoding
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { SphereCloud } from "./objects/SphereCloud.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	BlurPass,
+	EdgeDetectionMode,
 	EffectPass,
 	KernelSize,
 	SavePass,
 	SMAAEffect,
+	SMAAPreset,
 	SMAAImageLoader,
 	TextureEffect
 } from "../../../src";
@@ -58,13 +59,13 @@ export class BlurDemo extends PostProcessingDemo {
 		this.texturePass = null;
 
 		/**
-		 * An effect.
+		 * A texture effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.effect = null;
+		this.textureEffect = null;
 
 		/**
 		 * An object.
@@ -80,7 +81,7 @@ export class BlurDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
@@ -102,11 +103,13 @@ export class BlurDemo extends PostProcessingDemo {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
 				cubeTextureLoader.load(urls, (t) => {
 
+					t.encoding = sRGBEncoding;
 					assets.set("sky", t);
 
 				});
@@ -141,7 +144,8 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 1, 2000);
 		camera.position.set(-15, 0, -15);
 		camera.lookAt(scene.position);
 		this.camera = camera;
@@ -161,42 +165,21 @@ export class BlurDemo extends PostProcessingDemo {
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		const ambientLight = new AmbientLight(0x212121);
+		const mainLight = new DirectionalLight(0xff7e66, 1.0);
+		const backLight = new DirectionalLight(0xff7e66, 0.1);
 
-		directionalLight.position.set(1440, 200, 2000);
-		directionalLight.target.position.copy(scene.position);
+		mainLight.position.set(1.44, 0.2, 2.0);
+		backLight.position.copy(mainLight.position).negate();
 
-		scene.add(directionalLight);
 		scene.add(ambientLight);
+		scene.add(mainLight);
+		scene.add(backLight);
 
 		// Random objects.
 
-		let object = new Object3D();
-
-		let geometry = new SphereBufferGeometry(1, 4, 4);
-		let material;
-		let i, mesh;
-
-		for(i = 0; i < 100; ++i) {
-
-			material = new MeshPhongMaterial({
-				color: 0xffffff * Math.random(),
-				flatShading: true
-			});
-
-			mesh = new Mesh(geometry, material);
-			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 10);
-			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random());
-			object.add(mesh);
-
-		}
-
-		this.object = object;
-
-		scene.add(object);
+		this.object = SphereCloud.create();
+		scene.add(this.object);
 
 		// Passes.
 
@@ -205,7 +188,13 @@ export class BlurDemo extends PostProcessingDemo {
 			height: 480
 		});
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.LUMA
+		);
+
 		const textureEffect = new TextureEffect({
 			texture: savePass.renderTarget.texture
 		});
@@ -215,12 +204,9 @@ export class BlurDemo extends PostProcessingDemo {
 
 		textureEffect.blendMode.opacity.value = 0.0;
 
-		this.renderPass.renderToScreen = false;
-		texturePass.renderToScreen = true;
-
 		this.blurPass = blurPass;
 		this.texturePass = texturePass;
-		this.effect = textureEffect;
+		this.textureEffect = textureEffect;
 
 		composer.addPass(smaaPass);
 		composer.addPass(savePass);
@@ -238,20 +224,20 @@ export class BlurDemo extends PostProcessingDemo {
 	render(delta) {
 
 		const object = this.object;
-		const twoPI = 2.0 * Math.PI;
+		const PI2 = 2.0 * Math.PI;
 
-		object.rotation.x += 0.001;
-		object.rotation.y += 0.005;
+		object.rotation.x += 0.05 * delta;
+		object.rotation.y += 0.25 * delta;
 
-		if(object.rotation.x >= twoPI) {
+		if(object.rotation.x >= PI2) {
 
-			object.rotation.x -= twoPI;
+			object.rotation.x -= PI2;
 
 		}
 
-		if(object.rotation.y >= twoPI) {
+		if(object.rotation.y >= PI2) {
 
-			object.rotation.y -= twoPI;
+			object.rotation.y -= PI2;
 
 		}
 
@@ -267,13 +253,12 @@ export class BlurDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const effect = this.effect;
-		const pass = this.texturePass;
+		const textureEffect = this.textureEffect;
+		const texturePass = this.texturePass;
 		const blurPass = this.blurPass;
-		const blendMode = effect.blendMode;
+		const blendMode = textureEffect.blendMode;
 
 		const params = {
-			"enabled": blurPass.enabled,
 			"resolution": blurPass.height,
 			"kernel size": blurPass.kernelSize,
 			"scale": blurPass.scale,
@@ -283,24 +268,24 @@ export class BlurDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			blurPass.resolution.height = Number.parseInt(params.resolution);
+			blurPass.resolution.height = Number(params.resolution);
 
 		});
 
 		menu.add(params, "kernel size", KernelSize).onChange(() => {
 
-			blurPass.kernelSize = Number.parseInt(params["kernel size"]);
+			blurPass.kernelSize = Number(params["kernel size"]);
 
 		});
 
 		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			blurPass.scale = Number.parseFloat(params.scale);
+			blurPass.scale = Number(params.scale);
 
 		});
 
-		menu.add(blurPass, "dithering");
 		menu.add(blurPass, "enabled");
+		menu.add(texturePass, "dithering");
 
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
@@ -310,8 +295,8 @@ export class BlurDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			pass.recompile();
+			blendMode.blendFunction = Number(params["blend mode"]);
+			texturePass.recompile();
 
 		});
 

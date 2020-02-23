@@ -1,24 +1,17 @@
-import {
-	AmbientLight,
-	BoxBufferGeometry,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	PerspectiveCamera,
-	RepeatWrapping,
-	TextureLoader
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
-	ToneMappingEffect,
+	EdgeDetectionMode,
 	EffectPass,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset,
+	ToneMappingEffect
 } from "../../../src";
 
 /**
@@ -55,58 +48,31 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		this.pass = null;
 
-		/**
-		 * An object.
-		 *
-		 * @type {Object3D}
-		 * @private
-		 */
-
-		this.object = null;
-
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const textureLoader = new TextureLoader(loadingManager);
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/sunset/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
-
-				textureLoader.load("textures/crate.jpg", (t) => {
-
-					t.wrapS = t.wrapT = RepeatWrapping;
-					assets.set("crate-color", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -138,53 +104,44 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(-3, 0, -3);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-0.5, 5, -0.5);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(-0.5, 10, 0);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.settings.zoom.minDistance = 2.5;
-		controls.settings.zoom.maxDistance = 40.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
-
-		directionalLight.position.set(1440, 200, 2000);
-		directionalLight.target.position.copy(scene.position);
-
-		scene.add(directionalLight);
-		scene.add(ambientLight);
+		scene.add(...Sponza.createLights());
 
 		// Objects.
 
-		const mesh = new Mesh(
-			new BoxBufferGeometry(1, 1, 1),
-			new MeshPhongMaterial({
-				map: assets.get("crate-color")
-			})
-		);
-
-		this.object = mesh;
-		scene.add(mesh);
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.setEdgeDetectionThreshold(0.06);
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.setEdgeDetectionThreshold(0.05);
 
 		const toneMappingEffect = new ToneMappingEffect({
 			blendFunction: BlendFunction.NORMAL,
@@ -202,40 +159,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 		pass.dithering = true;
 		this.pass = pass;
 
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
-
 		composer.addPass(pass);
-
-	}
-
-	/**
-	 * Renders this demo.
-	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
-	 */
-
-	render(delta) {
-
-		const object = this.object;
-		const twoPI = 2.0 * Math.PI;
-
-		object.rotation.x += 0.0005;
-		object.rotation.y += 0.001;
-
-		if(object.rotation.x >= twoPI) {
-
-			object.rotation.x -= twoPI;
-
-		}
-
-		if(object.rotation.y >= twoPI) {
-
-			object.rotation.y -= twoPI;
-
-		}
-
-		super.render(delta);
 
 	}
 

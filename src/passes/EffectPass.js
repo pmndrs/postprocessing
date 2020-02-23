@@ -284,15 +284,41 @@ export class EffectPass extends Pass {
 	}
 
 	/**
-	 * The current render size.
+	 * Indicates whether this pass encodes its output when rendering to screen.
 	 *
-	 * @type {Vector2}
-	 * @private
+	 * @type {Boolean}
 	 */
 
-	get size() {
+	get encodeOutput() {
 
-		return this.getFullscreenMaterial().uniforms.resolution.value;
+		return (this.getFullscreenMaterial().defines.ENCODE_OUTPUT !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables output encoding.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set encodeOutput(value) {
+
+		if(this.encodeOutput !== value) {
+
+			const material = this.getFullscreenMaterial();
+			material.needsUpdate = true;
+
+			if(value) {
+
+				material.defines.ENCODE_OUTPUT = "1";
+
+			} else {
+
+				delete material.defines.ENCODE_OUTPUT;
+
+			}
+
+		}
 
 	}
 
@@ -312,8 +338,6 @@ export class EffectPass extends Pass {
 
 	/**
 	 * Enables or disables dithering.
-	 *
-	 * Note that some effects have their own dithering setting.
 	 *
 	 * @type {Boolean}
 	 */
@@ -416,6 +440,10 @@ export class EffectPass extends Pass {
 
 			// Only request a depth texture if none has been provided yet.
 			this.needsDepthTexture = (this.getDepthTexture() === null);
+
+		} else {
+
+			this.needsDepthTexture = false;
 
 		}
 
@@ -560,14 +588,15 @@ export class EffectPass extends Pass {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
 		// Initialize effects before building the final shader.
 		for(const effect of this.effects) {
 
-			effect.initialize(renderer, alpha);
+			effect.initialize(renderer, alpha, frameBufferType);
 
 		}
 

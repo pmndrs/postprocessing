@@ -70,7 +70,7 @@ export class ToneMappingEffect extends Effect {
 		 *
 		 * @type {WebGLRenderTarget}
 		 * @private
-		 * @todo Use RED format in WebGL 2.0 and remove LinearMipMapLinearFilter in next major release.
+		 * @todo Remove LinearMipMapLinearFilter in next major release.
 		 */
 
 		this.renderTargetLuminance = new WebGLRenderTarget(1, 1, {
@@ -135,6 +135,10 @@ export class ToneMappingEffect extends Effect {
 		 */
 
 		this.adaptiveLuminancePass = new ShaderPass(new AdaptiveLuminanceMaterial());
+
+		const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
+		uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
+		uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
 
 		this.adaptationRate = adaptationRate;
 		this.resolution = resolution;
@@ -275,8 +279,6 @@ export class ToneMappingEffect extends Effect {
 
 			// Use the frame delta to adapt the luminance over time.
 			const uniforms = this.adaptiveLuminancePass.getFullscreenMaterial().uniforms;
-			uniforms.previousLuminanceBuffer.value = this.renderTargetPrevious.texture;
-			uniforms.currentLuminanceBuffer.value = this.renderTargetLuminance.texture;
 			uniforms.deltaTime.value = deltaTime;
 			this.adaptiveLuminancePass.render(renderer, null, this.renderTargetAdapted);
 
@@ -305,9 +307,10 @@ export class ToneMappingEffect extends Effect {
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {
+	initialize(renderer, alpha, frameBufferType) {
 
 		const clearPass = new ClearPass(true, false, false);
 		clearPass.overrideClearColor = new Color(0x7fffff);

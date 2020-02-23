@@ -1,4 +1,4 @@
-import { LinearFilter, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -88,6 +88,30 @@ export class SavePass extends Pass {
 			height = Math.max(1, height);
 
 			this.renderTarget.setSize(width, height);
+
+		}
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - A renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		if(!alpha) {
+
+			this.renderTarget.texture.format = RGBFormat;
+
+		}
+
+		if(frameBufferType !== undefined) {
+
+			this.renderTarget.texture.type = frameBufferType;
 
 		}
 

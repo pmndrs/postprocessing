@@ -37,6 +37,30 @@ export class TextureEffect extends Effect {
 	}
 
 	/**
+	 * The texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.uniforms.get("texture").value;
+
+	}
+
+	/**
+	 * Sets the texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	set texture(value) {
+
+		this.uniforms.get("texture").value = value;
+
+	}
+
+	/**
 	 * Indicates whether aspect correction is enabled.
 	 *
 	 * If enabled, the texture can be scaled using the `scale` uniform.

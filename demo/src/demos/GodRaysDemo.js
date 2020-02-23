@@ -1,26 +1,29 @@
 import {
 	AmbientLight,
-	CubeTextureLoader,
-	DirectionalLight,
+	Color,
 	Group,
 	Mesh,
 	MeshBasicMaterial,
 	PerspectiveCamera,
+	PointLight,
 	SphereBufferGeometry,
 	Vector3
 } from "three";
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	EdgeDetectionMode,
 	EffectPass,
 	GodRaysEffect,
 	KernelSize,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -80,47 +83,26 @@ export class GodRaysDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const modelLoader = new GLTFLoader(loadingManager);
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/starry/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
-
-				modelLoader.load("models/tree/scene.gltf", (gltf) => {
-
-					gltf.scene.scale.multiplyScalar(2.5);
-					gltf.scene.position.set(0, -2.3, 0);
-					gltf.scene.rotation.set(0, 3, 0);
-
-					assets.set("model", gltf.scene);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -152,40 +134,38 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(-6, -1, -6);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(6, 1.2, -4);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(0, 0.5, 0);
+		const target = new Vector3(-2.5, 2.0, -3.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.rotation = 0.00125;
-		controls.settings.sensitivity.zoom = 1.0;
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
 		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0x000000);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x808080);
-		const directionalLight = new DirectionalLight(0xffbbaa);
-		directionalLight.position.set(75, 25, 100);
-		directionalLight.target = scene;
+		const ambientLight = new AmbientLight(0x101010);
 
-		this.light = directionalLight;
+		const mainLight = new PointLight(0xffe3b1);
+		mainLight.position.set(-0.5, 3, -0.25);
+		mainLight.castShadow = true;
+		mainLight.shadow.mapSize.width = 1024;
+		mainLight.shadow.mapSize.height = 1024;
+		this.light = mainLight;
 
-		scene.add(ambientLight);
-		scene.add(directionalLight);
-
-		// Objects.
-
-		scene.add(assets.get("model"));
+		scene.add(ambientLight, mainLight);
 
 		// Sun.
 
@@ -195,26 +175,39 @@ export class GodRaysDemo extends PostProcessingDemo {
 			fog: false
 		});
 
-		const sunGeometry = new SphereBufferGeometry(16, 32, 32);
+		const sunGeometry = new SphereBufferGeometry(0.75, 32, 32);
 		const sun = new Mesh(sunGeometry, sunMaterial);
 		sun.frustumCulled = false;
+		sun.matrixAutoUpdate = false;
+		// sun.position.copy(this.light.position);
+		// sun.updateMatrix();
 
+		// Using a group to check if matrix updates work correctly.
 		const group = new Group();
 		group.position.copy(this.light.position);
 		group.add(sun);
 
-		// The sun mesh is not added to the scene to hide hard geometry edges.
+		// The sun is not added to the scene to hide hard geometry edges.
 		// scene.add(group);
-		sun.matrixAutoUpdate = false;
 		this.sun = sun;
+
+		// Objects.
+
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.065);
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const godRaysEffect = new GodRaysEffect(camera, sun, {
-			height: 720,
+			height: 480,
 			kernelSize: KernelSize.SMALL,
 			density: 0.96,
 			decay: 0.92,
@@ -224,14 +217,9 @@ export class GodRaysDemo extends PostProcessingDemo {
 			clampMax: 1.0
 		});
 
-		godRaysEffect.dithering = true;
-		this.effect = godRaysEffect;
-
 		const pass = new EffectPass(camera, smaaEffect, godRaysEffect);
+		this.effect = godRaysEffect;
 		this.pass = pass;
-
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
 
 		composer.addPass(pass);
 
@@ -244,6 +232,8 @@ export class GodRaysDemo extends PostProcessingDemo {
 	 */
 
 	registerOptions(menu) {
+
+		const color = new Color();
 
 		const sun = this.sun;
 		const light = this.light;
@@ -262,7 +252,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 			"exposure": uniforms.exposure.value,
 			"clampMax": uniforms.clampMax.value,
 			"samples": effect.samples,
-			"color": sun.material.color.getHex(),
+			"color": color.copyLinearToSRGB(sun.material.color).getHex(),
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -273,7 +263,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(effect, "dithering");
+		menu.add(pass, "dithering");
 
 		menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(() => {
 
@@ -316,8 +306,8 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		menu.addColor(params, "color").onChange(() => {
 
-			sun.material.color.setHex(params.color);
-			light.color.setHex(params.color);
+			sun.material.color.setHex(params.color).convertSRGBToLinear();
+			light.color.setHex(params.color).convertSRGBToLinear();
 
 		});
 

@@ -1,17 +1,20 @@
-import { CubeTextureLoader, PerspectiveCamera } from "three";
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
 	BrightnessContrastEffect,
 	ColorAverageEffect,
+	EdgeDetectionMode,
 	EffectPass,
-	GammaCorrectionEffect,
 	HueSaturationEffect,
 	SepiaEffect,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -49,15 +52,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 		this.colorAverageEffect = null;
 
 		/**
-		 * A gamma correction effect.
-		 *
-		 * @type {Effect}
-		 * @private
-		 */
-
-		this.gammaCorrectionEffect = null;
-
-		/**
 		 * A hue/saturation effect.
 		 *
 		 * @type {Effect}
@@ -89,36 +83,26 @@ export class ColorGradingDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/sunset/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -150,58 +134,66 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(-0.75, -0.1, -1);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 3, -3.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
+
+		// Lights.
+
+		scene.add(...Sponza.createLights());
+
+		// Objects.
+
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
-			assets.get("smaa-area")
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
 		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.SKIP });
 
-		const brightnessContrastEffect = new BrightnessContrastEffect({ contrast: 0.25 });
-		const gammaCorrectionEffect = new GammaCorrectionEffect({ gamma: 0.65 });
-		const hueSaturationEffect = new HueSaturationEffect({ saturation: -0.375 });
+		const brightnessContrastEffect = new BrightnessContrastEffect({ blendFunction: BlendFunction.SKIP });
+		const hueSaturationEffect = new HueSaturationEffect({ hue: 0.0, saturation: 0.4 });
 
 		const pass = new EffectPass(camera,
 			smaaEffect,
 			colorAverageEffect,
 			sepiaEffect,
 			brightnessContrastEffect,
-			gammaCorrectionEffect,
 			hueSaturationEffect
 		);
 
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
 		pass.dithering = true;
+		this.pass = pass;
 
 		this.brightnessContrastEffect = brightnessContrastEffect;
 		this.colorAverageEffect = colorAverageEffect;
-		this.gammaCorrectionEffect = gammaCorrectionEffect;
 		this.hueSaturationEffect = hueSaturationEffect;
 		this.sepiaEffect = sepiaEffect;
-
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -219,7 +211,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		const brightnessContrastEffect = this.brightnessContrastEffect;
 		const colorAverageEffect = this.colorAverageEffect;
-		const gammaCorrectionEffect = this.gammaCorrectionEffect;
 		const hueSaturationEffect = this.hueSaturationEffect;
 		const sepiaEffect = this.sepiaEffect;
 
@@ -238,11 +229,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 				"contrast": brightnessContrastEffect.uniforms.get("contrast").value,
 				"opacity": brightnessContrastEffect.blendMode.opacity.value,
 				"blend mode": brightnessContrastEffect.blendMode.blendFunction
-			},
-			gammaCorrection: {
-				"gamma": gammaCorrectionEffect.uniforms.get("gamma").value,
-				"opacity": gammaCorrectionEffect.blendMode.opacity.value,
-				"blend mode": gammaCorrectionEffect.blendMode.blendFunction
 			},
 			hueSaturation: {
 				"hue": 0.0,
@@ -269,7 +255,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		folder = menu.addFolder("Sepia");
 
-		folder.add(params.sepia, "intensity").min(0.0).max(4.0).step(0.001).onChange(() => {
+		folder.add(params.sepia, "intensity").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			sepiaEffect.uniforms.get("intensity").value = params.sepia.intensity;
 
@@ -314,31 +300,6 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			pass.recompile();
 
 		});
-
-		folder.open();
-
-		folder = menu.addFolder("Gamma Correction");
-
-		folder.add(params.gammaCorrection, "gamma").min(0.01).max(1.5).step(0.001).onChange(() => {
-
-			gammaCorrectionEffect.uniforms.get("gamma").value = params.gammaCorrection.gamma;
-
-		});
-
-		folder.add(params.gammaCorrection, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			gammaCorrectionEffect.blendMode.opacity.value = params.gammaCorrection.opacity;
-
-		});
-
-		folder.add(params.gammaCorrection, "blend mode", BlendFunction).onChange(() => {
-
-			gammaCorrectionEffect.blendMode.blendFunction = Number.parseInt(params.gammaCorrection["blend mode"]);
-			pass.recompile();
-
-		});
-
-		folder.open();
 
 		folder = menu.addFolder("Hue & Saturation");
 

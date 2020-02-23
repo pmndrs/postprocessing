@@ -146,7 +146,7 @@ export class SSAOEffect extends Effect {
 
 	get samples() {
 
-		return Number.parseInt(this.defines.get("SAMPLES_INT"));
+		return Number(this.defines.get("SAMPLES_INT"));
 
 	}
 
@@ -177,7 +177,7 @@ export class SSAOEffect extends Effect {
 
 	get rings() {
 
-		return Number.parseInt(this.defines.get("RINGS_INT"));
+		return Number(this.defines.get("RINGS_INT"));
 
 	}
 

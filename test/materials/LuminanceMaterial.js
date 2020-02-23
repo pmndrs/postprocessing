@@ -1,10 +1,8 @@
 import test from "ava";
-import { LuminanceMaterial } from "../../build/postprocessing.js";
+import { LuminanceMaterial } from "../../build/postprocessing.esm.js";
 
 test("can be created", t => {
 
-	const object = new LuminanceMaterial();
-
-	t.truthy(object);
+	t.truthy(new LuminanceMaterial());
 
 });

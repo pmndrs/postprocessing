@@ -1,4 +1,5 @@
 export {
+	ColorChannel,
 	Disposable,
 	Initializable,
 	EffectComposer,
@@ -17,6 +18,7 @@ export {
 	ColorDepthEffect,
 	ChromaticAberrationEffect,
 	DepthEffect,
+	DepthOfFieldEffect,
 	DotScreenEffect,
 	Effect,
 	EffectAttribute,
@@ -52,15 +54,22 @@ export {
 
 export {
 	AdaptiveLuminanceMaterial,
+	BokehMaterial,
+	CircleOfConfusionMaterial,
 	ColorEdgesMaterial,
 	ConvolutionMaterial,
 	CopyMaterial,
 	DepthComparisonMaterial,
 	DepthMaskMaterial,
+	EdgeDetectionMaterial,
+	EdgeDetectionMode,
 	EffectMaterial,
 	GodRaysMaterial,
 	KernelSize,
 	LuminanceMaterial,
+	MaskFunction,
+	MaskMaterial,
+	OutlineMaterial,
 	OutlineEdgesMaterial,
 	SMAAWeightsMaterial
 } from "./materials";

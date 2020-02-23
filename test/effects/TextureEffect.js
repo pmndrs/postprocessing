@@ -1,5 +1,5 @@
 import test from "ava";
-import { TextureEffect } from "../../build/postprocessing.js";
+import { TextureEffect } from "../../build/postprocessing.esm.js";
 
 test("can be created and destroyed", t => {
 

@@ -1,10 +1,8 @@
 import test from "ava";
-import { DepthComparisonMaterial } from "../../build/postprocessing.js";
+import { DepthComparisonMaterial } from "../../build/postprocessing.esm.js";
 
 test("can be created", t => {
 
-	const object = new DepthComparisonMaterial();
-
-	t.truthy(object);
+	t.truthy(new DepthComparisonMaterial());
 
 });

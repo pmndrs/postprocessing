@@ -20,15 +20,14 @@ export class CopyMaterial extends ShaderMaterial {
 			type: "CopyMaterial",
 
 			uniforms: {
-
 				inputBuffer: new Uniform(null),
 				opacity: new Uniform(1.0)
-
 			},
 
 			fragmentShader,
 			vertexShader,
 
+			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 

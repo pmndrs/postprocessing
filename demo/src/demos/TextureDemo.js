@@ -1,18 +1,24 @@
 import {
-	CubeTextureLoader,
+	Color,
 	PerspectiveCamera,
 	RepeatWrapping,
-	TextureLoader
+	sRGBEncoding,
+	TextureLoader,
+	Vector3
 } from "three";
 
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
 	BlendFunction,
+	EdgeDetectionMode,
 	EffectPass,
 	SMAAEffect,
 	SMAAImageLoader,
+	SMAAPreset,
 	TextureEffect
 } from "../../../src";
 
@@ -55,7 +61,7 @@ export class TextureDemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
@@ -63,32 +69,23 @@ export class TextureDemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
 		const textureLoader = new TextureLoader(loadingManager);
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/sunset/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				textureLoader.load("textures/scratches.jpg", (t) => {
 
+					t.encoding = sRGBEncoding;
 					t.wrapS = t.wrapT = RepeatWrapping;
 					assets.set("scratches-color", t);
 
@@ -124,38 +121,53 @@ export class TextureDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-		camera.position.set(-0.75, -0.1, -1);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 3, -3.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
+
+		// Lights.
+
+		scene.add(...Sponza.createLights());
+
+		// Objects.
+
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
 
 		const textureEffect = new TextureEffect({
-			blendFunction: BlendFunction.REFLECT,
+			blendFunction: BlendFunction.COLOR_DODGE,
 			texture: assets.get("scratches-color")
 		});
 
 		textureEffect.blendMode.opacity.value = 0.8;
 
 		const pass = new EffectPass(camera, smaaEffect, textureEffect);
-		this.renderPass.renderToScreen = false;
-		pass.renderToScreen = true;
 
 		this.effect = textureEffect;
 		this.pass = pass;
@@ -193,8 +205,6 @@ export class TextureDemo extends PostProcessingDemo {
 			pass.recompile();
 
 		});
-
-		menu.add(pass, "dithering");
 
 	}
 

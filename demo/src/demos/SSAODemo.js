@@ -1,22 +1,19 @@
-import {
-	CubeTextureLoader,
-	PerspectiveCamera,
-	Vector2,
-	WebGLRenderer
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
-import { CornellBox } from "./objects/CornellBox.js";
 
 import {
 	BlendFunction,
 	DepthEffect,
+	EdgeDetectionMode,
 	EffectPass,
 	NormalPass,
 	SSAOEffect,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -34,15 +31,6 @@ export class SSAODemo extends PostProcessingDemo {
 	constructor(composer) {
 
 		super("ssao", composer);
-
-		/**
-		 * A renderer that uses a shadow map.
-		 *
-		 * @type {WebGLRenderer}
-		 * @private
-		 */
-
-		this.renderer = null;
 
 		/**
 		 * An SSAO effect.
@@ -85,36 +73,26 @@ export class SSAODemo extends PostProcessingDemo {
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/starry/";
-		const format = ".png";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -142,57 +120,37 @@ export class SSAODemo extends PostProcessingDemo {
 		const scene = this.scene;
 		const assets = this.assets;
 		const composer = this.composer;
-
-		// Create a renderer with shadows enabled.
-
-		const renderer = ((renderer) => {
-
-			const size = renderer.getSize(new Vector2());
-			const pixelRatio = renderer.getPixelRatio();
-
-			renderer = new WebGLRenderer({
-				antialias: false
-			});
-
-			renderer.setSize(size.width, size.height);
-			renderer.setPixelRatio(pixelRatio);
-			renderer.shadowMap.enabled = true;
-
-			return renderer;
-
-		})(composer.getRenderer());
-
-		composer.replaceRenderer(renderer);
-		this.renderer = renderer;
+		const renderer = composer.getRenderer();
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
-		camera.position.set(0, 0, 35);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(9.75, 1.72, 0.75);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 1, -1.25);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		scene.add(...CornellBox.createLights());
+		scene.add(...Sponza.createLights());
 
 		// Objects.
 
-		scene.add(CornellBox.createEnvironment());
-		scene.add(CornellBox.createActors());
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
@@ -202,24 +160,31 @@ export class SSAODemo extends PostProcessingDemo {
 			blendFunction: BlendFunction.SKIP
 		});
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.setEdgeDetectionThreshold(0.05);
+
+		// Note: Thresholds and falloff correspond to camera near/far.
 		const ssaoEffect = new SSAOEffect(camera, normalPass.renderTarget.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
 			rings: 4,
-			distanceThreshold: 0.3,	// Render up to a distance of ~300 world units
-			distanceFalloff: 0.02,	// with an additional 20 units of falloff.
-			rangeThreshold: 0.001,
-			rangeFalloff: 0.001,
+			distanceThreshold: 0.02,	// Render up to a distance of ~20 world units
+			distanceFalloff: 0.0025,	// with an additional ~2.5 units of falloff.
+			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
+			rangeFalloff: 0.0001,			// with 0.1 units of falloff.
 			luminanceInfluence: 0.7,
-			radius: 18.25,
+			radius: 30,
 			scale: 1.0,
 			bias: 0.05
 		});
 
 		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);
-		this.renderPass.renderToScreen = false;
-		effectPass.renderToScreen = true;
 
 		this.ssaoEffect = ssaoEffect;
 		this.depthEffect = depthEffect;
@@ -276,7 +241,7 @@ export class SSAODemo extends PostProcessingDemo {
 			effectPass.enabled = (mode === RenderMode.DEFAULT || mode === RenderMode.DEPTH);
 			normalPass.renderToScreen = (mode === RenderMode.NORMALS);
 			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-
+			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
 			effectPass.recompile();
 
 		}
@@ -345,20 +310,6 @@ export class SSAODemo extends PostProcessingDemo {
 			effectPass.recompile();
 
 		});
-
-	}
-
-	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
-	 */
-
-	reset() {
-
-		super.reset();
-
-		this.renderer.dispose();
 
 	}
 

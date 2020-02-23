@@ -13,8 +13,9 @@ export class Initializable {
 	 *
 	 * @param {WebGLRenderer} renderer - A renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
 	 */
 
-	initialize(renderer, alpha) {}
+	initialize(renderer, alpha, frameBufferType) {}
 
 }

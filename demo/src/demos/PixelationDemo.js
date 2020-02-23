@@ -1,26 +1,16 @@
-import {
-	AmbientLight,
-	BoxBufferGeometry,
-	CubeTextureLoader,
-	DirectionalLight,
-	Mesh,
-	MeshPhongMaterial,
-	Object3D,
-	PerspectiveCamera,
-	Scene,
-	SphereBufferGeometry
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
+import { ProgressManager } from "../utils/ProgressManager.js";
+import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
-	ClearMaskPass,
+	EdgeDetectionMode,
 	EffectPass,
-	MaskPass,
 	PixelationEffect,
 	SMAAEffect,
-	SMAAImageLoader
+	SMAAImageLoader,
+	SMAAPreset
 } from "../../../src";
 
 /**
@@ -48,68 +38,31 @@ export class PixelationDemo extends PostProcessingDemo {
 
 		this.effect = null;
 
-		/**
-		 * An object.
-		 *
-		 * @type {Object3D}
-		 * @private
-		 */
-
-		this.object = null;
-
-		/**
-		 * A mask pass.
-		 *
-		 * @type {MaskPass}
-		 * @private
-		 */
-
-		this.maskPass = null;
-
-		/**
-		 * An object used for masking.
-		 *
-		 * @type {Mesh}
-		 * @private
-		 */
-
-		this.maskObject = null;
-
 	}
 
 	/**
 	 * Loads scene assets.
 	 *
-	 * @return {Promise} A promise that will be fulfilled as soon as all assets have been loaded.
+	 * @return {Promise} A promise that returns a collection of assets.
 	 */
 
 	load() {
 
 		const assets = this.assets;
 		const loadingManager = this.loadingManager;
-		const cubeTextureLoader = new CubeTextureLoader(loadingManager);
 		const smaaImageLoader = new SMAAImageLoader(loadingManager);
 
-		const path = "textures/skies/space/";
-		const format = ".jpg";
-		const urls = [
-			path + "px" + format, path + "nx" + format,
-			path + "py" + format, path + "ny" + format,
-			path + "pz" + format, path + "nz" + format
-		];
+		const anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
 
 		return new Promise((resolve, reject) => {
 
 			if(assets.size === 0) {
 
+				loadingManager.onLoad = () => setTimeout(resolve, 250);
+				loadingManager.onProgress = ProgressManager.updateProgress;
 				loadingManager.onError = reject;
-				loadingManager.onLoad = resolve;
 
-				cubeTextureLoader.load(urls, (t) => {
-
-					assets.set("sky", t);
-
-				});
+				Sponza.load(assets, loadingManager, anisotropy);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -141,127 +94,54 @@ export class PixelationDemo extends PostProcessingDemo {
 
 		// Camera.
 
-		const camera = new PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
-		camera.position.set(10, 1, 10);
-		camera.lookAt(scene.position);
+		const aspect = window.innerWidth / window.innerHeight;
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		camera.position.set(-9, 0.5, 0);
 		this.camera = camera;
 
 		// Controls.
 
+		const target = new Vector3(0, 3, -3.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
-		controls.settings.translation.enabled = false;
-		controls.settings.sensitivity.zoom = 1.0;
-		controls.lookAt(scene.position);
+		controls.settings.translation.enabled = true;
+		controls.settings.sensitivity.translation = 3.0;
+		controls.lookAt(target);
+		controls.setOrbitEnabled(false);
 		this.controls = controls;
 
 		// Sky.
 
-		scene.background = assets.get("sky");
+		scene.background = new Color(0xeeeeee);
 
 		// Lights.
 
-		const ambientLight = new AmbientLight(0x666666);
-		const directionalLight = new DirectionalLight(0xffbbaa);
+		scene.add(...Sponza.createLights());
 
-		directionalLight.position.set(-1, 1, 1);
-		directionalLight.target.position.copy(scene.position);
+		// Objects.
 
-		scene.add(directionalLight);
-		scene.add(ambientLight);
-
-		// Random objects.
-
-		const object = new Object3D();
-		const geometry = new SphereBufferGeometry(1, 4, 4);
-
-		let material, mesh;
-		let i;
-
-		for(i = 0; i < 100; ++i) {
-
-			material = new MeshPhongMaterial({
-				color: 0xffffff * Math.random(),
-				flatShading: true
-			});
-
-			mesh = new Mesh(geometry, material);
-			mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-			mesh.position.multiplyScalar(Math.random() * 10);
-			mesh.rotation.set(Math.random() * 2, Math.random() * 2, Math.random() * 2);
-			mesh.scale.multiplyScalar(Math.random());
-			object.add(mesh);
-
-		}
-
-		this.object = object;
-		scene.add(object);
-
-		// Stencil mask scene.
-
-		const maskScene = new Scene();
-
-		mesh = new Mesh(new BoxBufferGeometry(4, 4, 4));
-		this.maskObject = mesh;
-		maskScene.add(mesh);
+		scene.add(assets.get("sponza"));
 
 		// Passes.
 
-		const smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"));
+		const smaaEffect = new SMAAEffect(
+			assets.get("smaa-search"),
+			assets.get("smaa-area"),
+			SMAAPreset.HIGH,
+			EdgeDetectionMode.DEPTH
+		);
+
+		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+
 		const pixelationEffect = new PixelationEffect(5.0);
 
 		const effectPass = new EffectPass(camera, pixelationEffect);
-		const maskPass = new MaskPass(maskScene, camera);
 		const smaaPass = new EffectPass(camera, smaaEffect);
 
-		this.renderPass.renderToScreen = false;
-		smaaPass.renderToScreen = true;
-
-		// The mask pass renders normal geometry and introduces aliasing artifacts.
-		composer.addPass(maskPass);
-		composer.addPass(effectPass);
-		composer.addPass(new ClearMaskPass());
-		composer.addPass(smaaPass);
-
 		this.effect = pixelationEffect;
-		this.maskPass = maskPass;
 
-	}
-
-	/**
-	 * Renders this demo.
-	 *
-	 * @param {Number} delta - The time since the last frame in seconds.
-	 */
-
-	render(delta) {
-
-		const object = this.object;
-		const maskObject = this.maskObject;
-		const twoPI = 2.0 * Math.PI;
-		const time = performance.now() * 0.001;
-
-		object.rotation.x += 0.001;
-		object.rotation.y += 0.005;
-
-		if(object.rotation.x >= twoPI) {
-
-			object.rotation.x -= twoPI;
-
-		}
-
-		if(object.rotation.y >= twoPI) {
-
-			object.rotation.y -= twoPI;
-
-		}
-
-		maskObject.position.x = Math.cos(time / 1.5) * 4;
-		maskObject.position.y = Math.sin(time) * 4;
-		maskObject.rotation.x = time;
-		maskObject.rotation.y = time * 0.5;
-
-		super.render(delta);
+		composer.addPass(smaaPass);
+		composer.addPass(effectPass);
 
 	}
 
@@ -274,22 +154,14 @@ export class PixelationDemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const effect = this.effect;
-		const maskPass = this.maskPass;
 
 		const params = {
-			"use mask": maskPass.enabled,
 			"granularity": effect.getGranularity()
 		};
 
 		menu.add(params, "granularity").min(0.0).max(50.0).step(0.1).onChange(() => {
 
 			effect.setGranularity(params.granularity);
-
-		});
-
-		menu.add(params, "use mask").onChange(() => {
-
-			maskPass.enabled = params["use mask"];
 
 		});
 
