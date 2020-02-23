@@ -36,6 +36,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~bokehmaterial",
+    "class/src/materials/BokehMaterial.js~BokehMaterial.html",
+    "<span>BokehMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~brightnesscontrasteffect",
     "class/src/effects/BrightnessContrastEffect.js~BrightnessContrastEffect.html",
     "<span>BrightnessContrastEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -45,6 +51,12 @@ window.esdocSearchIndex = [
     "postprocessing~chromaticaberrationeffect",
     "class/src/effects/ChromaticAberrationEffect.js~ChromaticAberrationEffect.html",
     "<span>ChromaticAberrationEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~circleofconfusionmaterial",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html",
+    "<span>CircleOfConfusionMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
@@ -64,6 +76,12 @@ window.esdocSearchIndex = [
     "class/src/effects/ColorAverageEffect.js~ColorAverageEffect.html",
     "<span>ColorAverageEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
+  ],
+  [
+    "postprocessing~colorchannel",
+    "variable/index.html#static-variable-ColorChannel",
+    "<span>ColorChannel</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
   ],
   [
     "postprocessing~colordeptheffect",
@@ -108,6 +126,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~depthoffieldeffect",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html",
+    "<span>DepthOfFieldEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~depthpass",
     "class/src/passes/DepthPass.js~DepthPass.html",
     "<span>DepthPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -124,6 +148,18 @@ window.esdocSearchIndex = [
     "class/src/effects/DotScreenEffect.js~DotScreenEffect.html",
     "<span>DotScreenEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
+  ],
+  [
+    "postprocessing~edgedetectionmaterial",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html",
+    "<span>EdgeDetectionMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~edgedetectionmode",
+    "variable/index.html#static-variable-EdgeDetectionMode",
+    "<span>EdgeDetectionMode</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
   ],
   [
     "postprocessing~effect",
@@ -216,6 +252,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~maskfunction",
+    "variable/index.html#static-variable-MaskFunction",
+    "<span>MaskFunction</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "variable"
+  ],
+  [
+    "postprocessing~maskmaterial",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html",
+    "<span>MaskMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~maskpass",
     "class/src/passes/MaskPass.js~MaskPass.html",
     "<span>MaskPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -235,14 +283,20 @@ window.esdocSearchIndex = [
   ],
   [
     "postprocessing~outlineedgesmaterial",
-    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html",
+    "variable/index.html#static-variable-OutlineEdgesMaterial",
     "<span>OutlineEdgesMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
-    "class"
+    "variable"
   ],
   [
     "postprocessing~outlineeffect",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html",
     "<span>OutlineEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~outlinematerial",
+    "class/src/materials/OutlineMaterial.js~OutlineMaterial.html",
+    "<span>OutlineMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
@@ -682,6 +736,12 @@ window.esdocSearchIndex = [
     "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
     "src/.external-ecmascript.js~undefined",
     "external"
+  ],
+  [
+    "src/core/colorchannel.js",
+    "file/src/core/ColorChannel.js.html",
+    "src/core/ColorChannel.js",
+    "file"
   ],
   [
     "src/core/disposable.js",
@@ -1156,6 +1216,84 @@ window.esdocSearchIndex = [
     "class/src/effects/DepthEffect.js~DepthEffect.html#instance-set-inverted",
     "src/effects/DepthEffect.js~DepthEffect#inverted",
     "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js",
+    "file/src/effects/DepthOfFieldEffect.js.html",
+    "src/effects/DepthOfFieldEffect.js",
+    "file"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#blurpass",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-member-blurPass",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#blurPass",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#bokehscale",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-get-bokehScale",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#bokehScale",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#bokehscale",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-set-bokehScale",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#bokehScale",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#calculatefocusdistance",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-method-calculateFocusDistance",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#calculateFocusDistance",
+    "method"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#circleofconfusionmaterial",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-get-circleOfConfusionMaterial",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#circleOfConfusionMaterial",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#constructor",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-constructor-constructor",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#initialize",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-method-initialize",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#initialize",
+    "method"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#resolution",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-get-resolution",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#resolution",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#setdepthtexture",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-method-setDepthTexture",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#setDepthTexture",
+    "method"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#setsize",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-method-setSize",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#target",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-member-target",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#target",
+    "member"
+  ],
+  [
+    "src/effects/depthoffieldeffect.js~depthoffieldeffect#update",
+    "class/src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect.html#instance-method-update",
+    "src/effects/DepthOfFieldEffect.js~DepthOfFieldEffect#update",
+    "method"
   ],
   [
     "src/effects/dotscreeneffect.js",
@@ -1890,6 +2028,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/smaaeffect.js~smaaeffect#attributes",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-attributes",
+    "src/effects/SMAAEffect.js~SMAAEffect#attributes",
+    "member"
+  ],
+  [
     "src/effects/smaaeffect.js~smaaeffect#coloredgesmaterial",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-get-colorEdgesMaterial",
     "src/effects/SMAAEffect.js~SMAAEffect#colorEdgesMaterial",
@@ -1899,6 +2043,24 @@ window.esdocSearchIndex = [
     "src/effects/smaaeffect.js~smaaeffect#constructor",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-constructor-constructor",
     "src/effects/SMAAEffect.js~SMAAEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/smaaeffect.js~smaaeffect#dispose",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-dispose",
+    "src/effects/SMAAEffect.js~SMAAEffect#dispose",
+    "method"
+  ],
+  [
+    "src/effects/smaaeffect.js~smaaeffect#edgedetectionmaterial",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-get-edgeDetectionMaterial",
+    "src/effects/SMAAEffect.js~SMAAEffect#edgeDetectionMaterial",
+    "member"
+  ],
+  [
+    "src/effects/smaaeffect.js~smaaeffect#setdepthtexture",
+    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-method-setDepthTexture",
+    "src/effects/SMAAEffect.js~SMAAEffect#setDepthTexture",
     "method"
   ],
   [
@@ -2172,6 +2334,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/textureeffect.js~textureeffect#texture",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-texture",
+    "src/effects/TextureEffect.js~TextureEffect#texture",
+    "member"
+  ],
+  [
+    "src/effects/textureeffect.js~textureeffect#texture",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-texture",
+    "src/effects/TextureEffect.js~TextureEffect#texture",
+    "member"
+  ],
+  [
     "src/effects/textureeffect.js~textureeffect#vertexshader",
     "class/src/effects/TextureEffect.js~TextureEffect.html#instance-member-vertexShader",
     "src/effects/TextureEffect.js~TextureEffect#vertexShader",
@@ -2424,12 +2598,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/images/smaa/utils/smaaimageloader.js~smaaimageloader#loadingmanager",
-    "class/src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader.html#instance-member-loadingManager",
-    "src/images/smaa/utils/SMAAImageLoader.js~SMAAImageLoader#loadingManager",
-    "member"
-  ],
-  [
     "src/images/smaa/utils/smaasearchimagedata.js",
     "file/src/images/smaa/utils/SMAASearchImageData.js.html",
     "src/images/smaa/utils/SMAASearchImageData.js",
@@ -2464,6 +2632,48 @@ window.esdocSearchIndex = [
     "class/src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial.html#instance-constructor-constructor",
     "src/materials/AdaptiveLuminanceMaterial.js~AdaptiveLuminanceMaterial#constructor",
     "method"
+  ],
+  [
+    "src/materials/bokehmaterial.js",
+    "file/src/materials/BokehMaterial.js.html",
+    "src/materials/BokehMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/bokehmaterial.js~bokehmaterial#constructor",
+    "class/src/materials/BokehMaterial.js~BokehMaterial.html#instance-constructor-constructor",
+    "src/materials/BokehMaterial.js~BokehMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/bokehmaterial.js~bokehmaterial#settexelsize",
+    "class/src/materials/BokehMaterial.js~BokehMaterial.html#instance-method-setTexelSize",
+    "src/materials/BokehMaterial.js~BokehMaterial#setTexelSize",
+    "method"
+  ],
+  [
+    "src/materials/circleofconfusionmaterial.js",
+    "file/src/materials/CircleOfConfusionMaterial.js.html",
+    "src/materials/CircleOfConfusionMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#adoptcamerasettings",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-method-adoptCameraSettings",
+    "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#adoptCameraSettings",
+    "method"
+  ],
+  [
+    "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#constructor",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-constructor-constructor",
+    "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#needsupdate",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-member-needsUpdate",
+    "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#needsUpdate",
+    "member"
   ],
   [
     "src/materials/coloredgesmaterial.js",
@@ -2565,6 +2775,60 @@ window.esdocSearchIndex = [
     "src/materials/depthmaskmaterial.js~depthmaskmaterial#constructor",
     "class/src/materials/DepthMaskMaterial.js~DepthMaskMaterial.html#instance-constructor-constructor",
     "src/materials/DepthMaskMaterial.js~DepthMaskMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js",
+    "file/src/materials/EdgeDetectionMaterial.js.html",
+    "src/materials/EdgeDetectionMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#constructor",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-constructor-constructor",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#depthpacking",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-get-depthPacking",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#depthpacking",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-set-depthPacking",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#fragmentshader",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-member-fragmentShader",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#fragmentShader",
+    "member"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#needsupdate",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-member-needsUpdate",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setedgedetectionmode",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setEdgeDetectionMode",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setEdgeDetectionMode",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setedgedetectionthreshold",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setEdgeDetectionThreshold",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setEdgeDetectionThreshold",
+    "method"
+  ],
+  [
+    "src/materials/edgedetectionmaterial.js~edgedetectionmaterial#setlocalcontrastadaptationfactor",
+    "class/src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial.html#instance-method-setLocalContrastAdaptationFactor",
+    "src/materials/EdgeDetectionMaterial.js~EdgeDetectionMaterial#setLocalContrastAdaptationFactor",
     "method"
   ],
   [
@@ -2772,21 +3036,69 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/materials/outlineedgesmaterial.js",
-    "file/src/materials/OutlineEdgesMaterial.js.html",
-    "src/materials/OutlineEdgesMaterial.js",
+    "src/materials/maskmaterial.js",
+    "file/src/materials/MaskMaterial.js.html",
+    "src/materials/MaskMaterial.js",
     "file"
   ],
   [
-    "src/materials/outlineedgesmaterial.js~outlineedgesmaterial#constructor",
-    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html#instance-constructor-constructor",
-    "src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial#constructor",
+    "src/materials/maskmaterial.js~maskmaterial#colorchannel",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-set-colorChannel",
+    "src/materials/MaskMaterial.js~MaskMaterial#colorChannel",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#constructor",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-constructor-constructor",
+    "src/materials/MaskMaterial.js~MaskMaterial#constructor",
     "method"
   ],
   [
-    "src/materials/outlineedgesmaterial.js~outlineedgesmaterial#settexelsize",
-    "class/src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial.html#instance-method-setTexelSize",
-    "src/materials/OutlineEdgesMaterial.js~OutlineEdgesMaterial#setTexelSize",
+    "src/materials/maskmaterial.js~maskmaterial#inverted",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-get-inverted",
+    "src/materials/MaskMaterial.js~MaskMaterial#inverted",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#inverted",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-set-inverted",
+    "src/materials/MaskMaterial.js~MaskMaterial#inverted",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#maskfunction",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-set-maskFunction",
+    "src/materials/MaskMaterial.js~MaskMaterial#maskFunction",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#masktexture",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-set-maskTexture",
+    "src/materials/MaskMaterial.js~MaskMaterial#maskTexture",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#needsupdate",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-member-needsUpdate",
+    "src/materials/MaskMaterial.js~MaskMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/outlinematerial.js",
+    "file/src/materials/OutlineMaterial.js.html",
+    "src/materials/OutlineMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/outlinematerial.js~outlinematerial#constructor",
+    "class/src/materials/OutlineMaterial.js~OutlineMaterial.html#instance-constructor-constructor",
+    "src/materials/OutlineMaterial.js~OutlineMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/outlinematerial.js~outlinematerial#settexelsize",
+    "class/src/materials/OutlineMaterial.js~OutlineMaterial.html#instance-method-setTexelSize",
+    "src/materials/OutlineMaterial.js~OutlineMaterial#setTexelSize",
     "method"
   ],
   [
@@ -3132,6 +3444,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/effectpass.js~effectpass#encodeoutput",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-get-encodeOutput",
+    "src/passes/EffectPass.js~EffectPass#encodeOutput",
+    "member"
+  ],
+  [
+    "src/passes/effectpass.js~effectpass#encodeoutput",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-set-encodeOutput",
+    "src/passes/EffectPass.js~EffectPass#encodeOutput",
+    "member"
+  ],
+  [
     "src/passes/effectpass.js~effectpass#getdepthtexture",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-getDepthTexture",
     "src/passes/EffectPass.js~EffectPass#getDepthTexture",
@@ -3367,7 +3691,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/pass.js~pass#rendertoscreen",
-    "class/src/passes/Pass.js~Pass.html#instance-member-renderToScreen",
+    "class/src/passes/Pass.js~Pass.html#instance-get-renderToScreen",
+    "src/passes/Pass.js~Pass#renderToScreen",
+    "member"
+  ],
+  [
+    "src/passes/pass.js~pass#rendertoscreen",
+    "class/src/passes/Pass.js~Pass.html#instance-set-renderToScreen",
     "src/passes/Pass.js~Pass#renderToScreen",
     "member"
   ],
@@ -3465,6 +3795,12 @@ window.esdocSearchIndex = [
     "src/passes/savepass.js~savepass#constructor",
     "class/src/passes/SavePass.js~SavePass.html#instance-constructor-constructor",
     "src/passes/SavePass.js~SavePass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/savepass.js~savepass#initialize",
+    "class/src/passes/SavePass.js~SavePass.html#instance-method-initialize",
+    "src/passes/SavePass.js~SavePass#initialize",
     "method"
   ],
   [

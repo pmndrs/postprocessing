@@ -1,16 +1,21 @@
 {
-  "coverage": "95.9%",
-  "expectCount": 611,
-  "actualCount": 586,
+  "coverage": "95.84%",
+  "expectCount": 674,
+  "actualCount": 646,
   "files": {
+    "src/core/ColorChannel.js": {
+      "expectCount": 1,
+      "actualCount": 1,
+      "undocumentLines": []
+    },
     "src/core/Disposable.js": {
       "expectCount": 2,
       "actualCount": 2,
       "undocumentLines": []
     },
     "src/core/EffectComposer.js": {
-      "expectCount": 18,
-      "actualCount": 18,
+      "expectCount": 19,
+      "actualCount": 19,
       "undocumentLines": []
     },
     "src/core/Initializable.js": {
@@ -78,6 +83,11 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/effects/DepthOfFieldEffect.js": {
+      "expectCount": 24,
+      "actualCount": 24,
+      "undocumentLines": []
+    },
     "src/effects/DotScreenEffect.js": {
       "expectCount": 3,
       "actualCount": 3,
@@ -122,8 +132,8 @@
       "expectCount": 42,
       "actualCount": 40,
       "undocumentLines": [
-        76,
-        447
+        77,
+        448
       ]
     },
     "src/effects/PixelationEffect.js": {
@@ -157,9 +167,11 @@
       "undocumentLines": []
     },
     "src/effects/SMAAEffect.js": {
-      "expectCount": 17,
-      "actualCount": 17,
-      "undocumentLines": []
+      "expectCount": 21,
+      "actualCount": 20,
+      "undocumentLines": [
+        109
+      ]
     },
     "src/effects/SSAOEffect.js": {
       "expectCount": 16,
@@ -167,10 +179,10 @@
       "undocumentLines": []
     },
     "src/effects/TextureEffect.js": {
-      "expectCount": 5,
-      "actualCount": 4,
+      "expectCount": 7,
+      "actualCount": 6,
       "undocumentLines": [
-        67
+        91
       ]
     },
     "src/effects/ToneMappingEffect.js": {
@@ -190,17 +202,15 @@
     },
     "src/images/smaa/utils/SMAAAreaImageData.js": {
       "expectCount": 33,
-      "actualCount": 29,
+      "actualCount": 31,
       "undocumentLines": [
-        20,
-        21,
-        71,
-        72
+        84,
+        85
       ]
     },
     "src/images/smaa/utils/SMAAImageLoader.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 5,
+      "actualCount": 5,
       "undocumentLines": []
     },
     "src/images/smaa/utils/SMAASearchImageData.js": {
@@ -213,11 +223,23 @@
       "actualCount": 2,
       "undocumentLines": []
     },
+    "src/materials/BokehMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 4,
+      "undocumentLines": []
+    },
+    "src/materials/CircleOfConfusionMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 3,
+      "undocumentLines": [
+        72
+      ]
+    },
     "src/materials/ColorEdgesMaterial.js": {
       "expectCount": 5,
       "actualCount": 4,
       "undocumentLines": [
-        66
+        63
       ]
     },
     "src/materials/ConvolutionMaterial.js": {
@@ -240,39 +262,54 @@
       "actualCount": 2,
       "undocumentLines": []
     },
+    "src/materials/EdgeDetectionMaterial.js": {
+      "expectCount": 10,
+      "actualCount": 8,
+      "undocumentLines": [
+        80,
+        99
+      ]
+    },
     "src/materials/EffectMaterial.js": {
       "expectCount": 13,
       "actualCount": 10,
       "undocumentLines": [
-        119,
-        123,
-        126
+        103,
+        116,
+        120
       ]
     },
     "src/materials/GodRaysMaterial.js": {
       "expectCount": 5,
       "actualCount": 4,
       "undocumentLines": [
-        90
+        88
       ]
     },
     "src/materials/LuminanceMaterial.js": {
       "expectCount": 17,
       "actualCount": 16,
       "undocumentLines": [
-        136
+        135
       ]
     },
-    "src/materials/OutlineEdgesMaterial.js": {
-      "expectCount": 3,
-      "actualCount": 3,
+    "src/materials/MaskMaterial.js": {
+      "expectCount": 9,
+      "actualCount": 8,
+      "undocumentLines": [
+        69
+      ]
+    },
+    "src/materials/OutlineMaterial.js": {
+      "expectCount": 4,
+      "actualCount": 4,
       "undocumentLines": []
     },
     "src/materials/SMAAWeightsMaterial.js": {
       "expectCount": 10,
       "actualCount": 9,
       "undocumentLines": [
-        84
+        83
       ]
     },
     "src/passes/BlurPass.js": {
@@ -303,11 +340,11 @@
       ]
     },
     "src/passes/EffectPass.js": {
-      "expectCount": 24,
-      "actualCount": 22,
+      "expectCount": 25,
+      "actualCount": 23,
       "undocumentLines": [
-        418,
-        442
+        442,
+        470
       ]
     },
     "src/passes/MaskPass.js": {
@@ -326,8 +363,8 @@
       ]
     },
     "src/passes/Pass.js": {
-      "expectCount": 20,
-      "actualCount": 20,
+      "expectCount": 22,
+      "actualCount": 22,
       "undocumentLines": []
     },
     "src/passes/RenderPass.js": {
@@ -338,8 +375,8 @@
       ]
     },
     "src/passes/SavePass.js": {
-      "expectCount": 7,
-      "actualCount": 6,
+      "expectCount": 8,
+      "actualCount": 7,
       "undocumentLines": [
         24
       ]

@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 370,
+  "end": 462,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 21,
+      "line": 22,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 370,
+    "end": 462,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 21,
+        "line": 22,
         "column": 0
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 119,
-        "end": 368,
+        "end": 460,
         "loc": {
           "start": {
             "line": 9,
             "column": 0
           },
           "end": {
-            "line": 20,
+            "line": 21,
             "column": 1
           }
         },
@@ -47,14 +47,14 @@
         "declaration": {
           "type": "ClassDeclaration",
           "start": 126,
-          "end": 368,
+          "end": 460,
           "loc": {
             "start": {
               "line": 9,
               "column": 7
             },
             "end": {
-              "line": 20,
+              "line": 21,
               "column": 1
             }
           },
@@ -80,45 +80,45 @@
           "body": {
             "type": "ClassBody",
             "start": 146,
-            "end": 368,
+            "end": 460,
             "loc": {
               "start": {
                 "line": 9,
                 "column": 27
               },
               "end": {
-                "line": 20,
+                "line": 21,
                 "column": 1
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 333,
-                "end": 363,
+                "start": 408,
+                "end": 455,
                 "loc": {
                   "start": {
-                    "line": 18,
+                    "line": 19,
                     "column": 1
                   },
                   "end": {
-                    "line": 18,
-                    "column": 31
+                    "line": 19,
+                    "column": 48
                   }
                 },
                 "static": false,
                 "computed": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 333,
-                  "end": 343,
+                  "start": 408,
+                  "end": 418,
                   "loc": {
                     "start": {
-                      "line": 18,
+                      "line": 19,
                       "column": 1
                     },
                     "end": {
-                      "line": 18,
+                      "line": 19,
                       "column": 11
                     },
                     "identifierName": "initialize"
@@ -134,15 +134,15 @@
                 "params": [
                   {
                     "type": "Identifier",
-                    "start": 344,
-                    "end": 352,
+                    "start": 419,
+                    "end": 427,
                     "loc": {
                       "start": {
-                        "line": 18,
+                        "line": 19,
                         "column": 12
                       },
                       "end": {
-                        "line": 18,
+                        "line": 19,
                         "column": 20
                       },
                       "identifierName": "renderer"
@@ -151,34 +151,51 @@
                   },
                   {
                     "type": "Identifier",
-                    "start": 354,
-                    "end": 359,
+                    "start": 429,
+                    "end": 434,
                     "loc": {
                       "start": {
-                        "line": 18,
+                        "line": 19,
                         "column": 22
                       },
                       "end": {
-                        "line": 18,
+                        "line": 19,
                         "column": 27
                       },
                       "identifierName": "alpha"
                     },
                     "name": "alpha"
+                  },
+                  {
+                    "type": "Identifier",
+                    "start": 436,
+                    "end": 451,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 44
+                      },
+                      "identifierName": "frameBufferType"
+                    },
+                    "name": "frameBufferType"
                   }
                 ],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 361,
-                  "end": 363,
+                  "start": 453,
+                  "end": 455,
                   "loc": {
                     "start": {
-                      "line": 18,
-                      "column": 29
+                      "line": 19,
+                      "column": 46
                     },
                     "end": {
-                      "line": 18,
-                      "column": 31
+                      "line": 19,
+                      "column": 48
                     }
                   },
                   "body": [],
@@ -187,16 +204,16 @@
                 "leadingComments": [
                   {
                     "type": "CommentBlock",
-                    "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t ",
+                    "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t * @param {Number} frameBufferType - The type of the main frame buffers.\r\n\t ",
                     "start": 152,
-                    "end": 328,
+                    "end": 403,
                     "loc": {
                       "start": {
                         "line": 11,
                         "column": 1
                       },
                       "end": {
-                        "line": 16,
+                        "line": 17,
                         "column": 4
                       }
                     }
@@ -266,16 +283,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t ",
+      "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t * @param {Number} frameBufferType - The type of the main frame buffers.\r\n\t ",
       "start": 152,
-      "end": 328,
+      "end": 403,
       "loc": {
         "start": {
           "line": 11,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 17,
           "column": 4
         }
       }
@@ -407,16 +424,16 @@
     },
     {
       "type": "CommentBlock",
-      "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t ",
+      "value": "*\r\n\t * Performs initialization tasks.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - A renderer.\r\n\t * @param {Boolean} alpha - Whether the renderer uses the alpha channel.\r\n\t * @param {Number} frameBufferType - The type of the main frame buffers.\r\n\t ",
       "start": 152,
-      "end": 328,
+      "end": 403,
       "loc": {
         "start": {
           "line": 11,
           "column": 1
         },
         "end": {
-          "line": 16,
+          "line": 17,
           "column": 4
         }
       }
@@ -434,15 +451,15 @@
         "binop": null
       },
       "value": "initialize",
-      "start": 333,
-      "end": 343,
+      "start": 408,
+      "end": 418,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 19,
           "column": 1
         },
         "end": {
-          "line": 18,
+          "line": 19,
           "column": 11
         }
       }
@@ -459,15 +476,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 343,
-      "end": 344,
+      "start": 418,
+      "end": 419,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 19,
           "column": 11
         },
         "end": {
-          "line": 18,
+          "line": 19,
           "column": 12
         }
       }
@@ -485,15 +502,15 @@
         "binop": null
       },
       "value": "renderer",
-      "start": 344,
-      "end": 352,
+      "start": 419,
+      "end": 427,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 19,
           "column": 12
         },
         "end": {
-          "line": 18,
+          "line": 19,
           "column": 20
         }
       }
@@ -511,15 +528,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 352,
-      "end": 353,
+      "start": 427,
+      "end": 428,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 19,
           "column": 20
         },
         "end": {
-          "line": 18,
+          "line": 19,
           "column": 21
         }
       }
@@ -537,16 +554,68 @@
         "binop": null
       },
       "value": "alpha",
-      "start": 354,
-      "end": 359,
+      "start": 429,
+      "end": 434,
       "loc": {
         "start": {
-          "line": 18,
+          "line": 19,
           "column": 22
         },
         "end": {
-          "line": 18,
+          "line": 19,
           "column": 27
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ",",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 434,
+      "end": 435,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 27
+        },
+        "end": {
+          "line": 19,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "frameBufferType",
+      "start": 436,
+      "end": 451,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 29
+        },
+        "end": {
+          "line": 19,
+          "column": 44
         }
       }
     },
@@ -562,16 +631,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 359,
-      "end": 360,
+      "start": 451,
+      "end": 452,
       "loc": {
         "start": {
-          "line": 18,
-          "column": 27
+          "line": 19,
+          "column": 44
         },
         "end": {
-          "line": 18,
-          "column": 28
+          "line": 19,
+          "column": 45
         }
       }
     },
@@ -587,16 +656,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 361,
-      "end": 362,
+      "start": 453,
+      "end": 454,
       "loc": {
         "start": {
-          "line": 18,
-          "column": 29
+          "line": 19,
+          "column": 46
         },
         "end": {
-          "line": 18,
-          "column": 30
+          "line": 19,
+          "column": 47
         }
       }
     },
@@ -612,16 +681,16 @@
         "postfix": false,
         "binop": null
       },
-      "start": 362,
-      "end": 363,
+      "start": 454,
+      "end": 455,
       "loc": {
         "start": {
-          "line": 18,
-          "column": 30
+          "line": 19,
+          "column": 47
         },
         "end": {
-          "line": 18,
-          "column": 31
+          "line": 19,
+          "column": 48
         }
       }
     },
@@ -637,15 +706,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 367,
-      "end": 368,
+      "start": 459,
+      "end": 460,
       "loc": {
         "start": {
-          "line": 20,
+          "line": 21,
           "column": 0
         },
         "end": {
-          "line": 20,
+          "line": 21,
           "column": 1
         }
       }
@@ -663,15 +732,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 370,
-      "end": 370,
+      "start": 462,
+      "end": 462,
       "loc": {
         "start": {
-          "line": 21,
+          "line": 22,
           "column": 0
         },
         "end": {
-          "line": 21,
+          "line": 22,
           "column": 0
         }
       }
