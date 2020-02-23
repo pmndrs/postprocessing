@@ -10,5 +10,6 @@ export { EdgeDetectionMaterial, EdgeDetectionMode } from "./EdgeDetectionMateria
 export { EffectMaterial, Section } from "./EffectMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";
 export { LuminanceMaterial } from "./LuminanceMaterial.js";
+export { MaskFunction, MaskMaterial } from "./MaskMaterial.js";
 export { OutlineMaterial, OutlineEdgesMaterial } from "./OutlineMaterial.js";
 export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial.js";

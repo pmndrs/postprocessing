@@ -66,6 +66,8 @@ export {
 	GodRaysMaterial,
 	KernelSize,
 	LuminanceMaterial,
+	MaskFunction,
+	MaskMaterial,
 	OutlineMaterial,
 	OutlineEdgesMaterial,
 	SMAAWeightsMaterial
