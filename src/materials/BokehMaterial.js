@@ -5,30 +5,37 @@ import vertexShader from "./glsl/common/shader.vert";
 
 /**
  * A bokeh blur material.
+ *
+ * This material should be applied twice in a row, with `fill` mode enabled for
+ * the second pass.
  */
 
 export class BokehMaterial extends ShaderMaterial {
 
 	/**
 	 * Constructs a new bokeh material.
+	 *
+	 * @param {Boolean} [fill=false] - Enables or disables the bokeh highlight fill mode.
 	 */
 
-	constructor() {
+	constructor(fill = false) {
 
 		super({
 
 			type: "BokehMaterial",
 
-			uniforms: {
+			defines: {
+				PASS: fill ? "2" : "1"
+			},
 
+			uniforms: {
+				kernel64: new Uniform(new Float32Array(128)),
+				kernel16: new Uniform(new Float32Array(32)),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
-				texelSize: new Uniform(new Vector2()),
 				cocMask: new Uniform(new Vector2()),
-				scale: new Uniform(2.0),
-				kernel64: new Uniform(new Float32Array(128)),
-				kernel16: new Uniform(new Float32Array(32))
-
+				texelSize: new Uniform(new Vector2()),
+				scale: new Uniform(1.0)
 			},
 
 			fragmentShader,
@@ -45,7 +52,7 @@ export class BokehMaterial extends ShaderMaterial {
 	}
 
 	/**
-	 * Generates the blur kernel.
+	 * Generates the blur kernels; one big one and a small one for highlights.
 	 *
 	 * @private
 	 */

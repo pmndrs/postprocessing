@@ -19,38 +19,46 @@ varying vec2 vUv;
 
 void main() {
 
-	vec2 CoCNearFar = min(texture2D(cocBuffer, vUv).rg, cocMask);
-	float CoC = CoCNearFar.r + CoCNearFar.g;
-	vec2 step = texelSize * scale * CoC;
+	vec2 CoCNearFar = texture2D(cocBuffer, vUv).rg;
+	float CoC = dot(CoCNearFar, cocMask) * scale;
 
-	#if PASS == 1
+	if(CoC == 0.0) {
 
-		vec4 acc = vec4(0.0);
+		// Skip blurring.
+		gl_FragColor = texture2D(inputBuffer, vUv);
 
-		for(int i = 0; i < 128; i += 2) {
+	} else {
 
-			vec2 uv = step * vec2(kernel64[i], kernel64[i + 1]) + vUv;
-			vec4 texel = texture2D(inputBuffer, uv);
-			acc += texel;
+		vec2 step = texelSize * CoC;
 
-		}
+		#if PASS == 1
 
-		gl_FragColor = acc / 64.0;
+			vec4 acc = vec4(0.0);
 
-	#else
+			for(int i = 0; i < 128; i += 2) {
 
-		vec4 maxValue = texture2D(inputBuffer, vUv);
+				vec2 uv = step * vec2(kernel64[i], kernel64[i + 1]) + vUv;
+				acc += texture2D(inputBuffer, uv);
 
-		for(int i = 0; i < 32; i += 2) {
+			}
 
-			vec2 uv = step * vec2(kernel16[i], kernel16[i + 1]) + vUv;
-			vec4 texel = texture2D(inputBuffer, uv);
-			maxValue = max(texel, maxValue);
+			gl_FragColor = acc / 64.0;
 
-		}
+		#else
 
-		gl_FragColor = maxValue;
+			vec4 maxValue = texture2D(inputBuffer, vUv);
 
-	#endif
+			for(int i = 0; i < 32; i += 2) {
+
+				vec2 uv = step * vec2(kernel16[i], kernel16[i + 1]) + vUv;
+				maxValue = max(texture2D(inputBuffer, uv), maxValue);
+
+			}
+
+			gl_FragColor = maxValue;
+
+		#endif
+
+	}
 
 }
