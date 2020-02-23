@@ -10,6 +10,7 @@ import {
 	DepthEffect,
 	EdgeDetectionMode,
 	EffectPass,
+	KernelSize,
 	SMAAEffect,
 	SMAAImageLoader,
 	SMAAPreset,
@@ -144,13 +145,13 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 100);
-		camera.position.set(0, 5, 4);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 30);
+		camera.position.set(-2.3684, 0.5964, -1.3052);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(0, 5, -1.25);
+		const target = new Vector3(-1.4265, 0.6513, -1.6365);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
@@ -183,8 +184,10 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		smaaEffect.setEdgeDetectionThreshold(0.05);
 
 		const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
-			focalLength: camera.getFocalLength() / 1000.0,
-			focusDistance: 0.055
+			focusDistance: 0.0,
+			focalLength: 0.048,
+			bokehScale: 2.0,
+			height: 480
 		});
 
 		const depthEffect = new DepthEffect({
@@ -199,11 +202,11 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		const cocTextureEffect = new TextureEffect({
 			blendFunction: BlendFunction.SKIP,
-			texture: depthOfFieldEffect.renderTargetCoCFar.texture
+			texture: depthOfFieldEffect.renderTargetCoC.texture
 		});
 
-		const effectPass0 = new EffectPass(camera, smaaEffect, depthEffect);
-		const effectPass1 = new EffectPass(camera, depthOfFieldEffect, cocTextureEffect, vignetteEffect);
+		const effectPass0 = new EffectPass(camera, depthOfFieldEffect);
+		const effectPass1 = new EffectPass(camera, smaaEffect, vignetteEffect, cocTextureEffect, depthEffect);
 
 		this.depthEffect = depthEffect;
 		this.vignetteEffect = vignetteEffect;
@@ -226,7 +229,6 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const camera = this.camera;
 		const effectPass0 = this.effectPass0;
 		const effectPass1 = this.effectPass1;
 
@@ -245,14 +247,19 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		};
 
 		const params = {
+			"coc": {
+				"edge blur kernel": depthOfFieldEffect.blurPass.kernelSize,
+				"focus": cocMaterial.uniforms.focusDistance.value,
+				"focal length": cocMaterial.uniforms.focalLength.value
+			},
 			"vignette": {
 				"enabled": true,
 				"offset": vignetteEffect.uniforms.get("offset").value,
 				"darkness": vignetteEffect.uniforms.get("darkness").value
 			},
 			"render mode": RenderMode.DEFAULT,
-			"focus": cocMaterial.uniforms.focusDistance.value,
-			"focal length": camera.getFocalLength(),
+			"resolution": depthOfFieldEffect.resolution.height,
+			"bokeh scale": depthOfFieldEffect.bokehScale,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -264,11 +271,8 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			cocTextureEffect.blendMode.blendFunction = (mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			vignetteEffect.blendMode.blendFunction = (mode === RenderMode.DEFAULT && params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-
-			effectPass0.renderToScreen = (mode === RenderMode.DEPTH);
-			effectPass1.enabled = (mode === RenderMode.DEFAULT || mode === RenderMode.COC);
-
 			effectPass1.encodeOutput = (mode === RenderMode.DEFAULT);
+
 			effectPass0.recompile();
 			effectPass1.recompile();
 
@@ -276,22 +280,41 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
 
-		menu.add(effectPass1, "dithering");
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-		menu.add(params, "focus").min(0.0).max(1.0).step(0.0001).onChange(() => {
-
-			cocMaterial.uniforms.focusDistance.value = params.focus;
+			depthOfFieldEffect.resolution.height = Number(params.resolution);
 
 		});
 
-		menu.add(params, "focal length").min(0.0).max(30.0).step(0.01).onChange(() => {
+		menu.add(params, "bokeh scale").min(1.0).max(5.0).step(0.001).onChange(() => {
 
-			// camera.setFocalLength(params["focal length"]);
-			cocMaterial.uniforms.focalLength.value = params["focal length"] / 1000.0;
+			depthOfFieldEffect.bokehScale = params["bokeh scale"];
 
 		});
 
-		let folder = menu.addFolder("Vignette");
+		let folder = menu.addFolder("Circle of Confusion");
+
+		folder.add(params.coc, "edge blur kernel", KernelSize).onChange(() => {
+
+			depthOfFieldEffect.blurPass.kernelSize = Number(params.coc["edge blur kernel"]);
+
+		});
+
+		folder.add(params.coc, "focus").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			cocMaterial.uniforms.focusDistance.value = params.coc.focus;
+
+		});
+
+		folder.add(params.coc, "focal length").min(0.0).max(1.0).step(0.0001).onChange(() => {
+
+			cocMaterial.uniforms.focalLength.value = params.coc["focal length"];
+
+		});
+
+		folder.open();
+
+		folder = menu.addFolder("Vignette");
 
 		folder.add(params.vignette, "enabled").onChange(() => {
 
@@ -300,7 +323,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(vignetteEffect, "eskil").onChange(() => effectPass1.recompile());
+		folder.add(vignetteEffect, "eskil").onChange(() => effectPass0.recompile());
 
 		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -323,7 +346,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
 			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			effectPass1.recompile();
+			effectPass0.recompile();
 
 		});
 
