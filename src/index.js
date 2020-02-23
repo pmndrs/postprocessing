@@ -1,4 +1,5 @@
 export {
+	ColorChannel,
 	Disposable,
 	Initializable,
 	EffectComposer,

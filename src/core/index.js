@@ -1,3 +1,4 @@
+export { ColorChannel } from "./ColorChannel.js";
 export { Disposable } from "./Disposable.js";
 export { Initializable } from "./Initializable.js";
 export { EffectComposer } from "./EffectComposer.js";
