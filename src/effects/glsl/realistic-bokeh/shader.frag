@@ -98,8 +98,16 @@ float gather(const in float i, const in float j, const in float ringSamples,
 
 void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
-	// Translate depth into world space units.
-	float linearDepth = (-cameraFar * cameraNear / (depth * (cameraFar - cameraNear) - cameraFar));
+	#ifdef PERSPECTIVE_CAMERA
+
+		float viewZ = perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+	#else
+
+		float linearDepth = depth;
+
+	#endif
 
 	#ifdef MANUAL_DOF
 

@@ -7,14 +7,25 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 
 	vec2 aspectCorrection = vec2(1.0, aspect);
 
+	#ifdef PERSPECTIVE_CAMERA
+
+		float viewZ = perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+
+	#else
+
+		float linearDepth = depth;
+
+	#endif
+
 	float focusNear = clamp(focus - dof, 0.0, 1.0);
 	float focusFar = clamp(focus + dof, 0.0, 1.0);
 
 	// Calculate a DoF mask.
-	float low = step(depth, focusNear);
-	float high = step(focusFar, depth);
+	float low = step(linearDepth, focusNear);
+	float high = step(focusFar, linearDepth);
 
-	float factor = (depth - focusNear) * low + (depth - focusFar) * high;
+	float factor = (linearDepth - focusNear) * low + (linearDepth - focusFar) * high;
 	vec2 dofBlur = vec2(clamp(factor * aperture, -maxBlur, maxBlur));
 
 	vec2 dofblur9 = dofBlur * 0.9;
