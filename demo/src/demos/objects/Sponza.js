@@ -45,7 +45,7 @@ function load(assets, manager, anisotropy) {
 	const gltfLoader = new GLTFLoader(manager);
 
 	const sponzaURL = (window.location.hostname !== "localhost") ?
-		"https://cdn.jsdelivr.net/gh/vanruesc/postprocessing@latest/public/models/sponza/scene.gltf" :
+		"https://gitcdn.xyz/repo/vanruesc/postprocessing/master/public/demo/models/sponza/scene.gltf" :
 		"models/sponza/scene.gltf";
 
 	gltfLoader.load(sponzaURL, (gltf) => {
