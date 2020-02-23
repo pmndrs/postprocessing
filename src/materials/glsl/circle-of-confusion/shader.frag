@@ -24,27 +24,14 @@ float readDepth(const in vec2 uv) {
 
 }
 
-float getViewZ(const in float depth) {
-
-	#ifdef PERSPECTIVE_CAMERA
-
-		return perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
-
-	#else
-
-		return orthographicDepthToViewZ(depth, cameraNear, cameraFar);
-
-	#endif
-
-}
-
 void main() {
 
 	float depth = readDepth(vUv);
 
 	#ifdef PERSPECTIVE_CAMERA
 
-		float linearDepth = viewZToOrthographicDepth(getViewZ(depth), cameraNear, cameraFar);
+		float viewZ = perspectiveDepthToViewZ(depth, cameraNear, cameraFar);
+		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
 
 	#else
 
