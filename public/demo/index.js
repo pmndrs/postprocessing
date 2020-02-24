@@ -45139,7 +45139,7 @@
           effectPass1.recompile();
         });
         folder.add(vignetteEffect, "eskil").onChange(function () {
-          return effectPass0.recompile();
+          return effectPass1.recompile();
         });
         folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(function () {
           vignetteEffect.uniforms.get("offset").value = params.vignette.offset;
