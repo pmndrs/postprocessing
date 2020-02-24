@@ -323,7 +323,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		});
 
-		folder.add(vignetteEffect, "eskil").onChange(() => effectPass0.recompile());
+		folder.add(vignetteEffect, "eskil").onChange(() => effectPass1.recompile());
 
 		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(() => {
 
