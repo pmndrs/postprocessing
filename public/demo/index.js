@@ -44647,7 +44647,7 @@
 
   function load$1(assets, manager, anisotropy) {
     var gltfLoader = new GLTFLoader(manager);
-    var sponzaURL = window.location.hostname !== "localhost" ? "https://gitcdn.xyz/repo/vanruesc/postprocessing/master/public/demo/models/sponza/scene.gltf" : "models/sponza/scene.gltf";
+    var sponzaURL = "models/sponza/scene.gltf";
     gltfLoader.load(sponzaURL, function (gltf) {
       gltf.scene.traverse(function (object) {
         if (object.isMesh) {
