@@ -27,14 +27,13 @@ Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/mast
 import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
 
-const clock = new Clock();
 const composer = new EffectComposer(new WebGLRenderer());
 const camera = new PerspectiveCamera();
 const scene = new Scene();
+const clock = new Clock();
 
-const effectPass = new EffectPass(camera, new BloomEffect());
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(effectPass);
+composer.addPass(new EffectPass(camera, new BloomEffect()));
 
 (function render() {
 
@@ -72,12 +71,12 @@ _The total demo download size is about `60 MB`._
 
  - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
  - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
+ - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)
  - [Color Grading](http://vanruesc.github.io/postprocessing/public/demo/#color-grading)
    - Color Average
    - Sepia
    - Brightness & Contrast
    - Hue & Saturation
- - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)
  - [Depth of Field](http://vanruesc.github.io/postprocessing/public/demo/#depth-of-field)
    - Vignette
  - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
