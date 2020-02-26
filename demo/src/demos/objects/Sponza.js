@@ -43,10 +43,7 @@ function createLights(shadowCameraHelper) {
 function load(assets, manager, anisotropy) {
 
 	const gltfLoader = new GLTFLoader(manager);
-
-	const sponzaURL = (window.location.hostname !== "localhost") ?
-		"https://gitcdn.xyz/repo/vanruesc/postprocessing/master/public/demo/models/sponza/scene.gltf" :
-		"models/sponza/scene.gltf";
+	const sponzaURL = "models/sponza/scene.gltf";
 
 	gltfLoader.load(sponzaURL, (gltf) => {
 
