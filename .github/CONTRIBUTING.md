@@ -8,7 +8,7 @@ Thank you for considering to contribute! :speech_balloon:
 1. Search the issue tracker for similar bug reports before submitting a new one.
 2. Specify the version of the library where the bug occurred.
 3. Specify your browser version, operating system, and graphics card  
-   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 7 (64-bit), NVIDIA GTX 1050`).
+   (e.g. `Chrome 0.0.0.0 (64-bit), Windows 10 (64-bit), NVIDIA GTX 1050`).
 4. Describe the problem in detail. Explain what happened, and what you expected would happen.
 5. Provide a minimal test case (http://jsfiddle.net) or a link to a live version of your application.
 6. If helpful, include a screenshot. Annotate the screenshot for clarity.
@@ -17,15 +17,15 @@ Thank you for considering to contribute! :speech_balloon:
 ## Pull Request Process :sparkles:
 
 When contributing to this repository, please first discuss the change you wish to make with the owners of this repository via the issue tracker.
-A proposed change should be focused and concise.
+A proposed change should be focused and concise. Please adhere to the following guideline:
 
 __Do not include generated build files in your commits.__
 
-1. Create a feature branch.
-2. Implement your patch or feature on that branch. Maintain the existing coding style.
-3. Lint and test your changes.
+1. Create a feature branch based on the `dev` branch.
+2. Implement your patch or feature on that branch.
+3. Lint and test your changes. Maintain the existing coding style.
 3. Add unit tests for any new or changed functionality.
-3. Navigate to your fork on Github, select your feature branch and create a new Pull Request.
+3. Navigate to your fork on Github, select your feature branch and create a new Pull Request targeting the `dev` branch.
 4. Once your PR has been merged, you can safely remove your feature-branch.
 
 
@@ -34,13 +34,11 @@ __Do not include generated build files in your commits.__
 This project contains scripts that will help you during development. All scripts can be executed with `npm run [script]`.
 The following table provides an overview of the most important scripts:
 
-| Task  | Description                                    |
-|-------|------------------------------------------------|
-| lint  | Checks source files for syntax errors          |
-| build | Builds the demo bundle                         |
-| watch | Builds the demo bundle and listens for changes |
-| ava   | Runs unit tests                                |
-| test  | Generates the final bundles                    |
+| Task  | Description                                     |
+|-------|-------------------------------------------------|
+| build | Builds the demo bundle.                         |
+| watch | Builds the demo bundle and listens for changes. |
+| test  | Generates production bundles and runs tests.    |
 
 __Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process. The `test` script does this automatically.
 
@@ -71,5 +69,5 @@ Git will guide you through the process of resolving conflicts.
 This operation is similar to merging, except you're in fact rewriting your local history.
 After rebasing, you'll need to use `git push --force my-feature`.
 
-You can add more commits to your feature branch after you created the PR.
+You can add more commits to your feature branch after you created the Pull Request.
 This means that you can change things later if necessary.

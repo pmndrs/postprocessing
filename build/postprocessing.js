@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.11.0 build Mon Feb 24 2020
+ * postprocessing v6.12.0 build Mon Mar 02 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -2791,6 +2791,8 @@
         var alpha = renderer.getContext().getContextAttributes().alpha;
         var frameBufferType = this.inputBuffer.texture.type;
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
+        pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
+        pass.initialize(renderer, alpha, frameBufferType);
 
         if (this.autoRenderToScreen) {
           if (passes.length > 0) {
@@ -2799,18 +2801,17 @@
 
           if (pass.renderToScreen) {
             this.autoRenderToScreen = false;
-          } else {
-            pass.renderToScreen = true;
           }
         }
-
-        pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-        pass.initialize(renderer, alpha, frameBufferType);
 
         if (index !== undefined) {
           passes.splice(index, 0, pass);
         } else {
           passes.push(pass);
+        }
+
+        if (this.autoRenderToScreen) {
+          passes[passes.length - 1].renderToScreen = true;
         }
 
         if (pass.needsDepthTexture || this.depthTexture !== null) {

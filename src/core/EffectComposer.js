@@ -252,6 +252,9 @@ export class EffectComposer {
 		const frameBufferType = this.inputBuffer.texture.type;
 		const drawingBufferSize = renderer.getDrawingBufferSize(new Vector2());
 
+		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
+		pass.initialize(renderer, alpha, frameBufferType);
+
 		if(this.autoRenderToScreen) {
 
 			if(passes.length > 0) {
@@ -264,16 +267,9 @@ export class EffectComposer {
 
 				this.autoRenderToScreen = false;
 
-			} else {
-
-				pass.renderToScreen = true;
-
 			}
 
 		}
-
-		pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
-		pass.initialize(renderer, alpha, frameBufferType);
 
 		if(index !== undefined) {
 
@@ -282,6 +278,12 @@ export class EffectComposer {
 		} else {
 
 			passes.push(pass);
+
+		}
+
+		if(this.autoRenderToScreen) {
+
+			passes[passes.length - 1].renderToScreen = true;
 
 		}
 
