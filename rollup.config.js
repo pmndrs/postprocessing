@@ -17,6 +17,7 @@ const banner = `/**
  */`;
 
 const production = (process.env.NODE_ENV === "production");
+const include = ["src/**/*.js", "demo/**/*.js"];
 const external = Object.keys(pkg.peerDependencies);
 const globals = Object.assign({}, ...external.map((value) => ({
 	[value]: value.replace(/-/g, "").toUpperCase()
@@ -38,9 +39,7 @@ const lib = {
 	module: {
 		input: "src/index.js",
 		external,
-		plugins: [resolve(), eslint({
-			include: ["src/**/*.js", "demo/**/*.js"]
-		}), glsl({
+		plugins: [resolve(), eslint({ include }), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -95,9 +94,7 @@ const demo = {
 
 	module: {
 		input: "demo/src/index.js",
-		plugins: [resolve(), commonjs(), eslint({
-			include: ["src/**/*.js", "demo/**/*.js"]
-		}), glsl({
+		plugins: [resolve(), commonjs(), eslint({ include }), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: production,
 			sourceMap: false
@@ -115,9 +112,7 @@ const demo = {
 
 	main: {
 		input: production ? "public/demo/index.js" : "demo/src/index.js",
-		plugins: production ? [babel()] : [resolve(), commonjs(), eslint({
-			include: ["src/**/*.js", "demo/**/*.js"]
-		}), glsl({
+		plugins: production ? [babel()] : [resolve(), commonjs(), eslint({ include }), glsl({
 			include: ["**/*.frag", "**/*.vert"],
 			compress: false,
 			sourceMap: false
