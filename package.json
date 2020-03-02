@@ -41,16 +41,11 @@
 	],
 	"scripts": {
 		"ava": "ava",
-		"lint": "npm run lint:lib && npm run lint:demo && npm run lint:test",
-		"lint:config": "eslint *.js",
-		"lint:lib": "eslint src",
-		"lint:demo": "eslint demo/src",
-		"lint:test": "eslint test",
 		"build": "rollup -c",
 		"build:production": "cross-env NODE_ENV=production npm run build",
 		"watch": "rollup -c -w",
 		"doc": "rimraf public/docs && esdoc",
-		"pretest": "npm run lint && npm run build:production",
+		"pretest": "npm run build:production",
 		"test": "ava",
 		"prepack": "npm test && npm run doc"
 	},
@@ -67,7 +62,7 @@
 		"extends": "delta"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.114.0"
+		"three": ">= 0.102.0 < 0.115.0"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
@@ -81,7 +76,6 @@
 		"esdoc": "1.x.x",
 		"esdoc-importpath-plugin": "1.x.x",
 		"esdoc-standard-plugin": "1.x.x",
-		"eslint": "6.x.x",
 		"eslint-config-delta": "1.x.x",
 		"esm": "3.x.x",
 		"math-ds": "1.x.x",
@@ -93,7 +87,7 @@
 		"rollup-plugin-string": "3.x.x",
 		"rollup-plugin-terser": "5.x.x",
 		"synthetic-event": "1.x.x",
-		"three": "0.113.x",
+		"three": "0.114.x",
 		"three-demo": "3.x.x"
 	}
 }
