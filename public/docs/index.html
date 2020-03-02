@@ -122,14 +122,13 @@
 <pre><code class="lang-js"><code class="source-code prettyprint">import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from &quot;three&quot;;
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from &quot;postprocessing&quot;;
 
-const clock = new Clock();
 const composer = new EffectComposer(new WebGLRenderer());
 const camera = new PerspectiveCamera();
 const scene = new Scene();
+const clock = new Clock();
 
-const effectPass = new EffectPass(camera, new BloomEffect());
 composer.addPass(new RenderPass(scene, camera));
-composer.addPass(effectPass);
+composer.addPass(new EffectPass(camera, new BloomEffect()));
 
 (function render() {
 
@@ -152,6 +151,7 @@ const composer = new EffectComposer(renderer, {
 <ul>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bloom">Bloom</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#blur">Blur</a></li>
+<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-depth">Color Depth</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-grading">Color Grading</a><ul>
 <li>Color Average</li>
 <li>Sepia</li>
@@ -159,7 +159,6 @@ const composer = new EffectComposer(renderer, {
 <li>Hue &amp; Saturation</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-depth">Color Depth</a></li>
 <li><a href="http://vanruesc.github.io/postprocessing/public/demo/#depth-of-field">Depth of Field</a><ul>
 <li>Vignette</li>
 </ul>
