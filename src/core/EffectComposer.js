@@ -4,6 +4,7 @@ import {
 	LinearFilter,
 	RGBAFormat,
 	RGBFormat,
+	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
 	WebGLRenderTarget
@@ -196,6 +197,10 @@ export class EffectComposer {
 
 			depthTexture.format = DepthStencilFormat;
 			depthTexture.type = UnsignedInt248Type;
+
+		} else {
+
+			depthTexture.type = UnsignedIntType;
 
 		}
 
