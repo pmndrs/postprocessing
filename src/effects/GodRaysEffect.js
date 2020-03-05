@@ -8,6 +8,7 @@ import {
 	Uniform,
 	Vector2,
 	Vector3,
+	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
@@ -592,7 +593,7 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTargetA.texture.format = RGBFormat;
 			this.renderTargetB.texture.format = RGBFormat;

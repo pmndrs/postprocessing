@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { Resizer } from "../core";
 import { KernelSize, LuminanceMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
@@ -335,7 +335,7 @@ export class BloomEffect extends Effect {
 
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTarget.texture.format = RGBFormat;
 

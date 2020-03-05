@@ -215,6 +215,9 @@ export class EffectComposer {
 	 * magnification. Its render texture format depends on whether the renderer
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
+	 * Note: The buffer format will also be set to RGBA if the frame buffer type
+	 * is not UnsignedByteType because RGBXXF buffers are not renderable.
+	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
@@ -227,7 +230,7 @@ export class EffectComposer {
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-			format: alpha ? RGBAFormat : RGBFormat,
+			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,

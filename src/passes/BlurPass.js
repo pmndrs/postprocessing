@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ConvolutionMaterial, KernelSize } from "../materials";
 import { Resizer } from "../core/Resizer.js";
 import { Pass } from "./Pass.js";
@@ -332,7 +332,7 @@ export class BlurPass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTargetA.texture.format = RGBFormat;
 			this.renderTargetB.texture.format = RGBFormat;
