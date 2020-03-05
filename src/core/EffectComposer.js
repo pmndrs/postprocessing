@@ -4,6 +4,7 @@ import {
 	LinearFilter,
 	RGBAFormat,
 	RGBFormat,
+	UnsignedByteType,
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
@@ -75,6 +76,7 @@ export class EffectComposer {
 			this.renderer.autoClear = false;
 			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
 			this.outputBuffer = this.inputBuffer.clone();
+			this.enableExtensions();
 
 		}
 
@@ -132,6 +134,34 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Explicitly enables required WebGL extensions.
+	 *
+	 * @private
+	 */
+
+	enableExtensions() {
+
+		const frameBufferType = this.inputBuffer.texture.type;
+		const capabilities = this.renderer.capabilities;
+		const context = this.renderer.getContext();
+
+		if(frameBufferType !== UnsignedByteType) {
+
+			if(capabilities.isWebGL2) {
+
+				context.getExtension("EXT_color_buffer_float");
+
+			} else {
+
+				context.getExtension("EXT_color_buffer_half_float");
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Replaces the current renderer with the given one.
 	 *
 	 * The auto clear mechanism of the provided renderer will be disabled. If the
@@ -171,6 +201,8 @@ export class EffectComposer {
 				parent.appendChild(renderer.domElement);
 
 			}
+
+			this.enableExtensions();
 
 		}
 
