@@ -108,6 +108,12 @@ export class TextureEffect extends Effect {
 
 		if(value) {
 
+			if(this.uvTransform) {
+
+				this.uvTransform = false;
+
+			}
+
 			this.defines.set("ASPECT_CORRECTION", "1");
 			this.uniforms.set("scale", new Uniform(1.0));
 			this.vertexShader = vertexShader;
@@ -117,6 +123,74 @@ export class TextureEffect extends Effect {
 			this.defines.delete("ASPECT_CORRECTION");
 			this.uniforms.delete("scale");
 			this.vertexShader = null;
+
+		}
+
+	}
+
+	/**
+	 * Indicates whether the texture UV coordinates will be transformed using the
+	 * transformation matrix of the texture.
+	 *
+	 * Cannot be used if aspect correction is enabled.
+	 *
+	 * @type {Number}
+	 */
+
+	get uvTransform() {
+
+		return this.defines.has("UV_TRANSFORM");
+
+	}
+
+	/**
+	 * Enables or disables texture UV transformation.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 *
+	 * @type {Number}
+	 */
+
+	set uvTransform(value) {
+
+		if(value) {
+
+			if(this.aspectCorrection) {
+
+				this.aspectCorrection = false;
+
+			}
+
+			this.defines.set("UV_TRANSFORM", "1");
+			this.uniforms.set("uvTransform", new Uniform(new Matrix3()));
+			this.vertexShader = vertexShader;
+
+		} else {
+
+			this.defines.delete("UV_TRANSFORM");
+			this.uniforms.delete("uvTransform");
+			this.vertexShader = null;
+
+		}
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, deltaTime) {
+
+		const texture = this.uniforms.get("texture").value;
+
+		if(this.uvTransform && texture.matrixAutoUpdate) {
+
+			texture.updateMatrix();
+			this.uniforms.get("uvTransform").value.copy(texture.matrix);
 
 		}
 
