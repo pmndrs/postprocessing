@@ -346,7 +346,7 @@ export class OutlineDemo extends PostProcessingDemo {
 			EdgeDetectionMode.COLOR
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const outlineEffect = new OutlineEffect(scene, camera, {
 			blendFunction: BlendFunction.SCREEN,

@@ -158,14 +158,12 @@ export class TextureDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const textureEffect = new TextureEffect({
 			blendFunction: BlendFunction.COLOR_DODGE,
 			texture: assets.get("scratches-color")
 		});
-
-		textureEffect.blendMode.opacity.value = 0.8;
 
 		const pass = new EffectPass(camera, smaaEffect, textureEffect);
 
@@ -188,10 +186,39 @@ export class TextureDemo extends PostProcessingDemo {
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 
+		const offset = effect.texture.offset;
+		const repeat = effect.texture.repeat;
+		const center = effect.texture.center;
+
 		const params = {
+			"uv": {
+				"enabled": effect.uvTransform
+			},
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
+
+		const folder = menu.addFolder("UV Transformation");
+		folder.add(params.uv, "enabled").onChange(() => {
+
+			effect.uvTransform = params.uv.enabled;
+			pass.recompile();
+
+		});
+
+		folder.open();
+
+		let subFolder = folder.addFolder("Offset");
+		subFolder.add(offset, "x").min(0.0).max(1.0).step(0.001);
+		subFolder.add(offset, "y").min(0.0).max(1.0).step(0.001);
+
+		subFolder = folder.addFolder("Repeat");
+		subFolder.add(repeat, "x").min(0.0).max(2.0).step(0.001);
+		subFolder.add(repeat, "y").min(0.0).max(2.0).step(0.001);
+
+		subFolder = folder.addFolder("Center");
+		subFolder.add(center, "x").min(0.0).max(1.0).step(0.001);
+		subFolder.add(center, "y").min(0.0).max(1.0).step(0.001);
 
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 

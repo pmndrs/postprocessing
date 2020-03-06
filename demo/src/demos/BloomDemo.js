@@ -323,7 +323,7 @@ export class BloomDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bloomOptions = {
 			blendFunction: BlendFunction.SCREEN,
@@ -412,7 +412,8 @@ export class BloomDemo extends PostProcessingDemo {
 		const params = {
 			"resolution": effectA.resolution.height,
 			"kernel size": effectA.blurPass.kernelSize,
-			"scale": effectA.blurPass.scale,
+			"blur scale": effectA.blurPass.scale,
+			"intensity": effectA.intensity,
 			"luminance": {
 				"filter": effectA.luminancePass.enabled,
 				"threshold": effectA.luminanceMaterial.threshold,
@@ -439,9 +440,15 @@ export class BloomDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(() => {
+		menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange(() => {
 
-			effectA.blurPass.scale = effectB.blurPass.scale = Number(params.scale);
+			effectA.blurPass.scale = effectB.blurPass.scale = Number(params["blur scale"]);
+
+		});
+
+		menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(() => {
+
+			effectA.intensity = effectB.intensity = Number(params.intensity);
 
 		});
 

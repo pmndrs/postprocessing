@@ -141,7 +141,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
 		const pass = new EffectPass(camera, smaaEffect, colorDepthEffect);

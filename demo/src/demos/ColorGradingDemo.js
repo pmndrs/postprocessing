@@ -171,7 +171,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const colorAverageEffect = new ColorAverageEffect(BlendFunction.SKIP);
 		const sepiaEffect = new SepiaEffect({ blendFunction: BlendFunction.SKIP });
