@@ -138,9 +138,10 @@ function integrateEffect(prefix, effect, shaderParts, blendModes, defines, unifo
 
 		}
 
+		// Assemble all names while ignoring parameters of function-like macros.
 		names = names.concat(findSubstrings(functionRegExp, shaders.get("fragment")))
-			.concat(Array.from(effect.uniforms.keys()))
-			.concat(Array.from(effect.defines.keys()));
+			.concat(Array.from(effect.defines.keys()).map((s) => s.replace(/\([\w\s,]*\)/g, "")))
+			.concat(Array.from(effect.uniforms.keys()));
 
 		// Store prefixed uniforms and macros.
 		effect.uniforms.forEach((value, key) => uniforms.set(prefix + key.charAt(0).toUpperCase() + key.slice(1), value));
