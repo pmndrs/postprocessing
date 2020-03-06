@@ -5,7 +5,7 @@ import { BlurPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
-import fragmentShader from "./glsl/texture/shader.frag";
+import fragmentShader from "./glsl/bloom/shader.frag";
 
 /**
  * A bloom effect.
@@ -24,6 +24,7 @@ export class BloomEffect extends Effect {
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
+	 * @param {Number} [options.intensity=1.0] - The intensity.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
@@ -34,6 +35,7 @@ export class BloomEffect extends Effect {
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
 		resolutionScale = 0.5,
+		intensity = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
@@ -44,7 +46,8 @@ export class BloomEffect extends Effect {
 			blendFunction,
 
 			uniforms: new Map([
-				["texture", new Uniform(null)]
+				["texture", new Uniform(null)],
+				["intensity", new Uniform(intensity)]
 			])
 
 		});
@@ -254,6 +257,30 @@ export class BloomEffect extends Effect {
 	set distinction(value) {
 
 		console.warn(this.name, "The distinction field has been removed, use luminanceMaterial.threshold and luminanceMaterial.smoothing instead.");
+
+	}
+
+	/**
+	 * The bloom intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get intensity() {
+
+		return this.uniforms.get("intensity").value;
+
+	}
+
+	/**
+	 * Sets the bloom intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	set intensity(value) {
+
+		this.uniforms.get("intensity").value = value;
 
 	}
 
