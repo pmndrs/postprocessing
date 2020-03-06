@@ -17,7 +17,7 @@ export class TextureEffect extends Effect {
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.NORMAL] - The blend function of this effect.
 	 * @param {Texture} [options.texture] - A texture.
-	 * @param {Boolean} [options.aspectCorrection=false] - Whether the texture coordinates should be affected by the aspect ratio.
+	 * @param {Boolean} [options.aspectCorrection=false] - Deprecated. Enable uvTransform instead and adjust the texture's offset, repeat and center.
 	 */
 
 	constructor({ blendFunction = BlendFunction.NORMAL, texture = null, aspectCorrection = false } = {}) {
@@ -87,7 +87,8 @@ export class TextureEffect extends Effect {
 	 *
 	 * If enabled, the texture can be scaled using the `scale` uniform.
 	 *
-	 * @type {Boolean}
+	 * @type {Number}
+	 * @deprecated Use uvTransform instead for full control over the texture coordinates.
 	 */
 
 	get aspectCorrection() {
@@ -101,7 +102,8 @@ export class TextureEffect extends Effect {
 	 *
 	 * You'll need to call {@link EffectPass#recompile} after changing this value.
 	 *
-	 * @type {Boolean}
+	 * @type {Number}
+	 * @deprecated Use uvTransform instead for full control over the texture coordinates.
 	 */
 
 	set aspectCorrection(value) {
