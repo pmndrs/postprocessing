@@ -18,7 +18,7 @@ import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragmentShader from "./glsl/texture/shader.frag";
+import fragmentShader from "./glsl/god-rays/shader.frag";
 
 /**
  * A vector.
