@@ -110,7 +110,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/passes/SavePass.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, WebGLRenderTarget } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from &quot;three&quot;;
 import { CopyMaterial } from &quot;../materials&quot;;
 import { Pass } from &quot;./Pass.js&quot;;
 
@@ -215,7 +215,7 @@ export class SavePass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		if(!alpha) {
+		if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) {
 
 			this.renderTarget.texture.format = RGBFormat;
 

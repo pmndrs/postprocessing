@@ -289,7 +289,7 @@ export class PerformanceDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const bloomEffect = new BloomEffect({
 			blendFunction: BlendFunction.ADD,

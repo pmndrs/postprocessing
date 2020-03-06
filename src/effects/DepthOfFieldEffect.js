@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from "three";
 import { ColorChannel, Resizer } from "../core";
 import { BokehMaterial, CircleOfConfusionMaterial, KernelSize, MaskFunction, MaskMaterial } from "../materials";
 import { BlurPass, ShaderPass } from "../passes";
@@ -396,7 +396,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.bokehBasePass.initialize(renderer, alpha, frameBufferType);
 		this.bokehFillPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTargetNear.texture.format = RGBFormat;
 

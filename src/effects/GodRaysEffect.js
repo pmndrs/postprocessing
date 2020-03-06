@@ -8,6 +8,7 @@ import {
 	Uniform,
 	Vector2,
 	Vector3,
+	UnsignedByteType,
 	WebGLRenderTarget
 } from "three";
 
@@ -17,7 +18,7 @@ import { BlurPass, ClearPass, RenderPass, ShaderPass } from "../passes";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect, EffectAttribute } from "./Effect.js";
 
-import fragmentShader from "./glsl/texture/shader.frag";
+import fragmentShader from "./glsl/god-rays/shader.frag";
 
 /**
  * A vector.
@@ -592,7 +593,7 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass.initialize(renderer, alpha, frameBufferType);
 		this.godRaysPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTargetA.texture.format = RGBFormat;
 			this.renderTargetB.texture.format = RGBFormat;

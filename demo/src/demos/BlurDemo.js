@@ -12,7 +12,6 @@ import { SphereCloud } from "./objects/SphereCloud.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
 import {
-	BlendFunction,
 	BlurPass,
 	EdgeDetectionMode,
 	EffectPass,
@@ -290,13 +289,6 @@ export class BlurDemo extends PostProcessingDemo {
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
 			blendMode.opacity.value = 1.0 - params.opacity;
-
-		});
-
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
-
-			blendMode.blendFunction = Number(params["blend mode"]);
-			texturePass.recompile();
 
 		});
 

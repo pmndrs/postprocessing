@@ -1,4 +1,4 @@
-import { LinearFilter, RGBFormat, WebGLRenderTarget } from "three";
+import { LinearFilter, RGBFormat, UnsignedByteType, WebGLRenderTarget } from "three";
 import { CopyMaterial } from "../materials";
 import { Pass } from "./Pass.js";
 
@@ -103,7 +103,7 @@ export class SavePass extends Pass {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		if(!alpha) {
+		if(!alpha && frameBufferType === UnsignedByteType) {
 
 			this.renderTarget.texture.format = RGBFormat;
 

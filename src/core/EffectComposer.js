@@ -4,6 +4,8 @@ import {
 	LinearFilter,
 	RGBAFormat,
 	RGBFormat,
+	UnsignedByteType,
+	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
 	WebGLRenderTarget
@@ -74,6 +76,7 @@ export class EffectComposer {
 			this.renderer.autoClear = false;
 			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
 			this.outputBuffer = this.inputBuffer.clone();
+			this.enableExtensions();
 
 		}
 
@@ -131,6 +134,34 @@ export class EffectComposer {
 	}
 
 	/**
+	 * Explicitly enables required WebGL extensions.
+	 *
+	 * @private
+	 */
+
+	enableExtensions() {
+
+		const frameBufferType = this.inputBuffer.texture.type;
+		const capabilities = this.renderer.capabilities;
+		const context = this.renderer.getContext();
+
+		if(frameBufferType !== UnsignedByteType) {
+
+			if(capabilities.isWebGL2) {
+
+				context.getExtension("EXT_color_buffer_float");
+
+			} else {
+
+				context.getExtension("EXT_color_buffer_half_float");
+
+			}
+
+		}
+
+	}
+
+	/**
 	 * Replaces the current renderer with the given one.
 	 *
 	 * The auto clear mechanism of the provided renderer will be disabled. If the
@@ -171,6 +202,8 @@ export class EffectComposer {
 
 			}
 
+			this.enableExtensions();
+
 		}
 
 		return oldRenderer;
@@ -197,6 +230,10 @@ export class EffectComposer {
 			depthTexture.format = DepthStencilFormat;
 			depthTexture.type = UnsignedInt248Type;
 
+		} else {
+
+			depthTexture.type = UnsignedIntType;
+
 		}
 
 		return depthTexture;
@@ -210,6 +247,9 @@ export class EffectComposer {
 	 * magnification. Its render texture format depends on whether the renderer
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
+	 * Note: The buffer format will also be set to RGBA if the frame buffer type
+	 * is not UnsignedByteType because RGBXXF buffers are not renderable.
+	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
@@ -222,7 +262,7 @@ export class EffectComposer {
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-			format: alpha ? RGBAFormat : RGBFormat,
+			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,

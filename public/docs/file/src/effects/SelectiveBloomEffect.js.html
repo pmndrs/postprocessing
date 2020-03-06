@@ -116,6 +116,7 @@
 	MeshBasicMaterial,
 	RGBFormat,
 	Scene,
+	UnsignedByteType,
 	WebGLRenderTarget
 } from &quot;three&quot;;
 
@@ -367,7 +368,7 @@ export class SelectiveBloomEffect extends BloomEffect {
 		this.blackoutPass.initialize(renderer, alpha, frameBufferType);
 		this.renderPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) {
 
 			this.renderTargetSelection.texture.format = RGBFormat;
 

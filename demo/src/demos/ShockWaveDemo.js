@@ -150,7 +150,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 			EdgeDetectionMode.DEPTH
 		);
 
-		smaaEffect.colorEdgesMaterial.setEdgeDetectionThreshold(0.05);
+		smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
 
 		const shockWaveEffect = new ShockWaveEffect(camera, mesh.position, {
 			speed: 1.25,

@@ -110,14 +110,14 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/BloomEffect.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from &quot;three&quot;;
 import { Resizer } from &quot;../core&quot;;
 import { KernelSize, LuminanceMaterial } from &quot;../materials&quot;;
 import { BlurPass, ShaderPass } from &quot;../passes&quot;;
 import { BlendFunction } from &quot;./blending/BlendFunction.js&quot;;
 import { Effect } from &quot;./Effect.js&quot;;
 
-import fragmentShader from &quot;./glsl/texture/shader.frag&quot;;
+import fragmentShader from &quot;./glsl/bloom/shader.frag&quot;;
 
 /**
  * A bloom effect.
@@ -136,6 +136,7 @@ export class BloomEffect extends Effect {
 	 * @param {Number} [options.luminanceThreshold=0.9] - The luminance threshold. Raise this value to mask out darker elements in the scene. Range is [0, 1].
 	 * @param {Number} [options.luminanceSmoothing=0.025] - Controls the smoothness of the luminance threshold. Range is [0, 1].
 	 * @param {Number} [options.resolutionScale=0.5] - Deprecated. Use height or width instead.
+	 * @param {Number} [options.intensity=1.0] - The intensity.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 * @param {KernelSize} [options.kernelSize=KernelSize.LARGE] - The blur kernel size.
@@ -146,6 +147,7 @@ export class BloomEffect extends Effect {
 		luminanceThreshold = 0.9,
 		luminanceSmoothing = 0.025,
 		resolutionScale = 0.5,
+		intensity = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
 		kernelSize = KernelSize.LARGE
@@ -156,7 +158,8 @@ export class BloomEffect extends Effect {
 			blendFunction,
 
 			uniforms: new Map([
-				[&quot;texture&quot;, new Uniform(null)]
+				[&quot;texture&quot;, new Uniform(null)],
+				[&quot;intensity&quot;, new Uniform(intensity)]
 			])
 
 		});
@@ -370,6 +373,30 @@ export class BloomEffect extends Effect {
 	}
 
 	/**
+	 * The bloom intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	get intensity() {
+
+		return this.uniforms.get(&quot;intensity&quot;).value;
+
+	}
+
+	/**
+	 * Sets the bloom intensity.
+	 *
+	 * @type {Number}
+	 */
+
+	set intensity(value) {
+
+		this.uniforms.get(&quot;intensity&quot;).value = value;
+
+	}
+
+	/**
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
@@ -447,7 +474,7 @@ export class BloomEffect extends Effect {
 
 		this.blurPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) {
 
 			this.renderTarget.texture.format = RGBFormat;
 
