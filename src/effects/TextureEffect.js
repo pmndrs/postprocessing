@@ -1,4 +1,4 @@
-import { Uniform } from "three";
+import { LinearEncoding, Matrix3, sRGBEncoding, Uniform } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -27,11 +27,12 @@ export class TextureEffect extends Effect {
 			blendFunction,
 
 			uniforms: new Map([
-				["texture", new Uniform(texture)]
+				["texture", new Uniform(null)]
 			])
 
 		});
 
+		this.texture = texture;
 		this.aspectCorrection = aspectCorrection;
 
 	}
@@ -51,12 +52,33 @@ export class TextureEffect extends Effect {
 	/**
 	 * Sets the texture.
 	 *
+	 * You'll need to call {@link EffectPass#recompile} if you switch to a texture
+	 * that uses a different encoding.
+	 *
 	 * @type {Texture}
 	 */
 
 	set texture(value) {
 
 		this.uniforms.get("texture").value = value;
+
+		if(value !== null) {
+
+			if(value.encoding === sRGBEncoding) {
+
+				this.defines.set("texelToLinear(texel)", "sRGBToLinear(texel)");
+
+			} else if(value.encoding === LinearEncoding) {
+
+				this.defines.set("texelToLinear(texel)", "texel");
+
+			} else {
+
+				console.log("unsupported encoding: " + value.encoding);
+
+			}
+
+		}
 
 	}
 
