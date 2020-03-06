@@ -1383,7 +1383,7 @@ queue, but not before its size has been set.</p>
     
   <div class="example-doc" data-ice="exampleDoc">
       
-      <pre class="prettyprint source-code"><code data-ice="exampleCode">if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }</code></pre>
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) { this.myRenderTarget.texture.format = RGBFormat; }</code></pre>
     </div>
 </div>
 

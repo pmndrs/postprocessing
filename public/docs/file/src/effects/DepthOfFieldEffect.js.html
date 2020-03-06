@@ -110,7 +110,7 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/effects/DepthOfFieldEffect.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Uniform, WebGLRenderTarget } from &quot;three&quot;;
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import { LinearFilter, RGBFormat, Uniform, UnsignedByteType, WebGLRenderTarget } from &quot;three&quot;;
 import { ColorChannel, Resizer } from &quot;../core&quot;;
 import { BokehMaterial, CircleOfConfusionMaterial, KernelSize, MaskFunction, MaskMaterial } from &quot;../materials&quot;;
 import { BlurPass, ShaderPass } from &quot;../passes&quot;;
@@ -508,7 +508,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.bokehBasePass.initialize(renderer, alpha, frameBufferType);
 		this.bokehFillPass.initialize(renderer, alpha, frameBufferType);
 
-		if(!alpha) {
+		if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) {
 
 			this.renderTargetNear.texture.format = RGBFormat;
 

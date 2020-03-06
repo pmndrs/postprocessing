@@ -110,13 +110,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectComposer} from &apos;<span><a href="file/src/core/EffectComposer.js.html#lineNumber28">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectComposer} from &apos;<span><a href="file/src/core/EffectComposer.js.html#lineNumber30">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/core/EffectComposer.js.html#lineNumber28">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/core/EffectComposer.js.html#lineNumber30">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -249,6 +249,8 @@ automatically clear the buffers and render a scene for further processing.</p>
 <p>The created render target uses a linear filter for texel minification and
 magnification. Its render texture format depends on whether the renderer
 uses the alpha channel. Mipmaps are disabled.</p>
+<p>Note: The buffer format will also be set to RGBA if the frame buffer type
+is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
 </div>
       </div>
     </td>
@@ -484,7 +486,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber40">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber42">source</a></span></span>
     </span>
   </h3>
 
@@ -579,7 +581,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber247">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber287">source</a></span></span>
     </span>
   </h3>
 
@@ -647,7 +649,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber219">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber259">source</a></span></span>
     </span>
   </h3>
 
@@ -658,6 +660,8 @@ information is used.</p>
 <p>The created render target uses a linear filter for texel minification and
 magnification. Its render texture format depends on whether the renderer
 uses the alpha channel. Mipmaps are disabled.</p>
+<p>Note: The buffer format will also be set to RGBA if the frame buffer type
+is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
 </div>
 
   
@@ -738,7 +742,7 @@ uses the alpha channel. Mipmaps are disabled.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber495">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber535">source</a></span></span>
     </span>
   </h3>
 
@@ -784,7 +788,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber127">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber130">source</a></span></span>
     </span>
   </h3>
 
@@ -843,7 +847,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber318">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
@@ -904,7 +908,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber373">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber413">source</a></span></span>
     </span>
   </h3>
 
@@ -965,7 +969,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber148">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber179">source</a></span></span>
     </span>
   </h3>
 
@@ -1051,7 +1055,7 @@ take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber473">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber513">source</a></span></span>
     </span>
   </h3>
 
@@ -1095,7 +1099,7 @@ take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber441">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 

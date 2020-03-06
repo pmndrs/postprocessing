@@ -205,11 +205,11 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-aspectCorrection">aspectCorrection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-aspectCorrection">aspectCorrection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this get was deprecated. Use uvTransform instead for full control over the texture coordinates.</div>
         
         <div data-ice="description"><p>Indicates whether aspect correction is enabled.</p>
 </div>
@@ -234,11 +234,11 @@
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-aspectCorrection">aspectCorrection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-aspectCorrection">aspectCorrection</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
-        
+        <div class="deprecated" data-ice="deprecated">this set was deprecated. Use uvTransform instead for full control over the texture coordinates.</div>
         
         <div data-ice="description"><p>Enables or disables aspect correction.</p>
 </div>
@@ -311,6 +311,65 @@
     <td>
       <span class="access" data-ice="access">public</span>
       
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-uvTransform">uvTransform</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether the texture UV coordinates will be transformed using the
+transformation matrix of the texture.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-uvTransform">uvTransform</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables texture UV transformation.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
       
       
       <span class="override" data-ice="override"></span>
@@ -338,7 +397,42 @@
 </tbody>
 </table>
 </div>
-
+<div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/TextureEffect.js~TextureEffect.html#instance-method-update">update</a></span></span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Updates this effect.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 
 <div class="inherited-summary" data-ice="inheritedSummary"><h2>Inherited Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3"><span class="toggle closed"></span> From class <span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span></td></tr></thead>
@@ -789,7 +883,7 @@ deletes them.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
-      <td data-ice="description"><p>Whether the texture coordinates should be affected by the aspect ratio.</p>
+      <td data-ice="description"><p>Deprecated. Enable uvTransform instead and adjust the texture&apos;s offset, repeat and center.</p>
 </td>
     </tr>
 </tbody>
@@ -825,16 +919,16 @@ deletes them.</p>
     
     
     
-    <span class="code" data-ice="name">aspectCorrection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">aspectCorrection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber71">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber94">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this get was deprecated. Use uvTransform instead for full control over the texture coordinates.</div>
   
   <div data-ice="description"><p>Indicates whether aspect correction is enabled.</p>
 <p>If enabled, the texture can be scaled using the <code>scale</code> uniform.</p>
@@ -870,16 +964,16 @@ deletes them.</p>
     
     
     
-    <span class="code" data-ice="name">aspectCorrection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="code" data-ice="name">aspectCorrection</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber85">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber109">source</a></span></span>
     </span>
   </h3>
 
   
-  
+  <div class="deprecated" data-ice="deprecated">this set was deprecated. Use uvTransform instead for full control over the texture coordinates.</div>
   
   <div data-ice="description"><p>Enables or disables aspect correction.</p>
 <p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
@@ -919,7 +1013,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber45">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber46">source</a></span></span>
     </span>
   </h3>
 
@@ -963,7 +1057,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber61">source</a></span></span>
     </span>
   </h3>
 
@@ -971,6 +1065,99 @@ deletes them.</p>
   
   
   <div data-ice="description"><p>Sets the texture.</p>
+<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> if you switch to a texture
+that uses a different encoding.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-uvTransform">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">uvTransform</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber142">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether the texture UV coordinates will be transformed using the
+transformation matrix of the texture.</p>
+<p>Cannot be used if aspect correction is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-uvTransform">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">uvTransform</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber156">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables texture UV transformation.</p>
+<p>You&apos;ll need to call <span><a href="class/src/passes/EffectPass.js~EffectPass.html#instance-method-recompile">EffectPass#recompile</a></span> after changing this value.</p>
 </div>
 
   
@@ -1007,7 +1194,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber91">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber121">source</a></span></span>
     </span>
   </h3>
 
@@ -1040,7 +1227,84 @@ deletes them.</p>
   
 </div>
 </div>
+<div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-method-update">
+    <span class="access" data-ice="access">public</span>
+    
+    
+    
+    
+    
+    <span class="code" data-ice="name">update</span><span class="code" data-ice="signature">(renderer: <span>WebGLRenderer</span>, inputBuffer: <span>WebGLRenderTarget</span>, deltaTime: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/TextureEffect.js.html#lineNumber188">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Updates this effect.</p>
+</div>
+
+  <div data-ice="override"><h4>Override:</h4><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-update">Effect#update</a></span></div>
+
+  <div data-ice="properties"><div data-ice="properties">
+  <h4 data-ice="title">Params:</h4>
+  <table class="params">
+    <thead>
+    <tr><td>Name</td><td>Type</td><td>Attribute</td><td>Description</td></tr>
+    </thead>
+    <tbody>
+    
+    <tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">renderer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderer</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The renderer.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">inputBuffer</td>
+      <td data-ice="type" class="code"><span>WebGLRenderTarget</span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>A frame buffer that contains the result of the previous pass.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">deltaTime</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li></ul></td>
+      <td data-ice="description"><p>The time between the last frame and the current one in seconds.</p>
+</td>
+    </tr>
+</tbody>
+  </table>
+</div>
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 </div>
 
 <footer class="footer">

@@ -1038,6 +1038,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/bloomeffect.js~bloomeffect#intensity",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-intensity",
+    "src/effects/BloomEffect.js~BloomEffect#intensity",
+    "member"
+  ],
+  [
+    "src/effects/bloomeffect.js~bloomeffect#intensity",
+    "class/src/effects/BloomEffect.js~BloomEffect.html#instance-set-intensity",
+    "src/effects/BloomEffect.js~BloomEffect#intensity",
+    "member"
+  ],
+  [
     "src/effects/bloomeffect.js~bloomeffect#kernelsize",
     "class/src/effects/BloomEffect.js~BloomEffect.html#instance-get-kernelSize",
     "src/effects/BloomEffect.js~BloomEffect#kernelSize",
@@ -2343,6 +2355,24 @@ window.esdocSearchIndex = [
     "src/effects/textureeffect.js~textureeffect#texture",
     "class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-texture",
     "src/effects/TextureEffect.js~TextureEffect#texture",
+    "member"
+  ],
+  [
+    "src/effects/textureeffect.js~textureeffect#update",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-method-update",
+    "src/effects/TextureEffect.js~TextureEffect#update",
+    "method"
+  ],
+  [
+    "src/effects/textureeffect.js~textureeffect#uvtransform",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-get-uvTransform",
+    "src/effects/TextureEffect.js~TextureEffect#uvTransform",
+    "member"
+  ],
+  [
+    "src/effects/textureeffect.js~textureeffect#uvtransform",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-set-uvTransform",
+    "src/effects/TextureEffect.js~TextureEffect#uvTransform",
     "member"
   ],
   [
