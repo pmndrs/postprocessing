@@ -246,10 +246,10 @@ export class DepthOfFieldEffect extends Effect {
 		 * @private
 		 */
 
-		this.renderTargetCoCNear = this.renderTargetCoC.clone();
-		this.renderTargetCoCNear.texture.name = &quot;DoF.CoC.Near&quot;;
+		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
+		this.renderTargetCoCBlurred.texture.name = &quot;DoF.CoC.Blurred&quot;;
 
-		this.uniforms.get(&quot;cocBuffer&quot;).value = this.renderTargetCoCNear.texture;
+		this.uniforms.get(&quot;cocBuffer&quot;).value = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A circle of confusion pass.
@@ -281,26 +281,44 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.colorChannel = ColorChannel.GREEN;
 		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
+		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
-		 * A bokeh blur pass.
+		 * A bokeh blur pass for the foreground colors.
 		 *
 		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.bokehBasePass = new ShaderPass(new BokehMaterial(false));
+		this.bokehNearBasePass = new ShaderPass(new BokehMaterial(false, true));
 
 		/**
-		 * A bokeh fill pass.
+		 * A bokeh fill pass for the foreground colors.
 		 *
 		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.bokehFillPass = new ShaderPass(new BokehMaterial(true));
+		this.bokehNearFillPass = new ShaderPass(new BokehMaterial(true, true));
+
+		/**
+		 * A bokeh blur pass for the background colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehFarBasePass = new ShaderPass(new BokehMaterial(false, false));
+
+		/**
+		 * A bokeh fill pass for the background colors.
+		 *
+		 * @type {ShaderPass}
+		 * @private
+		 */
+
+		this.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
 
 		this.bokehScale = bokehScale;
 
@@ -348,7 +366,7 @@ export class DepthOfFieldEffect extends Effect {
 
 	get bokehScale() {
 
-		return this.bokehBasePass.getFullscreenMaterial().uniforms.scale.value;
+		return this.uniforms.get(&quot;scale&quot;).value;
 
 	}
 
@@ -360,9 +378,20 @@ export class DepthOfFieldEffect extends Effect {
 
 	set bokehScale(value) {
 
+		const passes = [
+			this.bokehNearBasePass,
+			this.bokehNearFillPass,
+			this.bokehFarBasePass,
+			this.bokehFarFillPass
+		];
+
+		passes.map((p) =&gt; p.getFullscreenMaterial().uniforms.scale).forEach((u) =&gt; {
+
+			u.value = value;
+
+		});
+
 		this.uniforms.get(&quot;scale&quot;).value = value;
-		this.bokehBasePass.getFullscreenMaterial().uniforms.scale.value = value;
-		this.bokehFillPass.getFullscreenMaterial().uniforms.scale.value = value;
 
 	}
 
@@ -409,49 +438,44 @@ export class DepthOfFieldEffect extends Effect {
 	update(renderer, inputBuffer, deltaTime) {
 
 		const renderTarget = this.renderTarget;
-		const renderTargetNear = this.renderTargetNear;
-		const renderTargetFar = this.renderTargetFar;
 		const renderTargetCoC = this.renderTargetCoC;
-		const renderTargetCoCNear = this.renderTargetCoCNear;
+		const renderTargetCoCBlurred = this.renderTargetCoCBlurred;
 		const renderTargetMasked = this.renderTargetMasked;
 
-		const bokehBasePass = this.bokehBasePass;
-		const bokehFillPass = this.bokehFillPass;
-		const uniformsBase = bokehBasePass.getFullscreenMaterial().uniforms;
-		const uniformsFill = bokehFillPass.getFullscreenMaterial().uniforms;
+		const bokehFarBasePass = this.bokehFarBasePass;
+		const bokehFarFillPass = this.bokehFarFillPass;
+		const farBaseUniforms = bokehFarBasePass.getFullscreenMaterial().uniforms;
+		const farFillUniforms = bokehFarFillPass.getFullscreenMaterial().uniforms;
+
+		const bokehNearBasePass = this.bokehNearBasePass;
+		const bokehNearFillPass = this.bokehNearFillPass;
+		const nearBaseUniforms = bokehNearBasePass.getFullscreenMaterial().uniforms;
+		const nearFillUniforms = bokehNearFillPass.getFullscreenMaterial().uniforms;
 
 		// Auto focus.
 		if(this.target !== null) {
 
-			const focusDistance = this.calculateFocusDistance(this.target);
-			this.circleOfConfusionMaterial.uniforms.focusDistance.value = focusDistance;
+			const distance = this.calculateFocusDistance(this.target);
+			this.circleOfConfusionMaterial.uniforms.focusDistance.value = distance;
 
 		}
 
 		// Render the CoC and create a blurred version for soft near field blending.
 		this.cocPass.render(renderer, null, renderTargetCoC);
-		this.blurPass.render(renderer, renderTargetCoC, renderTargetCoCNear);
-
-		// Use the blurred CoC buffer and ignore far CoC values.
-		uniformsBase.cocBuffer.value = renderTargetCoCNear.texture;
-		uniformsFill.cocBuffer.value = renderTargetCoCNear.texture;
-		uniformsBase.cocMask.value.copy(uniformsFill.cocMask.value.set(1.0, 0.0));
-
-		// Render the foreground bokeh.
-		bokehBasePass.render(renderer, inputBuffer, renderTarget);
-		bokehFillPass.render(renderer, renderTarget, renderTargetNear);
-
-		// Use the sharp CoC buffer and ignore near CoC values.
-		uniformsBase.cocBuffer.value = renderTargetCoC.texture;
-		uniformsFill.cocBuffer.value = renderTargetCoC.texture;
-		uniformsBase.cocMask.value.copy(uniformsFill.cocMask.value.set(0.0, 1.0));
+		this.blurPass.render(renderer, renderTargetCoC, renderTargetCoCBlurred);
 
 		// Prevent sharp colors from bleeding onto the background.
 		this.maskPass.render(renderer, inputBuffer, renderTargetMasked);
 
-		// Render the background bokeh.
-		bokehBasePass.render(renderer, renderTargetMasked, renderTarget);
-		bokehFillPass.render(renderer, renderTarget, renderTargetFar);
+		// Use the sharp CoC buffer and render the background bokeh.
+		farBaseUniforms.cocBuffer.value = farFillUniforms.cocBuffer.value = renderTargetCoC.texture;
+		bokehFarBasePass.render(renderer, renderTargetMasked, renderTarget);
+		bokehFarFillPass.render(renderer, renderTarget, this.renderTargetFar);
+
+		// Use the blurred CoC buffer and render the foreground bokeh.
+		nearBaseUniforms.cocBuffer.value = nearFillUniforms.cocBuffer.value = renderTargetCoCBlurred.texture;
+		bokehNearBasePass.render(renderer, inputBuffer, renderTarget);
+		bokehNearFillPass.render(renderer, renderTarget, this.renderTargetNear);
 
 	}
 
@@ -466,28 +490,41 @@ export class DepthOfFieldEffect extends Effect {
 
 		const resolution = this.resolution;
 
-		this.cocPass.setSize(width, height);
-		this.blurPass.setSize(width, height);
-		this.maskPass.setSize(width, height);
-
-		this.bokehBasePass.setSize(width, height);
-		this.bokehFillPass.setSize(width, height);
+		let resizables = [
+			this.cocPass,
+			this.blurPass,
+			this.maskPass,
+			this.bokehNearBasePass,
+			this.bokehNearFillPass,
+			this.bokehFarBasePass,
+			this.bokehFarFillPass
+		];
 
 		// These buffers require full resolution to prevent bleeding artifacts.
-		this.renderTargetCoC.setSize(width, height);
-		this.renderTargetMasked.setSize(width, height);
+		resizables.push(this.renderTargetCoC, this.renderTargetMasked);
+		resizables.forEach((r) =&gt; r.setSize(width, height));
 
 		width = resolution.width;
 		height = resolution.height;
 
-		this.renderTarget.setSize(width, height);
-		this.renderTargetNear.setSize(width, height);
-		this.renderTargetFar.setSize(width, height);
-		this.renderTargetCoCNear.setSize(width, height);
+		resizables = [
+			this.renderTarget,
+			this.renderTargetNear,
+			this.renderTargetFar,
+			this.renderTargetCoCBlurred
+		];
 
-		// The blur passes operate on the low resolution buffers.
-		this.bokehBasePass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
-		this.bokehFillPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+		resizables.forEach((r) =&gt; r.setSize(width, height));
+
+		// The bokeh blur passes operate on the low resolution buffers.
+		const passes = [
+			this.bokehNearBasePass,
+			this.bokehNearFillPass,
+			this.bokehFarBasePass,
+			this.bokehFarFillPass
+		];
+
+		passes.forEach((p) =&gt; p.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height));
 
 	}
 
@@ -501,12 +538,17 @@ export class DepthOfFieldEffect extends Effect {
 
 	initialize(renderer, alpha, frameBufferType) {
 
-		this.cocPass.initialize(renderer, alpha, frameBufferType);
-		this.blurPass.initialize(renderer, alpha, frameBufferType);
-		this.maskPass.initialize(renderer, alpha, frameBufferType);
+		const initializables = [
+			this.cocPass,
+			this.blurPass,
+			this.maskPass,
+			this.bokehNearBasePass,
+			this.bokehNearFillPass,
+			this.bokehFarBasePass,
+			this.bokehFarFillPass
+		];
 
-		this.bokehBasePass.initialize(renderer, alpha, frameBufferType);
-		this.bokehFillPass.initialize(renderer, alpha, frameBufferType);
+		initializables.forEach((i) =&gt; i.initialize(renderer, alpha, frameBufferType));
 
 		if(!alpha &amp;&amp; frameBufferType === UnsignedByteType) {
 

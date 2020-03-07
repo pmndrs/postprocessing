@@ -110,13 +110,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BokehMaterial} from &apos;<span><a href="file/src/materials/BokehMaterial.js.html#lineNumber13">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {BokehMaterial} from &apos;<span><a href="file/src/materials/BokehMaterial.js.html#lineNumber16">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/materials/BokehMaterial.js.html#lineNumber13">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/materials/BokehMaterial.js.html#lineNumber16">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -139,6 +139,8 @@
   <div class="description" data-ice="description"><p>A bokeh blur material.</p>
 <p>This material should be applied twice in a row, with <code>fill</code> mode enabled for
 the second pass.</p>
+<p>Enabling the <code>foreground</code> option causes the shader to combine the near and
+far CoC values around foreground objects.</p>
 </div>
   
 
@@ -171,7 +173,7 @@ the second pass.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(fill: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/materials/BokehMaterial.js~BokehMaterial.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(fill: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, foreground: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
         </p>
       </div>
       <div>
@@ -241,11 +243,11 @@ the second pass.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(fill: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(fill: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, foreground: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/BokehMaterial.js.html#lineNumber21">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/BokehMaterial.js.html#lineNumber25">source</a></span></span>
     </span>
   </h3>
 
@@ -271,6 +273,14 @@ the second pass.</p>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: false</li></ul></td>
       <td data-ice="description"><p>Enables or disables the bokeh highlight fill mode.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">foreground</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: false</li></ul></td>
+      <td data-ice="description"><p>Determines whether this material will be applied to foreground colors.</p>
 </td>
     </tr>
 </tbody>
@@ -311,7 +321,7 @@ the second pass.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/materials/BokehMaterial.js.html#lineNumber97">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/materials/BokehMaterial.js.html#lineNumber106">source</a></span></span>
     </span>
   </h3>
 
