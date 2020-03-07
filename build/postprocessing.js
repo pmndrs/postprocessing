@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.12.1 build Fri Mar 06 2020
+ * postprocessing v6.12.2 build Sat Mar 07 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -242,7 +242,7 @@
     return AdaptiveLuminanceMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentShader$1 = "uniform sampler2D inputBuffer;uniform sampler2D cocBuffer;uniform vec2 cocMask;uniform vec2 texelSize;uniform float scale;\n#if PASS == 1\nuniform float kernel64[128];\n#else\nuniform float kernel16[32];\n#endif\nvarying vec2 vUv;void main(){vec2 CoCNearFar=texture2D(cocBuffer,vUv).rg;float CoC=dot(CoCNearFar,cocMask)*scale;if(CoC==0.0){gl_FragColor=texture2D(inputBuffer,vUv);}else{vec2 step=texelSize*CoC;\n#if PASS == 1\nvec4 acc=vec4(0.0);for(int i=0;i<128;i+=2){vec2 uv=step*vec2(kernel64[i],kernel64[i+1])+vUv;acc+=texture2D(inputBuffer,uv);}gl_FragColor=acc/64.0;\n#else\nvec4 maxValue=texture2D(inputBuffer,vUv);for(int i=0;i<32;i+=2){vec2 uv=step*vec2(kernel16[i],kernel16[i+1])+vUv;maxValue=max(texture2D(inputBuffer,uv),maxValue);}gl_FragColor=maxValue;\n#endif\n}}";
+  var fragmentShader$1 = "uniform sampler2D inputBuffer;uniform sampler2D cocBuffer;uniform vec2 texelSize;uniform float scale;\n#if PASS == 1\nuniform float kernel64[128];\n#else\nuniform float kernel16[32];\n#endif\nvarying vec2 vUv;void main(){\n#ifdef FOREGROUND\nvec2 CoCNearFar=texture2D(cocBuffer,vUv).rg;float CoC=CoCNearFar.r*scale;\n#else\nfloat CoC=texture2D(cocBuffer,vUv).g*scale;\n#endif\nif(CoC==0.0){gl_FragColor=texture2D(inputBuffer,vUv);}else{\n#ifdef FOREGROUND\nvec2 step=texelSize*max(CoC,CoCNearFar.g*scale);\n#else\nvec2 step=texelSize*CoC;\n#endif\n#if PASS == 1\nvec4 acc=vec4(0.0);for(int i=0;i<128;i+=2){vec2 uv=step*vec2(kernel64[i],kernel64[i+1])+vUv;acc+=texture2D(inputBuffer,uv);}gl_FragColor=acc/64.0;\n#else\nvec4 maxValue=texture2D(inputBuffer,vUv);for(int i=0;i<32;i+=2){vec2 uv=step*vec2(kernel16[i],kernel16[i+1])+vUv;maxValue=max(texture2D(inputBuffer,uv),maxValue);}gl_FragColor=maxValue;\n#endif\n}}";
 
   var BokehMaterial = function (_ShaderMaterial2) {
     _inherits(BokehMaterial, _ShaderMaterial2);
@@ -251,6 +251,7 @@
       var _this;
 
       var fill = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var foreground = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
       _classCallCheck(this, BokehMaterial);
 
@@ -264,7 +265,6 @@
           kernel16: new three.Uniform(new Float32Array(32)),
           inputBuffer: new three.Uniform(null),
           cocBuffer: new three.Uniform(null),
-          cocMask: new three.Uniform(new three.Vector2()),
           texelSize: new three.Uniform(new three.Vector2()),
           scale: new three.Uniform(1.0)
         },
@@ -274,6 +274,10 @@
         depthWrite: false,
         depthTest: false
       }));
+
+      if (foreground) {
+        _this.defines.FOREGROUND = "1";
+      }
 
       _this.generateKernel();
 
@@ -3679,9 +3683,9 @@
       _this24.renderTargetCoC = _this24.renderTarget.clone();
       _this24.renderTargetCoC.texture.format = three.RGBFormat;
       _this24.renderTargetCoC.texture.name = "DoF.CoC";
-      _this24.renderTargetCoCNear = _this24.renderTargetCoC.clone();
-      _this24.renderTargetCoCNear.texture.name = "DoF.CoC.Near";
-      _this24.uniforms.get("cocBuffer").value = _this24.renderTargetCoCNear.texture;
+      _this24.renderTargetCoCBlurred = _this24.renderTargetCoC.clone();
+      _this24.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
+      _this24.uniforms.get("cocBuffer").value = _this24.renderTargetCoCBlurred.texture;
       _this24.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
       var cocMaterial = _this24.circleOfConfusionMaterial;
       cocMaterial.uniforms.focusDistance.value = focusDistance;
@@ -3696,10 +3700,12 @@
 
       var maskMaterial = _this24.maskPass.getFullscreenMaterial();
 
-      maskMaterial.colorChannel = ColorChannel.GREEN;
       maskMaterial.maskFunction = MaskFunction.MULTIPLY;
-      _this24.bokehBasePass = new ShaderPass(new BokehMaterial(false));
-      _this24.bokehFillPass = new ShaderPass(new BokehMaterial(true));
+      maskMaterial.colorChannel = ColorChannel.GREEN;
+      _this24.bokehNearBasePass = new ShaderPass(new BokehMaterial(false, true));
+      _this24.bokehNearFillPass = new ShaderPass(new BokehMaterial(true, true));
+      _this24.bokehFarBasePass = new ShaderPass(new BokehMaterial(false, false));
+      _this24.bokehFarFillPass = new ShaderPass(new BokehMaterial(true, false));
       _this24.bokehScale = bokehScale;
       _this24.target = null;
       return _this24;
@@ -3725,63 +3731,60 @@
       key: "update",
       value: function update(renderer, inputBuffer, deltaTime) {
         var renderTarget = this.renderTarget;
-        var renderTargetNear = this.renderTargetNear;
-        var renderTargetFar = this.renderTargetFar;
         var renderTargetCoC = this.renderTargetCoC;
-        var renderTargetCoCNear = this.renderTargetCoCNear;
+        var renderTargetCoCBlurred = this.renderTargetCoCBlurred;
         var renderTargetMasked = this.renderTargetMasked;
-        var bokehBasePass = this.bokehBasePass;
-        var bokehFillPass = this.bokehFillPass;
-        var uniformsBase = bokehBasePass.getFullscreenMaterial().uniforms;
-        var uniformsFill = bokehFillPass.getFullscreenMaterial().uniforms;
+        var bokehFarBasePass = this.bokehFarBasePass;
+        var bokehFarFillPass = this.bokehFarFillPass;
+        var farBaseUniforms = bokehFarBasePass.getFullscreenMaterial().uniforms;
+        var farFillUniforms = bokehFarFillPass.getFullscreenMaterial().uniforms;
+        var bokehNearBasePass = this.bokehNearBasePass;
+        var bokehNearFillPass = this.bokehNearFillPass;
+        var nearBaseUniforms = bokehNearBasePass.getFullscreenMaterial().uniforms;
+        var nearFillUniforms = bokehNearFillPass.getFullscreenMaterial().uniforms;
 
         if (this.target !== null) {
-          var focusDistance = this.calculateFocusDistance(this.target);
-          this.circleOfConfusionMaterial.uniforms.focusDistance.value = focusDistance;
+          var distance = this.calculateFocusDistance(this.target);
+          this.circleOfConfusionMaterial.uniforms.focusDistance.value = distance;
         }
 
         this.cocPass.render(renderer, null, renderTargetCoC);
-        this.blurPass.render(renderer, renderTargetCoC, renderTargetCoCNear);
-        uniformsBase.cocBuffer.value = renderTargetCoCNear.texture;
-        uniformsFill.cocBuffer.value = renderTargetCoCNear.texture;
-        uniformsBase.cocMask.value.copy(uniformsFill.cocMask.value.set(1.0, 0.0));
-        bokehBasePass.render(renderer, inputBuffer, renderTarget);
-        bokehFillPass.render(renderer, renderTarget, renderTargetNear);
-        uniformsBase.cocBuffer.value = renderTargetCoC.texture;
-        uniformsFill.cocBuffer.value = renderTargetCoC.texture;
-        uniformsBase.cocMask.value.copy(uniformsFill.cocMask.value.set(0.0, 1.0));
+        this.blurPass.render(renderer, renderTargetCoC, renderTargetCoCBlurred);
         this.maskPass.render(renderer, inputBuffer, renderTargetMasked);
-        bokehBasePass.render(renderer, renderTargetMasked, renderTarget);
-        bokehFillPass.render(renderer, renderTarget, renderTargetFar);
+        farBaseUniforms.cocBuffer.value = farFillUniforms.cocBuffer.value = renderTargetCoC.texture;
+        bokehFarBasePass.render(renderer, renderTargetMasked, renderTarget);
+        bokehFarFillPass.render(renderer, renderTarget, this.renderTargetFar);
+        nearBaseUniforms.cocBuffer.value = nearFillUniforms.cocBuffer.value = renderTargetCoCBlurred.texture;
+        bokehNearBasePass.render(renderer, inputBuffer, renderTarget);
+        bokehNearFillPass.render(renderer, renderTarget, this.renderTargetNear);
       }
     }, {
       key: "setSize",
       value: function setSize(width, height) {
         var resolution = this.resolution;
-        this.cocPass.setSize(width, height);
-        this.blurPass.setSize(width, height);
-        this.maskPass.setSize(width, height);
-        this.bokehBasePass.setSize(width, height);
-        this.bokehFillPass.setSize(width, height);
-        this.renderTargetCoC.setSize(width, height);
-        this.renderTargetMasked.setSize(width, height);
+        var resizables = [this.cocPass, this.blurPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        resizables.push(this.renderTargetCoC, this.renderTargetMasked);
+        resizables.forEach(function (r) {
+          return r.setSize(width, height);
+        });
         width = resolution.width;
         height = resolution.height;
-        this.renderTarget.setSize(width, height);
-        this.renderTargetNear.setSize(width, height);
-        this.renderTargetFar.setSize(width, height);
-        this.renderTargetCoCNear.setSize(width, height);
-        this.bokehBasePass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
-        this.bokehFillPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+        resizables = [this.renderTarget, this.renderTargetNear, this.renderTargetFar, this.renderTargetCoCBlurred];
+        resizables.forEach(function (r) {
+          return r.setSize(width, height);
+        });
+        var passes = [this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        passes.forEach(function (p) {
+          return p.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+        });
       }
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha, frameBufferType) {
-        this.cocPass.initialize(renderer, alpha, frameBufferType);
-        this.blurPass.initialize(renderer, alpha, frameBufferType);
-        this.maskPass.initialize(renderer, alpha, frameBufferType);
-        this.bokehBasePass.initialize(renderer, alpha, frameBufferType);
-        this.bokehFillPass.initialize(renderer, alpha, frameBufferType);
+        var initializables = [this.cocPass, this.blurPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        initializables.forEach(function (i) {
+          return i.initialize(renderer, alpha, frameBufferType);
+        });
 
         if (!alpha && frameBufferType === three.UnsignedByteType) {
           this.renderTargetNear.texture.format = three.RGBFormat;
@@ -3807,12 +3810,16 @@
     }, {
       key: "bokehScale",
       get: function get() {
-        return this.bokehBasePass.getFullscreenMaterial().uniforms.scale.value;
+        return this.uniforms.get("scale").value;
       },
       set: function set(value) {
+        var passes = [this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        passes.map(function (p) {
+          return p.getFullscreenMaterial().uniforms.scale;
+        }).forEach(function (u) {
+          u.value = value;
+        });
         this.uniforms.get("scale").value = value;
-        this.bokehBasePass.getFullscreenMaterial().uniforms.scale.value = value;
-        this.bokehFillPass.getFullscreenMaterial().uniforms.scale.value = value;
       }
     }]);
 

@@ -8,6 +8,9 @@ import vertexShader from "./glsl/common/shader.vert";
  *
  * This material should be applied twice in a row, with `fill` mode enabled for
  * the second pass.
+ *
+ * Enabling the `foreground` option causes the shader to combine the near and
+ * far CoC values around foreground objects.
  */
 
 export class BokehMaterial extends ShaderMaterial {
@@ -16,9 +19,10 @@ export class BokehMaterial extends ShaderMaterial {
 	 * Constructs a new bokeh material.
 	 *
 	 * @param {Boolean} [fill=false] - Enables or disables the bokeh highlight fill mode.
+	 * @param {Boolean} [foreground=false] - Determines whether this material will be applied to foreground colors.
 	 */
 
-	constructor(fill = false) {
+	constructor(fill = false, foreground = false) {
 
 		super({
 
@@ -33,7 +37,6 @@ export class BokehMaterial extends ShaderMaterial {
 				kernel16: new Uniform(new Float32Array(32)),
 				inputBuffer: new Uniform(null),
 				cocBuffer: new Uniform(null),
-				cocMask: new Uniform(new Vector2()),
 				texelSize: new Uniform(new Vector2()),
 				scale: new Uniform(1.0)
 			},
@@ -46,6 +49,12 @@ export class BokehMaterial extends ShaderMaterial {
 			depthTest: false
 
 		});
+
+		if(foreground) {
+
+			this.defines.FOREGROUND = "1";
+
+		}
 
 		this.generateKernel();
 
