@@ -8,7 +8,8 @@ import {
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
-	WebGLRenderTarget
+	WebGLRenderTarget,
+	WebGLMultisampleRenderTarget
 } from "three";
 
 import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
@@ -36,10 +37,11 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Boolean} [options.multisample=false] - Whether to enable WebGL2 Multisample Render Targets between the render passes.
 	 * @param {Boolean} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
-	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, frameBufferType } = {}) {
+	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, multisample = false, frameBufferType } = {}) {
 
 		/**
 		 * The renderer.
@@ -74,7 +76,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisample);
 			this.outputBuffer = this.inputBuffer.clone();
 			this.enableExtensions();
 
@@ -253,22 +255,27 @@ export class EffectComposer {
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
+	 * @param {Boolean} multisample - Whether the render target should be multisampled.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, type) {
+	createBuffer(depthBuffer, stencilBuffer, type, multisample) {
 
-		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
+		const size = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
-		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
+		const options = {
 			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,
 			depthBuffer,
 			type
-		});
+		};
+
+		const renderTarget = multisample ?
+			new WebGLMultisampleRenderTarget(size.width, size.height, options) :
+			new WebGLRenderTarget(size.width, size.height, options);
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
