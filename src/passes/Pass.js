@@ -180,13 +180,12 @@ export class Pass {
 
 		const material = this.getFullscreenMaterial();
 
-		if(material !== null) {
+		if(this.rtt === value && material !== null) {
 
 			material.needsUpdate = true;
+			this.rtt = !value;
 
 		}
-
-		this.rtt = !value;
 
 	}
 
