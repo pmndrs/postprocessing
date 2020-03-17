@@ -1,11 +1,4 @@
-import {
-	Color,
-	PerspectiveCamera,
-	Vector2,
-	Vector3,
-	WebGLRenderer
-} from "three";
-
+import { Color, PerspectiveCamera, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
 import { Cage } from "./objects/Cage.js";
@@ -25,29 +18,20 @@ import {
 } from "../../../src";
 
 /**
- * An SMAA demo setup.
+ * An antialiasing demo setup.
  */
 
-export class SMAADemo extends PostProcessingDemo {
+export class AntialiasingDemo extends PostProcessingDemo {
 
 	/**
-	 * Constructs a new SMAA demo.
+	 * Constructs a new antialiasing demo.
 	 *
 	 * @param {EffectComposer} composer - An effect composer.
 	 */
 
 	constructor(composer) {
 
-		super("smaa", composer);
-
-		/**
-		 * A secondary renderer.
-		 *
-		 * @type {WebGLRenderer}
-		 * @private
-		 */
-
-		this.secondaryRenderer = null;
+		super("antialiasing", composer);
 
 		/**
 		 * An SMAA effect.
@@ -77,7 +61,7 @@ export class SMAADemo extends PostProcessingDemo {
 		this.effectPass = null;
 
 		/**
-		 * A texture effect (SMAA color edges).
+		 * A texture effect (SMAA edges).
 		 *
 		 * @type {Effect}
 		 * @private
@@ -165,29 +149,6 @@ export class SMAADemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
-
-		// Create a secondary renderer that uses MSAA.
-
-		this.secondaryRenderer = ((primary) => {
-
-			const renderer = new WebGLRenderer({
-				powerPreference: "high-performance",
-				antialias: true
-			});
-
-			const size = primary.getSize(new Vector2());
-			renderer.setSize(size.width, size.height);
-			renderer.setClearColor(primary.getClearColor(), primary.getClearAlpha());
-			renderer.setPixelRatio(primary.getPixelRatio());
-			renderer.outputEncoding = primary.outputEncoding;
-			renderer.shadowMap.type = primary.shadowMap.type;
-			renderer.shadowMap.autoUpdate = false;
-			renderer.shadowMap.needsUpdate = true;
-			renderer.shadowMap.enabled = true;
-
-			return renderer;
-
-		})(renderer);
 
 		// Camera.
 
@@ -313,132 +274,101 @@ export class SMAADemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const scene = this.scene;
-		const controls = this.controls;
 		const composer = this.composer;
-		const renderer1 = composer.getRenderer();
-		const renderer2 = this.secondaryRenderer;
+		const renderer = composer.getRenderer();
+		const context = renderer.getContext();
 
 		const copyPass = this.copyPass;
-		const renderPass = this.renderPass;
 		const effectPass = this.effectPass;
 
 		const smaaEffect = this.smaaEffect;
 		const edgesTextureEffect = this.edgesTextureEffect;
 		const weightsTextureEffect = this.weightsTextureEffect;
-
-		const blendMode = smaaEffect.blendMode;
 		const edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
 
-		const AAMode = {
+		const AAMode = Object.assign({
 			DISABLED: 0,
-			BROWSER: 1,
-			SMAA_EDGES: 2,
-			SMAA_WEIGHTS: 3,
-			SMAA: 4
+			SMAA: 1
+		}, !renderer.capabilities.isWebGL2 ? {} : {
+			MSAA: 2
+		});
+
+		const SMAAMode = {
+			DEFAULT: 0,
+			SMAA_EDGES: 1,
+			SMAA_WEIGHTS: 2
 		};
 
 		const params = {
-			"AA mode": AAMode.SMAA,
-			"preset": SMAAPreset.HIGH,
-			"edge detection": EdgeDetectionMode.DEPTH,
-			"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
-			"opacity": this.smaaEffect.blendMode.opacity.value,
-			"blend mode": this.smaaEffect.blendMode.blendFunction
-		};
-
-		function swapRenderers(browser) {
-
-			const size = composer.getRenderer().getSize(new Vector2());
-
-			if(browser && composer.getRenderer() !== renderer2) {
-
-				scene.background.convertLinearToSRGB();
-				renderer2.setSize(size.width, size.height);
-				composer.replaceRenderer(renderer2);
-				controls.setDom(renderer2.domElement);
-
-			} else {
-
-				scene.background.set(0x777777);
-				renderer1.setSize(size.width, size.height);
-				composer.replaceRenderer(renderer1);
-				controls.setDom(renderer1.domElement);
-
+			"antialiasing": AAMode.SMAA,
+			"smaa": {
+				"mode": SMAAMode.DEFAULT,
+				"preset": SMAAPreset.HIGH,
+				"edge detection": EdgeDetectionMode.DEPTH,
+				"contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+				"opacity": smaaEffect.blendMode.opacity.value,
+				"blend mode": smaaEffect.blendMode.blendFunction
 			}
-
-		}
-
-		function toggleAAMode() {
-
-			const mode = Number(params["AA mode"]);
-
-			renderPass.renderToScreen = (mode === AAMode.BROWSER);
-			effectPass.enabled = (mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES || mode === AAMode.SMAA_WEIGHTS);
-			copyPass.enabled = (mode === AAMode.DISABLED);
-
-			edgesTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			weightsTextureEffect.blendMode.blendFunction = (mode === AAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			effectPass.encodeOutput = (mode !== AAMode.SMAA_EDGES && mode !== AAMode.SMAA_WEIGHTS);
-			effectPass.recompile();
-
-			swapRenderers(mode === AAMode.BROWSER);
-
-		}
+		};
 
 		menu.add(this, "rotate");
 
-		menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
+		menu.add(params, "antialiasing", AAMode).onChange(() => {
 
-		menu.add(params, "preset", SMAAPreset).onChange(() => {
+			const mode = Number(params.antialiasing);
 
-			smaaEffect.applyPreset(Number(params.preset));
+			effectPass.enabled = (mode === AAMode.SMAA);
+			copyPass.enabled = !effectPass.enabled;
 
-		});
-
-		menu.add(params, "edge detection", EdgeDetectionMode).onChange(() => {
-
-			edgeDetectionMaterial.setEdgeDetectionMode(Number(params["edge detection"]));
+			composer.multisampling = (mode === AAMode.MSAA) ? Math.min(4, context.getParameter(context.MAX_SAMPLES)) : 0;
 
 		});
 
-		menu.add(params, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
+		const folder = menu.addFolder("SMAA");
 
-			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params["contrast factor"]));
+		folder.add(params.smaa, "mode", SMAAMode).onChange(() => {
 
-		});
+			const mode = Number(params.smaa.mode);
 
-		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
-
-			blendMode.opacity.value = params.opacity;
-
-		});
-
-		menu.add(params, "blend mode", BlendFunction).onChange(() => {
-
-			blendMode.blendFunction = Number(params["blend mode"]);
+			edgesTextureEffect.blendMode.blendFunction = (mode === SMAAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			weightsTextureEffect.blendMode.blendFunction = (mode === SMAAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			effectPass.encodeOutput = (mode !== SMAAMode.SMAA_EDGES && mode !== SMAAMode.SMAA_WEIGHTS);
 			effectPass.recompile();
 
 		});
 
-	}
+		folder.add(params.smaa, "preset", SMAAPreset).onChange(() => {
 
-	/**
-	 * Resets this demo.
-	 *
-	 * @return {Demo} This demo.
-	 */
+			smaaEffect.applyPreset(Number(params.smaa.preset));
 
-	reset() {
+		});
 
-		super.reset();
+		folder.add(params.smaa, "edge detection", EdgeDetectionMode).onChange(() => {
 
-		if(this.secondaryRenderer !== null) {
+			edgeDetectionMaterial.setEdgeDetectionMode(Number(params.smaa["edge detection"]));
 
-			this.secondaryRenderer.dispose();
-			this.secondaryRenderer = null;
+		});
 
-		}
+		folder.add(params.smaa, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(() => {
+
+			edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.smaa["contrast factor"]));
+
+		});
+
+		folder.add(params.smaa, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
+
+			smaaEffect.blendMode.opacity.value = params.smaa.opacity;
+
+		});
+
+		folder.add(params.smaa, "blend mode", BlendFunction).onChange(() => {
+
+			smaaEffect.blendMode.blendFunction = Number(params.smaa["blend mode"]);
+			effectPass.recompile();
+
+		});
+
+		folder.open();
 
 	}
 
