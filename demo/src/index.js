@@ -9,6 +9,7 @@ import {
 import { DemoManager } from "three-demo";
 import { EffectComposer } from "../../src";
 
+import { AntialiasingDemo } from "./demos/AntialiasingDemo.js";
 import { BloomDemo } from "./demos/BloomDemo.js";
 import { BlurDemo } from "./demos/BlurDemo.js";
 import { ColorDepthDemo } from "./demos/ColorDepthDemo.js";
@@ -20,7 +21,6 @@ import { OutlineDemo } from "./demos/OutlineDemo.js";
 import { PatternDemo } from "./demos/PatternDemo.js";
 import { PixelationDemo } from "./demos/PixelationDemo.js";
 import { ShockWaveDemo } from "./demos/ShockWaveDemo.js";
-import { SMAADemo } from "./demos/SMAADemo.js";
 import { SSAODemo } from "./demos/SSAODemo.js";
 import { TextureDemo } from "./demos/TextureDemo.js";
 import { ToneMappingDemo } from "./demos/ToneMappingDemo.js";
@@ -167,7 +167,29 @@ window.addEventListener("load", (event) => {
 	const viewport = document.getElementById("viewport");
 
 	// Create and configure the renderer.
-	renderer = new WebGLRenderer({ powerPreference: "high-performance" });
+	const attributes = {
+		powerPreference: "high-performance",
+		antialias: false,
+		stencil: false,
+		alpha: false,
+		depth: true
+	};
+
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("webgl2", attributes);
+
+	if(context !== null) {
+
+		// Use WebGL 2.
+		renderer = new WebGLRenderer({ canvas, context });
+
+	} else {
+
+		// Fall back to WebGL 1.
+		renderer = new WebGLRenderer(attributes);
+
+	}
+
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
@@ -180,8 +202,7 @@ window.addEventListener("load", (event) => {
 
 	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType,
-		stencilBuffer: true
+		frameBufferType: HalfFloatType
 	});
 
 	// Create the demo manager.
@@ -195,6 +216,7 @@ window.addEventListener("load", (event) => {
 	manager.addEventListener("load", onLoad);
 
 	const demos = [
+		new AntialiasingDemo(composer),
 		new BloomDemo(composer),
 		new BlurDemo(composer),
 		new ColorDepthDemo(composer),
@@ -206,7 +228,6 @@ window.addEventListener("load", (event) => {
 		new PatternDemo(composer),
 		new PixelationDemo(composer),
 		new ShockWaveDemo(composer),
-		new SMAADemo(composer),
 		new SSAODemo(composer),
 		new TextureDemo(composer),
 		new ToneMappingDemo(composer),

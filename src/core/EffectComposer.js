@@ -8,6 +8,7 @@ import {
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
+	WebGLMultisampleRenderTarget,
 	WebGLRenderTarget
 } from "three";
 
@@ -36,10 +37,16 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Boolean} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
-	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, frameBufferType } = {}) {
+	constructor(renderer = null, {
+		depthBuffer = true,
+		stencilBuffer = false,
+		multisampling = 0,
+		frameBufferType
+	} = {}) {
 
 		/**
 		 * The renderer.
@@ -74,7 +81,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
 			this.outputBuffer = this.inputBuffer.clone();
 			this.enableExtensions();
 
@@ -115,6 +122,56 @@ export class EffectComposer {
 		 */
 
 		this.autoRenderToScreen = true;
+
+	}
+
+	/**
+	 * The current amount of samples used for multisample antialiasing.
+	 *
+	 * @type {Number}
+	 */
+
+	get multisampling() {
+
+		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ?
+			this.inputBuffer.samples : 0;
+
+	}
+
+	/**
+	 * Sets the amount of MSAA samples.
+	 *
+	 * Requires WebGL 2. Set to zero to disable multisampling.
+	 *
+	 * @type {Number}
+	 */
+
+	set multisampling(value) {
+
+		const buffer = this.inputBuffer;
+		const multisampling = this.multisampling;
+
+		if(multisampling > 0 && value > 0) {
+
+			this.inputBuffer.samples = value;
+			this.outputBuffer.samples = value;
+
+		} else if(multisampling !== value) {
+
+			this.inputBuffer.dispose();
+			this.outputBuffer.dispose();
+
+			// Enable or disable MSAA.
+			this.inputBuffer = this.createBuffer(
+				buffer.depthBuffer,
+				buffer.stencilBuffer,
+				buffer.texture.type,
+				value
+			);
+
+			this.outputBuffer = this.inputBuffer.clone();
+
+		}
 
 	}
 
@@ -248,27 +305,38 @@ export class EffectComposer {
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
 	 * Note: The buffer format will also be set to RGBA if the frame buffer type
-	 * is not UnsignedByteType because RGBXXF buffers are not renderable.
+	 * is HalfFloatType because RGB16F buffers are not renderable.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
+	 * @param {Number} multisampling - The number of samples to use for antialiasing.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, type) {
+	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
+		const size = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
-		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
+		const options = {
+			format: (!alpha && type === UnsignedByteType) ? RGBFormat : RGBAFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,
 			depthBuffer,
 			type
-		});
+		};
+
+		const renderTarget = (multisampling > 0) ?
+			new WebGLMultisampleRenderTarget(size.width, size.height, options) :
+			new WebGLRenderTarget(size.width, size.height, options);
+
+		if(multisampling > 0) {
+
+			renderTarget.samples = multisampling;
+
+		}
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;

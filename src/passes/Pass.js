@@ -171,22 +171,29 @@ export class Pass {
 	}
 
 	/**
-	 * Sets the render to screen flag and updates the fullscreen material.
+	 * Sets the render to screen flag.
+	 *
+	 * If the flag is changed to a different value, the fullscreen material will
+	 * be updated as well.
 	 *
 	 * @type {Boolean}
 	 */
 
 	set renderToScreen(value) {
 
-		const material = this.getFullscreenMaterial();
+		if(this.rtt === value) {
 
-		if(material !== null) {
+			const material = this.getFullscreenMaterial();
 
-			material.needsUpdate = true;
+			if(material !== null) {
+
+				material.needsUpdate = true;
+
+			}
+
+			this.rtt = !value;
 
 		}
-
-		this.rtt = !value;
 
 	}
 

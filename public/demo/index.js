@@ -34274,7 +34274,7 @@
     return DepthMaskMaterial;
   }(ShaderMaterial);
 
-  var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbours=gatherNeighbors();vec2 delta=abs(neighbours.xx-vec2(neighbours.y,neighbours.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
+  var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbors=gatherNeighbors();vec2 delta=abs(neighbors.xx-vec2(neighbors.y,neighbors.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
   var fragmentShaderLuma = "#include <common>\nuniform sampler2D inputBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;void main(){const vec2 threshold=vec2(EDGE_THRESHOLD);float l=linearToRelativeLuminance(texture2D(inputBuffer,vUv).rgb);float lLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv0).rgb);float lTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv1).rgb);vec4 delta;delta.xy=abs(l-vec2(lLeft,lTop));vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}float lRight=linearToRelativeLuminance(texture2D(inputBuffer,vUv2).rgb);float lBottom=linearToRelativeLuminance(texture2D(inputBuffer,vUv3).rgb);delta.zw=abs(l-vec2(lRight,lBottom));vec2 maxDelta=max(delta.xy,delta.zw);float lLeftLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv4).rgb);float lTopTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv5).rgb);delta.zw=abs(vec2(lLeft,lTop)-vec2(lLeftLeft,lTopTop));maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges.xy*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);}";
 
   var EdgeDetectionMaterial = function (_ShaderMaterial8) {
@@ -35062,13 +35062,15 @@
         return !this.rtt;
       },
       set: function set(value) {
-        var material = this.getFullscreenMaterial();
+        if (this.rtt === value) {
+          var material = this.getFullscreenMaterial();
 
-        if (material !== null) {
-          material.needsUpdate = true;
+          if (material !== null) {
+            material.needsUpdate = true;
+          }
+
+          this.rtt = !value;
         }
-
-        this.rtt = !value;
       }
     }]);
 
@@ -36385,6 +36387,8 @@
           depthBuffer = _ref8$depthBuffer === void 0 ? true : _ref8$depthBuffer,
           _ref8$stencilBuffer = _ref8.stencilBuffer,
           stencilBuffer = _ref8$stencilBuffer === void 0 ? false : _ref8$stencilBuffer,
+          _ref8$multisampling = _ref8.multisampling,
+          multisampling = _ref8$multisampling === void 0 ? 0 : _ref8$multisampling,
           frameBufferType = _ref8.frameBufferType;
 
       _classCallCheck(this, EffectComposer);
@@ -36395,7 +36399,7 @@
 
       if (this.renderer !== null) {
         this.renderer.autoClear = false;
-        this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
+        this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
         this.outputBuffer = this.inputBuffer.clone();
         this.enableExtensions();
       }
@@ -36469,17 +36473,23 @@
       }
     }, {
       key: "createBuffer",
-      value: function createBuffer(depthBuffer, stencilBuffer, type) {
-        var drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2());
+      value: function createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
+        var size = this.renderer.getDrawingBufferSize(new Vector2());
         var alpha = this.renderer.getContext().getContextAttributes().alpha;
-        var renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-          format: alpha || type !== UnsignedByteType ? RGBAFormat : RGBFormat,
+        var options = {
+          format: !alpha && type === UnsignedByteType ? RGBFormat : RGBAFormat,
           minFilter: LinearFilter,
           magFilter: LinearFilter,
           stencilBuffer: stencilBuffer,
           depthBuffer: depthBuffer,
           type: type
-        });
+        };
+        var renderTarget = multisampling > 0 ? new WebGLMultisampleRenderTarget(size.width, size.height, options) : new WebGLRenderTarget(size.width, size.height, options);
+
+        if (multisampling > 0) {
+          renderTarget.samples = multisampling;
+        }
+
         renderTarget.texture.name = "EffectComposer.Buffer";
         renderTarget.texture.generateMipmaps = false;
         return renderTarget;
@@ -36751,6 +36761,25 @@
         }
 
         this.copyPass.dispose();
+      }
+    }, {
+      key: "multisampling",
+      get: function get() {
+        return this.inputBuffer instanceof WebGLMultisampleRenderTarget ? this.inputBuffer.samples : 0;
+      },
+      set: function set(value) {
+        var buffer = this.inputBuffer;
+        var multisampling = this.multisampling;
+
+        if (multisampling > 0 && value > 0) {
+          this.inputBuffer.samples = value;
+          this.outputBuffer.samples = value;
+        } else if (multisampling !== value) {
+          this.inputBuffer.dispose();
+          this.outputBuffer.dispose();
+          this.inputBuffer = this.createBuffer(buffer.depthBuffer, buffer.stencilBuffer, buffer.texture.type, value);
+          this.outputBuffer = this.inputBuffer.clone();
+        }
       }
     }]);
 
@@ -42124,511 +42153,6 @@
     return Cage;
   }();
 
-  function create$1(amount, range) {
-    var group = new Group();
-    var geometry = new SphereBufferGeometry(1, 5, 5);
-    var twoPI = 2 * Math.PI;
-
-    for (var _i4 = 0; _i4 < amount; ++_i4) {
-      var material = new MeshPhongMaterial({
-        color: 0xffffff * Math.random(),
-        flatShading: true
-      });
-      var mesh = new Mesh(geometry, material);
-      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
-      mesh.position.multiplyScalar(Math.random() * range);
-      mesh.rotation.set(Math.random() * twoPI, Math.random() * twoPI, Math.random() * twoPI);
-      mesh.scale.multiplyScalar(Math.random());
-      group.add(mesh);
-    }
-
-    return group;
-  }
-
-  var SphereCloud = function () {
-    function SphereCloud() {
-      _classCallCheck(this, SphereCloud);
-    }
-
-    _createClass(SphereCloud, null, [{
-      key: "create",
-      value: function create() {
-        var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
-        var range = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10.0;
-        return create$1(amount, range);
-      }
-    }]);
-
-    return SphereCloud;
-  }();
-
-  var PostProcessingDemo = function (_Demo) {
-    _inherits(PostProcessingDemo, _Demo);
-
-    function PostProcessingDemo(id, composer) {
-      var _this53;
-
-      _classCallCheck(this, PostProcessingDemo);
-
-      _this53 = _possibleConstructorReturn(this, _getPrototypeOf(PostProcessingDemo).call(this, id));
-      _this53.composer = composer;
-      _this53.renderPass = new RenderPass(_this53.scene, null);
-      return _this53;
-    }
-
-    _createClass(PostProcessingDemo, [{
-      key: "render",
-      value: function render(deltaTime) {
-        if (this.controls !== null) {
-          this.controls.update(deltaTime);
-        }
-
-        this.composer.render(deltaTime);
-      }
-    }, {
-      key: "reset",
-      value: function reset() {
-        _get(_getPrototypeOf(PostProcessingDemo.prototype), "reset", this).call(this);
-
-        var renderPass = new RenderPass(this.scene, null);
-        renderPass.enabled = this.renderPass.enabled;
-        this.renderPass = renderPass;
-        return this;
-      }
-    }]);
-
-    return PostProcessingDemo;
-  }(Demo);
-
-  var mouse = new Vector2();
-
-  var BloomDemo = function (_PostProcessingDemo) {
-    _inherits(BloomDemo, _PostProcessingDemo);
-
-    function BloomDemo(composer) {
-      var _this54;
-
-      _classCallCheck(this, BloomDemo);
-
-      _this54 = _possibleConstructorReturn(this, _getPrototypeOf(BloomDemo).call(this, "bloom", composer));
-      _this54.raycaster = null;
-      _this54.selectedObject = null;
-      _this54.effectA = null;
-      _this54.effectB = null;
-      _this54.passA = null;
-      _this54.passB = null;
-      _this54.object = null;
-      return _this54;
-    }
-
-    _createClass(BloomDemo, [{
-      key: "raycast",
-      value: function raycast(event) {
-        var raycaster = this.raycaster;
-        mouse.x = event.clientX / window.innerWidth * 2.0 - 1.0;
-        mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
-        raycaster.setFromCamera(mouse, this.camera);
-        var intersects = raycaster.intersectObjects(this.object.children);
-        this.selectedObject = null;
-
-        if (intersects.length > 0) {
-          var _x2 = intersects[0];
-
-          if (_x2.object !== undefined) {
-            this.selectedObject = _x2.object;
-          } else {
-            console.warn("Encountered an undefined object", intersects);
-          }
-        }
-      }
-    }, {
-      key: "handleSelection",
-      value: function handleSelection() {
-        var selection = this.effectB.selection;
-        var selectedObject = this.selectedObject;
-
-        if (selectedObject !== null) {
-          if (selection.has(selectedObject)) {
-            selection["delete"](selectedObject);
-          } else {
-            selection.add(selectedObject);
-          }
-        }
-      }
-    }, {
-      key: "handleEvent",
-      value: function handleEvent(event) {
-        switch (event.type) {
-          case "mousemove":
-            this.raycast(event);
-            break;
-
-          case "mousedown":
-            this.handleSelection();
-            break;
-        }
-      }
-    }, {
-      key: "load",
-      value: function load() {
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new CubeTextureLoader(loadingManager);
-        var smaaImageLoader = new SMAAImageLoader(loadingManager);
-        var path = "textures/skies/space-green/";
-        var format = ".jpg";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onLoad = function () {
-              return setTimeout(resolve, 250);
-            };
-
-            loadingManager.onProgress = ProgressManager.updateProgress;
-            loadingManager.onError = reject;
-            cubeTextureLoader.load(urls, function (t) {
-              t.encoding = sRGBEncoding;
-              assets.set("sky", t);
-            });
-            smaaImageLoader.load(function (_ref28) {
-              var _ref29 = _slicedToArray(_ref28, 2),
-                  search = _ref29[0],
-                  area = _ref29[1];
-
-              assets.set("smaa-search", search);
-              assets.set("smaa-area", area);
-            });
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.getRenderer();
-        var aspect = window.innerWidth / window.innerHeight;
-        var camera = new PerspectiveCamera(50, aspect, 1, 2000);
-        camera.position.set(-10, 6, 15);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.background = assets.get("sky");
-        var ambientLight = new AmbientLight(0x212121);
-        var mainLight = new DirectionalLight(0xffffff, 1.0);
-        var backLight = new DirectionalLight(0xff7e66, 0.1);
-        mainLight.position.set(-1, 1, 1);
-        backLight.position.copy(mainLight.position).negate();
-        scene.add(ambientLight, mainLight, backLight);
-        var cloud = SphereCloud.create();
-        cloud.scale.setScalar(0.4);
-        this.object = cloud;
-        scene.add(cloud);
-        scene.add(Cage.create());
-        this.raycaster = new Raycaster();
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
-        smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
-        var bloomOptions = {
-          blendFunction: BlendFunction.SCREEN,
-          kernelSize: KernelSize.MEDIUM,
-          luminanceThreshold: 0.8,
-          luminanceSmoothing: 0.075,
-          height: 480
-        };
-        var bloomEffect = new BloomEffect(bloomOptions);
-        var selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
-        selectiveBloomEffect.inverted = true;
-        this.effectA = bloomEffect;
-        this.effectB = selectiveBloomEffect;
-        var effectPassA = new EffectPass(camera, smaaEffect, bloomEffect);
-        var effectPassB = new EffectPass(camera, smaaEffect, selectiveBloomEffect);
-        this.passA = effectPassA;
-        this.passB = effectPassB;
-        effectPassA.renderToScreen = true;
-        effectPassB.renderToScreen = true;
-        effectPassB.enabled = false;
-        composer.addPass(effectPassA);
-        composer.addPass(effectPassB);
-        ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
-        mainLight.layers.enable(selectiveBloomEffect.selection.layer);
-        backLight.layers.enable(selectiveBloomEffect.selection.layer);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var PI2 = 2.0 * Math.PI;
-        object.rotation.x += 0.05 * delta;
-        object.rotation.y += 0.25 * delta;
-
-        if (object.rotation.x >= PI2) {
-          object.rotation.x -= PI2;
-        }
-
-        if (object.rotation.y >= PI2) {
-          object.rotation.y -= PI2;
-        }
-
-        _get(_getPrototypeOf(BloomDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var _this55 = this;
-
-        var renderer = this.composer.getRenderer();
-        var passA = this.passA;
-        var passB = this.passB;
-        var effectA = this.effectA;
-        var effectB = this.effectB;
-        var blendModeA = effectA.blendMode;
-        var blendModeB = effectB.blendMode;
-        var params = {
-          "resolution": effectA.resolution.height,
-          "kernel size": effectA.blurPass.kernelSize,
-          "blur scale": effectA.blurPass.scale,
-          "intensity": effectA.intensity,
-          "luminance": {
-            "filter": effectA.luminancePass.enabled,
-            "threshold": effectA.luminanceMaterial.threshold,
-            "smoothing": effectA.luminanceMaterial.smoothing
-          },
-          "selection": {
-            "enabled": false,
-            "inverted": effectB.inverted,
-            "ignore bg": effectB.ignoreBackground
-          },
-          "opacity": blendModeA.opacity.value,
-          "blend mode": blendModeA.blendFunction
-        };
-        menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effectA.resolution.height = effectB.resolution.height = Number(params.resolution);
-        });
-        menu.add(params, "kernel size", KernelSize).onChange(function () {
-          effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(params["kernel size"]);
-        });
-        menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange(function () {
-          effectA.blurPass.scale = effectB.blurPass.scale = Number(params["blur scale"]);
-        });
-        menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
-          effectA.intensity = effectB.intensity = Number(params.intensity);
-        });
-        var folder = menu.addFolder("Luminance");
-        folder.add(params.luminance, "filter").onChange(function () {
-          effectA.luminancePass.enabled = effectB.luminancePass.enabled = params.luminance.filter;
-        });
-        folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(function () {
-          effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(params.luminance.threshold);
-        });
-        folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(function () {
-          effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(params.luminance.smoothing);
-        });
-        folder.open();
-        folder = menu.addFolder("Selection");
-        folder.add(params.selection, "enabled").onChange(function () {
-          passB.enabled = params.selection.enabled;
-          passA.enabled = !passB.enabled;
-
-          if (passB.enabled) {
-            renderer.domElement.addEventListener("mousemove", _this55);
-            renderer.domElement.addEventListener("mousedown", _this55);
-          } else {
-            renderer.domElement.removeEventListener("mousemove", _this55);
-            renderer.domElement.removeEventListener("mousedown", _this55);
-          }
-        });
-        folder.add(params.selection, "inverted").onChange(function () {
-          effectB.inverted = params.selection.inverted;
-        });
-        folder.add(params.selection, "ignore bg").onChange(function () {
-          effectB.ignoreBackground = params.selection["ignore bg"];
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendModeA.blendFunction = blendModeB.blendFunction = Number(params["blend mode"]);
-          passA.recompile();
-          passB.recompile();
-        });
-        menu.add(passA, "dithering").onChange(function () {
-          passB.dithering = passA.dithering;
-        });
-      }
-    }, {
-      key: "reset",
-      value: function reset() {
-        _get(_getPrototypeOf(BloomDemo.prototype), "reset", this).call(this);
-
-        var dom = this.composer.getRenderer().domElement;
-        dom.removeEventListener("mousemove", this);
-        dom.removeEventListener("mousedown", this);
-        return this;
-      }
-    }]);
-
-    return BloomDemo;
-  }(PostProcessingDemo);
-
-  var BlurDemo = function (_PostProcessingDemo2) {
-    _inherits(BlurDemo, _PostProcessingDemo2);
-
-    function BlurDemo(composer) {
-      var _this56;
-
-      _classCallCheck(this, BlurDemo);
-
-      _this56 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
-      _this56.blurPass = null;
-      _this56.texturePass = null;
-      _this56.textureEffect = null;
-      _this56.object = null;
-      return _this56;
-    }
-
-    _createClass(BlurDemo, [{
-      key: "load",
-      value: function load() {
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var cubeTextureLoader = new CubeTextureLoader(loadingManager);
-        var smaaImageLoader = new SMAAImageLoader(loadingManager);
-        var path = "textures/skies/sunset/";
-        var format = ".png";
-        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onLoad = function () {
-              return setTimeout(resolve, 250);
-            };
-
-            loadingManager.onProgress = ProgressManager.updateProgress;
-            loadingManager.onError = reject;
-            cubeTextureLoader.load(urls, function (t) {
-              t.encoding = sRGBEncoding;
-              assets.set("sky", t);
-            });
-            smaaImageLoader.load(function (_ref30) {
-              var _ref31 = _slicedToArray(_ref30, 2),
-                  search = _ref31[0],
-                  area = _ref31[1];
-
-              assets.set("smaa-search", search);
-              assets.set("smaa-area", area);
-            });
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.getRenderer();
-        var aspect = window.innerWidth / window.innerHeight;
-        var camera = new PerspectiveCamera(50, aspect, 1, 2000);
-        camera.position.set(-15, 0, -15);
-        camera.lookAt(scene.position);
-        this.camera = camera;
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = false;
-        controls.settings.sensitivity.zoom = 1.0;
-        controls.lookAt(scene.position);
-        this.controls = controls;
-        scene.background = assets.get("sky");
-        var ambientLight = new AmbientLight(0x212121);
-        var mainLight = new DirectionalLight(0xff7e66, 1.0);
-        var backLight = new DirectionalLight(0xff7e66, 0.1);
-        mainLight.position.set(1.44, 0.2, 2.0);
-        backLight.position.copy(mainLight.position).negate();
-        scene.add(ambientLight);
-        scene.add(mainLight);
-        scene.add(backLight);
-        this.object = SphereCloud.create();
-        scene.add(this.object);
-        var savePass = new SavePass();
-        var blurPass = new BlurPass({
-          height: 480
-        });
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.LUMA);
-        var textureEffect = new TextureEffect({
-          texture: savePass.renderTarget.texture
-        });
-        var smaaPass = new EffectPass(camera, smaaEffect);
-        var texturePass = new EffectPass(camera, textureEffect);
-        textureEffect.blendMode.opacity.value = 0.0;
-        this.blurPass = blurPass;
-        this.texturePass = texturePass;
-        this.textureEffect = textureEffect;
-        composer.addPass(smaaPass);
-        composer.addPass(savePass);
-        composer.addPass(blurPass);
-        composer.addPass(texturePass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        var object = this.object;
-        var PI2 = 2.0 * Math.PI;
-        object.rotation.x += 0.05 * delta;
-        object.rotation.y += 0.25 * delta;
-
-        if (object.rotation.x >= PI2) {
-          object.rotation.x -= PI2;
-        }
-
-        if (object.rotation.y >= PI2) {
-          object.rotation.y -= PI2;
-        }
-
-        _get(_getPrototypeOf(BlurDemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var textureEffect = this.textureEffect;
-        var texturePass = this.texturePass;
-        var blurPass = this.blurPass;
-        var blendMode = textureEffect.blendMode;
-        var params = {
-          "resolution": blurPass.height,
-          "kernel size": blurPass.kernelSize,
-          "scale": blurPass.scale,
-          "opacity": 1.0 - blendMode.opacity.value,
-          "blend mode": blendMode.blendFunction
-        };
-        menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          blurPass.resolution.height = Number(params.resolution);
-        });
-        menu.add(params, "kernel size", KernelSize).onChange(function () {
-          blurPass.kernelSize = Number(params["kernel size"]);
-        });
-        menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blurPass.scale = Number(params.scale);
-        });
-        menu.add(blurPass, "enabled");
-        menu.add(texturePass, "dithering");
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = 1.0 - params.opacity;
-        });
-      }
-    }]);
-
-    return BlurDemo;
-  }(PostProcessingDemo);
-
   var GLTFLoader = function () {
     function GLTFLoader(manager) {
       Loader.call(this, manager);
@@ -44635,18 +44159,713 @@
     return Sponza;
   }();
 
-  var ColorDepthDemo = function (_PostProcessingDemo3) {
-    _inherits(ColorDepthDemo, _PostProcessingDemo3);
+  var PostProcessingDemo = function (_Demo) {
+    _inherits(PostProcessingDemo, _Demo);
+
+    function PostProcessingDemo(id, composer) {
+      var _this53;
+
+      _classCallCheck(this, PostProcessingDemo);
+
+      _this53 = _possibleConstructorReturn(this, _getPrototypeOf(PostProcessingDemo).call(this, id));
+      _this53.composer = composer;
+      _this53.renderPass = new RenderPass(_this53.scene, null);
+      return _this53;
+    }
+
+    _createClass(PostProcessingDemo, [{
+      key: "render",
+      value: function render(deltaTime) {
+        if (this.controls !== null) {
+          this.controls.update(deltaTime);
+        }
+
+        this.composer.render(deltaTime);
+      }
+    }, {
+      key: "reset",
+      value: function reset() {
+        _get(_getPrototypeOf(PostProcessingDemo.prototype), "reset", this).call(this);
+
+        var renderPass = new RenderPass(this.scene, null);
+        renderPass.enabled = this.renderPass.enabled;
+        this.renderPass = renderPass;
+        return this;
+      }
+    }]);
+
+    return PostProcessingDemo;
+  }(Demo);
+
+  var AntialiasingDemo = function (_PostProcessingDemo) {
+    _inherits(AntialiasingDemo, _PostProcessingDemo);
+
+    function AntialiasingDemo(composer) {
+      var _this54;
+
+      _classCallCheck(this, AntialiasingDemo);
+
+      _this54 = _possibleConstructorReturn(this, _getPrototypeOf(AntialiasingDemo).call(this, "antialiasing", composer));
+      _this54.smaaEffect = null;
+      _this54.copyPass = null;
+      _this54.effectPass = null;
+      _this54.edgesTextureEffect = null;
+      _this54.weightsTextureEffect = null;
+      _this54.object = null;
+      _this54.rotate = true;
+      return _this54;
+    }
+
+    _createClass(AntialiasingDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var smaaImageLoader = new SMAAImageLoader(loadingManager);
+        var anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onLoad = function () {
+              return setTimeout(resolve, 250);
+            };
+
+            loadingManager.onProgress = ProgressManager.updateProgress;
+            loadingManager.onError = reject;
+            Sponza.load(assets, loadingManager, anisotropy);
+            smaaImageLoader.load(function (_ref28) {
+              var _ref29 = _slicedToArray(_ref28, 2),
+                  search = _ref29[0],
+                  area = _ref29[1];
+
+              assets.set("smaa-search", search);
+              assets.set("smaa-area", area);
+            });
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.getRenderer();
+        var aspect = window.innerWidth / window.innerHeight;
+        var camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+        camera.position.set(4, 8, 0.75);
+        this.camera = camera;
+        var target = new Vector3(-0.5, 6.5, -0.25);
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = true;
+        controls.settings.sensitivity.translation = 3.0;
+        controls.lookAt(target);
+        controls.setOrbitEnabled(false);
+        this.controls = controls;
+        scene.background = new Color(0xccccff);
+        scene.add.apply(scene, _toConsumableArray(Sponza.createLights()));
+        scene.add(assets.get("sponza"));
+        var cage = Cage.create(0x000000, 1.25, 0.025);
+        cage.position.set(-0.5, 6.5, -0.25);
+        cage.rotation.x += Math.PI * 0.1;
+        cage.rotation.y += Math.PI * 0.3;
+        this.object = cage;
+        scene.add(cage);
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
+        var edgesTextureEffect = new TextureEffect({
+          blendFunction: BlendFunction.SKIP,
+          texture: smaaEffect.renderTargetEdges.texture
+        });
+        var weightsTextureEffect = new TextureEffect({
+          blendFunction: BlendFunction.SKIP,
+          texture: smaaEffect.renderTargetWeights.texture
+        });
+        var copyPass = new ShaderPass(new CopyMaterial());
+        var effectPass = new EffectPass(camera, smaaEffect, edgesTextureEffect, weightsTextureEffect);
+        this.smaaEffect = smaaEffect;
+        this.edgesTextureEffect = edgesTextureEffect;
+        this.weightsTextureEffect = weightsTextureEffect;
+        this.copyPass = copyPass;
+        this.effectPass = effectPass;
+        copyPass.enabled = false;
+        copyPass.renderToScreen = true;
+        effectPass.renderToScreen = true;
+        composer.addPass(copyPass);
+        composer.addPass(effectPass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        if (this.rotate) {
+          var object = this.object;
+          var PI2 = 2.0 * Math.PI;
+          object.rotation.x += 0.01 * delta;
+          object.rotation.y += 0.05 * delta;
+
+          if (object.rotation.x >= PI2) {
+            object.rotation.x -= PI2;
+          }
+
+          if (object.rotation.y >= PI2) {
+            object.rotation.y -= PI2;
+          }
+        }
+
+        _get(_getPrototypeOf(AntialiasingDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var composer = this.composer;
+        var renderer = composer.getRenderer();
+        var context = renderer.getContext();
+        var copyPass = this.copyPass;
+        var effectPass = this.effectPass;
+        var smaaEffect = this.smaaEffect;
+        var edgesTextureEffect = this.edgesTextureEffect;
+        var weightsTextureEffect = this.weightsTextureEffect;
+        var edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
+        var AAMode = Object.assign({
+          DISABLED: 0,
+          SMAA: 1
+        }, !renderer.capabilities.isWebGL2 ? {} : {
+          MSAA: 2
+        });
+        var SMAAMode = {
+          DEFAULT: 0,
+          SMAA_EDGES: 1,
+          SMAA_WEIGHTS: 2
+        };
+        var params = {
+          "antialiasing": AAMode.SMAA,
+          "smaa": {
+            "mode": SMAAMode.DEFAULT,
+            "preset": SMAAPreset.HIGH,
+            "edge detection": EdgeDetectionMode.DEPTH,
+            "contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
+            "opacity": smaaEffect.blendMode.opacity.value,
+            "blend mode": smaaEffect.blendMode.blendFunction
+          }
+        };
+        menu.add(this, "rotate");
+        menu.add(params, "antialiasing", AAMode).onChange(function () {
+          var mode = Number(params.antialiasing);
+          effectPass.enabled = mode === AAMode.SMAA;
+          copyPass.enabled = !effectPass.enabled;
+          composer.multisampling = mode === AAMode.MSAA ? Math.min(4, context.getParameter(context.MAX_SAMPLES)) : 0;
+        });
+        var folder = menu.addFolder("SMAA");
+        folder.add(params.smaa, "mode", SMAAMode).onChange(function () {
+          var mode = Number(params.smaa.mode);
+          edgesTextureEffect.blendMode.blendFunction = mode === SMAAMode.SMAA_EDGES ? BlendFunction.NORMAL : BlendFunction.SKIP;
+          weightsTextureEffect.blendMode.blendFunction = mode === SMAAMode.SMAA_WEIGHTS ? BlendFunction.NORMAL : BlendFunction.SKIP;
+          effectPass.encodeOutput = mode !== SMAAMode.SMAA_EDGES && mode !== SMAAMode.SMAA_WEIGHTS;
+          effectPass.recompile();
+        });
+        folder.add(params.smaa, "preset", SMAAPreset).onChange(function () {
+          smaaEffect.applyPreset(Number(params.smaa.preset));
+        });
+        folder.add(params.smaa, "edge detection", EdgeDetectionMode).onChange(function () {
+          edgeDetectionMaterial.setEdgeDetectionMode(Number(params.smaa["edge detection"]));
+        });
+        folder.add(params.smaa, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(function () {
+          edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params.smaa["contrast factor"]));
+        });
+        folder.add(params.smaa, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          smaaEffect.blendMode.opacity.value = params.smaa.opacity;
+        });
+        folder.add(params.smaa, "blend mode", BlendFunction).onChange(function () {
+          smaaEffect.blendMode.blendFunction = Number(params.smaa["blend mode"]);
+          effectPass.recompile();
+        });
+        folder.open();
+      }
+    }]);
+
+    return AntialiasingDemo;
+  }(PostProcessingDemo);
+
+  function create$1(amount, range) {
+    var group = new Group();
+    var geometry = new SphereBufferGeometry(1, 5, 5);
+    var twoPI = 2 * Math.PI;
+
+    for (var _i4 = 0; _i4 < amount; ++_i4) {
+      var material = new MeshPhongMaterial({
+        color: 0xffffff * Math.random(),
+        flatShading: true
+      });
+      var mesh = new Mesh(geometry, material);
+      mesh.position.set(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize();
+      mesh.position.multiplyScalar(Math.random() * range);
+      mesh.rotation.set(Math.random() * twoPI, Math.random() * twoPI, Math.random() * twoPI);
+      mesh.scale.multiplyScalar(Math.random());
+      group.add(mesh);
+    }
+
+    return group;
+  }
+
+  var SphereCloud = function () {
+    function SphereCloud() {
+      _classCallCheck(this, SphereCloud);
+    }
+
+    _createClass(SphereCloud, null, [{
+      key: "create",
+      value: function create() {
+        var amount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
+        var range = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 10.0;
+        return create$1(amount, range);
+      }
+    }]);
+
+    return SphereCloud;
+  }();
+
+  var mouse = new Vector2();
+
+  var BloomDemo = function (_PostProcessingDemo2) {
+    _inherits(BloomDemo, _PostProcessingDemo2);
+
+    function BloomDemo(composer) {
+      var _this55;
+
+      _classCallCheck(this, BloomDemo);
+
+      _this55 = _possibleConstructorReturn(this, _getPrototypeOf(BloomDemo).call(this, "bloom", composer));
+      _this55.raycaster = null;
+      _this55.selectedObject = null;
+      _this55.effectA = null;
+      _this55.effectB = null;
+      _this55.passA = null;
+      _this55.passB = null;
+      _this55.object = null;
+      return _this55;
+    }
+
+    _createClass(BloomDemo, [{
+      key: "raycast",
+      value: function raycast(event) {
+        var raycaster = this.raycaster;
+        mouse.x = event.clientX / window.innerWidth * 2.0 - 1.0;
+        mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
+        raycaster.setFromCamera(mouse, this.camera);
+        var intersects = raycaster.intersectObjects(this.object.children);
+        this.selectedObject = null;
+
+        if (intersects.length > 0) {
+          var _x2 = intersects[0];
+
+          if (_x2.object !== undefined) {
+            this.selectedObject = _x2.object;
+          } else {
+            console.warn("Encountered an undefined object", intersects);
+          }
+        }
+      }
+    }, {
+      key: "handleSelection",
+      value: function handleSelection() {
+        var selection = this.effectB.selection;
+        var selectedObject = this.selectedObject;
+
+        if (selectedObject !== null) {
+          if (selection.has(selectedObject)) {
+            selection["delete"](selectedObject);
+          } else {
+            selection.add(selectedObject);
+          }
+        }
+      }
+    }, {
+      key: "handleEvent",
+      value: function handleEvent(event) {
+        switch (event.type) {
+          case "mousemove":
+            this.raycast(event);
+            break;
+
+          case "mousedown":
+            this.handleSelection();
+            break;
+        }
+      }
+    }, {
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new CubeTextureLoader(loadingManager);
+        var smaaImageLoader = new SMAAImageLoader(loadingManager);
+        var path = "textures/skies/space-green/";
+        var format = ".jpg";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onLoad = function () {
+              return setTimeout(resolve, 250);
+            };
+
+            loadingManager.onProgress = ProgressManager.updateProgress;
+            loadingManager.onError = reject;
+            cubeTextureLoader.load(urls, function (t) {
+              t.encoding = sRGBEncoding;
+              assets.set("sky", t);
+            });
+            smaaImageLoader.load(function (_ref30) {
+              var _ref31 = _slicedToArray(_ref30, 2),
+                  search = _ref31[0],
+                  area = _ref31[1];
+
+              assets.set("smaa-search", search);
+              assets.set("smaa-area", area);
+            });
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.getRenderer();
+        var aspect = window.innerWidth / window.innerHeight;
+        var camera = new PerspectiveCamera(50, aspect, 1, 2000);
+        camera.position.set(-10, 6, 15);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.background = assets.get("sky");
+        var ambientLight = new AmbientLight(0x212121);
+        var mainLight = new DirectionalLight(0xffffff, 1.0);
+        var backLight = new DirectionalLight(0xff7e66, 0.1);
+        mainLight.position.set(-1, 1, 1);
+        backLight.position.copy(mainLight.position).negate();
+        scene.add(ambientLight, mainLight, backLight);
+        var cloud = SphereCloud.create();
+        cloud.scale.setScalar(0.4);
+        this.object = cloud;
+        scene.add(cloud);
+        scene.add(Cage.create());
+        this.raycaster = new Raycaster();
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
+        smaaEffect.edgeDetectionMaterial.setEdgeDetectionThreshold(0.05);
+        var bloomOptions = {
+          blendFunction: BlendFunction.SCREEN,
+          kernelSize: KernelSize.MEDIUM,
+          luminanceThreshold: 0.8,
+          luminanceSmoothing: 0.075,
+          height: 480
+        };
+        var bloomEffect = new BloomEffect(bloomOptions);
+        var selectiveBloomEffect = new SelectiveBloomEffect(scene, camera, bloomOptions);
+        selectiveBloomEffect.inverted = true;
+        this.effectA = bloomEffect;
+        this.effectB = selectiveBloomEffect;
+        var effectPassA = new EffectPass(camera, smaaEffect, bloomEffect);
+        var effectPassB = new EffectPass(camera, smaaEffect, selectiveBloomEffect);
+        this.passA = effectPassA;
+        this.passB = effectPassB;
+        effectPassA.renderToScreen = true;
+        effectPassB.renderToScreen = true;
+        effectPassB.enabled = false;
+        composer.addPass(effectPassA);
+        composer.addPass(effectPassB);
+        ambientLight.layers.enable(selectiveBloomEffect.selection.layer);
+        mainLight.layers.enable(selectiveBloomEffect.selection.layer);
+        backLight.layers.enable(selectiveBloomEffect.selection.layer);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var PI2 = 2.0 * Math.PI;
+        object.rotation.x += 0.05 * delta;
+        object.rotation.y += 0.25 * delta;
+
+        if (object.rotation.x >= PI2) {
+          object.rotation.x -= PI2;
+        }
+
+        if (object.rotation.y >= PI2) {
+          object.rotation.y -= PI2;
+        }
+
+        _get(_getPrototypeOf(BloomDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var _this56 = this;
+
+        var renderer = this.composer.getRenderer();
+        var passA = this.passA;
+        var passB = this.passB;
+        var effectA = this.effectA;
+        var effectB = this.effectB;
+        var blendModeA = effectA.blendMode;
+        var blendModeB = effectB.blendMode;
+        var params = {
+          "resolution": effectA.resolution.height,
+          "kernel size": effectA.blurPass.kernelSize,
+          "blur scale": effectA.blurPass.scale,
+          "intensity": effectA.intensity,
+          "luminance": {
+            "filter": effectA.luminancePass.enabled,
+            "threshold": effectA.luminanceMaterial.threshold,
+            "smoothing": effectA.luminanceMaterial.smoothing
+          },
+          "selection": {
+            "enabled": false,
+            "inverted": effectB.inverted,
+            "ignore bg": effectB.ignoreBackground
+          },
+          "opacity": blendModeA.opacity.value,
+          "blend mode": blendModeA.blendFunction
+        };
+        menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
+          effectA.resolution.height = effectB.resolution.height = Number(params.resolution);
+        });
+        menu.add(params, "kernel size", KernelSize).onChange(function () {
+          effectA.blurPass.kernelSize = effectB.blurPass.kernelSize = Number(params["kernel size"]);
+        });
+        menu.add(params, "blur scale").min(0.0).max(1.0).step(0.01).onChange(function () {
+          effectA.blurPass.scale = effectB.blurPass.scale = Number(params["blur scale"]);
+        });
+        menu.add(params, "intensity").min(0.0).max(3.0).step(0.01).onChange(function () {
+          effectA.intensity = effectB.intensity = Number(params.intensity);
+        });
+        var folder = menu.addFolder("Luminance");
+        folder.add(params.luminance, "filter").onChange(function () {
+          effectA.luminancePass.enabled = effectB.luminancePass.enabled = params.luminance.filter;
+        });
+        folder.add(params.luminance, "threshold").min(0.0).max(1.0).step(0.001).onChange(function () {
+          effectA.luminanceMaterial.threshold = effectB.luminanceMaterial.threshold = Number(params.luminance.threshold);
+        });
+        folder.add(params.luminance, "smoothing").min(0.0).max(1.0).step(0.001).onChange(function () {
+          effectA.luminanceMaterial.smoothing = effectB.luminanceMaterial.smoothing = Number(params.luminance.smoothing);
+        });
+        folder.open();
+        folder = menu.addFolder("Selection");
+        folder.add(params.selection, "enabled").onChange(function () {
+          passB.enabled = params.selection.enabled;
+          passA.enabled = !passB.enabled;
+
+          if (passB.enabled) {
+            renderer.domElement.addEventListener("mousemove", _this56);
+            renderer.domElement.addEventListener("mousedown", _this56);
+          } else {
+            renderer.domElement.removeEventListener("mousemove", _this56);
+            renderer.domElement.removeEventListener("mousedown", _this56);
+          }
+        });
+        folder.add(params.selection, "inverted").onChange(function () {
+          effectB.inverted = params.selection.inverted;
+        });
+        folder.add(params.selection, "ignore bg").onChange(function () {
+          effectB.ignoreBackground = params.selection["ignore bg"];
+        });
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendModeA.opacity.value = blendModeB.opacity.value = params.opacity;
+        });
+        menu.add(params, "blend mode", BlendFunction).onChange(function () {
+          blendModeA.blendFunction = blendModeB.blendFunction = Number(params["blend mode"]);
+          passA.recompile();
+          passB.recompile();
+        });
+        menu.add(passA, "dithering").onChange(function () {
+          passB.dithering = passA.dithering;
+        });
+      }
+    }, {
+      key: "reset",
+      value: function reset() {
+        _get(_getPrototypeOf(BloomDemo.prototype), "reset", this).call(this);
+
+        var dom = this.composer.getRenderer().domElement;
+        dom.removeEventListener("mousemove", this);
+        dom.removeEventListener("mousedown", this);
+        return this;
+      }
+    }]);
+
+    return BloomDemo;
+  }(PostProcessingDemo);
+
+  var BlurDemo = function (_PostProcessingDemo3) {
+    _inherits(BlurDemo, _PostProcessingDemo3);
+
+    function BlurDemo(composer) {
+      var _this57;
+
+      _classCallCheck(this, BlurDemo);
+
+      _this57 = _possibleConstructorReturn(this, _getPrototypeOf(BlurDemo).call(this, "blur", composer));
+      _this57.blurPass = null;
+      _this57.texturePass = null;
+      _this57.textureEffect = null;
+      _this57.object = null;
+      return _this57;
+    }
+
+    _createClass(BlurDemo, [{
+      key: "load",
+      value: function load() {
+        var assets = this.assets;
+        var loadingManager = this.loadingManager;
+        var cubeTextureLoader = new CubeTextureLoader(loadingManager);
+        var smaaImageLoader = new SMAAImageLoader(loadingManager);
+        var path = "textures/skies/sunset/";
+        var format = ".png";
+        var urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+        return new Promise(function (resolve, reject) {
+          if (assets.size === 0) {
+            loadingManager.onLoad = function () {
+              return setTimeout(resolve, 250);
+            };
+
+            loadingManager.onProgress = ProgressManager.updateProgress;
+            loadingManager.onError = reject;
+            cubeTextureLoader.load(urls, function (t) {
+              t.encoding = sRGBEncoding;
+              assets.set("sky", t);
+            });
+            smaaImageLoader.load(function (_ref32) {
+              var _ref33 = _slicedToArray(_ref32, 2),
+                  search = _ref33[0],
+                  area = _ref33[1];
+
+              assets.set("smaa-search", search);
+              assets.set("smaa-area", area);
+            });
+          } else {
+            resolve();
+          }
+        });
+      }
+    }, {
+      key: "initialize",
+      value: function initialize() {
+        var scene = this.scene;
+        var assets = this.assets;
+        var composer = this.composer;
+        var renderer = composer.getRenderer();
+        var aspect = window.innerWidth / window.innerHeight;
+        var camera = new PerspectiveCamera(50, aspect, 1, 2000);
+        camera.position.set(-15, 0, -15);
+        camera.lookAt(scene.position);
+        this.camera = camera;
+        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
+        controls.settings.pointer.lock = false;
+        controls.settings.translation.enabled = false;
+        controls.settings.sensitivity.zoom = 1.0;
+        controls.lookAt(scene.position);
+        this.controls = controls;
+        scene.background = assets.get("sky");
+        var ambientLight = new AmbientLight(0x212121);
+        var mainLight = new DirectionalLight(0xff7e66, 1.0);
+        var backLight = new DirectionalLight(0xff7e66, 0.1);
+        mainLight.position.set(1.44, 0.2, 2.0);
+        backLight.position.copy(mainLight.position).negate();
+        scene.add(ambientLight);
+        scene.add(mainLight);
+        scene.add(backLight);
+        this.object = SphereCloud.create();
+        scene.add(this.object);
+        var savePass = new SavePass();
+        var blurPass = new BlurPass({
+          height: 480
+        });
+        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.LUMA);
+        var textureEffect = new TextureEffect({
+          texture: savePass.renderTarget.texture
+        });
+        var smaaPass = new EffectPass(camera, smaaEffect);
+        var texturePass = new EffectPass(camera, textureEffect);
+        textureEffect.blendMode.opacity.value = 0.0;
+        this.blurPass = blurPass;
+        this.texturePass = texturePass;
+        this.textureEffect = textureEffect;
+        composer.addPass(smaaPass);
+        composer.addPass(savePass);
+        composer.addPass(blurPass);
+        composer.addPass(texturePass);
+      }
+    }, {
+      key: "render",
+      value: function render(delta) {
+        var object = this.object;
+        var PI2 = 2.0 * Math.PI;
+        object.rotation.x += 0.05 * delta;
+        object.rotation.y += 0.25 * delta;
+
+        if (object.rotation.x >= PI2) {
+          object.rotation.x -= PI2;
+        }
+
+        if (object.rotation.y >= PI2) {
+          object.rotation.y -= PI2;
+        }
+
+        _get(_getPrototypeOf(BlurDemo.prototype), "render", this).call(this, delta);
+      }
+    }, {
+      key: "registerOptions",
+      value: function registerOptions(menu) {
+        var textureEffect = this.textureEffect;
+        var texturePass = this.texturePass;
+        var blurPass = this.blurPass;
+        var blendMode = textureEffect.blendMode;
+        var params = {
+          "resolution": blurPass.height,
+          "kernel size": blurPass.kernelSize,
+          "scale": blurPass.scale,
+          "opacity": 1.0 - blendMode.opacity.value,
+          "blend mode": blendMode.blendFunction
+        };
+        menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
+          blurPass.resolution.height = Number(params.resolution);
+        });
+        menu.add(params, "kernel size", KernelSize).onChange(function () {
+          blurPass.kernelSize = Number(params["kernel size"]);
+        });
+        menu.add(params, "scale").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blurPass.scale = Number(params.scale);
+        });
+        menu.add(blurPass, "enabled");
+        menu.add(texturePass, "dithering");
+        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
+          blendMode.opacity.value = 1.0 - params.opacity;
+        });
+      }
+    }]);
+
+    return BlurDemo;
+  }(PostProcessingDemo);
+
+  var ColorDepthDemo = function (_PostProcessingDemo4) {
+    _inherits(ColorDepthDemo, _PostProcessingDemo4);
 
     function ColorDepthDemo(composer) {
-      var _this57;
+      var _this58;
 
       _classCallCheck(this, ColorDepthDemo);
 
-      _this57 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
-      _this57.effect = null;
-      _this57.pass = null;
-      return _this57;
+      _this58 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthDemo).call(this, "color-depth", composer));
+      _this58.effect = null;
+      _this58.pass = null;
+      return _this58;
     }
 
     _createClass(ColorDepthDemo, [{
@@ -44665,10 +44884,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref32) {
-              var _ref33 = _slicedToArray(_ref32, 2),
-                  search = _ref33[0],
-                  area = _ref33[1];
+            smaaImageLoader.load(function (_ref34) {
+              var _ref35 = _slicedToArray(_ref34, 2),
+                  search = _ref35[0],
+                  area = _ref35[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -44737,21 +44956,21 @@
     return ColorDepthDemo;
   }(PostProcessingDemo);
 
-  var ColorGradingDemo = function (_PostProcessingDemo4) {
-    _inherits(ColorGradingDemo, _PostProcessingDemo4);
+  var ColorGradingDemo = function (_PostProcessingDemo5) {
+    _inherits(ColorGradingDemo, _PostProcessingDemo5);
 
     function ColorGradingDemo(composer) {
-      var _this58;
+      var _this59;
 
       _classCallCheck(this, ColorGradingDemo);
 
-      _this58 = _possibleConstructorReturn(this, _getPrototypeOf(ColorGradingDemo).call(this, "color-grading", composer));
-      _this58.brightnessContrastEffect = null;
-      _this58.colorAverageEffect = null;
-      _this58.hueSaturationEffect = null;
-      _this58.sepiaEffect = null;
-      _this58.pass = null;
-      return _this58;
+      _this59 = _possibleConstructorReturn(this, _getPrototypeOf(ColorGradingDemo).call(this, "color-grading", composer));
+      _this59.brightnessContrastEffect = null;
+      _this59.colorAverageEffect = null;
+      _this59.hueSaturationEffect = null;
+      _this59.sepiaEffect = null;
+      _this59.pass = null;
+      return _this59;
     }
 
     _createClass(ColorGradingDemo, [{
@@ -44770,10 +44989,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref34) {
-              var _ref35 = _slicedToArray(_ref34, 2),
-                  search = _ref35[0],
-                  area = _ref35[1];
+            smaaImageLoader.load(function (_ref36) {
+              var _ref37 = _slicedToArray(_ref36, 2),
+                  search = _ref37[0],
+                  area = _ref37[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -44913,22 +45132,22 @@
     return ColorGradingDemo;
   }(PostProcessingDemo);
 
-  var DepthOfFieldDemo = function (_PostProcessingDemo5) {
-    _inherits(DepthOfFieldDemo, _PostProcessingDemo5);
+  var DepthOfFieldDemo = function (_PostProcessingDemo6) {
+    _inherits(DepthOfFieldDemo, _PostProcessingDemo6);
 
     function DepthOfFieldDemo(composer) {
-      var _this59;
+      var _this60;
 
       _classCallCheck(this, DepthOfFieldDemo);
 
-      _this59 = _possibleConstructorReturn(this, _getPrototypeOf(DepthOfFieldDemo).call(this, "depth-of-field", composer));
-      _this59.depthEffect = null;
-      _this59.vignetteEffect = null;
-      _this59.depthOfFieldEffect = null;
-      _this59.cocTextureEffect = null;
-      _this59.effectPass0 = null;
-      _this59.effectPass1 = null;
-      return _this59;
+      _this60 = _possibleConstructorReturn(this, _getPrototypeOf(DepthOfFieldDemo).call(this, "depth-of-field", composer));
+      _this60.depthEffect = null;
+      _this60.vignetteEffect = null;
+      _this60.depthOfFieldEffect = null;
+      _this60.cocTextureEffect = null;
+      _this60.effectPass0 = null;
+      _this60.effectPass1 = null;
+      return _this60;
     }
 
     _createClass(DepthOfFieldDemo, [{
@@ -44947,10 +45166,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref36) {
-              var _ref37 = _slicedToArray(_ref36, 2),
-                  search = _ref37[0],
-                  area = _ref37[1];
+            smaaImageLoader.load(function (_ref38) {
+              var _ref39 = _slicedToArray(_ref38, 2),
+                  search = _ref39[0],
+                  area = _ref39[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45102,18 +45321,18 @@
     return DepthOfFieldDemo;
   }(PostProcessingDemo);
 
-  var GlitchDemo = function (_PostProcessingDemo6) {
-    _inherits(GlitchDemo, _PostProcessingDemo6);
+  var GlitchDemo = function (_PostProcessingDemo7) {
+    _inherits(GlitchDemo, _PostProcessingDemo7);
 
     function GlitchDemo(composer) {
-      var _this60;
+      var _this61;
 
       _classCallCheck(this, GlitchDemo);
 
-      _this60 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
-      _this60.effect = null;
-      _this60.pass = null;
-      return _this60;
+      _this61 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchDemo).call(this, "glitch", composer));
+      _this61.effect = null;
+      _this61.pass = null;
+      return _this61;
     }
 
     _createClass(GlitchDemo, [{
@@ -45136,10 +45355,10 @@
             textureLoader.load("textures/perturb.jpg", function (t) {
               assets.set("perturbation-map", t);
             });
-            smaaImageLoader.load(function (_ref38) {
-              var _ref39 = _slicedToArray(_ref38, 2),
-                  search = _ref39[0],
-                  area = _ref39[1];
+            smaaImageLoader.load(function (_ref40) {
+              var _ref41 = _slicedToArray(_ref40, 2),
+                  search = _ref41[0],
+                  area = _ref41[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45253,20 +45472,20 @@
     return GlitchDemo;
   }(PostProcessingDemo);
 
-  var GodRaysDemo = function (_PostProcessingDemo7) {
-    _inherits(GodRaysDemo, _PostProcessingDemo7);
+  var GodRaysDemo = function (_PostProcessingDemo8) {
+    _inherits(GodRaysDemo, _PostProcessingDemo8);
 
     function GodRaysDemo(composer) {
-      var _this61;
+      var _this62;
 
       _classCallCheck(this, GodRaysDemo);
 
-      _this61 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
-      _this61.pass = null;
-      _this61.effect = null;
-      _this61.sun = null;
-      _this61.light = null;
-      return _this61;
+      _this62 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysDemo).call(this, "god-rays", composer));
+      _this62.pass = null;
+      _this62.effect = null;
+      _this62.sun = null;
+      _this62.light = null;
+      return _this62;
     }
 
     _createClass(GodRaysDemo, [{
@@ -45285,10 +45504,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref40) {
-              var _ref41 = _slicedToArray(_ref40, 2),
-                  search = _ref41[0],
-                  area = _ref41[1];
+            smaaImageLoader.load(function (_ref42) {
+              var _ref43 = _slicedToArray(_ref42, 2),
+                  search = _ref43[0],
+                  area = _ref43[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45423,20 +45642,20 @@
 
   var mouse$1 = new Vector2();
 
-  var OutlineDemo = function (_PostProcessingDemo8) {
-    _inherits(OutlineDemo, _PostProcessingDemo8);
+  var OutlineDemo = function (_PostProcessingDemo9) {
+    _inherits(OutlineDemo, _PostProcessingDemo9);
 
     function OutlineDemo(composer) {
-      var _this62;
+      var _this63;
 
       _classCallCheck(this, OutlineDemo);
 
-      _this62 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
-      _this62.raycaster = null;
-      _this62.selectedObject = null;
-      _this62.effect = null;
-      _this62.pass = null;
-      return _this62;
+      _this63 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineDemo).call(this, "outline", composer));
+      _this63.raycaster = null;
+      _this63.selectedObject = null;
+      _this63.effect = null;
+      _this63.pass = null;
+      return _this63;
     }
 
     _createClass(OutlineDemo, [{
@@ -45512,10 +45731,10 @@
             textureLoader.load("textures/pattern.png", function (t) {
               assets.set("pattern-color", t);
             });
-            smaaImageLoader.load(function (_ref42) {
-              var _ref43 = _slicedToArray(_ref42, 2),
-                  search = _ref43[0],
-                  area = _ref43[1];
+            smaaImageLoader.load(function (_ref44) {
+              var _ref45 = _slicedToArray(_ref44, 2),
+                  search = _ref45[0],
+                  area = _ref45[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45680,20 +45899,20 @@
     return OutlineDemo;
   }(PostProcessingDemo);
 
-  var PatternDemo = function (_PostProcessingDemo9) {
-    _inherits(PatternDemo, _PostProcessingDemo9);
+  var PatternDemo = function (_PostProcessingDemo10) {
+    _inherits(PatternDemo, _PostProcessingDemo10);
 
     function PatternDemo(composer) {
-      var _this63;
+      var _this64;
 
       _classCallCheck(this, PatternDemo);
 
-      _this63 = _possibleConstructorReturn(this, _getPrototypeOf(PatternDemo).call(this, "pattern", composer));
-      _this63.dotScreenEffect = null;
-      _this63.gridEffect = null;
-      _this63.scanlineEffect = null;
-      _this63.pass = null;
-      return _this63;
+      _this64 = _possibleConstructorReturn(this, _getPrototypeOf(PatternDemo).call(this, "pattern", composer));
+      _this64.dotScreenEffect = null;
+      _this64.gridEffect = null;
+      _this64.scanlineEffect = null;
+      _this64.pass = null;
+      return _this64;
     }
 
     _createClass(PatternDemo, [{
@@ -45712,10 +45931,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref44) {
-              var _ref45 = _slicedToArray(_ref44, 2),
-                  search = _ref45[0],
-                  area = _ref45[1];
+            smaaImageLoader.load(function (_ref46) {
+              var _ref47 = _slicedToArray(_ref46, 2),
+                  search = _ref47[0],
+                  area = _ref47[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45845,17 +46064,17 @@
     return PatternDemo;
   }(PostProcessingDemo);
 
-  var PixelationDemo = function (_PostProcessingDemo10) {
-    _inherits(PixelationDemo, _PostProcessingDemo10);
+  var PixelationDemo = function (_PostProcessingDemo11) {
+    _inherits(PixelationDemo, _PostProcessingDemo11);
 
     function PixelationDemo(composer) {
-      var _this64;
+      var _this65;
 
       _classCallCheck(this, PixelationDemo);
 
-      _this64 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
-      _this64.effect = null;
-      return _this64;
+      _this65 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationDemo).call(this, "pixelation", composer));
+      _this65.effect = null;
+      return _this65;
     }
 
     _createClass(PixelationDemo, [{
@@ -45874,10 +46093,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref46) {
-              var _ref47 = _slicedToArray(_ref46, 2),
-                  search = _ref47[0],
-                  area = _ref47[1];
+            smaaImageLoader.load(function (_ref48) {
+              var _ref49 = _slicedToArray(_ref48, 2),
+                  search = _ref49[0],
+                  area = _ref49[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -45934,17 +46153,17 @@
     return PixelationDemo;
   }(PostProcessingDemo);
 
-  var ShockWaveDemo = function (_PostProcessingDemo11) {
-    _inherits(ShockWaveDemo, _PostProcessingDemo11);
+  var ShockWaveDemo = function (_PostProcessingDemo12) {
+    _inherits(ShockWaveDemo, _PostProcessingDemo12);
 
     function ShockWaveDemo(composer) {
-      var _this65;
+      var _this66;
 
       _classCallCheck(this, ShockWaveDemo);
 
-      _this65 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
-      _this65.effect = null;
-      return _this65;
+      _this66 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveDemo).call(this, "shock-wave", composer));
+      _this66.effect = null;
+      return _this66;
     }
 
     _createClass(ShockWaveDemo, [{
@@ -45963,10 +46182,10 @@
             loadingManager.onProgress = ProgressManager.updateProgress;
             loadingManager.onError = reject;
             Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref48) {
-              var _ref49 = _slicedToArray(_ref48, 2),
-                  search = _ref49[0],
-                  area = _ref49[1];
+            smaaImageLoader.load(function (_ref50) {
+              var _ref51 = _slicedToArray(_ref50, 2),
+                  search = _ref51[0],
+                  area = _ref51[1];
 
               assets.set("smaa-search", search);
               assets.set("smaa-area", area);
@@ -46050,237 +46269,6 @@
     }]);
 
     return ShockWaveDemo;
-  }(PostProcessingDemo);
-
-  var SMAADemo = function (_PostProcessingDemo12) {
-    _inherits(SMAADemo, _PostProcessingDemo12);
-
-    function SMAADemo(composer) {
-      var _this66;
-
-      _classCallCheck(this, SMAADemo);
-
-      _this66 = _possibleConstructorReturn(this, _getPrototypeOf(SMAADemo).call(this, "smaa", composer));
-      _this66.secondaryRenderer = null;
-      _this66.smaaEffect = null;
-      _this66.copyPass = null;
-      _this66.effectPass = null;
-      _this66.edgesTextureEffect = null;
-      _this66.weightsTextureEffect = null;
-      _this66.object = null;
-      _this66.rotate = true;
-      return _this66;
-    }
-
-    _createClass(SMAADemo, [{
-      key: "load",
-      value: function load() {
-        var assets = this.assets;
-        var loadingManager = this.loadingManager;
-        var smaaImageLoader = new SMAAImageLoader(loadingManager);
-        var anisotropy = Math.min(this.composer.getRenderer().capabilities.getMaxAnisotropy(), 8);
-        return new Promise(function (resolve, reject) {
-          if (assets.size === 0) {
-            loadingManager.onLoad = function () {
-              return setTimeout(resolve, 250);
-            };
-
-            loadingManager.onProgress = ProgressManager.updateProgress;
-            loadingManager.onError = reject;
-            Sponza.load(assets, loadingManager, anisotropy);
-            smaaImageLoader.load(function (_ref50) {
-              var _ref51 = _slicedToArray(_ref50, 2),
-                  search = _ref51[0],
-                  area = _ref51[1];
-
-              assets.set("smaa-search", search);
-              assets.set("smaa-area", area);
-            });
-          } else {
-            resolve();
-          }
-        });
-      }
-    }, {
-      key: "initialize",
-      value: function initialize() {
-        var scene = this.scene;
-        var assets = this.assets;
-        var composer = this.composer;
-        var renderer = composer.getRenderer();
-
-        this.secondaryRenderer = function (primary) {
-          var renderer = new WebGLRenderer({
-            powerPreference: "high-performance",
-            antialias: true
-          });
-          var size = primary.getSize(new Vector2());
-          renderer.setSize(size.width, size.height);
-          renderer.setClearColor(primary.getClearColor(), primary.getClearAlpha());
-          renderer.setPixelRatio(primary.getPixelRatio());
-          renderer.outputEncoding = primary.outputEncoding;
-          renderer.shadowMap.type = primary.shadowMap.type;
-          renderer.shadowMap.autoUpdate = false;
-          renderer.shadowMap.needsUpdate = true;
-          renderer.shadowMap.enabled = true;
-          return renderer;
-        }(renderer);
-
-        var aspect = window.innerWidth / window.innerHeight;
-        var camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-        camera.position.set(4, 8, 0.75);
-        this.camera = camera;
-        var target = new Vector3(-0.5, 6.5, -0.25);
-        var controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
-        controls.settings.pointer.lock = false;
-        controls.settings.translation.enabled = true;
-        controls.settings.sensitivity.translation = 3.0;
-        controls.lookAt(target);
-        controls.setOrbitEnabled(false);
-        this.controls = controls;
-        scene.background = new Color(0xccccff);
-        scene.add.apply(scene, _toConsumableArray(Sponza.createLights()));
-        scene.add(assets.get("sponza"));
-        var cage = Cage.create(0x000000, 1.25, 0.025);
-        cage.position.set(-0.5, 6.5, -0.25);
-        cage.rotation.x += Math.PI * 0.1;
-        cage.rotation.y += Math.PI * 0.3;
-        this.object = cage;
-        scene.add(cage);
-        var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
-        var edgesTextureEffect = new TextureEffect({
-          blendFunction: BlendFunction.SKIP,
-          texture: smaaEffect.renderTargetEdges.texture
-        });
-        var weightsTextureEffect = new TextureEffect({
-          blendFunction: BlendFunction.SKIP,
-          texture: smaaEffect.renderTargetWeights.texture
-        });
-        var copyPass = new ShaderPass(new CopyMaterial());
-        var effectPass = new EffectPass(camera, smaaEffect, edgesTextureEffect, weightsTextureEffect);
-        this.smaaEffect = smaaEffect;
-        this.edgesTextureEffect = edgesTextureEffect;
-        this.weightsTextureEffect = weightsTextureEffect;
-        this.copyPass = copyPass;
-        this.effectPass = effectPass;
-        copyPass.enabled = false;
-        copyPass.renderToScreen = true;
-        effectPass.renderToScreen = true;
-        composer.addPass(copyPass);
-        composer.addPass(effectPass);
-      }
-    }, {
-      key: "render",
-      value: function render(delta) {
-        if (this.rotate) {
-          var object = this.object;
-          var PI2 = 2.0 * Math.PI;
-          object.rotation.x += 0.01 * delta;
-          object.rotation.y += 0.05 * delta;
-
-          if (object.rotation.x >= PI2) {
-            object.rotation.x -= PI2;
-          }
-
-          if (object.rotation.y >= PI2) {
-            object.rotation.y -= PI2;
-          }
-        }
-
-        _get(_getPrototypeOf(SMAADemo.prototype), "render", this).call(this, delta);
-      }
-    }, {
-      key: "registerOptions",
-      value: function registerOptions(menu) {
-        var scene = this.scene;
-        var controls = this.controls;
-        var composer = this.composer;
-        var renderer1 = composer.getRenderer();
-        var renderer2 = this.secondaryRenderer;
-        var copyPass = this.copyPass;
-        var renderPass = this.renderPass;
-        var effectPass = this.effectPass;
-        var smaaEffect = this.smaaEffect;
-        var edgesTextureEffect = this.edgesTextureEffect;
-        var weightsTextureEffect = this.weightsTextureEffect;
-        var blendMode = smaaEffect.blendMode;
-        var edgeDetectionMaterial = smaaEffect.edgeDetectionMaterial;
-        var AAMode = {
-          DISABLED: 0,
-          BROWSER: 1,
-          SMAA_EDGES: 2,
-          SMAA_WEIGHTS: 3,
-          SMAA: 4
-        };
-        var params = {
-          "AA mode": AAMode.SMAA,
-          "preset": SMAAPreset.HIGH,
-          "edge detection": EdgeDetectionMode.DEPTH,
-          "contrast factor": Number(edgeDetectionMaterial.defines.LOCAL_CONTRAST_ADAPTATION_FACTOR),
-          "opacity": this.smaaEffect.blendMode.opacity.value,
-          "blend mode": this.smaaEffect.blendMode.blendFunction
-        };
-
-        function swapRenderers(browser) {
-          var size = composer.getRenderer().getSize(new Vector2());
-
-          if (browser && composer.getRenderer() !== renderer2) {
-            scene.background.convertLinearToSRGB();
-            renderer2.setSize(size.width, size.height);
-            composer.replaceRenderer(renderer2);
-            controls.setDom(renderer2.domElement);
-          } else {
-            scene.background.set(0x777777);
-            renderer1.setSize(size.width, size.height);
-            composer.replaceRenderer(renderer1);
-            controls.setDom(renderer1.domElement);
-          }
-        }
-
-        function toggleAAMode() {
-          var mode = Number(params["AA mode"]);
-          renderPass.renderToScreen = mode === AAMode.BROWSER;
-          effectPass.enabled = mode === AAMode.SMAA || mode === AAMode.SMAA_EDGES || mode === AAMode.SMAA_WEIGHTS;
-          copyPass.enabled = mode === AAMode.DISABLED;
-          edgesTextureEffect.blendMode.blendFunction = mode === AAMode.SMAA_EDGES ? BlendFunction.NORMAL : BlendFunction.SKIP;
-          weightsTextureEffect.blendMode.blendFunction = mode === AAMode.SMAA_WEIGHTS ? BlendFunction.NORMAL : BlendFunction.SKIP;
-          effectPass.encodeOutput = mode !== AAMode.SMAA_EDGES && mode !== AAMode.SMAA_WEIGHTS;
-          effectPass.recompile();
-          swapRenderers(mode === AAMode.BROWSER);
-        }
-
-        menu.add(this, "rotate");
-        menu.add(params, "AA mode", AAMode).onChange(toggleAAMode);
-        menu.add(params, "preset", SMAAPreset).onChange(function () {
-          smaaEffect.applyPreset(Number(params.preset));
-        });
-        menu.add(params, "edge detection", EdgeDetectionMode).onChange(function () {
-          edgeDetectionMaterial.setEdgeDetectionMode(Number(params["edge detection"]));
-        });
-        menu.add(params, "contrast factor").min(1.0).max(3.0).step(0.01).onChange(function () {
-          edgeDetectionMaterial.setLocalContrastAdaptationFactor(Number(params["contrast factor"]));
-        });
-        menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(function () {
-          blendMode.opacity.value = params.opacity;
-        });
-        menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number(params["blend mode"]);
-          effectPass.recompile();
-        });
-      }
-    }, {
-      key: "reset",
-      value: function reset() {
-        _get(_getPrototypeOf(SMAADemo.prototype), "reset", this).call(this);
-
-        if (this.secondaryRenderer !== null) {
-          this.secondaryRenderer.dispose();
-          this.secondaryRenderer = null;
-        }
-      }
-    }]);
-
-    return SMAADemo;
   }(PostProcessingDemo);
 
   var SSAODemo = function (_PostProcessingDemo13) {
@@ -47062,9 +47050,25 @@
   window.addEventListener("load", function (event) {
     var debug = window.location.href.indexOf("debug") !== -1;
     var viewport = document.getElementById("viewport");
-    renderer = new WebGLRenderer({
-      powerPreference: "high-performance"
-    });
+    var attributes = {
+      powerPreference: "high-performance",
+      antialias: false,
+      stencil: false,
+      alpha: false,
+      depth: true
+    };
+    var canvas = document.createElement("canvas");
+    var context = canvas.getContext("webgl2", attributes);
+
+    if (context !== null) {
+      renderer = new WebGLRenderer({
+        canvas: canvas,
+        context: context
+      });
+    } else {
+      renderer = new WebGLRenderer(attributes);
+    }
+
     renderer.outputEncoding = sRGBEncoding;
     renderer.debug.checkShaderErrors = debug;
     renderer.setSize(viewport.clientWidth, viewport.clientHeight);
@@ -47075,8 +47079,7 @@
     renderer.shadowMap.needsUpdate = true;
     renderer.shadowMap.enabled = true;
     composer = new EffectComposer(renderer, {
-      frameBufferType: HalfFloatType,
-      stencilBuffer: true
+      frameBufferType: HalfFloatType
     });
     manager = new DemoManager(viewport, {
       aside: document.getElementById("aside"),
@@ -47084,7 +47087,7 @@
     });
     manager.addEventListener("change", onChange);
     manager.addEventListener("load", onLoad);
-    var demos = [new BloomDemo(composer), new BlurDemo(composer), new ColorDepthDemo(composer), new ColorGradingDemo(composer), new DepthOfFieldDemo(composer), new GlitchDemo(composer), new GodRaysDemo(composer), new OutlineDemo(composer), new PatternDemo(composer), new PixelationDemo(composer), new ShockWaveDemo(composer), new SMAADemo(composer), new SSAODemo(composer), new TextureDemo(composer), new ToneMappingDemo(composer), new PerformanceDemo(composer)];
+    var demos = [new AntialiasingDemo(composer), new BloomDemo(composer), new BlurDemo(composer), new ColorDepthDemo(composer), new ColorGradingDemo(composer), new DepthOfFieldDemo(composer), new GlitchDemo(composer), new GodRaysDemo(composer), new OutlineDemo(composer), new PatternDemo(composer), new PixelationDemo(composer), new ShockWaveDemo(composer), new SSAODemo(composer), new TextureDemo(composer), new ToneMappingDemo(composer), new PerformanceDemo(composer)];
     var id = demos.map(function (demo) {
       return demo.id;
     }).indexOf(window.location.hash.slice(1));

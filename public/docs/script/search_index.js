@@ -792,6 +792,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#multisampling",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-get-multisampling",
+    "src/core/EffectComposer.js~EffectComposer#multisampling",
+    "member"
+  ],
+  [
+    "src/core/effectcomposer.js~effectcomposer#multisampling",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-set-multisampling",
+    "src/core/EffectComposer.js~EffectComposer#multisampling",
+    "member"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#removepass",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-method-removePass",
     "src/core/EffectComposer.js~EffectComposer#removePass",

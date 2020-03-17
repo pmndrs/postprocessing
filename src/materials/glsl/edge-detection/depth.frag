@@ -38,8 +38,8 @@ void main() {
 
 	const vec2 threshold = vec2(DEPTH_THRESHOLD);
 
-	vec3 neighbours = gatherNeighbors();
-	vec2 delta = abs(neighbours.xx - vec2(neighbours.y, neighbours.z));
+	vec3 neighbors = gatherNeighbors();
+	vec2 delta = abs(neighbors.xx - vec2(neighbors.y, neighbors.z));
 	vec2 edges = step(threshold, delta);
 
 	if(dot(edges, vec2(1.0)) == 0.0) {
