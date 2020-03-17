@@ -110,13 +110,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectComposer} from &apos;<span><a href="file/src/core/EffectComposer.js.html#lineNumber30">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {EffectComposer} from &apos;<span><a href="file/src/core/EffectComposer.js.html#lineNumber31">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/core/EffectComposer.js.html#lineNumber30">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/core/EffectComposer.js.html#lineNumber31">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -191,7 +191,71 @@ automatically clear the buffers and render a scene for further processing.</p>
 </tbody>
 </table>
 </div>
-
+<div data-ice="memberSummary"><h2>Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-get-multisampling">multisampling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The current amount of samples used for multisample antialiasing.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-set-multisampling">multisampling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the amount of MSAA samples.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 <div data-ice="methodSummary"><h2>Method Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Methods</td></tr></thead>
   <tbody>
@@ -239,7 +303,7 @@ automatically clear the buffers and render a scene for further processing.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createBuffer">createBuffer</a></span></span><span class="code" data-ice="signature">(depthBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencilBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, type: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>WebGLRenderTarget</span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/EffectComposer.js~EffectComposer.html#instance-method-createBuffer">createBuffer</a></span></span><span class="code" data-ice="signature">(depthBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencilBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, type: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, multisampling: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>WebGLRenderTarget</span></span>
         </p>
       </div>
       <div>
@@ -250,7 +314,7 @@ automatically clear the buffers and render a scene for further processing.</p>
 magnification. Its render texture format depends on whether the renderer
 uses the alpha channel. Mipmaps are disabled.</p>
 <p>Note: The buffer format will also be set to RGBA if the frame buffer type
-is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
+is HalfFloatType because RGB16F buffers are not renderable.</p>
 </div>
       </div>
     </td>
@@ -486,7 +550,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber42">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber44">source</a></span></span>
     </span>
   </h3>
 
@@ -537,6 +601,14 @@ information is used.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.multisampling</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0</li></ul></td>
+      <td data-ice="description"><p>The number of samples used for multisample antialiasing. Requires WebGL 2.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.frameBufferType</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li></ul></td>
@@ -566,7 +638,98 @@ information is used.</p>
   
 </div>
 </div>
+<div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-multisampling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">multisampling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber134">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The current amount of samples used for multisample antialiasing.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-multisampling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">multisampling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber149">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the amount of MSAA samples.</p>
+<p>Requires WebGL 2. Set to zero to disable multisampling.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 <div data-ice="methodDetails"><h2 data-ice="title">Public Methods</h2>
 
 <div class="detail" data-ice="detail">
@@ -581,7 +744,7 @@ information is used.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber355">source</a></span></span>
     </span>
   </h3>
 
@@ -645,11 +808,11 @@ information is used.</p>
     
     
     
-    <span class="code" data-ice="name">createBuffer</span><span class="code" data-ice="signature">(depthBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencilBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, type: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>WebGLRenderTarget</span></span>
+    <span class="code" data-ice="name">createBuffer</span><span class="code" data-ice="signature">(depthBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, stencilBuffer: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span>, type: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, multisampling: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>): <span>WebGLRenderTarget</span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber259">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber317">source</a></span></span>
     </span>
   </h3>
 
@@ -661,7 +824,7 @@ information is used.</p>
 magnification. Its render texture format depends on whether the renderer
 uses the alpha channel. Mipmaps are disabled.</p>
 <p>Note: The buffer format will also be set to RGBA if the frame buffer type
-is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
+is HalfFloatType because RGB16F buffers are not renderable.</p>
 </div>
 
   
@@ -693,6 +856,13 @@ is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>The frame buffer type.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">multisampling</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"></td>
+      <td data-ice="description"><p>The number of samples to use for antialiasing.</p>
 </td>
     </tr>
 </tbody>
@@ -742,7 +912,7 @@ is not UnsignedByteType because RGBXXF buffers are not renderable.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber535">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber603">source</a></span></span>
     </span>
   </h3>
 
@@ -788,7 +958,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber187">source</a></span></span>
     </span>
   </h3>
 
@@ -847,7 +1017,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber358">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber426">source</a></span></span>
     </span>
   </h3>
 
@@ -908,7 +1078,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber481">source</a></span></span>
     </span>
   </h3>
 
@@ -969,7 +1139,7 @@ also deletes the main frame buffers of this composer.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber179">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber236">source</a></span></span>
     </span>
   </h3>
 
@@ -1055,7 +1225,7 @@ take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber513">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber581">source</a></span></span>
     </span>
   </h3>
 
@@ -1099,7 +1269,7 @@ take its place.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber481">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/EffectComposer.js.html#lineNumber549">source</a></span></span>
     </span>
   </h3>
 

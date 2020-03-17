@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.12.2 build Sat Mar 07 2020
+ * postprocessing v6.13.0 build Wed Mar 18 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -594,7 +594,7 @@
     return DepthMaskMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbours=gatherNeighbors();vec2 delta=abs(neighbours.xx-vec2(neighbours.y,neighbours.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
+  var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbors=gatherNeighbors();vec2 delta=abs(neighbors.xx-vec2(neighbors.y,neighbors.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
   var fragmentShaderLuma = "#include <common>\nuniform sampler2D inputBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;void main(){const vec2 threshold=vec2(EDGE_THRESHOLD);float l=linearToRelativeLuminance(texture2D(inputBuffer,vUv).rgb);float lLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv0).rgb);float lTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv1).rgb);vec4 delta;delta.xy=abs(l-vec2(lLeft,lTop));vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}float lRight=linearToRelativeLuminance(texture2D(inputBuffer,vUv2).rgb);float lBottom=linearToRelativeLuminance(texture2D(inputBuffer,vUv3).rgb);delta.zw=abs(l-vec2(lRight,lBottom));vec2 maxDelta=max(delta.xy,delta.zw);float lLeftLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv4).rgb);float lTopTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv5).rgb);delta.zw=abs(vec2(lLeft,lTop)-vec2(lLeftLeft,lTopTop));maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges.xy*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);}";
 
   var EdgeDetectionMaterial = function (_ShaderMaterial9) {
@@ -1381,13 +1381,15 @@
         return !this.rtt;
       },
       set: function set(value) {
-        var material = this.getFullscreenMaterial();
+        if (this.rtt === value) {
+          var material = this.getFullscreenMaterial();
 
-        if (material !== null) {
-          material.needsUpdate = true;
+          if (material !== null) {
+            material.needsUpdate = true;
+          }
+
+          this.rtt = !value;
         }
-
-        this.rtt = !value;
       }
     }]);
 
@@ -2710,6 +2712,8 @@
           depthBuffer = _ref5$depthBuffer === void 0 ? true : _ref5$depthBuffer,
           _ref5$stencilBuffer = _ref5.stencilBuffer,
           stencilBuffer = _ref5$stencilBuffer === void 0 ? false : _ref5$stencilBuffer,
+          _ref5$multisampling = _ref5.multisampling,
+          multisampling = _ref5$multisampling === void 0 ? 0 : _ref5$multisampling,
           frameBufferType = _ref5.frameBufferType;
 
       _classCallCheck(this, EffectComposer);
@@ -2720,7 +2724,7 @@
 
       if (this.renderer !== null) {
         this.renderer.autoClear = false;
-        this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
+        this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
         this.outputBuffer = this.inputBuffer.clone();
         this.enableExtensions();
       }
@@ -2794,17 +2798,23 @@
       }
     }, {
       key: "createBuffer",
-      value: function createBuffer(depthBuffer, stencilBuffer, type) {
-        var drawingBufferSize = this.renderer.getDrawingBufferSize(new three.Vector2());
+      value: function createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
+        var size = this.renderer.getDrawingBufferSize(new three.Vector2());
         var alpha = this.renderer.getContext().getContextAttributes().alpha;
-        var renderTarget = new three.WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-          format: alpha || type !== three.UnsignedByteType ? three.RGBAFormat : three.RGBFormat,
+        var options = {
+          format: !alpha && type === three.UnsignedByteType ? three.RGBFormat : three.RGBAFormat,
           minFilter: three.LinearFilter,
           magFilter: three.LinearFilter,
           stencilBuffer: stencilBuffer,
           depthBuffer: depthBuffer,
           type: type
-        });
+        };
+        var renderTarget = multisampling > 0 ? new three.WebGLMultisampleRenderTarget(size.width, size.height, options) : new three.WebGLRenderTarget(size.width, size.height, options);
+
+        if (multisampling > 0) {
+          renderTarget.samples = multisampling;
+        }
+
         renderTarget.texture.name = "EffectComposer.Buffer";
         renderTarget.texture.generateMipmaps = false;
         return renderTarget;
@@ -3076,6 +3086,25 @@
         }
 
         this.copyPass.dispose();
+      }
+    }, {
+      key: "multisampling",
+      get: function get() {
+        return this.inputBuffer instanceof three.WebGLMultisampleRenderTarget ? this.inputBuffer.samples : 0;
+      },
+      set: function set(value) {
+        var buffer = this.inputBuffer;
+        var multisampling = this.multisampling;
+
+        if (multisampling > 0 && value > 0) {
+          this.inputBuffer.samples = value;
+          this.outputBuffer.samples = value;
+        } else if (multisampling !== value) {
+          this.inputBuffer.dispose();
+          this.outputBuffer.dispose();
+          this.inputBuffer = this.createBuffer(buffer.depthBuffer, buffer.stencilBuffer, buffer.texture.type, value);
+          this.outputBuffer = this.inputBuffer.clone();
+        }
       }
     }]);
 

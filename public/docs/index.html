@@ -146,48 +146,48 @@ const composer = new EffectComposer(renderer, {
 </code></pre>
 <h2 id="performance">Performance</h2><p>This library provides an <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a> which automatically organizes and merges any given combination of effects. This minimizes the amount of render operations and makes it possible to combine many effects without the performance penalties of traditional pass chaining. Additionally, every effect can choose its own <a href="https://vanruesc.github.io/postprocessing/public/docs/variable/index.html#static-variable-BlendFunction">blend function</a>.</p>
 <p>All fullscreen render operations also use a <a href="https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/">single triangle</a> that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for GPGPU passes and effects that use complex fragment shaders.</p>
-<p><a href="http://vanruesc.github.io/postprocessing/public/demo/#performance">Performance Test</a></p>
+<p><a href="https://vanruesc.github.io/postprocessing/public/demo/#performance">Performance Test</a></p>
 <h2 id="included-effects">Included Effects</h2><p><em>The total demo download size is about <code>60 MB</code>.</em></p>
 <ul>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#bloom">Bloom</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#blur">Blur</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-depth">Color Depth</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#color-grading">Color Grading</a><ul>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#antialiasing">Antialiasing</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#bloom">Bloom</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#blur">Blur</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#color-depth">Color Depth</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#color-grading">Color Grading</a><ul>
 <li>Color Average</li>
 <li>Sepia</li>
 <li>Brightness &amp; Contrast</li>
 <li>Hue &amp; Saturation</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#depth-of-field">Depth of Field</a><ul>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#depth-of-field">Depth of Field</a><ul>
 <li>Vignette</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a><ul>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#glitch">Glitch</a><ul>
 <li>Chromatic Aberration</li>
 <li>Noise</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#god-rays">God Rays</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pattern">Pattern</a><ul>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#god-rays">God Rays</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#pattern">Pattern</a><ul>
 <li>Dot-Screen</li>
 <li>Grid</li>
 <li>Scanline</li>
 </ul>
 </li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#outline">Outline</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#shock-wave">Shock Wave</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#smaa">SMAA</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#ssao">SSAO</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#texture">Texture</a></li>
-<li><a href="http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping">Tone Mapping</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#pixelation">Pixelation</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#outline">Outline</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#shock-wave">Shock Wave</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#ssao">SSAO</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#texture">Texture</a></li>
+<li><a href="https://vanruesc.github.io/postprocessing/public/demo/#tone-mapping">Tone Mapping</a></li>
 </ul>
 <h2 id="custom-effects">Custom Effects</h2><p>If you want to learn how to create custom effects or passes, please check the <a href="https://github.com/vanruesc/postprocessing/wiki">Wiki</a>.</p>
 <h2 id="contributing">Contributing</h2><p>Please refer to the <a href="https://github.com/vanruesc/postprocessing/blob/master/.github/CONTRIBUTING.md">contribution guidelines</a> for details.</p>
 <h2 id="license">License</h2><p>This library is licensed under the <a href="https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md">Zlib license</a>.</p>
-<p>The original code that this library is based on, was written by <a href="http://mrdoob.com">mrdoob</a> and the <a href="https://github.com/mrdoob/three.js/graphs/contributors">three.js contributors</a> and is licensed under the <a href="https://github.com/mrdoob/three.js/blob/master/LICENSE">MIT license</a>.</p>
-<p>The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a>.</p>
+<p>The original code that this library is based on, was written by <a href="https://mrdoob.com">mrdoob</a> and the <a href="https://github.com/mrdoob/three.js/graphs/contributors">three.js contributors</a> and is licensed under the <a href="https://github.com/mrdoob/three.js/blob/master/LICENSE">MIT license</a>.</p>
+<p>The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the <a href="https://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 License</a>.</p>
 </div>
 </div>
 

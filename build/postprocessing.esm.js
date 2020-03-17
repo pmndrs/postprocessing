@@ -1,10 +1,10 @@
 /**
- * postprocessing v6.12.2 build Sat Mar 07 2020
+ * postprocessing v6.13.0 build Wed Mar 18 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
  */
-import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, MeshNormalMaterial, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, RepeatWrapping, DataTexture, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Loader, LoadingManager } from 'three';
+import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, RepeatWrapping, DataTexture, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Loader, LoadingManager } from 'three';
 
 /**
  * A color channel enumeration.
@@ -671,7 +671,7 @@ class DepthMaskMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbours=gatherNeighbors();vec2 delta=abs(neighbours.xx-vec2(neighbours.y,neighbours.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
+var fragmentShaderDepth = "#include <packing>\nuniform sampler2D depthBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Gathers the current texel,and the top-left neighbors.*/vec3 gatherNeighbors(){float p=readDepth(vUv);float pLeft=readDepth(vUv0);float pTop=readDepth(vUv1);return vec3(p,pLeft,pTop);}void main(){const vec2 threshold=vec2(DEPTH_THRESHOLD);vec3 neighbors=gatherNeighbors();vec2 delta=abs(neighbors.xx-vec2(neighbors.y,neighbors.z));vec2 edges=step(threshold,delta);if(dot(edges,vec2(1.0))==0.0){discard;}gl_FragColor=vec4(edges,0.0,1.0);}";
 
 var fragmentShaderLuma = "#include <common>\nuniform sampler2D inputBuffer;varying vec2 vUv;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;varying vec2 vUv4;varying vec2 vUv5;void main(){const vec2 threshold=vec2(EDGE_THRESHOLD);float l=linearToRelativeLuminance(texture2D(inputBuffer,vUv).rgb);float lLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv0).rgb);float lTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv1).rgb);vec4 delta;delta.xy=abs(l-vec2(lLeft,lTop));vec2 edges=step(threshold,delta.xy);if(dot(edges,vec2(1.0))==0.0){discard;}float lRight=linearToRelativeLuminance(texture2D(inputBuffer,vUv2).rgb);float lBottom=linearToRelativeLuminance(texture2D(inputBuffer,vUv3).rgb);delta.zw=abs(l-vec2(lRight,lBottom));vec2 maxDelta=max(delta.xy,delta.zw);float lLeftLeft=linearToRelativeLuminance(texture2D(inputBuffer,vUv4).rgb);float lTopTop=linearToRelativeLuminance(texture2D(inputBuffer,vUv5).rgb);delta.zw=abs(vec2(lLeft,lTop)-vec2(lLeftLeft,lTopTop));maxDelta=max(maxDelta.xy,delta.zw);float finalDelta=max(maxDelta.x,maxDelta.y);edges.xy*=step(finalDelta,LOCAL_CONTRAST_ADAPTATION_FACTOR*delta.xy);gl_FragColor=vec4(edges,0.0,1.0);}";
 
@@ -2152,22 +2152,29 @@ class Pass {
 	}
 
 	/**
-	 * Sets the render to screen flag and updates the fullscreen material.
+	 * Sets the render to screen flag.
+	 *
+	 * If the flag is changed to a different value, the fullscreen material will
+	 * be updated as well.
 	 *
 	 * @type {Boolean}
 	 */
 
 	set renderToScreen(value) {
 
-		const material = this.getFullscreenMaterial();
+		if(this.rtt === value) {
 
-		if(material !== null) {
+			const material = this.getFullscreenMaterial();
 
-			material.needsUpdate = true;
+			if(material !== null) {
+
+				material.needsUpdate = true;
+
+			}
+
+			this.rtt = !value;
 
 		}
-
-		this.rtt = !value;
 
 	}
 
@@ -4738,10 +4745,16 @@ class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
+	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Boolean} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
-	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, frameBufferType } = {}) {
+	constructor(renderer = null, {
+		depthBuffer = true,
+		stencilBuffer = false,
+		multisampling = 0,
+		frameBufferType
+	} = {}) {
 
 		/**
 		 * The renderer.
@@ -4776,7 +4789,7 @@ class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
 			this.outputBuffer = this.inputBuffer.clone();
 			this.enableExtensions();
 
@@ -4817,6 +4830,56 @@ class EffectComposer {
 		 */
 
 		this.autoRenderToScreen = true;
+
+	}
+
+	/**
+	 * The current amount of samples used for multisample antialiasing.
+	 *
+	 * @type {Number}
+	 */
+
+	get multisampling() {
+
+		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ?
+			this.inputBuffer.samples : 0;
+
+	}
+
+	/**
+	 * Sets the amount of MSAA samples.
+	 *
+	 * Requires WebGL 2. Set to zero to disable multisampling.
+	 *
+	 * @type {Number}
+	 */
+
+	set multisampling(value) {
+
+		const buffer = this.inputBuffer;
+		const multisampling = this.multisampling;
+
+		if(multisampling > 0 && value > 0) {
+
+			this.inputBuffer.samples = value;
+			this.outputBuffer.samples = value;
+
+		} else if(multisampling !== value) {
+
+			this.inputBuffer.dispose();
+			this.outputBuffer.dispose();
+
+			// Enable or disable MSAA.
+			this.inputBuffer = this.createBuffer(
+				buffer.depthBuffer,
+				buffer.stencilBuffer,
+				buffer.texture.type,
+				value
+			);
+
+			this.outputBuffer = this.inputBuffer.clone();
+
+		}
 
 	}
 
@@ -4950,27 +5013,38 @@ class EffectComposer {
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
 	 * Note: The buffer format will also be set to RGBA if the frame buffer type
-	 * is not UnsignedByteType because RGBXXF buffers are not renderable.
+	 * is HalfFloatType because RGB16F buffers are not renderable.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
 	 * @param {Number} type - The frame buffer type.
+	 * @param {Number} multisampling - The number of samples to use for antialiasing.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, type) {
+	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
-		const drawingBufferSize = this.renderer.getDrawingBufferSize(new Vector2$1());
+		const size = this.renderer.getDrawingBufferSize(new Vector2$1());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
-		const renderTarget = new WebGLRenderTarget(drawingBufferSize.width, drawingBufferSize.height, {
-			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
+		const options = {
+			format: (!alpha && type === UnsignedByteType) ? RGBFormat : RGBAFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,
 			depthBuffer,
 			type
-		});
+		};
+
+		const renderTarget = (multisampling > 0) ?
+			new WebGLMultisampleRenderTarget(size.width, size.height, options) :
+			new WebGLRenderTarget(size.width, size.height, options);
+
+		if(multisampling > 0) {
+
+			renderTarget.samples = multisampling;
+
+		}
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
