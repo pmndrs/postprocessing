@@ -126,6 +126,56 @@ export class EffectComposer {
 	}
 
 	/**
+	 * The current amount of samples used for multisample antialiasing.
+	 *
+	 * @type {Number}
+	 */
+
+	get multisampling() {
+
+		return (this.inputBuffer instanceof WebGLMultisampleRenderTarget) ?
+			this.inputBuffer.samples : 0;
+
+	}
+
+	/**
+	 * Sets the amount of MSAA samples.
+	 *
+	 * Requires WebGL 2. Set to zero to disable multisampling.
+	 *
+	 * @type {Number}
+	 */
+
+	set multisampling(value) {
+
+		const buffer = this.inputBuffer;
+		const multisampling = this.multisampling;
+
+		if(multisampling > 0 && value > 0) {
+
+			this.inputBuffer.samples = value;
+			this.outputBuffer.samples = value;
+
+		} else if(multisampling !== value) {
+
+			this.inputBuffer.dispose();
+			this.outputBuffer.dispose();
+
+			// Enable or disable MSAA.
+			this.inputBuffer = this.createBuffer(
+				buffer.depthBuffer,
+				buffer.stencilBuffer,
+				buffer.texture.type,
+				value
+			);
+
+			this.outputBuffer = this.inputBuffer.clone();
+
+		}
+
+	}
+
+	/**
 	 * Returns the WebGL renderer.
 	 *
 	 * You may replace the renderer at any time by using
