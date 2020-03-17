@@ -8,8 +8,8 @@ import {
 	UnsignedIntType,
 	UnsignedInt248Type,
 	Vector2,
-	WebGLRenderTarget,
-	WebGLMultisampleRenderTarget
+	WebGLMultisampleRenderTarget,
+	WebGLRenderTarget
 } from "three";
 
 import { ClearMaskPass, MaskPass, ShaderPass } from "../passes";
@@ -37,11 +37,16 @@ export class EffectComposer {
 	 * @param {Object} [options] - The options.
 	 * @param {Boolean} [options.depthBuffer=true] - Whether the main render targets should have a depth buffer.
 	 * @param {Boolean} [options.stencilBuffer=false] - Whether the main render targets should have a stencil buffer.
-	 * @param {Boolean} [options.multisample=false] - Whether to enable WebGL2 Multisample Render Targets between the render passes.
+	 * @param {Number} [options.multisampling=0] - The number of samples used for multisample antialiasing. Requires WebGL 2.
 	 * @param {Boolean} [options.frameBufferType] - The type of the internal frame buffers. It's recommended to use HalfFloatType if possible.
 	 */
 
-	constructor(renderer = null, { depthBuffer = true, stencilBuffer = false, multisample = false, frameBufferType } = {}) {
+	constructor(renderer = null, {
+		depthBuffer = true,
+		stencilBuffer = false,
+		multisampling = 0,
+		frameBufferType
+	} = {}) {
 
 		/**
 		 * The renderer.
@@ -76,7 +81,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisample);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, multisampling, frameBufferType);
 			this.outputBuffer = this.inputBuffer.clone();
 			this.enableExtensions();
 
@@ -254,12 +259,12 @@ export class EffectComposer {
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
+	 * @param {Number} multisampling - The number of samples to use for antialiasing.
 	 * @param {Number} type - The frame buffer type.
-	 * @param {Boolean} multisample - Whether the render target should be multisampled.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, type, multisample) {
+	createBuffer(depthBuffer, stencilBuffer, multisampling, type) {
 
 		const size = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
@@ -273,9 +278,15 @@ export class EffectComposer {
 			type
 		};
 
-		const renderTarget = multisample ?
+		const renderTarget = (multisampling > 0) ?
 			new WebGLMultisampleRenderTarget(size.width, size.height, options) :
 			new WebGLRenderTarget(size.width, size.height, options);
+
+		if(multisampling > 0) {
+
+			renderTarget.samples = multisampling;
+
+		}
 
 		renderTarget.texture.name = "EffectComposer.Buffer";
 		renderTarget.texture.generateMipmaps = false;
