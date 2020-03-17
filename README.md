@@ -63,37 +63,37 @@ This library provides an [EffectPass](https://vanruesc.github.io/postprocessing/
 
 All fullscreen render operations also use a [single triangle](https://michaldrobot.com/2014/04/01/gcn-execution-patterns-in-full-screen-passes/) that fills the screen. Compared to using a quad, this approach harmonizes with modern GPU rasterization patterns and eliminates unnecessary fragment calculations along the screen diagonal. This is especially beneficial for GPGPU passes and effects that use complex fragment shaders.
 
-[Performance Test](http://vanruesc.github.io/postprocessing/public/demo/#performance)
+[Performance Test](https://vanruesc.github.io/postprocessing/public/demo/#performance)
 
 ## Included Effects
 
 _The total demo download size is about `60 MB`._
 
- - [Bloom](http://vanruesc.github.io/postprocessing/public/demo/#bloom)
- - [Blur](http://vanruesc.github.io/postprocessing/public/demo/#blur)
- - [Color Depth](http://vanruesc.github.io/postprocessing/public/demo/#color-depth)
- - [Color Grading](http://vanruesc.github.io/postprocessing/public/demo/#color-grading)
+ - [Antialiasing](https://vanruesc.github.io/postprocessing/public/demo/#antialiasing)
+ - [Bloom](https://vanruesc.github.io/postprocessing/public/demo/#bloom)
+ - [Blur](https://vanruesc.github.io/postprocessing/public/demo/#blur)
+ - [Color Depth](https://vanruesc.github.io/postprocessing/public/demo/#color-depth)
+ - [Color Grading](https://vanruesc.github.io/postprocessing/public/demo/#color-grading)
    - Color Average
    - Sepia
    - Brightness & Contrast
    - Hue & Saturation
- - [Depth of Field](http://vanruesc.github.io/postprocessing/public/demo/#depth-of-field)
+ - [Depth of Field](https://vanruesc.github.io/postprocessing/public/demo/#depth-of-field)
    - Vignette
- - [Glitch](http://vanruesc.github.io/postprocessing/public/demo/#glitch)
+ - [Glitch](https://vanruesc.github.io/postprocessing/public/demo/#glitch)
    - Chromatic Aberration
    - Noise
- - [God Rays](http://vanruesc.github.io/postprocessing/public/demo/#god-rays)
- - [Pattern](http://vanruesc.github.io/postprocessing/public/demo/#pattern)
+ - [God Rays](https://vanruesc.github.io/postprocessing/public/demo/#god-rays)
+ - [Pattern](https://vanruesc.github.io/postprocessing/public/demo/#pattern)
    - Dot-Screen
    - Grid
    - Scanline
- - [Pixelation](http://vanruesc.github.io/postprocessing/public/demo/#pixelation)
- - [Outline](http://vanruesc.github.io/postprocessing/public/demo/#outline)
- - [Shock Wave](http://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
- - [SMAA](http://vanruesc.github.io/postprocessing/public/demo/#smaa)
- - [SSAO](http://vanruesc.github.io/postprocessing/public/demo/#ssao)
- - [Texture](http://vanruesc.github.io/postprocessing/public/demo/#texture)
- - [Tone Mapping](http://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
+ - [Pixelation](https://vanruesc.github.io/postprocessing/public/demo/#pixelation)
+ - [Outline](https://vanruesc.github.io/postprocessing/public/demo/#outline)
+ - [Shock Wave](https://vanruesc.github.io/postprocessing/public/demo/#shock-wave)
+ - [SSAO](https://vanruesc.github.io/postprocessing/public/demo/#ssao)
+ - [Texture](https://vanruesc.github.io/postprocessing/public/demo/#texture)
+ - [Tone Mapping](https://vanruesc.github.io/postprocessing/public/demo/#tone-mapping)
 
 
 ## Custom Effects
@@ -110,6 +110,6 @@ Please refer to the [contribution guidelines](https://github.com/vanruesc/postpr
 
 This library is licensed under the [Zlib license](https://github.com/vanruesc/postprocessing/blob/master/LICENSE.md).
 
-The original code that this library is based on, was written by [mrdoob](http://mrdoob.com) and the [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors) and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
+The original code that this library is based on, was written by [mrdoob](https://mrdoob.com) and the [three.js contributors](https://github.com/mrdoob/three.js/graphs/contributors) and is licensed under the [MIT license](https://github.com/mrdoob/three.js/blob/master/LICENSE).
 
-The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).
+The noise and scanline effects incorporate code written by Georg Steinrohder and Pat Shearon which was released under the [Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/).
