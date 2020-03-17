@@ -81,7 +81,7 @@ export class EffectComposer {
 		if(this.renderer !== null) {
 
 			this.renderer.autoClear = false;
-			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, multisampling, frameBufferType);
+			this.inputBuffer = this.createBuffer(depthBuffer, stencilBuffer, frameBufferType, multisampling);
 			this.outputBuffer = this.inputBuffer.clone();
 			this.enableExtensions();
 
@@ -259,12 +259,12 @@ export class EffectComposer {
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
-	 * @param {Number} multisampling - The number of samples to use for antialiasing.
 	 * @param {Number} type - The frame buffer type.
+	 * @param {Number} multisampling - The number of samples to use for antialiasing.
 	 * @return {WebGLRenderTarget} A new render target that equals the renderer's canvas.
 	 */
 
-	createBuffer(depthBuffer, stencilBuffer, multisampling, type) {
+	createBuffer(depthBuffer, stencilBuffer, type, multisampling) {
 
 		const size = this.renderer.getDrawingBufferSize(new Vector2());
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
