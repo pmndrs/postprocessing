@@ -167,7 +167,29 @@ window.addEventListener("load", (event) => {
 	const viewport = document.getElementById("viewport");
 
 	// Create and configure the renderer.
-	renderer = new WebGLRenderer({ powerPreference: "high-performance" });
+	const attributes = {
+		powerPreference: "high-performance",
+		antialias: false,
+		stencil: false,
+		alpha: false,
+		depth: true
+	};
+
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("webgl2", attributes);
+
+	if(context !== null) {
+
+		// Use WebGL 2.
+		renderer = new WebGLRenderer({ canvas, context });
+
+	} else {
+
+		// Fall back to WebGL 1.
+		renderer = new WebGLRenderer(attributes);
+
+	}
+
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = debug;
 	renderer.setSize(viewport.clientWidth, viewport.clientHeight);
@@ -180,8 +202,7 @@ window.addEventListener("load", (event) => {
 
 	// Create the effect composer.
 	composer = new EffectComposer(renderer, {
-		frameBufferType: HalfFloatType,
-		stencilBuffer: true
+		frameBufferType: HalfFloatType
 	});
 
 	// Create the demo manager.
