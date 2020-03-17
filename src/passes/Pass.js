@@ -191,7 +191,6 @@ export class Pass {
 
 			}
 
-			material.needsUpdate = true;
 			this.rtt = !value;
 
 		}

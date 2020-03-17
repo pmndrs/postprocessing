@@ -255,7 +255,7 @@ export class EffectComposer {
 	 * uses the alpha channel. Mipmaps are disabled.
 	 *
 	 * Note: The buffer format will also be set to RGBA if the frame buffer type
-	 * is not UnsignedByteType because RGBXXF buffers are not renderable.
+	 * is HalfFloatType because RGB16F buffers are not renderable.
 	 *
 	 * @param {Boolean} depthBuffer - Whether the render target should have a depth buffer.
 	 * @param {Boolean} stencilBuffer - Whether the render target should have a stencil buffer.
@@ -270,7 +270,7 @@ export class EffectComposer {
 		const alpha = this.renderer.getContext().getContextAttributes().alpha;
 
 		const options = {
-			format: (alpha || type !== UnsignedByteType) ? RGBAFormat : RGBFormat,
+			format: (!alpha && type === UnsignedByteType) ? RGBFormat : RGBAFormat,
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
 			stencilBuffer,
