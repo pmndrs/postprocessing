@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.13.0 build Wed Mar 18 2020
+ * postprocessing v6.13.1 build Wed Mar 25 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -63,7 +63,7 @@
     return _setPrototypeOf(o, p);
   }
 
-  function isNativeReflectConstruct() {
+  function _isNativeReflectConstruct() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
     if (Reflect.construct.sham) return false;
     if (typeof Proxy === "function") return true;
@@ -77,7 +77,7 @@
   }
 
   function _construct(Parent, args, Class) {
-    if (isNativeReflectConstruct()) {
+    if (_isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -147,6 +147,23 @@
     return _assertThisInitialized(self);
   }
 
+  function _createSuper(Derived) {
+    return function () {
+      var Super = _getPrototypeOf(Derived),
+          result;
+
+      if (_isNativeReflectConstruct()) {
+        var NewTarget = _getPrototypeOf(this).constructor;
+
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+
+      return _possibleConstructorReturn(this, result);
+    };
+  }
+
   function _superPropBase(object, property) {
     while (!Object.prototype.hasOwnProperty.call(object, property)) {
       object = _getPrototypeOf(object);
@@ -175,6 +192,78 @@
     }
 
     return _get(target, property, receiver || target);
+  }
+
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(n);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+  }
+
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+
+    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+
+  function _createForOfIteratorHelper(o) {
+    if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+      if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) {
+        var i = 0;
+
+        var F = function () {};
+
+        return {
+          s: F,
+          n: function () {
+            if (i >= o.length) return {
+              done: true
+            };
+            return {
+              done: false,
+              value: o[i++]
+            };
+          },
+          e: function (e) {
+            throw e;
+          },
+          f: F
+        };
+      }
+
+      throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+
+    var it,
+        normalCompletion = true,
+        didErr = false,
+        err;
+    return {
+      s: function () {
+        it = o[Symbol.iterator]();
+      },
+      n: function () {
+        var step = it.next();
+        normalCompletion = step.done;
+        return step;
+      },
+      e: function (e) {
+        didErr = true;
+        err = e;
+      },
+      f: function () {
+        try {
+          if (!normalCompletion && it.return != null) it.return();
+        } finally {
+          if (didErr) throw err;
+        }
+      }
+    };
   }
 
   var ColorChannel = {
@@ -216,10 +305,12 @@
   var AdaptiveLuminanceMaterial = function (_ShaderMaterial) {
     _inherits(AdaptiveLuminanceMaterial, _ShaderMaterial);
 
+    var _super = _createSuper(AdaptiveLuminanceMaterial);
+
     function AdaptiveLuminanceMaterial() {
       _classCallCheck(this, AdaptiveLuminanceMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(AdaptiveLuminanceMaterial).call(this, {
+      return _super.call(this, {
         type: "AdaptiveLuminanceMaterial",
         defines: {
           MIP_LEVEL_1X1: "0.0"
@@ -236,7 +327,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     return AdaptiveLuminanceMaterial;
@@ -247,6 +338,8 @@
   var BokehMaterial = function (_ShaderMaterial2) {
     _inherits(BokehMaterial, _ShaderMaterial2);
 
+    var _super2 = _createSuper(BokehMaterial);
+
     function BokehMaterial() {
       var _this;
 
@@ -255,7 +348,7 @@
 
       _classCallCheck(this, BokehMaterial);
 
-      _this = _possibleConstructorReturn(this, _getPrototypeOf(BokehMaterial).call(this, {
+      _this = _super2.call(this, {
         type: "BokehMaterial",
         defines: {
           PASS: fill ? "2" : "1"
@@ -273,7 +366,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
 
       if (foreground) {
         _this.defines.FOREGROUND = "1";
@@ -324,12 +417,14 @@
   var CircleOfConfusionMaterial = function (_ShaderMaterial3) {
     _inherits(CircleOfConfusionMaterial, _ShaderMaterial3);
 
+    var _super3 = _createSuper(CircleOfConfusionMaterial);
+
     function CircleOfConfusionMaterial(camera) {
       var _this2;
 
       _classCallCheck(this, CircleOfConfusionMaterial);
 
-      _this2 = _possibleConstructorReturn(this, _getPrototypeOf(CircleOfConfusionMaterial).call(this, {
+      _this2 = _super3.call(this, {
         type: "CircleOfConfusionMaterial",
         defines: {
           DEPTH_PACKING: "0"
@@ -346,7 +441,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
 
       _this2.adoptCameraSettings(camera);
 
@@ -382,12 +477,14 @@
   var ColorEdgesMaterial = function (_ShaderMaterial4) {
     _inherits(ColorEdgesMaterial, _ShaderMaterial4);
 
+    var _super4 = _createSuper(ColorEdgesMaterial);
+
     function ColorEdgesMaterial() {
       var texelSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.Vector2();
 
       _classCallCheck(this, ColorEdgesMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(ColorEdgesMaterial).call(this, {
+      return _super4.call(this, {
         type: "ColorEdgesMaterial",
         defines: {
           LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
@@ -402,7 +499,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     _createClass(ColorEdgesMaterial, [{
@@ -429,6 +526,8 @@
   var ConvolutionMaterial = function (_ShaderMaterial5) {
     _inherits(ConvolutionMaterial, _ShaderMaterial5);
 
+    var _super5 = _createSuper(ConvolutionMaterial);
+
     function ConvolutionMaterial() {
       var _this3;
 
@@ -436,7 +535,7 @@
 
       _classCallCheck(this, ConvolutionMaterial);
 
-      _this3 = _possibleConstructorReturn(this, _getPrototypeOf(ConvolutionMaterial).call(this, {
+      _this3 = _super5.call(this, {
         type: "ConvolutionMaterial",
         uniforms: {
           inputBuffer: new three.Uniform(null),
@@ -450,7 +549,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
 
       _this3.setTexelSize(texelSize.x, texelSize.y);
 
@@ -488,10 +587,12 @@
   var CopyMaterial = function (_ShaderMaterial6) {
     _inherits(CopyMaterial, _ShaderMaterial6);
 
+    var _super6 = _createSuper(CopyMaterial);
+
     function CopyMaterial() {
       _classCallCheck(this, CopyMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(CopyMaterial).call(this, {
+      return _super6.call(this, {
         type: "CopyMaterial",
         uniforms: {
           inputBuffer: new three.Uniform(null),
@@ -502,7 +603,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     return CopyMaterial;
@@ -514,6 +615,8 @@
   var DepthComparisonMaterial = function (_ShaderMaterial7) {
     _inherits(DepthComparisonMaterial, _ShaderMaterial7);
 
+    var _super7 = _createSuper(DepthComparisonMaterial);
+
     function DepthComparisonMaterial() {
       var _this4;
 
@@ -522,7 +625,7 @@
 
       _classCallCheck(this, DepthComparisonMaterial);
 
-      _this4 = _possibleConstructorReturn(this, _getPrototypeOf(DepthComparisonMaterial).call(this, {
+      _this4 = _super7.call(this, {
         type: "DepthComparisonMaterial",
         uniforms: {
           depthBuffer: new three.Uniform(depthTexture),
@@ -536,7 +639,7 @@
         depthTest: false,
         morphTargets: true,
         skinning: true
-      }));
+      });
 
       _this4.adoptCameraSettings(camera);
 
@@ -569,10 +672,12 @@
   var DepthMaskMaterial = function (_ShaderMaterial8) {
     _inherits(DepthMaskMaterial, _ShaderMaterial8);
 
+    var _super8 = _createSuper(DepthMaskMaterial);
+
     function DepthMaskMaterial() {
       _classCallCheck(this, DepthMaskMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(DepthMaskMaterial).call(this, {
+      return _super8.call(this, {
         type: "DepthMaskMaterial",
         defines: {
           DEPTH_PACKING_0: "0",
@@ -588,7 +693,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     return DepthMaskMaterial;
@@ -600,6 +705,8 @@
   var EdgeDetectionMaterial = function (_ShaderMaterial9) {
     _inherits(EdgeDetectionMaterial, _ShaderMaterial9);
 
+    var _super9 = _createSuper(EdgeDetectionMaterial);
+
     function EdgeDetectionMaterial() {
       var _this5;
 
@@ -608,7 +715,7 @@
 
       _classCallCheck(this, EdgeDetectionMaterial);
 
-      _this5 = _possibleConstructorReturn(this, _getPrototypeOf(EdgeDetectionMaterial).call(this, {
+      _this5 = _super9.call(this, {
         type: "EdgeDetectionMaterial",
         defines: {
           LOCAL_CONTRAST_ADAPTATION_FACTOR: "2.0",
@@ -625,7 +732,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
 
       _this5.setEdgeDetectionMode(mode);
 
@@ -692,6 +799,8 @@
   var EffectMaterial = function (_ShaderMaterial10) {
     _inherits(EffectMaterial, _ShaderMaterial10);
 
+    var _super10 = _createSuper(EffectMaterial);
+
     function EffectMaterial() {
       var _this6;
 
@@ -703,7 +812,7 @@
 
       _classCallCheck(this, EffectMaterial);
 
-      _this6 = _possibleConstructorReturn(this, _getPrototypeOf(EffectMaterial).call(this, {
+      _this6 = _super10.call(this, {
         type: "EffectMaterial",
         defines: {
           DEPTH_PACKING: "0",
@@ -723,7 +832,7 @@
         depthWrite: false,
         depthTest: false,
         dithering: dithering
-      }));
+      });
 
       if (shaderParts !== null) {
         _this6.setShaderParts(shaderParts);
@@ -753,28 +862,18 @@
     }, {
       key: "setDefines",
       value: function setDefines(defines) {
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
+        var _iterator = _createForOfIteratorHelper(defines.entries()),
+            _step;
 
         try {
-          for (var _iterator = defines.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var entry = _step.value;
             this.defines[entry[0]] = entry[1];
           }
         } catch (err) {
-          _didIteratorError = true;
-          _iteratorError = err;
+          _iterator.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion && _iterator["return"] != null) {
-              _iterator["return"]();
-            }
-          } finally {
-            if (_didIteratorError) {
-              throw _iteratorError;
-            }
-          }
+          _iterator.f();
         }
 
         this.needsUpdate = true;
@@ -783,28 +882,18 @@
     }, {
       key: "setUniforms",
       value: function setUniforms(uniforms) {
-        var _iteratorNormalCompletion2 = true;
-        var _didIteratorError2 = false;
-        var _iteratorError2 = undefined;
+        var _iterator2 = _createForOfIteratorHelper(uniforms.entries()),
+            _step2;
 
         try {
-          for (var _iterator2 = uniforms.entries()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
             var entry = _step2.value;
             this.uniforms[entry[0]] = entry[1];
           }
         } catch (err) {
-          _didIteratorError2 = true;
-          _iteratorError2 = err;
+          _iterator2.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-              _iterator2["return"]();
-            }
-          } finally {
-            if (_didIteratorError2) {
-              throw _iteratorError2;
-            }
-          }
+          _iterator2.f();
         }
 
         return this;
@@ -862,10 +951,12 @@
   var GodRaysMaterial = function (_ShaderMaterial11) {
     _inherits(GodRaysMaterial, _ShaderMaterial11);
 
+    var _super11 = _createSuper(GodRaysMaterial);
+
     function GodRaysMaterial(lightPosition) {
       _classCallCheck(this, GodRaysMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(GodRaysMaterial).call(this, {
+      return _super11.call(this, {
         type: "GodRaysMaterial",
         defines: {
           SAMPLES_INT: "60",
@@ -885,7 +976,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     _createClass(GodRaysMaterial, [{
@@ -909,6 +1000,8 @@
   var LuminanceMaterial = function (_ShaderMaterial12) {
     _inherits(LuminanceMaterial, _ShaderMaterial12);
 
+    var _super12 = _createSuper(LuminanceMaterial);
+
     function LuminanceMaterial() {
       var _this7;
 
@@ -918,7 +1011,7 @@
       _classCallCheck(this, LuminanceMaterial);
 
       var useRange = luminanceRange !== null;
-      _this7 = _possibleConstructorReturn(this, _getPrototypeOf(LuminanceMaterial).call(this, {
+      _this7 = _super12.call(this, {
         type: "LuminanceMaterial",
         uniforms: {
           inputBuffer: new three.Uniform(null),
@@ -931,7 +1024,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
       _this7.colorOutput = colorOutput;
       _this7.useThreshold = true;
       _this7.useRange = useRange;
@@ -1012,6 +1105,8 @@
   var MaskMaterial = function (_ShaderMaterial13) {
     _inherits(MaskMaterial, _ShaderMaterial13);
 
+    var _super13 = _createSuper(MaskMaterial);
+
     function MaskMaterial() {
       var _this8;
 
@@ -1019,7 +1114,7 @@
 
       _classCallCheck(this, MaskMaterial);
 
-      _this8 = _possibleConstructorReturn(this, _getPrototypeOf(MaskMaterial).call(this, {
+      _this8 = _super13.call(this, {
         type: "MaskMaterial",
         uniforms: {
           maskTexture: new three.Uniform(maskTexture),
@@ -1030,7 +1125,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
       _this8.colorChannel = ColorChannel.RED;
       _this8.maskFunction = MaskFunction.DISCARD;
       return _this8;
@@ -1082,6 +1177,8 @@
   var OutlineMaterial = function (_ShaderMaterial14) {
     _inherits(OutlineMaterial, _ShaderMaterial14);
 
+    var _super14 = _createSuper(OutlineMaterial);
+
     function OutlineMaterial() {
       var _this9;
 
@@ -1089,7 +1186,7 @@
 
       _classCallCheck(this, OutlineMaterial);
 
-      _this9 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineMaterial).call(this, {
+      _this9 = _super14.call(this, {
         type: "OutlineMaterial",
         uniforms: {
           inputBuffer: new three.Uniform(null),
@@ -1100,7 +1197,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
 
       _this9.setTexelSize(texelSize.x, texelSize.y);
 
@@ -1125,13 +1222,15 @@
   var SMAAWeightsMaterial = function (_ShaderMaterial15) {
     _inherits(SMAAWeightsMaterial, _ShaderMaterial15);
 
+    var _super15 = _createSuper(SMAAWeightsMaterial);
+
     function SMAAWeightsMaterial() {
       var texelSize = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : new three.Vector2();
       var resolution = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Vector2();
 
       _classCallCheck(this, SMAAWeightsMaterial);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(SMAAWeightsMaterial).call(this, {
+      return _super15.call(this, {
         type: "SMAAWeightsMaterial",
         defines: {
           MAX_SEARCH_STEPS_INT: "16",
@@ -1159,7 +1258,7 @@
         toneMapped: false,
         depthWrite: false,
         depthTest: false
-      }));
+      });
     }
 
     _createClass(SMAAWeightsMaterial, [{
@@ -1399,6 +1498,8 @@
   var BlurPass = function (_Pass) {
     _inherits(BlurPass, _Pass);
 
+    var _super16 = _createSuper(BlurPass);
+
     function BlurPass() {
       var _this10;
 
@@ -1414,7 +1515,7 @@
 
       _classCallCheck(this, BlurPass);
 
-      _this10 = _possibleConstructorReturn(this, _getPrototypeOf(BlurPass).call(this, "BlurPass"));
+      _this10 = _super16.call(this, "BlurPass");
       _this10.renderTargetA = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
@@ -1552,12 +1653,14 @@
   var ClearMaskPass = function (_Pass2) {
     _inherits(ClearMaskPass, _Pass2);
 
+    var _super17 = _createSuper(ClearMaskPass);
+
     function ClearMaskPass() {
       var _this11;
 
       _classCallCheck(this, ClearMaskPass);
 
-      _this11 = _possibleConstructorReturn(this, _getPrototypeOf(ClearMaskPass).call(this, "ClearMaskPass", null, null));
+      _this11 = _super17.call(this, "ClearMaskPass", null, null);
       _this11.needsSwap = false;
       return _this11;
     }
@@ -1579,6 +1682,8 @@
   var ClearPass = function (_Pass3) {
     _inherits(ClearPass, _Pass3);
 
+    var _super18 = _createSuper(ClearPass);
+
     function ClearPass() {
       var _this12;
 
@@ -1588,7 +1693,7 @@
 
       _classCallCheck(this, ClearPass);
 
-      _this12 = _possibleConstructorReturn(this, _getPrototypeOf(ClearPass).call(this, "ClearPass", null, null));
+      _this12 = _super18.call(this, "ClearPass", null, null);
       _this12.needsSwap = false;
       _this12.color = color;
       _this12.depth = depth;
@@ -1631,6 +1736,8 @@
   var RenderPass = function (_Pass4) {
     _inherits(RenderPass, _Pass4);
 
+    var _super19 = _createSuper(RenderPass);
+
     function RenderPass(scene, camera) {
       var _this13;
 
@@ -1638,7 +1745,7 @@
 
       _classCallCheck(this, RenderPass);
 
-      _this13 = _possibleConstructorReturn(this, _getPrototypeOf(RenderPass).call(this, "RenderPass", scene, camera));
+      _this13 = _super19.call(this, "RenderPass", scene, camera);
       _this13.needsSwap = false;
       _this13.overrideMaterial = overrideMaterial;
       _this13.clearPass = new ClearPass();
@@ -1699,6 +1806,8 @@
   var DepthPass = function (_Pass5) {
     _inherits(DepthPass, _Pass5);
 
+    var _super20 = _createSuper(DepthPass);
+
     function DepthPass(scene, camera) {
       var _this14;
 
@@ -1713,7 +1822,7 @@
 
       _classCallCheck(this, DepthPass);
 
-      _this14 = _possibleConstructorReturn(this, _getPrototypeOf(DepthPass).call(this, "DepthPass"));
+      _this14 = _super20.call(this, "DepthPass");
       _this14.needsSwap = false;
       _this14.renderPass = new RenderPass(scene, camera, new three.MeshDepthMaterial({
         depthPacking: three.RGBADepthPacking,
@@ -1915,21 +2024,21 @@
 
   function prefixSubstrings(prefix, substrings, strings) {
     var prefixed, regExp;
-    var _iteratorNormalCompletion3 = true;
-    var _didIteratorError3 = false;
-    var _iteratorError3 = undefined;
+
+    var _iterator3 = _createForOfIteratorHelper(substrings),
+        _step3;
 
     try {
-      for (var _iterator3 = substrings[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
         var substring = _step3.value;
         prefixed = "$1" + prefix + substring.charAt(0).toUpperCase() + substring.slice(1);
         regExp = new RegExp("([^\\.])(\\b" + substring + "\\b)", "g");
-        var _iteratorNormalCompletion4 = true;
-        var _didIteratorError4 = false;
-        var _iteratorError4 = undefined;
+
+        var _iterator4 = _createForOfIteratorHelper(strings.entries()),
+            _step4;
 
         try {
-          for (var _iterator4 = strings.entries()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
             var entry = _step4.value;
 
             if (entry[1] !== null) {
@@ -1937,33 +2046,15 @@
             }
           }
         } catch (err) {
-          _didIteratorError4 = true;
-          _iteratorError4 = err;
+          _iterator4.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-              _iterator4["return"]();
-            }
-          } finally {
-            if (_didIteratorError4) {
-              throw _iteratorError4;
-            }
-          }
+          _iterator4.f();
         }
       }
     } catch (err) {
-      _didIteratorError3 = true;
-      _iteratorError3 = err;
+      _iterator3.e(err);
     } finally {
-      try {
-        if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-          _iterator3["return"]();
-        }
-      } finally {
-        if (_didIteratorError3) {
-          throw _iteratorError3;
-        }
-      }
+      _iterator3.f();
     }
   }
 
@@ -2050,12 +2141,14 @@
   var EffectPass = function (_Pass6) {
     _inherits(EffectPass, _Pass6);
 
+    var _super21 = _createSuper(EffectPass);
+
     function EffectPass(camera) {
       var _this15;
 
       _classCallCheck(this, EffectPass);
 
-      _this15 = _possibleConstructorReturn(this, _getPrototypeOf(EffectPass).call(this, "EffectPass"));
+      _this15 = _super21.call(this, "EffectPass");
 
       _this15.setFullscreenMaterial(new EffectMaterial(null, null, null, camera));
 
@@ -2089,12 +2182,12 @@
         var transformedUv = false;
         var readDepth = false;
         var result;
-        var _iteratorNormalCompletion5 = true;
-        var _didIteratorError5 = false;
-        var _iteratorError5 = undefined;
+
+        var _iterator5 = _createForOfIteratorHelper(this.effects),
+            _step5;
 
         try {
-          for (var _iterator5 = this.effects[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
             var effect = _step5.value;
 
             if (effect.blendMode.blendFunction === BlendFunction.SKIP) {
@@ -2109,69 +2202,40 @@
               readDepth = readDepth || result.readDepth;
 
               if (effect.extensions !== null) {
-                var _iteratorNormalCompletion8 = true;
-                var _didIteratorError8 = false;
-                var _iteratorError8 = undefined;
+                var _iterator8 = _createForOfIteratorHelper(effect.extensions),
+                    _step8;
 
                 try {
-                  for (var _iterator8 = effect.extensions[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                  for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
                     var _extension = _step8.value;
                     extensions.add(_extension);
                   }
                 } catch (err) {
-                  _didIteratorError8 = true;
-                  _iteratorError8 = err;
+                  _iterator8.e(err);
                 } finally {
-                  try {
-                    if (!_iteratorNormalCompletion8 && _iterator8["return"] != null) {
-                      _iterator8["return"]();
-                    }
-                  } finally {
-                    if (_didIteratorError8) {
-                      throw _iteratorError8;
-                    }
-                  }
+                  _iterator8.f();
                 }
               }
             }
           }
         } catch (err) {
-          _didIteratorError5 = true;
-          _iteratorError5 = err;
+          _iterator5.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-              _iterator5["return"]();
-            }
-          } finally {
-            if (_didIteratorError5) {
-              throw _iteratorError5;
-            }
-          }
+          _iterator5.f();
         }
 
-        var _iteratorNormalCompletion6 = true;
-        var _didIteratorError6 = false;
-        var _iteratorError6 = undefined;
+        var _iterator6 = _createForOfIteratorHelper(blendModes.values()),
+            _step6;
 
         try {
-          for (var _iterator6 = blendModes.values()[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
             var blendMode = _step6.value;
             shaderParts.set(Section.FRAGMENT_HEAD, shaderParts.get(Section.FRAGMENT_HEAD) + blendMode.getShaderCode().replace(blendRegExp, "blend" + blendMode.blendFunction) + "\n");
           }
         } catch (err) {
-          _didIteratorError6 = true;
-          _iteratorError6 = err;
+          _iterator6.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-              _iterator6["return"]();
-            }
-          } finally {
-            if (_didIteratorError6) {
-              throw _iteratorError6;
-            }
-          }
+          _iterator6.f();
         }
 
         if ((attributes & EffectAttribute.DEPTH) !== 0) {
@@ -2203,28 +2267,18 @@
         material.extensions = {};
 
         if (extensions.size > 0) {
-          var _iteratorNormalCompletion7 = true;
-          var _didIteratorError7 = false;
-          var _iteratorError7 = undefined;
+          var _iterator7 = _createForOfIteratorHelper(extensions),
+              _step7;
 
           try {
-            for (var _iterator7 = extensions[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+            for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
               var extension = _step7.value;
               material.extensions[extension] = true;
             }
           } catch (err) {
-            _didIteratorError7 = true;
-            _iteratorError7 = err;
+            _iterator7.e(err);
           } finally {
-            try {
-              if (!_iteratorNormalCompletion7 && _iterator7["return"] != null) {
-                _iterator7["return"]();
-              }
-            } finally {
-              if (_didIteratorError7) {
-                throw _iteratorError7;
-              }
-            }
+            _iterator7.f();
           }
         }
       }
@@ -2246,28 +2300,19 @@
         material.uniforms.depthBuffer.value = depthTexture;
         material.depthPacking = depthPacking;
         material.needsUpdate = true;
-        var _iteratorNormalCompletion9 = true;
-        var _didIteratorError9 = false;
-        var _iteratorError9 = undefined;
+
+        var _iterator9 = _createForOfIteratorHelper(this.effects),
+            _step9;
 
         try {
-          for (var _iterator9 = this.effects[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+          for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
             var effect = _step9.value;
             effect.setDepthTexture(depthTexture, depthPacking);
           }
         } catch (err) {
-          _didIteratorError9 = true;
-          _iteratorError9 = err;
+          _iterator9.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion9 && _iterator9["return"] != null) {
-              _iterator9["return"]();
-            }
-          } finally {
-            if (_didIteratorError9) {
-              throw _iteratorError9;
-            }
-          }
+          _iterator9.f();
         }
       }
     }, {
@@ -2275,28 +2320,19 @@
       value: function render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
         var material = this.getFullscreenMaterial();
         var time = material.uniforms.time.value + deltaTime;
-        var _iteratorNormalCompletion10 = true;
-        var _didIteratorError10 = false;
-        var _iteratorError10 = undefined;
+
+        var _iterator10 = _createForOfIteratorHelper(this.effects),
+            _step10;
 
         try {
-          for (var _iterator10 = this.effects[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+          for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
             var effect = _step10.value;
             effect.update(renderer, inputBuffer, deltaTime);
           }
         } catch (err) {
-          _didIteratorError10 = true;
-          _iteratorError10 = err;
+          _iterator10.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
-              _iterator10["return"]();
-            }
-          } finally {
-            if (_didIteratorError10) {
-              throw _iteratorError10;
-            }
-          }
+          _iterator10.f();
         }
 
         if (!this.skipRendering || this.renderToScreen) {
@@ -2310,55 +2346,36 @@
       key: "setSize",
       value: function setSize(width, height) {
         this.getFullscreenMaterial().setSize(width, height);
-        var _iteratorNormalCompletion11 = true;
-        var _didIteratorError11 = false;
-        var _iteratorError11 = undefined;
+
+        var _iterator11 = _createForOfIteratorHelper(this.effects),
+            _step11;
 
         try {
-          for (var _iterator11 = this.effects[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+          for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
             var effect = _step11.value;
             effect.setSize(width, height);
           }
         } catch (err) {
-          _didIteratorError11 = true;
-          _iteratorError11 = err;
+          _iterator11.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
-              _iterator11["return"]();
-            }
-          } finally {
-            if (_didIteratorError11) {
-              throw _iteratorError11;
-            }
-          }
+          _iterator11.f();
         }
       }
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha, frameBufferType) {
-        var _iteratorNormalCompletion12 = true;
-        var _didIteratorError12 = false;
-        var _iteratorError12 = undefined;
+        var _iterator12 = _createForOfIteratorHelper(this.effects),
+            _step12;
 
         try {
-          for (var _iterator12 = this.effects[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+          for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
             var effect = _step12.value;
             effect.initialize(renderer, alpha, frameBufferType);
           }
         } catch (err) {
-          _didIteratorError12 = true;
-          _iteratorError12 = err;
+          _iterator12.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion12 && _iterator12["return"] != null) {
-              _iterator12["return"]();
-            }
-          } finally {
-            if (_didIteratorError12) {
-              throw _iteratorError12;
-            }
-          }
+          _iterator12.f();
         }
 
         this.updateMaterial();
@@ -2380,28 +2397,18 @@
       value: function dispose() {
         _get(_getPrototypeOf(EffectPass.prototype), "dispose", this).call(this);
 
-        var _iteratorNormalCompletion13 = true;
-        var _didIteratorError13 = false;
-        var _iteratorError13 = undefined;
+        var _iterator13 = _createForOfIteratorHelper(this.effects),
+            _step13;
 
         try {
-          for (var _iterator13 = this.effects[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+          for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
             var effect = _step13.value;
             effect.dispose();
           }
         } catch (err) {
-          _didIteratorError13 = true;
-          _iteratorError13 = err;
+          _iterator13.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion13 && _iterator13["return"] != null) {
-              _iterator13["return"]();
-            }
-          } finally {
-            if (_didIteratorError13) {
-              throw _iteratorError13;
-            }
-          }
+          _iterator13.f();
         }
       }
     }, {
@@ -2442,12 +2449,14 @@
   var MaskPass = function (_Pass7) {
     _inherits(MaskPass, _Pass7);
 
+    var _super22 = _createSuper(MaskPass);
+
     function MaskPass(scene, camera) {
       var _this16;
 
       _classCallCheck(this, MaskPass);
 
-      _this16 = _possibleConstructorReturn(this, _getPrototypeOf(MaskPass).call(this, "MaskPass", scene, camera));
+      _this16 = _super22.call(this, "MaskPass", scene, camera);
       _this16.needsSwap = false;
       _this16.clearPass = new ClearPass(false, false, true);
       _this16.inverse = false;
@@ -2516,6 +2525,8 @@
   var NormalPass = function (_Pass8) {
     _inherits(NormalPass, _Pass8);
 
+    var _super23 = _createSuper(NormalPass);
+
     function NormalPass(scene, camera) {
       var _this17;
 
@@ -2530,7 +2541,7 @@
 
       _classCallCheck(this, NormalPass);
 
-      _this17 = _possibleConstructorReturn(this, _getPrototypeOf(NormalPass).call(this, "NormalPass"));
+      _this17 = _super23.call(this, "NormalPass");
       _this17.needsSwap = false;
       _this17.renderPass = new RenderPass(scene, camera, new three.MeshNormalMaterial({
         morphTargets: true,
@@ -2593,6 +2604,8 @@
   var SavePass = function (_Pass9) {
     _inherits(SavePass, _Pass9);
 
+    var _super24 = _createSuper(SavePass);
+
     function SavePass(renderTarget) {
       var _this18;
 
@@ -2600,7 +2613,7 @@
 
       _classCallCheck(this, SavePass);
 
-      _this18 = _possibleConstructorReturn(this, _getPrototypeOf(SavePass).call(this, "SavePass"));
+      _this18 = _super24.call(this, "SavePass");
 
       _this18.setFullscreenMaterial(new CopyMaterial());
 
@@ -2656,6 +2669,8 @@
   var ShaderPass = function (_Pass10) {
     _inherits(ShaderPass, _Pass10);
 
+    var _super25 = _createSuper(ShaderPass);
+
     function ShaderPass(material) {
       var _this19;
 
@@ -2663,7 +2678,7 @@
 
       _classCallCheck(this, ShaderPass);
 
-      _this19 = _possibleConstructorReturn(this, _getPrototypeOf(ShaderPass).call(this, "ShaderPass"));
+      _this19 = _super25.call(this, "ShaderPass");
 
       _this19.setFullscreenMaterial(material);
 
@@ -2853,28 +2868,19 @@
         if (pass.needsDepthTexture || this.depthTexture !== null) {
           if (this.depthTexture === null) {
             var depthTexture = this.createDepthTexture();
-            var _iteratorNormalCompletion14 = true;
-            var _didIteratorError14 = false;
-            var _iteratorError14 = undefined;
+
+            var _iterator14 = _createForOfIteratorHelper(passes),
+                _step14;
 
             try {
-              for (var _iterator14 = passes[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+              for (_iterator14.s(); !(_step14 = _iterator14.n()).done;) {
                 pass = _step14.value;
                 pass.setDepthTexture(depthTexture);
               }
             } catch (err) {
-              _didIteratorError14 = true;
-              _iteratorError14 = err;
+              _iterator14.e(err);
             } finally {
-              try {
-                if (!_iteratorNormalCompletion14 && _iterator14["return"] != null) {
-                  _iterator14["return"]();
-                }
-              } finally {
-                if (_didIteratorError14) {
-                  throw _iteratorError14;
-                }
-              }
+              _iterator14.f();
             }
           } else {
             pass.setDepthTexture(this.depthTexture);
@@ -2902,28 +2908,19 @@
               this.inputBuffer.depthTexture = null;
               this.outputBuffer.depthTexture = null;
               pass.setDepthTexture(null);
-              var _iteratorNormalCompletion15 = true;
-              var _didIteratorError15 = false;
-              var _iteratorError15 = undefined;
+
+              var _iterator15 = _createForOfIteratorHelper(passes),
+                  _step15;
 
               try {
-                for (var _iterator15 = passes[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+                for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
                   pass = _step15.value;
                   pass.setDepthTexture(null);
                 }
               } catch (err) {
-                _didIteratorError15 = true;
-                _iteratorError15 = err;
+                _iterator15.e(err);
               } finally {
-                try {
-                  if (!_iteratorNormalCompletion15 && _iterator15["return"] != null) {
-                    _iterator15["return"]();
-                  }
-                } finally {
-                  if (_didIteratorError15) {
-                    throw _iteratorError15;
-                  }
-                }
+                _iterator15.f();
               }
             }
           }
@@ -2944,12 +2941,12 @@
         var outputBuffer = this.outputBuffer;
         var stencilTest = false;
         var context, stencil, buffer;
-        var _iteratorNormalCompletion16 = true;
-        var _didIteratorError16 = false;
-        var _iteratorError16 = undefined;
+
+        var _iterator16 = _createForOfIteratorHelper(this.passes),
+            _step16;
 
         try {
-          for (var _iterator16 = this.passes[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+          for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
             var pass = _step16.value;
 
             if (pass.enabled) {
@@ -2978,18 +2975,9 @@
             }
           }
         } catch (err) {
-          _didIteratorError16 = true;
-          _iteratorError16 = err;
+          _iterator16.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion16 && _iterator16["return"] != null) {
-              _iterator16["return"]();
-            }
-          } finally {
-            if (_didIteratorError16) {
-              throw _iteratorError16;
-            }
-          }
+          _iterator16.f();
         }
       }
     }, {
@@ -3007,28 +2995,19 @@
         var drawingBufferSize = renderer.getDrawingBufferSize(new three.Vector2());
         this.inputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
         this.outputBuffer.setSize(drawingBufferSize.width, drawingBufferSize.height);
-        var _iteratorNormalCompletion17 = true;
-        var _didIteratorError17 = false;
-        var _iteratorError17 = undefined;
+
+        var _iterator17 = _createForOfIteratorHelper(this.passes),
+            _step17;
 
         try {
-          for (var _iterator17 = this.passes[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+          for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
             var pass = _step17.value;
             pass.setSize(drawingBufferSize.width, drawingBufferSize.height);
           }
         } catch (err) {
-          _didIteratorError17 = true;
-          _iteratorError17 = err;
+          _iterator17.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion17 && _iterator17["return"] != null) {
-              _iterator17["return"]();
-            }
-          } finally {
-            if (_didIteratorError17) {
-              throw _iteratorError17;
-            }
-          }
+          _iterator17.f();
         }
       }
     }, {
@@ -3045,28 +3024,18 @@
     }, {
       key: "dispose",
       value: function dispose() {
-        var _iteratorNormalCompletion18 = true;
-        var _didIteratorError18 = false;
-        var _iteratorError18 = undefined;
+        var _iterator18 = _createForOfIteratorHelper(this.passes),
+            _step18;
 
         try {
-          for (var _iterator18 = this.passes[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {
+          for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
             var pass = _step18.value;
             pass.dispose();
           }
         } catch (err) {
-          _didIteratorError18 = true;
-          _iteratorError18 = err;
+          _iterator18.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion18 && _iterator18["return"] != null) {
-              _iterator18["return"]();
-            }
-          } finally {
-            if (_didIteratorError18) {
-              throw _iteratorError18;
-            }
-          }
+          _iterator18.f();
         }
 
         this.passes = [];
@@ -3127,6 +3096,8 @@
   var Selection = function (_Set) {
     _inherits(Selection, _Set);
 
+    var _super26 = _createSuper(Selection);
+
     function Selection(iterable) {
       var _this20;
 
@@ -3134,7 +3105,7 @@
 
       _classCallCheck(this, Selection);
 
-      _this20 = _possibleConstructorReturn(this, _getPrototypeOf(Selection).call(this));
+      _this20 = _super26.call(this);
       _this20.currentLayer = layer;
 
       if (iterable !== undefined) {
@@ -3148,28 +3119,19 @@
       key: "clear",
       value: function clear() {
         var layer = this.layer;
-        var _iteratorNormalCompletion19 = true;
-        var _didIteratorError19 = false;
-        var _iteratorError19 = undefined;
+
+        var _iterator19 = _createForOfIteratorHelper(this),
+            _step19;
 
         try {
-          for (var _iterator19 = this[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+          for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
             var object = _step19.value;
             object.layers.disable(layer);
           }
         } catch (err) {
-          _didIteratorError19 = true;
-          _iteratorError19 = err;
+          _iterator19.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion19 && _iterator19["return"] != null) {
-              _iterator19["return"]();
-            }
-          } finally {
-            if (_didIteratorError19) {
-              throw _iteratorError19;
-            }
-          }
+          _iterator19.f();
         }
 
         return _get(_getPrototypeOf(Selection.prototype), "clear", this).call(this);
@@ -3178,28 +3140,19 @@
       key: "set",
       value: function set(objects) {
         this.clear();
-        var _iteratorNormalCompletion20 = true;
-        var _didIteratorError20 = false;
-        var _iteratorError20 = undefined;
+
+        var _iterator20 = _createForOfIteratorHelper(objects),
+            _step20;
 
         try {
-          for (var _iterator20 = objects[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
+          for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
             var object = _step20.value;
             this.add(object);
           }
         } catch (err) {
-          _didIteratorError20 = true;
-          _iteratorError20 = err;
+          _iterator20.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion20 && _iterator20["return"] != null) {
-              _iterator20["return"]();
-            }
-          } finally {
-            if (_didIteratorError20) {
-              throw _iteratorError20;
-            }
-          }
+          _iterator20.f();
         }
 
         return this;
@@ -3230,12 +3183,11 @@
     }, {
       key: "setVisible",
       value: function setVisible(visible) {
-        var _iteratorNormalCompletion21 = true;
-        var _didIteratorError21 = false;
-        var _iteratorError21 = undefined;
+        var _iterator21 = _createForOfIteratorHelper(this),
+            _step21;
 
         try {
-          for (var _iterator21 = this[Symbol.iterator](), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
+          for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
             var object = _step21.value;
 
             if (visible) {
@@ -3245,18 +3197,9 @@
             }
           }
         } catch (err) {
-          _didIteratorError21 = true;
-          _iteratorError21 = err;
+          _iterator21.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion21 && _iterator21["return"] != null) {
-              _iterator21["return"]();
-            }
-          } finally {
-            if (_didIteratorError21) {
-              throw _iteratorError21;
-            }
-          }
+          _iterator21.f();
         }
 
         return this;
@@ -3268,29 +3211,20 @@
       },
       set: function set(value) {
         var currentLayer = this.currentLayer;
-        var _iteratorNormalCompletion22 = true;
-        var _didIteratorError22 = false;
-        var _iteratorError22 = undefined;
+
+        var _iterator22 = _createForOfIteratorHelper(this),
+            _step22;
 
         try {
-          for (var _iterator22 = this[Symbol.iterator](), _step22; !(_iteratorNormalCompletion22 = (_step22 = _iterator22.next()).done); _iteratorNormalCompletion22 = true) {
+          for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
             var object = _step22.value;
             object.layers.disable(currentLayer);
             object.layers.enable(value);
           }
         } catch (err) {
-          _didIteratorError22 = true;
-          _iteratorError22 = err;
+          _iterator22.e(err);
         } finally {
-          try {
-            if (!_iteratorNormalCompletion22 && _iterator22["return"] != null) {
-              _iterator22["return"]();
-            }
-          } finally {
-            if (_didIteratorError22) {
-              throw _iteratorError22;
-            }
-          }
+          _iterator22.f();
         }
 
         this.currentLayer = value;
@@ -3304,6 +3238,8 @@
 
   var BloomEffect = function (_Effect) {
     _inherits(BloomEffect, _Effect);
+
+    var _super27 = _createSuper(BloomEffect);
 
     function BloomEffect() {
       var _this21;
@@ -3328,10 +3264,10 @@
 
       _classCallCheck(this, BloomEffect);
 
-      _this21 = _possibleConstructorReturn(this, _getPrototypeOf(BloomEffect).call(this, "BloomEffect", fragmentShader$c, {
+      _this21 = _super27.call(this, "BloomEffect", fragmentShader$c, {
         blendFunction: blendFunction,
         uniforms: new Map([["texture", new three.Uniform(null)], ["intensity", new three.Uniform(intensity)]])
-      }));
+      });
       _this21.renderTarget = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         magFilter: three.LinearFilter,
@@ -3470,6 +3406,8 @@
   var BokehEffect = function (_Effect2) {
     _inherits(BokehEffect, _Effect2);
 
+    var _super28 = _createSuper(BokehEffect);
+
     function BokehEffect() {
       var _ref7 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref7$blendFunction = _ref7.blendFunction,
@@ -3485,11 +3423,11 @@
 
       _classCallCheck(this, BokehEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(BokehEffect).call(this, "BokehEffect", fragmentShader$d, {
+      return _super28.call(this, "BokehEffect", fragmentShader$d, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
         uniforms: new Map([["focus", new three.Uniform(focus)], ["dof", new three.Uniform(dof)], ["aperture", new three.Uniform(aperture)], ["maxBlur", new three.Uniform(maxBlur)]])
-      }));
+      });
     }
 
     return BokehEffect;
@@ -3499,6 +3437,8 @@
 
   var BrightnessContrastEffect = function (_Effect3) {
     _inherits(BrightnessContrastEffect, _Effect3);
+
+    var _super29 = _createSuper(BrightnessContrastEffect);
 
     function BrightnessContrastEffect() {
       var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
@@ -3511,10 +3451,10 @@
 
       _classCallCheck(this, BrightnessContrastEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(BrightnessContrastEffect).call(this, "BrightnessContrastEffect", fragmentShader$e, {
+      return _super29.call(this, "BrightnessContrastEffect", fragmentShader$e, {
         blendFunction: blendFunction,
         uniforms: new Map([["brightness", new three.Uniform(brightness)], ["contrast", new three.Uniform(contrast)]])
-      }));
+      });
     }
 
     return BrightnessContrastEffect;
@@ -3525,14 +3465,16 @@
   var ColorAverageEffect = function (_Effect4) {
     _inherits(ColorAverageEffect, _Effect4);
 
+    var _super30 = _createSuper(ColorAverageEffect);
+
     function ColorAverageEffect() {
       var blendFunction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : BlendFunction.NORMAL;
 
       _classCallCheck(this, ColorAverageEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(ColorAverageEffect).call(this, "ColorAverageEffect", fragmentShader$f, {
+      return _super30.call(this, "ColorAverageEffect", fragmentShader$f, {
         blendFunction: blendFunction
-      }));
+      });
     }
 
     return ColorAverageEffect;
@@ -3542,6 +3484,8 @@
 
   var ColorDepthEffect = function (_Effect5) {
     _inherits(ColorDepthEffect, _Effect5);
+
+    var _super31 = _createSuper(ColorDepthEffect);
 
     function ColorDepthEffect() {
       var _this22;
@@ -3554,10 +3498,10 @@
 
       _classCallCheck(this, ColorDepthEffect);
 
-      _this22 = _possibleConstructorReturn(this, _getPrototypeOf(ColorDepthEffect).call(this, "ColorDepthEffect", fragmentShader$g, {
+      _this22 = _super31.call(this, "ColorDepthEffect", fragmentShader$g, {
         blendFunction: blendFunction,
         uniforms: new Map([["factor", new three.Uniform(1.0)]])
-      }));
+      });
       _this22.bits = 0;
 
       _this22.setBitDepth(bits);
@@ -3587,6 +3531,8 @@
   var ChromaticAberrationEffect = function (_Effect6) {
     _inherits(ChromaticAberrationEffect, _Effect6);
 
+    var _super32 = _createSuper(ChromaticAberrationEffect);
+
     function ChromaticAberrationEffect() {
       var _ref10 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref10$blendFunction = _ref10.blendFunction,
@@ -3596,12 +3542,12 @@
 
       _classCallCheck(this, ChromaticAberrationEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(ChromaticAberrationEffect).call(this, "ChromaticAberrationEffect", fragmentShader$h, {
+      return _super32.call(this, "ChromaticAberrationEffect", fragmentShader$h, {
         vertexShader: vertexShader$6,
         blendFunction: blendFunction,
         attributes: EffectAttribute.CONVOLUTION,
         uniforms: new Map([["offset", new three.Uniform(offset)]])
-      }));
+      });
     }
 
     _createClass(ChromaticAberrationEffect, [{
@@ -3631,6 +3577,8 @@
   var DepthEffect = function (_Effect7) {
     _inherits(DepthEffect, _Effect7);
 
+    var _super33 = _createSuper(DepthEffect);
+
     function DepthEffect() {
       var _this23;
 
@@ -3642,10 +3590,10 @@
 
       _classCallCheck(this, DepthEffect);
 
-      _this23 = _possibleConstructorReturn(this, _getPrototypeOf(DepthEffect).call(this, "DepthEffect", fragmentShader$i, {
+      _this23 = _super33.call(this, "DepthEffect", fragmentShader$i, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH
-      }));
+      });
       _this23.inverted = inverted;
       return _this23;
     }
@@ -3668,6 +3616,8 @@
   var DepthOfFieldEffect = function (_Effect8) {
     _inherits(DepthOfFieldEffect, _Effect8);
 
+    var _super34 = _createSuper(DepthOfFieldEffect);
+
     function DepthOfFieldEffect(camera) {
       var _this24;
 
@@ -3687,11 +3637,11 @@
 
       _classCallCheck(this, DepthOfFieldEffect);
 
-      _this24 = _possibleConstructorReturn(this, _getPrototypeOf(DepthOfFieldEffect).call(this, "DepthOfFieldEffect", fragmentShader$j, {
+      _this24 = _super34.call(this, "DepthOfFieldEffect", fragmentShader$j, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["nearBuffer", new three.Uniform(null)], ["farBuffer", new three.Uniform(null)], ["cocBuffer", new three.Uniform(null)], ["scale", new three.Uniform(1.0)]])
-      }));
+      });
       _this24.camera = camera;
       _this24.renderTarget = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
@@ -3860,6 +3810,8 @@
   var DotScreenEffect = function (_Effect9) {
     _inherits(DotScreenEffect, _Effect9);
 
+    var _super35 = _createSuper(DotScreenEffect);
+
     function DotScreenEffect() {
       var _this25;
 
@@ -3873,10 +3825,10 @@
 
       _classCallCheck(this, DotScreenEffect);
 
-      _this25 = _possibleConstructorReturn(this, _getPrototypeOf(DotScreenEffect).call(this, "DotScreenEffect", fragmentShader$k, {
+      _this25 = _super35.call(this, "DotScreenEffect", fragmentShader$k, {
         blendFunction: blendFunction,
         uniforms: new Map([["angle", new three.Uniform(new three.Vector2())], ["scale", new three.Uniform(scale)]])
-      }));
+      });
 
       _this25.setAngle(angle);
 
@@ -3898,6 +3850,8 @@
   var GammaCorrectionEffect = function (_Effect10) {
     _inherits(GammaCorrectionEffect, _Effect10);
 
+    var _super36 = _createSuper(GammaCorrectionEffect);
+
     function GammaCorrectionEffect() {
       var _ref14 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref14$blendFunction = _ref14.blendFunction,
@@ -3907,10 +3861,10 @@
 
       _classCallCheck(this, GammaCorrectionEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(GammaCorrectionEffect).call(this, "GammaCorrectionEffect", fragmentShader$l, {
+      return _super36.call(this, "GammaCorrectionEffect", fragmentShader$l, {
         blendFunction: blendFunction,
         uniforms: new Map([["gamma", new three.Uniform(gamma)]])
-      }));
+      });
     }
 
     return GammaCorrectionEffect;
@@ -3925,6 +3879,8 @@
 
   var GlitchEffect = function (_Effect11) {
     _inherits(GlitchEffect, _Effect11);
+
+    var _super37 = _createSuper(GlitchEffect);
 
     function GlitchEffect() {
       var _this26;
@@ -3951,10 +3907,10 @@
 
       _classCallCheck(this, GlitchEffect);
 
-      _this26 = _possibleConstructorReturn(this, _getPrototypeOf(GlitchEffect).call(this, "GlitchEffect", fragmentShader$m, {
+      _this26 = _super37.call(this, "GlitchEffect", fragmentShader$m, {
         blendFunction: blendFunction,
         uniforms: new Map([["perturbationMap", new three.Uniform(null)], ["columns", new three.Uniform(columns)], ["active", new three.Uniform(false)], ["random", new three.Uniform(0.02)], ["seed", new three.Uniform(new three.Vector2())], ["distortion", new three.Uniform(new three.Vector2())]])
-      }));
+      });
       _this26.perturbationMap = null;
 
       _this26.setPerturbationMap(perturbationMap === null ? _this26.generatePerturbationMap(dtSize) : perturbationMap);
@@ -4087,6 +4043,8 @@
   var GodRaysEffect = function (_Effect12) {
     _inherits(GodRaysEffect, _Effect12);
 
+    var _super38 = _createSuper(GodRaysEffect);
+
     function GodRaysEffect(camera, lightSource) {
       var _this27;
 
@@ -4118,11 +4076,11 @@
 
       _classCallCheck(this, GodRaysEffect);
 
-      _this27 = _possibleConstructorReturn(this, _getPrototypeOf(GodRaysEffect).call(this, "GodRaysEffect", fragmentShader$n, {
+      _this27 = _super38.call(this, "GodRaysEffect", fragmentShader$n, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         uniforms: new Map([["texture", new three.Uniform(null)]])
-      }));
+      });
       _this27.camera = camera;
       _this27.lightSource = lightSource;
       _this27.lightSource.material.depthWrite = false;
@@ -4344,6 +4302,8 @@
   var GridEffect = function (_Effect13) {
     _inherits(GridEffect, _Effect13);
 
+    var _super39 = _createSuper(GridEffect);
+
     function GridEffect() {
       var _this28;
 
@@ -4357,10 +4317,10 @@
 
       _classCallCheck(this, GridEffect);
 
-      _this28 = _possibleConstructorReturn(this, _getPrototypeOf(GridEffect).call(this, "GridEffect", fragmentShader$o, {
+      _this28 = _super39.call(this, "GridEffect", fragmentShader$o, {
         blendFunction: blendFunction,
         uniforms: new Map([["scale", new three.Uniform(new three.Vector2())], ["lineWidth", new three.Uniform(lineWidth)]])
-      }));
+      });
       _this28.resolution = new three.Vector2();
       _this28.scale = Math.max(scale, 1e-6);
       _this28.lineWidth = Math.max(lineWidth, 0.0);
@@ -4408,6 +4368,8 @@
   var HueSaturationEffect = function (_Effect14) {
     _inherits(HueSaturationEffect, _Effect14);
 
+    var _super40 = _createSuper(HueSaturationEffect);
+
     function HueSaturationEffect() {
       var _this29;
 
@@ -4421,10 +4383,10 @@
 
       _classCallCheck(this, HueSaturationEffect);
 
-      _this29 = _possibleConstructorReturn(this, _getPrototypeOf(HueSaturationEffect).call(this, "HueSaturationEffect", fragmentShader$p, {
+      _this29 = _super40.call(this, "HueSaturationEffect", fragmentShader$p, {
         blendFunction: blendFunction,
         uniforms: new Map([["hue", new three.Uniform(new three.Vector3())], ["saturation", new three.Uniform(saturation)]])
-      }));
+      });
 
       _this29.setHue(hue);
 
@@ -4443,10 +4405,12 @@
     return HueSaturationEffect;
   }(Effect);
 
-  var fragmentShader$q = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(inputColor.rgb*noise,inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
+  var fragmentShader$q = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(min(inputColor.rgb*noise,vec3(1.0)),inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
 
   var NoiseEffect = function (_Effect15) {
     _inherits(NoiseEffect, _Effect15);
+
+    var _super41 = _createSuper(NoiseEffect);
 
     function NoiseEffect() {
       var _this30;
@@ -4459,9 +4423,9 @@
 
       _classCallCheck(this, NoiseEffect);
 
-      _this30 = _possibleConstructorReturn(this, _getPrototypeOf(NoiseEffect).call(this, "NoiseEffect", fragmentShader$q, {
+      _this30 = _super41.call(this, "NoiseEffect", fragmentShader$q, {
         blendFunction: blendFunction
-      }));
+      });
       _this30.premultiply = premultiply;
       return _this30;
     }
@@ -4484,6 +4448,8 @@
 
   var OutlineEffect = function (_Effect16) {
     _inherits(OutlineEffect, _Effect16);
+
+    var _super42 = _createSuper(OutlineEffect);
 
     function OutlineEffect(scene, camera) {
       var _this31;
@@ -4516,9 +4482,9 @@
 
       _classCallCheck(this, OutlineEffect);
 
-      _this31 = _possibleConstructorReturn(this, _getPrototypeOf(OutlineEffect).call(this, "OutlineEffect", fragmentShader$r, {
+      _this31 = _super42.call(this, "OutlineEffect", fragmentShader$r, {
         uniforms: new Map([["maskTexture", new three.Uniform(null)], ["edgeTexture", new three.Uniform(null)], ["edgeStrength", new three.Uniform(edgeStrength)], ["visibleEdgeColor", new three.Uniform(new three.Color(visibleEdgeColor))], ["hiddenEdgeColor", new three.Uniform(new three.Color(hiddenEdgeColor))], ["pulse", new three.Uniform(1.0)]])
-      }));
+      });
 
       _this31.blendMode = function (defines) {
         return new Proxy(_this31.blendMode, {
@@ -4763,6 +4729,8 @@
   var PixelationEffect = function (_Effect17) {
     _inherits(PixelationEffect, _Effect17);
 
+    var _super43 = _createSuper(PixelationEffect);
+
     function PixelationEffect() {
       var _this32;
 
@@ -4770,9 +4738,9 @@
 
       _classCallCheck(this, PixelationEffect);
 
-      _this32 = _possibleConstructorReturn(this, _getPrototypeOf(PixelationEffect).call(this, "PixelationEffect", fragmentShader$s, {
+      _this32 = _super43.call(this, "PixelationEffect", fragmentShader$s, {
         uniforms: new Map([["active", new three.Uniform(false)], ["d", new three.Uniform(new three.Vector2())]])
-      }));
+      });
       _this32.resolution = new three.Vector2();
       _this32.granularity = granularity;
       return _this32;
@@ -4813,6 +4781,8 @@
   var RealisticBokehEffect = function (_Effect18) {
     _inherits(RealisticBokehEffect, _Effect18);
 
+    var _super44 = _createSuper(RealisticBokehEffect);
+
     function RealisticBokehEffect() {
       var _this33;
 
@@ -4848,11 +4818,11 @@
 
       _classCallCheck(this, RealisticBokehEffect);
 
-      _this33 = _possibleConstructorReturn(this, _getPrototypeOf(RealisticBokehEffect).call(this, "RealisticBokehEffect", fragmentShader$t, {
+      _this33 = _super44.call(this, "RealisticBokehEffect", fragmentShader$t, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH,
         uniforms: new Map([["focus", new three.Uniform(focus)], ["focalLength", new three.Uniform(focalLength)], ["fStop", new three.Uniform(fStop)], ["luminanceThreshold", new three.Uniform(luminanceThreshold)], ["luminanceGain", new three.Uniform(luminanceGain)], ["bias", new three.Uniform(bias)], ["fringe", new three.Uniform(fringe)], ["maxBlur", new three.Uniform(maxBlur)]])
-      }));
+      });
       _this33.rings = rings;
       _this33.samples = samples;
       _this33.showFocus = showFocus;
@@ -4921,6 +4891,8 @@
   var ScanlineEffect = function (_Effect19) {
     _inherits(ScanlineEffect, _Effect19);
 
+    var _super45 = _createSuper(ScanlineEffect);
+
     function ScanlineEffect() {
       var _this34;
 
@@ -4932,10 +4904,10 @@
 
       _classCallCheck(this, ScanlineEffect);
 
-      _this34 = _possibleConstructorReturn(this, _getPrototypeOf(ScanlineEffect).call(this, "ScanlineEffect", fragmentShader$u, {
+      _this34 = _super45.call(this, "ScanlineEffect", fragmentShader$u, {
         blendFunction: blendFunction,
         uniforms: new Map([["count", new three.Uniform(0.0)]])
-      }));
+      });
       _this34.resolution = new three.Vector2();
       _this34.density = density;
       return _this34;
@@ -4972,6 +4944,8 @@
   var ShockWaveEffect = function (_Effect20) {
     _inherits(ShockWaveEffect, _Effect20);
 
+    var _super46 = _createSuper(ShockWaveEffect);
+
     function ShockWaveEffect(camera) {
       var _this35;
 
@@ -4989,10 +4963,10 @@
 
       _classCallCheck(this, ShockWaveEffect);
 
-      _this35 = _possibleConstructorReturn(this, _getPrototypeOf(ShockWaveEffect).call(this, "ShockWaveEffect", fragmentShader$v, {
+      _this35 = _super46.call(this, "ShockWaveEffect", fragmentShader$v, {
         vertexShader: vertexShader$8,
         uniforms: new Map([["active", new three.Uniform(false)], ["center", new three.Uniform(new three.Vector2(0.5, 0.5))], ["cameraDistance", new three.Uniform(1.0)], ["size", new three.Uniform(1.0)], ["radius", new three.Uniform(-waveSize)], ["maxRadius", new three.Uniform(maxRadius)], ["waveSize", new three.Uniform(waveSize)], ["amplitude", new three.Uniform(amplitude)]])
-      }));
+      });
       _this35.camera = camera;
       _this35.epicenter = epicenter;
       _this35.screenPosition = _this35.uniforms.get("center").value;
@@ -5047,12 +5021,14 @@
   var SelectiveBloomEffect = function (_BloomEffect) {
     _inherits(SelectiveBloomEffect, _BloomEffect);
 
+    var _super47 = _createSuper(SelectiveBloomEffect);
+
     function SelectiveBloomEffect(scene, camera, options) {
       var _this36;
 
       _classCallCheck(this, SelectiveBloomEffect);
 
-      _this36 = _possibleConstructorReturn(this, _getPrototypeOf(SelectiveBloomEffect).call(this, options));
+      _this36 = _super47.call(this, options);
       _this36.scene = scene;
       _this36.camera = camera;
       _this36.clearPass = new ClearPass(true, true, false);
@@ -5167,6 +5143,8 @@
   var SepiaEffect = function (_Effect21) {
     _inherits(SepiaEffect, _Effect21);
 
+    var _super48 = _createSuper(SepiaEffect);
+
     function SepiaEffect() {
       var _ref24 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
           _ref24$blendFunction = _ref24.blendFunction,
@@ -5176,10 +5154,10 @@
 
       _classCallCheck(this, SepiaEffect);
 
-      return _possibleConstructorReturn(this, _getPrototypeOf(SepiaEffect).call(this, "SepiaEffect", fragmentShader$w, {
+      return _super48.call(this, "SepiaEffect", fragmentShader$w, {
         blendFunction: blendFunction,
         uniforms: new Map([["intensity", new three.Uniform(intensity)]])
-      }));
+      });
     }
 
     return SepiaEffect;
@@ -5193,6 +5171,8 @@
   var SMAAEffect = function (_Effect22) {
     _inherits(SMAAEffect, _Effect22);
 
+    var _super49 = _createSuper(SMAAEffect);
+
     function SMAAEffect(searchImage, areaImage) {
       var _this37;
 
@@ -5201,12 +5181,12 @@
 
       _classCallCheck(this, SMAAEffect);
 
-      _this37 = _possibleConstructorReturn(this, _getPrototypeOf(SMAAEffect).call(this, "SMAAEffect", fragmentShader$x, {
+      _this37 = _super49.call(this, "SMAAEffect", fragmentShader$x, {
         vertexShader: vertexShader$9,
         blendFunction: BlendFunction.NORMAL,
         attributes: EffectAttribute.CONVOLUTION,
         uniforms: new Map([["weightMap", new three.Uniform(null)]])
-      }));
+      });
       _this37.renderTargetEdges = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearFilter,
         stencilBuffer: false,
@@ -5383,6 +5363,8 @@
   var SSAOEffect = function (_Effect23) {
     _inherits(SSAOEffect, _Effect23);
 
+    var _super50 = _createSuper(SSAOEffect);
+
     function SSAOEffect(camera, normalBuffer) {
       var _this38;
 
@@ -5412,12 +5394,12 @@
 
       _classCallCheck(this, SSAOEffect);
 
-      _this38 = _possibleConstructorReturn(this, _getPrototypeOf(SSAOEffect).call(this, "SSAOEffect", fragmentShader$y, {
+      _this38 = _super50.call(this, "SSAOEffect", fragmentShader$y, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
         defines: new Map([["RINGS_INT", "0"], ["SAMPLES_INT", "0"], ["SAMPLES_FLOAT", "0.0"]]),
         uniforms: new Map([["normalBuffer", new three.Uniform(normalBuffer)], ["cameraInverseProjectionMatrix", new three.Uniform(new three.Matrix4())], ["cameraProjectionMatrix", new three.Uniform(new three.Matrix4())], ["radiusStep", new three.Uniform(new three.Vector2())], ["distanceCutoff", new three.Uniform(new three.Vector2())], ["proximityCutoff", new three.Uniform(new three.Vector2())], ["seed", new three.Uniform(Math.random())], ["luminanceInfluence", new three.Uniform(luminanceInfluence)], ["scale", new three.Uniform(scale)], ["bias", new three.Uniform(bias)]])
-      }));
+      });
       _this38.r = 0.0;
       _this38.resolution = new three.Vector2(1, 1);
       _this38.camera = camera;
@@ -5503,6 +5485,8 @@
   var TextureEffect = function (_Effect24) {
     _inherits(TextureEffect, _Effect24);
 
+    var _super51 = _createSuper(TextureEffect);
+
     function TextureEffect() {
       var _this39;
 
@@ -5516,10 +5500,10 @@
 
       _classCallCheck(this, TextureEffect);
 
-      _this39 = _possibleConstructorReturn(this, _getPrototypeOf(TextureEffect).call(this, "TextureEffect", fragmentShader$z, {
+      _this39 = _super51.call(this, "TextureEffect", fragmentShader$z, {
         blendFunction: blendFunction,
         uniforms: new Map([["texture", new three.Uniform(null)]])
-      }));
+      });
       _this39.texture = texture;
       _this39.aspectCorrection = aspectCorrection;
       return _this39;
@@ -5603,6 +5587,8 @@
   var ToneMappingEffect = function (_Effect25) {
     _inherits(ToneMappingEffect, _Effect25);
 
+    var _super52 = _createSuper(ToneMappingEffect);
+
     function ToneMappingEffect() {
       var _this40;
 
@@ -5624,10 +5610,10 @@
 
       _classCallCheck(this, ToneMappingEffect);
 
-      _this40 = _possibleConstructorReturn(this, _getPrototypeOf(ToneMappingEffect).call(this, "ToneMappingEffect", fragmentShader$A, {
+      _this40 = _super52.call(this, "ToneMappingEffect", fragmentShader$A, {
         blendFunction: blendFunction,
         uniforms: new Map([["luminanceMap", new three.Uniform(null)], ["middleGrey", new three.Uniform(middleGrey)], ["maxLuminance", new three.Uniform(maxLuminance)], ["averageLuminance", new three.Uniform(averageLuminance)]])
-      }));
+      });
       _this40.renderTargetLuminance = new three.WebGLRenderTarget(1, 1, {
         minFilter: three.LinearMipmapLinearFilter !== undefined ? three.LinearMipmapLinearFilter : three.LinearMipMapLinearFilter,
         magFilter: three.LinearFilter,
@@ -5739,6 +5725,8 @@
   var VignetteEffect = function (_Effect26) {
     _inherits(VignetteEffect, _Effect26);
 
+    var _super53 = _createSuper(VignetteEffect);
+
     function VignetteEffect() {
       var _this41;
 
@@ -5752,10 +5740,10 @@
         offset: 0.5,
         darkness: 0.5
       }, options);
-      _this41 = _possibleConstructorReturn(this, _getPrototypeOf(VignetteEffect).call(this, "VignetteEffect", fragmentShader$B, {
+      _this41 = _super53.call(this, "VignetteEffect", fragmentShader$B, {
         blendFunction: settings.blendFunction,
         uniforms: new Map([["offset", new three.Uniform(settings.offset)], ["darkness", new three.Uniform(settings.darkness)]])
-      }));
+      });
       _this41.eskil = settings.eskil;
       return _this41;
     }
@@ -5844,12 +5832,14 @@
   var SMAAImageLoader = function (_Loader) {
     _inherits(SMAAImageLoader, _Loader);
 
+    var _super54 = _createSuper(SMAAImageLoader);
+
     function SMAAImageLoader(manager) {
       var _this42;
 
       _classCallCheck(this, SMAAImageLoader);
 
-      _this42 = _possibleConstructorReturn(this, _getPrototypeOf(SMAAImageLoader).call(this, manager));
+      _this42 = _super54.call(this, manager);
       _this42.disableCache = false;
       return _this42;
     }

@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.13.0 build Wed Mar 18 2020
+ * postprocessing v6.13.1 build Wed Mar 25 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -7934,7 +7934,7 @@ class HueSaturationEffect extends Effect {
 
 }
 
-var fragmentShader$q = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(inputColor.rgb*noise,inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
+var fragmentShader$q = "void mainImage(const in vec4 inputColor,const in vec2 uv,out vec4 outputColor){vec3 noise=vec3(rand(uv*time));\n#ifdef PREMULTIPLY\noutputColor=vec4(min(inputColor.rgb*noise,vec3(1.0)),inputColor.a);\n#else\noutputColor=vec4(noise,inputColor.a);\n#endif\n}";
 
 /**
  * A noise effect.
