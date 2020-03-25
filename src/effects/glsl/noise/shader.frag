@@ -4,7 +4,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor)
 
 	#ifdef PREMULTIPLY
 
-		outputColor = vec4(inputColor.rgb * noise, inputColor.a);
+		outputColor = vec4(min(inputColor.rgb * noise, vec3(1.0)), inputColor.a);
 
 	#else
 
