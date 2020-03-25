@@ -136,7 +136,7 @@ export class TextureEffect extends Effect {
 	 *
 	 * Cannot be used if aspect correction is enabled.
 	 *
-	 * @type {Number}
+	 * @type {Boolean}
 	 */
 
 	get uvTransform() {
@@ -150,7 +150,7 @@ export class TextureEffect extends Effect {
 	 *
 	 * You'll need to call {@link EffectPass#recompile} after changing this value.
 	 *
-	 * @type {Number}
+	 * @type {Boolean}
 	 */
 
 	set uvTransform(value) {
