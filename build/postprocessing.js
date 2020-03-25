@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.13.1 build Wed Mar 25 2020
+ * postprocessing v6.13.2 build Wed Mar 25 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -2256,7 +2256,7 @@
         }
 
         shaderParts.forEach(function (value, key, map) {
-          return map.set(key, value.trim());
+          return map.set(key, value.trim().replace(/^#/, "\n#"));
         });
         this.uniforms = uniforms.size;
         this.varyings = varyings;

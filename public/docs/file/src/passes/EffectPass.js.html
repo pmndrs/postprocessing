@@ -574,7 +574,8 @@ export class EffectPass extends Pass {
 
 		}
 
-		shaderParts.forEach((value, key, map) =&gt; map.set(key, value.trim()));
+		// Ensure that leading preprocessor directives start at a new line.
+		shaderParts.forEach((value, key, map) =&gt; map.set(key, value.trim().replace(/^#/, &quot;\n#&quot;)));
 
 		this.uniforms = uniforms.size;
 		this.varyings = varyings;

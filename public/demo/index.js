@@ -36004,7 +36004,7 @@
         }
 
         shaderParts.forEach(function (value, key, map) {
-          return map.set(key, value.trim());
+          return map.set(key, value.trim().replace(/^#/, "\n#"));
         });
         this.uniforms = uniforms.size;
         this.varyings = varyings;
