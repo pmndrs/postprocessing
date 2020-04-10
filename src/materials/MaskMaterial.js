@@ -125,7 +125,7 @@ export class MaskMaterial extends ShaderMaterial {
 	 *
 	 * Individual mask values will be clamped to [0.0, 1.0].
 	 *
-	 * @type {Boolean}
+	 * @type {Number}
 	 */
 
 	get strength() {
@@ -139,7 +139,7 @@ export class MaskMaterial extends ShaderMaterial {
 	 *
 	 * Has no effect when the mask function is set to `DISCARD`.
 	 *
-	 * @type {Boolean}
+	 * @type {Number}
 	 */
 
 	set strength(value) {
