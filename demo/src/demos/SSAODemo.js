@@ -125,7 +125,7 @@ export class SSAODemo extends PostProcessingDemo {
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 1000);
 		camera.position.set(9.75, 1.72, 0.75);
 		this.camera = camera;
 
@@ -170,6 +170,7 @@ export class SSAODemo extends PostProcessingDemo {
 		smaaEffect.setEdgeDetectionThreshold(0.05);
 
 		// Note: Thresholds and falloff correspond to camera near/far.
+		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
 		const ssaoEffect = new SSAOEffect(camera, normalPass.renderTarget.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 11,
@@ -177,7 +178,7 @@ export class SSAODemo extends PostProcessingDemo {
 			distanceThreshold: 0.02,	// Render up to a distance of ~20 world units
 			distanceFalloff: 0.0025,	// with an additional ~2.5 units of falloff.
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
-			rangeFalloff: 0.0001,			// with 0.1 units of falloff.
+			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
 			luminanceInfluence: 0.7,
 			radius: 30,
 			scale: 1.0,

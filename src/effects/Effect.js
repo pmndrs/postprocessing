@@ -180,7 +180,7 @@ export class Effect {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
+	 * @example if(!alpha && frameBufferType === UnsignedByteType) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {}
@@ -224,8 +224,7 @@ export class Effect {
  * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
  * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
- * @example
- * const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
+ * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  */
 
 export const EffectAttribute = {

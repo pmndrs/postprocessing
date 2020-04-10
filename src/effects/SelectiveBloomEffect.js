@@ -15,9 +15,10 @@ import { BloomEffect } from "./BloomEffect.js";
 /**
  * A selective bloom effect.
  *
- * This effect applies bloom only to selected objects. For this, all objects in
- * the scene need to be rendered again: non-selected objects are rendered solid
- * black to properly occlude selected objects and the scene background.
+ * This effect applies bloom only to selected objects by using layers. Make sure
+ * to enable the selection layer for all relevant lights:
+ *
+ * `lights.forEach((l) => l.layers.enable(bloomEffect.selection.layer));`
  *
  * Attention: If you don't need to limit bloom to a subset of objects, consider
  * using the {@link BloomEffect} instead for better performance.

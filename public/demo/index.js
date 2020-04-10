@@ -31167,7 +31167,7 @@
       return obj === false || obj === true;
     },
     isFunction: function isFunction(obj) {
-      return Object.prototype.toString.call(obj) === '[object Function]';
+      return obj instanceof Function;
     }
   };
   var INTERPRETATIONS = [{
@@ -31667,8 +31667,9 @@
   });
   Object.defineProperty(Color$1.prototype, 'hex', {
     get: function get$$1() {
-      if (!this.__state.space !== 'HEX') {
+      if (this.__state.space !== 'HEX') {
         this.__state.hex = ColorMath.rgb_to_hex(this.r, this.g, this.b);
+        this.__state.space = 'HEX';
       }
 
       return this.__state.hex;
@@ -34853,7 +34854,7 @@
     return LuminanceMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
+  var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION == 1\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
 
   var MaskMaterial = function (_ShaderMaterial12) {
     _inherits(MaskMaterial, _ShaderMaterial12);
@@ -34871,7 +34872,8 @@
         type: "MaskMaterial",
         uniforms: {
           maskTexture: new Uniform(maskTexture),
-          inputBuffer: new Uniform(null)
+          inputBuffer: new Uniform(null),
+          strength: new Uniform(1.0)
         },
         fragmentShader: fragmentShader$9,
         vertexShader: vertexShader,
@@ -34914,6 +34916,14 @@
         }
 
         this.needsUpdate = true;
+      }
+    }, {
+      key: "strength",
+      get: function get() {
+        return this.uniforms.strength.value;
+      },
+      set: function set(value) {
+        this.uniforms.strength.value = value;
       }
     }]);
 
@@ -35127,6 +35137,7 @@
     return Resizer;
   }();
 
+  var dummyCamera = new Camera();
   var geometry = null;
 
   function getFullscreenTriangle() {
@@ -35153,7 +35164,7 @@
     function Pass() {
       var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Pass";
       var scene = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new Scene();
-      var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : dummyCamera;
 
       _classCallCheck(this, Pass);
 
@@ -37314,7 +37325,7 @@
     return DepthEffect;
   }(Effect);
 
-  var fragmentShader$i = "uniform sampler2D nearBuffer;uniform sampler2D farBuffer;uniform sampler2D cocBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearBuffer,uv);vec4 colorFar=texture2D(farBuffer,uv);float CoCNear=texture2D(cocBuffer,uv).r;float blendNear=min(scale*CoCNear,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,blendNear);outputColor=result;}";
+  var fragmentShader$i = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform sampler2D farCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;float CoCFar=texture2D(farCoCBuffer,uv).g;vec2 blend=min(vec2(CoCNear,CoCFar)*scale,1.0);vec4 result=inputColor*(1.0-blend.g)+colorFar;result=mix(result,colorNear,blend.r);outputColor=result;}";
 
   var DepthOfFieldEffect = function (_Effect7) {
     _inherits(DepthOfFieldEffect, _Effect7);
@@ -37343,7 +37354,7 @@
       _this32 = _super36.call(this, "DepthOfFieldEffect", fragmentShader$i, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
-        uniforms: new Map([["nearBuffer", new Uniform(null)], ["farBuffer", new Uniform(null)], ["cocBuffer", new Uniform(null)], ["scale", new Uniform(1.0)]])
+        uniforms: new Map([["nearColorBuffer", new Uniform(null)], ["farColorBuffer", new Uniform(null)], ["nearCoCBuffer", new Uniform(null)], ["farCoCBuffer", new Uniform(null)], ["scale", new Uniform(1.0)]])
       });
       _this32.camera = camera;
       _this32.renderTarget = new WebGLRenderTarget(1, 1, {
@@ -37358,16 +37369,17 @@
       _this32.renderTargetMasked.texture.name = "DoF.Masked.Far";
       _this32.renderTargetNear = _this32.renderTarget.clone();
       _this32.renderTargetNear.texture.name = "DoF.Bokeh.Near";
-      _this32.uniforms.get("nearBuffer").value = _this32.renderTargetNear.texture;
+      _this32.uniforms.get("nearColorBuffer").value = _this32.renderTargetNear.texture;
       _this32.renderTargetFar = _this32.renderTarget.clone();
       _this32.renderTargetFar.texture.name = "DoF.Bokeh.Far";
-      _this32.uniforms.get("farBuffer").value = _this32.renderTargetFar.texture;
+      _this32.uniforms.get("farColorBuffer").value = _this32.renderTargetFar.texture;
       _this32.renderTargetCoC = _this32.renderTarget.clone();
       _this32.renderTargetCoC.texture.format = RGBFormat;
       _this32.renderTargetCoC.texture.name = "DoF.CoC";
+      _this32.uniforms.get("farCoCBuffer").value = _this32.renderTargetCoC.texture;
       _this32.renderTargetCoCBlurred = _this32.renderTargetCoC.clone();
       _this32.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
-      _this32.uniforms.get("cocBuffer").value = _this32.renderTargetCoCBlurred.texture;
+      _this32.uniforms.get("nearCoCBuffer").value = _this32.renderTargetCoCBlurred.texture;
       _this32.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
       var cocMaterial = _this32.circleOfConfusionMaterial;
       cocMaterial.uniforms.focusDistance.value = focusDistance;
@@ -37463,13 +37475,17 @@
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha, frameBufferType) {
-        var initializables = [this.cocPass, this.blurPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        var initializables = [this.cocPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
         initializables.forEach(function (i) {
           return i.initialize(renderer, alpha, frameBufferType);
         });
+        this.blurPass.initialize(renderer, alpha, UnsignedByteType);
 
         if (!alpha && frameBufferType === UnsignedByteType) {
-          this.renderTargetNear.texture.format = RGBFormat;
+          this.renderTarget.texture.type = RGBFormat;
+          this.renderTargetNear.texture.type = RGBFormat;
+          this.renderTargetFar.texture.type = RGBFormat;
+          this.renderTargetMasked.texture.type = RGBFormat;
         }
 
         if (frameBufferType !== undefined) {
@@ -37501,6 +37517,7 @@
         }).forEach(function (u) {
           u.value = value;
         });
+        this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
         this.uniforms.get("scale").value = value;
       }
     }]);
@@ -46473,7 +46490,7 @@
         var composer = this.composer;
         var renderer = composer.getRenderer();
         var aspect = window.innerWidth / window.innerHeight;
-        var camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
+        var camera = new PerspectiveCamera(50, aspect, 0.3, 1000);
         camera.position.set(9.75, 1.72, 0.75);
         this.camera = camera;
         var target = new Vector3(0, 1, -1.25);

@@ -1,10 +1,10 @@
 /**
- * postprocessing v6.13.2 build Wed Mar 25 2020
+ * postprocessing v6.13.3 build Fri Apr 10 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
  */
-import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Scene, OrthographicCamera, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, RepeatWrapping, DataTexture, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Loader, LoadingManager } from 'three';
+import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, RepeatWrapping, DataTexture, Vector3, Matrix4, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter, Loader, LoadingManager } from 'three';
 
 /**
  * A color channel enumeration.
@@ -1428,12 +1428,12 @@ class LuminanceMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
+var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION == 1\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
 
 /**
  * A mask shader material.
  *
- * This material applies a mask texture to an arbitrary input buffer.
+ * This material applies a mask texture to a buffer.
  */
 
 class MaskMaterial extends ShaderMaterial {
@@ -1452,7 +1452,8 @@ class MaskMaterial extends ShaderMaterial {
 
 			uniforms: {
 				maskTexture: new Uniform(maskTexture),
-				inputBuffer: new Uniform(null)
+				inputBuffer: new Uniform(null),
+				strength: new Uniform(1.0)
 			},
 
 			fragmentShader: fragmentShader$9,
@@ -1542,6 +1543,34 @@ class MaskMaterial extends ShaderMaterial {
 		}
 
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The current mask strength.
+	 *
+	 * Individual mask values will be clamped to [0.0, 1.0].
+	 *
+	 * @type {Number}
+	 */
+
+	get strength() {
+
+		return this.uniforms.strength.value;
+
+	}
+
+	/**
+	 * Sets the strength of the mask.
+	 *
+	 * Has no effect when the mask function is set to `DISCARD`.
+	 *
+	 * @type {Number}
+	 */
+
+	set strength(value) {
+
+		this.uniforms.strength.value = value;
 
 	}
 
@@ -1990,6 +2019,15 @@ class Resizer {
 }
 
 /**
+ * A dummy camera
+ *
+ * @type {Camera}
+ * @private
+ */
+
+const dummyCamera = new Camera();
+
+/**
  * Shared fullscreen geometry.
  *
  * @type {BufferGeometry}
@@ -2056,10 +2094,10 @@ class Pass {
 	 *
 	 * @param {String} [name] - The name of this pass. Does not have to be unique.
 	 * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.
-	 * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.
+	 * @param {Camera} [camera] - A camera. Fullscreen effect passes don't require a camera.
 	 */
 
-	constructor(name = "Pass", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {
+	constructor(name = "Pass", scene = new Scene(), camera = dummyCamera) {
 
 		/**
 		 * The name of this pass.
@@ -3508,7 +3546,7 @@ class Effect {
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
 	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 * @example if(!alpha) { this.myRenderTarget.texture.format = RGBFormat; }
+	 * @example if(!alpha && frameBufferType === UnsignedByteType) { this.myRenderTarget.texture.format = RGBFormat; }
 	 */
 
 	initialize(renderer, alpha, frameBufferType) {}
@@ -3552,8 +3590,7 @@ class Effect {
  * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
  * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
- * @example
- * const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
+ * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  */
 
 const EffectAttribute = {
@@ -6250,7 +6287,7 @@ class DepthEffect extends Effect {
 
 }
 
-var fragmentShader$j = "uniform sampler2D nearBuffer;uniform sampler2D farBuffer;uniform sampler2D cocBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearBuffer,uv);vec4 colorFar=texture2D(farBuffer,uv);float CoCNear=texture2D(cocBuffer,uv).r;float blendNear=min(scale*CoCNear,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,blendNear);outputColor=result;}";
+var fragmentShader$j = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform sampler2D farCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;float CoCFar=texture2D(farCoCBuffer,uv).g;vec2 blend=min(vec2(CoCNear,CoCFar)*scale,1.0);vec4 result=inputColor*(1.0-blend.g)+colorFar;result=mix(result,colorNear,blend.r);outputColor=result;}";
 
 /**
  * A depth of field effect.
@@ -6290,9 +6327,10 @@ class DepthOfFieldEffect extends Effect {
 			attributes: EffectAttribute.DEPTH,
 
 			uniforms: new Map([
-				["nearBuffer", new Uniform(null)],
-				["farBuffer", new Uniform(null)],
-				["cocBuffer", new Uniform(null)],
+				["nearColorBuffer", new Uniform(null)],
+				["farColorBuffer", new Uniform(null)],
+				["nearCoCBuffer", new Uniform(null)],
+				["farCoCBuffer", new Uniform(null)],
 				["scale", new Uniform(1.0)]
 			])
 
@@ -6344,7 +6382,7 @@ class DepthOfFieldEffect extends Effect {
 		this.renderTargetNear = this.renderTarget.clone();
 		this.renderTargetNear.texture.name = "DoF.Bokeh.Near";
 
-		this.uniforms.get("nearBuffer").value = this.renderTargetNear.texture;
+		this.uniforms.get("nearColorBuffer").value = this.renderTargetNear.texture;
 
 		/**
 		 * A render target for the blurred background colors.
@@ -6356,7 +6394,7 @@ class DepthOfFieldEffect extends Effect {
 		this.renderTargetFar = this.renderTarget.clone();
 		this.renderTargetFar.texture.name = "DoF.Bokeh.Far";
 
-		this.uniforms.get("farBuffer").value = this.renderTargetFar.texture;
+		this.uniforms.get("farColorBuffer").value = this.renderTargetFar.texture;
 
 		/**
 		 * A render target for the circle of confusion.
@@ -6372,6 +6410,8 @@ class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoC.texture.format = RGBFormat;
 		this.renderTargetCoC.texture.name = "DoF.CoC";
 
+		this.uniforms.get("farCoCBuffer").value = this.renderTargetCoC.texture;
+
 		/**
 		 * A render target that stores a blurred copy of the circle of confusion.
 		 *
@@ -6382,7 +6422,7 @@ class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
 		this.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
 
-		this.uniforms.get("cocBuffer").value = this.renderTargetCoCBlurred.texture;
+		this.uniforms.get("nearCoCBuffer").value = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A circle of confusion pass.
@@ -6524,6 +6564,7 @@ class DepthOfFieldEffect extends Effect {
 
 		});
 
+		this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
 		this.uniforms.get("scale").value = value;
 
 	}
@@ -6673,7 +6714,6 @@ class DepthOfFieldEffect extends Effect {
 
 		const initializables = [
 			this.cocPass,
-			this.blurPass,
 			this.maskPass,
 			this.bokehNearBasePass,
 			this.bokehNearFillPass,
@@ -6683,9 +6723,15 @@ class DepthOfFieldEffect extends Effect {
 
 		initializables.forEach((i) => i.initialize(renderer, alpha, frameBufferType));
 
+		// The blur pass operates on the CoC buffer.
+		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
+
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
-			this.renderTargetNear.texture.format = RGBFormat;
+			this.renderTarget.texture.type = RGBFormat;
+			this.renderTargetNear.texture.type = RGBFormat;
+			this.renderTargetFar.texture.type = RGBFormat;
+			this.renderTargetMasked.texture.type = RGBFormat;
 
 		}
 
@@ -9255,9 +9301,10 @@ class ShockWaveEffect extends Effect {
 /**
  * A selective bloom effect.
  *
- * This effect applies bloom only to selected objects. For this, all objects in
- * the scene need to be rendered again: non-selected objects are rendered solid
- * black to properly occlude selected objects and the scene background.
+ * This effect applies bloom only to selected objects by using layers. Make sure
+ * to enable the selection layer for all relevant lights:
+ *
+ * `lights.forEach((l) => l.layers.enable(bloomEffect.selection.layer));`
  *
  * Attention: If you don't need to limit bloom to a subset of objects, consider
  * using the {@link BloomEffect} instead for better performance.
@@ -10930,7 +10977,7 @@ function generate(disableCache = false) {
  * Generated data URLs will be cached using localStorage, if available. To
  * disable caching, please refer to {@link SMAAImageLoader.disableCache}.
  *
- * @experimental Added for testing, API might change in patch or minor releases.
+ * @experimental Added for testing, API might change in patch or minor releases. Requires three >= r108.
  */
 
 class SMAAImageLoader extends Loader {

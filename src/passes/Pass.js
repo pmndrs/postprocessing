@@ -1,10 +1,19 @@
 import {
 	BufferAttribute,
 	BufferGeometry,
-	Scene,
+	Camera,
 	Mesh,
-	OrthographicCamera
+	Scene
 } from "three";
+
+/**
+ * A dummy camera
+ *
+ * @type {Camera}
+ * @private
+ */
+
+const dummyCamera = new Camera();
 
 /**
  * Shared fullscreen geometry.
@@ -73,10 +82,10 @@ export class Pass {
 	 *
 	 * @param {String} [name] - The name of this pass. Does not have to be unique.
 	 * @param {Scene} [scene] - The scene to render. The default scene contains a single mesh that fills the screen.
-	 * @param {Camera} [camera] - The camera. The default camera perfectly captures the screen mesh.
+	 * @param {Camera} [camera] - A camera. Fullscreen effect passes don't require a camera.
 	 */
 
-	constructor(name = "Pass", scene = new Scene(), camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1)) {
+	constructor(name = "Pass", scene = new Scene(), camera = dummyCamera) {
 
 		/**
 		 * The name of this pass.
