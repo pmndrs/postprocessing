@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.13.2 build Wed Mar 25 2020
+ * postprocessing v6.13.3 build Fri Apr 10 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -1100,7 +1100,7 @@
     return LuminanceMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;varying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
+  var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION == 1\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
 
   var MaskMaterial = function (_ShaderMaterial13) {
     _inherits(MaskMaterial, _ShaderMaterial13);
@@ -1118,7 +1118,8 @@
         type: "MaskMaterial",
         uniforms: {
           maskTexture: new three.Uniform(maskTexture),
-          inputBuffer: new three.Uniform(null)
+          inputBuffer: new three.Uniform(null),
+          strength: new three.Uniform(1.0)
         },
         fragmentShader: fragmentShader$9,
         vertexShader: vertexShader,
@@ -1161,6 +1162,14 @@
         }
 
         this.needsUpdate = true;
+      }
+    }, {
+      key: "strength",
+      get: function get() {
+        return this.uniforms.strength.value;
+      },
+      set: function set(value) {
+        this.uniforms.strength.value = value;
       }
     }]);
 
@@ -1375,6 +1384,7 @@
     return Resizer;
   }();
 
+  var dummyCamera = new three.Camera();
   var geometry = null;
 
   function getFullscreenTriangle() {
@@ -1399,7 +1409,7 @@
     function Pass() {
       var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "Pass";
       var scene = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : new three.Scene();
-      var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : new three.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      var camera = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : dummyCamera;
 
       _classCallCheck(this, Pass);
 
@@ -3611,7 +3621,7 @@
     return DepthEffect;
   }(Effect);
 
-  var fragmentShader$j = "uniform sampler2D nearBuffer;uniform sampler2D farBuffer;uniform sampler2D cocBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearBuffer,uv);vec4 colorFar=texture2D(farBuffer,uv);float CoCNear=texture2D(cocBuffer,uv).r;float blendNear=min(scale*CoCNear,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,blendNear);outputColor=result;}";
+  var fragmentShader$j = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform sampler2D farCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;float CoCFar=texture2D(farCoCBuffer,uv).g;vec2 blend=min(vec2(CoCNear,CoCFar)*scale,1.0);vec4 result=inputColor*(1.0-blend.g)+colorFar;result=mix(result,colorNear,blend.r);outputColor=result;}";
 
   var DepthOfFieldEffect = function (_Effect8) {
     _inherits(DepthOfFieldEffect, _Effect8);
@@ -3640,7 +3650,7 @@
       _this24 = _super34.call(this, "DepthOfFieldEffect", fragmentShader$j, {
         blendFunction: blendFunction,
         attributes: EffectAttribute.DEPTH,
-        uniforms: new Map([["nearBuffer", new three.Uniform(null)], ["farBuffer", new three.Uniform(null)], ["cocBuffer", new three.Uniform(null)], ["scale", new three.Uniform(1.0)]])
+        uniforms: new Map([["nearColorBuffer", new three.Uniform(null)], ["farColorBuffer", new three.Uniform(null)], ["nearCoCBuffer", new three.Uniform(null)], ["farCoCBuffer", new three.Uniform(null)], ["scale", new three.Uniform(1.0)]])
       });
       _this24.camera = camera;
       _this24.renderTarget = new three.WebGLRenderTarget(1, 1, {
@@ -3655,16 +3665,17 @@
       _this24.renderTargetMasked.texture.name = "DoF.Masked.Far";
       _this24.renderTargetNear = _this24.renderTarget.clone();
       _this24.renderTargetNear.texture.name = "DoF.Bokeh.Near";
-      _this24.uniforms.get("nearBuffer").value = _this24.renderTargetNear.texture;
+      _this24.uniforms.get("nearColorBuffer").value = _this24.renderTargetNear.texture;
       _this24.renderTargetFar = _this24.renderTarget.clone();
       _this24.renderTargetFar.texture.name = "DoF.Bokeh.Far";
-      _this24.uniforms.get("farBuffer").value = _this24.renderTargetFar.texture;
+      _this24.uniforms.get("farColorBuffer").value = _this24.renderTargetFar.texture;
       _this24.renderTargetCoC = _this24.renderTarget.clone();
       _this24.renderTargetCoC.texture.format = three.RGBFormat;
       _this24.renderTargetCoC.texture.name = "DoF.CoC";
+      _this24.uniforms.get("farCoCBuffer").value = _this24.renderTargetCoC.texture;
       _this24.renderTargetCoCBlurred = _this24.renderTargetCoC.clone();
       _this24.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
-      _this24.uniforms.get("cocBuffer").value = _this24.renderTargetCoCBlurred.texture;
+      _this24.uniforms.get("nearCoCBuffer").value = _this24.renderTargetCoCBlurred.texture;
       _this24.cocPass = new ShaderPass(new CircleOfConfusionMaterial(camera));
       var cocMaterial = _this24.circleOfConfusionMaterial;
       cocMaterial.uniforms.focusDistance.value = focusDistance;
@@ -3760,13 +3771,17 @@
     }, {
       key: "initialize",
       value: function initialize(renderer, alpha, frameBufferType) {
-        var initializables = [this.cocPass, this.blurPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
+        var initializables = [this.cocPass, this.maskPass, this.bokehNearBasePass, this.bokehNearFillPass, this.bokehFarBasePass, this.bokehFarFillPass];
         initializables.forEach(function (i) {
           return i.initialize(renderer, alpha, frameBufferType);
         });
+        this.blurPass.initialize(renderer, alpha, three.UnsignedByteType);
 
         if (!alpha && frameBufferType === three.UnsignedByteType) {
-          this.renderTargetNear.texture.format = three.RGBFormat;
+          this.renderTarget.texture.type = three.RGBFormat;
+          this.renderTargetNear.texture.type = three.RGBFormat;
+          this.renderTargetFar.texture.type = three.RGBFormat;
+          this.renderTargetMasked.texture.type = three.RGBFormat;
         }
 
         if (frameBufferType !== undefined) {
@@ -3798,6 +3813,7 @@
         }).forEach(function (u) {
           u.value = value;
         });
+        this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
         this.uniforms.get("scale").value = value;
       }
     }]);

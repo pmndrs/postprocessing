@@ -3126,6 +3126,18 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/materials/maskmaterial.js~maskmaterial#strength",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-get-strength",
+    "src/materials/MaskMaterial.js~MaskMaterial#strength",
+    "member"
+  ],
+  [
+    "src/materials/maskmaterial.js~maskmaterial#strength",
+    "class/src/materials/MaskMaterial.js~MaskMaterial.html#instance-set-strength",
+    "src/materials/MaskMaterial.js~MaskMaterial#strength",
+    "member"
+  ],
+  [
     "src/materials/outlinematerial.js",
     "file/src/materials/OutlineMaterial.js.html",
     "src/materials/OutlineMaterial.js",
