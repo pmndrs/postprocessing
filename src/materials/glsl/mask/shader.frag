@@ -1,6 +1,12 @@
 uniform sampler2D maskTexture;
 uniform sampler2D inputBuffer;
 
+#if MASK_FUNCTION == 1
+
+	uniform float strength;
+
+#endif
+
 varying vec2 vUv;
 
 void main() {
@@ -44,6 +50,8 @@ void main() {
 		#endif
 
 	#else
+
+		mask = clamp(mask * strength, 0.0, 1.0);
 
 		#ifdef INVERTED
 

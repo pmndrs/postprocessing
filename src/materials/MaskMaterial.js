@@ -7,7 +7,7 @@ import vertexShader from "./glsl/common/shader.vert";
 /**
  * A mask shader material.
  *
- * This material applies a mask texture to an arbitrary input buffer.
+ * This material applies a mask texture to a buffer.
  */
 
 export class MaskMaterial extends ShaderMaterial {
@@ -26,7 +26,8 @@ export class MaskMaterial extends ShaderMaterial {
 
 			uniforms: {
 				maskTexture: new Uniform(maskTexture),
-				inputBuffer: new Uniform(null)
+				inputBuffer: new Uniform(null),
+				strength: new Uniform(1.0)
 			},
 
 			fragmentShader,
@@ -116,6 +117,34 @@ export class MaskMaterial extends ShaderMaterial {
 		}
 
 		this.needsUpdate = true;
+
+	}
+
+	/**
+	 * The current mask strength.
+	 *
+	 * Individual mask values will be clamped to [0.0, 1.0].
+	 *
+	 * @type {Boolean}
+	 */
+
+	get strength() {
+
+		return this.uniforms.strength.value;
+
+	}
+
+	/**
+	 * Sets the strength of the mask.
+	 *
+	 * Has no effect when the mask function is set to `DISCARD`.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set strength(value) {
+
+		this.uniforms.strength.value = value;
 
 	}
 
