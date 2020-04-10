@@ -279,6 +279,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		});
 
+		this.maskPass.getFullscreenMaterial().uniforms.strength.value = value;
 		this.uniforms.get("scale").value = value;
 
 	}
