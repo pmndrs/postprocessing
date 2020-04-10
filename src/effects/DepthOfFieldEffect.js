@@ -429,7 +429,6 @@ export class DepthOfFieldEffect extends Effect {
 
 		const initializables = [
 			this.cocPass,
-			this.blurPass,
 			this.maskPass,
 			this.bokehNearBasePass,
 			this.bokehNearFillPass,
@@ -438,6 +437,9 @@ export class DepthOfFieldEffect extends Effect {
 		];
 
 		initializables.forEach((i) => i.initialize(renderer, alpha, frameBufferType));
+
+		// The blur pass operates on the CoC buffer.
+		this.blurPass.initialize(renderer, alpha, UnsignedByteType);
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
