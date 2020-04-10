@@ -45,9 +45,10 @@ export class DepthOfFieldEffect extends Effect {
 			attributes: EffectAttribute.DEPTH,
 
 			uniforms: new Map([
-				["nearBuffer", new Uniform(null)],
-				["farBuffer", new Uniform(null)],
-				["cocBuffer", new Uniform(null)],
+				["nearColorBuffer", new Uniform(null)],
+				["farColorBuffer", new Uniform(null)],
+				["nearCoCBuffer", new Uniform(null)],
+				["farCoCBuffer", new Uniform(null)],
 				["scale", new Uniform(1.0)]
 			])
 
@@ -99,7 +100,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetNear = this.renderTarget.clone();
 		this.renderTargetNear.texture.name = "DoF.Bokeh.Near";
 
-		this.uniforms.get("nearBuffer").value = this.renderTargetNear.texture;
+		this.uniforms.get("nearColorBuffer").value = this.renderTargetNear.texture;
 
 		/**
 		 * A render target for the blurred background colors.
@@ -111,7 +112,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetFar = this.renderTarget.clone();
 		this.renderTargetFar.texture.name = "DoF.Bokeh.Far";
 
-		this.uniforms.get("farBuffer").value = this.renderTargetFar.texture;
+		this.uniforms.get("farColorBuffer").value = this.renderTargetFar.texture;
 
 		/**
 		 * A render target for the circle of confusion.
@@ -127,6 +128,8 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoC.texture.format = RGBFormat;
 		this.renderTargetCoC.texture.name = "DoF.CoC";
 
+		this.uniforms.get("farCoCBuffer").value = this.renderTargetCoC.texture;
+
 		/**
 		 * A render target that stores a blurred copy of the circle of confusion.
 		 *
@@ -137,7 +140,7 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoCBlurred = this.renderTargetCoC.clone();
 		this.renderTargetCoCBlurred.texture.name = "DoF.CoC.Blurred";
 
-		this.uniforms.get("cocBuffer").value = this.renderTargetCoCBlurred.texture;
+		this.uniforms.get("nearCoCBuffer").value = this.renderTargetCoCBlurred.texture;
 
 		/**
 		 * A circle of confusion pass.
@@ -443,7 +446,10 @@ export class DepthOfFieldEffect extends Effect {
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
-			this.renderTargetNear.texture.format = RGBFormat;
+			this.renderTarget.texture.type = RGBFormat;
+			this.renderTargetNear.texture.type = RGBFormat;
+			this.renderTargetFar.texture.type = RGBFormat;
+			this.renderTargetMasked.texture.type = RGBFormat;
 
 		}
 
