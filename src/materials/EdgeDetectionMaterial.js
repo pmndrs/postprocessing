@@ -41,11 +41,13 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 			},
 
 			vertexShader,
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.setEdgeDetectionMode(mode);
 

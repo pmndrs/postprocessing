@@ -31,7 +31,6 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 
@@ -39,6 +38,9 @@ export class DepthComparisonMaterial extends ShaderMaterial {
 			skinning: true
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.adoptCameraSettings(camera);
 

@@ -29,11 +29,13 @@ export class OutlineMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 
