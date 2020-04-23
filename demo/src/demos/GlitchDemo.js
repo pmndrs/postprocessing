@@ -1,8 +1,9 @@
 import { Color, PerspectiveCamera, TextureLoader, Vector3 } from "three";
 import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
-import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
+
+import * as Sponza from "./objects/Sponza.js";
 
 import {
 	BlendFunction,

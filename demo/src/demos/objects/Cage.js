@@ -3,14 +3,13 @@ import { BoxBufferGeometry, Group, Mesh, MeshBasicMaterial } from "three";
 /**
  * Creates a cubic cage.
  *
- * @private
- * @param {Number} color - The color.
- * @param {Number} size - The side length.
- * @param {Number} thickness - The line thickness.
+ * @param {Number} [color=0x000000] - The color.
+ * @param {Number} [size=8.0] - The side length.
+ * @param {Number} [thickness=0.25] - The line thickness.
  * @return {Group} The cage.
  */
 
-function create(color, size, thickness) {
+export function create(color = 0x000000, size = 8.0, thickness = 0.25) {
 
 	const group = new Group();
 	const halfSize = size * 0.5;
@@ -49,28 +48,5 @@ function create(color, size, thickness) {
 	group.add(clone2);
 
 	return group;
-
-}
-
-/**
- * A cubic cage.
- */
-
-export class Cage {
-
-	/**
-	 * Creates a cubic cage.
-	 *
-	 * @param {Number} [color=0x000000] - The color.
-	 * @param {Number} [size=8.0] - The side length.
-	 * @param {Number} [thickness=0.25] - The line thickness.
-	 * @return {Group} The cage.
-	 */
-
-	static create(color = 0x000000, size = 8.0, thickness = 0.25) {
-
-		return create(color, size, thickness);
-
-	}
 
 }
