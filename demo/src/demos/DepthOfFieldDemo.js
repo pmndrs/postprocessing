@@ -78,16 +78,19 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		 * @private
 		 */
 
-		this.effectPass0 = null;
+		this.effectPass = null;
 
 		/**
-		 * A pass.
+		 * An SMAA pass.
+		 *
+		 * SMAA is performed last in this demo because the CoC mask of the DoF
+		 * effect introduces aliasing artifacts.
 		 *
 		 * @type {Pass}
 		 * @private
 		 */
 
-		this.effectPass1 = null;
+		this.smaaPass = null;
 
 	}
 
@@ -206,19 +209,19 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			texture: depthOfFieldEffect.renderTargetCoC.texture
 		});
 
-		const effectPass0 = new EffectPass(camera, depthOfFieldEffect);
-		const effectPass1 = new EffectPass(camera, smaaEffect, vignetteEffect, cocTextureEffect, depthEffect);
+		const effectPass = new EffectPass(camera, depthOfFieldEffect, vignetteEffect, cocTextureEffect, depthEffect);
+		const smaaPass = new EffectPass(camera, smaaEffect);
 
 		this.depthEffect = depthEffect;
 		this.vignetteEffect = vignetteEffect;
 		this.depthOfFieldEffect = depthOfFieldEffect;
 		this.cocTextureEffect = cocTextureEffect;
 
-		this.effectPass0 = effectPass0;
-		this.effectPass1 = effectPass1;
+		this.effectPass = effectPass;
+		this.smaaPass = smaaPass;
 
-		composer.addPass(effectPass0);
-		composer.addPass(effectPass1);
+		composer.addPass(effectPass);
+		composer.addPass(smaaPass);
 
 	}
 
@@ -230,8 +233,8 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const effectPass0 = this.effectPass0;
-		const effectPass1 = this.effectPass1;
+		const smaaPass = this.smaaPass;
+		const effectPass = this.effectPass;
 
 		const depthEffect = this.depthEffect;
 		const vignetteEffect = this.vignetteEffect;
@@ -272,10 +275,11 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			cocTextureEffect.blendMode.blendFunction = (mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			vignetteEffect.blendMode.blendFunction = (mode === RenderMode.DEFAULT && params.vignette.enabled) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			effectPass1.encodeOutput = (mode === RenderMode.DEFAULT);
 
-			effectPass0.recompile();
-			effectPass1.recompile();
+			smaaPass.enabled = (mode === RenderMode.DEFAULT);
+			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
+			effectPass.renderToScreen = (mode !== RenderMode.DEFAULT);
+			effectPass.recompile();
 
 		}
 
@@ -320,11 +324,11 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		folder.add(params.vignette, "enabled").onChange(() => {
 
 			vignetteEffect.blendMode.blendFunction = params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			effectPass1.recompile();
+			effectPass.recompile();
 
 		});
 
-		folder.add(vignetteEffect, "eskil").onChange(() => effectPass1.recompile());
+		folder.add(vignetteEffect, "eskil").onChange(() => effectPass.recompile());
 
 		folder.add(params.vignette, "offset").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -347,7 +351,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
 			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
-			effectPass0.recompile();
+			effectPass.recompile();
 
 		});
 
