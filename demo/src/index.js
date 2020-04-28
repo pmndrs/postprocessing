@@ -124,17 +124,28 @@ function onLoad(event) {
 
 			if(object.isMesh) {
 
-				const { map = null, normalMap = null } = object.material;
+				const m = object.material;
 
-				if(map !== null) {
+				const maps = [
+					m.map,
+					m.lightMap,
+					m.aoMap,
+					m.emissiveMap,
+					m.bumpMap,
+					m.normalMap,
+					m.displacementMap,
+					m.roughnessMap,
+					m.metalnessMap,
+					m.alphaMap
+				];
 
-					renderer.initTexture(object.material.map);
+				for(const map of maps) {
 
-				}
+					if(map !== undefined && map !== null) {
 
-				if(normalMap !== null) {
+						renderer.initTexture(map);
 
-					renderer.initTexture(object.material.normalMap);
+					}
 
 				}
 
