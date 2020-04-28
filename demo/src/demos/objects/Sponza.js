@@ -49,17 +49,23 @@ export function load(assets, manager, anisotropy) {
 
 			if(object.isMesh) {
 
-				const { map = null, normalMap = null } = object.material;
+				const m = object.material;
 
-				if(map !== null) {
+				const maps = [
+					m.map,
+					m.bumpMap,
+					m.normalMap,
+					m.roughnessMap,
+					m.metalnessMap
+				];
 
-					object.material.map.anisotropy = anisotropy;
+				for(const map of maps) {
 
-				}
+					if(map !== undefined && map !== null) {
 
-				if(normalMap !== null) {
+						map.anisotropy = anisotropy;
 
-					object.material.normalMap.anisotropy = anisotropy;
+					}
 
 				}
 
