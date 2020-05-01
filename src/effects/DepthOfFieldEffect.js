@@ -48,7 +48,6 @@ export class DepthOfFieldEffect extends Effect {
 				["nearColorBuffer", new Uniform(null)],
 				["farColorBuffer", new Uniform(null)],
 				["nearCoCBuffer", new Uniform(null)],
-				["farCoCBuffer", new Uniform(null)],
 				["scale", new Uniform(1.0)]
 			])
 
@@ -128,8 +127,6 @@ export class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoC.texture.format = RGBFormat;
 		this.renderTargetCoC.texture.name = "DoF.CoC";
 
-		this.uniforms.get("farCoCBuffer").value = this.renderTargetCoC.texture;
-
 		/**
 		 * A render target that stores a blurred copy of the circle of confusion.
 		 *
@@ -172,7 +169,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
@@ -446,10 +443,7 @@ export class DepthOfFieldEffect extends Effect {
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
-			this.renderTarget.texture.type = RGBFormat;
 			this.renderTargetNear.texture.type = RGBFormat;
-			this.renderTargetFar.texture.type = RGBFormat;
-			this.renderTargetMasked.texture.type = RGBFormat;
 
 		}
 

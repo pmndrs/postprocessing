@@ -46,7 +46,7 @@ composer.addPass(new EffectPass(camera, new BloomEffect()));
 
 ## Output Encoding
 
-Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space. It's recommended to enable high precision frame buffers when using `sRGBEncoding`:
+Simply set `WebGLRenderer.outputEncoding` to the desired target color space and `postprocessing` will follow suit. Built-in passes automatically encode colors when they render to screen and internal render operations are always performed in linear color space. It's [recommended](https://blog.demofox.org/2018/03/10/dont-convert-srgb-u8-to-linear-u8/) to enable high precision frame buffers when using `sRGBEncoding`:
 
 ```js
 import { HalfFloatType } from "three";

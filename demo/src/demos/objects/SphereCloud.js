@@ -3,13 +3,12 @@ import { SphereBufferGeometry, Group, Mesh, MeshPhongMaterial } from "three";
 /**
  * Creates a sphere cloud.
  *
- * @private
- * @param {Number} amount - The amount of spheres.
- * @param {Number} range - The spread range.
+ * @param {Number} [amount=100] - The amount of spheres.
+ * @param {Number} [range=10.0] - The spread range.
  * @return {Group} The sphere cloud.
  */
 
-function create(amount, range) {
+export function create(amount = 100, range = 10.0) {
 
 	const group = new Group();
 	const geometry = new SphereBufferGeometry(1, 5, 5);
@@ -33,27 +32,5 @@ function create(amount, range) {
 	}
 
 	return group;
-
-}
-
-/**
- * A sphere cloud.
- */
-
-export class SphereCloud {
-
-	/**
-	 * Creates a sphere cloud.
-	 *
-	 * @param {Number} [amount=100] - The amount of spheres.
-	 * @param {Number} [range=10.0] - The spread range.
-	 * @return {Group} The sphere cloud.
-	 */
-
-	static create(amount = 100, range = 10.0) {
-
-		return create(amount, range);
-
-	}
 
 }

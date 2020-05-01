@@ -50,11 +50,13 @@ export class LuminanceMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.colorOutput = colorOutput;
 		this.useThreshold = true;

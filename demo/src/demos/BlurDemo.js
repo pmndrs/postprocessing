@@ -8,8 +8,9 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
-import { SphereCloud } from "./objects/SphereCloud.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
+
+import * as SphereCloud from "./objects/SphereCloud.js";
 
 import {
 	BlurPass,

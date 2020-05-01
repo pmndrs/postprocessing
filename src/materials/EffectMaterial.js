@@ -45,12 +45,14 @@ export class EffectMaterial extends ShaderMaterial {
 				time: new Uniform(0.0)
 			},
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			dithering
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		if(shaderParts !== null) {
 

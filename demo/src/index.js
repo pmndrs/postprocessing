@@ -3,6 +3,7 @@ import {
 	PCFSoftShadowMap,
 	sRGBEncoding,
 	Vector2,
+	Vector3,
 	WebGLRenderer
 } from "three";
 
@@ -45,6 +46,15 @@ const cache = new WeakSet();
  */
 
 let renderer;
+
+/**
+ * A camera.
+ *
+ * @type {Camera}
+ * @private
+ */
+
+let camera;
 
 /**
  * An effect composer.
@@ -124,17 +134,28 @@ function onLoad(event) {
 
 			if(object.isMesh) {
 
-				const { map = null, normalMap = null } = object.material;
+				const m = object.material;
 
-				if(map !== null) {
+				const maps = [
+					m.map,
+					m.lightMap,
+					m.aoMap,
+					m.emissiveMap,
+					m.bumpMap,
+					m.normalMap,
+					m.displacementMap,
+					m.roughnessMap,
+					m.metalnessMap,
+					m.alphaMap
+				];
 
-					renderer.initTexture(object.material.map);
+				for(const map of maps) {
 
-				}
+					if(map !== undefined && map !== null) {
 
-				if(normalMap !== null) {
+						renderer.initTexture(map);
 
-					renderer.initTexture(object.material.normalMap);
+					}
 
 				}
 
@@ -146,8 +167,11 @@ function onLoad(event) {
 
 	}
 
-	// Let the main render pass use the camera of the current demo.
-	demo.renderPass.camera = demo.camera;
+	// Keep a reference the camera of the current demo for debugging purposes.
+	camera = demo.camera;
+
+	// Assign this camera to the main render pass.
+	demo.renderPass.camera = camera;
 
 	// Hide the progress bar.
 	document.querySelector(".loading").classList.add("hidden");
@@ -329,6 +353,13 @@ document.addEventListener("keydown", (event) => {
 
 		event.preventDefault();
 		aside.classList.toggle("hidden");
+
+	} else if(camera !== undefined && event.key === "c") {
+
+		const v = new Vector3();
+		console.log("Camera position", camera.position);
+		console.log("World direction", camera.getWorldDirection(v));
+		console.log("Target position", v.addVectors(camera.position, camera.getWorldDirection(v)));
 
 	}
 

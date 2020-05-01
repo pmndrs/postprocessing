@@ -1,6 +1,6 @@
 {
 	"name": "postprocessing",
-	"version": "6.13.3",
+	"version": "6.13.4",
 	"description": "A post processing library that provides the means to implement image filter effects for three.js.",
 	"homepage": "https://github.com/vanruesc/postprocessing",
 	"main": "build/postprocessing.js",
@@ -62,12 +62,12 @@
 		"extends": "delta"
 	},
 	"peerDependencies": {
-		"three": ">= 0.102.0 < 0.116.0"
+		"three": ">= 0.102.0 < 0.117.0"
 	},
 	"devDependencies": {
 		"@babel/core": "7.x.x",
 		"@babel/preset-env": "7.x.x",
-		"@rollup/plugin-commonjs": "11.x.x",
+		"@rollup/plugin-babel": "5.x.x",
 		"@rollup/plugin-node-resolve": "7.x.x",
 		"ava": "3.x.x",
 		"cross-env": "7.x.x",
@@ -81,13 +81,12 @@
 		"math-ds": "1.x.x",
 		"rimraf": "3.x.x",
 		"rollup": "2.x.x",
-		"rollup-plugin-babel": "4.x.x",
 		"rollup-plugin-eslint": "6.x.x",
 		"rollup-plugin-glsl": "1.x.x",
 		"rollup-plugin-string": "3.x.x",
 		"rollup-plugin-terser": "5.x.x",
 		"synthetic-event": "1.x.x",
-		"three": "0.115.x",
+		"three": "0.116.x",
 		"three-demo": "3.x.x"
 	}
 }

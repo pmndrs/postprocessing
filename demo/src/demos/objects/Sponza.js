@@ -4,12 +4,11 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 /**
  * Creates lights.
  *
- * @private
- * @param {Boolean} shadowCameraHelper - Determines whether a shadow camera helper should be created.
+ * @param {Boolean} [shadowCameraHelper=false] - Determines whether a shadow camera helper should be created.
  * @return {Object3D[]} The lights, light targets and, optionally, a shadow camera helper.
  */
 
-function createLights(shadowCameraHelper) {
+export function createLights(shadowCameraHelper = false) {
 
 	const ambientLight = new AmbientLight(0x111111);
 	const directionalLight = new DirectionalLight(0xffffff, 1);
@@ -34,34 +33,39 @@ function createLights(shadowCameraHelper) {
 /**
  * Loads the Sponza model.
  *
- * @private
  * @param {Map} assets - A collection of assets. The model will be stored as "sponza".
  * @param {LoadingManager} manager - A loading manager.
  * @param {Number} anisotropy - The texture anisotropy.
  */
 
-function load(assets, manager, anisotropy) {
+export function load(assets, manager, anisotropy) {
 
 	const gltfLoader = new GLTFLoader(manager);
-	const sponzaURL = "models/sponza/scene.gltf";
+	const url = "models/sponza/Sponza.gltf";
 
-	gltfLoader.load(sponzaURL, (gltf) => {
+	gltfLoader.load(url, (gltf) => {
 
 		gltf.scene.traverse((object) => {
 
 			if(object.isMesh) {
 
-				const { map = null, normalMap = null } = object.material;
+				const m = object.material;
 
-				if(map !== null) {
+				const maps = [
+					m.map,
+					m.bumpMap,
+					m.normalMap,
+					m.roughnessMap,
+					m.metalnessMap
+				];
 
-					object.material.map.anisotropy = anisotropy;
+				for(const map of maps) {
 
-				}
+					if(map !== undefined && map !== null) {
 
-				if(normalMap !== null) {
+						map.anisotropy = anisotropy;
 
-					object.material.normalMap.anisotropy = anisotropy;
+					}
 
 				}
 
@@ -77,37 +81,3 @@ function load(assets, manager, anisotropy) {
 
 }
 
-/**
- * The Sponza model.
- */
-
-export class Sponza {
-
-	/**
-	 * Creates lights.
-	 *
-	 * @param {Boolean} [shadowCameraHelper=false] - Determines whether a shadow camera helper should be created.
-	 * @return {Object3D[]} The lights, light targets and, optionally, a shadow camera helper.
-	 */
-
-	static createLights(shadowCameraHelper = false) {
-
-		return createLights(shadowCameraHelper);
-
-	}
-
-	/**
-	 * Loads the Sponza model.
-	 *
-	 * @param {Map} assets - A collection of assets. The model will be stored as "sponza".
-	 * @param {LoadingManager} manager - A loading manager.
-	 * @param {Number} anisotropy - The texture anisotropy.
-	 */
-
-	static load(assets, manager, anisotropy) {
-
-		load(assets, manager, anisotropy);
-
-	}
-
-}

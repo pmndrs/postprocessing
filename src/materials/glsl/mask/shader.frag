@@ -1,7 +1,7 @@
 uniform sampler2D maskTexture;
 uniform sampler2D inputBuffer;
 
-#if MASK_FUNCTION == 1
+#if MASK_FUNCTION != 0
 
 	uniform float strength;
 
@@ -55,11 +55,17 @@ void main() {
 
 		#ifdef INVERTED
 
-			gl_FragColor = (1.0 - mask) * texture2D(inputBuffer, vUv);
+			mask = (1.0 - mask);
+
+		#endif
+
+		#if MASK_FUNCTION == 1
+
+			gl_FragColor = mask * texture2D(inputBuffer, vUv);
 
 		#else
 
-			gl_FragColor = mask * texture2D(inputBuffer, vUv);
+			gl_FragColor = vec4(mask * texture2D(inputBuffer, vUv).rgb, mask);
 
 		#endif
 

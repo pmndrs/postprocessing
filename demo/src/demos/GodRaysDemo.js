@@ -12,8 +12,9 @@ import {
 
 import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
-import { Sponza } from "./objects/Sponza.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
+
+import * as Sponza from "./objects/Sponza.js";
 
 import {
 	BlendFunction,
@@ -135,13 +136,13 @@ export class GodRaysDemo extends PostProcessingDemo {
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.5, 2000);
-		camera.position.set(6, 1.2, -4);
+		const camera = new PerspectiveCamera(50, aspect, 0.3, 2000);
+		camera.position.set(9.25, 2.4, 1);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(-2.5, 2.0, -3.25);
+		const target = new Vector3(8.4, 2.15, 0.5);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
