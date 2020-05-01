@@ -1,5 +1,6 @@
 import {
 	AmbientLight,
+	// AnimationMixer,
 	BoxBufferGeometry,
 	Color,
 	CubeTextureLoader,
@@ -19,6 +20,8 @@ import {
 import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
+
+// import * as RiggedSimple from "./objects/RiggedSimple.js";
 
 import {
 	BlendFunction,
@@ -93,6 +96,15 @@ export class OutlineDemo extends PostProcessingDemo {
 		 */
 
 		this.pass = null;
+
+		/**
+		 * An animation mixer.
+		 *
+		 * @type {AnimationMixer}
+		 * @private
+		 */
+
+		this.animationMixer = null;
 
 	}
 
@@ -224,6 +236,8 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				});
 
+				// RiggedSimple.load(assets, loadingManager);
+
 				smaaImageLoader.load(([search, area]) => {
 
 					assets.set("smaa-search", search);
@@ -287,6 +301,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		// Objects.
 
 		const selection = [];
+		const meshes = [];
 
 		let mesh = new Mesh(
 			new SphereBufferGeometry(1, 32, 32),
@@ -295,19 +310,8 @@ export class OutlineDemo extends PostProcessingDemo {
 			})
 		);
 
-		mesh.position.set(2, 0, -2);
 		scene.add(mesh);
-		selection.push(mesh);
-
-		mesh = new Mesh(
-			new ConeBufferGeometry(1, 1, 32),
-			new MeshPhongMaterial({
-				color: 0x00ff00
-			})
-		);
-
-		mesh.position.set(-2, 0, 2);
-		scene.add(mesh);
+		meshes.push(mesh);
 		selection.push(mesh);
 
 		mesh = new Mesh(
@@ -317,8 +321,19 @@ export class OutlineDemo extends PostProcessingDemo {
 			})
 		);
 
-		mesh.position.set(2, 0, 2);
 		scene.add(mesh);
+		meshes.push(mesh);
+		selection.push(mesh);
+
+		mesh = new Mesh(
+			new ConeBufferGeometry(1, 1, 32),
+			new MeshPhongMaterial({
+				color: 0x00ff00
+			})
+		);
+
+		scene.add(mesh);
+		meshes.push(mesh);
 		selection.push(mesh);
 
 		mesh = new Mesh(
@@ -328,8 +343,35 @@ export class OutlineDemo extends PostProcessingDemo {
 			})
 		);
 
-		mesh.position.set(-2, 0, -2);
 		scene.add(mesh);
+		meshes.push(mesh);
+
+		/*
+		const riggedSimple = assets.get("rigged-simple");
+		const animationMixer = new AnimationMixer(riggedSimple.scene);
+		const action = animationMixer.clipAction(riggedSimple.animations[0]);
+		this.animationMixer = animationMixer;
+		action.play();
+
+		mesh = riggedSimple.scene;
+
+		scene.add(mesh);
+		meshes.push(mesh);
+		selection.push(mesh.children[0].children[0].children[1]);
+		*/
+
+		const step = 2.0 * Math.PI / meshes.length;
+		const radius = 3.0;
+
+		let angle = -0.8; // 0.4;
+
+		for(mesh of meshes) {
+
+			// Arrange the objects in a circle.
+			mesh.position.set(radius * Math.cos(angle), 0, radius * Math.sin(angle));
+			angle += step;
+
+		}
 
 		// Raycaster.
 
@@ -370,6 +412,19 @@ export class OutlineDemo extends PostProcessingDemo {
 		// The outline effect uses mask textures which produce aliasing artifacts.
 		composer.addPass(outlinePass);
 		composer.addPass(smaaPass);
+
+	}
+
+	/**
+	 * Renders this demo.
+	 *
+	 * @param {Number} delta - The time since the last frame in seconds.
+	 */
+
+	render(delta) {
+
+		// this.animationMixer.update(delta);
+		super.render(delta);
 
 	}
 
