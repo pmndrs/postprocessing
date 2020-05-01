@@ -357,9 +357,9 @@ document.addEventListener("keydown", (event) => {
 	} else if(camera !== undefined && event.key === "c") {
 
 		const v = new Vector3();
-		console.log("Camera position: ", camera.position);
-		console.log("World direction: ", camera.getWorldDirection(v));
-		console.log("Target position: ", v.addVectors(camera.position, camera.getWorldDirection(v)));
+		console.log("Camera position", camera.position);
+		console.log("World direction", camera.getWorldDirection(v));
+		console.log("Target position", v.addVectors(camera.position, camera.getWorldDirection(v)));
 
 	}
 
