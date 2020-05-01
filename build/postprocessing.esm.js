@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.13.3 build Fri Apr 10 2020
+ * postprocessing v6.13.4 build Fri May 01 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -100,11 +100,13 @@ class AdaptiveLuminanceMaterial extends ShaderMaterial {
 			fragmentShader,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -153,11 +155,13 @@ class BokehMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$1,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		if(foreground) {
 
@@ -255,11 +259,13 @@ class CircleOfConfusionMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$2,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.adoptCameraSettings(camera);
 
@@ -333,11 +339,13 @@ class ColorEdgesMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShaderColor,
 			vertexShader: vertexShader$1,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -432,11 +440,13 @@ class ConvolutionMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$3,
 			vertexShader: vertexShader$2,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 
@@ -543,11 +553,13 @@ class CopyMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$4,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -585,7 +597,6 @@ class DepthComparisonMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$5,
 			vertexShader: vertexShader$3,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 
@@ -593,6 +604,9 @@ class DepthComparisonMaterial extends ShaderMaterial {
 			skinning: true
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.adoptCameraSettings(camera);
 
@@ -661,11 +675,13 @@ class DepthMaskMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$6,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -711,11 +727,13 @@ class EdgeDetectionMaterial extends ShaderMaterial {
 			},
 
 			vertexShader: vertexShader$1,
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.setEdgeDetectionMode(mode);
 
@@ -896,12 +914,14 @@ class EffectMaterial extends ShaderMaterial {
 				time: new Uniform(0.0)
 			},
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false,
 			dithering
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		if(shaderParts !== null) {
 
@@ -1141,11 +1161,13 @@ class GodRaysMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$7,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -1228,11 +1250,13 @@ class LuminanceMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$8,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.colorOutput = colorOutput;
 		this.useThreshold = true;
@@ -1428,7 +1452,7 @@ class LuminanceMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION == 1\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\ngl_FragColor=(1.0-mask)*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#endif\n#endif\n}";
+var fragmentShader$9 = "uniform sampler2D maskTexture;uniform sampler2D inputBuffer;\n#if MASK_FUNCTION != 0\nuniform float strength;\n#endif\nvarying vec2 vUv;void main(){\n#if COLOR_CHANNEL == 0\nfloat mask=texture2D(maskTexture,vUv).r;\n#elif COLOR_CHANNEL == 1\nfloat mask=texture2D(maskTexture,vUv).g;\n#elif COLOR_CHANNEL == 2\nfloat mask=texture2D(maskTexture,vUv).b;\n#else\nfloat mask=texture2D(maskTexture,vUv).a;\n#endif\n#if MASK_FUNCTION == 0\n#ifdef INVERTED\nif(mask>0.0){discard;}\n#else\nif(mask==0.0){discard;}\n#endif\n#else\nmask=clamp(mask*strength,0.0,1.0);\n#ifdef INVERTED\nmask=(1.0-mask);\n#endif\n#if MASK_FUNCTION == 1\ngl_FragColor=mask*texture2D(inputBuffer,vUv);\n#else\ngl_FragColor=vec4(mask*texture2D(inputBuffer,vUv).rgb,mask);\n#endif\n#endif\n}";
 
 /**
  * A mask shader material.
@@ -1459,11 +1483,13 @@ class MaskMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$9,
 			vertexShader,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.colorChannel = ColorChannel.RED;
 		this.maskFunction = MaskFunction.DISCARD;
@@ -1582,12 +1608,14 @@ class MaskMaterial extends ShaderMaterial {
  * @type {Object}
  * @property {Number} DISCARD - Discards elements when the respective mask value is zero.
  * @property {Number} MULTIPLY - Multiplies the input buffer with the mask texture.
+ * @property {Number} MULTIPLY_RGB_SET_ALPHA - Multiplies the input RGB values with the mask and sets alpha to the mask value.
  */
 
 const MaskFunction = {
 
 	DISCARD: 0,
-	MULTIPLY: 1
+	MULTIPLY: 1,
+	MULTIPLY_RGB_SET_ALPHA: 2
 
 };
 
@@ -1621,11 +1649,13 @@ class OutlineMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$a,
 			vertexShader: vertexShader$4,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 		this.setTexelSize(texelSize.x, texelSize.y);
 
@@ -1713,11 +1743,13 @@ class SMAAWeightsMaterial extends ShaderMaterial {
 			fragmentShader: fragmentShader$b,
 			vertexShader: vertexShader$5,
 
-			toneMapped: false,
 			depthWrite: false,
 			depthTest: false
 
 		});
+
+		/** @ignore */
+		this.toneMapped = false;
 
 	}
 
@@ -6287,7 +6319,7 @@ class DepthEffect extends Effect {
 
 }
 
-var fragmentShader$j = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform sampler2D farCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;float CoCFar=texture2D(farCoCBuffer,uv).g;vec2 blend=min(vec2(CoCNear,CoCFar)*scale,1.0);vec4 result=inputColor*(1.0-blend.g)+colorFar;result=mix(result,colorNear,blend.r);outputColor=result;}";
+var fragmentShader$j = "uniform sampler2D nearColorBuffer;uniform sampler2D farColorBuffer;uniform sampler2D nearCoCBuffer;uniform float scale;void mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){vec4 colorNear=texture2D(nearColorBuffer,uv);vec4 colorFar=texture2D(farColorBuffer,uv);float CoCNear=texture2D(nearCoCBuffer,uv).r;CoCNear=min(CoCNear*scale,1.0);vec4 result=inputColor*(1.0-colorFar.a)+colorFar;result=mix(result,colorNear,CoCNear);outputColor=result;}";
 
 /**
  * A depth of field effect.
@@ -6330,7 +6362,6 @@ class DepthOfFieldEffect extends Effect {
 				["nearColorBuffer", new Uniform(null)],
 				["farColorBuffer", new Uniform(null)],
 				["nearCoCBuffer", new Uniform(null)],
-				["farCoCBuffer", new Uniform(null)],
 				["scale", new Uniform(1.0)]
 			])
 
@@ -6410,8 +6441,6 @@ class DepthOfFieldEffect extends Effect {
 		this.renderTargetCoC.texture.format = RGBFormat;
 		this.renderTargetCoC.texture.name = "DoF.CoC";
 
-		this.uniforms.get("farCoCBuffer").value = this.renderTargetCoC.texture;
-
 		/**
 		 * A render target that stores a blurred copy of the circle of confusion.
 		 *
@@ -6454,7 +6483,7 @@ class DepthOfFieldEffect extends Effect {
 
 		this.maskPass = new ShaderPass(new MaskMaterial(this.renderTargetCoC.texture));
 		const maskMaterial = this.maskPass.getFullscreenMaterial();
-		maskMaterial.maskFunction = MaskFunction.MULTIPLY;
+		maskMaterial.maskFunction = MaskFunction.MULTIPLY_RGB_SET_ALPHA;
 		maskMaterial.colorChannel = ColorChannel.GREEN;
 
 		/**
@@ -6728,10 +6757,7 @@ class DepthOfFieldEffect extends Effect {
 
 		if(!alpha && frameBufferType === UnsignedByteType) {
 
-			this.renderTarget.texture.type = RGBFormat;
 			this.renderTargetNear.texture.type = RGBFormat;
-			this.renderTargetFar.texture.type = RGBFormat;
-			this.renderTargetMasked.texture.type = RGBFormat;
 
 		}
 
