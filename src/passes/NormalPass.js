@@ -1,7 +1,7 @@
 import {
 	Color,
 	MeshNormalMaterial,
-	LinearFilter,
+	NearestFilter,
 	RGBFormat,
 	WebGLRenderTarget
 } from "three";
@@ -67,8 +67,8 @@ export class NormalPass extends Pass {
 		if(this.renderTarget === undefined) {
 
 			this.renderTarget = new WebGLRenderTarget(1, 1, {
-				minFilter: LinearFilter,
-				magFilter: LinearFilter,
+				minFilter: NearestFilter,
+				magFilter: NearestFilter,
 				format: RGBFormat,
 				stencilBuffer: false
 			});
