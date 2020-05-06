@@ -49,6 +49,31 @@ export class CircleOfConfusionMaterial extends ShaderMaterial {
 	}
 
 	/**
+	 * The current depth packing.
+	 *
+	 * @type {Number}
+	 */
+
+	get depthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing.
+	 *
+	 * @type {Number}
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
+
+	}
+
+	/**
 	 * Adopts the settings of the given camera.
 	 *
 	 * @param {Camera} [camera=null] - A camera.
