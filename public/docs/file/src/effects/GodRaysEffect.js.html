@@ -254,7 +254,7 @@ export class GodRaysEffect extends Effect {
 			depthBuffer: false
 		});
 
-		this.renderTargetA.texture.name = &quot;GodRays.TargetX&quot;;
+		this.renderTargetA.texture.name = &quot;GodRays.Target.A&quot;;
 
 		/**
 		 * A render target.
@@ -264,7 +264,7 @@ export class GodRaysEffect extends Effect {
 		 */
 
 		this.renderTargetB = this.renderTargetA.clone();
-		this.renderTargetB.texture.name = &quot;GodRays.TargetY&quot;;
+		this.renderTargetB.texture.name = &quot;GodRays.Target.B&quot;;
 		this.uniforms.get(&quot;texture&quot;).value = this.renderTargetB.texture;
 
 		/**
@@ -580,7 +580,6 @@ export class GodRaysEffect extends Effect {
 	setDepthTexture(depthTexture, depthPacking = 0) {
 
 		const material = this.depthMaskPass.getFullscreenMaterial();
-
 		material.uniforms.depthBuffer0.value = depthTexture;
 		material.defines.DEPTH_PACKING_0 = depthPacking.toFixed(0);
 

@@ -2712,6 +2712,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#depthpacking",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-get-depthPacking",
+    "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#depthpacking",
+    "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-set-depthPacking",
+    "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#depthPacking",
+    "member"
+  ],
+  [
     "src/materials/circleofconfusionmaterial.js~circleofconfusionmaterial#needsupdate",
     "class/src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial.html#instance-member-needsUpdate",
     "src/materials/CircleOfConfusionMaterial.js~CircleOfConfusionMaterial#needsUpdate",
