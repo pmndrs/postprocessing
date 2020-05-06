@@ -94,8 +94,6 @@ export class EffectMaterial extends ShaderMaterial {
 	 * Use `BasicDepthPacking` or `RGBADepthPacking` if your depth texture
 	 * contains packed depth.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 

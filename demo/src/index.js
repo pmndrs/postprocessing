@@ -202,17 +202,10 @@ window.addEventListener("load", (event) => {
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("webgl2", attributes);
 
-	if(context !== null) {
-
-		// Use WebGL 2.
-		renderer = new WebGLRenderer({ canvas, context });
-
-	} else {
-
-		// Fall back to WebGL 1.
-		renderer = new WebGLRenderer(attributes);
-
-	}
+	// Use WebGL 2 or fall back to WebGL 1.
+	renderer = (context !== null) ?
+		new WebGLRenderer({ canvas, context }) :
+		new WebGLRenderer(attributes);
 
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = debug;
