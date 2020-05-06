@@ -1,8 +1,18 @@
 #include <common>
 #include <packing>
 
-uniform sampler2D depthBuffer0;
-uniform sampler2D depthBuffer1;
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+	uniform highp sampler2D depthBuffer0;
+	uniform highp sampler2D depthBuffer1;
+
+#else
+
+	uniform mediump sampler2D depthBuffer0;
+	uniform mediump sampler2D depthBuffer1;
+
+#endif
+
 uniform sampler2D inputBuffer;
 
 varying vec2 vUv;

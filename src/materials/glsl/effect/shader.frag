@@ -3,7 +3,16 @@
 #include <dithering_pars_fragment>
 
 uniform sampler2D inputBuffer;
-uniform sampler2D depthBuffer;
+
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+	uniform highp sampler2D depthBuffer;
+
+#else
+
+	uniform mediump sampler2D depthBuffer;
+
+#endif
 
 uniform vec2 resolution;
 uniform vec2 texelSize;

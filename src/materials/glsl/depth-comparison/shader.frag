@@ -1,7 +1,16 @@
 #include <packing>
 #include <clipping_planes_pars_fragment>
 
-uniform sampler2D depthBuffer;
+#ifdef GL_FRAGMENT_PRECISION_HIGH
+
+	uniform highp sampler2D depthBuffer;
+
+#else
+
+	uniform mediump sampler2D depthBuffer;
+
+#endif
+
 uniform float cameraNear;
 uniform float cameraFar;
 
