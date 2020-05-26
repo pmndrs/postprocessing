@@ -25,6 +25,7 @@ export class NormalPass extends Pass {
 	 * @param {Number} [options.resolutionScale=1.0] - Deprecated. Adjust the height or width instead for consistent results.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
+	 * @param {Boolean} [options.singleMaterials=false] - Use single normal materials instead of a single override. Fixes instancing issues.
 	 * @param {WebGLRenderTarget} [options.renderTarget] - A custom render target.
 	 */
 
@@ -32,6 +33,7 @@ export class NormalPass extends Pass {
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE,
+		singleMaterials = false,
 		renderTarget
 	} = {}) {
 
@@ -46,11 +48,15 @@ export class NormalPass extends Pass {
 		 * @private
 		 */
 
-		this.renderPass = new RenderPass(scene, camera, new MeshNormalMaterial({
-			morphTargets: true,
-			morphNormals: true,
-			skinning: true
-		}));
+		this.renderPass = new RenderPass(
+			scene,
+			camera,
+			!singleMaterials && new MeshNormalMaterial({
+				morphTargets: true,
+				morphNormals: true,
+				skinning: true
+			})
+		);
 
 		const clearPass = this.renderPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0x7777ff);
@@ -88,6 +94,14 @@ export class NormalPass extends Pass {
 
 		this.resolution = new Resizer(this, width, height);
 		this.resolution.scale = resolutionScale;
+
+		/**
+		 * Use single normal materials instead of a single override. Fixes instancing issues.
+		 *
+		 * @type {boolean}
+		 */
+
+		this.singleMaterials = singleMaterials;
 
 	}
 
@@ -131,7 +145,49 @@ export class NormalPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const renderTarget = this.renderToScreen ? null : this.renderTarget;
+
+		if(this.singleMaterials) {
+
+			// HACK for instancing: traverse the scene and replace the materials with single instances
+			this.renderPass.scene.traverse(n => {
+
+				if(n.isMesh) {
+
+					if(!n.normalMaterial) {
+
+						n.normalMaterial = new MeshNormalMaterial({
+							morphTargets: true,
+							morphNormals: true,
+							skinning: true
+						});
+
+					}
+
+					n.materialOld = n.material;
+					n.material = n.normalMaterial;
+
+				}
+
+			});
+
+		}
+
 		this.renderPass.render(renderer, renderTarget, renderTarget);
+
+		if(this.singleMaterials) {
+
+			// Restore the old materials
+			this.renderPass.scene.traverse(n => {
+
+				if(n.isMesh && n.materialOld) {
+
+					n.material = n.materialOld;
+
+				}
+
+			});
+
+		}
 
 	}
 
