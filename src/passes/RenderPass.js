@@ -129,6 +129,7 @@ export class RenderPass extends Pass {
 
 		const scene = this.scene;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
+		const shadowMapEnabled = renderer.shadowMap.enabled;
 		const overrideMaterial = scene.overrideMaterial;
 
 		if(this.depthTexture !== null && !this.renderToScreen) {
@@ -145,9 +146,18 @@ export class RenderPass extends Pass {
 
 		}
 
+		if(this.overrideMaterial !== null) {
+
+			renderer.shadowMap.enabled = false;
+
+		}
+
 		scene.overrideMaterial = this.overrideMaterial;
+
 		renderer.setRenderTarget(renderTarget);
 		renderer.render(scene, this.camera);
+
+		renderer.shadowMap.enabled = shadowMapEnabled;
 		scene.overrideMaterial = overrideMaterial;
 
 	}
