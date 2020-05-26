@@ -196,7 +196,7 @@ window.addEventListener("load", (event) => {
 		antialias: false,
 		stencil: false,
 		alpha: false,
-		depth: true
+		depth: false
 	};
 
 	const canvas = document.createElement("canvas");
