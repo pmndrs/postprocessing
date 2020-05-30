@@ -1,5 +1,18 @@
-import { Matrix4, Uniform, Vector2 } from "three";
+import {
+	FloatType,
+	LinearFilter,
+	NearestFilter,
+	RepeatWrapping,
+	RGBFormat,
+	Uniform,
+	WebGLRenderTarget
+} from "three";
+
 import { BlendFunction } from "./blending/BlendFunction.js";
+import { Resizer } from "../core";
+import { NoiseTexture } from "../images";
+import { DownsamplingMaterial, SSAOMaterial } from "../materials";
+import { ShaderPass } from "../passes";
 import { Effect, EffectAttribute } from "./Effect.js";
 
 import fragmentShader from "./glsl/ssao/shader.frag";
@@ -10,8 +23,9 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation uses a spiral sampling pattern:
- *  https://jsfiddle.net/a16ff1p7
+ * This implementation is based on
+ * https://research.nvidia.com/publication/scalable-ambient-obscurance and
+ * uses a spiral sampling pattern: https://jsfiddle.net/a16ff1p7
  */
 
 export class SSAOEffect extends Effect {
@@ -23,30 +37,34 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Number} [options.samples=11] - The amount of samples per pixel. Should not be a multiple of the ring count.
-	 * @param {Number} [options.rings=4] - The amount of rings in the occlusion sampling pattern.
+	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
+	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
 	 * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
 	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
-	 * @param {Number} [options.radius=18.25] - The occlusion sampling radius.
-	 * @param {Number} [options.scale=1.0] - The scale of the ambient occlusion.
+	 * @param {Number} [options.radius=8.0] - The occlusion sampling radius.
+	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.0] - An occlusion bias.
+	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
+	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 */
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
-		samples = 11,
-		rings = 4,
+		samples = 9,
+		rings = 7,
 		distanceThreshold = 0.97,
 		distanceFalloff = 0.03,
 		rangeThreshold = 0.0005,
 		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
-		radius = 18.25,
-		scale = 1.0,
-		bias = 0.0
+		radius = 8.0,
+		intensity = 1.0,
+		bias = 0.015,
+		width = Resizer.AUTO_SIZE,
+		height = Resizer.AUTO_SIZE
 	} = {}) {
 
 		super("SSAOEffect", fragmentShader, {
@@ -54,26 +72,68 @@ export class SSAOEffect extends Effect {
 			blendFunction,
 			attributes: EffectAttribute.DEPTH,
 
-			defines: new Map([
-				["RINGS_INT", "0"],
-				["SAMPLES_INT", "0"],
-				["SAMPLES_FLOAT", "0.0"]
-			]),
-
 			uniforms: new Map([
-				["normalBuffer", new Uniform(normalBuffer)],
-				["cameraInverseProjectionMatrix", new Uniform(new Matrix4())],
-				["cameraProjectionMatrix", new Uniform(new Matrix4())],
-				["radiusStep", new Uniform(new Vector2())],
-				["distanceCutoff", new Uniform(new Vector2())],
-				["proximityCutoff", new Uniform(new Vector2())],
-				["seed", new Uniform(Math.random())],
-				["luminanceInfluence", new Uniform(luminanceInfluence)],
-				["scale", new Uniform(scale)],
-				["bias", new Uniform(bias)]
+				["aoBuffer", new Uniform(null)],
+				["luminanceInfluence", new Uniform(luminanceInfluence)]
 			])
 
 		});
+
+		/**
+		 * A render target for the ambient occlusion shadows.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetAO = new WebGLRenderTarget(1, 1, {
+			minFilter: LinearFilter,
+			magFilter: LinearFilter,
+			format: RGBFormat,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetAO.texture.name = "AO.Target";
+		this.renderTargetAO.texture.generateMipmaps = false;
+
+		this.uniforms.get("aoBuffer").value = this.renderTargetAO.texture;
+
+		/**
+		 * A render target for downsampled normals and depth.
+		 *
+		 * @type {WebGLRenderTarget}
+		 * @private
+		 */
+
+		this.renderTargetNormalDepth = new WebGLRenderTarget(1, 1, {
+			minFilter: NearestFilter,
+			magFilter: NearestFilter,
+			type: FloatType,
+			stencilBuffer: false,
+			depthBuffer: false
+		});
+
+		this.renderTargetNormalDepth.texture.name = "NormalDepth.Target";
+		this.renderTargetNormalDepth.texture.generateMipmaps = false;
+
+		/**
+		/**
+		 * The resolution of this effect.
+		 *
+		 * @type {Resizer}
+		 */
+
+		this.resolution = new Resizer(this, width, height);
+
+		/**
+		 * The main camera.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.camera = camera;
 
 		/**
 		 * The current sampling radius.
@@ -85,22 +145,36 @@ export class SSAOEffect extends Effect {
 		this.r = 0.0;
 
 		/**
-		 * The current resolution.
+		 * A downsampling pass.
 		 *
-		 * @type {Vector2}
+		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.resolution = new Vector2(1, 1);
+		this.downsamplingPass = new ShaderPass(new DownsamplingMaterial());
+		this.downsamplingPass.getFullscreenMaterial().uniforms.normalBuffer.value = normalBuffer;
 
 		/**
-		 * The main camera.
+		 * An SSAO pass.
 		 *
-		 * @type {Camera}
+		 * @type {ShaderPass}
 		 * @private
 		 */
 
-		this.camera = camera;
+		this.ssaoPass = new ShaderPass((() => {
+
+			const noiseTexture = new NoiseTexture(64, 64);
+			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
+
+			const material = new SSAOMaterial(camera);
+			material.uniforms.normalDepthBuffer.value = this.renderTargetNormalDepth.texture;
+			material.uniforms.noiseTexture.value = noiseTexture;
+			material.uniforms.intensity.value = intensity;
+			material.uniforms.bias.value = bias;
+
+			return material;
+
+		})());
 
 		this.samples = samples;
 		this.rings = rings;
@@ -112,29 +186,14 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
-	 * Updates the angle step constant.
+	 * The SSAO material.
 	 *
-	 * @private
+	 * @type {SSAOMaterial}
 	 */
 
-	updateAngleStep() {
+	get ssaoMaterial() {
 
-		this.defines.set("ANGLE_STEP", (Math.PI * 2.0 * this.rings / this.samples).toFixed(11));
-
-	}
-
-	/**
-	 * Updates the radius step uniform.
-	 *
-	 * Note: The radius step is a uniform because it changes with the screen size.
-	 *
-	 * @private
-	 */
-
-	updateRadiusStep() {
-
-		const r = this.r / this.samples;
-		this.uniforms.get("radiusStep").value.set(r, r).divide(this.resolution);
+		return this.ssaoPass.getFullscreenMaterial();
 
 	}
 
@@ -146,55 +205,48 @@ export class SSAOEffect extends Effect {
 
 	get samples() {
 
-		return Number(this.defines.get("SAMPLES_INT"));
+		return Number(this.ssaoMaterial.defines.SAMPLES_INT);
 
 	}
 
 	/**
 	 * Sets the amount of occlusion samples per pixel.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Number}
 	 */
 
 	set samples(value) {
 
-		value = Math.floor(value);
-
-		this.defines.set("SAMPLES_INT", value.toFixed(0));
-		this.defines.set("SAMPLES_FLOAT", value.toFixed(1));
-		this.updateAngleStep();
-		this.updateRadiusStep();
+		const material = this.ssaoMaterial;
+		material.defines.SAMPLES_INT = value.toFixed(0);
+		material.defines.SAMPLES_FLOAT = value.toFixed(1);
+		material.needsUpdate = true;
 
 	}
 
 	/**
-	 * The amount of rings in the occlusion sampling spiral pattern.
+	 * The amount of spiral turns in the occlusion sampling pattern.
 	 *
 	 * @type {Number}
 	 */
 
 	get rings() {
 
-		return Number(this.defines.get("RINGS_INT"));
+		return Number(this.ssaoMaterial.defines.SPIRAL_TURNS);
 
 	}
 
 	/**
-	 * Sets the amount of rings in the occlusion sampling spiral pattern.
-	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
+	 * Sets the amount of spiral turns in the occlusion sampling pattern.
 	 *
 	 * @type {Number}
 	 */
 
 	set rings(value) {
 
-		value = Math.floor(value);
-
-		this.defines.set("RINGS_INT", value.toFixed(0));
-		this.updateAngleStep();
+		const material = this.ssaoMaterial;
+		material.defines.SPIRAL_TURNS = value.toFixed(1);
+		material.needsUpdate = true;
 
 	}
 
@@ -206,7 +258,7 @@ export class SSAOEffect extends Effect {
 
 	get radius() {
 
-		return this.r;
+		return Number(this.ssaoMaterial.defines.RADIUS);
 
 	}
 
@@ -218,8 +270,10 @@ export class SSAOEffect extends Effect {
 
 	set radius(value) {
 
-		this.r = value;
-		this.updateRadiusStep();
+		const material = this.ssaoMaterial;
+		material.defines.RADIUS = value.toFixed(11);
+		material.defines.RADIUS_SQ = (value * value).toFixed(11);
+		material.needsUpdate = true;
 
 	}
 
@@ -232,7 +286,7 @@ export class SSAOEffect extends Effect {
 
 	setDistanceCutoff(threshold, falloff) {
 
-		this.uniforms.get("distanceCutoff").value.set(
+		this.ssaoMaterial.uniforms.distanceCutoff.value.set(
 			Math.min(Math.max(threshold, 0.0), 1.0),
 			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
 		);
@@ -248,7 +302,7 @@ export class SSAOEffect extends Effect {
 
 	setProximityCutoff(threshold, falloff) {
 
-		this.uniforms.get("proximityCutoff").value.set(
+		this.ssaoMaterial.uniforms.proximityCutoff.value.set(
 			Math.min(Math.max(threshold, 0.0), 1.0),
 			Math.min(Math.max(threshold + falloff, 0.0), 1.0)
 		);
@@ -256,7 +310,38 @@ export class SSAOEffect extends Effect {
 	}
 
 	/**
-	 * Updates the camera projection matrix uniforms.
+	 * Sets the depth texture.
+	 *
+	 * @param {Texture} depthTexture - A depth texture.
+	 * @param {Number} [depthPacking=0] - The depth packing.
+	 */
+
+	setDepthTexture(depthTexture, depthPacking = 0) {
+
+		const material = this.downsamplingPass.getFullscreenMaterial();
+		material.uniforms.depthBuffer.value = depthTexture;
+		material.depthPacking = depthPacking;
+
+	}
+
+	/**
+	 * Updates this effect.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
+	 * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.
+	 */
+
+	update(renderer, inputBuffer, deltaTime) {
+
+		this.downsamplingPass.render(renderer, null, this.renderTargetNormalDepth);
+		this.ssaoPass.render(renderer, null, this.renderTargetAO);
+
+	}
+
+	/**
+	 * Updates the camera projection matrix uniforms and the size of internal
+	 * render targets.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
@@ -264,11 +349,42 @@ export class SSAOEffect extends Effect {
 
 	setSize(width, height) {
 
-		this.resolution.set(width, height);
-		this.updateRadiusStep();
+		const camera = this.camera;
+		const uniforms = this.ssaoMaterial.uniforms;
+		const resolution = this.resolution;
+		resolution.base.set(width, height);
 
-		this.uniforms.get("cameraInverseProjectionMatrix").value.getInverse(this.camera.projectionMatrix);
-		this.uniforms.get("cameraProjectionMatrix").value.copy(this.camera.projectionMatrix);
+		// Use the full resolution to calculate the depth/normal buffer texel size.
+		this.downsamplingPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+
+		width = resolution.width;
+		height = resolution.height;
+
+		this.renderTargetAO.setSize(width, height);
+		this.renderTargetNormalDepth.setSize(width, height);
+		this.ssaoMaterial.setTexelSize(1.0 / width, 1.0 / height);
+
+		uniforms.noiseScale.value.set(width, height).divideScalar(64.0);
+		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
+		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
+
+	}
+
+	/**
+	 * Performs initialization tasks.
+	 *
+	 * @param {WebGLRenderer} renderer - The renderer.
+	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
+	 * @param {Number} frameBufferType - The type of the main frame buffers.
+	 */
+
+	initialize(renderer, alpha, frameBufferType) {
+
+		if(!renderer.capabilities.isWebGL2) {
+
+			renderer.getContext().getExtension("OES_texture_float");
+
+		}
 
 	}
 
