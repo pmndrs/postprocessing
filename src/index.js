@@ -75,7 +75,8 @@ export {
 	OutlineMaterial,
 	OutlineEdgesMaterial,
 	Section,
-	SMAAWeightsMaterial
+	SMAAWeightsMaterial,
+	SSAOMaterial
 } from "./materials";
 
 export {

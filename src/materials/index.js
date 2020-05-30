@@ -14,3 +14,4 @@ export { LuminanceMaterial } from "./LuminanceMaterial.js";
 export { MaskFunction, MaskMaterial } from "./MaskMaterial.js";
 export { OutlineMaterial, OutlineEdgesMaterial } from "./OutlineMaterial.js";
 export { SMAAWeightsMaterial } from "./SMAAWeightsMaterial.js";
+export { SSAOMaterial } from "./SSAOMaterial.js";
