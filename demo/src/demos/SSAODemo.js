@@ -7,14 +7,15 @@ import * as Sponza from "./objects/Sponza.js";
 
 import {
 	BlendFunction,
-	DepthEffect,
+	ColorChannel,
 	EdgeDetectionMode,
 	EffectPass,
 	NormalPass,
 	SSAOEffect,
 	SMAAEffect,
 	SMAAImageLoader,
-	SMAAPreset
+	SMAAPreset,
+	TextureEffect
 } from "../../../src";
 
 /**
@@ -43,13 +44,13 @@ export class SSAODemo extends PostProcessingDemo {
 		this.ssaoEffect = null;
 
 		/**
-		 * A depth effect.
+		 * A texture effect.
 		 *
 		 * @type {Effect}
 		 * @private
 		 */
 
-		this.depthEffect = null;
+		this.textureEffect = null;
 
 		/**
 		 * An effect pass.
@@ -59,15 +60,6 @@ export class SSAODemo extends PostProcessingDemo {
 		 */
 
 		this.effectPass = null;
-
-		/**
-		 * A pass that renders scene normals.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.normalPass = null;
 
 	}
 
@@ -126,7 +118,7 @@ export class SSAODemo extends PostProcessingDemo {
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
-		const camera = new PerspectiveCamera(50, aspect, 0.3, 1000);
+		const camera = new PerspectiveCamera(50, aspect, 0.5, 1000);
 		camera.position.set(9.75, 1.72, 0.75);
 		this.camera = camera;
 
@@ -157,10 +149,6 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const normalPass = new NormalPass(scene, camera);
 
-		const depthEffect = new DepthEffect({
-			blendFunction: BlendFunction.SKIP
-		});
-
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
 			assets.get("smaa-area"),
@@ -174,24 +162,29 @@ export class SSAODemo extends PostProcessingDemo {
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
 		const ssaoEffect = new SSAOEffect(camera, normalPass.renderTarget.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
-			samples: 11,
-			rings: 4,
+			samples: 9,
+			rings: 7,
 			distanceThreshold: 0.02,	// Render up to a distance of ~20 world units
 			distanceFalloff: 0.0025,	// with an additional ~2.5 units of falloff.
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
-			luminanceInfluence: 0.7,
-			radius: 30,
-			scale: 1.0,
-			bias: 0.05
+			luminanceInfluence: 0.0,
+			radius: 8.0,
+			intensity: 2.0,
+			bias: 0.025,
+			height: 480
 		});
 
-		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, depthEffect);
+		const textureEffect = new TextureEffect({
+			blendFunction: BlendFunction.SKIP,
+			texture: ssaoEffect.renderTargetNormalDepth.texture
+		});
+
+		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, textureEffect);
 
 		this.ssaoEffect = ssaoEffect;
-		this.depthEffect = depthEffect;
+		this.textureEffect = textureEffect;
 		this.effectPass = effectPass;
-		this.normalPass = normalPass;
 
 		composer.addPass(normalPass);
 		composer.addPass(effectPass);
@@ -207,11 +200,10 @@ export class SSAODemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const effectPass = this.effectPass;
-		const normalPass = this.normalPass;
 		const ssaoEffect = this.ssaoEffect;
-		const depthEffect = this.depthEffect;
+		const textureEffect = this.textureEffect;
 		const blendMode = ssaoEffect.blendMode;
-		const uniforms = ssaoEffect.uniforms;
+		const uniforms = ssaoEffect.ssaoMaterial.uniforms;
 
 		const RenderMode = {
 			DEFAULT: 0,
@@ -221,17 +213,18 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const params = {
 			"distance": {
-				"threshold": uniforms.get("distanceCutoff").value.x,
-				"falloff": uniforms.get("distanceCutoff").value.y - uniforms.get("distanceCutoff").value.x
+				"threshold": uniforms.distanceCutoff.value.x,
+				"falloff": uniforms.distanceCutoff.value.y - uniforms.distanceCutoff.value.x
 			},
 			"proximity": {
-				"threshold": uniforms.get("proximityCutoff").value.x,
-				"falloff": uniforms.get("proximityCutoff").value.y - uniforms.get("proximityCutoff").value.x
+				"threshold": uniforms.proximityCutoff.value.x,
+				"falloff": uniforms.proximityCutoff.value.y - uniforms.proximityCutoff.value.x
 			},
-			"lum influence": uniforms.get("luminanceInfluence").value,
-			"scale": uniforms.get("scale").value,
-			"bias": uniforms.get("bias").value,
+			"lum influence": ssaoEffect.uniforms.get("luminanceInfluence").value,
+			"intensity": uniforms.intensity.value,
+			"bias": uniforms.bias.value,
 			"render mode": RenderMode.DEFAULT,
+			"resolution": ssaoEffect.resolution.height,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
@@ -240,23 +233,43 @@ export class SSAODemo extends PostProcessingDemo {
 
 			const mode = Number.parseInt(params["render mode"]);
 
-			effectPass.enabled = (mode === RenderMode.DEFAULT || mode === RenderMode.DEPTH);
-			normalPass.renderToScreen = (mode === RenderMode.NORMALS);
-			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			effectPass.encodeOutput = (mode === RenderMode.DEFAULT);
+			textureEffect.blendMode.blendFunction = (mode !== RenderMode.DEFAULT) ?
+				BlendFunction.NORMAL : BlendFunction.SKIP;
+
+			if(mode === RenderMode.DEPTH) {
+
+				textureEffect.setTextureSwizzleRGBA(ColorChannel.ALPHA);
+
+			} else if(mode === RenderMode.NORMALS) {
+
+				textureEffect.setTextureSwizzleRGBA(
+					ColorChannel.RED,
+					ColorChannel.GREEN,
+					ColorChannel.BLUE,
+					ColorChannel.ALPHA
+				);
+
+			}
+
 			effectPass.recompile();
 
 		}
 
 		menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
 
-		menu.add(ssaoEffect, "samples").min(1).max(32).step(1).onChange(() => effectPass.recompile());
-		menu.add(ssaoEffect, "rings").min(1).max(16).step(1).onChange(() => effectPass.recompile());
+		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+
+			ssaoEffect.resolution.height = Number(params.resolution);
+
+		});
+
+		menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
+		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
 		menu.add(ssaoEffect, "radius").min(0.01).max(50.0).step(0.01);
 
 		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			uniforms.get("luminanceInfluence").value = params["lum influence"];
+			ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
 
 		});
 
@@ -276,31 +289,31 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Proximity Cutoff");
 
-		f.add(params.proximity, "threshold").min(0.0).max(0.05).step(0.0001).onChange(() => {
+		f.add(params.proximity, "threshold").min(0.0).max(0.003).step(0.0001).onChange(() => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
-		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange(() => {
+		f.add(params.proximity, "falloff").min(0.0).max(0.003).step(0.0001).onChange(() => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
-		menu.add(params, "bias").min(-1.0).max(1.0).step(0.001).onChange(() => {
+		menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange(() => {
 
-			uniforms.get("bias").value = params.bias;
-
-		});
-
-		menu.add(params, "scale").min(0.0).max(2.0).step(0.001).onChange(() => {
-
-			uniforms.get("scale").value = params.scale;
+			uniforms.bias.value = params.bias;
 
 		});
 
-		menu.add(params, "opacity").min(0.0).max(3.0).step(0.01).onChange(() => {
+		menu.add(params, "intensity").min(0.0).max(6.0).step(0.01).onChange(() => {
+
+			uniforms.intensity.value = params.intensity;
+
+		});
+
+		menu.add(params, "opacity").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			blendMode.opacity.value = params.opacity;
 
