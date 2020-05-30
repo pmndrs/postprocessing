@@ -6,6 +6,7 @@ export { ConvolutionMaterial, KernelSize } from "./ConvolutionMaterial.js";
 export { CopyMaterial } from "./CopyMaterial.js";
 export { DepthComparisonMaterial } from "./DepthComparisonMaterial.js";
 export { DepthMaskMaterial } from "./DepthMaskMaterial.js";
+export { DownsamplingMaterial } from "./DownsamplingMaterial.js";
 export { EdgeDetectionMaterial, EdgeDetectionMode } from "./EdgeDetectionMaterial.js";
 export { EffectMaterial, Section } from "./EffectMaterial.js";
 export { GodRaysMaterial } from "./GodRaysMaterial.js";

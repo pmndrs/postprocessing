@@ -63,6 +63,7 @@ export {
 	CopyMaterial,
 	DepthComparisonMaterial,
 	DepthMaskMaterial,
+	DownsamplingMaterial,
 	EdgeDetectionMaterial,
 	EdgeDetectionMode,
 	EffectMaterial,
