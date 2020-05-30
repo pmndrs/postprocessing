@@ -46,6 +46,7 @@ export {
 } from "./effects";
 
 export {
+	NoiseTexture,
 	RawImageData,
 	SMAAAreaImageData,
 	SMAAImageLoader,
