@@ -169,7 +169,7 @@ export class SSAODemo extends PostProcessingDemo {
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
 			luminanceInfluence: 0.0,
-			radius: 8.0,
+			radius: 25.0,
 			intensity: 2.0,
 			bias: 0.025,
 			height: 480
