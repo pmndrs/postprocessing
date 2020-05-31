@@ -66,6 +66,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	float rings = (SPIRAL_TURNS * PI2);
 
 	float occlusion = 0.0;
+	int taps = 0;
 
 	for(int i = 0; i < SAMPLES_INT; ++i) {
 
@@ -109,11 +110,13 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 			float f = max(RADIUS_SQ - vv, 0.0) / RADIUS_SQ;
 			occlusion += (f * f * f * max(vn / (0.01 + vv), 0.0)) * falloff;
 
+			++taps;
+
 		}
 
 	}
 
-	return occlusion / (4.0 * SAMPLES_FLOAT);
+	return occlusion / max(4.0 * float(taps), 1.0);
 
 }
 
