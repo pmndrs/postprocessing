@@ -72,7 +72,15 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 		float alpha = (float(i) + 0.5) * inv_samples;
 		float angle = alpha * rings + baseAngle;
 
-		vec2 coord = uv + alpha * radius * vec2(cos(angle), sin(angle)) * texelSize;
+		vec2 coord = alpha * radius * vec2(cos(angle), sin(angle)) * texelSize + uv;
+
+		if(coord.s < 0.0 || coord.s > 1.0 || coord.t < 0.0 || coord.t > 1.0) {
+
+			// Skip samples outside the screen.
+			continue;
+
+		}
+
 		float sampleDepth = texture2D(normalDepthBuffer, coord).a;
 		float viewZ = getViewZ(sampleDepth);
 
