@@ -58,7 +58,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	// Calculate the screen space radius for this fragment.
 	float radius = -projectionScale * RADIUS / p.z;
 
-	// Get a random starting angle.
+	// Use a random starting angle.
 	float noise = texture2D(noiseTexture, vUv2).r;
 	float baseAngle = noise * PI2;
 
@@ -127,7 +127,7 @@ void main() {
 
 	#endif
 
-	// Skip fragments of objects that are too far away.
+	// Skip fragments that are too far away.
 	if(linearDepth < distanceCutoff.y) {
 
 		vec3 viewPosition = getViewPosition(vUv, depth, viewZ);
@@ -137,7 +137,9 @@ void main() {
 		// Fade AO based on depth.
 		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
 		ao = mix(ao, 1.0, d);
-		ao = clamp(pow(ao, 1.0 + intensity), 0.0, 1.0);
+
+		// Adjust the overall intensity.
+		ao = clamp(pow(ao, max(intensity, 1.0)), 0.0, 1.0);
 
 	}
 
