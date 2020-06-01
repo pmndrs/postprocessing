@@ -10,7 +10,11 @@
 
 #endif
 
-uniform sampler2D normalBuffer;
+#ifdef DOWNSAMPLE_NORMALS
+
+	uniform sampler2D normalBuffer;
+
+#endif
 
 varying vec2 vUv0;
 varying vec2 vUv1;
@@ -118,8 +122,17 @@ void main() {
 	);
 
 	int index = findBestDepth(d);
-	vec2 uvs[] = vec2[](vUv0, vUv1, vUv2, vUv3);
-	vec3 n = texture2D(normalBuffer, uvs[index]).xyz;
+
+	#ifdef DOWNSAMPLE_NORMALS
+
+		vec2 uvs[] = vec2[](vUv0, vUv1, vUv2, vUv3);
+		vec3 n = texture2D(normalBuffer, uvs[index]).xyz;
+
+	#else
+
+		vec3 n = vec3(0.0);
+
+	#endif
 
 	gl_FragColor = vec4(n, d[index]);
 

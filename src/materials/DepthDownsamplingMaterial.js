@@ -1,26 +1,26 @@
 import { ShaderMaterial, Uniform, Vector2 } from "three";
 
-import fragmentShader from "./glsl/downsampling/shader.frag";
-import vertexShader from "./glsl/downsampling/shader.vert";
+import fragmentShader from "./glsl/depth-downsampling/shader.frag";
+import vertexShader from "./glsl/depth-downsampling/shader.vert";
 
 /**
- * A downsampling shader material for depth and normal textures.
+ * A depth downsampling shader material.
  *
  * Based on an article by Eleni Maria Stea:
  * https://eleni.mutantstargoat.com/hikiko/depth-aware-upsampling-6
  */
 
-export class DownsamplingMaterial extends ShaderMaterial {
+export class DepthDownsamplingMaterial extends ShaderMaterial {
 
 	/**
-	 * Constructs a new downsampling material.
+	 * Constructs a new depth downsampling material.
 	 */
 
 	constructor() {
 
 		super({
 
-			type: "DownsamplingMaterial",
+			type: "DepthDownsamplingMaterial",
 
 			defines: {
 				DEPTH_PACKING: "0"
