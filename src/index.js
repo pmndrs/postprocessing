@@ -84,6 +84,7 @@ export {
 	ClearPass,
 	ClearMaskPass,
 	DepthPass,
+	DepthDownsamplingPass,
 	EffectPass,
 	MaskPass,
 	NormalPass,
