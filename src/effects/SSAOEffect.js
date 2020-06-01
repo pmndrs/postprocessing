@@ -21,8 +21,14 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation is based on:
+ * This effect uses depth-aware upsampling and should be rendered at a lower
+ * resolution. Do not provide a normalDepthBuffer if you intend to render SSAO
+ * at full resolution.
+ *
+ * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and
+ * "Depth-aware upsampling experiments" by Eleni Maria Stea:
  * https://research.nvidia.com/publication/scalable-ambient-obscurance
+ * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling
  */
 
 export class SSAOEffect extends Effect {
@@ -32,7 +38,7 @@ export class SSAOEffect extends Effect {
 	 *
 	 * @todo Move normalBuffer to options.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Texture} normalBuffer - A texture that contains scene normals. See {@link NormalPass}. May be null if a normalDepthBuffer is provided.
+	 * @param {Texture} normalBuffer - A texture that contains scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
