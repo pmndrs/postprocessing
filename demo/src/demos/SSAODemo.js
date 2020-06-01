@@ -8,6 +8,7 @@ import * as Sponza from "./objects/Sponza.js";
 import {
 	BlendFunction,
 	ColorChannel,
+	DepthDownsamplingPass,
 	EdgeDetectionMode,
 	EffectPass,
 	NormalPass,
@@ -51,6 +52,15 @@ export class SSAODemo extends PostProcessingDemo {
 		 */
 
 		this.textureEffect = null;
+
+		/**
+		 * A depth downsampling pass.
+		 *
+		 * @type {Pass}
+		 * @private
+		 */
+
+		this.depthDownsamplingPass = null;
 
 		/**
 		 * An effect pass.
@@ -114,17 +124,20 @@ export class SSAODemo extends PostProcessingDemo {
 		const assets = this.assets;
 		const composer = this.composer;
 		const renderer = composer.getRenderer();
+		const capabilities = renderer.capabilities;
 
 		// Camera.
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 1000);
-		camera.position.set(9.75, 1.72, 0.75);
+		//camera.position.set(9.75, 1.72, 0.75);
+		camera.position.set(1.75, 2.2, -0.35);
 		this.camera = camera;
 
 		// Controls.
 
-		const target = new Vector3(0, 1, -1.25);
+		//const target = new Vector3(0, 1, -1.25);
+		const target = new Vector3(0.75, 2.0, -0.35);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
@@ -143,11 +156,18 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Objects.
 
-		scene.add(assets.get("sponza"));
+		scene.add(assets.get(Sponza.tag));
 
 		// Passes.
 
 		const normalPass = new NormalPass(scene, camera);
+		const depthDownsamplingPass = new DepthDownsamplingPass({
+			normalBuffer: normalPass.texture,
+			height: 480
+		});
+
+		const normalDepthBuffer = capabilities.floatFragmentTextures ?
+			depthDownsamplingPass.texture : null;
 
 		const smaaEffect = new SMAAEffect(
 			assets.get("smaa-search"),
@@ -160,7 +180,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Note: Thresholds and falloff correspond to camera near/far.
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
-		const ssaoEffect = new SSAOEffect(camera, normalPass.renderTarget.texture, {
+		const ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
 			samples: 9,
 			rings: 7,
@@ -168,25 +188,38 @@ export class SSAODemo extends PostProcessingDemo {
 			distanceFalloff: 0.0025,	// with an additional ~2.5 units of falloff.
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
-			luminanceInfluence: 0.0,
-			radius: 25.0,
+			luminanceInfluence: 0.7,
+			radius: 50.0,
 			intensity: 2.0,
 			bias: 0.025,
+			normalDepthBuffer,
 			height: 480
 		});
 
 		const textureEffect = new TextureEffect({
 			blendFunction: BlendFunction.SKIP,
-			texture: ssaoEffect.renderTargetNormalDepth.texture
+			texture: depthDownsamplingPass.texture
 		});
 
 		const effectPass = new EffectPass(camera, smaaEffect, ssaoEffect, textureEffect);
 
 		this.ssaoEffect = ssaoEffect;
 		this.textureEffect = textureEffect;
+		this.depthDownsamplingPass = depthDownsamplingPass;
 		this.effectPass = effectPass;
 
 		composer.addPass(normalPass);
+
+		if(capabilities.floatFragmentTextures) {
+
+			composer.addPass(depthDownsamplingPass);
+
+		} else {
+
+			console.warn("Floating-point textures not supported, falling back to naive depth downsampling");
+
+		}
+
 		composer.addPass(effectPass);
 
 	}
@@ -200,6 +233,8 @@ export class SSAODemo extends PostProcessingDemo {
 	registerOptions(menu) {
 
 		const effectPass = this.effectPass;
+		const depthDownsamplingPass = this.depthDownsamplingPass;
+
 		const ssaoEffect = this.ssaoEffect;
 		const textureEffect = this.textureEffect;
 		const blendMode = ssaoEffect.blendMode;
@@ -260,12 +295,13 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
 			ssaoEffect.resolution.height = Number(params.resolution);
+			depthDownsamplingPass.resolution.height = Number(params.resolution);
 
 		});
 
 		menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
 		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
-		menu.add(ssaoEffect, "radius").min(0.01).max(50.0).step(0.01);
+		menu.add(ssaoEffect, "radius").min(0.01).max(150.0).step(0.1);
 
 		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -289,13 +325,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		f = menu.addFolder("Proximity Cutoff");
 
-		f.add(params.proximity, "threshold").min(0.0).max(0.003).step(0.0001).onChange(() => {
+		f.add(params.proximity, "threshold").min(0.0).max(0.01).step(0.0001).onChange(() => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
 		});
 
-		f.add(params.proximity, "falloff").min(0.0).max(0.003).step(0.0001).onChange(() => {
+		f.add(params.proximity, "falloff").min(0.0).max(0.01).step(0.0001).onChange(() => {
 
 			ssaoEffect.setProximityCutoff(params.proximity.threshold, params.proximity.falloff);
 
@@ -307,7 +343,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "intensity").min(0.0).max(6.0).step(0.01).onChange(() => {
+		menu.add(params, "intensity").min(1.0).max(6.0).step(0.01).onChange(() => {
 
 			uniforms.intensity.value = params.intensity;
 
