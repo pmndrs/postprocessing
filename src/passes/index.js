@@ -2,6 +2,7 @@ export { BlurPass } from "./BlurPass.js";
 export { ClearMaskPass } from "./ClearMaskPass.js";
 export { ClearPass } from "./ClearPass.js";
 export { DepthPass } from "./DepthPass.js";
+export { DepthDownsamplingPass } from "./DepthDownsamplingPass.js";
 export { EffectPass } from "./EffectPass.js";
 export { MaskPass } from "./MaskPass.js";
 export { NormalPass } from "./NormalPass.js";
