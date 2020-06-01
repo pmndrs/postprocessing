@@ -1,7 +1,5 @@
 import {
-	FloatType,
 	LinearFilter,
-	NearestFilter,
 	RepeatWrapping,
 	RGBFormat,
 	Uniform,
@@ -11,7 +9,7 @@ import {
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Resizer } from "../core";
 import { NoiseTexture } from "../images";
-import { DownsamplingMaterial, SSAOMaterial } from "../materials";
+import { SSAOMaterial } from "../materials";
 import { ShaderPass } from "../passes";
 import { Effect, EffectAttribute } from "./Effect.js";
 
@@ -23,9 +21,8 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This implementation is based on
- * https://research.nvidia.com/publication/scalable-ambient-obscurance and
- * uses a spiral sampling pattern: https://jsfiddle.net/a16ff1p7
+ * This implementation is based on:
+ * https://research.nvidia.com/publication/scalable-ambient-obscurance
  */
 
 export class SSAOEffect extends Effect {
@@ -33,8 +30,9 @@ export class SSAOEffect extends Effect {
 	/**
 	 * Constructs a new SSAO effect.
 	 *
+	 * @todo Move normalBuffer to options.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Texture} normalBuffer - A texture that contains the scene normals. See {@link NormalPass}.
+	 * @param {Texture} normalBuffer - A texture that contains scene normals. See {@link NormalPass}. May be null if a normalDepthBuffer is provided.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
@@ -44,9 +42,10 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
 	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
-	 * @param {Number} [options.radius=8.0] - The occlusion sampling radius.
+	 * @param {Number} [options.radius=50.0] - The occlusion sampling radius.
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
-	 * @param {Number} [options.bias=0.0] - An occlusion bias.
+	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 */
@@ -60,9 +59,10 @@ export class SSAOEffect extends Effect {
 		rangeThreshold = 0.0005,
 		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
-		radius = 8.0,
+		radius = 50.0,
 		intensity = 1.0,
-		bias = 0.015,
+		bias = 0.025,
+		normalDepthBuffer = null,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
 	} = {}) {
@@ -89,9 +89,9 @@ export class SSAOEffect extends Effect {
 		this.renderTargetAO = new WebGLRenderTarget(1, 1, {
 			minFilter: LinearFilter,
 			magFilter: LinearFilter,
-			format: RGBFormat,
 			stencilBuffer: false,
-			depthBuffer: false
+			depthBuffer: false,
+			format: RGBFormat
 		});
 
 		this.renderTargetAO.texture.name = "AO.Target";
@@ -99,25 +99,6 @@ export class SSAOEffect extends Effect {
 
 		this.uniforms.get("aoBuffer").value = this.renderTargetAO.texture;
 
-		/**
-		 * A render target for downsampled normals and depth.
-		 *
-		 * @type {WebGLRenderTarget}
-		 * @private
-		 */
-
-		this.renderTargetNormalDepth = new WebGLRenderTarget(1, 1, {
-			minFilter: NearestFilter,
-			magFilter: NearestFilter,
-			type: FloatType,
-			stencilBuffer: false,
-			depthBuffer: false
-		});
-
-		this.renderTargetNormalDepth.texture.name = "NormalDepth.Target";
-		this.renderTargetNormalDepth.texture.generateMipmaps = false;
-
-		/**
 		/**
 		 * The resolution of this effect.
 		 *
@@ -136,25 +117,6 @@ export class SSAOEffect extends Effect {
 		this.camera = camera;
 
 		/**
-		 * The current sampling radius.
-		 *
-		 * @type {Number}
-		 * @private
-		 */
-
-		this.r = 0.0;
-
-		/**
-		 * A downsampling pass.
-		 *
-		 * @type {ShaderPass}
-		 * @private
-		 */
-
-		this.downsamplingPass = new ShaderPass(new DownsamplingMaterial());
-		this.downsamplingPass.getFullscreenMaterial().uniforms.normalBuffer.value = normalBuffer;
-
-		/**
 		 * An SSAO pass.
 		 *
 		 * @type {ShaderPass}
@@ -167,10 +129,20 @@ export class SSAOEffect extends Effect {
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
-			material.uniforms.normalDepthBuffer.value = this.renderTargetNormalDepth.texture;
 			material.uniforms.noiseTexture.value = noiseTexture;
 			material.uniforms.intensity.value = intensity;
 			material.uniforms.bias.value = bias;
+
+			if(normalDepthBuffer !== null) {
+
+				material.uniforms.normalDepthBuffer.value = normalDepthBuffer;
+				material.defines.NORMAL_DEPTH = "1";
+
+			} else {
+
+				material.uniforms.normalBuffer.value = normalBuffer;
+
+			}
 
 			return material;
 
@@ -318,9 +290,14 @@ export class SSAOEffect extends Effect {
 
 	setDepthTexture(depthTexture, depthPacking = 0) {
 
-		const material = this.downsamplingPass.getFullscreenMaterial();
-		material.uniforms.depthBuffer.value = depthTexture;
-		material.depthPacking = depthPacking;
+		const material = this.ssaoMaterial;
+
+		if(material.defines.NORMAL_DEPTH === undefined) {
+
+			material.uniforms.normalDepthBuffer.value = depthTexture;
+			material.depthPacking = depthPacking;
+
+		}
 
 	}
 
@@ -334,7 +311,6 @@ export class SSAOEffect extends Effect {
 
 	update(renderer, inputBuffer, deltaTime) {
 
-		this.downsamplingPass.render(renderer, null, this.renderTargetNormalDepth);
 		this.ssaoPass.render(renderer, null, this.renderTargetAO);
 
 	}
@@ -349,42 +325,20 @@ export class SSAOEffect extends Effect {
 
 	setSize(width, height) {
 
-		const camera = this.camera;
-		const uniforms = this.ssaoMaterial.uniforms;
 		const resolution = this.resolution;
 		resolution.base.set(width, height);
 
-		// Use the full resolution to calculate the depth/normal buffer texel size.
-		this.downsamplingPass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+		const w = resolution.width;
+		const h = resolution.height;
 
-		width = resolution.width;
-		height = resolution.height;
+		this.renderTargetAO.setSize(w, h);
+		this.ssaoMaterial.setTexelSize(1.0 / w, 1.0 / h);
 
-		this.renderTargetAO.setSize(width, height);
-		this.renderTargetNormalDepth.setSize(width, height);
-		this.ssaoMaterial.setTexelSize(1.0 / width, 1.0 / height);
-
-		uniforms.noiseScale.value.set(width, height).divideScalar(64.0);
+		const camera = this.camera;
+		const uniforms = this.ssaoMaterial.uniforms;
+		uniforms.noiseScale.value.set(w, h).divideScalar(64.0);
 		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
-
-	}
-
-	/**
-	 * Performs initialization tasks.
-	 *
-	 * @param {WebGLRenderer} renderer - The renderer.
-	 * @param {Boolean} alpha - Whether the renderer uses the alpha channel or not.
-	 * @param {Number} frameBufferType - The type of the main frame buffers.
-	 */
-
-	initialize(renderer, alpha, frameBufferType) {
-
-		if(!renderer.capabilities.isWebGL2) {
-
-			renderer.getContext().getExtension("OES_texture_float");
-
-		}
 
 	}
 

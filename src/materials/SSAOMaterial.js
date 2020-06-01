@@ -26,11 +26,13 @@ export class SSAOMaterial extends ShaderMaterial {
 				SAMPLES_FLOAT: "0.0",
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
-				RADIUS_SQ: "1.0"
+				RADIUS_SQ: "1.0",
+				DEPTH_PACKING: "0"
 			},
 
 			uniforms: {
 
+				normalBuffer: new Uniform(null),
 				normalDepthBuffer: new Uniform(null),
 				noiseTexture: new Uniform(null),
 
@@ -60,6 +62,31 @@ export class SSAOMaterial extends ShaderMaterial {
 		this.toneMapped = false;
 
 		this.adoptCameraSettings(camera);
+
+	}
+
+	/**
+	 * The depth packing of the source depth buffer.
+	 *
+	 * @type {Number}
+	 */
+
+	get depthPacking() {
+
+		return Number(this.defines.DEPTH_PACKING);
+
+	}
+
+	/**
+	 * Sets the depth packing.
+	 *
+	 * @type {Number}
+	 */
+
+	set depthPacking(value) {
+
+		this.defines.DEPTH_PACKING = value.toFixed(0);
+		this.needsUpdate = true;
 
 	}
 

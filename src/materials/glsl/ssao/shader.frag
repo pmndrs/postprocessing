@@ -11,6 +11,27 @@
 
 #endif
 
+#ifndef NORMAL_DEPTH
+
+	uniform sampler2D normalBuffer;
+
+	// The depth texture is bound to normalDepthBuffer.
+	float readDepth(const in vec2 uv) {
+
+		#if DEPTH_PACKING == 3201
+
+			return unpackRGBAToDepth(texture2D(normalDepthBuffer, uv));
+
+		#else
+
+			return texture2D(normalDepthBuffer, uv).r;
+
+		#endif
+
+	}
+
+#endif
+
 uniform sampler2D noiseTexture;
 
 uniform mat4 inverseProjectionMatrix;
@@ -82,7 +103,16 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 		}
 
-		float sampleDepth = texture2D(normalDepthBuffer, coord).a;
+		#ifdef NORMAL_DEPTH
+
+			float sampleDepth = texture2D(normalDepthBuffer, coord).a;
+
+		#else
+
+			float sampleDepth = readDepth(coord);
+
+		#endif
+
 		float viewZ = getViewZ(sampleDepth);
 
 		#ifdef PERSPECTIVE_CAMERA
@@ -122,7 +152,18 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 void main() {
 
-	vec4 normalDepth = texture2D(normalDepthBuffer, vUv);
+	#ifdef NORMAL_DEPTH
+
+		vec4 normalDepth = texture2D(normalDepthBuffer, vUv);
+
+	#else
+
+		vec4 normalDepth = vec4(
+			texture2D(normalBuffer, vUv).rgb,
+			readDepth(vUv)
+		);
+
+	#endif
 
 	float ao = 1.0;
 	float depth = normalDepth.a;
