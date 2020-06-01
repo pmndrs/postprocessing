@@ -91,6 +91,18 @@ export class DepthPass extends Pass {
 	}
 
 	/**
+	 * The depth texture.
+	 *
+	 * @type {Texture}
+	 */
+
+	get texture() {
+
+		return this.renderTarget.texture;
+
+	}
+
+	/**
 	 * Returns the current resolution scale.
 	 *
 	 * @return {Number} The resolution scale.
