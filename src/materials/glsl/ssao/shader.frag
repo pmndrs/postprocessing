@@ -83,8 +83,8 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 	float noise = texture2D(noiseTexture, vUv2).r;
 	float baseAngle = noise * PI2;
 
-	float inv_samples = (1.0 / SAMPLES_FLOAT);
-	float rings = (SPIRAL_TURNS * PI2);
+	float inv_samples = 1.0 / SAMPLES_FLOAT;
+	float rings = SPIRAL_TURNS * PI2;
 
 	float occlusion = 0.0;
 	int taps = 0;
