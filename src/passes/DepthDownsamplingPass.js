@@ -76,7 +76,7 @@ export class DepthDownsamplingPass extends Pass {
 	}
 
 	/**
-	 * The normal & depth texture.
+	 * The normal(RGB) + depth(A) texture.
 	 *
 	 * @type {Texture}
 	 */
@@ -103,7 +103,7 @@ export class DepthDownsamplingPass extends Pass {
 	}
 
 	/**
-	 * Renders the scene normals.
+	 * Downsamples depth and scene normals.
 	 *
 	 * @param {WebGLRenderer} renderer - The renderer.
 	 * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.
