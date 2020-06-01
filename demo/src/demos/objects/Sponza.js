@@ -2,6 +2,12 @@ import { AmbientLight, CameraHelper, DirectionalLight } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 /**
+ * The tag under which the asset is stored.
+ */
+
+export const tag = "sponza";
+
+/**
  * Creates lights.
  *
  * @param {Boolean} [shadowCameraHelper=false] - Determines whether a shadow camera helper should be created.
@@ -33,7 +39,7 @@ export function createLights(shadowCameraHelper = false) {
 /**
  * Loads the Sponza model.
  *
- * @param {Map} assets - A collection of assets. The model will be stored as "sponza".
+ * @param {Map} assets - A collection of assets.
  * @param {LoadingManager} manager - A loading manager.
  * @param {Number} anisotropy - The texture anisotropy.
  */
@@ -75,7 +81,7 @@ export function load(assets, manager, anisotropy) {
 
 		});
 
-		assets.set("sponza", gltf.scene);
+		assets.set(tag, gltf.scene);
 
 	});
 

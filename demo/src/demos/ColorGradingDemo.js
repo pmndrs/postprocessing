@@ -161,7 +161,7 @@ export class ColorGradingDemo extends PostProcessingDemo {
 
 		// Objects.
 
-		scene.add(assets.get("sponza"));
+		scene.add(assets.get(Sponza.tag));
 
 		// Passes.
 

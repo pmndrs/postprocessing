@@ -347,7 +347,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		meshes.push(mesh);
 
 		/*
-		const riggedSimple = assets.get("rigged-simple");
+		const riggedSimple = assets.get(RiggedSimple.tag);
 		const animationMixer = new AnimationMixer(riggedSimple.scene);
 		const action = animationMixer.clipAction(riggedSimple.animations[0]);
 		this.animationMixer = animationMixer;
