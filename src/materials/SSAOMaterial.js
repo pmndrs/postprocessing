@@ -37,7 +37,6 @@ export class SSAOMaterial extends ShaderMaterial {
 				inverseProjectionMatrix: new Uniform(new Matrix4()),
 				projectionMatrix: new Uniform(new Matrix4()),
 				texelSize: new Uniform(new Vector2()),
-				projectionScale: new Uniform(1.0),
 				cameraNear: new Uniform(0.0),
 				cameraFar: new Uniform(0.0),
 
@@ -91,7 +90,6 @@ export class SSAOMaterial extends ShaderMaterial {
 
 			uniforms.cameraNear.value = camera.near;
 			uniforms.cameraFar.value = camera.far;
-			uniforms.projectionScale.value = 1.0 / (2.0 * Math.tan(camera.fov * 0.5));
 
 			if(camera instanceof PerspectiveCamera) {
 

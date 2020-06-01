@@ -55,8 +55,8 @@ vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const i
 
 float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth, const in vec2 uv) {
 
-	// Calculate the screen space radius for this fragment.
-	float radius = -projectionScale * RADIUS / p.z;
+	// Scale the radius based on the distance from the camera.
+	float radius = RADIUS / p.z;
 
 	// Use a random starting angle.
 	float noise = texture2D(noiseTexture, vUv2).r;
