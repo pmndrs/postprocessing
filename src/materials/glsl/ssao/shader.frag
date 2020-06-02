@@ -191,7 +191,7 @@ void main() {
 		ao = mix(ao, 1.0, d);
 
 		// Adjust the overall intensity.
-		ao = clamp(pow(ao, max(intensity, 1.0)), 0.0, 1.0);
+		ao = clamp(pow(ao, abs(intensity)), 0.0, 1.0);
 
 	}
 

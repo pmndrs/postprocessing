@@ -182,6 +182,7 @@ export class SSAODemo extends PostProcessingDemo {
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
 		const ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
+			normalDepthBuffer,
 			samples: 9,
 			rings: 7,
 			distanceThreshold: 0.02,	// Render up to a distance of ~20 world units
@@ -189,10 +190,9 @@ export class SSAODemo extends PostProcessingDemo {
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
 			luminanceInfluence: 0.7,
-			radius: 50.0,
+			radius: 0.1825,
 			intensity: 2.0,
 			bias: 0.025,
-			normalDepthBuffer,
 			height: 480
 		});
 
@@ -301,7 +301,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
 		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
-		menu.add(ssaoEffect, "radius").min(0.01).max(150.0).step(0.1);
+		menu.add(ssaoEffect, "radius").min(1e-6).max(1.0).step(0.001);
 
 		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
 

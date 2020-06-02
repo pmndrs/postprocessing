@@ -41,6 +41,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
@@ -48,16 +49,16 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].
 	 * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].
 	 * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.
-	 * @param {Number} [options.radius=50.0] - The occlusion sampling radius.
+	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
-	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 */
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
+		normalDepthBuffer = null,
 		samples = 9,
 		rings = 7,
 		distanceThreshold = 0.97,
@@ -65,10 +66,9 @@ export class SSAOEffect extends Effect {
 		rangeThreshold = 0.0005,
 		rangeFalloff = 0.001,
 		luminanceInfluence = 0.7,
-		radius = 50.0,
+		radius = 0.1825,
 		intensity = 1.0,
 		bias = 0.025,
-		normalDepthBuffer = null,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
 	} = {}) {
@@ -114,6 +114,15 @@ export class SSAOEffect extends Effect {
 		this.resolution = new Resizer(this, width, height);
 
 		/**
+		 * The current radius relative to the render height.
+		 *
+		 * @type {Camera}
+		 * @private
+		 */
+
+		this.r = 1.0;
+
+		/**
 		 * The main camera.
 		 *
 		 * @type {Camera}
@@ -143,6 +152,7 @@ export class SSAOEffect extends Effect {
 
 				material.uniforms.normalDepthBuffer.value = normalDepthBuffer;
 				material.defines.NORMAL_DEPTH = "1";
+				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
 
 			} else {
 
@@ -156,7 +166,9 @@ export class SSAOEffect extends Effect {
 
 		this.samples = samples;
 		this.rings = rings;
-		this.radius = radius;
+
+		// @todo Special case treatment added for backwards-compatibility.
+		this.radius = (radius > 1.0) ? (radius / 100.0) : radius;
 
 		this.setDistanceCutoff(distanceThreshold, distanceFalloff);
 		this.setProximityCutoff(rangeThreshold, rangeFalloff);
@@ -236,21 +248,24 @@ export class SSAOEffect extends Effect {
 
 	get radius() {
 
-		return Number(this.ssaoMaterial.defines.RADIUS);
+		return Number(this.r);
 
 	}
 
 	/**
-	 * Sets the occlusion sampling radius.
+	 * Sets the occlusion sampling radius. Range [1e-6, 1.0].
 	 *
 	 * @type {Number}
 	 */
 
 	set radius(value) {
 
+		this.r = Math.min(Math.max(value, 1e-6), 1.0);
+
+		const radius = this.r * this.resolution.height;
 		const material = this.ssaoMaterial;
-		material.defines.RADIUS = value.toFixed(11);
-		material.defines.RADIUS_SQ = (value * value).toFixed(11);
+		material.defines.RADIUS = radius.toFixed(11);
+		material.defines.RADIUS_SQ = (radius * radius).toFixed(11);
 		material.needsUpdate = true;
 
 	}
@@ -345,6 +360,9 @@ export class SSAOEffect extends Effect {
 		uniforms.noiseScale.value.set(w, h).divideScalar(64.0);
 		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
+
+		// Update the absolute radius.
+		this.radius = this.r;
 
 	}
 
