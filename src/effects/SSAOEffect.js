@@ -21,9 +21,9 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * For high quality visuals use two SSAO effect instances in a row with
  * different radii, one for rough AO and one for fine details.
  *
- * This effect uses depth-aware upsampling and should be rendered at a lower
- * resolution. Do not provide a normalDepthBuffer if you intend to render SSAO
- * at full resolution.
+ * This effect supports depth-aware upsampling and should be rendered at a lower
+ * resolution. If you intend to render SSAO at full resolution, do not provide a
+ * downsampled normalDepthBuffer and make sure to disable depthAwareUpsampling.
  *
  * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and
  * "Depth-aware upsampling experiments" by Eleni Maria Stea:
@@ -38,10 +38,11 @@ export class SSAOEffect extends Effect {
 	 *
 	 * @todo Move normalBuffer to options.
 	 * @param {Camera} camera - The main camera.
-	 * @param {Texture} normalBuffer - A texture that contains scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
+	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
-	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains scene normals and depth. See {@link DepthDownsamplingPass}.
+	 * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
+	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
 	 * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.
 	 * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].
@@ -58,6 +59,7 @@ export class SSAOEffect extends Effect {
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
+		depthAwareUpsampling = true,
 		normalDepthBuffer = null,
 		samples = 9,
 		rings = 7,
@@ -152,7 +154,14 @@ export class SSAOEffect extends Effect {
 
 				material.uniforms.normalDepthBuffer.value = normalDepthBuffer;
 				material.defines.NORMAL_DEPTH = "1";
-				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+
+				if(depthAwareUpsampling) {
+
+					this.uniforms.set("normalDepthBuffer", new Uniform(normalDepthBuffer));
+					this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+					this.defines.set("THRESHOLD", "0.997");
+
+				}
 
 			} else {
 
