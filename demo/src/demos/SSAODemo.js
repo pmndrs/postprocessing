@@ -160,10 +160,12 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Passes.
 
+		const height = 480;
+
 		const normalPass = new NormalPass(scene, camera);
 		const depthDownsamplingPass = new DepthDownsamplingPass({
 			normalBuffer: normalPass.texture,
-			height: 480
+			height
 		});
 
 		const normalDepthBuffer = capabilities.floatFragmentTextures ?
@@ -191,9 +193,9 @@ export class SSAODemo extends PostProcessingDemo {
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
 			luminanceInfluence: 0.7,
 			radius: 0.1825,
-			intensity: 2.0,
+			intensity: 1.33,
 			bias: 0.025,
-			height: 480
+			height
 		});
 
 		const textureEffect = new TextureEffect({
