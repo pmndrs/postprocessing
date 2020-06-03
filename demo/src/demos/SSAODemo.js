@@ -130,18 +130,16 @@ export class SSAODemo extends PostProcessingDemo {
 
 		const aspect = window.innerWidth / window.innerHeight;
 		const camera = new PerspectiveCamera(50, aspect, 0.5, 1000);
-		//camera.position.set(9.75, 1.72, 0.75);
-		camera.position.set(1.75, 2.2, -0.35);
+		camera.position.set(9.45, 1.735, 0.75);
 		this.camera = camera;
 
 		// Controls.
 
-		//const target = new Vector3(0, 1, -1.25);
-		const target = new Vector3(0.75, 2.0, -0.35);
+		const target = new Vector3(8.45, 1.65, 0.6);
 		const controls = new DeltaControls(camera.position, camera.quaternion, renderer.domElement);
 		controls.settings.pointer.lock = false;
 		controls.settings.translation.enabled = true;
-		controls.settings.sensitivity.translation = 3.0;
+		controls.settings.sensitivity.translation = 2.0;
 		controls.lookAt(target);
 		controls.setOrbitEnabled(false);
 		this.controls = controls;
@@ -184,6 +182,7 @@ export class SSAODemo extends PostProcessingDemo {
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
 		const ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
+			depthAwareUpsampling: true,
 			normalDepthBuffer,
 			samples: 9,
 			rings: 7,
@@ -234,6 +233,8 @@ export class SSAODemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
+		const capabilities = this.composer.getRenderer().capabilities;
+
 		const effectPass = this.effectPass;
 		const depthDownsamplingPass = this.depthDownsamplingPass;
 
@@ -256,6 +257,10 @@ export class SSAODemo extends PostProcessingDemo {
 			"proximity": {
 				"threshold": uniforms.proximityCutoff.value.x,
 				"falloff": uniforms.proximityCutoff.value.y - uniforms.proximityCutoff.value.x
+			},
+			"upsampling": {
+				"enabled": ssaoEffect.defines.has("DEPTH_AWARE_UPSAMPLING"),
+				"threshold": Number(ssaoEffect.defines.get("THRESHOLD"))
 			},
 			"lum influence": ssaoEffect.uniforms.get("luminanceInfluence").value,
 			"intensity": uniforms.intensity.value,
@@ -311,7 +316,38 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		let f = menu.addFolder("Distance Cutoff");
+		let f;
+
+		if(capabilities.isWebGL2) {
+
+			f = menu.addFolder("Depth-Aware Upsampling");
+
+			f.add(params.upsampling, "enabled").onChange(() => {
+
+				if(params.upsampling.enabled) {
+
+					ssaoEffect.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+
+				} else {
+
+					ssaoEffect.defines.delete("DEPTH_AWARE_UPSAMPLING");
+
+				}
+
+				effectPass.recompile();
+
+			});
+
+			f.add(params.upsampling, "threshold").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+				ssaoEffect.defines.set("THRESHOLD", params.upsampling.threshold.toFixed(3));
+				effectPass.recompile();
+
+			});
+
+		}
+
+		f = menu.addFolder("Distance Cutoff");
 
 		f.add(params.distance, "threshold").min(0.0).max(1.0).step(0.0001).onChange(() => {
 
@@ -345,7 +381,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(params, "intensity").min(1.0).max(6.0).step(0.01).onChange(() => {
+		menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange(() => {
 
 			uniforms.intensity.value = params.intensity;
 
