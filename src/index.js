@@ -62,6 +62,7 @@ export {
 	ConvolutionMaterial,
 	CopyMaterial,
 	DepthComparisonMaterial,
+	DepthDownsamplingMaterial,
 	DepthMaskMaterial,
 	EdgeDetectionMaterial,
 	EdgeDetectionMode,
@@ -74,7 +75,8 @@ export {
 	OutlineMaterial,
 	OutlineEdgesMaterial,
 	Section,
-	SMAAWeightsMaterial
+	SMAAWeightsMaterial,
+	SSAOMaterial
 } from "./materials";
 
 export {
@@ -82,6 +84,7 @@ export {
 	ClearPass,
 	ClearMaskPass,
 	DepthPass,
+	DepthDownsamplingPass,
 	EffectPass,
 	MaskPass,
 	NormalPass,
