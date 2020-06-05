@@ -568,8 +568,8 @@ export class GodRaysEffect extends Effect {
 		this.depthMaskPass.setSize(width, height);
 		this.godRaysPass.setSize(width, height);
 
-		const w = resolution.width;
-		const h = resolution.height;
+		const w = this.resolution.width;
+		const h = this.resolution.height;
 
 		this.renderTargetA.setSize(w, h);
 		this.renderTargetB.setSize(w, h);
