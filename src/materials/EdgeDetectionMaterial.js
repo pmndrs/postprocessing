@@ -150,10 +150,10 @@ export class EdgeDetectionMaterial extends ShaderMaterial {
 
 	setEdgeDetectionThreshold(threshold) {
 
-		threshold = Math.min(Math.max(threshold, 0.05), 0.5);
+		const t = Math.min(Math.max(threshold, 0.05), 0.5);
 
-		this.defines.EDGE_THRESHOLD = threshold.toFixed("2");
-		this.defines.DEPTH_THRESHOLD = (threshold * 0.1).toFixed("3");
+		this.defines.EDGE_THRESHOLD = t.toFixed("2");
+		this.defines.DEPTH_THRESHOLD = (t * 0.1).toFixed("3");
 		this.needsUpdate = true;
 
 	}

@@ -71,7 +71,7 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 	get samples() {
 
-		return Number.parseInt(this.defines.SAMPLES_INT);
+		return Number(this.defines.SAMPLES_INT);
 
 	}
 
@@ -83,10 +83,10 @@ export class GodRaysMaterial extends ShaderMaterial {
 
 	set samples(value) {
 
-		value = Math.floor(value);
+		const s = Math.floor(value);
 
-		this.defines.SAMPLES_INT = value.toFixed(0);
-		this.defines.SAMPLES_FLOAT = value.toFixed(1);
+		this.defines.SAMPLES_INT = s.toFixed(0);
+		this.defines.SAMPLES_FLOAT = s.toFixed(1);
 		this.needsUpdate = true;
 
 	}

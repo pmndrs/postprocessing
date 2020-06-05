@@ -126,7 +126,7 @@ export class NormalPass extends Pass {
 	setResolutionScale(scale) {
 
 		this.resolutionScale = scale;
-		this.setSize(this.originalSize.x, this.originalSize.y);
+		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -159,10 +159,7 @@ export class NormalPass extends Pass {
 		const resolution = this.resolution;
 		resolution.base.set(width, height);
 
-		width = resolution.width;
-		height = resolution.height;
-
-		this.renderTarget.setSize(width, height);
+		this.renderTarget.setSize(resolution.width, resolution.height);
 
 	}
 

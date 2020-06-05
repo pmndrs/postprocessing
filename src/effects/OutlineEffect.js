@@ -184,7 +184,8 @@ export class OutlineEffect extends Effect {
 		 * @private
 		 */
 
-		this.maskPass = new RenderPass(scene, camera, new DepthComparisonMaterial(this.depthPass.renderTarget.texture, camera));
+		this.maskPass = new RenderPass(scene, camera,
+			new DepthComparisonMaterial(this.depthPass.texture, camera));
 
 		const clearPass = this.maskPass.getClearPass();
 		clearPass.overrideClearColor = new Color(0xffffff);
@@ -622,13 +623,13 @@ export class OutlineEffect extends Effect {
 		this.blurPass.setSize(width, height);
 		this.renderTargetMask.setSize(width, height);
 
-		width = this.resolution.width;
-		height = this.resolution.height;
+		const w = this.resolution.width;
+		const h = this.resolution.height;
 
-		this.depthPass.setSize(width, height);
-		this.renderTargetOutline.setSize(width, height);
-		this.renderTargetBlurredOutline.setSize(width, height);
-		this.outlinePass.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height);
+		this.depthPass.setSize(w, h);
+		this.renderTargetOutline.setSize(w, h);
+		this.renderTargetBlurredOutline.setSize(w, h);
+		this.outlinePass.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h);
 
 	}
 

@@ -47,7 +47,15 @@ export class NoiseEffect extends Effect {
 
 	set premultiply(value) {
 
-		value ? this.defines.set("PREMULTIPLY", "1") : this.defines.delete("PREMULTIPLY");
+		if(value) {
+
+			this.defines.set("PREMULTIPLY", "1");
+
+		} else {
+
+			this.defines.delete("PREMULTIPLY");
+
+		}
 
 	}
 

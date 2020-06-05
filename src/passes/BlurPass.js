@@ -311,14 +311,14 @@ export class BlurPass extends Pass {
 		const resolution = this.resolution;
 		resolution.base.set(width, height);
 
-		width = resolution.width;
-		height = resolution.height;
+		const w = resolution.width;
+		const h = resolution.height;
 
-		this.renderTargetA.setSize(width, height);
-		this.renderTargetB.setSize(width, height);
+		this.renderTargetA.setSize(w, h);
+		this.renderTargetB.setSize(w, h);
 
-		this.convolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
-		this.ditheredConvolutionMaterial.setTexelSize(1.0 / width, 1.0 / height);
+		this.convolutionMaterial.setTexelSize(1.0 / w, 1.0 / h);
+		this.ditheredConvolutionMaterial.setTexelSize(1.0 / w, 1.0 / h);
 
 	}
 

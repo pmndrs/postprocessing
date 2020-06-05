@@ -80,8 +80,7 @@ export class PixelationEffect extends Effect {
 
 		const uniforms = this.uniforms;
 		uniforms.get("active").value = (granularity > 0.0);
-		uniforms.get("d").value.set(granularity, granularity)
-			.divide(this.resolution);
+		uniforms.get("d").value.set(granularity, granularity).divide(this.resolution);
 
 		this.granularity = granularity;
 
