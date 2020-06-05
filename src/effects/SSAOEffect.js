@@ -82,7 +82,8 @@ export class SSAOEffect extends Effect {
 
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
-				["luminanceInfluence", new Uniform(luminanceInfluence)]
+				["luminanceInfluence", new Uniform(luminanceInfluence)],
+				["scale", new Uniform(0.0)] // Unused.
 			])
 
 		});
@@ -257,7 +258,7 @@ export class SSAOEffect extends Effect {
 
 	get radius() {
 
-		return Number(this.r);
+		return this.r;
 
 	}
 
