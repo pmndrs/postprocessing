@@ -10,7 +10,11 @@ import { Vector2 } from "three";
 const AUTO_SIZE = -1;
 
 /**
- * A resizer.
+ * A resizer that can be used to store a base and a target resolution.
+ *
+ * The attached resizeable will be updated with the base resolution when the
+ * target resolution changes. The new calculated resolution can then be
+ * retrieved via {@link Resizer.width} and {@link Resizer.height}.
  */
 
 export class Resizer {
@@ -36,8 +40,8 @@ export class Resizer {
 		/**
 		 * The base size.
 		 *
-		 * This size will be passed to the resizable object every time the width or
-		 * height is changed.
+		 * This size will be passed to the resizable object every time the target
+		 * width or height is changed.
 		 *
 		 * @type {Vector2}
 		 */
