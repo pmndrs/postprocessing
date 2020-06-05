@@ -23,10 +23,10 @@ export class OverrideMaterialManager {
 	/**
 	 * Constructs a new override material manager.
 	 *
-	 * @param {Material} material - An override material.
+	 * @param {Material} [material=null] - An override material.
 	 */
 
-	constructor(material) {
+	constructor(material = null) {
 
 		/**
 		 * Keeps track of original materials.
@@ -44,7 +44,7 @@ export class OverrideMaterialManager {
 		 * @private
 		 */
 
-		this.material = material;
+		this.material = null;
 
 		/**
 		 * A clone of the override material.
@@ -76,26 +76,20 @@ export class OverrideMaterialManager {
 
 	setMaterial(material) {
 
-		if(this.materialInstanced !== null) {
+		this.disposeMaterials();
 
-			this.materialInstanced.dispose();
+		if(material !== null) {
+
+			this.material = material;
+
+			this.materialInstanced = material.clone();
+			this.materialInstanced.uniforms = Object.assign({}, material.uniforms);
+
+			this.materialSkinning = material.clone();
+			this.materialSkinning.uniforms = Object.assign({}, material.uniforms);
+			this.materialSkinning.skinning = true;
 
 		}
-
-		if(this.materialSkinning !== null) {
-
-			this.materialSkinning.dispose();
-
-		}
-
-		this.material = material;
-
-		this.materialInstanced = material.clone();
-		this.materialInstanced.uniforms = Object.assign({}, material.uniforms);
-
-		this.materialSkinning = material.clone();
-		this.materialSkinning.uniforms = Object.assign({}, material.uniforms);
-		this.materialSkinning.skinning = true;
 
 	}
 
@@ -182,14 +176,35 @@ export class OverrideMaterialManager {
 	}
 
 	/**
-	 * Deletes cloned override materials and clears the original materials map.
+	 * Deletes cloned override materials.
+	 *
+	 * @private
+	 */
+
+	disposeMaterials() {
+
+		if(this.materialInstanced !== null) {
+
+			this.materialInstanced.dispose();
+
+		}
+
+		if(this.materialSkinning !== null) {
+
+			this.materialSkinning.dispose();
+
+		}
+
+	}
+
+	/**
+	 * Performs cleanup tasks.
 	 */
 
 	dispose() {
 
 		this.originalMaterials.clear();
-		this.materialInstanced.dispose();
-		this.materialSkinning.dispose();
+		this.disposeMaterials();
 
 	}
 
