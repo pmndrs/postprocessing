@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 267,
+  "end": 327,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 5,
+      "line": 6,
       "column": 0
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 267,
+    "end": 327,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 5,
+        "line": 6,
         "column": 0
       }
     },
@@ -31,7 +31,7 @@
       {
         "type": "ExportNamedDeclaration",
         "start": 0,
-        "end": 66,
+        "end": 58,
         "loc": {
           "start": {
             "line": 1,
@@ -39,7 +39,7 @@
           },
           "end": {
             "line": 1,
-            "column": 66
+            "column": 58
           }
         },
         "declaration": null,
@@ -47,7 +47,7 @@
           {
             "type": "ExportSpecifier",
             "start": 9,
-            "end": 24,
+            "end": 21,
             "loc": {
               "start": {
                 "line": 1,
@@ -55,13 +55,13 @@
               },
               "end": {
                 "line": 1,
-                "column": 24
+                "column": 21
               }
             },
             "local": {
               "type": "Identifier",
               "start": 9,
-              "end": 24,
+              "end": 21,
               "loc": {
                 "start": {
                   "line": 1,
@@ -69,6 +69,93 @@
                 },
                 "end": {
                   "line": 1,
+                  "column": 21
+                },
+                "identifierName": "NoiseTexture"
+              },
+              "name": "NoiseTexture"
+            },
+            "exported": {
+              "type": "Identifier",
+              "start": 9,
+              "end": 21,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 21
+                },
+                "identifierName": "NoiseTexture"
+              },
+              "name": "NoiseTexture"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 29,
+          "end": 57,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 29
+            },
+            "end": {
+              "line": 1,
+              "column": 57
+            }
+          },
+          "extra": {
+            "rawValue": "./textures/NoiseTexture.js",
+            "raw": "\"./textures/NoiseTexture.js\""
+          },
+          "value": "./textures/NoiseTexture.js"
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 60,
+        "end": 126,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 66
+          }
+        },
+        "declaration": null,
+        "specifiers": [
+          {
+            "type": "ExportSpecifier",
+            "start": 69,
+            "end": 84,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 9
+              },
+              "end": {
+                "line": 2,
+                "column": 24
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 69,
+              "end": 84,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 9
+                },
+                "end": {
+                  "line": 2,
                   "column": 24
                 },
                 "identifierName": "SMAAImageLoader"
@@ -77,15 +164,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 9,
-              "end": 24,
+              "start": 69,
+              "end": 84,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 2,
                   "column": 9
                 },
                 "end": {
-                  "line": 1,
+                  "line": 2,
                   "column": 24
                 },
                 "identifierName": "SMAAImageLoader"
@@ -96,15 +183,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 32,
-          "end": 65,
+          "start": 92,
+          "end": 125,
           "loc": {
             "start": {
-              "line": 1,
+              "line": 2,
               "column": 32
             },
             "end": {
-              "line": 1,
+              "line": 2,
               "column": 65
             }
           },
@@ -117,15 +204,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 68,
-        "end": 138,
+        "start": 128,
+        "end": 198,
         "loc": {
           "start": {
-            "line": 2,
+            "line": 3,
             "column": 0
           },
           "end": {
-            "line": 2,
+            "line": 3,
             "column": 70
           }
         },
@@ -133,29 +220,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 77,
-            "end": 94,
+            "start": 137,
+            "end": 154,
             "loc": {
               "start": {
-                "line": 2,
+                "line": 3,
                 "column": 9
               },
               "end": {
-                "line": 2,
+                "line": 3,
                 "column": 26
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 77,
-              "end": 94,
+              "start": 137,
+              "end": 154,
               "loc": {
                 "start": {
-                  "line": 2,
+                  "line": 3,
                   "column": 9
                 },
                 "end": {
-                  "line": 2,
+                  "line": 3,
                   "column": 26
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -164,15 +251,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 77,
-              "end": 94,
+              "start": 137,
+              "end": 154,
               "loc": {
                 "start": {
-                  "line": 2,
+                  "line": 3,
                   "column": 9
                 },
                 "end": {
-                  "line": 2,
+                  "line": 3,
                   "column": 26
                 },
                 "identifierName": "SMAAAreaImageData"
@@ -183,15 +270,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 102,
-          "end": 137,
+          "start": 162,
+          "end": 197,
           "loc": {
             "start": {
-              "line": 2,
+              "line": 3,
               "column": 34
             },
             "end": {
-              "line": 2,
+              "line": 3,
               "column": 69
             }
           },
@@ -204,15 +291,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 140,
-        "end": 214,
+        "start": 200,
+        "end": 274,
         "loc": {
           "start": {
-            "line": 3,
+            "line": 4,
             "column": 0
           },
           "end": {
-            "line": 3,
+            "line": 4,
             "column": 74
           }
         },
@@ -220,29 +307,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 149,
-            "end": 168,
+            "start": 209,
+            "end": 228,
             "loc": {
               "start": {
-                "line": 3,
+                "line": 4,
                 "column": 9
               },
               "end": {
-                "line": 3,
+                "line": 4,
                 "column": 28
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 149,
-              "end": 168,
+              "start": 209,
+              "end": 228,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -251,15 +338,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 149,
-              "end": 168,
+              "start": 209,
+              "end": 228,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 4,
                   "column": 9
                 },
                 "end": {
-                  "line": 3,
+                  "line": 4,
                   "column": 28
                 },
                 "identifierName": "SMAASearchImageData"
@@ -270,15 +357,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 176,
-          "end": 213,
+          "start": 236,
+          "end": 273,
           "loc": {
             "start": {
-              "line": 3,
+              "line": 4,
               "column": 36
             },
             "end": {
-              "line": 3,
+              "line": 4,
               "column": 73
             }
           },
@@ -291,15 +378,15 @@
       },
       {
         "type": "ExportNamedDeclaration",
-        "start": 216,
-        "end": 265,
+        "start": 276,
+        "end": 325,
         "loc": {
           "start": {
-            "line": 4,
+            "line": 5,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 5,
             "column": 49
           }
         },
@@ -307,29 +394,29 @@
         "specifiers": [
           {
             "type": "ExportSpecifier",
-            "start": 225,
-            "end": 237,
+            "start": 285,
+            "end": 297,
             "loc": {
               "start": {
-                "line": 4,
+                "line": 5,
                 "column": 9
               },
               "end": {
-                "line": 4,
+                "line": 5,
                 "column": 21
               }
             },
             "local": {
               "type": "Identifier",
-              "start": 225,
-              "end": 237,
+              "start": 285,
+              "end": 297,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 5,
                   "column": 9
                 },
                 "end": {
-                  "line": 4,
+                  "line": 5,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -338,15 +425,15 @@
             },
             "exported": {
               "type": "Identifier",
-              "start": 225,
-              "end": 237,
+              "start": 285,
+              "end": 297,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 5,
                   "column": 9
                 },
                 "end": {
-                  "line": 4,
+                  "line": 5,
                   "column": 21
                 },
                 "identifierName": "RawImageData"
@@ -357,15 +444,15 @@
         ],
         "source": {
           "type": "StringLiteral",
-          "start": 245,
-          "end": 264,
+          "start": 305,
+          "end": 324,
           "loc": {
             "start": {
-              "line": 4,
+              "line": 5,
               "column": 29
             },
             "end": {
-              "line": 4,
+              "line": 5,
               "column": 48
             }
           },
@@ -446,9 +533,9 @@
         "postfix": false,
         "binop": null
       },
-      "value": "SMAAImageLoader",
+      "value": "NoiseTexture",
       "start": 9,
-      "end": 24,
+      "end": 21,
       "loc": {
         "start": {
           "line": 1,
@@ -456,6 +543,189 @@
         },
         "end": {
           "line": 1,
+          "column": 21
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "}",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 22,
+      "end": 23,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 22
+        },
+        "end": {
+          "line": 1,
+          "column": 23
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "from",
+      "start": 24,
+      "end": 28,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 24
+        },
+        "end": {
+          "line": 1,
+          "column": 28
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "string",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "./textures/NoiseTexture.js",
+      "start": 29,
+      "end": 57,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 29
+        },
+        "end": {
+          "line": 1,
+          "column": 57
+        }
+      }
+    },
+    {
+      "type": {
+        "label": ";",
+        "beforeExpr": true,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "start": 57,
+      "end": 58,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 57
+        },
+        "end": {
+          "line": 1,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "export",
+        "keyword": "export",
+        "beforeExpr": false,
+        "startsExpr": false,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null,
+        "updateContext": null
+      },
+      "value": "export",
+      "start": 60,
+      "end": 66,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 6
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "{",
+        "beforeExpr": true,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "start": 67,
+      "end": 68,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 7
+        },
+        "end": {
+          "line": 2,
+          "column": 8
+        }
+      }
+    },
+    {
+      "type": {
+        "label": "name",
+        "beforeExpr": false,
+        "startsExpr": true,
+        "rightAssociative": false,
+        "isLoop": false,
+        "isAssign": false,
+        "prefix": false,
+        "postfix": false,
+        "binop": null
+      },
+      "value": "SMAAImageLoader",
+      "start": 69,
+      "end": 84,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 9
+        },
+        "end": {
+          "line": 2,
           "column": 24
         }
       }
@@ -472,15 +742,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 25,
-      "end": 26,
+      "start": 85,
+      "end": 86,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 25
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 26
         }
       }
@@ -498,15 +768,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 27,
-      "end": 31,
+      "start": 87,
+      "end": 91,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 27
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 31
         }
       }
@@ -525,15 +795,15 @@
         "updateContext": null
       },
       "value": "./smaa/utils/SMAAImageLoader.js",
-      "start": 32,
-      "end": 65,
+      "start": 92,
+      "end": 125,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 32
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 65
         }
       }
@@ -551,15 +821,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 65,
-      "end": 66,
+      "start": 125,
+      "end": 126,
       "loc": {
         "start": {
-          "line": 1,
+          "line": 2,
           "column": 65
         },
         "end": {
-          "line": 1,
+          "line": 2,
           "column": 66
         }
       }
@@ -579,15 +849,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 68,
-      "end": 74,
+      "start": 128,
+      "end": 134,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 0
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 6
         }
       }
@@ -604,15 +874,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 75,
-      "end": 76,
+      "start": 135,
+      "end": 136,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 7
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 8
         }
       }
@@ -630,15 +900,15 @@
         "binop": null
       },
       "value": "SMAAAreaImageData",
-      "start": 77,
-      "end": 94,
+      "start": 137,
+      "end": 154,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 9
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 26
         }
       }
@@ -655,15 +925,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 95,
-      "end": 96,
+      "start": 155,
+      "end": 156,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 27
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 28
         }
       }
@@ -681,15 +951,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 97,
-      "end": 101,
+      "start": 157,
+      "end": 161,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 29
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 33
         }
       }
@@ -708,15 +978,15 @@
         "updateContext": null
       },
       "value": "./smaa/utils/SMAAAreaImageData.js",
-      "start": 102,
-      "end": 137,
+      "start": 162,
+      "end": 197,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 34
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 69
         }
       }
@@ -734,15 +1004,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 137,
-      "end": 138,
+      "start": 197,
+      "end": 198,
       "loc": {
         "start": {
-          "line": 2,
+          "line": 3,
           "column": 69
         },
         "end": {
-          "line": 2,
+          "line": 3,
           "column": 70
         }
       }
@@ -762,15 +1032,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 140,
-      "end": 146,
+      "start": 200,
+      "end": 206,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 0
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 6
         }
       }
@@ -787,15 +1057,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 147,
-      "end": 148,
+      "start": 207,
+      "end": 208,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 7
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 8
         }
       }
@@ -813,15 +1083,15 @@
         "binop": null
       },
       "value": "SMAASearchImageData",
-      "start": 149,
-      "end": 168,
+      "start": 209,
+      "end": 228,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 9
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 28
         }
       }
@@ -838,15 +1108,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 169,
-      "end": 170,
+      "start": 229,
+      "end": 230,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 29
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 30
         }
       }
@@ -864,15 +1134,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 171,
-      "end": 175,
+      "start": 231,
+      "end": 235,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 31
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 35
         }
       }
@@ -891,15 +1161,15 @@
         "updateContext": null
       },
       "value": "./smaa/utils/SMAASearchImageData.js",
-      "start": 176,
-      "end": 213,
+      "start": 236,
+      "end": 273,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 36
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 73
         }
       }
@@ -917,15 +1187,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 213,
-      "end": 214,
+      "start": 273,
+      "end": 274,
       "loc": {
         "start": {
-          "line": 3,
+          "line": 4,
           "column": 73
         },
         "end": {
-          "line": 3,
+          "line": 4,
           "column": 74
         }
       }
@@ -945,15 +1215,15 @@
         "updateContext": null
       },
       "value": "export",
-      "start": 216,
-      "end": 222,
+      "start": 276,
+      "end": 282,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 6
         }
       }
@@ -970,15 +1240,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 223,
-      "end": 224,
+      "start": 283,
+      "end": 284,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 7
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 8
         }
       }
@@ -996,15 +1266,15 @@
         "binop": null
       },
       "value": "RawImageData",
-      "start": 225,
-      "end": 237,
+      "start": 285,
+      "end": 297,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 9
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 21
         }
       }
@@ -1021,15 +1291,15 @@
         "postfix": false,
         "binop": null
       },
-      "start": 238,
-      "end": 239,
+      "start": 298,
+      "end": 299,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 22
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 23
         }
       }
@@ -1047,15 +1317,15 @@
         "binop": null
       },
       "value": "from",
-      "start": 240,
-      "end": 244,
+      "start": 300,
+      "end": 304,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 24
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 28
         }
       }
@@ -1074,15 +1344,15 @@
         "updateContext": null
       },
       "value": "./RawImageData.js",
-      "start": 245,
-      "end": 264,
+      "start": 305,
+      "end": 324,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 29
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 48
         }
       }
@@ -1100,15 +1370,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 264,
-      "end": 265,
+      "start": 324,
+      "end": 325,
       "loc": {
         "start": {
-          "line": 4,
+          "line": 5,
           "column": 48
         },
         "end": {
-          "line": 4,
+          "line": 5,
           "column": 49
         }
       }
@@ -1126,15 +1396,15 @@
         "binop": null,
         "updateContext": null
       },
-      "start": 267,
-      "end": 267,
+      "start": 327,
+      "end": 327,
       "loc": {
         "start": {
-          "line": 5,
+          "line": 6,
           "column": 0
         },
         "end": {
-          "line": 5,
+          "line": 6,
           "column": 0
         }
       }
