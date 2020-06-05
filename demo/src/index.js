@@ -8,7 +8,7 @@ import {
 } from "three";
 
 import { DemoManager } from "three-demo";
-import { EffectComposer } from "../../src";
+import { EffectComposer, OverrideMaterialManager } from "../../src";
 
 import { AntialiasingDemo } from "./demos/AntialiasingDemo.js";
 import { BloomDemo } from "./demos/BloomDemo.js";
@@ -196,7 +196,7 @@ window.addEventListener("load", (event) => {
 		antialias: false,
 		stencil: false,
 		alpha: false,
-		depth: true
+		depth: false
 	};
 
 	const canvas = document.createElement("canvas");
@@ -216,6 +216,9 @@ window.addEventListener("load", (event) => {
 	renderer.shadowMap.autoUpdate = false;
 	renderer.shadowMap.needsUpdate = true;
 	renderer.shadowMap.enabled = true;
+
+	// Enable the override material workaround.
+	OverrideMaterialManager.workaroundEnabled = true;
 
 	// Create the effect composer.
 	composer = new EffectComposer(renderer, {

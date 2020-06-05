@@ -1,7 +1,7 @@
 {
-  "coverage": "96.02%",
-  "expectCount": 704,
-  "actualCount": 676,
+  "coverage": "95.76%",
+  "expectCount": 755,
+  "actualCount": 723,
   "files": {
     "src/core/ColorChannel.js": {
       "expectCount": 1,
@@ -21,6 +21,11 @@
     "src/core/Initializable.js": {
       "expectCount": 2,
       "actualCount": 2,
+      "undocumentLines": []
+    },
+    "src/core/OverrideMaterialManager.js": {
+      "expectCount": 13,
+      "actualCount": 13,
       "undocumentLines": []
     },
     "src/core/Resizable.js": {
@@ -104,8 +109,8 @@
       "undocumentLines": []
     },
     "src/effects/GlitchEffect.js": {
-      "expectCount": 21,
-      "actualCount": 21,
+      "expectCount": 20,
+      "actualCount": 20,
       "undocumentLines": []
     },
     "src/effects/GodRaysEffect.js": {
@@ -133,7 +138,7 @@
       "actualCount": 40,
       "undocumentLines": [
         77,
-        448
+        449
       ]
     },
     "src/effects/PixelationEffect.js": {
@@ -174,15 +179,15 @@
       ]
     },
     "src/effects/SSAOEffect.js": {
-      "expectCount": 16,
-      "actualCount": 16,
+      "expectCount": 19,
+      "actualCount": 19,
       "undocumentLines": []
     },
     "src/effects/TextureEffect.js": {
-      "expectCount": 10,
-      "actualCount": 9,
+      "expectCount": 11,
+      "actualCount": 10,
       "undocumentLines": [
-        121
+        126
       ]
     },
     "src/effects/ToneMappingEffect.js": {
@@ -216,6 +221,11 @@
     "src/images/smaa/utils/SMAASearchImageData.js": {
       "expectCount": 7,
       "actualCount": 7,
+      "undocumentLines": []
+    },
+    "src/images/textures/NoiseTexture.js": {
+      "expectCount": 3,
+      "actualCount": 3,
       "undocumentLines": []
     },
     "src/materials/AdaptiveLuminanceMaterial.js": {
@@ -257,6 +267,13 @@
       "actualCount": 4,
       "undocumentLines": []
     },
+    "src/materials/DepthDownsamplingMaterial.js": {
+      "expectCount": 7,
+      "actualCount": 6,
+      "undocumentLines": [
+        69
+      ]
+    },
     "src/materials/DepthMaskMaterial.js": {
       "expectCount": 3,
       "actualCount": 3,
@@ -290,7 +307,7 @@
       "expectCount": 18,
       "actualCount": 17,
       "undocumentLines": [
-        137
+        145
       ]
     },
     "src/materials/MaskMaterial.js": {
@@ -312,6 +329,13 @@
         85
       ]
     },
+    "src/materials/SSAOMaterial.js": {
+      "expectCount": 8,
+      "actualCount": 7,
+      "undocumentLines": [
+        89
+      ]
+    },
     "src/passes/BlurPass.js": {
       "expectCount": 22,
       "actualCount": 22,
@@ -331,12 +355,20 @@
         31
       ]
     },
-    "src/passes/DepthPass.js": {
+    "src/passes/DepthDownsamplingPass.js": {
       "expectCount": 11,
       "actualCount": 9,
       "undocumentLines": [
+        37,
+        38
+      ]
+    },
+    "src/passes/DepthPass.js": {
+      "expectCount": 12,
+      "actualCount": 10,
+      "undocumentLines": [
         40,
-        115
+        127
       ]
     },
     "src/passes/EffectPass.js": {
@@ -355,11 +387,11 @@
       ]
     },
     "src/passes/NormalPass.js": {
-      "expectCount": 11,
-      "actualCount": 9,
+      "expectCount": 12,
+      "actualCount": 10,
       "undocumentLines": [
         40,
-        116
+        128
       ]
     },
     "src/passes/Pass.js": {
@@ -368,10 +400,10 @@
       "undocumentLines": []
     },
     "src/passes/RenderPass.js": {
-      "expectCount": 12,
-      "actualCount": 11,
+      "expectCount": 16,
+      "actualCount": 15,
       "undocumentLines": [
-        24
+        25
       ]
     },
     "src/passes/SavePass.js": {

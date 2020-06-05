@@ -132,7 +132,15 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	set useThreshold(value) {
 
-		value ? (this.defines.THRESHOLD = "1") : (delete this.defines.THRESHOLD);
+		if(value) {
+
+			this.defines.THRESHOLD = "1";
+
+		} else {
+
+			delete this.defines.THRESHOLD;
+
+		}
 
 		this.needsUpdate = true;
 
@@ -158,7 +166,15 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	set colorOutput(value) {
 
-		value ? (this.defines.COLOR = "1") : (delete this.defines.COLOR);
+		if(value) {
+
+			this.defines.COLOR = "1";
+
+		} else {
+
+			delete this.defines.COLOR;
+
+		}
 
 		this.needsUpdate = true;
 
@@ -173,9 +189,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	setColorOutputEnabled(enabled) {
 
-		enabled ? (this.defines.COLOR = "1") : (delete this.defines.COLOR);
-
-		this.needsUpdate = true;
+		this.colorOutput = enabled;
 
 	}
 
@@ -201,7 +215,15 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	set useRange(value) {
 
-		value ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
+		if(value) {
+
+			this.defines.RANGE = "1";
+
+		} else {
+
+			delete this.defines.RANGE;
+
+		}
 
 		this.needsUpdate = true;
 
@@ -216,7 +238,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	get luminanceRange() {
 
-		return (this.defines.RANGE !== undefined);
+		return this.useRange;
 
 	}
 
@@ -229,9 +251,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	set luminanceRange(value) {
 
-		value ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
-
-		this.needsUpdate = true;
+		this.useRange = value;
 
 	}
 
@@ -244,9 +264,7 @@ export class LuminanceMaterial extends ShaderMaterial {
 
 	setLuminanceRangeEnabled(enabled) {
 
-		enabled ? (this.defines.RANGE = "1") : (delete this.defines.RANGE);
-
-		this.needsUpdate = true;
+		this.useRange = enabled;
 
 	}
 

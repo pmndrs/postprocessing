@@ -1,9 +1,15 @@
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 /**
+ * The tag under which the asset is stored.
+ */
+
+export const tag = "rigged-simple";
+
+/**
  * Loads a simple rigged model.
  *
- * @param {Map} assets - A collection of assets. The model will be stored as "rigged-simple".
+ * @param {Map} assets - A collection of assets.
  * @param {LoadingManager} manager - A loading manager.
  */
 
@@ -26,7 +32,7 @@ export function load(assets, manager) {
 
 		gltf.scene.scale.multiplyScalar(0.2);
 
-		assets.set("rigged-simple", gltf);
+		assets.set(tag, gltf);
 
 	});
 

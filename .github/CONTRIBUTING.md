@@ -38,6 +38,7 @@ The following table provides an overview of the most important scripts:
 |-------|-------------------------------------------------|
 | build | Builds the demo bundle.                         |
 | watch | Builds the demo bundle and listens for changes. |
+| dev   | Runs the watch script and serves files locally. |
 | test  | Generates production bundles and runs tests.    |
 
 __Note__: Setting `NODE_ENV` to `production` enables source code transpilation and minification which considerably slows down the build process. The `test` script does this automatically.
@@ -45,10 +46,7 @@ __Note__: Setting `NODE_ENV` to `production` enables source code transpilation a
 
 ### Testing :heavy_check_mark:
 
-First, install the [http-server](https://github.com/indexzero/http-server) using `npm install -g http-server` to conveniently run things locally.
-
-Navigate to the project's root folder and start the server with the command `hs`. Open your web browser and navigate to http://localhost:8080/demo/index.debug.html.
-Please note that the default `index.html` will load the minified demo bundle which is _not_ desirable during development.
+Use the script `npm run dev` to run an HTTP server in the background while building the demo bundle and watching for file changes at the same time. Open your web browser and navigate to http://localhost:8080/demo/index.debug.html. Please note that the default `index.html` will load the minified demo bundle which is _not_ desirable during development.
 
 __Hint__: Open the development tools in your browser and make sure that the browser cache is disabled while it's open.
 

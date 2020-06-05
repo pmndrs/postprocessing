@@ -78,10 +78,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	setOrthogonalSearchSteps(steps) {
 
-		steps = Math.min(Math.max(steps, 0), 112);
+		const s = Math.min(Math.max(steps, 0), 112);
 
-		this.defines.MAX_SEARCH_STEPS_INT = steps.toFixed("0");
-		this.defines.MAX_SEARCH_STEPS_FLOAT = steps.toFixed("1");
+		this.defines.MAX_SEARCH_STEPS_INT = s.toFixed("0");
+		this.defines.MAX_SEARCH_STEPS_FLOAT = s.toFixed("1");
 		this.needsUpdate = true;
 
 	}
@@ -98,10 +98,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	setDiagonalSearchSteps(steps) {
 
-		steps = Math.min(Math.max(steps, 0), 20);
+		const s = Math.min(Math.max(steps, 0), 20);
 
-		this.defines.MAX_SEARCH_STEPS_DIAG_INT = steps.toFixed("0");
-		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = steps.toFixed("1");
+		this.defines.MAX_SEARCH_STEPS_DIAG_INT = s.toFixed("0");
+		this.defines.MAX_SEARCH_STEPS_DIAG_FLOAT = s.toFixed("1");
 		this.needsUpdate = true;
 
 	}
@@ -114,10 +114,10 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	setCornerRounding(rounding) {
 
-		rounding = Math.min(Math.max(rounding, 0), 100);
+		const r = Math.min(Math.max(rounding, 0), 100);
 
-		this.defines.CORNER_ROUNDING = rounding.toFixed("4");
-		this.defines.CORNER_ROUNDING_NORM = (rounding / 100.0).toFixed("4");
+		this.defines.CORNER_ROUNDING = r.toFixed("4");
+		this.defines.CORNER_ROUNDING_NORM = (r / 100.0).toFixed("4");
 		this.needsUpdate = true;
 
 	}
@@ -142,8 +142,15 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	set diagonalDetection(value) {
 
-		value ? (delete this.defines.DISABLE_DIAG_DETECTION) :
-			(this.defines.DISABLE_DIAG_DETECTION = "1");
+		if(value) {
+
+			delete this.defines.DISABLE_DIAG_DETECTION;
+
+		} else {
+
+			this.defines.DISABLE_DIAG_DETECTION = "1";
+
+		}
 
 		this.needsUpdate = true;
 
@@ -169,8 +176,15 @@ export class SMAAWeightsMaterial extends ShaderMaterial {
 
 	set cornerRounding(value) {
 
-		value ? (delete this.defines.DISABLE_CORNER_DETECTION) :
-			(this.defines.DISABLE_CORNER_DETECTION = "1");
+		if(value) {
+
+			delete this.defines.DISABLE_CORNER_DETECTION;
+
+		} else {
+
+			this.defines.DISABLE_CORNER_DETECTION = "1";
+
+		}
 
 		this.needsUpdate = true;
 

@@ -179,7 +179,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		// Objects.
 
-		scene.add(assets.get("sponza"));
+		scene.add(assets.get(Sponza.tag));
 
 		const cage = Cage.create(0x000000, 1.25, 0.025);
 		cage.position.set(-0.5, 6.5, -0.25);

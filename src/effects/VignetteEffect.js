@@ -66,7 +66,15 @@ export class VignetteEffect extends Effect {
 
 	set eskil(value) {
 
-		value ? this.defines.set("ESKIL", "1") : this.defines.delete("ESKIL");
+		if(value) {
+
+			this.defines.set("ESKIL", "1");
+
+		} else {
+
+			this.defines.delete("ESKIL");
+
+		}
 
 	}
 

@@ -393,8 +393,8 @@ export class DepthOfFieldEffect extends Effect {
 		resizables.push(this.renderTargetCoC, this.renderTargetMasked);
 		resizables.forEach((r) => r.setSize(width, height));
 
-		width = resolution.width;
-		height = resolution.height;
+		const w = resolution.width;
+		const h = resolution.height;
 
 		resizables = [
 			this.renderTarget,
@@ -403,7 +403,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.renderTargetCoCBlurred
 		];
 
-		resizables.forEach((r) => r.setSize(width, height));
+		resizables.forEach((r) => r.setSize(w, h));
 
 		// The bokeh blur passes operate on the low resolution buffers.
 		const passes = [
@@ -413,7 +413,7 @@ export class DepthOfFieldEffect extends Effect {
 			this.bokehFarFillPass
 		];
 
-		passes.forEach((p) => p.getFullscreenMaterial().setTexelSize(1.0 / width, 1.0 / height));
+		passes.forEach((p) => p.getFullscreenMaterial().setTexelSize(1.0 / w, 1.0 / h));
 
 	}
 

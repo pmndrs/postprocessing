@@ -174,7 +174,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		// Objects.
 
-		scene.add(assets.get("sponza"));
+		scene.add(assets.get(Sponza.tag));
 
 		// Passes.
 

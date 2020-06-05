@@ -1,8 +1,9 @@
 export {
 	ColorChannel,
 	Disposable,
-	Initializable,
 	EffectComposer,
+	Initializable,
+	OverrideMaterialManager,
 	Resizable,
 	Resizer,
 	Selection
@@ -46,6 +47,7 @@ export {
 } from "./effects";
 
 export {
+	NoiseTexture,
 	RawImageData,
 	SMAAAreaImageData,
 	SMAAImageLoader,
@@ -60,6 +62,7 @@ export {
 	ConvolutionMaterial,
 	CopyMaterial,
 	DepthComparisonMaterial,
+	DepthDownsamplingMaterial,
 	DepthMaskMaterial,
 	EdgeDetectionMaterial,
 	EdgeDetectionMode,
@@ -72,7 +75,8 @@ export {
 	OutlineMaterial,
 	OutlineEdgesMaterial,
 	Section,
-	SMAAWeightsMaterial
+	SMAAWeightsMaterial,
+	SSAOMaterial
 } from "./materials";
 
 export {
@@ -80,6 +84,7 @@ export {
 	ClearPass,
 	ClearMaskPass,
 	DepthPass,
+	DepthDownsamplingPass,
 	EffectPass,
 	MaskPass,
 	NormalPass,

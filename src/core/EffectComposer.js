@@ -118,7 +118,6 @@ export class EffectComposer {
 		 * Determines whether the last pass automatically renders to screen.
 		 *
 		 * @type {Boolean}
-		 * @private
 		 */
 
 		this.autoRenderToScreen = true;

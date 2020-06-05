@@ -129,7 +129,7 @@ export class ShockWaveDemo extends PostProcessingDemo {
 
 		// Objects.
 
-		scene.add(assets.get("sponza"));
+		scene.add(assets.get(Sponza.tag));
 
 		const geometry = new SphereBufferGeometry(1, 64, 64);
 		const material = new MeshBasicMaterial({

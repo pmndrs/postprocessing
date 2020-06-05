@@ -133,21 +133,17 @@ export class BloomDemo extends PostProcessingDemo {
 		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
 		raycaster.setFromCamera(mouse, this.camera);
-		const intersects = raycaster.intersectObjects(this.object.children);
+		const intersects = raycaster.intersectObjects(this.object.children, true);
 
 		this.selectedObject = null;
 
 		if(intersects.length > 0) {
 
-			const x = intersects[0];
+			const object = intersects[0].object;
 
-			if(x.object !== undefined) {
+			if(object !== undefined) {
 
-				this.selectedObject = x.object;
-
-			} else {
-
-				console.warn("Encountered an undefined object", intersects);
+				this.selectedObject = object;
 
 			}
 
@@ -192,11 +188,8 @@ export class BloomDemo extends PostProcessingDemo {
 
 		switch(event.type) {
 
-			case "mousemove":
-				this.raycast(event);
-				break;
-
 			case "mousedown":
+				this.raycast(event);
 				this.handleSelection();
 				break;
 
@@ -484,12 +477,10 @@ export class BloomDemo extends PostProcessingDemo {
 
 			if(passB.enabled) {
 
-				renderer.domElement.addEventListener("mousemove", this);
 				renderer.domElement.addEventListener("mousedown", this);
 
 			} else {
 
-				renderer.domElement.removeEventListener("mousemove", this);
 				renderer.domElement.removeEventListener("mousedown", this);
 
 			}
@@ -542,7 +533,6 @@ export class BloomDemo extends PostProcessingDemo {
 		super.reset();
 
 		const dom = this.composer.getRenderer().domElement;
-		dom.removeEventListener("mousemove", this);
 		dom.removeEventListener("mousedown", this);
 
 		return this;

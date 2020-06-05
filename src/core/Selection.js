@@ -1,5 +1,8 @@
 /**
  * An object selection.
+ *
+ * Object selections use render layers to facilitate quick and efficient
+ * visibility changes.
  */
 
 export class Selection extends Set {

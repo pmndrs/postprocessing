@@ -269,6 +269,8 @@ export class Pass {
 	/**
 	 * Sets the depth texture.
 	 *
+	 * This method will be called automatically by the {@link EffectComposer}.
+	 *
 	 * You may override this method if your pass relies on the depth information
 	 * of a preceding {@link RenderPass}.
 	 *

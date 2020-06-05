@@ -114,6 +114,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~depthdownsamplingmaterial",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html",
+    "<span>DepthDownsamplingMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~depthdownsamplingpass",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html",
+    "<span>DepthDownsamplingPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~deptheffect",
     "class/src/effects/DepthEffect.js~DepthEffect.html",
     "<span>DepthEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -276,6 +288,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "postprocessing~noisetexture",
+    "class/src/images/textures/NoiseTexture.js~NoiseTexture.html",
+    "<span>NoiseTexture</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
     "postprocessing~normalpass",
     "class/src/passes/NormalPass.js~NormalPass.html",
     "<span>NormalPass</span> <span class=\"search-result-import-path\">postprocessing</span>",
@@ -297,6 +315,12 @@ window.esdocSearchIndex = [
     "postprocessing~outlinematerial",
     "class/src/materials/OutlineMaterial.js~OutlineMaterial.html",
     "<span>OutlineMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~overridematerialmanager",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html",
+    "<span>OverrideMaterialManager</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
@@ -381,6 +405,12 @@ window.esdocSearchIndex = [
     "postprocessing~ssaoeffect",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html",
     "<span>SSAOEffect</span> <span class=\"search-result-import-path\">postprocessing</span>",
+    "class"
+  ],
+  [
+    "postprocessing~ssaomaterial",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html",
+    "<span>SSAOMaterial</span> <span class=\"search-result-import-path\">postprocessing</span>",
     "class"
   ],
   [
@@ -768,6 +798,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/core/effectcomposer.js~effectcomposer#autorendertoscreen",
+    "class/src/core/EffectComposer.js~EffectComposer.html#instance-member-autoRenderToScreen",
+    "src/core/EffectComposer.js~EffectComposer#autoRenderToScreen",
+    "member"
+  ],
+  [
     "src/core/effectcomposer.js~effectcomposer#constructor",
     "class/src/core/EffectComposer.js~EffectComposer.html#instance-constructor-constructor",
     "src/core/EffectComposer.js~EffectComposer#constructor",
@@ -844,6 +880,42 @@ window.esdocSearchIndex = [
     "class/src/core/Initializable.js~Initializable.html#instance-method-initialize",
     "src/core/Initializable.js~Initializable#initialize",
     "method"
+  ],
+  [
+    "src/core/overridematerialmanager.js",
+    "file/src/core/OverrideMaterialManager.js.html",
+    "src/core/OverrideMaterialManager.js",
+    "file"
+  ],
+  [
+    "src/core/overridematerialmanager.js~overridematerialmanager#constructor",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html#instance-constructor-constructor",
+    "src/core/OverrideMaterialManager.js~OverrideMaterialManager#constructor",
+    "method"
+  ],
+  [
+    "src/core/overridematerialmanager.js~overridematerialmanager#dispose",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html#instance-method-dispose",
+    "src/core/OverrideMaterialManager.js~OverrideMaterialManager#dispose",
+    "method"
+  ],
+  [
+    "src/core/overridematerialmanager.js~overridematerialmanager#setmaterial",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html#instance-method-setMaterial",
+    "src/core/OverrideMaterialManager.js~OverrideMaterialManager#setMaterial",
+    "method"
+  ],
+  [
+    "src/core/overridematerialmanager.js~overridematerialmanager.workaroundenabled",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html#static-get-workaroundEnabled",
+    "src/core/OverrideMaterialManager.js~OverrideMaterialManager.workaroundEnabled",
+    "member"
+  ],
+  [
+    "src/core/overridematerialmanager.js~overridematerialmanager.workaroundenabled",
+    "class/src/core/OverrideMaterialManager.js~OverrideMaterialManager.html#static-set-workaroundEnabled",
+    "src/core/OverrideMaterialManager.js~OverrideMaterialManager.workaroundEnabled",
+    "member"
   ],
   [
     "src/core/resizable.js",
@@ -2154,6 +2226,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/ssaoeffect.js~ssaoeffect#resolution",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-member-resolution",
+    "src/effects/SSAOEffect.js~SSAOEffect#resolution",
+    "member"
+  ],
+  [
     "src/effects/ssaoeffect.js~ssaoeffect#rings",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-rings",
     "src/effects/SSAOEffect.js~SSAOEffect#rings",
@@ -2178,6 +2256,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/ssaoeffect.js~ssaoeffect#setdepthtexture",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setDepthTexture",
+    "src/effects/SSAOEffect.js~SSAOEffect#setDepthTexture",
+    "method"
+  ],
+  [
     "src/effects/ssaoeffect.js~ssaoeffect#setdistancecutoff",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setDistanceCutoff",
     "src/effects/SSAOEffect.js~SSAOEffect#setDistanceCutoff",
@@ -2193,6 +2277,18 @@ window.esdocSearchIndex = [
     "src/effects/ssaoeffect.js~ssaoeffect#setsize",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-setSize",
     "src/effects/SSAOEffect.js~SSAOEffect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#ssaomaterial",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-ssaoMaterial",
+    "src/effects/SSAOEffect.js~SSAOEffect#ssaoMaterial",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#update",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-method-update",
+    "src/effects/SSAOEffect.js~SSAOEffect#update",
     "method"
   ],
   [
@@ -2355,6 +2451,12 @@ window.esdocSearchIndex = [
     "src/effects/textureeffect.js~textureeffect#constructor",
     "class/src/effects/TextureEffect.js~TextureEffect.html#instance-constructor-constructor",
     "src/effects/TextureEffect.js~TextureEffect#constructor",
+    "method"
+  ],
+  [
+    "src/effects/textureeffect.js~textureeffect#settextureswizzlergba",
+    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-method-setTextureSwizzleRGBA",
+    "src/effects/TextureEffect.js~TextureEffect#setTextureSwizzleRGBA",
     "method"
   ],
   [
@@ -2658,6 +2760,18 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/images/textures/noisetexture.js",
+    "file/src/images/textures/NoiseTexture.js.html",
+    "src/images/textures/NoiseTexture.js",
+    "file"
+  ],
+  [
+    "src/images/textures/noisetexture.js~noisetexture#constructor",
+    "class/src/images/textures/NoiseTexture.js~NoiseTexture.html#instance-constructor-constructor",
+    "src/images/textures/NoiseTexture.js~NoiseTexture#constructor",
+    "method"
+  ],
+  [
     "src/index.js",
     "file/src/index.js.html",
     "src/index.js",
@@ -2817,6 +2931,42 @@ window.esdocSearchIndex = [
     "src/materials/depthcomparisonmaterial.js~depthcomparisonmaterial#constructor",
     "class/src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial.html#instance-constructor-constructor",
     "src/materials/DepthComparisonMaterial.js~DepthComparisonMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js",
+    "file/src/materials/DepthDownsamplingMaterial.js.html",
+    "src/materials/DepthDownsamplingMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js~depthdownsamplingmaterial#constructor",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html#instance-constructor-constructor",
+    "src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js~depthdownsamplingmaterial#depthpacking",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html#instance-get-depthPacking",
+    "src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js~depthdownsamplingmaterial#depthpacking",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html#instance-set-depthPacking",
+    "src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js~depthdownsamplingmaterial#needsupdate",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html#instance-member-needsUpdate",
+    "src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/depthdownsamplingmaterial.js~depthdownsamplingmaterial#settexelsize",
+    "class/src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial.html#instance-method-setTexelSize",
+    "src/materials/DepthDownsamplingMaterial.js~DepthDownsamplingMaterial#setTexelSize",
     "method"
   ],
   [
@@ -3228,6 +3378,48 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/materials/ssaomaterial.js",
+    "file/src/materials/SSAOMaterial.js.html",
+    "src/materials/SSAOMaterial.js",
+    "file"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#adoptcamerasettings",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-method-adoptCameraSettings",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#adoptCameraSettings",
+    "method"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#constructor",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-constructor-constructor",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#constructor",
+    "method"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#depthpacking",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-get-depthPacking",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#depthpacking",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-set-depthPacking",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#depthPacking",
+    "member"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#needsupdate",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-member-needsUpdate",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#needsUpdate",
+    "member"
+  ],
+  [
+    "src/materials/ssaomaterial.js~ssaomaterial#settexelsize",
+    "class/src/materials/SSAOMaterial.js~SSAOMaterial.html#instance-method-setTexelSize",
+    "src/materials/SSAOMaterial.js~SSAOMaterial#setTexelSize",
+    "method"
+  ],
+  [
     "src/materials/index.js",
     "file/src/materials/index.js.html",
     "src/materials/index.js",
@@ -3420,6 +3612,72 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/passes/depthdownsamplingpass.js",
+    "file/src/passes/DepthDownsamplingPass.js.html",
+    "src/passes/DepthDownsamplingPass.js",
+    "file"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#constructor",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-constructor-constructor",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#constructor",
+    "method"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#initialize",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-method-initialize",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#initialize",
+    "method"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#needsdepthtexture",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-member-needsDepthTexture",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#needsDepthTexture",
+    "member"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#needsswap",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-member-needsSwap",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#render",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-method-render",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#render",
+    "method"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#rendertarget",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-member-renderTarget",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#renderTarget",
+    "member"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#resolution",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-member-resolution",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#resolution",
+    "member"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#setdepthtexture",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-method-setDepthTexture",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#setDepthTexture",
+    "method"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#setsize",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-method-setSize",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#setSize",
+    "method"
+  ],
+  [
+    "src/passes/depthdownsamplingpass.js~depthdownsamplingpass#texture",
+    "class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html#instance-get-texture",
+    "src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass#texture",
+    "member"
+  ],
+  [
     "src/passes/depthpass.js",
     "file/src/passes/DepthPass.js.html",
     "src/passes/DepthPass.js",
@@ -3478,6 +3736,12 @@ window.esdocSearchIndex = [
     "class/src/passes/DepthPass.js~DepthPass.html#instance-method-setSize",
     "src/passes/DepthPass.js~DepthPass#setSize",
     "method"
+  ],
+  [
+    "src/passes/depthpass.js~depthpass#texture",
+    "class/src/passes/DepthPass.js~DepthPass.html#instance-get-texture",
+    "src/passes/DepthPass.js~DepthPass#texture",
+    "member"
   ],
   [
     "src/passes/effectpass.js",
@@ -3684,6 +3948,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/normalpass.js~normalpass#texture",
+    "class/src/passes/NormalPass.js~NormalPass.html#instance-get-texture",
+    "src/passes/NormalPass.js~NormalPass#texture",
+    "member"
+  ],
+  [
     "src/passes/pass.js",
     "file/src/passes/Pass.js.html",
     "src/passes/Pass.js",
@@ -3835,7 +4105,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/passes/renderpass.js~renderpass#overridematerial",
-    "class/src/passes/RenderPass.js~RenderPass.html#instance-member-overrideMaterial",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-get-overrideMaterial",
+    "src/passes/RenderPass.js~RenderPass#overrideMaterial",
+    "member"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#overridematerial",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-set-overrideMaterial",
     "src/passes/RenderPass.js~RenderPass#overrideMaterial",
     "member"
   ],
@@ -3844,6 +4120,18 @@ window.esdocSearchIndex = [
     "class/src/passes/RenderPass.js~RenderPass.html#instance-method-render",
     "src/passes/RenderPass.js~RenderPass#render",
     "method"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#rendertoscreen",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-get-renderToScreen",
+    "src/passes/RenderPass.js~RenderPass#renderToScreen",
+    "member"
+  ],
+  [
+    "src/passes/renderpass.js~renderpass#rendertoscreen",
+    "class/src/passes/RenderPass.js~RenderPass.html#instance-set-renderToScreen",
+    "src/passes/RenderPass.js~RenderPass#renderToScreen",
+    "member"
   ],
   [
     "src/passes/renderpass.js~renderpass#setdepthtexture",

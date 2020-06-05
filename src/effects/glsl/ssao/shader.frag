@@ -1,105 +1,80 @@
-uniform sampler2D normalBuffer;
-
-uniform mat4 cameraProjectionMatrix;
-uniform mat4 cameraInverseProjectionMatrix;
-
-uniform vec2 radiusStep;
-uniform vec2 distanceCutoff;
-uniform vec2 proximityCutoff;
-uniform float seed;
+uniform sampler2D aoBuffer;
 uniform float luminanceInfluence;
-uniform float scale;
-uniform float bias;
 
-vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const in float viewZ) {
+#ifdef DEPTH_AWARE_UPSAMPLING
 
-	float clipW = cameraProjectionMatrix[2][3] * viewZ + cameraProjectionMatrix[3][3];
-	vec4 clipPosition = vec4((vec3(screenPosition, depth) - 0.5) * 2.0, 1.0);
-	clipPosition *= clipW; // Unproject.
+	#ifdef GL_FRAGMENT_PRECISION_HIGH
 
-	return (cameraInverseProjectionMatrix * clipPosition).xyz;
-
-}
-
-float getOcclusion(const in vec3 p, const in vec3 n, const in vec3 sampleViewPosition) {
-
-	vec3 viewDelta = sampleViewPosition - p;
-	float d = length(viewDelta) * scale;
-
-	return max(0.0, dot(n, viewDelta) / d - bias) / (1.0 + pow2(d));
-
-}
-
-float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth, const in vec2 uv) {
-
-	vec2 radius = radiusStep;
-	float angle = rand(uv + seed) * PI2;
-	float occlusionSum = 0.0;
-
-	for(int i = 0; i < SAMPLES_INT; ++i) {
-
-		vec2 coord = uv + vec2(cos(angle), sin(angle)) * radius;
-		radius += radiusStep;
-		angle += ANGLE_STEP;
-
-		float sampleDepth = readDepth(coord);
-		float viewZ = getViewZ(sampleDepth);
-
-		#ifdef PERSPECTIVE_CAMERA
-
-			float linearSampleDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
-
-		#else
-
-			float linearSampleDepth = sampleDepth;
-
-		#endif
-
-		float proximity = abs(depth - linearSampleDepth);
-
-		if(linearSampleDepth < distanceCutoff.y && proximity < proximityCutoff.y) {
-
-			float falloff = 1.0 - smoothstep(proximityCutoff.x, proximityCutoff.y, proximity);
-			vec3 sampleViewPosition = getViewPosition(coord, sampleDepth, viewZ);
-			occlusionSum += getOcclusion(p, n, sampleViewPosition) * falloff;
-
-		}
-
-	}
-
-	return occlusionSum / SAMPLES_FLOAT;
-
-}
-
-void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
-
-	float ao = 1.0;
-	float viewZ = getViewZ(depth);
-
-	#ifdef PERSPECTIVE_CAMERA
-
-		float linearDepth = viewZToOrthographicDepth(viewZ, cameraNear, cameraFar);
+		uniform highp sampler2D normalDepthBuffer;
 
 	#else
 
-		float linearDepth = depth;
+		uniform mediump sampler2D normalDepthBuffer;
 
 	#endif
 
-	// Skip fragments of objects that are too far away.
-	if(linearDepth < distanceCutoff.y) {
+#endif
 
-		vec3 viewPosition = getViewPosition(uv, depth, viewZ);
-		vec3 viewNormal = unpackRGBToNormal(texture2D(normalBuffer, uv).xyz);
-		ao -= getAmbientOcclusion(viewPosition, viewNormal, linearDepth, uv);
+void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
-		// Fade AO based on luminance and depth.
-		float l = linearToRelativeLuminance(inputColor.rgb);
-		float d = smoothstep(distanceCutoff.x, distanceCutoff.y, linearDepth);
-		float f = max(l * luminanceInfluence, d);
-		ao = mix(ao, 1.0, f);
+	float aoLinear = texture2D(aoBuffer, uv).r;
 
-	}
+	#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300
+
+		// Gather normals and depth in a 2x2 neighborhood.
+		vec4[] normalDepth = vec4[](
+			textureOffset(normalDepthBuffer, uv, ivec2(0, 0)),
+			textureOffset(normalDepthBuffer, uv, ivec2(0, 1)),
+			textureOffset(normalDepthBuffer, uv, ivec2(1, 0)),
+			textureOffset(normalDepthBuffer, uv, ivec2(1, 1))
+		);
+
+		// Determine the smoothness of the surface around this fragment.
+		float dot01 = dot(normalDepth[0].rgb, normalDepth[1].rgb);
+		float dot02 = dot(normalDepth[0].rgb, normalDepth[2].rgb);
+		float dot03 = dot(normalDepth[0].rgb, normalDepth[3].rgb);
+
+		float minDot = min(dot01, min(dot02, dot03));
+		float s = step(THRESHOLD, minDot);
+
+		// Find the best AO based on depth.
+		float smallestDistance = 1.0;
+		int index;
+
+		for(int i = 0; i < 4; ++i) {
+
+			float distance = abs(depth - normalDepth[i].a);
+
+			if(distance < smallestDistance) {
+
+				smallestDistance = distance;
+				index = i;
+
+			}
+
+		}
+ 
+		// Fetch the exact AO texel that corresponds to the best depth.
+		ivec2[] offsets = ivec2[](
+			ivec2(0, 0), ivec2(0, 1),
+			ivec2(1, 0), ivec2(1, 1)
+		);
+
+		ivec2 coord = ivec2(uv * vec2(textureSize(aoBuffer, 0))) + offsets[index];
+		float aoNearest = texelFetch(aoBuffer, coord, 0).r;
+
+		// Smooth surfaces benefit more from linear filtering.
+		float ao = mix(aoNearest, aoLinear, s);
+
+	#else
+
+		float ao = aoLinear;
+
+	#endif
+
+	// Fade AO based on luminance.
+	float l = linearToRelativeLuminance(inputColor.rgb);
+	ao = mix(ao, 1.0, l * luminanceInfluence);
 
 	outputColor = vec4(vec3(ao), inputColor.a);
 

@@ -1,6 +1,6 @@
 import {
 	AmbientLight,
-	// AnimationMixer,
+	AnimationMixer,
 	BoxBufferGeometry,
 	Color,
 	CubeTextureLoader,
@@ -21,7 +21,7 @@ import { DeltaControls } from "delta-controls";
 import { ProgressManager } from "../utils/ProgressManager.js";
 import { PostProcessingDemo } from "./PostProcessingDemo.js";
 
-// import * as RiggedSimple from "./objects/RiggedSimple.js";
+import * as RiggedSimple from "./objects/RiggedSimple.js";
 
 import {
 	BlendFunction,
@@ -122,21 +122,17 @@ export class OutlineDemo extends PostProcessingDemo {
 		mouse.y = -(event.clientY / window.innerHeight) * 2.0 + 1.0;
 
 		raycaster.setFromCamera(mouse, this.camera);
-		const intersects = raycaster.intersectObjects(this.scene.children);
+		const intersects = raycaster.intersectObjects(this.scene.children, true);
 
 		this.selectedObject = null;
 
 		if(intersects.length > 0) {
 
-			const x = intersects[0];
+			const object = intersects[0].object;
 
-			if(x.object !== undefined) {
+			if(object !== undefined) {
 
-				this.selectedObject = x.object;
-
-			} else {
-
-				console.warn("Encountered an undefined object", intersects);
+				this.selectedObject = object;
 
 			}
 
@@ -181,11 +177,8 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		switch(event.type) {
 
-			case "mousemove":
-				this.raycast(event);
-				break;
-
 			case "mousedown":
+				this.raycast(event);
 				this.handleSelection();
 				break;
 
@@ -236,7 +229,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 				});
 
-				// RiggedSimple.load(assets, loadingManager);
+				RiggedSimple.load(assets, loadingManager);
 
 				smaaImageLoader.load(([search, area]) => {
 
@@ -346,8 +339,7 @@ export class OutlineDemo extends PostProcessingDemo {
 		scene.add(mesh);
 		meshes.push(mesh);
 
-		/*
-		const riggedSimple = assets.get("rigged-simple");
+		const riggedSimple = assets.get(RiggedSimple.tag);
 		const animationMixer = new AnimationMixer(riggedSimple.scene);
 		const action = animationMixer.clipAction(riggedSimple.animations[0]);
 		this.animationMixer = animationMixer;
@@ -358,12 +350,11 @@ export class OutlineDemo extends PostProcessingDemo {
 		scene.add(mesh);
 		meshes.push(mesh);
 		selection.push(mesh.children[0].children[0].children[1]);
-		*/
 
 		const step = 2.0 * Math.PI / meshes.length;
 		const radius = 3.0;
 
-		let angle = -0.8; // 0.4;
+		let angle = 0.4;
 
 		for(mesh of meshes) {
 
@@ -376,7 +367,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		// Raycaster.
 
 		this.raycaster = new Raycaster();
-		renderer.domElement.addEventListener("mousemove", this);
 		renderer.domElement.addEventListener("mousedown", this);
 
 		// Passes.
@@ -423,7 +413,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 	render(delta) {
 
-		// this.animationMixer.update(delta);
+		this.animationMixer.update(delta);
 		super.render(delta);
 
 	}
@@ -552,7 +542,6 @@ export class OutlineDemo extends PostProcessingDemo {
 		super.reset();
 
 		const dom = this.composer.getRenderer().domElement;
-		dom.removeEventListener("mousemove", this);
 		dom.removeEventListener("mousedown", this);
 
 		return this;

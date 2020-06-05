@@ -49,7 +49,9 @@ const settings = {
 const worker = {
 
 	input: "src/images/smaa/utils/worker.js",
-	plugins: production ? [resolve(), terser(), babel(settings.babel)] : [resolve()],
+	plugins: [resolve(), eslint(settings.eslint)].concat(
+		production ? [terser(), babel(settings.babel)] : []
+	),
 	output: {
 		file: "src/images/smaa/utils/worker.tmp",
 		format: "iife"

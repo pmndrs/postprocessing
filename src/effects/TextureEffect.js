@@ -1,4 +1,5 @@
 import { LinearEncoding, Matrix3, sRGBEncoding, Uniform } from "three";
+import { ColorChannel } from "../core";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { Effect } from "./Effect.js";
 
@@ -25,6 +26,10 @@ export class TextureEffect extends Effect {
 		super("TextureEffect", fragmentShader, {
 
 			blendFunction,
+
+			defines: new Map([
+				["TEXEL", "texel"]
+			]),
 
 			uniforms: new Map([
 				["texture", new Uniform(null)]
@@ -74,7 +79,7 @@ export class TextureEffect extends Effect {
 
 			} else {
 
-				console.log("unsupported encoding: " + value.encoding);
+				console.log("Unsupported encoding: " + value.encoding);
 
 			}
 
@@ -174,6 +179,35 @@ export class TextureEffect extends Effect {
 			this.vertexShader = null;
 
 		}
+
+	}
+
+	/**
+	 * Sets the swizzles that will be applied to the `r`, `g`, `b`, and `a`
+	 * components of a texel before it is written to the output color.
+	 *
+	 * You'll need to call {@link EffectPass#recompile} after changing the
+	 * texture swizzles.
+	 *
+	 * @param {ColorChannel} r - The swizzle for the `r` component.
+	 * @param {ColorChannel} [g=r] - The swizzle for the `g` component.
+	 * @param {ColorChannel} [b=r] - The swizzle for the `b` component.
+	 * @param {ColorChannel} [a=r] - The swizzle for the `a` component.
+	 */
+
+	setTextureSwizzleRGBA(r, g = r, b = r, a = r) {
+
+		const rgba = "rgba";
+		let swizzle = "";
+
+		if(r !== ColorChannel.RED || g !== ColorChannel.GREEN ||
+			b !== ColorChannel.BLUE || a !== ColorChannel.ALPHA) {
+
+			swizzle = [".", rgba[r], rgba[g], rgba[b], rgba[a]].join("");
+
+		}
+
+		this.defines.set("TEXEL", "texel" + swizzle);
 
 	}
 
