@@ -1,8 +1,9 @@
 export {
 	ColorChannel,
 	Disposable,
-	Initializable,
 	EffectComposer,
+	Initializable,
+	OverrideMaterialManager,
 	Resizable,
 	Resizer,
 	Selection

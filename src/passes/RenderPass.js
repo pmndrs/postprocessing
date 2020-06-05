@@ -1,3 +1,4 @@
+import { OverrideMaterialManager } from "../core/OverrideMaterialManager.js";
 import { ClearPass } from "./ClearPass.js";
 import { Pass } from "./Pass.js";
 
@@ -14,7 +15,7 @@ export class RenderPass extends Pass {
 	 *
 	 * @param {Scene} scene - The scene to render.
 	 * @param {Camera} camera - The camera to use to render the scene.
-	 * @param {Material} [overrideMaterial=null] - An override material for the scene.
+	 * @param {Material} [overrideMaterial=null] - An override material.
 	 */
 
 	constructor(scene, camera, overrideMaterial = null) {
@@ -22,14 +23,6 @@ export class RenderPass extends Pass {
 		super("RenderPass", scene, camera);
 
 		this.needsSwap = false;
-
-		/**
-		 * An override material.
-		 *
-		 * @type {Material}
-		 */
-
-		this.overrideMaterial = overrideMaterial;
 
 		/**
 		 * A clear pass.
@@ -48,6 +41,82 @@ export class RenderPass extends Pass {
 		 */
 
 		this.depthTexture = null;
+
+		/**
+		 * An override material manager.
+		 *
+		 * @type {OverrideMaterialManager}
+		 * @private
+		 */
+
+		this.overrideMaterialManager = (overrideMaterial === null) ? null :
+			new OverrideMaterialManager(overrideMaterial);
+
+	}
+
+	/**
+	 * Indicates whether this pass should render to screen.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get renderToScreen() {
+
+		return super.renderToScreen;
+
+	}
+
+	/**
+	 * Sets the render to screen flag.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set renderToScreen(value) {
+
+		super.renderToScreen = value;
+		this.clearPass.renderToScreen = value;
+
+	}
+
+	/**
+	 * The current override material.
+	 *
+	 * @type {Material}
+	 */
+
+	get overrideMaterial() {
+
+		const manager = this.overrideMaterialManager;
+
+		return (manager !== null) ? manager.material : null;
+
+	}
+
+	/**
+	 * Sets the override material.
+	 *
+	 * @type {Material}
+	 */
+
+	set overrideMaterial(value) {
+
+		const manager = this.overrideMaterialManager;
+
+		if(value !== null && manager !== null) {
+
+			manager.setMaterial(value);
+
+		} else if(value === null) {
+
+			manager.dispose();
+			this.overrideMaterialManager = null;
+
+		} else {
+
+			this.overrideMaterialManager = new OverrideMaterialManager(value);
+
+		}
 
 	}
 
@@ -128,9 +197,8 @@ export class RenderPass extends Pass {
 	render(renderer, inputBuffer, outputBuffer, deltaTime, stencilTest) {
 
 		const scene = this.scene;
+		const camera = this.camera;
 		const renderTarget = this.renderToScreen ? null : inputBuffer;
-		const shadowMapEnabled = renderer.shadowMap.enabled;
-		const overrideMaterial = scene.overrideMaterial;
 
 		if(this.depthTexture !== null && !this.renderToScreen) {
 
@@ -141,24 +209,21 @@ export class RenderPass extends Pass {
 
 		if(this.clear) {
 
-			this.clearPass.renderToScreen = this.renderToScreen;
 			this.clearPass.render(renderer, inputBuffer);
 
 		}
 
-		if(this.overrideMaterial !== null) {
+		renderer.setRenderTarget(renderTarget);
 
-			renderer.shadowMap.enabled = false;
+		if(this.overrideMaterialManager !== null) {
+
+			this.overrideMaterialManager.render(renderer, scene, camera);
+
+		} else {
+
+			renderer.render(scene, camera);
 
 		}
-
-		scene.overrideMaterial = this.overrideMaterial;
-
-		renderer.setRenderTarget(renderTarget);
-		renderer.render(scene, this.camera);
-
-		renderer.shadowMap.enabled = shadowMapEnabled;
-		scene.overrideMaterial = overrideMaterial;
 
 	}
 
