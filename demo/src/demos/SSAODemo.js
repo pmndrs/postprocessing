@@ -273,7 +273,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		function toggleRenderMode() {
 
-			const mode = Number.parseInt(params["render mode"]);
+			const mode = Number(params["render mode"]);
 
 			textureEffect.blendMode.blendFunction = (mode !== RenderMode.DEFAULT) ?
 				BlendFunction.NORMAL : BlendFunction.SKIP;
@@ -395,7 +395,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			effectPass.recompile();
 
 		});

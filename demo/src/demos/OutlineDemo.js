@@ -450,7 +450,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
 
-			effect.resolution.height = Number.parseInt(params.resolution);
+			effect.resolution.height = Number(params.resolution);
 
 		});
 
@@ -524,7 +524,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			pass.recompile();
 
 		});
