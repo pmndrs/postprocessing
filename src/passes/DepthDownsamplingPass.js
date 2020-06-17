@@ -18,7 +18,7 @@ export class DepthDownsamplingPass extends Pass {
 	 * Constructs a new depth downsampling pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
+	 * @param {Texture} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
