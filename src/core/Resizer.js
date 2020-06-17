@@ -41,7 +41,7 @@ export class Resizer {
 		 * The base size.
 		 *
 		 * This size will be passed to the resizable object every time the target
-		 * width or height is changed.
+		 * width, height or scale is changed.
 		 *
 		 * @type {Vector2}
 		 */
@@ -64,10 +64,41 @@ export class Resizer {
 		 * they will be scaled uniformly using this scalar.
 		 *
 		 * @type {Number}
-		 * @deprecated Added for internal use only.
+		 * @private
 		 */
 
-		this.scale = 1.0;
+		this.s = 1.0;
+
+	}
+
+	/**
+	 * The current resolution scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.s;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * Also sets the width and height to {@link Resizer.AUTO_SIZE}.
+	 *
+	 * @type {Number}
+	 */
+
+	set scale(value) {
+
+		this.s = value;
+
+		this.target.x = AUTO_SIZE;
+		this.target.y = AUTO_SIZE;
+
+		this.resizable.setSize(this.base.x, this.base.y);
 
 	}
 
@@ -97,7 +128,7 @@ export class Resizer {
 
 		} else {
 
-			result = Math.round(base.x * this.scale);
+			result = Math.round(base.x * this.s);
 
 		}
 
@@ -147,7 +178,7 @@ export class Resizer {
 
 		} else {
 
-			result = Math.round(base.y * this.scale);
+			result = Math.round(base.y * this.s);
 
 		}
 
