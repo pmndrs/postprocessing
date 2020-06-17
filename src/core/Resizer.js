@@ -25,9 +25,10 @@ export class Resizer {
 	 * @param {Resizable} resizeable - A resizable object.
 	 * @param {Number} [width=Resizer.AUTO_SIZE] - The width.
 	 * @param {Number} [height=Resizer.AUTO_SIZE] - The height.
+	 * @param {Number} [scale=1.0] - An alternative resolution scale.
 	 */
 
-	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE) {
+	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE, scale = 1.0) {
 
 		/**
 		 * A resizable object.
@@ -67,7 +68,7 @@ export class Resizer {
 		 * @private
 		 */
 
-		this.s = 1.0;
+		this.s = scale;
 
 	}
 
