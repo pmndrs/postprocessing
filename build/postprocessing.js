@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.14.0 build Fri Jun 05 2020
+ * postprocessing v6.14.1 build Wed Jun 17 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -741,7 +741,7 @@
     return DepthComparisonMaterial;
   }(three.ShaderMaterial);
 
-  var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float[]distances=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}while(j<3){remaining[j++]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float[]d=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2[]uvs=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
+  var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float distances[4]=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}for(;j<3;++j){remaining[j]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float d[4]=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2 uvs[4]=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
   var vertexShader$4 = "uniform vec2 texelSize;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vUv0=uv;vUv1=vec2(uv.x,uv.y+texelSize.y);vUv2=vec2(uv.x+texelSize.x,uv.y);vUv3=uv+texelSize;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var DepthDownsamplingMaterial = function (_ShaderMaterial8) {
@@ -1568,16 +1568,28 @@
     function Resizer(resizable) {
       var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : AUTO_SIZE;
       var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : AUTO_SIZE;
+      var scale = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1.0;
 
       _classCallCheck(this, Resizer);
 
       this.resizable = resizable;
       this.base = new three.Vector2(1, 1);
       this.target = new three.Vector2(width, height);
-      this.scale = 1.0;
+      this.s = scale;
     }
 
     _createClass(Resizer, [{
+      key: "scale",
+      get: function get() {
+        return this.s;
+      },
+      set: function set(value) {
+        this.s = value;
+        this.target.x = AUTO_SIZE;
+        this.target.y = AUTO_SIZE;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }, {
       key: "width",
       get: function get() {
         var base = this.base;
@@ -1589,7 +1601,7 @@
         } else if (target.y !== AUTO_SIZE) {
           result = Math.round(target.y * (base.x / base.y));
         } else {
-          result = Math.round(base.x * this.scale);
+          result = Math.round(base.x * this.s);
         }
 
         return result;
@@ -1610,7 +1622,7 @@
         } else if (target.x !== AUTO_SIZE) {
           result = Math.round(target.x / (base.x / base.y));
         } else {
-          result = Math.round(base.y * this.scale);
+          result = Math.round(base.y * this.s);
         }
 
         return result;
@@ -1780,8 +1792,7 @@
       _this18.renderTargetA.texture.name = "Blur.Target.A";
       _this18.renderTargetB = _this18.renderTargetA.clone();
       _this18.renderTargetB.texture.name = "Blur.Target.B";
-      _this18.resolution = new Resizer(_assertThisInitialized(_this18), width, height);
-      _this18.resolution.scale = resolutionScale;
+      _this18.resolution = new Resizer(_assertThisInitialized(_this18), width, height, resolutionScale);
       _this18.convolutionMaterial = new ConvolutionMaterial();
       _this18.ditheredConvolutionMaterial = new ConvolutionMaterial();
       _this18.ditheredConvolutionMaterial.dithering = true;
@@ -1799,7 +1810,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "render",
@@ -2247,8 +2257,7 @@
         _this22.renderTarget.texture.name = "DepthPass.Target";
       }
 
-      _this22.resolution = new Resizer(_assertThisInitialized(_this22), width, height);
-      _this22.resolution.scale = resolutionScale;
+      _this22.resolution = new Resizer(_assertThisInitialized(_this22), width, height, resolutionScale);
       return _this22;
     }
 
@@ -3057,8 +3066,7 @@
         _this26.renderTarget.texture.name = "NormalPass.Target";
       }
 
-      _this26.resolution = new Resizer(_assertThisInitialized(_this26), width, height);
-      _this26.resolution.scale = resolutionScale;
+      _this26.resolution = new Resizer(_assertThisInitialized(_this26), width, height, resolutionScale);
       return _this26;
     }
 
@@ -3807,7 +3815,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "update",
@@ -4411,7 +4418,7 @@
     var _super40 = _createSuper(NoiseTexture);
 
     function NoiseTexture(width, height) {
-      var format = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : three.RedFormat;
+      var format = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : three.LuminanceFormat;
       var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : three.UnsignedByteType;
 
       _classCallCheck(this, NoiseTexture);
@@ -5454,7 +5461,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setDepthTexture",
@@ -5890,7 +5896,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setSelection",
@@ -6676,7 +6681,7 @@
     HIGH: 2,
     ULTRA: 3
   };
-  var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4[]normalDepth=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2[]offsets=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
+  var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
 
   var SSAOEffect = function (_Effect23) {
     _inherits(SSAOEffect, _Effect23);
@@ -6713,6 +6718,8 @@
           intensity = _ref26$intensity === void 0 ? 1.0 : _ref26$intensity,
           _ref26$bias = _ref26.bias,
           bias = _ref26$bias === void 0 ? 0.025 : _ref26$bias,
+          _ref26$resolutionScal = _ref26.resolutionScale,
+          resolutionScale = _ref26$resolutionScal === void 0 ? 1.0 : _ref26$resolutionScal,
           _ref26$width = _ref26.width,
           width = _ref26$width === void 0 ? Resizer.AUTO_SIZE : _ref26$width,
           _ref26$height = _ref26.height,
@@ -6735,7 +6742,7 @@
       _this49.renderTargetAO.texture.name = "AO.Target";
       _this49.renderTargetAO.texture.generateMipmaps = false;
       _this49.uniforms.get("aoBuffer").value = _this49.renderTargetAO.texture;
-      _this49.resolution = new Resizer(_assertThisInitialized(_this49), width, height);
+      _this49.resolution = new Resizer(_assertThisInitialized(_this49), width, height, resolutionScale);
       _this49.r = 1.0;
       _this49.camera = camera;
       _this49.ssaoPass = new ShaderPass(function () {

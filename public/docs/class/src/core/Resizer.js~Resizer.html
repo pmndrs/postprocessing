@@ -212,7 +212,7 @@ retrieved via <span><a href="class/src/core/Resizer.js~Resizer.html#instance-get
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-constructor-constructor">constructor</a></span></span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, scale: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -354,7 +354,7 @@ retrieved via <span><a href="class/src/core/Resizer.js~Resizer.html#instance-get
     <td>
       <span class="access" data-ice="access">public</span>
       
-      
+      <span class="kind" data-ice="kind">get</span>
       
       <span class="override" data-ice="override"></span>
     </td>
@@ -364,13 +364,42 @@ retrieved via <span><a href="class/src/core/Resizer.js~Resizer.html#instance-get
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-member-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-get-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
       <div>
-        <div class="deprecated" data-ice="deprecated">this member was deprecated. Added for internal use only.</div>
         
-        <div data-ice="description"><p>A scale.</p>
+        
+        <div data-ice="description"><p>The current resolution scale.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/core/Resizer.js~Resizer.html#instance-set-scale">scale</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the resolution scale.</p>
 </div>
       </div>
     </td>
@@ -458,7 +487,7 @@ retrieved via <span><a href="class/src/core/Resizer.js~Resizer.html#instance-get
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber183">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber215">source</a></span></span>
     </span>
   </h3>
 
@@ -504,11 +533,11 @@ original aspect ratio.</p>
     
     
     
-    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
+    <span class="code" data-ice="name">constructor</span><span class="code" data-ice="signature">(resizeable: <span><a href="class/src/core/Resizable.js~Resizable.html">Resizable</a></span>, width: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, height: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>, scale: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber30">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber31">source</a></span></span>
     </span>
   </h3>
 
@@ -551,6 +580,14 @@ original aspect ratio.</p>
       <td data-ice="description"><p>The height.</p>
 </td>
     </tr>
+<tr data-ice="property" data-depth="0">
+      <td data-ice="name" class="code" data-depth="0">scale</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 1.0</li></ul></td>
+      <td data-ice="description"><p>An alternative resolution scale.</p>
+</td>
+    </tr>
 </tbody>
   </table>
 </div>
@@ -588,7 +625,7 @@ original aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber50">source</a></span></span>
     </span>
   </h3>
 
@@ -597,7 +634,7 @@ original aspect ratio.</p>
   
   <div data-ice="description"><p>The base size.</p>
 <p>This size will be passed to the resizable object every time the target
-width or height is changed.</p>
+width, height or scale is changed.</p>
 </div>
 
   
@@ -634,7 +671,7 @@ width or height is changed.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber133">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber165">source</a></span></span>
     </span>
   </h3>
 
@@ -680,7 +717,7 @@ base height will be returned.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber167">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber199">source</a></span></span>
     </span>
   </h3>
 
@@ -726,7 +763,7 @@ on the width and the original aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber38">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber39">source</a></span></span>
     </span>
   </h3>
 
@@ -759,10 +796,10 @@ on the width and the original aspect ratio.</p>
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-scale">
+  <h3 data-ice="anchor" id="instance-get-scale">
     <span class="access" data-ice="access">public</span>
     
-    
+    <span class="kind" data-ice="kind">get</span>
     
     
     
@@ -770,16 +807,59 @@ on the width and the original aspect ratio.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber70">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber81">source</a></span></span>
     </span>
   </h3>
 
   
-  <div class="deprecated" data-ice="deprecated">this member was deprecated. Added for internal use only.</div>
   
-  <div data-ice="description"><p>A scale.</p>
-<p>If both the width and the height are set to <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span>,
-they will be scaled uniformly using this scalar.</p>
+  
+  <div data-ice="description"><p>The current resolution scale.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-scale">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">scale</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber95">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the resolution scale.</p>
+<p>Also sets the width and height to <span><a href="class/src/core/Resizer.js~Resizer.html#static-get-AUTO_SIZE">Resizer.AUTO_SIZE</a></span>.</p>
 </div>
 
   
@@ -816,7 +896,7 @@ they will be scaled uniformly using this scalar.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber83">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber115">source</a></span></span>
     </span>
   </h3>
 
@@ -862,7 +942,7 @@ base width will be returned.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber117">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/Resizer.js.html#lineNumber149">source</a></span></span>
     </span>
   </h3>
 

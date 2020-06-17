@@ -967,7 +967,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/core/resizer.js~resizer#scale",
-    "class/src/core/Resizer.js~Resizer.html#instance-member-scale",
+    "class/src/core/Resizer.js~Resizer.html#instance-get-scale",
+    "src/core/Resizer.js~Resizer#scale",
+    "member"
+  ],
+  [
+    "src/core/resizer.js~resizer#scale",
+    "class/src/core/Resizer.js~Resizer.html#instance-set-scale",
     "src/core/Resizer.js~Resizer#scale",
     "member"
   ],

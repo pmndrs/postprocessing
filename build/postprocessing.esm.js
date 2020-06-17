@@ -1,10 +1,10 @@
 /**
- * postprocessing v6.14.0 build Fri Jun 05 2020
+ * postprocessing v6.14.1 build Wed Jun 17 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
  */
-import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, RedFormat, LuminanceFormat, RGFormat, Loader, LoadingManager, RepeatWrapping, Vector3, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter } from 'three';
+import { ShaderMaterial, Uniform, Vector2 as Vector2$1, PerspectiveCamera, Matrix4, Camera, Scene, Mesh, BufferGeometry, BufferAttribute, WebGLRenderTarget, LinearFilter, UnsignedByteType, RGBFormat, Color, MeshDepthMaterial, RGBADepthPacking, NearestFilter, FloatType, MeshNormalMaterial, WebGLMultisampleRenderTarget, DepthTexture, DepthStencilFormat, UnsignedInt248Type, UnsignedIntType, RGBAFormat, DataTexture, LuminanceFormat, RedFormat, RGFormat, Loader, LoadingManager, RepeatWrapping, Vector3, Vector4, MeshBasicMaterial, Texture, sRGBEncoding, LinearEncoding, Matrix3, LinearMipmapLinearFilter, LinearMipMapLinearFilter } from 'three';
 
 /**
  * A color channel enumeration.
@@ -643,7 +643,7 @@ class DepthComparisonMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float[]distances=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}while(j<3){remaining[j++]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float[]d=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2[]uvs=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
+var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float distances[4]=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}for(;j<3;++j){remaining[j]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float d[4]=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2 uvs[4]=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
 
 var vertexShader$4 = "uniform vec2 texelSize;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vUv0=uv;vUv1=vec2(uv.x,uv.y+texelSize.y);vUv2=vec2(uv.x+texelSize.x,uv.y);vUv3=uv+texelSize;gl_Position=vec4(position.xy,1.0,1.0);}";
 
@@ -2141,9 +2141,10 @@ class Resizer {
 	 * @param {Resizable} resizeable - A resizable object.
 	 * @param {Number} [width=Resizer.AUTO_SIZE] - The width.
 	 * @param {Number} [height=Resizer.AUTO_SIZE] - The height.
+	 * @param {Number} [scale=1.0] - An alternative resolution scale.
 	 */
 
-	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE) {
+	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE, scale = 1.0) {
 
 		/**
 		 * A resizable object.
@@ -2157,7 +2158,7 @@ class Resizer {
 		 * The base size.
 		 *
 		 * This size will be passed to the resizable object every time the target
-		 * width or height is changed.
+		 * width, height or scale is changed.
 		 *
 		 * @type {Vector2}
 		 */
@@ -2180,10 +2181,41 @@ class Resizer {
 		 * they will be scaled uniformly using this scalar.
 		 *
 		 * @type {Number}
-		 * @deprecated Added for internal use only.
+		 * @private
 		 */
 
-		this.scale = 1.0;
+		this.s = scale;
+
+	}
+
+	/**
+	 * The current resolution scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.s;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * Also sets the width and height to {@link Resizer.AUTO_SIZE}.
+	 *
+	 * @type {Number}
+	 */
+
+	set scale(value) {
+
+		this.s = value;
+
+		this.target.x = AUTO_SIZE;
+		this.target.y = AUTO_SIZE;
+
+		this.resizable.setSize(this.base.x, this.base.y);
 
 	}
 
@@ -2213,7 +2245,7 @@ class Resizer {
 
 		} else {
 
-			result = Math.round(base.x * this.scale);
+			result = Math.round(base.x * this.s);
 
 		}
 
@@ -2263,7 +2295,7 @@ class Resizer {
 
 		} else {
 
-			result = Math.round(base.y * this.scale);
+			result = Math.round(base.y * this.s);
 
 		}
 
@@ -2726,19 +2758,15 @@ class BlurPass extends Pass {
 		this.renderTargetB.texture.name = "Blur.Target.B";
 
 		/**
-		 * The desired render resolution.
+		 * The render resolution.
 		 *
 		 * It's recommended to set the height or the width to an absolute value for
 		 * consistent results across different devices and resolutions.
 		 *
-		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
-		 * calculate it based on its counterpart and the original aspect ratio.
-		 *
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 		/**
 		 * A convolution shader material.
@@ -2907,7 +2935,6 @@ class BlurPass extends Pass {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -3736,8 +3763,7 @@ class DepthPass extends Pass {
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 	}
 
@@ -3820,7 +3846,7 @@ class DepthPass extends Pass {
  * depth in 2x2 texel neighborhoods. If a normal buffer is provided, the
  * corresponding normals will be stored as well.
  *
- * Attention: This pass requires support for floating-point textures.
+ * Attention: This pass requires WebGL 2.
  */
 
 class DepthDownsamplingPass extends Pass {
@@ -3829,7 +3855,7 @@ class DepthDownsamplingPass extends Pass {
 	 * Constructs a new depth downsampling pass.
 	 *
 	 * @param {Object} [options] - The options.
-	 * @param {Number} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
+	 * @param {Texture} [options.normalBuffer=null] - A texture that contains view space normals. See {@link NormalPass}.
 	 * @param {Number} [options.resolutionScale=0.5] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -5248,8 +5274,7 @@ class NormalPass extends Pass {
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 	}
 
@@ -6696,7 +6721,6 @@ class BloomEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -7683,16 +7707,17 @@ class NoiseTexture extends DataTexture {
 	/**
 	 * Constructs a new noise texture.
 	 *
-	 * The texture format can be either `LuminanceFormat`, `RedFormat`,
-	 * `RGFormat` (requires WebGL 2), `RGBFormat` or `RGBAFormat`.
+	 * The texture format can be either `LuminanceFormat`, `RGBFormat` or
+	 * `RGBAFormat`. Additionally, the formats `RedFormat` and `RGFormat` can be
+	 * used in a WebGL 2 context.
 	 *
 	 * @param {Number} width - The width.
 	 * @param {Number} height - The height.
-	 * @param {Number} [format=RedFormat] - The texture format.
+	 * @param {Number} [format=LuminanceFormat] - The texture format.
 	 * @param {Number} [type=UnsignedByteType] - The texture type.
 	 */
 
-	constructor(width, height, format = RedFormat, type = UnsignedByteType) {
+	constructor(width, height, format = LuminanceFormat, type = UnsignedByteType) {
 
 		super(getNoise(width * height, format, type), width, height, format, type);
 
@@ -10259,7 +10284,6 @@ class GodRaysEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -11154,7 +11178,6 @@ class OutlineEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
@@ -12625,7 +12648,7 @@ const SMAAPreset = {
 
 };
 
-var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4[]normalDepth=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2[]offsets=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
+var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
 
 /**
  * A Screen Space Ambient Occlusion (SSAO) effect.
@@ -12634,8 +12657,13 @@ var fragmentShader$A = "uniform sampler2D aoBuffer;uniform float luminanceInflue
  * different radii, one for rough AO and one for fine details.
  *
  * This effect supports depth-aware upsampling and should be rendered at a lower
- * resolution. If you intend to render SSAO at full resolution, do not provide a
- * downsampled normalDepthBuffer and make sure to disable depthAwareUpsampling.
+ * resolution. The resolution should match that of the downsampled normals and
+ * depth. If you intend to render SSAO at full resolution, do not provide a
+ * downsampled `normalDepthBuffer` and make sure to disable
+ * `depthAwareUpsampling`.
+ *
+ * It's recommended to specify a relative render resolution using the
+ * `resolutionScale` constructor parameter to avoid undesired sampling patterns.
  *
  * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and
  * "Depth-aware upsampling experiments" by Eleni Maria Stea:
@@ -12665,6 +12693,7 @@ class SSAOEffect extends Effect {
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 */
@@ -12683,6 +12712,7 @@ class SSAOEffect extends Effect {
 		radius = 0.1825,
 		intensity = 1.0,
 		bias = 0.025,
+		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
 	} = {}) {
@@ -12726,7 +12756,7 @@ class SSAOEffect extends Effect {
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 		/**
 		 * The current radius relative to the render height.
