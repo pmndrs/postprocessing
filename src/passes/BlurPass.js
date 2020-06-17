@@ -55,19 +55,15 @@ export class BlurPass extends Pass {
 		this.renderTargetB.texture.name = "Blur.Target.B";
 
 		/**
-		 * The desired render resolution.
+		 * The render resolution.
 		 *
 		 * It's recommended to set the height or the width to an absolute value for
 		 * consistent results across different devices and resolutions.
 		 *
-		 * Use {@link Resizer.AUTO_SIZE} for the width or height to automatically
-		 * calculate it based on its counterpart and the original aspect ratio.
-		 *
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 		/**
 		 * A convolution shader material.
@@ -236,7 +232,6 @@ export class BlurPass extends Pass {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 
