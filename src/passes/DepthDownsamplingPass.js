@@ -9,7 +9,7 @@ import { Pass } from "./Pass.js";
  * depth in 2x2 texel neighborhoods. If a normal buffer is provided, the
  * corresponding normals will be stored as well.
  *
- * Attention: This pass requires support for floating-point textures.
+ * Attention: This pass requires WebGL 2.
  */
 
 export class DepthDownsamplingPass extends Pass {
