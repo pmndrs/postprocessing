@@ -22,8 +22,13 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * different radii, one for rough AO and one for fine details.
  *
  * This effect supports depth-aware upsampling and should be rendered at a lower
- * resolution. If you intend to render SSAO at full resolution, do not provide a
- * downsampled normalDepthBuffer and make sure to disable depthAwareUpsampling.
+ * resolution. The resolution should match that of the downsampled normals and
+ * depth. If you intend to render SSAO at full resolution, do not provide a
+ * downsampled `normalDepthBuffer` and make sure to disable
+ * `depthAwareUpsampling`.
+ *
+ * It's recommended to specify a relative render resolution using the
+ * `resolutionScale` constructor parameter to avoid undesired sampling patterns.
  *
  * Based on "Scalable Ambient Obscurance" by Morgan McGuire et al. and
  * "Depth-aware upsampling experiments" by Eleni Maria Stea:
@@ -53,6 +58,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
 	 */
@@ -71,6 +77,7 @@ export class SSAOEffect extends Effect {
 		radius = 0.1825,
 		intensity = 1.0,
 		bias = 0.025,
+		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
 	} = {}) {
@@ -114,7 +121,7 @@ export class SSAOEffect extends Effect {
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 		/**
 		 * The current radius relative to the render height.

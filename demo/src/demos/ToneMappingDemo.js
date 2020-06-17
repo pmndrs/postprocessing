@@ -188,7 +188,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		menu.add(params, "resolution", [64, 128, 256, 512, 1024]).onChange(() => {
 
-			effect.resolution = Number.parseInt(params.resolution);
+			effect.resolution = Number(params.resolution);
 
 		});
 
@@ -234,7 +234,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			pass.recompile();
 
 		});

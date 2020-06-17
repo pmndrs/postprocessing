@@ -255,7 +255,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(() => {
 
-			dotScreenEffect.blendMode.blendFunction = Number.parseInt(params.dotScreen["blend mode"]);
+			dotScreenEffect.blendMode.blendFunction = Number(params.dotScreen["blend mode"]);
 			pass.recompile();
 
 		});
@@ -284,7 +284,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.grid, "blend mode", BlendFunction).onChange(() => {
 
-			gridEffect.blendMode.blendFunction = Number.parseInt(params.grid["blend mode"]);
+			gridEffect.blendMode.blendFunction = Number(params.grid["blend mode"]);
 			pass.recompile();
 
 		});
@@ -307,7 +307,7 @@ export class PatternDemo extends PostProcessingDemo {
 
 		folder.add(params.scanline, "blend mode", BlendFunction).onChange(() => {
 
-			scanlineEffect.blendMode.blendFunction = Number.parseInt(params.scanline["blend mode"]);
+			scanlineEffect.blendMode.blendFunction = Number(params.scanline["blend mode"]);
 			pass.recompile();
 
 		});

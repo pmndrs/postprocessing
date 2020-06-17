@@ -270,7 +270,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		function toggleRenderMode() {
 
-			const mode = Number.parseInt(params["render mode"]);
+			const mode = Number(params["render mode"]);
 
 			depthEffect.blendMode.blendFunction = (mode === RenderMode.DEPTH) ? BlendFunction.NORMAL : BlendFunction.SKIP;
 			cocTextureEffect.blendMode.blendFunction = (mode === RenderMode.COC) ? BlendFunction.NORMAL : BlendFunction.SKIP;
@@ -350,7 +350,7 @@ export class DepthOfFieldDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			effectPass.recompile();
 
 		});

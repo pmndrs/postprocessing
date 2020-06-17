@@ -34946,7 +34946,7 @@
     return DepthComparisonMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float[]distances=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}while(j<3){remaining[j++]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float[]d=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2[]uvs=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
+  var fragmentShader$6 = "#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D depthBuffer;\n#else\nuniform mediump sampler2D depthBuffer;\n#endif\n#ifdef DOWNSAMPLE_NORMALS\nuniform sampler2D normalBuffer;\n#endif\nvarying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(depthBuffer,uv));\n#else\nreturn texture2D(depthBuffer,uv).r;\n#endif\n}/***Returns the index of the most representative depth in the 2x2 neighborhood.*/int findBestDepth(const in float samples[4]){float c=(samples[0]+samples[1]+samples[2]+samples[3])/4.0;float distances[4]=float[](abs(c-samples[0]),abs(c-samples[1]),abs(c-samples[2]),abs(c-samples[3]));float maxDistance=max(max(distances[0],distances[1]),max(distances[2],distances[3]));int remaining[3];int rejected[3];int i,j,k;for(i=0,j=0,k=0;i<4;++i){if(distances[i]<maxDistance){remaining[j++]=i;}else{rejected[k++]=i;}}for(;j<3;++j){remaining[j]=rejected[--k];}vec3 s=vec3(samples[remaining[0]],samples[remaining[1]],samples[remaining[2]]);c=(s.x+s.y+s.z)/3.0;distances[0]=abs(c-s.x);distances[1]=abs(c-s.y);distances[2]=abs(c-s.z);float minDistance=min(distances[0],min(distances[1],distances[2]));for(i=0;i<3;++i){if(distances[i]==minDistance){break;}}return remaining[i];}void main(){float d[4]=float[](readDepth(vUv0),readDepth(vUv1),readDepth(vUv2),readDepth(vUv3));int index=findBestDepth(d);\n#ifdef DOWNSAMPLE_NORMALS\nvec2 uvs[4]=vec2[](vUv0,vUv1,vUv2,vUv3);vec3 n=texture2D(normalBuffer,uvs[index]).rgb;\n#else\nvec3 n=vec3(0.0);\n#endif\ngl_FragColor=vec4(n,d[index]);}";
   var vertexShader$4 = "uniform vec2 texelSize;varying vec2 vUv0;varying vec2 vUv1;varying vec2 vUv2;varying vec2 vUv3;void main(){vec2 uv=position.xy*0.5+0.5;vUv0=uv;vUv1=vec2(uv.x,uv.y+texelSize.y);vUv2=vec2(uv.x+texelSize.x,uv.y);vUv3=uv+texelSize;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var DepthDownsamplingMaterial = function (_ShaderMaterial7) {
@@ -35772,16 +35772,28 @@
     function Resizer(resizable) {
       var width = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : AUTO_SIZE;
       var height = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : AUTO_SIZE;
+      var scale = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1.0;
 
       _classCallCheck(this, Resizer);
 
       this.resizable = resizable;
       this.base = new Vector2(1, 1);
       this.target = new Vector2(width, height);
-      this.scale = 1.0;
+      this.s = scale;
     }
 
     _createClass(Resizer, [{
+      key: "scale",
+      get: function get() {
+        return this.s;
+      },
+      set: function set(value) {
+        this.s = value;
+        this.target.x = AUTO_SIZE;
+        this.target.y = AUTO_SIZE;
+        this.resizable.setSize(this.base.x, this.base.y);
+      }
+    }, {
       key: "width",
       get: function get() {
         var base = this.base;
@@ -35793,7 +35805,7 @@
         } else if (target.y !== AUTO_SIZE) {
           result = Math.round(target.y * (base.x / base.y));
         } else {
-          result = Math.round(base.x * this.scale);
+          result = Math.round(base.x * this.s);
         }
 
         return result;
@@ -35814,7 +35826,7 @@
         } else if (target.x !== AUTO_SIZE) {
           result = Math.round(target.x / (base.x / base.y));
         } else {
-          result = Math.round(base.y * this.scale);
+          result = Math.round(base.y * this.s);
         }
 
         return result;
@@ -35986,8 +35998,7 @@
       _this25.renderTargetA.texture.name = "Blur.Target.A";
       _this25.renderTargetB = _this25.renderTargetA.clone();
       _this25.renderTargetB.texture.name = "Blur.Target.B";
-      _this25.resolution = new Resizer(_assertThisInitialized(_this25), width, height);
-      _this25.resolution.scale = resolutionScale;
+      _this25.resolution = new Resizer(_assertThisInitialized(_this25), width, height, resolutionScale);
       _this25.convolutionMaterial = new ConvolutionMaterial();
       _this25.ditheredConvolutionMaterial = new ConvolutionMaterial();
       _this25.ditheredConvolutionMaterial.dithering = true;
@@ -36005,7 +36016,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "render",
@@ -36453,8 +36463,7 @@
         _this29.renderTarget.texture.name = "DepthPass.Target";
       }
 
-      _this29.resolution = new Resizer(_assertThisInitialized(_this29), width, height);
-      _this29.resolution.scale = resolutionScale;
+      _this29.resolution = new Resizer(_assertThisInitialized(_this29), width, height, resolutionScale);
       return _this29;
     }
 
@@ -37257,8 +37266,7 @@
         _this33.renderTarget.texture.name = "NormalPass.Target";
       }
 
-      _this33.resolution = new Resizer(_assertThisInitialized(_this33), width, height);
-      _this33.resolution.scale = resolutionScale;
+      _this33.resolution = new Resizer(_assertThisInitialized(_this33), width, height, resolutionScale);
       return _this33;
     }
 
@@ -37981,7 +37989,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "update",
@@ -38528,7 +38535,7 @@
     var _super41 = _createSuper(NoiseTexture);
 
     function NoiseTexture(width, height) {
-      var format = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : RedFormat;
+      var format = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : LuminanceFormat;
       var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : UnsignedByteType;
 
       _classCallCheck(this, NoiseTexture);
@@ -38937,7 +38944,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setDepthTexture",
@@ -39373,7 +39379,6 @@
       key: "setResolutionScale",
       value: function setResolutionScale(scale) {
         this.resolution.scale = scale;
-        this.setSize(this.resolution.base.x, this.resolution.base.y);
       }
     }, {
       key: "setSelection",
@@ -40049,7 +40054,7 @@
     HIGH: 2,
     ULTRA: 3
   };
-  var fragmentShader$x = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4[]normalDepth=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2[]offsets=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
+  var fragmentShader$x = "uniform sampler2D aoBuffer;uniform float luminanceInfluence;\n#ifdef DEPTH_AWARE_UPSAMPLING\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#endif\nvoid mainImage(const in vec4 inputColor,const in vec2 uv,const in float depth,out vec4 outputColor){float aoLinear=texture2D(aoBuffer,uv).r;\n#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300\nvec4 normalDepth[4]=vec4[](textureOffset(normalDepthBuffer,uv,ivec2(0,0)),textureOffset(normalDepthBuffer,uv,ivec2(0,1)),textureOffset(normalDepthBuffer,uv,ivec2(1,0)),textureOffset(normalDepthBuffer,uv,ivec2(1,1)));float dot01=dot(normalDepth[0].rgb,normalDepth[1].rgb);float dot02=dot(normalDepth[0].rgb,normalDepth[2].rgb);float dot03=dot(normalDepth[0].rgb,normalDepth[3].rgb);float minDot=min(dot01,min(dot02,dot03));float s=step(THRESHOLD,minDot);float smallestDistance=1.0;int index;for(int i=0;i<4;++i){float distance=abs(depth-normalDepth[i].a);if(distance<smallestDistance){smallestDistance=distance;index=i;}}ivec2 offsets[4]=ivec2[](ivec2(0,0),ivec2(0,1),ivec2(1,0),ivec2(1,1));ivec2 coord=ivec2(uv*vec2(textureSize(aoBuffer,0)))+offsets[index];float aoNearest=texelFetch(aoBuffer,coord,0).r;float ao=mix(aoNearest,aoLinear,s);\n#else\nfloat ao=aoLinear;\n#endif\nfloat l=linearToRelativeLuminance(inputColor.rgb);ao=mix(ao,1.0,l*luminanceInfluence);outputColor=vec4(vec3(ao),inputColor.a);}";
 
   var SSAOEffect = function (_Effect20) {
     _inherits(SSAOEffect, _Effect20);
@@ -40086,6 +40091,8 @@
           intensity = _ref26$intensity === void 0 ? 1.0 : _ref26$intensity,
           _ref26$bias = _ref26.bias,
           bias = _ref26$bias === void 0 ? 0.025 : _ref26$bias,
+          _ref26$resolutionScal = _ref26.resolutionScale,
+          resolutionScale = _ref26$resolutionScal === void 0 ? 1.0 : _ref26$resolutionScal,
           _ref26$width = _ref26.width,
           width = _ref26$width === void 0 ? Resizer.AUTO_SIZE : _ref26$width,
           _ref26$height = _ref26.height,
@@ -40108,7 +40115,7 @@
       _this55.renderTargetAO.texture.name = "AO.Target";
       _this55.renderTargetAO.texture.generateMipmaps = false;
       _this55.uniforms.get("aoBuffer").value = _this55.renderTargetAO.texture;
-      _this55.resolution = new Resizer(_assertThisInitialized(_this55), width, height);
+      _this55.resolution = new Resizer(_assertThisInitialized(_this55), width, height, resolutionScale);
       _this55.r = 1.0;
       _this55.camera = camera;
       _this55.ssaoPass = new ShaderPass(function () {
@@ -46111,7 +46118,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           pass.recompile();
         });
       }
@@ -46248,7 +46255,7 @@
           colorAverageEffect.blendMode.opacity.value = params.colorAverage.opacity;
         });
         folder.add(params.colorAverage, "blend mode", BlendFunction).onChange(function () {
-          colorAverageEffect.blendMode.blendFunction = Number.parseInt(params.colorAverage["blend mode"]);
+          colorAverageEffect.blendMode.blendFunction = Number(params.colorAverage["blend mode"]);
           pass.recompile();
         });
         folder = menu.addFolder("Sepia");
@@ -46259,7 +46266,7 @@
           sepiaEffect.blendMode.opacity.value = params.sepia.opacity;
         });
         folder.add(params.sepia, "blend mode", BlendFunction).onChange(function () {
-          sepiaEffect.blendMode.blendFunction = Number.parseInt(params.sepia["blend mode"]);
+          sepiaEffect.blendMode.blendFunction = Number(params.sepia["blend mode"]);
           pass.recompile();
         });
         folder = menu.addFolder("Brightness & Contrast");
@@ -46273,7 +46280,7 @@
           brightnessContrastEffect.blendMode.opacity.value = params.brightnessContrast.opacity;
         });
         folder.add(params.brightnessContrast, "blend mode", BlendFunction).onChange(function () {
-          brightnessContrastEffect.blendMode.blendFunction = Number.parseInt(params.brightnessContrast["blend mode"]);
+          brightnessContrastEffect.blendMode.blendFunction = Number(params.brightnessContrast["blend mode"]);
           pass.recompile();
         });
         folder = menu.addFolder("Hue & Saturation");
@@ -46287,7 +46294,7 @@
           hueSaturationEffect.blendMode.opacity.value = params.hueSaturation.opacity;
         });
         folder.add(params.hueSaturation, "blend mode", BlendFunction).onChange(function () {
-          hueSaturationEffect.blendMode.blendFunction = Number.parseInt(params.hueSaturation["blend mode"]);
+          hueSaturationEffect.blendMode.blendFunction = Number(params.hueSaturation["blend mode"]);
           pass.recompile();
         });
         folder.open();
@@ -46435,7 +46442,7 @@
         };
 
         function toggleRenderMode() {
-          var mode = Number.parseInt(params["render mode"]);
+          var mode = Number(params["render mode"]);
           depthEffect.blendMode.blendFunction = mode === RenderMode.DEPTH ? BlendFunction.NORMAL : BlendFunction.SKIP;
           cocTextureEffect.blendMode.blendFunction = mode === RenderMode.COC ? BlendFunction.NORMAL : BlendFunction.SKIP;
           vignetteEffect.blendMode.blendFunction = mode === RenderMode.DEFAULT && params.vignette.enabled ? BlendFunction.NORMAL : BlendFunction.SKIP;
@@ -46481,7 +46488,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           effectPass.recompile();
         });
       }
@@ -46602,7 +46609,7 @@
           "columns": uniforms.get("columns").value
         };
         menu.add(params, "glitch mode", GlitchMode).onChange(function () {
-          effect.mode = Number.parseInt(params["glitch mode"]);
+          effect.mode = Number(params["glitch mode"]);
         });
         menu.add(params, "custom pattern").onChange(function () {
           if (params["custom pattern"]) {
@@ -46773,7 +46780,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effect.resolution.height = Number.parseInt(params.resolution);
+          effect.resolution.height = Number(params.resolution);
         });
         menu.add(pass, "dithering");
         menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
@@ -46804,7 +46811,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           pass.recompile();
         });
       }
@@ -47053,7 +47060,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          effect.resolution.height = Number.parseInt(params.resolution);
+          effect.resolution.height = Number(params.resolution);
         });
         menu.add(pass, "dithering");
         menu.add(params, "blurriness").min(KernelSize.VERY_SMALL).max(KernelSize.HUGE + 1).step(1).onChange(function () {
@@ -47094,7 +47101,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           pass.recompile();
         });
       }
@@ -47242,7 +47249,7 @@
           dotScreenEffect.blendMode.opacity.value = params.dotScreen.opacity;
         });
         folder.add(params.dotScreen, "blend mode", BlendFunction).onChange(function () {
-          dotScreenEffect.blendMode.blendFunction = Number.parseInt(params.dotScreen["blend mode"]);
+          dotScreenEffect.blendMode.blendFunction = Number(params.dotScreen["blend mode"]);
           pass.recompile();
         });
         folder.open();
@@ -47257,7 +47264,7 @@
           gridEffect.blendMode.opacity.value = params.grid.opacity;
         });
         folder.add(params.grid, "blend mode", BlendFunction).onChange(function () {
-          gridEffect.blendMode.blendFunction = Number.parseInt(params.grid["blend mode"]);
+          gridEffect.blendMode.blendFunction = Number(params.grid["blend mode"]);
           pass.recompile();
         });
         folder.open();
@@ -47269,7 +47276,7 @@
           scanlineEffect.blendMode.opacity.value = params.scanline.opacity;
         });
         folder.add(params.scanline, "blend mode", BlendFunction).onChange(function () {
-          scanlineEffect.blendMode.blendFunction = Number.parseInt(params.scanline["blend mode"]);
+          scanlineEffect.blendMode.blendFunction = Number(params.scanline["blend mode"]);
           pass.recompile();
         });
         folder.open();
@@ -47560,13 +47567,12 @@
         scene.background = new Color(0xeeeeee);
         scene.add.apply(scene, _toConsumableArray(createLights()));
         scene.add(assets.get(tag$1));
-        var height = 480;
         var normalPass = new NormalPass(scene, camera);
         var depthDownsamplingPass = new DepthDownsamplingPass({
           normalBuffer: normalPass.texture,
-          height: height
+          resolutionScale: 0.5
         });
-        var normalDepthBuffer = capabilities.floatFragmentTextures ? depthDownsamplingPass.texture : null;
+        var normalDepthBuffer = capabilities.isWebGL2 ? depthDownsamplingPass.texture : null;
         var smaaEffect = new SMAAEffect(assets.get("smaa-search"), assets.get("smaa-area"), SMAAPreset.HIGH, EdgeDetectionMode.DEPTH);
         smaaEffect.setEdgeDetectionThreshold(0.05);
         var ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
@@ -47583,7 +47589,7 @@
           radius: 0.1825,
           intensity: 1.33,
           bias: 0.025,
-          height: height
+          resolutionScale: 0.5
         });
         var textureEffect = new TextureEffect({
           blendFunction: BlendFunction.SKIP,
@@ -47596,7 +47602,7 @@
         this.effectPass = effectPass;
         composer.addPass(normalPass);
 
-        if (capabilities.floatFragmentTextures) {
+        if (capabilities.isWebGL2) {
           composer.addPass(depthDownsamplingPass);
         } else {
           console.warn("Floating-point textures not supported, falling back to naive depth downsampling");
@@ -47636,13 +47642,13 @@
           "intensity": uniforms.intensity.value,
           "bias": uniforms.bias.value,
           "render mode": RenderMode.DEFAULT,
-          "resolution": ssaoEffect.resolution.height,
+          "resolution": ssaoEffect.resolution.scale,
           "opacity": blendMode.opacity.value,
           "blend mode": blendMode.blendFunction
         };
 
         function toggleRenderMode() {
-          var mode = Number.parseInt(params["render mode"]);
+          var mode = Number(params["render mode"]);
           textureEffect.blendMode.blendFunction = mode !== RenderMode.DEFAULT ? BlendFunction.NORMAL : BlendFunction.SKIP;
 
           if (mode === RenderMode.DEPTH) {
@@ -47654,10 +47660,13 @@
           effectPass.recompile();
         }
 
-        menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
-        menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(function () {
-          ssaoEffect.resolution.height = Number(params.resolution);
-          depthDownsamplingPass.resolution.height = Number(params.resolution);
+        if (capabilities.isWebGL2) {
+          menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
+        }
+
+        menu.add(params, "resolution").min(0.25).max(1.0).step(0.25).onChange(function () {
+          ssaoEffect.resolution.scale = params.resolution;
+          depthDownsamplingPass.resolution.scale = params.resolution;
         });
         menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
         menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
@@ -47708,7 +47717,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           effectPass.recompile();
         });
       }
@@ -47836,7 +47845,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           pass.recompile();
         });
       }
@@ -47945,7 +47954,7 @@
           "blend mode": blendMode.blendFunction
         };
         menu.add(params, "resolution", [64, 128, 256, 512, 1024]).onChange(function () {
-          effect.resolution = Number.parseInt(params.resolution);
+          effect.resolution = Number(params.resolution);
         });
         var f = menu.addFolder("Luminance");
         f.add(effect, "adaptive").onChange(function () {
@@ -47968,7 +47977,7 @@
           blendMode.opacity.value = params.opacity;
         });
         menu.add(params, "blend mode", BlendFunction).onChange(function () {
-          blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+          blendMode.blendFunction = Number(params["blend mode"]);
           pass.recompile();
         });
         menu.add(pass, "dithering");

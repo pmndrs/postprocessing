@@ -22,7 +22,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	#if defined(DEPTH_AWARE_UPSAMPLING) && __VERSION__ == 300
 
 		// Gather normals and depth in a 2x2 neighborhood.
-		vec4[] normalDepth = vec4[](
+		vec4 normalDepth[4] = vec4[](
 			textureOffset(normalDepthBuffer, uv, ivec2(0, 0)),
 			textureOffset(normalDepthBuffer, uv, ivec2(0, 1)),
 			textureOffset(normalDepthBuffer, uv, ivec2(1, 0)),
@@ -55,7 +55,7 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 		}
  
 		// Fetch the exact AO texel that corresponds to the best depth.
-		ivec2[] offsets = ivec2[](
+		ivec2 offsets[4] = ivec2[](
 			ivec2(0, 0), ivec2(0, 1),
 			ivec2(1, 0), ivec2(1, 1)
 		);

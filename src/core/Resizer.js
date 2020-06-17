@@ -25,9 +25,10 @@ export class Resizer {
 	 * @param {Resizable} resizeable - A resizable object.
 	 * @param {Number} [width=Resizer.AUTO_SIZE] - The width.
 	 * @param {Number} [height=Resizer.AUTO_SIZE] - The height.
+	 * @param {Number} [scale=1.0] - An alternative resolution scale.
 	 */
 
-	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE) {
+	constructor(resizable, width = AUTO_SIZE, height = AUTO_SIZE, scale = 1.0) {
 
 		/**
 		 * A resizable object.
@@ -41,7 +42,7 @@ export class Resizer {
 		 * The base size.
 		 *
 		 * This size will be passed to the resizable object every time the target
-		 * width or height is changed.
+		 * width, height or scale is changed.
 		 *
 		 * @type {Vector2}
 		 */
@@ -64,10 +65,41 @@ export class Resizer {
 		 * they will be scaled uniformly using this scalar.
 		 *
 		 * @type {Number}
-		 * @deprecated Added for internal use only.
+		 * @private
 		 */
 
-		this.scale = 1.0;
+		this.s = scale;
+
+	}
+
+	/**
+	 * The current resolution scale.
+	 *
+	 * @type {Number}
+	 */
+
+	get scale() {
+
+		return this.s;
+
+	}
+
+	/**
+	 * Sets the resolution scale.
+	 *
+	 * Also sets the width and height to {@link Resizer.AUTO_SIZE}.
+	 *
+	 * @type {Number}
+	 */
+
+	set scale(value) {
+
+		this.s = value;
+
+		this.target.x = AUTO_SIZE;
+		this.target.y = AUTO_SIZE;
+
+		this.resizable.setSize(this.base.x, this.base.y);
 
 	}
 
@@ -97,7 +129,7 @@ export class Resizer {
 
 		} else {
 
-			result = Math.round(base.x * this.scale);
+			result = Math.round(base.x * this.s);
 
 		}
 
@@ -147,7 +179,7 @@ export class Resizer {
 
 		} else {
 
-			result = Math.round(base.y * this.scale);
+			result = Math.round(base.y * this.s);
 
 		}
 

@@ -185,7 +185,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			pass.recompile();
 
 		});

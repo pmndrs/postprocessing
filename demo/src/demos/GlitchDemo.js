@@ -209,7 +209,7 @@ export class GlitchDemo extends PostProcessingDemo {
 
 		menu.add(params, "glitch mode", GlitchMode).onChange(() => {
 
-			effect.mode = Number.parseInt(params["glitch mode"]);
+			effect.mode = Number(params["glitch mode"]);
 
 		});
 

@@ -86,8 +86,7 @@ export class NormalPass extends Pass {
 		 * @type {Resizer}
 		 */
 
-		this.resolution = new Resizer(this, width, height);
-		this.resolution.scale = resolutionScale;
+		this.resolution = new Resizer(this, width, height, resolutionScale);
 
 	}
 

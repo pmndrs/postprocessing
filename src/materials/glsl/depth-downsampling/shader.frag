@@ -44,7 +44,7 @@ int findBestDepth(const in float samples[4]) {
 	// Calculate the centroid.
 	float c = (samples[0] + samples[1] + samples[2] + samples[3]) / 4.0;
 
-	float[] distances = float[](
+	float distances[4] = float[](
 		abs(c - samples[0]), abs(c - samples[1]),
 		abs(c - samples[2]), abs(c - samples[3])
 	);
@@ -63,7 +63,7 @@ int findBestDepth(const in float samples[4]) {
 
 		if(distances[i] < maxDistance) {
 
-			// Keep most representative samples.
+			// Keep the most representative samples.
 			remaining[j++] = i;
 
 		} else {
@@ -76,9 +76,9 @@ int findBestDepth(const in float samples[4]) {
 	}
 
 	// Fill up the array in case there were two or more max distance samples.
-	while(j < 3) {
+	for(; j < 3; ++j) {
 
-		remaining[j++] = rejected[--k];
+		remaining[j] = rejected[--k];
 
 	}
 
@@ -116,7 +116,7 @@ int findBestDepth(const in float samples[4]) {
 void main() {
 
 	// Gather depth samples in a 2x2 neighborhood.
-	float[] d = float[](
+	float d[4] = float[](
 		readDepth(vUv0), readDepth(vUv1),
 		readDepth(vUv2), readDepth(vUv3)
 	);
@@ -125,7 +125,7 @@ void main() {
 
 	#ifdef DOWNSAMPLE_NORMALS
 
-		vec2[] uvs = vec2[](vUv0, vUv1, vUv2, vUv3);
+		vec2 uvs[4] = vec2[](vUv0, vUv1, vUv2, vUv3);
 		vec3 n = texture2D(normalBuffer, uvs[index]).rgb;
 
 	#else

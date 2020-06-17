@@ -482,7 +482,6 @@ export class OutlineEffect extends Effect {
 	setResolutionScale(scale) {
 
 		this.resolution.scale = scale;
-		this.setSize(this.resolution.base.x, this.resolution.base.y);
 
 	}
 

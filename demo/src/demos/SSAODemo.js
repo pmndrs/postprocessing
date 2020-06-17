@@ -158,15 +158,13 @@ export class SSAODemo extends PostProcessingDemo {
 
 		// Passes.
 
-		const height = 480;
-
 		const normalPass = new NormalPass(scene, camera);
 		const depthDownsamplingPass = new DepthDownsamplingPass({
 			normalBuffer: normalPass.texture,
-			height
+			resolutionScale: 0.5
 		});
 
-		const normalDepthBuffer = capabilities.floatFragmentTextures ?
+		const normalDepthBuffer = capabilities.isWebGL2 ?
 			depthDownsamplingPass.texture : null;
 
 		const smaaEffect = new SMAAEffect(
@@ -194,7 +192,7 @@ export class SSAODemo extends PostProcessingDemo {
 			radius: 0.1825,
 			intensity: 1.33,
 			bias: 0.025,
-			height
+			resolutionScale: 0.5
 		});
 
 		const textureEffect = new TextureEffect({
@@ -211,7 +209,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		composer.addPass(normalPass);
 
-		if(capabilities.floatFragmentTextures) {
+		if(capabilities.isWebGL2) {
 
 			composer.addPass(depthDownsamplingPass);
 
@@ -266,14 +264,14 @@ export class SSAODemo extends PostProcessingDemo {
 			"intensity": uniforms.intensity.value,
 			"bias": uniforms.bias.value,
 			"render mode": RenderMode.DEFAULT,
-			"resolution": ssaoEffect.resolution.height,
+			"resolution": ssaoEffect.resolution.scale,
 			"opacity": blendMode.opacity.value,
 			"blend mode": blendMode.blendFunction
 		};
 
 		function toggleRenderMode() {
 
-			const mode = Number.parseInt(params["render mode"]);
+			const mode = Number(params["render mode"]);
 
 			textureEffect.blendMode.blendFunction = (mode !== RenderMode.DEFAULT) ?
 				BlendFunction.NORMAL : BlendFunction.SKIP;
@@ -297,12 +295,16 @@ export class SSAODemo extends PostProcessingDemo {
 
 		}
 
-		menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
+		if(capabilities.isWebGL2) {
 
-		menu.add(params, "resolution", [240, 360, 480, 720, 1080]).onChange(() => {
+			menu.add(params, "render mode", RenderMode).onChange(toggleRenderMode);
 
-			ssaoEffect.resolution.height = Number(params.resolution);
-			depthDownsamplingPass.resolution.height = Number(params.resolution);
+		}
+
+		menu.add(params, "resolution").min(0.25).max(1.0).step(0.25).onChange(() => {
+
+			ssaoEffect.resolution.scale = params.resolution;
+			depthDownsamplingPass.resolution.scale = params.resolution;
 
 		});
 
@@ -395,7 +397,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number.parseInt(params["blend mode"]);
+			blendMode.blendFunction = Number(params["blend mode"]);
 			effectPass.recompile();
 
 		});
