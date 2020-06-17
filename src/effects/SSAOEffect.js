@@ -22,8 +22,10 @@ import fragmentShader from "./glsl/ssao/shader.frag";
  * different radii, one for rough AO and one for fine details.
  *
  * This effect supports depth-aware upsampling and should be rendered at a lower
- * resolution. If you intend to render SSAO at full resolution, do not provide a
- * downsampled normalDepthBuffer and make sure to disable depthAwareUpsampling.
+ * resolution. The resolution should match that of the downsampled normals and
+ * depth. If you intend to render SSAO at full resolution, do not provide a
+ * downsampled `normalDepthBuffer` and make sure to disable
+ * `depthAwareUpsampling`.
  *
  * It's recommended to specify a relative render resolution using the
  * `resolutionScale` constructor parameter to avoid undesired sampling patterns.
