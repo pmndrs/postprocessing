@@ -47605,7 +47605,7 @@
         if (capabilities.isWebGL2) {
           composer.addPass(depthDownsamplingPass);
         } else {
-          console.warn("Floating-point textures not supported, falling back to naive depth downsampling");
+          console.log("WebGL 2 not supported, falling back to naive depth downsampling");
         }
 
         composer.addPass(effectPass);
