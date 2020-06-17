@@ -86,4 +86,3 @@ export function load(assets, manager, anisotropy) {
 	});
 
 }
-
