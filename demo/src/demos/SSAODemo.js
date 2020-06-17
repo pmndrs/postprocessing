@@ -215,7 +215,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		} else {
 
-			console.warn("Floating-point textures not supported, falling back to naive depth downsampling");
+			console.log("WebGL 2 not supported, falling back to naive depth downsampling");
 
 		}
 
