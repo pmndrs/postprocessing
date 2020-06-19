@@ -79,7 +79,9 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 	#ifdef DISTANCE_SCALING
 
-		float radiusScale = max(1.0 - smoothstep(0.0, distanceCutoff.y, depth), minRadiusScale);
+		float radiusScale = 1.0 - smoothstep(0.0, distanceCutoff.y, depth);
+		radiusScale = radiusScale * (1.0 - minRadiusScale) + minRadiusScale;
+
 		float radius = RADIUS * radiusScale;
 
 	#else
