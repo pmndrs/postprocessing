@@ -223,6 +223,64 @@ downsampled <code>normalDepthBuffer</code> and make sure to disable
           
           
           
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-distanceScaling">distanceScaling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether distance-based radius scaling is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-distanceScaling">distanceScaling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables distance-based radius scaling.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
           <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-radius">radius</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></span>
         </p>
       </div>
@@ -1000,7 +1058,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber66">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -1047,6 +1105,14 @@ deletes them.</p>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: BlendFunction.MULTIPLY</li></ul></td>
       <td data-ice="description"><p>The blend function of this effect.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.distanceScaling</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: true</li></ul></td>
+      <td data-ice="description"><p>Enables or disables distance-based radius scaling.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
@@ -1146,6 +1212,14 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.fade</td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: 0.01</li></ul></td>
+      <td data-ice="description"><p>Influences the smoothness of the shadows. A lower value results in higher contrast.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1195,6 +1269,94 @@ deletes them.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-distanceScaling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">distanceScaling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber302">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether distance-based radius scaling is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-distanceScaling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">distanceScaling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber314">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables distance-based radius scaling.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-radius">
     <span class="access" data-ice="access">public</span>
     
@@ -1206,7 +1368,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber266">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber272">source</a></span></span>
     </span>
   </h3>
 
@@ -1250,7 +1412,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber278">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber284">source</a></span></span>
     </span>
   </h3>
 
@@ -1294,7 +1456,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber124">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber128">source</a></span></span>
     </span>
   </h3>
 
@@ -1338,7 +1500,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber240">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber246">source</a></span></span>
     </span>
   </h3>
 
@@ -1382,7 +1544,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber252">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber258">source</a></span></span>
     </span>
   </h3>
 
@@ -1426,7 +1588,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber213">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber219">source</a></span></span>
     </span>
   </h3>
 
@@ -1470,7 +1632,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber225">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber231">source</a></span></span>
     </span>
   </h3>
 
@@ -1514,7 +1676,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber201">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber207">source</a></span></span>
     </span>
   </h3>
 
@@ -1561,7 +1723,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber329">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber375">source</a></span></span>
     </span>
   </h3>
 
@@ -1630,7 +1792,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber297">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber343">source</a></span></span>
     </span>
   </h3>
 
@@ -1698,7 +1860,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber313">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber359">source</a></span></span>
     </span>
   </h3>
 
@@ -1766,7 +1928,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber364">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber410">source</a></span></span>
     </span>
   </h3>
 
@@ -1835,7 +1997,7 @@ render targets.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber350">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber396">source</a></span></span>
     </span>
   </h3>
 

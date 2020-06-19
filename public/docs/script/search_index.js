@@ -2220,6 +2220,18 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/effects/ssaoeffect.js~ssaoeffect#distancescaling",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-distanceScaling",
+    "src/effects/SSAOEffect.js~SSAOEffect#distanceScaling",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#distancescaling",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-distanceScaling",
+    "src/effects/SSAOEffect.js~SSAOEffect#distanceScaling",
+    "member"
+  ],
+  [
     "src/effects/ssaoeffect.js~ssaoeffect#radius",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-radius",
     "src/effects/SSAOEffect.js~SSAOEffect#radius",

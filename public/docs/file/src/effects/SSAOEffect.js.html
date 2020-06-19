@@ -163,6 +163,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
 	 * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
 	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
@@ -175,6 +176,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -182,6 +184,7 @@ export class SSAOEffect extends Effect {
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
+		distanceScaling = true,
 		depthAwareUpsampling = true,
 		normalDepthBuffer = null,
 		samples = 9,
@@ -194,6 +197,7 @@ export class SSAOEffect extends Effect {
 		radius = 0.1825,
 		intensity = 1.0,
 		bias = 0.025,
+		fade = 0.01,
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
@@ -273,6 +277,7 @@ export class SSAOEffect extends Effect {
 			const material = new SSAOMaterial(camera);
 			material.uniforms.noiseTexture.value = noiseTexture;
 			material.uniforms.intensity.value = intensity;
+			material.uniforms.fade.value = fade;
 			material.uniforms.bias.value = bias;
 
 			if(normalDepthBuffer !== null) {
@@ -298,6 +303,7 @@ export class SSAOEffect extends Effect {
 
 		})());
 
+		this.distanceScaling = distanceScaling;
 		this.samples = samples;
 		this.rings = rings;
 
@@ -401,6 +407,46 @@ export class SSAOEffect extends Effect {
 		material.defines.RADIUS = radius.toFixed(11);
 		material.defines.RADIUS_SQ = (radius * radius).toFixed(11);
 		material.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether distance-based radius scaling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get distanceScaling() {
+
+		return (this.ssaoMaterial.defines.DISTANCE_SCALING !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables distance-based radius scaling.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set distanceScaling(value) {
+
+		if(this.distanceScaling !== value) {
+
+			const material = this.ssaoMaterial;
+
+			if(value) {
+
+				material.defines.DISTANCE_SCALING = &quot;1&quot;;
+
+			} else {
+
+				delete material.defines.DISTANCE_SCALING;
+
+			}
+
+			material.needsUpdate = true;
+
+		}
 
 	}
 

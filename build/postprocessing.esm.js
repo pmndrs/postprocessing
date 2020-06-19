@@ -1,5 +1,5 @@
 /**
- * postprocessing v6.14.1 build Wed Jun 17 2020
+ * postprocessing v6.14.2 build Fri Jun 19 2020
  * https://github.com/vanruesc/postprocessing
  * Copyright 2020 Raoul van Rüschen
  * @license Zlib
@@ -1979,7 +1979,7 @@ class SMAAWeightsMaterial extends ShaderMaterial {
 
 }
 
-var fragmentShader$d = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float projectionScale;uniform float cameraNear;uniform float cameraFar;uniform float intensity;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){float radius=RADIUS/p.z;float noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float inv_samples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*inv_samples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(0.01+vv),0.0))*falloff;++taps;}}return occlusion/max(4.0*float(taps),1.0);}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
+var fragmentShader$d = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float projectionScale;uniform float cameraNear;uniform float cameraFar;uniform float intensity;uniform float fade;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){\n#ifdef DISTANCE_SCALING\nfloat radius=RADIUS/p.z;\n#else\nfloat radius=RADIUS;\n#endif\nfloat noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float inv_samples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*inv_samples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(fade+vv),0.0))*falloff;}++taps;}return occlusion/(4.0*max(float(taps),1.0));}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
 
 var vertexShader$7 = "uniform vec2 noiseScale;varying vec2 vUv;varying vec2 vUv2;void main(){vUv=position.xy*0.5+0.5;vUv2=vUv*noiseScale;gl_Position=vec4(position.xy,1.0,1.0);}";
 
@@ -2007,6 +2007,7 @@ class SSAOMaterial extends ShaderMaterial {
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
 				RADIUS_SQ: "1.0",
+				DISTANCE_SCALING: "1",
 				DEPTH_PACKING: "0"
 			},
 
@@ -2026,6 +2027,7 @@ class SSAOMaterial extends ShaderMaterial {
 				proximityCutoff: new Uniform(new Vector2$1()),
 				noiseScale: new Uniform(new Vector2$1()),
 				intensity: new Uniform(1.0),
+				fade: new Uniform(0.01),
 				bias: new Uniform(0.0)
 
 			},
@@ -12681,6 +12683,7 @@ class SSAOEffect extends Effect {
 	 * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.
 	 * @param {Object} [options] - The options.
 	 * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.
+	 * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.
 	 * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.
 	 * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.
 	 * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.
@@ -12693,6 +12696,7 @@ class SSAOEffect extends Effect {
 	 * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
+	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -12700,6 +12704,7 @@ class SSAOEffect extends Effect {
 
 	constructor(camera, normalBuffer, {
 		blendFunction = BlendFunction.MULTIPLY,
+		distanceScaling = true,
 		depthAwareUpsampling = true,
 		normalDepthBuffer = null,
 		samples = 9,
@@ -12712,6 +12717,7 @@ class SSAOEffect extends Effect {
 		radius = 0.1825,
 		intensity = 1.0,
 		bias = 0.025,
+		fade = 0.01,
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
@@ -12791,6 +12797,7 @@ class SSAOEffect extends Effect {
 			const material = new SSAOMaterial(camera);
 			material.uniforms.noiseTexture.value = noiseTexture;
 			material.uniforms.intensity.value = intensity;
+			material.uniforms.fade.value = fade;
 			material.uniforms.bias.value = bias;
 
 			if(normalDepthBuffer !== null) {
@@ -12816,6 +12823,7 @@ class SSAOEffect extends Effect {
 
 		})());
 
+		this.distanceScaling = distanceScaling;
 		this.samples = samples;
 		this.rings = rings;
 
@@ -12919,6 +12927,46 @@ class SSAOEffect extends Effect {
 		material.defines.RADIUS = radius.toFixed(11);
 		material.defines.RADIUS_SQ = (radius * radius).toFixed(11);
 		material.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether distance-based radius scaling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get distanceScaling() {
+
+		return (this.ssaoMaterial.defines.DISTANCE_SCALING !== undefined);
+
+	}
+
+	/**
+	 * Enables or disables distance-based radius scaling.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set distanceScaling(value) {
+
+		if(this.distanceScaling !== value) {
+
+			const material = this.ssaoMaterial;
+
+			if(value) {
+
+				material.defines.DISTANCE_SCALING = "1";
+
+			} else {
+
+				delete material.defines.DISTANCE_SCALING;
+
+			}
+
+			material.needsUpdate = true;
+
+		}
 
 	}
 
