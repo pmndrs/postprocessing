@@ -38,9 +38,9 @@ uniform mat4 inverseProjectionMatrix;
 uniform mat4 projectionMatrix;
 uniform vec2 texelSize;
 
-uniform float projectionScale;
 uniform float cameraNear;
 uniform float cameraFar;
+uniform float minRadiusScale;
 uniform float intensity;
 uniform float fade;
 uniform float bias;
@@ -79,7 +79,8 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 	#ifdef DISTANCE_SCALING
 
-		float radius = RADIUS / p.z;
+		float radiusScale = max(1.0 - smoothstep(0.0, distanceCutoff.y, depth), minRadiusScale);
+		float radius = RADIUS * radiusScale;
 
 	#else
 
