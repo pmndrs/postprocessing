@@ -35678,7 +35678,7 @@
     return SMAAWeightsMaterial;
   }(ShaderMaterial);
 
-  var fragmentShader$d = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float projectionScale;uniform float cameraNear;uniform float cameraFar;uniform float intensity;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){float radius=RADIUS/p.z;float noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float inv_samples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*inv_samples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(0.01+vv),0.0))*falloff;++taps;}}return occlusion/max(4.0*float(taps),1.0);}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
+  var fragmentShader$d = "#include <common>\n#include <packing>\n#ifdef GL_FRAGMENT_PRECISION_HIGH\nuniform highp sampler2D normalDepthBuffer;\n#else\nuniform mediump sampler2D normalDepthBuffer;\n#endif\n#ifndef NORMAL_DEPTH\nuniform sampler2D normalBuffer;float readDepth(const in vec2 uv){\n#if DEPTH_PACKING == 3201\nreturn unpackRGBAToDepth(texture2D(normalDepthBuffer,uv));\n#else\nreturn texture2D(normalDepthBuffer,uv).r;\n#endif\n}\n#endif\nuniform sampler2D noiseTexture;uniform mat4 inverseProjectionMatrix;uniform mat4 projectionMatrix;uniform vec2 texelSize;uniform float projectionScale;uniform float cameraNear;uniform float cameraFar;uniform float intensity;uniform float fade;uniform float bias;uniform vec2 distanceCutoff;uniform vec2 proximityCutoff;varying vec2 vUv;varying vec2 vUv2;float getViewZ(const in float depth){\n#ifdef PERSPECTIVE_CAMERA\nreturn perspectiveDepthToViewZ(depth,cameraNear,cameraFar);\n#else\nreturn orthographicDepthToViewZ(depth,cameraNear,cameraFar);\n#endif\n}vec3 getViewPosition(const in vec2 screenPosition,const in float depth,const in float viewZ){float clipW=projectionMatrix[2][3]*viewZ+projectionMatrix[3][3];vec4 clipPosition=vec4((vec3(screenPosition,depth)-0.5)*2.0,1.0);clipPosition*=clipW;return(inverseProjectionMatrix*clipPosition).xyz;}float getAmbientOcclusion(const in vec3 p,const in vec3 n,const in float depth,const in vec2 uv){\n#ifdef DISTANCE_SCALING\nfloat radius=RADIUS/p.z;\n#else\nfloat radius=RADIUS;\n#endif\nfloat noise=texture2D(noiseTexture,vUv2).r;float baseAngle=noise*PI2;float inv_samples=1.0/SAMPLES_FLOAT;float rings=SPIRAL_TURNS*PI2;float occlusion=0.0;int taps=0;for(int i=0;i<SAMPLES_INT;++i){float alpha=(float(i)+0.5)*inv_samples;float angle=alpha*rings+baseAngle;vec2 coord=alpha*radius*vec2(cos(angle),sin(angle))*texelSize+uv;if(coord.s<0.0||coord.s>1.0||coord.t<0.0||coord.t>1.0){continue;}\n#ifdef NORMAL_DEPTH\nfloat sampleDepth=texture2D(normalDepthBuffer,coord).a;\n#else\nfloat sampleDepth=readDepth(coord);\n#endif\nfloat viewZ=getViewZ(sampleDepth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearSampleDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearSampleDepth=sampleDepth;\n#endif\nfloat proximity=abs(depth-linearSampleDepth);if(proximity<proximityCutoff.y){float falloff=1.0-smoothstep(proximityCutoff.x,proximityCutoff.y,proximity);vec3 Q=getViewPosition(coord,sampleDepth,viewZ);vec3 v=Q-p;float vv=dot(v,v);float vn=dot(v,n)-bias;float f=max(RADIUS_SQ-vv,0.0)/RADIUS_SQ;occlusion+=(f*f*f*max(vn/(fade+vv),0.0))*falloff;}++taps;}return occlusion/(4.0*max(float(taps),1.0));}void main(){\n#ifdef NORMAL_DEPTH\nvec4 normalDepth=texture2D(normalDepthBuffer,vUv);\n#else\nvec4 normalDepth=vec4(texture2D(normalBuffer,vUv).rgb,readDepth(vUv));\n#endif\nfloat ao=1.0;float depth=normalDepth.a;float viewZ=getViewZ(depth);\n#ifdef PERSPECTIVE_CAMERA\nfloat linearDepth=viewZToOrthographicDepth(viewZ,cameraNear,cameraFar);\n#else\nfloat linearDepth=depth;\n#endif\nif(linearDepth<distanceCutoff.y){vec3 viewPosition=getViewPosition(vUv,depth,viewZ);vec3 viewNormal=unpackRGBToNormal(normalDepth.rgb);ao-=getAmbientOcclusion(viewPosition,viewNormal,linearDepth,vUv);float d=smoothstep(distanceCutoff.x,distanceCutoff.y,linearDepth);ao=mix(ao,1.0,d);ao=clamp(pow(ao,abs(intensity)),0.0,1.0);}gl_FragColor.r=ao;}";
   var vertexShader$7 = "uniform vec2 noiseScale;varying vec2 vUv;varying vec2 vUv2;void main(){vUv=position.xy*0.5+0.5;vUv2=vUv*noiseScale;gl_Position=vec4(position.xy,1.0,1.0);}";
 
   var SSAOMaterial = function (_ShaderMaterial16) {
@@ -35699,6 +35699,7 @@
           SPIRAL_TURNS: "0.0",
           RADIUS: "1.0",
           RADIUS_SQ: "1.0",
+          DISTANCE_SCALING: "1",
           DEPTH_PACKING: "0"
         },
         uniforms: {
@@ -35714,6 +35715,7 @@
           proximityCutoff: new Uniform(new Vector2()),
           noiseScale: new Uniform(new Vector2()),
           intensity: new Uniform(1.0),
+          fade: new Uniform(0.01),
           bias: new Uniform(0.0)
         },
         fragmentShader: fragmentShader$d,
@@ -40067,6 +40069,8 @@
       var _ref26 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {},
           _ref26$blendFunction = _ref26.blendFunction,
           blendFunction = _ref26$blendFunction === void 0 ? BlendFunction.MULTIPLY : _ref26$blendFunction,
+          _ref26$distanceScalin = _ref26.distanceScaling,
+          distanceScaling = _ref26$distanceScalin === void 0 ? true : _ref26$distanceScalin,
           _ref26$depthAwareUpsa = _ref26.depthAwareUpsampling,
           depthAwareUpsampling = _ref26$depthAwareUpsa === void 0 ? true : _ref26$depthAwareUpsa,
           _ref26$normalDepthBuf = _ref26.normalDepthBuffer,
@@ -40091,6 +40095,8 @@
           intensity = _ref26$intensity === void 0 ? 1.0 : _ref26$intensity,
           _ref26$bias = _ref26.bias,
           bias = _ref26$bias === void 0 ? 0.025 : _ref26$bias,
+          _ref26$fade = _ref26.fade,
+          fade = _ref26$fade === void 0 ? 0.01 : _ref26$fade,
           _ref26$resolutionScal = _ref26.resolutionScale,
           resolutionScale = _ref26$resolutionScal === void 0 ? 1.0 : _ref26$resolutionScal,
           _ref26$width = _ref26.width,
@@ -40124,6 +40130,7 @@
         var material = new SSAOMaterial(camera);
         material.uniforms.noiseTexture.value = noiseTexture;
         material.uniforms.intensity.value = intensity;
+        material.uniforms.fade.value = fade;
         material.uniforms.bias.value = bias;
 
         if (normalDepthBuffer !== null) {
@@ -40143,6 +40150,7 @@
 
         return material;
       }());
+      _this55.distanceScaling = distanceScaling;
       _this55.samples = samples;
       _this55.rings = rings;
       _this55.radius = radius > 1.0 ? radius / 100.0 : radius;
@@ -40234,6 +40242,24 @@
         material.defines.RADIUS = radius.toFixed(11);
         material.defines.RADIUS_SQ = (radius * radius).toFixed(11);
         material.needsUpdate = true;
+      }
+    }, {
+      key: "distanceScaling",
+      get: function get() {
+        return this.ssaoMaterial.defines.DISTANCE_SCALING !== undefined;
+      },
+      set: function set(value) {
+        if (this.distanceScaling !== value) {
+          var material = this.ssaoMaterial;
+
+          if (value) {
+            material.defines.DISTANCE_SCALING = "1";
+          } else {
+            delete material.defines.DISTANCE_SCALING;
+          }
+
+          material.needsUpdate = true;
+        }
       }
     }]);
 
@@ -47577,6 +47603,7 @@
         smaaEffect.setEdgeDetectionThreshold(0.05);
         var ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
           blendFunction: BlendFunction.MULTIPLY,
+          distanceScaling: true,
           depthAwareUpsampling: true,
           normalDepthBuffer: normalDepthBuffer,
           samples: 9,
@@ -47589,6 +47616,7 @@
           radius: 0.1825,
           intensity: 1.33,
           bias: 0.025,
+          fade: 0.01,
           resolutionScale: 0.5
         });
         var textureEffect = new TextureEffect({
@@ -47638,9 +47666,11 @@
             "enabled": ssaoEffect.defines.has("DEPTH_AWARE_UPSAMPLING"),
             "threshold": Number(ssaoEffect.defines.get("THRESHOLD"))
           },
+          "distance scaling": ssaoEffect.distanceScaling,
           "lum influence": ssaoEffect.uniforms.get("luminanceInfluence").value,
           "intensity": uniforms.intensity.value,
           "bias": uniforms.bias.value,
+          "fade": uniforms.fade.value,
           "render mode": RenderMode.DEFAULT,
           "resolution": ssaoEffect.resolution.scale,
           "opacity": blendMode.opacity.value,
@@ -47671,6 +47701,9 @@
         menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
         menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
         menu.add(ssaoEffect, "radius").min(1e-6).max(1.0).step(0.001);
+        menu.add(params, "distance scaling").onChange(function () {
+          ssaoEffect.distanceScaling = params["distance scaling"];
+        });
         menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(function () {
           ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
         });
@@ -47709,6 +47742,9 @@
         });
         menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange(function () {
           uniforms.bias.value = params.bias;
+        });
+        menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange(function () {
+          uniforms.fade.value = params.fade;
         });
         menu.add(params, "intensity").min(1.0).max(4.0).step(0.01).onChange(function () {
           uniforms.intensity.value = params.intensity;

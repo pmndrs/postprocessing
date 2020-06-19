@@ -27,6 +27,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
 				RADIUS_SQ: "1.0",
+				DISTANCE_SCALING: "1",
 				DEPTH_PACKING: "0"
 			},
 
@@ -46,6 +47,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				proximityCutoff: new Uniform(new Vector2()),
 				noiseScale: new Uniform(new Vector2()),
 				intensity: new Uniform(1.0),
+				fade: new Uniform(0.01),
 				bias: new Uniform(0.0)
 
 			},
