@@ -46,6 +46,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				proximityCutoff: new Uniform(new Vector2()),
 				noiseScale: new Uniform(new Vector2()),
 				intensity: new Uniform(1.0),
+				fade: new Uniform(0.01),
 				bias: new Uniform(0.0)
 
 			},

@@ -42,6 +42,7 @@ uniform float projectionScale;
 uniform float cameraNear;
 uniform float cameraFar;
 uniform float intensity;
+uniform float fade;
 uniform float bias;
 
 uniform vec2 distanceCutoff;
@@ -138,11 +139,11 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 			float vn = dot(v, n) - bias;
 
 			float f = max(RADIUS_SQ - vv, 0.0) / RADIUS_SQ;
-			occlusion += (f * f * f * max(vn / (0.01 + vv), 0.0)) * falloff;
-
-			++taps;
+			occlusion += (f * f * f * max(vn / (fade + vv), 0.0)) * falloff;
 
 		}
+
+		++taps;
 
 	}
 
