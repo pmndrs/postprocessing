@@ -11354,7 +11354,7 @@
     "__docId__": 491,
     "kind": "file",
     "name": "src/effects/SSAOEffect.js",
-    "content": "import {\r\n\tLinearFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Resizer } from \"../core\";\r\nimport { NoiseTexture } from \"../images\";\r\nimport { SSAOMaterial } from \"../materials\";\r\nimport { ShaderPass } from \"../passes\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/ssao/shader.frag\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) effect.\r\n *\r\n * For high quality visuals use two SSAO effect instances in a row with\r\n * different radii, one for rough AO and one for fine details.\r\n *\r\n * This effect supports depth-aware upsampling and should be rendered at a lower\r\n * resolution. The resolution should match that of the downsampled normals and\r\n * depth. If you intend to render SSAO at full resolution, do not provide a\r\n * downsampled `normalDepthBuffer` and make sure to disable\r\n * `depthAwareUpsampling`.\r\n *\r\n * It's recommended to specify a relative render resolution using the\r\n * `resolutionScale` constructor parameter to avoid undesired sampling patterns.\r\n *\r\n * Based on \"Scalable Ambient Obscurance\" by Morgan McGuire et al. and\r\n * \"Depth-aware upsampling experiments\" by Eleni Maria Stea:\r\n * https://research.nvidia.com/publication/scalable-ambient-obscurance\r\n * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling\r\n */\r\n\r\nexport class SSAOEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO effect.\r\n\t *\r\n\t * @todo Move normalBuffer to options.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.\r\n\t * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.\r\n\t * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.\r\n\t * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.\r\n\t * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.\r\n\t * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.\r\n\t * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.\r\n\t * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].\r\n\t * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.\r\n\t * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.\r\n\t * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.\r\n\t * @param {Number} [options.resolutionScale=1.0] - The resolution scale.\r\n\t * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.\r\n\t * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.\r\n\t */\r\n\r\n\tconstructor(camera, normalBuffer, {\r\n\t\tblendFunction = BlendFunction.MULTIPLY,\r\n\t\tdistanceScaling = true,\r\n\t\tdepthAwareUpsampling = true,\r\n\t\tnormalDepthBuffer = null,\r\n\t\tsamples = 9,\r\n\t\trings = 7,\r\n\t\tdistanceThreshold = 0.97,\r\n\t\tdistanceFalloff = 0.03,\r\n\t\trangeThreshold = 0.0005,\r\n\t\trangeFalloff = 0.001,\r\n\t\tluminanceInfluence = 0.7,\r\n\t\tradius = 0.1825,\r\n\t\tintensity = 1.0,\r\n\t\tbias = 0.025,\r\n\t\tfade = 0.01,\r\n\t\tresolutionScale = 1.0,\r\n\t\twidth = Resizer.AUTO_SIZE,\r\n\t\theight = Resizer.AUTO_SIZE\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"SSAOEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\t\t\tattributes: EffectAttribute.DEPTH,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"aoBuffer\", new Uniform(null)],\r\n\t\t\t\t[\"luminanceInfluence\", new Uniform(luminanceInfluence)],\r\n\t\t\t\t[\"scale\", new Uniform(0.0)] // Unused.\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A render target for the ambient occlusion shadows.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetAO = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false,\r\n\t\t\tformat: RGBFormat\r\n\t\t});\r\n\r\n\t\tthis.renderTargetAO.texture.name = \"AO.Target\";\r\n\t\tthis.renderTargetAO.texture.generateMipmaps = false;\r\n\r\n\t\tthis.uniforms.get(\"aoBuffer\").value = this.renderTargetAO.texture;\r\n\r\n\t\t/**\r\n\t\t * The resolution of this effect.\r\n\t\t *\r\n\t\t * @type {Resizer}\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Resizer(this, width, height, resolutionScale);\r\n\r\n\t\t/**\r\n\t\t * The current radius relative to the render height.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.r = 1.0;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * An SSAO pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.ssaoPass = new ShaderPass((() => {\r\n\r\n\t\t\tconst noiseTexture = new NoiseTexture(64, 64);\r\n\t\t\tnoiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;\r\n\r\n\t\t\tconst material = new SSAOMaterial(camera);\r\n\t\t\tmaterial.uniforms.noiseTexture.value = noiseTexture;\r\n\t\t\tmaterial.uniforms.intensity.value = intensity;\r\n\t\t\tmaterial.uniforms.fade.value = fade;\r\n\t\t\tmaterial.uniforms.bias.value = bias;\r\n\r\n\t\t\tif(normalDepthBuffer !== null) {\r\n\r\n\t\t\t\tmaterial.uniforms.normalDepthBuffer.value = normalDepthBuffer;\r\n\t\t\t\tmaterial.defines.NORMAL_DEPTH = \"1\";\r\n\r\n\t\t\t\tif(depthAwareUpsampling) {\r\n\r\n\t\t\t\t\tthis.uniforms.set(\"normalDepthBuffer\", new Uniform(normalDepthBuffer));\r\n\t\t\t\t\tthis.defines.set(\"DEPTH_AWARE_UPSAMPLING\", \"1\");\r\n\t\t\t\t\tthis.defines.set(\"THRESHOLD\", \"0.997\");\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tmaterial.uniforms.normalBuffer.value = normalBuffer;\r\n\r\n\t\t\t}\r\n\r\n\t\t\treturn material;\r\n\r\n\t\t})());\r\n\r\n\t\tthis.distanceScaling = distanceScaling;\r\n\t\tthis.samples = samples;\r\n\t\tthis.rings = rings;\r\n\r\n\t\t// @todo Special case treatment added for backwards-compatibility.\r\n\t\tthis.radius = (radius > 1.0) ? (radius / 100.0) : radius;\r\n\r\n\t\tthis.setDistanceCutoff(distanceThreshold, distanceFalloff);\r\n\t\tthis.setProximityCutoff(rangeThreshold, rangeFalloff);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The SSAO material.\r\n\t *\r\n\t * @type {SSAOMaterial}\r\n\t */\r\n\r\n\tget ssaoMaterial() {\r\n\r\n\t\treturn this.ssaoPass.getFullscreenMaterial();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number(this.ssaoMaterial.defines.SAMPLES_INT);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.SAMPLES_INT = value.toFixed(0);\r\n\t\tmaterial.defines.SAMPLES_FLOAT = value.toFixed(1);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of spiral turns in the occlusion sampling pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number(this.ssaoMaterial.defines.SPIRAL_TURNS);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of spiral turns in the occlusion sampling pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.SPIRAL_TURNS = value.toFixed(1);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget radius() {\r\n\r\n\t\treturn this.r;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion sampling radius. Range [1e-6, 1.0].\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset radius(value) {\r\n\r\n\t\tthis.r = Math.min(Math.max(value, 1e-6), 1.0);\r\n\r\n\t\tconst radius = this.r * this.resolution.height;\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.RADIUS = radius.toFixed(11);\r\n\t\tmaterial.defines.RADIUS_SQ = (radius * radius).toFixed(11);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether distance-based radius scaling is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget distanceScaling() {\r\n\r\n\t\treturn (this.ssaoMaterial.defines.DISTANCE_SCALING !== undefined);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables distance-based radius scaling.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset distanceScaling(value) {\r\n\r\n\t\tif(this.distanceScaling !== value) {\r\n\r\n\t\t\tconst material = this.ssaoMaterial;\r\n\r\n\t\t\tif(value) {\r\n\r\n\t\t\t\tmaterial.defines.DISTANCE_SCALING = \"1\";\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tdelete material.defines.DISTANCE_SCALING;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tmaterial.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion distance cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetDistanceCutoff(threshold, falloff) {\r\n\r\n\t\tthis.ssaoMaterial.uniforms.distanceCutoff.value.set(\r\n\t\t\tMath.min(Math.max(threshold, 0.0), 1.0),\r\n\t\t\tMath.min(Math.max(threshold + falloff, 0.0), 1.0)\r\n\t\t);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion proximity cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The range threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetProximityCutoff(threshold, falloff) {\r\n\r\n\t\tthis.ssaoMaterial.uniforms.proximityCutoff.value.set(\r\n\t\t\tMath.min(Math.max(threshold, 0.0), 1.0),\r\n\t\t\tMath.min(Math.max(threshold + falloff, 0.0), 1.0)\r\n\t\t);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\r\n\t\tif(material.defines.NORMAL_DEPTH === undefined) {\r\n\r\n\t\t\tmaterial.uniforms.normalDepthBuffer.value = depthTexture;\r\n\t\t\tmaterial.depthPacking = depthPacking;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, deltaTime) {\r\n\r\n\t\tthis.ssaoPass.render(renderer, null, this.renderTargetAO);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the camera projection matrix uniforms and the size of internal\r\n\t * render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tconst resolution = this.resolution;\r\n\t\tresolution.base.set(width, height);\r\n\r\n\t\tconst w = resolution.width;\r\n\t\tconst h = resolution.height;\r\n\r\n\t\tthis.renderTargetAO.setSize(w, h);\r\n\t\tthis.ssaoMaterial.setTexelSize(1.0 / w, 1.0 / h);\r\n\r\n\t\tconst camera = this.camera;\r\n\t\tconst uniforms = this.ssaoMaterial.uniforms;\r\n\t\tuniforms.noiseScale.value.set(w, h).divideScalar(64.0);\r\n\t\tuniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);\r\n\t\tuniforms.projectionMatrix.value.copy(camera.projectionMatrix);\r\n\r\n\t\t// Update the absolute radius.\r\n\t\tthis.radius = this.r;\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import {\r\n\tLinearFilter,\r\n\tRepeatWrapping,\r\n\tRGBFormat,\r\n\tUniform,\r\n\tWebGLRenderTarget\r\n} from \"three\";\r\n\r\nimport { BlendFunction } from \"./blending/BlendFunction.js\";\r\nimport { Resizer } from \"../core\";\r\nimport { NoiseTexture } from \"../images\";\r\nimport { SSAOMaterial } from \"../materials\";\r\nimport { ShaderPass } from \"../passes\";\r\nimport { Effect, EffectAttribute } from \"./Effect.js\";\r\n\r\nimport fragmentShader from \"./glsl/ssao/shader.frag\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) effect.\r\n *\r\n * For high quality visuals use two SSAO effect instances in a row with\r\n * different radii, one for rough AO and one for fine details.\r\n *\r\n * This effect supports depth-aware upsampling and should be rendered at a lower\r\n * resolution. The resolution should match that of the downsampled normals and\r\n * depth. If you intend to render SSAO at full resolution, do not provide a\r\n * downsampled `normalDepthBuffer` and make sure to disable\r\n * `depthAwareUpsampling`.\r\n *\r\n * It's recommended to specify a relative render resolution using the\r\n * `resolutionScale` constructor parameter to avoid undesired sampling patterns.\r\n *\r\n * Based on \"Scalable Ambient Obscurance\" by Morgan McGuire et al. and\r\n * \"Depth-aware upsampling experiments\" by Eleni Maria Stea:\r\n * https://research.nvidia.com/publication/scalable-ambient-obscurance\r\n * https://eleni.mutantstargoat.com/hikiko/on-depth-aware-upsampling\r\n */\r\n\r\nexport class SSAOEffect extends Effect {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO effect.\r\n\t *\r\n\t * @todo Move normalBuffer to options.\r\n\t * @param {Camera} camera - The main camera.\r\n\t * @param {Texture} normalBuffer - A texture that contains the scene normals. May be null if a normalDepthBuffer is provided. See {@link NormalPass}.\r\n\t * @param {Object} [options] - The options.\r\n\t * @param {BlendFunction} [options.blendFunction=BlendFunction.MULTIPLY] - The blend function of this effect.\r\n\t * @param {Number} [options.distanceScaling=true] - Enables or disables distance-based radius scaling.\r\n\t * @param {Number} [options.depthAwareUpsampling=true] - Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.\r\n\t * @param {Number} [options.normalDepthBuffer=null] - A texture that contains downsampled scene normals and depth. See {@link DepthDownsamplingPass}.\r\n\t * @param {Number} [options.samples=9] - The amount of samples per pixel. Should not be a multiple of the ring count.\r\n\t * @param {Number} [options.rings=7] - The amount of spiral turns in the occlusion sampling pattern. Should be a prime number.\r\n\t * @param {Number} [options.distanceThreshold=0.97] - A global distance threshold at which the occlusion effect starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.distanceFalloff=0.03] - The distance falloff. Influences the smoothness of the overall occlusion cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeThreshold=0.0005] - A local occlusion range threshold at which the occlusion starts to fade out. Range [0.0, 1.0].\r\n\t * @param {Number} [options.rangeFalloff=0.001] - The occlusion range falloff. Influences the smoothness of the proximity cutoff. Range [0.0, 1.0].\r\n\t * @param {Number} [options.minRadiusScale=0.33] - The minimum radius scale. Has no effect if distance scaling is disabled.\r\n\t * @param {Number} [options.luminanceInfluence=0.7] - Determines how much the luminance of the scene influences the ambient occlusion.\r\n\t * @param {Number} [options.radius=0.1825] - The occlusion sampling radius, expressed as a resolution independent scale. Range [1e-6, 1.0].\r\n\t * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.\r\n\t * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.\r\n\t * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.\r\n\t * @param {Number} [options.resolutionScale=1.0] - The resolution scale.\r\n\t * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.\r\n\t * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.\r\n\t */\r\n\r\n\tconstructor(camera, normalBuffer, {\r\n\t\tblendFunction = BlendFunction.MULTIPLY,\r\n\t\tdistanceScaling = true,\r\n\t\tdepthAwareUpsampling = true,\r\n\t\tnormalDepthBuffer = null,\r\n\t\tsamples = 9,\r\n\t\trings = 7,\r\n\t\tdistanceThreshold = 0.97,\r\n\t\tdistanceFalloff = 0.03,\r\n\t\trangeThreshold = 0.0005,\r\n\t\trangeFalloff = 0.001,\r\n\t\tminRadiusScale = 0.33,\r\n\t\tluminanceInfluence = 0.7,\r\n\t\tradius = 0.1825,\r\n\t\tintensity = 1.0,\r\n\t\tbias = 0.025,\r\n\t\tfade = 0.01,\r\n\t\tresolutionScale = 1.0,\r\n\t\twidth = Resizer.AUTO_SIZE,\r\n\t\theight = Resizer.AUTO_SIZE\r\n\t} = {}) {\r\n\r\n\t\tsuper(\"SSAOEffect\", fragmentShader, {\r\n\r\n\t\t\tblendFunction,\r\n\t\t\tattributes: EffectAttribute.DEPTH,\r\n\r\n\t\t\tuniforms: new Map([\r\n\t\t\t\t[\"aoBuffer\", new Uniform(null)],\r\n\t\t\t\t[\"luminanceInfluence\", new Uniform(luminanceInfluence)],\r\n\t\t\t\t[\"scale\", new Uniform(0.0)] // Unused.\r\n\t\t\t])\r\n\r\n\t\t});\r\n\r\n\t\t/**\r\n\t\t * A render target for the ambient occlusion shadows.\r\n\t\t *\r\n\t\t * @type {WebGLRenderTarget}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.renderTargetAO = new WebGLRenderTarget(1, 1, {\r\n\t\t\tminFilter: LinearFilter,\r\n\t\t\tmagFilter: LinearFilter,\r\n\t\t\tstencilBuffer: false,\r\n\t\t\tdepthBuffer: false,\r\n\t\t\tformat: RGBFormat\r\n\t\t});\r\n\r\n\t\tthis.renderTargetAO.texture.name = \"AO.Target\";\r\n\t\tthis.renderTargetAO.texture.generateMipmaps = false;\r\n\r\n\t\tthis.uniforms.get(\"aoBuffer\").value = this.renderTargetAO.texture;\r\n\r\n\t\t/**\r\n\t\t * The resolution of this effect.\r\n\t\t *\r\n\t\t * @type {Resizer}\r\n\t\t */\r\n\r\n\t\tthis.resolution = new Resizer(this, width, height, resolutionScale);\r\n\r\n\t\t/**\r\n\t\t * The current radius relative to the render height.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.r = 1.0;\r\n\r\n\t\t/**\r\n\t\t * The main camera.\r\n\t\t *\r\n\t\t * @type {Camera}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.camera = camera;\r\n\r\n\t\t/**\r\n\t\t * An SSAO pass.\r\n\t\t *\r\n\t\t * @type {ShaderPass}\r\n\t\t * @private\r\n\t\t */\r\n\r\n\t\tthis.ssaoPass = new ShaderPass((() => {\r\n\r\n\t\t\tconst noiseTexture = new NoiseTexture(64, 64);\r\n\t\t\tnoiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;\r\n\r\n\t\t\tconst material = new SSAOMaterial(camera);\r\n\t\t\tmaterial.uniforms.noiseTexture.value = noiseTexture;\r\n\t\t\tmaterial.uniforms.intensity.value = intensity;\r\n\t\t\tmaterial.uniforms.minRadiusScale.value = minRadiusScale;\r\n\t\t\tmaterial.uniforms.fade.value = fade;\r\n\t\t\tmaterial.uniforms.bias.value = bias;\r\n\r\n\t\t\tif(normalDepthBuffer !== null) {\r\n\r\n\t\t\t\tmaterial.uniforms.normalDepthBuffer.value = normalDepthBuffer;\r\n\t\t\t\tmaterial.defines.NORMAL_DEPTH = \"1\";\r\n\r\n\t\t\t\tif(depthAwareUpsampling) {\r\n\r\n\t\t\t\t\tthis.uniforms.set(\"normalDepthBuffer\", new Uniform(normalDepthBuffer));\r\n\t\t\t\t\tthis.defines.set(\"DEPTH_AWARE_UPSAMPLING\", \"1\");\r\n\t\t\t\t\tthis.defines.set(\"THRESHOLD\", \"0.997\");\r\n\r\n\t\t\t\t}\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tmaterial.uniforms.normalBuffer.value = normalBuffer;\r\n\r\n\t\t\t}\r\n\r\n\t\t\treturn material;\r\n\r\n\t\t})());\r\n\r\n\t\tthis.distanceScaling = distanceScaling;\r\n\t\tthis.samples = samples;\r\n\t\tthis.rings = rings;\r\n\r\n\t\t// @todo Special case treatment added for backwards-compatibility.\r\n\t\tthis.radius = (radius > 1.0) ? (radius / 100.0) : radius;\r\n\r\n\t\tthis.setDistanceCutoff(distanceThreshold, distanceFalloff);\r\n\t\tthis.setProximityCutoff(rangeThreshold, rangeFalloff);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The SSAO material.\r\n\t *\r\n\t * @type {SSAOMaterial}\r\n\t */\r\n\r\n\tget ssaoMaterial() {\r\n\r\n\t\treturn this.ssaoPass.getFullscreenMaterial();\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget samples() {\r\n\r\n\t\treturn Number(this.ssaoMaterial.defines.SAMPLES_INT);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of occlusion samples per pixel.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset samples(value) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.SAMPLES_INT = value.toFixed(0);\r\n\t\tmaterial.defines.SAMPLES_FLOAT = value.toFixed(1);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The amount of spiral turns in the occlusion sampling pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget rings() {\r\n\r\n\t\treturn Number(this.ssaoMaterial.defines.SPIRAL_TURNS);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the amount of spiral turns in the occlusion sampling pattern.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset rings(value) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.SPIRAL_TURNS = value.toFixed(1);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The occlusion sampling radius.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget radius() {\r\n\r\n\t\treturn this.r;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion sampling radius. Range [1e-6, 1.0].\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset radius(value) {\r\n\r\n\t\tthis.r = Math.min(Math.max(value, 1e-6), 1.0);\r\n\r\n\t\tconst radius = this.r * this.resolution.height;\r\n\t\tconst material = this.ssaoMaterial;\r\n\t\tmaterial.defines.RADIUS = radius.toFixed(11);\r\n\t\tmaterial.defines.RADIUS_SQ = (radius * radius).toFixed(11);\r\n\t\tmaterial.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Indicates whether distance-based radius scaling is enabled.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tget distanceScaling() {\r\n\r\n\t\treturn (this.ssaoMaterial.defines.DISTANCE_SCALING !== undefined);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Enables or disables distance-based radius scaling.\r\n\t *\r\n\t * @type {Boolean}\r\n\t */\r\n\r\n\tset distanceScaling(value) {\r\n\r\n\t\tif(this.distanceScaling !== value) {\r\n\r\n\t\t\tconst material = this.ssaoMaterial;\r\n\r\n\t\t\tif(value) {\r\n\r\n\t\t\t\tmaterial.defines.DISTANCE_SCALING = \"1\";\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tdelete material.defines.DISTANCE_SCALING;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tmaterial.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion distance cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The distance threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetDistanceCutoff(threshold, falloff) {\r\n\r\n\t\tthis.ssaoMaterial.uniforms.distanceCutoff.value.set(\r\n\t\t\tMath.min(Math.max(threshold, 0.0), 1.0),\r\n\t\t\tMath.min(Math.max(threshold + falloff, 0.0), 1.0)\r\n\t\t);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the occlusion proximity cutoff.\r\n\t *\r\n\t * @param {Number} threshold - The range threshold. Range [0.0, 1.0].\r\n\t * @param {Number} falloff - The falloff. Range [0.0, 1.0].\r\n\t */\r\n\r\n\tsetProximityCutoff(threshold, falloff) {\r\n\r\n\t\tthis.ssaoMaterial.uniforms.proximityCutoff.value.set(\r\n\t\t\tMath.min(Math.max(threshold, 0.0), 1.0),\r\n\t\t\tMath.min(Math.max(threshold + falloff, 0.0), 1.0)\r\n\t\t);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth texture.\r\n\t *\r\n\t * @param {Texture} depthTexture - A depth texture.\r\n\t * @param {Number} [depthPacking=0] - The depth packing.\r\n\t */\r\n\r\n\tsetDepthTexture(depthTexture, depthPacking = 0) {\r\n\r\n\t\tconst material = this.ssaoMaterial;\r\n\r\n\t\tif(material.defines.NORMAL_DEPTH === undefined) {\r\n\r\n\t\t\tmaterial.uniforms.normalDepthBuffer.value = depthTexture;\r\n\t\t\tmaterial.depthPacking = depthPacking;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates this effect.\r\n\t *\r\n\t * @param {WebGLRenderer} renderer - The renderer.\r\n\t * @param {WebGLRenderTarget} inputBuffer - A frame buffer that contains the result of the previous pass.\r\n\t * @param {Number} [deltaTime] - The time between the last frame and the current one in seconds.\r\n\t */\r\n\r\n\tupdate(renderer, inputBuffer, deltaTime) {\r\n\r\n\t\tthis.ssaoPass.render(renderer, null, this.renderTargetAO);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Updates the camera projection matrix uniforms and the size of internal\r\n\t * render targets.\r\n\t *\r\n\t * @param {Number} width - The width.\r\n\t * @param {Number} height - The height.\r\n\t */\r\n\r\n\tsetSize(width, height) {\r\n\r\n\t\tconst resolution = this.resolution;\r\n\t\tresolution.base.set(width, height);\r\n\r\n\t\tconst w = resolution.width;\r\n\t\tconst h = resolution.height;\r\n\r\n\t\tthis.renderTargetAO.setSize(w, h);\r\n\t\tthis.ssaoMaterial.setTexelSize(1.0 / w, 1.0 / h);\r\n\r\n\t\tconst camera = this.camera;\r\n\t\tconst uniforms = this.ssaoMaterial.uniforms;\r\n\t\tuniforms.noiseScale.value.set(w, h).divideScalar(64.0);\r\n\t\tuniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);\r\n\t\tuniforms.projectionMatrix.value.copy(camera.projectionMatrix);\r\n\r\n\t\t// Update the absolute radius.\r\n\t\tthis.radius = this.r;\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/effects/SSAOEffect.js",
     "access": "public",
@@ -11390,7 +11390,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#constructor",
     "access": "public",
     "description": "Constructs a new SSAO effect.",
-    "lineNumber": 68,
+    "lineNumber": 69,
     "todo": [
       "Move normalBuffer to options."
     ],
@@ -11552,6 +11552,18 @@
         ],
         "spread": false,
         "optional": true,
+        "defaultValue": "0.33",
+        "defaultRaw": 0.33,
+        "name": "options.minRadiusScale",
+        "description": "The minimum radius scale. Has no effect if distance scaling is disabled."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": true,
         "defaultValue": "0.7",
         "defaultRaw": 0.7,
         "name": "options.luminanceInfluence",
@@ -11652,7 +11664,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#renderTargetAO",
     "access": "private",
     "description": "A render target for the ambient occlusion shadows.",
-    "lineNumber": 109,
+    "lineNumber": 111,
     "type": {
       "nullable": null,
       "types": [
@@ -11672,7 +11684,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#resolution",
     "access": "public",
     "description": "The resolution of this effect.",
-    "lineNumber": 128,
+    "lineNumber": 130,
     "type": {
       "nullable": null,
       "types": [
@@ -11691,7 +11703,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#r",
     "access": "private",
     "description": "The current radius relative to the render height.",
-    "lineNumber": 137,
+    "lineNumber": 139,
     "type": {
       "nullable": null,
       "types": [
@@ -11711,7 +11723,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#camera",
     "access": "private",
     "description": "The main camera.",
-    "lineNumber": 146,
+    "lineNumber": 148,
     "type": {
       "nullable": null,
       "types": [
@@ -11731,7 +11743,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#ssaoPass",
     "access": "private",
     "description": "An SSAO pass.",
-    "lineNumber": 155,
+    "lineNumber": 157,
     "type": {
       "nullable": null,
       "types": [
@@ -11753,7 +11765,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#ssaoMaterial",
     "access": "public",
     "description": "The SSAO material.",
-    "lineNumber": 207,
+    "lineNumber": 210,
     "type": {
       "nullable": null,
       "types": [
@@ -11774,7 +11786,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "access": "public",
     "description": "The amount of occlusion samples per pixel.",
-    "lineNumber": 219,
+    "lineNumber": 222,
     "type": {
       "nullable": null,
       "types": [
@@ -11795,7 +11807,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#samples",
     "access": "public",
     "description": "Sets the amount of occlusion samples per pixel.",
-    "lineNumber": 231,
+    "lineNumber": 234,
     "type": {
       "nullable": null,
       "types": [
@@ -11816,7 +11828,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#rings",
     "access": "public",
     "description": "The amount of spiral turns in the occlusion sampling pattern.",
-    "lineNumber": 246,
+    "lineNumber": 249,
     "type": {
       "nullable": null,
       "types": [
@@ -11837,7 +11849,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#rings",
     "access": "public",
     "description": "Sets the amount of spiral turns in the occlusion sampling pattern.",
-    "lineNumber": 258,
+    "lineNumber": 261,
     "type": {
       "nullable": null,
       "types": [
@@ -11858,7 +11870,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "access": "public",
     "description": "The occlusion sampling radius.",
-    "lineNumber": 272,
+    "lineNumber": 275,
     "type": {
       "nullable": null,
       "types": [
@@ -11879,7 +11891,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#radius",
     "access": "public",
     "description": "Sets the occlusion sampling radius. Range [1e-6, 1.0].",
-    "lineNumber": 284,
+    "lineNumber": 287,
     "type": {
       "nullable": null,
       "types": [
@@ -11900,7 +11912,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#distanceScaling",
     "access": "public",
     "description": "Indicates whether distance-based radius scaling is enabled.",
-    "lineNumber": 302,
+    "lineNumber": 305,
     "type": {
       "nullable": null,
       "types": [
@@ -11921,7 +11933,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#distanceScaling",
     "access": "public",
     "description": "Enables or disables distance-based radius scaling.",
-    "lineNumber": 314,
+    "lineNumber": 317,
     "type": {
       "nullable": null,
       "types": [
@@ -11942,7 +11954,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setDistanceCutoff",
     "access": "public",
     "description": "Sets the occlusion distance cutoff.",
-    "lineNumber": 343,
+    "lineNumber": 346,
     "params": [
       {
         "nullable": null,
@@ -11978,7 +11990,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setProximityCutoff",
     "access": "public",
     "description": "Sets the occlusion proximity cutoff.",
-    "lineNumber": 359,
+    "lineNumber": 362,
     "params": [
       {
         "nullable": null,
@@ -12014,7 +12026,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setDepthTexture",
     "access": "public",
     "description": "Sets the depth texture.",
-    "lineNumber": 375,
+    "lineNumber": 378,
     "params": [
       {
         "nullable": null,
@@ -12052,7 +12064,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#update",
     "access": "public",
     "description": "Updates this effect.",
-    "lineNumber": 396,
+    "lineNumber": 399,
     "params": [
       {
         "nullable": null,
@@ -12098,7 +12110,7 @@
     "longname": "src/effects/SSAOEffect.js~SSAOEffect#setSize",
     "access": "public",
     "description": "Updates the camera projection matrix uniforms and the size of internal\nrender targets.",
-    "lineNumber": 410,
+    "lineNumber": 413,
     "params": [
       {
         "nullable": null,
@@ -18368,7 +18380,7 @@
     "__docId__": 801,
     "kind": "file",
     "name": "src/materials/SSAOMaterial.js",
-    "content": "import { Matrix4, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from \"three\";\r\n\r\nimport fragmentShader from \"./glsl/ssao/shader.frag\";\r\nimport vertexShader from \"./glsl/ssao/shader.vert\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) shader material.\r\n */\r\n\r\nexport class SSAOMaterial extends ShaderMaterial {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO material.\r\n\t *\r\n\t * @param {Camera} camera - A camera.\r\n\t */\r\n\r\n\tconstructor(camera) {\r\n\r\n\t\tsuper({\r\n\r\n\t\t\ttype: \"SSAOMaterial\",\r\n\r\n\t\t\tdefines: {\r\n\t\t\t\tSAMPLES_INT: \"0\",\r\n\t\t\t\tSAMPLES_FLOAT: \"0.0\",\r\n\t\t\t\tSPIRAL_TURNS: \"0.0\",\r\n\t\t\t\tRADIUS: \"1.0\",\r\n\t\t\t\tRADIUS_SQ: \"1.0\",\r\n\t\t\t\tDISTANCE_SCALING: \"1\",\r\n\t\t\t\tDEPTH_PACKING: \"0\"\r\n\t\t\t},\r\n\r\n\t\t\tuniforms: {\r\n\r\n\t\t\t\tnormalBuffer: new Uniform(null),\r\n\t\t\t\tnormalDepthBuffer: new Uniform(null),\r\n\t\t\t\tnoiseTexture: new Uniform(null),\r\n\r\n\t\t\t\tinverseProjectionMatrix: new Uniform(new Matrix4()),\r\n\t\t\t\tprojectionMatrix: new Uniform(new Matrix4()),\r\n\t\t\t\ttexelSize: new Uniform(new Vector2()),\r\n\t\t\t\tcameraNear: new Uniform(0.0),\r\n\t\t\t\tcameraFar: new Uniform(0.0),\r\n\r\n\t\t\t\tdistanceCutoff: new Uniform(new Vector2()),\r\n\t\t\t\tproximityCutoff: new Uniform(new Vector2()),\r\n\t\t\t\tnoiseScale: new Uniform(new Vector2()),\r\n\t\t\t\tintensity: new Uniform(1.0),\r\n\t\t\t\tfade: new Uniform(0.01),\r\n\t\t\t\tbias: new Uniform(0.0)\r\n\r\n\t\t\t},\r\n\r\n\t\t\tfragmentShader,\r\n\t\t\tvertexShader,\r\n\r\n\t\t\tdepthWrite: false,\r\n\t\t\tdepthTest: false\r\n\r\n\t\t});\r\n\r\n\t\t/** @ignore */\r\n\t\tthis.toneMapped = false;\r\n\r\n\t\tthis.adoptCameraSettings(camera);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The depth packing of the source depth buffer.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget depthPacking() {\r\n\r\n\t\treturn Number(this.defines.DEPTH_PACKING);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth packing.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset depthPacking(value) {\r\n\r\n\t\tthis.defines.DEPTH_PACKING = value.toFixed(0);\r\n\t\tthis.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the texel size.\r\n\t *\r\n\t * @param {Number} x - The texel width.\r\n\t * @param {Number} y - The texel height.\r\n\t */\r\n\r\n\tsetTexelSize(x, y) {\r\n\r\n\t\tthis.uniforms.texelSize.value.set(x, y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adopts the settings of the given camera.\r\n\t *\r\n\t * @param {Camera} [camera=null] - A camera.\r\n\t */\r\n\r\n\tadoptCameraSettings(camera = null) {\r\n\r\n\t\tif(camera !== null) {\r\n\r\n\t\t\tconst uniforms = this.uniforms;\r\n\r\n\t\t\tuniforms.cameraNear.value = camera.near;\r\n\t\t\tuniforms.cameraFar.value = camera.far;\r\n\r\n\t\t\tif(camera instanceof PerspectiveCamera) {\r\n\r\n\t\t\t\tthis.defines.PERSPECTIVE_CAMERA = \"1\";\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tdelete this.defines.PERSPECTIVE_CAMERA;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
+    "content": "import { Matrix4, PerspectiveCamera, ShaderMaterial, Uniform, Vector2 } from \"three\";\r\n\r\nimport fragmentShader from \"./glsl/ssao/shader.frag\";\r\nimport vertexShader from \"./glsl/ssao/shader.vert\";\r\n\r\n/**\r\n * A Screen Space Ambient Occlusion (SSAO) shader material.\r\n */\r\n\r\nexport class SSAOMaterial extends ShaderMaterial {\r\n\r\n\t/**\r\n\t * Constructs a new SSAO material.\r\n\t *\r\n\t * @param {Camera} camera - A camera.\r\n\t */\r\n\r\n\tconstructor(camera) {\r\n\r\n\t\tsuper({\r\n\r\n\t\t\ttype: \"SSAOMaterial\",\r\n\r\n\t\t\tdefines: {\r\n\t\t\t\tSAMPLES_INT: \"0\",\r\n\t\t\t\tSAMPLES_FLOAT: \"0.0\",\r\n\t\t\t\tSPIRAL_TURNS: \"0.0\",\r\n\t\t\t\tRADIUS: \"1.0\",\r\n\t\t\t\tRADIUS_SQ: \"1.0\",\r\n\t\t\t\tDISTANCE_SCALING: \"1\",\r\n\t\t\t\tDEPTH_PACKING: \"0\"\r\n\t\t\t},\r\n\r\n\t\t\tuniforms: {\r\n\r\n\t\t\t\tnormalBuffer: new Uniform(null),\r\n\t\t\t\tnormalDepthBuffer: new Uniform(null),\r\n\t\t\t\tnoiseTexture: new Uniform(null),\r\n\r\n\t\t\t\tinverseProjectionMatrix: new Uniform(new Matrix4()),\r\n\t\t\t\tprojectionMatrix: new Uniform(new Matrix4()),\r\n\t\t\t\ttexelSize: new Uniform(new Vector2()),\r\n\t\t\t\tcameraNear: new Uniform(0.0),\r\n\t\t\t\tcameraFar: new Uniform(0.0),\r\n\r\n\t\t\t\tdistanceCutoff: new Uniform(new Vector2()),\r\n\t\t\t\tproximityCutoff: new Uniform(new Vector2()),\r\n\t\t\t\tnoiseScale: new Uniform(new Vector2()),\r\n\t\t\t\tminRadiusScale: new Uniform(0.33),\r\n\t\t\t\tintensity: new Uniform(1.0),\r\n\t\t\t\tfade: new Uniform(0.01),\r\n\t\t\t\tbias: new Uniform(0.0)\r\n\r\n\t\t\t},\r\n\r\n\t\t\tfragmentShader,\r\n\t\t\tvertexShader,\r\n\r\n\t\t\tdepthWrite: false,\r\n\t\t\tdepthTest: false\r\n\r\n\t\t});\r\n\r\n\t\t/** @ignore */\r\n\t\tthis.toneMapped = false;\r\n\r\n\t\tthis.adoptCameraSettings(camera);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * The depth packing of the source depth buffer.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tget depthPacking() {\r\n\r\n\t\treturn Number(this.defines.DEPTH_PACKING);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the depth packing.\r\n\t *\r\n\t * @type {Number}\r\n\t */\r\n\r\n\tset depthPacking(value) {\r\n\r\n\t\tthis.defines.DEPTH_PACKING = value.toFixed(0);\r\n\t\tthis.needsUpdate = true;\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the texel size.\r\n\t *\r\n\t * @param {Number} x - The texel width.\r\n\t * @param {Number} y - The texel height.\r\n\t */\r\n\r\n\tsetTexelSize(x, y) {\r\n\r\n\t\tthis.uniforms.texelSize.value.set(x, y);\r\n\r\n\t}\r\n\r\n\t/**\r\n\t * Adopts the settings of the given camera.\r\n\t *\r\n\t * @param {Camera} [camera=null] - A camera.\r\n\t */\r\n\r\n\tadoptCameraSettings(camera = null) {\r\n\r\n\t\tif(camera !== null) {\r\n\r\n\t\t\tconst uniforms = this.uniforms;\r\n\r\n\t\t\tuniforms.cameraNear.value = camera.near;\r\n\t\t\tuniforms.cameraFar.value = camera.far;\r\n\r\n\t\t\tif(camera instanceof PerspectiveCamera) {\r\n\r\n\t\t\t\tthis.defines.PERSPECTIVE_CAMERA = \"1\";\r\n\r\n\t\t\t} else {\r\n\r\n\t\t\t\tdelete this.defines.PERSPECTIVE_CAMERA;\r\n\r\n\t\t\t}\r\n\r\n\t\t\tthis.needsUpdate = true;\r\n\r\n\t\t}\r\n\r\n\t}\r\n\r\n}\r\n",
     "static": true,
     "longname": "D:/Sourcecode/JavaScript/postprocessing/src/materials/SSAOMaterial.js",
     "access": "public",
@@ -18427,7 +18439,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#toneMapped",
     "access": "public",
     "description": null,
-    "lineNumber": 64,
+    "lineNumber": 65,
     "ignore": true,
     "type": {
       "types": [
@@ -18446,7 +18458,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#depthPacking",
     "access": "public",
     "description": "The depth packing of the source depth buffer.",
-    "lineNumber": 76,
+    "lineNumber": 77,
     "type": {
       "nullable": null,
       "types": [
@@ -18467,7 +18479,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#depthPacking",
     "access": "public",
     "description": "Sets the depth packing.",
-    "lineNumber": 88,
+    "lineNumber": 89,
     "type": {
       "nullable": null,
       "types": [
@@ -18486,7 +18498,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#needsUpdate",
     "access": "public",
     "description": null,
-    "lineNumber": 91,
+    "lineNumber": 92,
     "undocument": true,
     "type": {
       "types": [
@@ -18505,7 +18517,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#setTexelSize",
     "access": "public",
     "description": "Sets the texel size.",
-    "lineNumber": 102,
+    "lineNumber": 103,
     "params": [
       {
         "nullable": null,
@@ -18541,7 +18553,7 @@
     "longname": "src/materials/SSAOMaterial.js~SSAOMaterial#adoptCameraSettings",
     "access": "public",
     "description": "Adopts the settings of the given camera.",
-    "lineNumber": 114,
+    "lineNumber": 115,
     "params": [
       {
         "nullable": null,
@@ -23261,7 +23273,7 @@
   },
   {
     "kind": "packageJSON",
-    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.14.2\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"exports\": {\r\n\t\t\".\": \"./build/postprocessing.esm.js\"\r\n\t},\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c -w\",\r\n\t\t\"dev\": \"concurrently --kill-others \\\"hs -s\\\" \\\"rollup -c -w\\\"\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run build:production\",\r\n\t\t\"test\": \"ava\",\r\n\t\t\"prepack\": \"npm test && npm run doc\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t],\r\n\t\t\"require\": [\r\n\t\t\t\"esm\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.118.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"@rollup/plugin-babel\": \"5.x.x\",\r\n\t\t\"@rollup/plugin-node-resolve\": \"8.x.x\",\r\n\t\t\"ava\": \"3.x.x\",\r\n\t\t\"concurrently\": \"5.x.x\",\r\n\t\t\"cross-env\": \"7.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"esm\": \"3.x.x\",\r\n\t\t\"http-server\": \"0.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"2.x.x\",\r\n\t\t\"rollup-plugin-eslint\": \"6.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-string\": \"3.x.x\",\r\n\t\t\"rollup-plugin-terser\": \"6.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.117.x\",\r\n\t\t\"three-demo\": \"3.x.x\"\r\n\t}\r\n}\r\n",
+    "content": "{\r\n\t\"name\": \"postprocessing\",\r\n\t\"version\": \"6.14.3\",\r\n\t\"description\": \"A post processing library that provides the means to implement image filter effects for three.js.\",\r\n\t\"homepage\": \"https://github.com/vanruesc/postprocessing\",\r\n\t\"main\": \"build/postprocessing.js\",\r\n\t\"module\": \"build/postprocessing.esm.js\",\r\n\t\"exports\": {\r\n\t\t\".\": \"./build/postprocessing.esm.js\"\r\n\t},\r\n\t\"sideEffects\": false,\r\n\t\"license\": \"Zlib\",\r\n\t\"keywords\": [\r\n\t\t\"rendering\",\r\n\t\t\"image\",\r\n\t\t\"filter\",\r\n\t\t\"effect\",\r\n\t\t\"composer\",\r\n\t\t\"pass\",\r\n\t\t\"post\",\r\n\t\t\"processing\",\r\n\t\t\"gpgpu\",\r\n\t\t\"rtt\",\r\n\t\t\"rendertexture\",\r\n\t\t\"rendertarget\",\r\n\t\t\"three\"\r\n\t],\r\n\t\"author\": {\r\n\t\t\"name\": \"Raoul van Rüschen\",\r\n\t\t\"email\": \"vanruesc@outlook.de\"\r\n\t},\r\n\t\"repository\": {\r\n\t\t\"type\": \"git\",\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing.git\"\r\n\t},\r\n\t\"bugs\": {\r\n\t\t\"url\": \"https://github.com/vanruesc/postprocessing/issues\"\r\n\t},\r\n\t\"files\": [\r\n\t\t\"build\"\r\n\t],\r\n\t\"scripts\": {\r\n\t\t\"ava\": \"ava\",\r\n\t\t\"build\": \"rollup -c\",\r\n\t\t\"build:production\": \"cross-env NODE_ENV=production npm run build\",\r\n\t\t\"watch\": \"rollup -c -w\",\r\n\t\t\"dev\": \"concurrently --kill-others \\\"hs -s\\\" \\\"rollup -c -w\\\"\",\r\n\t\t\"doc\": \"rimraf public/docs && esdoc\",\r\n\t\t\"pretest\": \"npm run build:production\",\r\n\t\t\"test\": \"ava\",\r\n\t\t\"prepack\": \"npm test && npm run doc\"\r\n\t},\r\n\t\"ava\": {\r\n\t\t\"failFast\": true,\r\n\t\t\"files\": [\r\n\t\t\t\"test/**/*.js\"\r\n\t\t],\r\n\t\t\"require\": [\r\n\t\t\t\"esm\"\r\n\t\t]\r\n\t},\r\n\t\"eslintConfig\": {\r\n\t\t\"extends\": \"delta\"\r\n\t},\r\n\t\"peerDependencies\": {\r\n\t\t\"three\": \">= 0.102.0 < 0.118.0\"\r\n\t},\r\n\t\"devDependencies\": {\r\n\t\t\"@babel/core\": \"7.x.x\",\r\n\t\t\"@babel/preset-env\": \"7.x.x\",\r\n\t\t\"@rollup/plugin-babel\": \"5.x.x\",\r\n\t\t\"@rollup/plugin-node-resolve\": \"8.x.x\",\r\n\t\t\"ava\": \"3.x.x\",\r\n\t\t\"concurrently\": \"5.x.x\",\r\n\t\t\"cross-env\": \"7.x.x\",\r\n\t\t\"dat.gui\": \"0.x.x\",\r\n\t\t\"delta-controls\": \"2.x.x\",\r\n\t\t\"esdoc\": \"1.x.x\",\r\n\t\t\"esdoc-importpath-plugin\": \"1.x.x\",\r\n\t\t\"esdoc-standard-plugin\": \"1.x.x\",\r\n\t\t\"eslint-config-delta\": \"1.x.x\",\r\n\t\t\"esm\": \"3.x.x\",\r\n\t\t\"http-server\": \"0.x.x\",\r\n\t\t\"math-ds\": \"1.x.x\",\r\n\t\t\"rimraf\": \"3.x.x\",\r\n\t\t\"rollup\": \"2.x.x\",\r\n\t\t\"rollup-plugin-eslint\": \"6.x.x\",\r\n\t\t\"rollup-plugin-glsl\": \"1.x.x\",\r\n\t\t\"rollup-plugin-string\": \"3.x.x\",\r\n\t\t\"rollup-plugin-terser\": \"6.x.x\",\r\n\t\t\"synthetic-event\": \"1.x.x\",\r\n\t\t\"three\": \"0.117.x\",\r\n\t\t\"three-demo\": \"3.x.x\"\r\n\t}\r\n}\r\n",
     "longname": "D:\\Sourcecode\\JavaScript\\postprocessing\\package.json",
     "name": "package.json",
     "static": true,
