@@ -47618,7 +47618,7 @@
           rangeFalloff: 0.0001,
           luminanceInfluence: 0.7,
           minRadiusScale: 0.33,
-          radius: 0.1825,
+          radius: 0.1,
           intensity: 1.33,
           bias: 0.025,
           fade: 0.01,
