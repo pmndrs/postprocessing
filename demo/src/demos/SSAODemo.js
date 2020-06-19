@@ -180,6 +180,7 @@ export class SSAODemo extends PostProcessingDemo {
 		// Example: worldDistance = distanceThreshold * (camera.far - camera.near)
 		const ssaoEffect = new SSAOEffect(camera, normalPass.texture, {
 			blendFunction: BlendFunction.MULTIPLY,
+			distanceScaling: true,
 			depthAwareUpsampling: true,
 			normalDepthBuffer,
 			samples: 9,
@@ -192,6 +193,7 @@ export class SSAODemo extends PostProcessingDemo {
 			radius: 0.1825,
 			intensity: 1.33,
 			bias: 0.025,
+			fade: 0.01,
 			resolutionScale: 0.5
 		});
 
@@ -260,9 +262,11 @@ export class SSAODemo extends PostProcessingDemo {
 				"enabled": ssaoEffect.defines.has("DEPTH_AWARE_UPSAMPLING"),
 				"threshold": Number(ssaoEffect.defines.get("THRESHOLD"))
 			},
+			"distance scaling": ssaoEffect.distanceScaling,
 			"lum influence": ssaoEffect.uniforms.get("luminanceInfluence").value,
 			"intensity": uniforms.intensity.value,
 			"bias": uniforms.bias.value,
+			"fade": uniforms.fade.value,
 			"render mode": RenderMode.DEFAULT,
 			"resolution": ssaoEffect.resolution.scale,
 			"opacity": blendMode.opacity.value,
@@ -311,6 +315,12 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(ssaoEffect, "samples").min(1).max(32).step(1);
 		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
 		menu.add(ssaoEffect, "radius").min(1e-6).max(1.0).step(0.001);
+
+		menu.add(params, "distance scaling").onChange(() => {
+
+			ssaoEffect.distanceScaling = params["distance scaling"];
+
+		});
 
 		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
 
@@ -380,6 +390,12 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(params, "bias").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			uniforms.bias.value = params.bias;
+
+		});
+
+		menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			uniforms.fade.value = params.fade;
 
 		});
 
