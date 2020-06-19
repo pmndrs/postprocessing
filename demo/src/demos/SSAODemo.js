@@ -190,6 +190,7 @@ export class SSAODemo extends PostProcessingDemo {
 			rangeThreshold: 0.0003,		// Occlusion proximity of ~0.3 world units
 			rangeFalloff: 0.0001,			// with ~0.1 units of falloff.
 			luminanceInfluence: 0.7,
+			minRadiusScale: 0.33,
 			radius: 0.1825,
 			intensity: 1.33,
 			bias: 0.025,
@@ -262,7 +263,10 @@ export class SSAODemo extends PostProcessingDemo {
 				"enabled": ssaoEffect.defines.has("DEPTH_AWARE_UPSAMPLING"),
 				"threshold": Number(ssaoEffect.defines.get("THRESHOLD"))
 			},
-			"distance scaling": ssaoEffect.distanceScaling,
+			"distanceScaling": {
+				"enabled": ssaoEffect.distanceScaling,
+				"min scale": uniforms.minRadiusScale.value
+			},
 			"lum influence": ssaoEffect.uniforms.get("luminanceInfluence").value,
 			"intensity": uniforms.intensity.value,
 			"bias": uniforms.bias.value,
@@ -316,19 +320,19 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(ssaoEffect, "rings").min(1).max(16).step(1);
 		menu.add(ssaoEffect, "radius").min(1e-6).max(1.0).step(0.001);
 
-		menu.add(params, "distance scaling").onChange(() => {
+		let f = menu.addFolder("Distance Scaling");
 
-			ssaoEffect.distanceScaling = params["distance scaling"];
+		f.add(params.distanceScaling, "enabled").onChange(() => {
 
-		});
-
-		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
-
-			ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
+			ssaoEffect.distanceScaling = params.distanceScaling.enabled;
 
 		});
 
-		let f;
+		f.add(params.distanceScaling, "min scale").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			uniforms.minRadiusScale.value = params.distanceScaling["min scale"];
+
+		});
 
 		if(capabilities.isWebGL2) {
 
@@ -396,6 +400,12 @@ export class SSAODemo extends PostProcessingDemo {
 		menu.add(params, "fade").min(0.0).max(1.0).step(0.001).onChange(() => {
 
 			uniforms.fade.value = params.fade;
+
+		});
+
+		menu.add(params, "lum influence").min(0.0).max(1.0).step(0.001).onChange(() => {
+
+			ssaoEffect.uniforms.get("luminanceInfluence").value = params["lum influence"];
 
 		});
 
