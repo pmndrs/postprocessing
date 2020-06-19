@@ -27,6 +27,7 @@ export class SSAOMaterial extends ShaderMaterial {
 				SPIRAL_TURNS: "0.0",
 				RADIUS: "1.0",
 				RADIUS_SQ: "1.0",
+				DISTANCE_SCALING: "1",
 				DEPTH_PACKING: "0"
 			},
 

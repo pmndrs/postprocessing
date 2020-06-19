@@ -77,8 +77,15 @@ vec3 getViewPosition(const in vec2 screenPosition, const in float depth, const i
 
 float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth, const in vec2 uv) {
 
-	// Scale the radius based on the distance from the camera.
-	float radius = RADIUS / p.z;
+	#ifdef DISTANCE_SCALING
+
+		float radius = RADIUS / p.z;
+
+	#else
+
+		float radius = RADIUS;
+
+	#endif
 
 	// Use a random starting angle.
 	float noise = texture2D(noiseTexture, vUv2).r;
@@ -147,7 +154,7 @@ float getAmbientOcclusion(const in vec3 p, const in vec3 n, const in float depth
 
 	}
 
-	return occlusion / max(4.0 * float(taps), 1.0);
+	return occlusion / (4.0 * max(float(taps), 1.0));
 
 }
 
