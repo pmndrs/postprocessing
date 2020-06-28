@@ -191,21 +191,13 @@ window.addEventListener("load", (event) => {
 	const viewport = document.getElementById("viewport");
 
 	// Create and configure the renderer.
-	const attributes = {
+	renderer = new WebGLRenderer({
 		powerPreference: "high-performance",
 		antialias: false,
 		stencil: false,
 		alpha: false,
 		depth: false
-	};
-
-	const canvas = document.createElement("canvas");
-	const context = canvas.getContext("webgl2", attributes);
-
-	// Use WebGL 2 or fall back to WebGL 1.
-	renderer = (context !== null) ?
-		new WebGLRenderer({ canvas, context }) :
-		new WebGLRenderer(attributes);
+	});
 
 	renderer.outputEncoding = sRGBEncoding;
 	renderer.debug.checkShaderErrors = debug;
@@ -300,7 +292,7 @@ window.addEventListener("resize", (function() {
 
 		if(timeoutId === 0) {
 
-			timeoutId = setTimeout(handleResize, 66, event);
+			timeoutId = setTimeout(handleResize, 100, event);
 
 		}
 
