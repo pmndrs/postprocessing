@@ -15,6 +15,12 @@ uniform float luminanceInfluence;
 
 #endif
 
+#ifdef COLORIZE
+
+	uniform vec3 color;
+
+#endif
+
 void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth, out vec4 outputColor) {
 
 	float aoLinear = texture2D(aoBuffer, uv).r;
@@ -76,6 +82,14 @@ void mainImage(const in vec4 inputColor, const in vec2 uv, const in float depth,
 	float l = linearToRelativeLuminance(inputColor.rgb);
 	ao = mix(ao, 1.0, l * luminanceInfluence);
 
-	outputColor = vec4(vec3(ao), inputColor.a);
+	#ifdef COLORIZE
+
+		outputColor = vec4(1.0 - (1.0 - ao) * (1.0 - color), inputColor.a);
+
+	#else
+
+		outputColor = vec4(vec3(ao), inputColor.a);
+
+	#endif
 
 }

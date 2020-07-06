@@ -1,4 +1,5 @@
 import {
+	Color,
 	LinearFilter,
 	RepeatWrapping,
 	RGBFormat,
@@ -70,6 +71,7 @@ export class SSAOEffect extends Effect {
 	 * @param {Number} [options.intensity=1.0] - The intensity of the ambient occlusion.
 	 * @param {Number} [options.bias=0.025] - An occlusion bias. Eliminates artifacts caused by depth discontinuities.
 	 * @param {Number} [options.fade=0.01] - Influences the smoothness of the shadows. A lower value results in higher contrast.
+	 * @param {Color} [options.color=null] - The color of the ambient occlusion.
 	 * @param {Number} [options.resolutionScale=1.0] - The resolution scale.
 	 * @param {Number} [options.width=Resizer.AUTO_SIZE] - The render width.
 	 * @param {Number} [options.height=Resizer.AUTO_SIZE] - The render height.
@@ -92,6 +94,7 @@ export class SSAOEffect extends Effect {
 		intensity = 1.0,
 		bias = 0.025,
 		fade = 0.01,
+		color = null,
 		resolutionScale = 1.0,
 		width = Resizer.AUTO_SIZE,
 		height = Resizer.AUTO_SIZE
@@ -106,6 +109,7 @@ export class SSAOEffect extends Effect {
 				["aoBuffer", new Uniform(null)],
 				["normalDepthBuffer", new Uniform(null)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
+				["color", new Uniform(null)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
 
@@ -202,6 +206,7 @@ export class SSAOEffect extends Effect {
 		this.distanceScaling = distanceScaling;
 		this.samples = samples;
 		this.rings = rings;
+		this.color = color;
 
 		// @todo Special case treatment added for backwards-compatibility.
 		this.radius = (radius > 1.0) ? (radius / 100.0) : radius;
@@ -379,6 +384,59 @@ export class SSAOEffect extends Effect {
 			}
 
 			material.needsUpdate = true;
+
+		}
+
+	}
+
+	/**
+	 * The color of the ambient occlusion.
+	 *
+	 * @type {Color}
+	 */
+
+	get color() {
+
+		return this.uniforms.get("color").value;
+
+	}
+
+	/**
+	 * Sets the color of the ambient occlusion.
+	 *
+	 * Set to `null` to disable colorization.
+	 *
+	 * @type {Color}
+	 */
+
+	set color(value) {
+
+		const uniforms = this.uniforms;
+		const defines = this.defines;
+
+		if(value === null) {
+
+			if(defines.has("COLORIZE")) {
+
+				defines.delete("COLORIZE");
+				uniforms.get("color").value = null;
+				this.setChanged();
+
+			}
+
+		} else {
+
+			if(defines.has("COLORIZE")) {
+
+				uniforms.get("color").value.set(value);
+
+			} else {
+
+				defines.set("COLORIZE", "1");
+				uniforms.get("color").value = new Color(value);
+				this.setChanged();
+
+			}
 
 		}
 
