@@ -104,6 +104,7 @@ export class SSAOEffect extends Effect {
 
 			uniforms: new Map([
 				["aoBuffer", new Uniform(null)],
+				["normalDepthBuffer", new Uniform(null)],
 				["luminanceInfluence", new Uniform(luminanceInfluence)],
 				["scale", new Uniform(0.0)] // Unused.
 			])
@@ -182,8 +183,8 @@ export class SSAOEffect extends Effect {
 
 				if(depthAwareUpsampling) {
 
-					this.uniforms.set("normalDepthBuffer", new Uniform(normalDepthBuffer));
-					this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+					this.depthAwareUpsampling = depthAwareUpsampling;
+					this.uniforms.get("normalDepthBuffer").value = normalDepthBuffer;
 					this.defines.set("THRESHOLD", "0.997");
 
 				}
@@ -302,6 +303,44 @@ export class SSAOEffect extends Effect {
 		material.defines.RADIUS = radius.toFixed(11);
 		material.defines.RADIUS_SQ = (radius * radius).toFixed(11);
 		material.needsUpdate = true;
+
+	}
+
+	/**
+	 * Indicates whether depth-aware upsampling is enabled.
+	 *
+	 * @type {Boolean}
+	 */
+
+	get depthAwareUpsampling() {
+
+		return this.defines.has("DEPTH_AWARE_UPSAMPLING");
+
+	}
+
+	/**
+	 * Enables or disables depth-aware upsampling.
+	 *
+	 * @type {Boolean}
+	 */
+
+	set depthAwareUpsampling(value) {
+
+		if(this.depthAwareUpsampling !== value) {
+
+			if(value) {
+
+				this.defines.set("DEPTH_AWARE_UPSAMPLING", "1");
+
+			} else {
+
+				this.defines.delete("DEPTH_AWARE_UPSAMPLING");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
