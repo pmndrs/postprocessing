@@ -331,10 +331,9 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 			const mode = Number(params.smaa.mode);
 
-			edgesTextureEffect.blendMode.blendFunction = (mode === SMAAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP;
-			weightsTextureEffect.blendMode.blendFunction = (mode === SMAAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP;
+			edgesTextureEffect.blendMode.setBlendFunction((mode === SMAAMode.SMAA_EDGES) ? BlendFunction.NORMAL : BlendFunction.SKIP);
+			weightsTextureEffect.blendMode.setBlendFunction((mode === SMAAMode.SMAA_WEIGHTS) ? BlendFunction.NORMAL : BlendFunction.SKIP);
 			effectPass.encodeOutput = (mode !== SMAAMode.SMAA_EDGES && mode !== SMAAMode.SMAA_WEIGHTS);
-			effectPass.recompile();
 
 		});
 
@@ -364,8 +363,7 @@ export class AntialiasingDemo extends PostProcessingDemo {
 
 		folder.add(params.smaa, "blend mode", BlendFunction).onChange(() => {
 
-			smaaEffect.blendMode.blendFunction = Number(params.smaa["blend mode"]);
-			effectPass.recompile();
+			smaaEffect.blendMode.setBlendFunction(Number(params.smaa["blend mode"]));
 
 		});
 

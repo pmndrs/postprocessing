@@ -281,9 +281,6 @@ export class SSAODemo extends PostProcessingDemo {
 
 			const mode = Number(params["render mode"]);
 
-			textureEffect.blendMode.blendFunction = (mode !== RenderMode.DEFAULT) ?
-				BlendFunction.NORMAL : BlendFunction.SKIP;
-
 			if(mode === RenderMode.DEPTH) {
 
 				textureEffect.setTextureSwizzleRGBA(ColorChannel.ALPHA);
@@ -299,7 +296,8 @@ export class SSAODemo extends PostProcessingDemo {
 
 			}
 
-			effectPass.recompile();
+			textureEffect.blendMode.setBlendFunction((mode !== RenderMode.DEFAULT) ?
+				BlendFunction.NORMAL : BlendFunction.SKIP);
 
 		}
 
@@ -423,8 +421,7 @@ export class SSAODemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			effectPass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

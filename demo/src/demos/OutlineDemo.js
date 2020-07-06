@@ -476,8 +476,6 @@ export class OutlineDemo extends PostProcessingDemo {
 
 			}
 
-			pass.recompile();
-
 		});
 
 		menu.add(params, "pattern scale").min(20.0).max(100.0).step(0.1).onChange(() => {
@@ -514,7 +512,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		});
 
-		menu.add(effect, "xRay").onChange(() => pass.recompile());
+		menu.add(effect, "xRay");
 
 		menu.add(params, "opacity").min(0.0).max(1.0).step(0.01).onChange(() => {
 
@@ -524,8 +522,7 @@ export class OutlineDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			pass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

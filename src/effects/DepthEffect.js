@@ -33,7 +33,7 @@ export class DepthEffect extends Effect {
 	}
 
 	/**
-	 * Indicates whether depth will be inverted.
+	 * Indicates whether depth should be inverted.
 	 *
 	 * @type {Boolean}
 	 */
@@ -47,14 +47,26 @@ export class DepthEffect extends Effect {
 	/**
 	 * Enables or disables depth inversion.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set inverted(value) {
 
-		value ? this.defines.set("INVERTED", "1") : this.defines.delete("INVERTED");
+		if(this.inverted !== value) {
+
+			if(value) {
+
+				this.defines.set("INVERTED", "1");
+
+			} else {
+
+				this.defines.delete("INVERTED");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 

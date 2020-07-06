@@ -40,15 +40,6 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 		this.effect = null;
 
-		/**
-		 * A pass.
-		 *
-		 * @type {Pass}
-		 * @private
-		 */
-
-		this.pass = null;
-
 	}
 
 	/**
@@ -147,7 +138,6 @@ export class ColorDepthDemo extends PostProcessingDemo {
 		const colorDepthEffect = new ColorDepthEffect({ bits: 16 });
 		const pass = new EffectPass(camera, smaaEffect, colorDepthEffect);
 		this.effect = colorDepthEffect;
-		this.pass = pass;
 
 		composer.addPass(pass);
 
@@ -161,7 +151,6 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 	registerOptions(menu) {
 
-		const pass = this.pass;
 		const effect = this.effect;
 		const blendMode = effect.blendMode;
 
@@ -185,8 +174,7 @@ export class ColorDepthDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			pass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

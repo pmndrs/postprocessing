@@ -68,35 +68,31 @@ export class OutlineEffect extends Effect {
 				["edgeStrength", new Uniform(edgeStrength)],
 				["visibleEdgeColor", new Uniform(new Color(visibleEdgeColor))],
 				["hiddenEdgeColor", new Uniform(new Color(hiddenEdgeColor))],
-				["pulse", new Uniform(1.0)]
+				["pulse", new Uniform(1.0)],
+				["patternScale", new Uniform(1.0)],
+				["patternTexture", new Uniform(null)]
 			])
 
 		});
 
-		// Intercept blend function changes.
-		this.blendMode = ((defines) => (new Proxy(this.blendMode, {
+		// Handle alpha blending.
+		this.blendMode.addEventListener("change", (event) => {
 
-			set(target, name, value) {
+			if(this.blendMode.getBlendFunction() === BlendFunction.ALPHA) {
 
-				if(value === BlendFunction.ALPHA) {
+				this.defines.set("ALPHA", "1");
 
-					defines.set("ALPHA", "1");
+			} else {
 
-				} else {
-
-					defines.delete("ALPHA");
-
-				}
-
-				target[name] = value;
-
-				return true;
+				this.defines.delete("ALPHA");
 
 			}
 
-		})))(this.defines);
+			this.setChanged();
 
-		this.blendMode.blendFunction = blendFunction;
+		});
+
+		this.blendMode.setBlendFunction(blendFunction);
 		this.setPatternTexture(patternTexture);
 		this.xRay = xRay;
 
@@ -417,22 +413,31 @@ export class OutlineEffect extends Effect {
 	/**
 	 * Enables or disables X-Ray outlines.
 	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing this value.
-	 *
 	 * @type {Boolean}
 	 */
 
 	set xRay(value) {
 
-		value ? this.defines.set("X_RAY", "1") : this.defines.delete("X_RAY");
+		if(this.xRay !== value) {
+
+			if(value) {
+
+				this.defines.set("X_RAY", "1");
+
+			} else {
+
+				this.defines.delete("X_RAY");
+
+			}
+
+			this.setChanged();
+
+		}
 
 	}
 
 	/**
 	 * Sets the pattern texture.
-	 *
-	 * You'll need to call {@link EffectPass#recompile} after changing the
-	 * texture.
 	 *
 	 * @param {Texture} texture - The new texture.
 	 */
@@ -444,18 +449,18 @@ export class OutlineEffect extends Effect {
 			texture.wrapS = texture.wrapT = RepeatWrapping;
 
 			this.defines.set("USE_PATTERN", "1");
-			this.uniforms.set("patternScale", new Uniform(1.0));
-			this.uniforms.set("patternTexture", new Uniform(texture));
-			this.vertexShader = vertexShader;
+			this.uniforms.get("patternTexture").value = texture;
+			this.setVertexShader(vertexShader);
 
 		} else {
 
 			this.defines.delete("USE_PATTERN");
-			this.uniforms.delete("patternScale");
-			this.uniforms.delete("patternTexture");
-			this.vertexShader = null;
+			this.uniforms.get("patternTexture").value = null;
+			this.setVertexShader(null);
 
 		}
+
+		this.setChanged();
 
 	}
 

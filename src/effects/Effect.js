@@ -1,3 +1,4 @@
+import { EventDispatcher } from "three";
 import { BlendFunction } from "./blending/BlendFunction.js";
 import { BlendMode } from "./blending/BlendMode.js";
 
@@ -11,7 +12,7 @@ import { BlendMode } from "./blending/BlendMode.js";
  * @implements {Disposable}
  */
 
-export class Effect {
+export class Effect extends EventDispatcher {
 
 	/**
 	 * Constructs a new effect.
@@ -36,6 +37,8 @@ export class Effect {
 		vertexShader = null
 	} = {}) {
 
+		super();
+
 		/**
 		 * The name of this effect.
 		 *
@@ -47,10 +50,8 @@ export class Effect {
 		/**
 		 * The effect attributes.
 		 *
-		 * Effects that have the same attributes will be executed in the order in
-		 * which they were registered. Some attributes imply a higher priority.
-		 *
 		 * @type {EffectAttribute}
+		 * @private
 		 */
 
 		this.attributes = attributes;
@@ -59,6 +60,7 @@ export class Effect {
 		 * The fragment shader.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.fragmentShader = fragmentShader;
@@ -67,6 +69,7 @@ export class Effect {
 		 * The vertex shader.
 		 *
 		 * @type {String}
+		 * @private
 		 */
 
 		this.vertexShader = vertexShader;
@@ -74,7 +77,7 @@ export class Effect {
 		/**
 		 * Preprocessor macro definitions.
 		 *
-		 * You'll need to call {@link EffectPass#recompile} after changing a macro.
+		 * Call {@link Effect.setChanged} after changing macro definitions.
 		 *
 		 * @type {Map<String, String>}
 		 */
@@ -85,7 +88,9 @@ export class Effect {
 		 * Shader uniforms.
 		 *
 		 * You may freely modify the values of these uniforms at runtime. However,
-		 * uniforms must not be removed or added after the effect was created.
+		 * uniforms should not be removed or added after the effect was created.
+		 *
+		 * Call {@link Effect.setChanged} after adding or removing uniforms.
 		 *
 		 * @type {Map<String, Uniform>}
 		 */
@@ -95,8 +100,7 @@ export class Effect {
 		/**
 		 * WebGL extensions that are required by this effect.
 		 *
-		 * You'll need to call {@link EffectPass#recompile} after adding or removing
-		 * an extension.
+		 * Call {@link Effect.setChanged} after adding or removing extensions.
 		 *
 		 * @type {Set<WebGLExtension>}
 		 */
@@ -109,14 +113,108 @@ export class Effect {
 		 * The result of this effect will be blended with the result of the previous
 		 * effect using this blend mode.
 		 *
-		 * Feel free to adjust the opacity of the blend mode at runtime. However,
-		 * you'll need to call {@link EffectPass#recompile} if you change the blend
-		 * function.
-		 *
 		 * @type {BlendMode}
 		 */
 
 		this.blendMode = new BlendMode(blendFunction);
+		this.blendMode.addEventListener("change", (event) => this.setChanged());
+
+	}
+
+	/**
+	 * Informs the associated {@link EffectPass} that this effect has changed in
+	 * a way that requires a shader recompilation.
+	 *
+	 * Call this method after changing macro definitions or extensions and after
+	 * adding or removing uniforms.
+	 *
+	 * @protected
+	 */
+
+	setChanged() {
+
+		this.dispatchEvent({ type: "change" });
+
+	}
+
+	/**
+	 * Returns the effect attributes.
+	 *
+	 * @return {EffectAttribute} The attributes.
+	 */
+
+	getAttributes() {
+
+		return this.attributes;
+
+	}
+
+	/**
+	 * Sets the effect attributes.
+	 *
+	 * Effects that have the same attributes will be executed in the order in
+	 * which they were registered. Some attributes imply a higher priority.
+	 *
+	 * @protected
+	 * @param {EffectAttribute} attributes - The attributes.
+	 */
+
+	setAttributes(attributes) {
+
+		this.attributes = attributes;
+		this.setChanged();
+
+	}
+
+	/**
+	 * Returns the fragment shader.
+	 *
+	 * @return {String} The fragment shader.
+	 */
+
+	getFragmentShader() {
+
+		return this.fragmentShader;
+
+	}
+
+	/**
+	 * Sets the fragment shader.
+	 *
+	 * @protected
+	 * @param {String} fragmentShader - The fragment shader.
+	 */
+
+	setFragmentShader(fragmentShader) {
+
+		this.fragmentShader = fragmentShader;
+		this.setChanged();
+
+	}
+
+	/**
+	 * Returns the vertex shader.
+	 *
+	 * @return {String} The vertex shader.
+	 */
+
+	getVertexShader() {
+
+		return this.vertexShader;
+
+	}
+
+	/**
+	 * Sets the vertex shader.
+	 *
+	 * @protected
+	 * @param {String} vertexShader - The vertex shader.
+	 */
+
+	setVertexShader(vertexShader) {
+
+		this.vertexShader = vertexShader;
+		this.setChanged();
 
 	}
 
@@ -189,11 +287,6 @@ export class Effect {
 	 * Performs a shallow search for properties that define a dispose method and
 	 * deletes them. The effect will be inoperative after this method was called!
 	 *
-	 * Disposable objects:
-	 *  - render targets
-	 *  - materials
-	 *  - textures
-	 *
 	 * The {@link EffectPass} calls this method when it is being destroyed. Do not
 	 * call this method directly.
 	 */
@@ -221,17 +314,17 @@ export class Effect {
  * Attributes can be concatenated using the bitwise OR operator.
  *
  * @type {Object}
- * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
- * @property {Number} DEPTH - Describes effects that require a depth texture.
  * @property {Number} NONE - No attributes. Most effects don't need to specify any attributes.
+ * @property {Number} DEPTH - Describes effects that require a depth texture.
+ * @property {Number} CONVOLUTION - Describes effects that fetch additional samples from the input buffer. There cannot be more than one effect with this attribute per {@link EffectPass}.
  * @example const attributes = EffectAttribute.CONVOLUTION | EffectAttribute.DEPTH;
  */
 
 export const EffectAttribute = {
 
-	CONVOLUTION: 2,
+	NONE: 0,
 	DEPTH: 1,
-	NONE: 0
+	CONVOLUTION: 2
 
 };
 

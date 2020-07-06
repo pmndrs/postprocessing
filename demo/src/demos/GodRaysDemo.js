@@ -320,8 +320,7 @@ export class GodRaysDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			pass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 

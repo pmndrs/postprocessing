@@ -194,11 +194,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		let f = menu.addFolder("Luminance");
 
-		f.add(effect, "adaptive").onChange(() => {
-
-			pass.recompile();
-
-		});
+		f.add(effect, "adaptive");
 
 		f.add(params, "adaptation rate").min(0.0).max(5.0).step(0.01).onChange(() => {
 
@@ -234,8 +230,7 @@ export class ToneMappingDemo extends PostProcessingDemo {
 
 		menu.add(params, "blend mode", BlendFunction).onChange(() => {
 
-			blendMode.blendFunction = Number(params["blend mode"]);
-			pass.recompile();
+			blendMode.setBlendFunction(Number(params["blend mode"]));
 
 		});
 
