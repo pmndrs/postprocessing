@@ -115,13 +115,13 @@
 </nav>
 
 <div class="content" data-ice="content"><div class="header-notice">
-  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SSAOEffect} from &apos;<span><a href="file/src/effects/SSAOEffect.js.html#lineNumber39">postprocessing</a></span>&apos;</code></pre></div>
+  <div data-ice="importPath" class="import-path"><pre class="prettyprint"><code data-ice="importPathCode">import {SSAOEffect} from &apos;<span><a href="file/src/effects/SSAOEffect.js.html#lineNumber49">postprocessing</a></span>&apos;</code></pre></div>
   <span data-ice="access">public</span>
   <span data-ice="kind">class</span>
   
   
   
-  <span data-ice="source">| <span><a href="file/src/effects/SSAOEffect.js.html#lineNumber39">source</a></span></span>
+  <span data-ice="source">| <span><a href="file/src/effects/SSAOEffect.js.html#lineNumber49">source</a></span></span>
 </div>
 
 <div class="self-detail detail">
@@ -131,7 +131,7 @@
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span> &#x2192; SSAOEffect</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>three~EventDispatcher</span> &#x2192; <span><a href="class/src/effects/Effect.js~Effect.html">Effect</a></span> &#x2192; SSAOEffect</div></div>
   
   
   
@@ -210,6 +210,122 @@ downsampled <code>normalDepthBuffer</code> and make sure to disable
   <tbody>
   
   <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-color">color</a></span></span><span class="code" data-ice="signature">: <span>Color</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>The color of the ambient occlusion.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-color">color</a></span></span><span class="code" data-ice="signature">: <span>Color</span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the color of the ambient occlusion.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-depthAwareUpsampling">depthAwareUpsampling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Indicates whether depth-aware upsampling is enabled.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      <span class="kind" data-ice="kind">set</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-depthAwareUpsampling">depthAwareUpsampling</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Enables or disables depth-aware upsampling.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
     <td>
       <span class="access" data-ice="access">public</span>
       
@@ -674,35 +790,6 @@ render targets.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-attributes">attributes</a></span></span><span class="code" data-ice="signature">: <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The effect attributes.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-blendMode">blendMode</a></span></span><span class="code" data-ice="signature">: <span><a href="class/src/effects/blending/BlendMode.js~BlendMode.html">BlendMode</a></span></span>
         </p>
       </div>
@@ -790,35 +877,6 @@ render targets.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-fragmentShader">fragmentShader</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        <div data-ice="description"><p>The fragment shader.</p>
-</div>
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-          
-          
-          
           <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-name">name</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
@@ -877,13 +935,14 @@ render targets.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-member-vertexShader">vertexShader</a></span></span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-dispose">dispose</a></span></span><span class="code" data-ice="signature">()</span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>The vertex shader.</p>
+        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
+deletes them.</p>
 </div>
       </div>
     </td>
@@ -906,14 +965,71 @@ render targets.</p>
           
           
           
-          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-dispose">dispose</a></span></span><span class="code" data-ice="signature">()</span>
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getAttributes">getAttributes</a></span></span><span class="code" data-ice="signature">(): <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Performs a shallow search for properties that define a dispose method and
-deletes them.</p>
+        <div data-ice="description"><p>Returns the effect attributes.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getFragmentShader">getFragmentShader</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the fragment shader.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-getVertexShader">getVertexShader</a></span></span><span class="code" data-ice="signature">(): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Returns the vertex shader.</p>
 </div>
       </div>
     </td>
@@ -1038,6 +1154,123 @@ deletes them.</p>
       
     </td>
   </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setAttributes">setAttributes</a></span></span><span class="code" data-ice="signature">(attributes: <span><a href="variable/index.html#static-variable-EffectAttribute">EffectAttribute</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the effect attributes.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setChanged">setChanged</a></span></span><span class="code" data-ice="signature">()</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Informs the associated <span><a href="class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a></span> that this effect has changed in
+a way that requires a shader recompilation.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setFragmentShader">setFragmentShader</a></span></span><span class="code" data-ice="signature">(fragmentShader: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the fragment shader.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">protected</span>
+      
+      
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+          
+          
+          
+          <span class="code" data-ice="name"><span><a href="class/src/effects/Effect.js~Effect.html#instance-method-setVertexShader">setVertexShader</a></span></span><span class="code" data-ice="signature">(vertexShader: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>Sets the vertex shader.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -1058,7 +1291,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber69">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber80">source</a></span></span>
     </span>
   </h3>
 
@@ -1109,7 +1342,7 @@ deletes them.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.distanceScaling</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Enables or disables distance-based radius scaling.</p>
@@ -1117,7 +1350,7 @@ deletes them.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.depthAwareUpsampling</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: true</li></ul></td>
       <td data-ice="description"><p>Enables or disables depth-aware upsampling. Has no effect if WebGL 2 is not supported.</p>
@@ -1125,7 +1358,7 @@ deletes them.</p>
     </tr>
 <tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.normalDepthBuffer</td>
-      <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
+      <td data-ice="type" class="code"><span>Texture</span></td>
       <td data-ice="appendix"><ul><li>optional</li>
 <li>default: null</li></ul></td>
       <td data-ice="description"><p>A texture that contains downsampled scene normals and depth. See <span><a href="class/src/passes/DepthDownsamplingPass.js~DepthDownsamplingPass.html">DepthDownsamplingPass</a></span>.</p>
@@ -1228,6 +1461,14 @@ deletes them.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="1">
+      <td data-ice="name" class="code" data-depth="1">options.color</td>
+      <td data-ice="type" class="code"><span>Color</span></td>
+      <td data-ice="appendix"><ul><li>optional</li>
+<li>default: null</li></ul></td>
+      <td data-ice="description"><p>The color of the ambient occlusion.</p>
+</td>
+    </tr>
+<tr data-ice="property" data-depth="1">
       <td data-ice="name" class="code" data-depth="1">options.resolutionScale</td>
       <td data-ice="type" class="code"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">Number</a></span></td>
       <td data-ice="appendix"><ul><li>optional</li>
@@ -1277,6 +1518,183 @@ deletes them.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-color">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">color</span><span class="code" data-ice="signature">: <span>Color</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber398">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>The color of the ambient occlusion.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-color">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">color</span><span class="code" data-ice="signature">: <span>Color</span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber412">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Sets the color of the ambient occlusion.</p>
+<p>Set to <code>null</code> to disable colorization.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-get-depthAwareUpsampling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    
+    <span class="code" data-ice="name">depthAwareUpsampling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber320">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Indicates whether depth-aware upsampling is enabled.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="instance-set-depthAwareUpsampling">
+    <span class="access" data-ice="access">public</span>
+    
+    <span class="kind" data-ice="kind">set</span>
+    
+    
+    
+    <span class="code" data-ice="name">depthAwareUpsampling</span><span class="code" data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber332">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>Enables or disables depth-aware upsampling.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-get-distanceScaling">
     <span class="access" data-ice="access">public</span>
     
@@ -1288,7 +1706,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber305">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber358">source</a></span></span>
     </span>
   </h3>
 
@@ -1332,7 +1750,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber317">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber370">source</a></span></span>
     </span>
   </h3>
 
@@ -1376,7 +1794,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber275">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber290">source</a></span></span>
     </span>
   </h3>
 
@@ -1420,7 +1838,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber287">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber302">source</a></span></span>
     </span>
   </h3>
 
@@ -1464,7 +1882,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber130">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber144">source</a></span></span>
     </span>
   </h3>
 
@@ -1508,7 +1926,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber249">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber264">source</a></span></span>
     </span>
   </h3>
 
@@ -1552,7 +1970,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber261">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber276">source</a></span></span>
     </span>
   </h3>
 
@@ -1596,7 +2014,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber222">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber237">source</a></span></span>
     </span>
   </h3>
 
@@ -1640,7 +2058,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber234">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber249">source</a></span></span>
     </span>
   </h3>
 
@@ -1684,7 +2102,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber210">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber225">source</a></span></span>
     </span>
   </h3>
 
@@ -1731,7 +2149,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber378">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber484">source</a></span></span>
     </span>
   </h3>
 
@@ -1800,7 +2218,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber346">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber452">source</a></span></span>
     </span>
   </h3>
 
@@ -1868,7 +2286,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber362">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber468">source</a></span></span>
     </span>
   </h3>
 
@@ -1936,7 +2354,7 @@ deletes them.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber413">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber519">source</a></span></span>
     </span>
   </h3>
 
@@ -2005,7 +2423,7 @@ render targets.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber399">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/effects/SSAOEffect.js.html#lineNumber505">source</a></span></span>
     </span>
   </h3>
 

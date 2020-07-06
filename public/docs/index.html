@@ -123,17 +123,25 @@
 <h2 id="installation">Installation</h2><p>This library requires the peer dependency <a href="https://github.com/mrdoob/three.js/">three</a>.</p>
 <pre><code class="lang-sh"><code class="source-code prettyprint">npm install three postprocessing</code>
 </code></pre>
-<h2 id="usage">Usage</h2><p>Please refer to the <a href="https://github.com/mrdoob/three.js/blob/master/README.md">usage example</a> of three.js for information about how to setup the renderer, scene and camera.</p>
-<pre><code class="lang-js"><code class="source-code prettyprint">import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from &quot;three&quot;;
-import { BloomEffect, EffectComposer, EffectPass, RenderPass } from &quot;postprocessing&quot;;
+<h2 id="usage">Usage</h2><p>Post processing introduces the concept of passes and effects to extend the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal post processing workflow:</p>
+<pre><code class="lang-js"><code class="source-code prettyprint">import { WebGLRenderer } from &quot;three&quot;;
 
-const composer = new EffectComposer(new WebGLRenderer());
-const camera = new PerspectiveCamera();
-const scene = new Scene();
-const clock = new Clock();
+const renderer = new WebGLRenderer({
+    powerPreference: &quot;high-performance&quot;,
+    antialias: false,
+    stencil: false,
+    depth: false
+});</code>
+</code></pre>
+<p>The <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/core/EffectComposer.js~EffectComposer.html">EffectComposer</a> manages and runs passes. It is common practice to use a <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/RenderPass.js~RenderPass.html">RenderPass</a> as the first pass to automatically clear the buffers and render a scene for further processing. Fullscreen image effects are rendered via the <a href="https://vanruesc.github.io/postprocessing/public/docs/class/src/passes/EffectPass.js~EffectPass.html">EffectPass</a>. Please refer to the <a href="https://github.com/mrdoob/three.js/blob/master/README.md">usage example</a> of three.js for more information on how to setup the renderer, scene and camera.</p>
+<pre><code class="lang-js"><code class="source-code prettyprint">import { BloomEffect, EffectComposer, EffectPass, RenderPass } from &quot;postprocessing&quot;;
+import { Clock } from &quot;three&quot;;
 
+const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new EffectPass(camera, new BloomEffect()));
+
+const clock = new Clock();
 
 (function render() {
 

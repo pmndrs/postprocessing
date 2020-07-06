@@ -1,7 +1,7 @@
 {
-  "coverage": "95.78%",
-  "expectCount": 759,
-  "actualCount": 727,
+  "coverage": "96.11%",
+  "expectCount": 773,
+  "actualCount": 743,
   "files": {
     "src/core/ColorChannel.js": {
       "expectCount": 1,
@@ -49,8 +49,8 @@
       "undocumentLines": []
     },
     "src/effects/blending/BlendMode.js": {
-      "expectCount": 6,
-      "actualCount": 6,
+      "expectCount": 8,
+      "actualCount": 8,
       "undocumentLines": []
     },
     "src/effects/BloomEffect.js": {
@@ -99,8 +99,8 @@
       "undocumentLines": []
     },
     "src/effects/Effect.js": {
-      "expectCount": 17,
-      "actualCount": 17,
+      "expectCount": 24,
+      "actualCount": 24,
       "undocumentLines": []
     },
     "src/effects/GammaCorrectionEffect.js": {
@@ -134,12 +134,9 @@
       "undocumentLines": []
     },
     "src/effects/OutlineEffect.js": {
-      "expectCount": 42,
+      "expectCount": 40,
       "actualCount": 40,
-      "undocumentLines": [
-        77,
-        449
-      ]
+      "undocumentLines": []
     },
     "src/effects/PixelationEffect.js": {
       "expectCount": 7,
@@ -172,23 +169,19 @@
       "undocumentLines": []
     },
     "src/effects/SMAAEffect.js": {
-      "expectCount": 21,
+      "expectCount": 20,
       "actualCount": 20,
-      "undocumentLines": [
-        109
-      ]
+      "undocumentLines": []
     },
     "src/effects/SSAOEffect.js": {
-      "expectCount": 21,
-      "actualCount": 21,
+      "expectCount": 26,
+      "actualCount": 26,
       "undocumentLines": []
     },
     "src/effects/TextureEffect.js": {
-      "expectCount": 11,
+      "expectCount": 10,
       "actualCount": 10,
-      "undocumentLines": [
-        126
-      ]
+      "undocumentLines": []
     },
     "src/effects/ToneMappingEffect.js": {
       "expectCount": 19,
@@ -372,11 +365,13 @@
       ]
     },
     "src/passes/EffectPass.js": {
-      "expectCount": 25,
-      "actualCount": 23,
+      "expectCount": 29,
+      "actualCount": 25,
       "undocumentLines": [
-        443,
-        472
+        476,
+        505,
+        522,
+        647
       ]
     },
     "src/passes/MaskPass.js": {

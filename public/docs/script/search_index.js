@@ -1422,12 +1422,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/effect.js~effect#attributes",
-    "class/src/effects/Effect.js~Effect.html#instance-member-attributes",
-    "src/effects/Effect.js~Effect#attributes",
-    "member"
-  ],
-  [
     "src/effects/effect.js~effect#blendmode",
     "class/src/effects/Effect.js~Effect.html#instance-member-blendMode",
     "src/effects/Effect.js~Effect#blendMode",
@@ -1458,10 +1452,22 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/effect.js~effect#fragmentshader",
-    "class/src/effects/Effect.js~Effect.html#instance-member-fragmentShader",
-    "src/effects/Effect.js~Effect#fragmentShader",
-    "member"
+    "src/effects/effect.js~effect#getattributes",
+    "class/src/effects/Effect.js~Effect.html#instance-method-getAttributes",
+    "src/effects/Effect.js~Effect#getAttributes",
+    "method"
+  ],
+  [
+    "src/effects/effect.js~effect#getfragmentshader",
+    "class/src/effects/Effect.js~Effect.html#instance-method-getFragmentShader",
+    "src/effects/Effect.js~Effect#getFragmentShader",
+    "method"
+  ],
+  [
+    "src/effects/effect.js~effect#getvertexshader",
+    "class/src/effects/Effect.js~Effect.html#instance-method-getVertexShader",
+    "src/effects/Effect.js~Effect#getVertexShader",
+    "method"
   ],
   [
     "src/effects/effect.js~effect#initialize",
@@ -1476,15 +1482,39 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/effects/effect.js~effect#setattributes",
+    "class/src/effects/Effect.js~Effect.html#instance-method-setAttributes",
+    "src/effects/Effect.js~Effect#setAttributes",
+    "method"
+  ],
+  [
+    "src/effects/effect.js~effect#setchanged",
+    "class/src/effects/Effect.js~Effect.html#instance-method-setChanged",
+    "src/effects/Effect.js~Effect#setChanged",
+    "method"
+  ],
+  [
     "src/effects/effect.js~effect#setdepthtexture",
     "class/src/effects/Effect.js~Effect.html#instance-method-setDepthTexture",
     "src/effects/Effect.js~Effect#setDepthTexture",
     "method"
   ],
   [
+    "src/effects/effect.js~effect#setfragmentshader",
+    "class/src/effects/Effect.js~Effect.html#instance-method-setFragmentShader",
+    "src/effects/Effect.js~Effect#setFragmentShader",
+    "method"
+  ],
+  [
     "src/effects/effect.js~effect#setsize",
     "class/src/effects/Effect.js~Effect.html#instance-method-setSize",
     "src/effects/Effect.js~Effect#setSize",
+    "method"
+  ],
+  [
+    "src/effects/effect.js~effect#setvertexshader",
+    "class/src/effects/Effect.js~Effect.html#instance-method-setVertexShader",
+    "src/effects/Effect.js~Effect#setVertexShader",
     "method"
   ],
   [
@@ -1498,12 +1528,6 @@ window.esdocSearchIndex = [
     "class/src/effects/Effect.js~Effect.html#instance-method-update",
     "src/effects/Effect.js~Effect#update",
     "method"
-  ],
-  [
-    "src/effects/effect.js~effect#vertexshader",
-    "class/src/effects/Effect.js~Effect.html#instance-member-vertexShader",
-    "src/effects/Effect.js~Effect#vertexShader",
-    "member"
   ],
   [
     "src/effects/gammacorrectioneffect.js",
@@ -1830,12 +1854,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#blendmode",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-blendMode",
-    "src/effects/OutlineEffect.js~OutlineEffect#blendMode",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#blur",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-blur",
     "src/effects/OutlineEffect.js~OutlineEffect#blur",
@@ -1986,12 +2004,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/outlineeffect.js~outlineeffect#vertexshader",
-    "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-member-vertexShader",
-    "src/effects/OutlineEffect.js~OutlineEffect#vertexShader",
-    "member"
-  ],
-  [
     "src/effects/outlineeffect.js~outlineeffect#width",
     "class/src/effects/OutlineEffect.js~OutlineEffect.html#instance-get-width",
     "src/effects/OutlineEffect.js~OutlineEffect#width",
@@ -2130,12 +2142,6 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/effects/smaaeffect.js~smaaeffect#attributes",
-    "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-member-attributes",
-    "src/effects/SMAAEffect.js~SMAAEffect#attributes",
-    "member"
-  ],
-  [
     "src/effects/smaaeffect.js~smaaeffect#coloredgesmaterial",
     "class/src/effects/SMAAEffect.js~SMAAEffect.html#instance-get-colorEdgesMaterial",
     "src/effects/SMAAEffect.js~SMAAEffect#colorEdgesMaterial",
@@ -2214,10 +2220,34 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/effects/ssaoeffect.js~ssaoeffect#color",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-color",
+    "src/effects/SSAOEffect.js~SSAOEffect#color",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#color",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-color",
+    "src/effects/SSAOEffect.js~SSAOEffect#color",
+    "member"
+  ],
+  [
     "src/effects/ssaoeffect.js~ssaoeffect#constructor",
     "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-constructor-constructor",
     "src/effects/SSAOEffect.js~SSAOEffect#constructor",
     "method"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#depthawareupsampling",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-get-depthAwareUpsampling",
+    "src/effects/SSAOEffect.js~SSAOEffect#depthAwareUpsampling",
+    "member"
+  ],
+  [
+    "src/effects/ssaoeffect.js~ssaoeffect#depthawareupsampling",
+    "class/src/effects/SSAOEffect.js~SSAOEffect.html#instance-set-depthAwareUpsampling",
+    "src/effects/SSAOEffect.js~SSAOEffect#depthAwareUpsampling",
+    "member"
   ],
   [
     "src/effects/ssaoeffect.js~ssaoeffect#distancescaling",
@@ -2508,12 +2538,6 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/effects/textureeffect.js~textureeffect#vertexshader",
-    "class/src/effects/TextureEffect.js~TextureEffect.html#instance-member-vertexShader",
-    "src/effects/TextureEffect.js~TextureEffect#vertexShader",
-    "member"
-  ],
-  [
     "src/effects/tonemappingeffect.js",
     "file/src/effects/ToneMappingEffect.js.html",
     "src/effects/ToneMappingEffect.js",
@@ -2628,15 +2652,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/effects/blending/blendmode.js~blendmode#blendfunction",
-    "class/src/effects/blending/BlendMode.js~BlendMode.html#instance-member-blendFunction",
-    "src/effects/blending/BlendMode.js~BlendMode#blendFunction",
-    "member"
-  ],
-  [
     "src/effects/blending/blendmode.js~blendmode#constructor",
     "class/src/effects/blending/BlendMode.js~BlendMode.html#instance-constructor-constructor",
     "src/effects/blending/BlendMode.js~BlendMode#constructor",
+    "method"
+  ],
+  [
+    "src/effects/blending/blendmode.js~blendmode#getblendfunction",
+    "class/src/effects/blending/BlendMode.js~BlendMode.html#instance-method-getBlendFunction",
+    "src/effects/blending/BlendMode.js~BlendMode#getBlendFunction",
     "method"
   ],
   [
@@ -2650,6 +2674,12 @@ window.esdocSearchIndex = [
     "class/src/effects/blending/BlendMode.js~BlendMode.html#instance-member-opacity",
     "src/effects/blending/BlendMode.js~BlendMode#opacity",
     "member"
+  ],
+  [
+    "src/effects/blending/blendmode.js~blendmode#setblendfunction",
+    "class/src/effects/blending/BlendMode.js~BlendMode.html#instance-method-setBlendFunction",
+    "src/effects/blending/BlendMode.js~BlendMode#setBlendFunction",
+    "method"
   ],
   [
     "src/effects/blending/index.js",
@@ -3768,6 +3798,12 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
+    "src/passes/effectpass.js~effectpass#capabilities",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-capabilities",
+    "src/passes/EffectPass.js~EffectPass#capabilities",
+    "member"
+  ],
+  [
     "src/passes/effectpass.js~effectpass#constructor",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-constructor-constructor",
     "src/passes/EffectPass.js~EffectPass#constructor",
@@ -3810,6 +3846,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/passes/effectpass.js~effectpass#handleevent",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-method-handleEvent",
+    "src/passes/EffectPass.js~EffectPass#handleEvent",
+    "method"
+  ],
+  [
     "src/passes/effectpass.js~effectpass#initialize",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-method-initialize",
     "src/passes/EffectPass.js~EffectPass#initialize",
@@ -3837,6 +3879,12 @@ window.esdocSearchIndex = [
     "src/passes/effectpass.js~effectpass#needsswap",
     "class/src/passes/EffectPass.js~EffectPass.html#instance-member-needsSwap",
     "src/passes/EffectPass.js~EffectPass#needsSwap",
+    "member"
+  ],
+  [
+    "src/passes/effectpass.js~effectpass#needsupdate",
+    "class/src/passes/EffectPass.js~EffectPass.html#instance-member-needsUpdate",
+    "src/passes/EffectPass.js~EffectPass#needsUpdate",
     "member"
   ],
   [
