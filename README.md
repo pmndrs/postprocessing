@@ -24,6 +24,8 @@ npm install three postprocessing
 Post processing introduces the concept of passes and effects to extend the common rendering workflow with fullscreen image manipulation tools. The following WebGL attributes should be used for an optimal post processing workflow:
 
 ```js
+import { WebGLRenderer } from "three";
+
 const attributes = {
 	powerPreference: "high-performance",
 	antialias: false,
@@ -37,16 +39,14 @@ const renderer = new WebGLRenderer(attributes);
 The `EffectComposer` manages and runs passes. The `RenderPass` renders your scene and the `EffectPass` applies fullscreen image effects. Please refer to the [usage example](https://github.com/mrdoob/three.js/blob/master/README.md) of three.js for more information on how to setup the renderer, scene and camera.
 
 ```js
-import { Clock, PerspectiveCamera, Scene, WebGLRenderer } from "three";
 import { BloomEffect, EffectComposer, EffectPass, RenderPass } from "postprocessing";
+import { Clock } from "three";
 
 const composer = new EffectComposer(renderer);
-const camera = new PerspectiveCamera();
-const scene = new Scene();
-const clock = new Clock();
-
 composer.addPass(new RenderPass(scene, camera));
 composer.addPass(new EffectPass(camera, new BloomEffect()));
+
+const clock = new Clock();
 
 (function render() {
 
