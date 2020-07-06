@@ -16,6 +16,15 @@ import { Effect, EffectAttribute } from "./Effect.js";
 import fragmentShader from "./glsl/ssao/shader.frag";
 
 /**
+ * The size of the generated noise texture.
+ *
+ * @type {Number}
+ * @private
+ */
+
+const NOISE_TEXTURE_SIZE = 64;
+
+/**
  * A Screen Space Ambient Occlusion (SSAO) effect.
  *
  * For high quality visuals use two SSAO effect instances in a row with
@@ -156,7 +165,7 @@ export class SSAOEffect extends Effect {
 
 		this.ssaoPass = new ShaderPass((() => {
 
-			const noiseTexture = new NoiseTexture(64, 64);
+			const noiseTexture = new NoiseTexture(NOISE_TEXTURE_SIZE, NOISE_TEXTURE_SIZE);
 			noiseTexture.wrapS = noiseTexture.wrapT = RepeatWrapping;
 
 			const material = new SSAOMaterial(camera);
@@ -423,7 +432,7 @@ export class SSAOEffect extends Effect {
 
 		const camera = this.camera;
 		const uniforms = this.ssaoMaterial.uniforms;
-		uniforms.noiseScale.value.set(w, h).divideScalar(64.0);
+		uniforms.noiseScale.value.set(w, h).divideScalar(NOISE_TEXTURE_SIZE);
 		uniforms.inverseProjectionMatrix.value.getInverse(camera.projectionMatrix);
 		uniforms.projectionMatrix.value.copy(camera.projectionMatrix);
 
